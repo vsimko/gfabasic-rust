@@ -1,0 +1,17 @@
+id = "amiga-3.0-nested-loop-close-order"
+dialect = "GFA BASIC Amiga"
+version = "3.0"
+api_profiles = []
+kind = "semantic"
+status = "candidate"
+source_key = "AM-BOOK-FR-1989"
+source_pages = "printed pp. 4-45–4-50"
+evidence_status = "OCR-derived; page-image review required"
+expectation = "The inner loop closes before the outer loop. The body executes four times. The output contains eight lines: 1, 1, 1, 2, 2, 1, 2, 2."
+expected_stdout = "1\n1\n1\n2\n2\n1\n2\n2"
+expected_exit = "success"
+notes = [
+  "Original minimal fixture; not copied from the manual.",
+  "Verify FOR/NEXT syntax, variable suffixes, PRINT behavior, and NEXT variable syntax against page images.",
+  "The source establishes reverse nesting order; the exact output remains an expected semantic result to validate with an interpreter.",
+]
