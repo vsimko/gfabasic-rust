@@ -195,3 +195,15 @@ The 1988 *Happy Computer* review independently confirms that the GFA-BASIC 3.0 A
 - **Important separation:** This is an Atari ST source. Do not use it as direct evidence for Amiga APIs or later Atari ST releases such as 3.5/3.6TT without cross-checking.
 - **Initial page map:** Language overview and V3.0 changes, pp. 23–24; comments, p. 186; variable declarations/types, pp. 189–192; user functions and parameter behavior, pp. 192–194; program structure, chapter 6 beginning p. 155; strings, chapter 7 beginning p. 221; arithmetic/operators, chapter 8 beginning p. 229; graphics, chapter 9 beginning p. 251; arrays/memory/pointers, chapter 11 beginning p. 341; system APIs, chapter 21 beginning p. 605; editor/compiler, chapter 24 beginning p. 701.
 - **Evidence status:** Bibliographic identity and stated coverage verified from the scanned title/copyright/front-matter pages. The initial language facts above are transcribed as source-backed research findings; detailed syntax tables and OCR-sensitive signatures still require page-image verification.
+
+
+### Contemporary edition and pagination cross-check (2026-11-03)
+
+A contemporary *ST-Magazin* book review/catalogue in the December 1988 issue explicitly identifies Uwe Litzkendorf's *Das große GFA Basic 3.0 Buch* as the **6th revised and expanded edition (1988)**, Data Becker, ISBN 3-89011-222-6, with **828 pages**. The same issue's publisher advertisement lists the hardcover at 828 pages with diskette. This independently corroborates the edition and printed extent recorded from the user-provided scan. The scan has 836 PDF pages; the eight-page difference is consistent with unnumbered digitization/front-matter or inserted material, but the PDF-to-printed-page mapping should be treated as its own pagination layer.
+
+An October 1988 *ST-Magazin* literature listing gives the same ISBN but reports 574 pages without naming an edition. That earlier count is not sufficient to override the explicit December sixth-edition record; it may refer to an earlier printing/edition or a catalogue discrepancy. Retain the scan's title/copyright/front-matter evidence as the identity authority and record the October count as an unresolved historical catalogue variance, not as a second confirmed pagination for this exact sixth edition.
+
+Sources:
+- *ST-Magazin* 12/1988, printed p. 136 (book review and bibliographic record): https://www.homecomputerworld.at/magazine/st-magazin/st_magazin_1988-12.pdf
+- *ST-Magazin* 12/1988, publisher advertisement (same issue; 828-page hardcover listing): https://www.homecomputerworld.at/magazine/st-magazin/st_magazin_1988-12.pdf
+- *ST-Magazin* 10/1988, literature list: https://www.stcarchiv.de/st-magazin/1988/10/buecherliste
