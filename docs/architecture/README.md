@@ -39,6 +39,7 @@ The language core is separate from platform API profiles. Amiga and Atari ST pro
 | Rust workspace | Crate/module boundaries and dependency policy | [WORKSPACE.md](WORKSPACE.md) | [#11](https://github.com/vsimko/gfabasic-rust/issues/11) |
 | API registry | Canonical machine-readable declarations | [API-REGISTRY.md](API-REGISTRY.md) | [#12](https://github.com/vsimko/gfabasic-rust/issues/12) |
 | Versioning and compatibility lifecycle | Compiler releases, schema versions, runtime ABI, deprecation | [VERSIONING.md](VERSIONING.md) | [#58](https://github.com/vsimko/gfabasic-rust/issues/58) |
+| Performance benchmarks | Compiler, generated-program, runtime, and build measurements | [BENCHMARKING.md](BENCHMARKING.md) | [#57](https://github.com/vsimko/gfabasic-rust/issues/57) |
 
 Detailed decisions remain open until the corresponding research and review are complete. The existence of a document does not mean that its issue is resolved.
 
