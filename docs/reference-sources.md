@@ -207,3 +207,24 @@ Sources:
 - *ST-Magazin* 12/1988, printed p. 136 (book review and bibliographic record): https://www.homecomputerworld.at/magazine/st-magazin/st_magazin_1988-12.pdf
 - *ST-Magazin* 12/1988, publisher advertisement (same issue; 828-page hardcover listing): https://www.homecomputerworld.at/magazine/st-magazin/st_magazin_1988-12.pdf
 - *ST-Magazin* 10/1988, literature list: https://www.stcarchiv.de/st-magazin/1988/10/buecherliste
+
+
+### Aminet `dev/basic` catalogue verification (2026-11-03)
+
+The live Aminet mirror directory and the package README were checked on 2026-11-03:
+
+| Item | Catalogue metadata | Classification | Evidence limit |
+|---|---|---|---|
+| `gfalist.lha` / `gfalist.readme` | Directory listing: 150 KB, dated 2021-02-18. README: version 0.01; authors Peter Backes and Markus Hoffmann; architecture `ppc-morphos`; short description: reads tokenized GFA BASIC version 3.x. | Developer tool for inspecting tokenized GFA BASIC files. | The README does not establish interpreter semantics, token assignments, or compatibility with a specific Amiga 68k release. The archive contents have not been inspected. |
+| `GFA_Gadgets.lha` / `GFA_Gadgets.readme` | Present in the live `dev/basic` directory; archive listed as 28 KB, dated 1998-12-31. | Candidate GUI/gadget helper package. | Package README could not be decoded by the available text fetcher in this pass. Contents, author, dependencies, and license remain unverified. |
+| `GFA_Menus.lha` / `GFA_Menus.readme` | Present in the live `dev/basic` directory; archive listed as 15 KB, dated 1998-12-31. | Candidate menu helper package. | Package README could not be decoded by the available text fetcher in this pass. Contents, author, dependencies, and license remain unverified. |
+| `GuiGfxDevBas.lha` / `GuiGfxDevBas.readme` | Present in the live `dev/basic` directory; archive listed as 31 KB, dated 2003-07-21. | Candidate GUI/graphics developer package. | Package README could not be decoded by the available text fetcher in this pass. Contents, author, dependencies, and license remain unverified. |
+
+Sources:
+- Live directory listing: [Aminet `dev/basic` mirror](https://ftp.fau.de/aminet/dev/basic/).
+- Exact `gfalist` metadata: [gfalist.readme](https://ftp.fau.de/aminet/dev/basic/gfalist.readme).
+- Independent contemporary upload notice: [Amiga-News, Aminet uploads through 2021-02-20](https://www.amiga-news.de/en/standard/?frm_start=1883).
+
+The directory and README confirm that `gfalist` is a MorphOS/PPC tool for tokenized GFA BASIC 3.x. It is not an Amiga GFA BASIC language reference and must not be used to infer built-in commands or runtime behavior. The other three packages are catalogue leads only. Their names are not evidence that their functionality is built into GFA BASIC.
+
+This is a verified snapshot of selected catalogue entries, not a complete survey of `dev/basic`. Archive inspection, license checks, package dependency extraction, and classification of additional entries remain open work for issue #64.
