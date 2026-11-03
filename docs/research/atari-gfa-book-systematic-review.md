@@ -1262,3 +1262,52 @@ Candidate conformance cases for issue #42:
 10. 0/0 in interpreter versus compiled execution; preserve as a documented compiler quirk until tested on the exact compiler build.
 11. Compare REPEAT…UNTIL and FOR…NEXT performance only in a benchmark suite, never as a correctness assertion.
 
+
+
+## Chapter 24 execution contexts: Run-Only Interpreter and direct mode (printed pp. 722–725)
+
+Printed pages 722–725 were checked against page images. They describe distinct interpreter/editor operating contexts, not additional compiler language syntax.
+
+### Run-Only Interpreter (p. 722)
+
+- The Run-Only Interpreter can load and start BASIC programs; editing the loaded program is not possible.
+- The book describes the Run-Only Interpreter as freely copyable and intended to be distributed alongside GFA BASIC programs, allowing users to run programs without owning the full editor/interpreter.
+- BAS files on the same disk can be started by clicking them; the book says this provides an auto-start experience similar to compiled or assembled programs.
+- The book also says auto-start works with the full editor-interpreter.
+
+These are claims about the historical Atari distribution/runtime model. The statement that the executable was freely copyable is a statement in the book, not a substitute for verifying the license or redistribution rights of any specific binary. No Run-Only Interpreter binary was executed or redistributed.
+
+### Direct mode (pp. 723–724)
+
+- Direct mode executes each entered command immediately after Return; it does not wait for RUN.
+- It does not support command sequences assembled from separate commands. A multi-command construct such as FOR…NEXT therefore cannot be entered as a direct-mode command sequence.
+- A PROCEDURE defined in the program editor can be invoked from direct mode through GOSUB. The book presents this as a way to build a reusable helper library.
+- Commands not permitted in direct mode are reported in an alert box after the invalid input.
+- The book warns that a rare incompletely handled system error may cause a crash when switching into direct mode.
+- In color mode, editor and direct mode use different text-color registers. The documented SETCOLOR adjustment can restore visible direct-mode text. In V2.xx, a similar adjustment may be needed to restore editor text; V3.0 restores the original colors when returning to the editor.
+- Return to the editor is documented through Ed+Return, Esc followed by Return, or the Break key combination Control+Shift+Alternate.
+- Undo recalls the most recently entered direct-mode line.
+
+### V3.0 direct-mode history (p. 724)
+
+- V3.0 adds a history containing the last eight direct-mode commands.
+- Up/Down cursor keys recall history entries; the recalled line can be edited and executed again with Return.
+- Insert switches between insert and overwrite modes.
+- The adjacent DSAVE, DLOAD and DLINE procedures are user-written editor extensions that manipulate the history buffer. They are examples, not built-in GFA BASIC commands and not evidence of a stable public history-buffer ABI. Their hard-coded BASEPAGE offsets must not be adopted as runtime contracts.
+
+### Editor version boundary (p. 725)
+
+The book introduces the editor chapter by stating that its first part describes functions common to V2.xx and V3.0, with small differences in Replace and cursor-Tab behavior; a separate part describes V3.0 changes and additions. This is an editorial roadmap only. It does not establish that all editor behavior is identical between versions, nor does this page enumerate the detailed differences.
+
+Candidate conformance and compatibility checks for issue #42:
+1. Run-Only mode permits load/start but rejects or omits editing operations; distinguish this from the full editor-interpreter.
+2. BAS file auto-start by desktop click, separately for full interpreter and Run-Only Interpreter, if the original environment is available.
+3. Direct mode executes a single command immediately on Return without RUN.
+4. Multi-command constructs such as FOR…NEXT are rejected in direct mode, while a previously defined PROCEDURE can be invoked through GOSUB.
+5. Unsupported direct-mode commands produce the documented alert/diagnostic.
+6. Undo recalls the last direct-mode input.
+7. V3.0 history recalls at most the last eight commands, supports editing and re-execution, and Insert toggles insert/overwrite; verify independently from the custom DSAVE/DLOAD/DLINE helpers.
+8. Compare editor/direct-mode color restoration in V2.xx and V3.0 only on the matching original interpreter versions.
+9. Treat the rare crash warning as a robustness/recovery test, not a deterministic language conformance test.
+
+No original interpreter or Run-Only binary was executed. These findings remain documented source behavior, not runtime observations.
