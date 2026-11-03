@@ -42,12 +42,12 @@ Printed page ranges below follow the book's table of contents. This map is a rev
 | 14 | 471–486 | BASIC window commands | First pass reviewed; WINDTAB offsets and GEM behavior need validation |
 | 15 | 487–490 | Menu programming | First pass reviewed; menu-array edge cases need validation |
 | 16 | 491–498 | Event monitoring | First pass reviewed; event IDs and buffer lifecycle need validation |
-| 17 | 499–530 | GDOS/VDI library and fonts | Pending |
-| 18 | 531–584 | AES library and managers | Pending |
-| 19 | 585–596 | GEM object variables and structures | Pending |
-| 20 | 597–604 | GEM addresses and fields | Pending |
-| 21 | 605–656 | BIOS, GEMDOS, GEMSYS, VDISYS, XBIOS and low-level examples | Pending |
-| 22 | 657–664 | System variables | Pending |
+| 17 | 499–530 | GDOS/VDI library and fonts | First pass reviewed; GDOS availability, workstation lifecycle and custom-font hazards need validation |
+| 18 | 531–584 | AES library and managers | First pass reviewed; function signatures and GEM/TOS variants need validation |
+| 19 | 585–596 | GEM object variables and structures | First pass reviewed; structure offsets and flag bits need page-image checks |
+| 20 | 597–604 | GEM addresses and fields | First pass reviewed; shared-buffer layouts and OCR need validation |
+| 21 | 605–656 | BIOS, GEMDOS, VDISYS, XBIOS and low-level examples | First pass reviewed; OS-call signatures and hardware-specific behavior need validation |
+| 22 | 657–664 | System variables | First pass reviewed; absolute addresses are TOS/version-specific and unsafe |
 | 23 | 665–700 | RAM card-index application example | Example review pending |
 | 24 | 701–793 | Compiler, interpreter, variables/types, editor, quick lists, errors and command index | Pending |
 
