@@ -46,6 +46,8 @@ Also record a short original explanation, evidence status, and any uncertainty. 
 
 ## Amiga-specific candidate sources (research started 2026-11-03)
 
+Initial Amiga 3.0 extraction notes: [Amiga GFA BASIC 3.0 reference research](reference/amiga-gfa-basic-3.0.md).
+
 | ID | Source | Applicability | Evidence status | Notes |
 |---|---|---|---|---|
 | AM-BOOK-1989 | *Das große Buch zu GFA BASIC Amiga* / *Das große GFA-BASIC zum Amiga*, attributed to Wolf-Gideon Bleek, Martin Hecht, and Uwe Litzkendorf | Amiga GFA BASIC; likely 3.x, exact edition/version coverage to verify | Strong bibliographic candidate; primary text not yet inspected | Amiga-News reported on 2026-09-03 that Thomas Werner offers the 1989 book as a free PDF with the authors' permission. Bibliographic listings are inconsistent: ISBN 3-89011-276-5 is listed as 430 pages (1990/1989 variants), while ISBN 3-89011-399-0 is listed as a 508-page edition (1990). Verify title page, copyright page, and table of contents in the authorized scan before choosing canonical metadata. [Amiga-News announcement](https://www.amiga-news.de/en/standard/?frm_perPage=21&frm_start=42); [bibliographic comparison](https://diebuchsuche.at/buch-isbn-9783890113999.html); [catalog record](https://www.retrobug.org/library/med0142). |
