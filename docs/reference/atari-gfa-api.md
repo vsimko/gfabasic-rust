@@ -102,6 +102,49 @@ GDOS is an optional resident Atari service, normally installed at boot and confi
 | `VQT_NAME(index,name$)` | Query VDI font ID and name | p. 514 | Book describes fallback behavior without GDOS |
 | `VQT_EXTENT(text$[,coordinates...])` | Measure text bounding quadrilateral | pp. 512–513 | Results are returned through PTSOUT and depend on current text attributes |
 
+### 4.1 GDOS availability, workstation lifecycle and font calls
+
+The book's GDOS chapter is specific to the Atari ST environment and to the Digital Research GDOS releases named by the author. Except for `VQT_EXTENT()` and `VQT_NAME()`, the chapter's functions require GDOS to be resident. The author recommends GDOS 1.8 over 1.1 and notes that a valid `ASSIGN.SYS` must be found at boot. [pp. 499–502]
+
+The `ASSIGN.SYS` driver identifiers documented in the example are 01 (screen virtual workstation only), 11 (plotter), 21 (printer), 31 (metafile), 41 (camera) and 51 (graphics tablet). The screen pseudo-drivers 02/03/04 represent low/mid/high resolution font lists. Driver IDs are configuration identifiers, not portable device classes. [pp. 500–502]
+
+| GFA BASIC function | Signature | Documented contract |
+|---|---|---|
+| `GDOS?` | `GDOS?` | Returns TRUE (-1) if GDOS 1.1+ is resident, otherwise FALSE (0). No V2.xx equivalent is documented. [p. 502] |
+| `V-H` | Read: `V-H`; write: `V-H = handle` | Reads/sets the active VDI handle. Nonnegative values select a handle; -1 restores the handle assigned internally to GFA BASIC. [p. 503] |
+| `V_CLRWK()` | `V_CLRWK()` | Clears the selected workstation output buffer; on printer workstation also emits form feed. [p. 504] |
+| `V_CLSVWK()` | `V_CLSVWK()` | Closes a virtual screen workstation and restores GFA's VDI handle. GFA's own screen virtual workstation normally makes this unnecessary. [pp. 504–505] |
+| `V_CLSWK()` | `V_CLSWK()` | Flushes pending output, closes the selected physical workstation and restores GFA's handle. Close any separately opened virtual workstation first. [p. 505] |
+| `V_OPNVWK(driverId[,lineType,lineColor,markerType,markerColor,textStyle,textColor,fillStyle,fillPattern,fillColor,coordinateFlag])` | Returns VDI handle | Opens/configures a virtual screen workstation. Output is direct/unbuffered; `V_UPDWK()` is not needed. GFA already opens its own screen workstation. [pp. 505–506] |
+| `V_OPNWK(driverId[,lineType,lineColor,markerType,markerColor,textStyle,textColor,fillStyle,fillPattern,fillColor,coordinateFlag])` | Returns VDI handle | Opens the GDOS driver selected by `ASSIGN.SYS`; output is buffered until update/close. The ten optional values initialize VDI attributes; defaults are 1,1,1,1,1,1,1,1,1,2. Calling without resident GDOS or with an invalid ID is documented to crash the system. [pp. 507–509] |
+| `V_UPDWK()` | `V_UPDWK()` | Sends the current workstation output buffer to the device. Not needed for direct virtual-screen output. [p. 512] |
+| `VQT_EXTENT(text$[,xlo,ylo,xro,yro,xru,yru,xlu,y lu])` | Returns text extent; eight optional coordinate outputs | Measures the bounding quadrilateral using current GEM text attributes. Coordinates are also returned in PTSOUT(0–7); upper-left is (0,0), lower-right gives width/height. Available without GDOS according to the chapter. [pp. 512–513] |
+| `VQT_NAME(index,name$)` | Returns VDI font face; fills name$ | Looks up the VDI face/name for a font in the most recently loaded GDOS font list. Without GDOS, returns the system-font face/name. [p. 514] |
+| `VST_LOAD_FONTS(0)` | Returns number of fonts loaded | Loads fonts listed for the active resolution in `ASSIGN.SYS`; may allocate memory and require prior `RESERVE`. [p. 515] |
+| `VST_UNLOAD_FONTS(0)` | Returns status (not specified precisely) | Unregisters fonts loaded by VST_LOAD_FONTS and attempts to release their memory. [p. 515] |
+
+The V2.xx examples use VDISYS opcodes 3 (clear workstation), 101 (close virtual workstation), 2 (close workstation), 100 (open virtual workstation), 1 (open workstation), 4 (update workstation), 116 (text extent), 130 (font name), 119 (load fonts) and 120 (unload fonts). These are book-documented wrapper examples; they must not be assumed to be the full or universal VDI opcode contract. [pp. 504–515]
+
+The V2.xx `V_OPNVWK`/ `V_OPNWK` procedures require all eleven integer setup parameters plus a pointer to an integer result variable. The V3.0 form makes the ten attribute values optional. The book's examples construct the VDI INTIN array explicitly and return the device handle from CONTRL(6). [pp. 506–507, 511]
+
+### 4.2 Workstation and font lifecycle constraints
+
+- Keep the GFA screen handle, virtual workstation handles and GDOS physical workstation handles distinct. `V-H=-1` switches back to GFA's own screen output even while another workstation remains open. [p. 503]
+- For a physical workstation, reserve enough memory for its output buffer. The book estimates at least one bit per output pixel plus approximately 20% overhead; high-resolution printer pages can require over 1 MB. [pp. 509–510]
+- Flush buffered output with `V_UPDWK()` before closing. The author reports RESERVE errors if a workstation is opened and closed without drawing, and internal GEM problems if buffered drawing is closed without update. This is a test observation, not a universal VDI guarantee. [p. 511]
+- Load fonts only after confirming the relevant GDOS configuration. Query each font with `VQT_NAME`, select its face through `DEFTEXT`, and unload fonts before restoring BASIC memory/terminating. [pp. 510–515]
+- The `VQT_NAME` V2.xx example reads GEM's original INTOUT buffer through an absolute address. Treat that implementation detail as version-/memory-layout-specific, not as a portable API. [p. 514]
+
+### 4.3 Own-font material (pp. 516–530)
+
+The remainder of the chapter describes loading custom 8×16 system fonts, changing TOS/GEM font pointers, converting Degas and STAD/OLIFONT font data, and a custom GFA-specific font format. It includes supervisor-/memory-address-dependent patches and direct writes to system font pointers (notably addresses around 0x607E and 0x2924). These examples are historical Atari-specific techniques, not safe general GFA BASIC APIs. They must be classified as unsafe/disabled unless a future Atari machine/TOS profile provides a fully virtualized memory model and explicit compatibility evidence.
+
+The source describes these file layouts:
+- Degas high-resolution font: 2,050 bytes (2-byte header plus 2,048 bytes for 128 glyphs × 16 scanlines).
+- STAD/OLIFONT high-resolution font: 4,096 bytes (256 glyphs × 16 scanlines).
+- 8×16 system font: 4,698 bytes (602-byte header plus 4,096 glyph bytes).
+These are source-described file formats; do not infer that all Atari font loaders accept them interchangeably. [pp. 528–530]
+
 Workstation handles, capabilities and lifecycle must be explicit. Do not assume a printer/plotter workstation behaves like the screen. The book reports a RESERVE error in one tested environment when closing a newly opened workstation without first issuing graphics output; treat this as a compatibility warning, not a universal VDI rule. [p. 511]
 
 The font-header and direct TOS/GEM font-pointer material on pp. 516–530 is low-level and OS-specific. It includes resident-memory and supervisor-level patches, including one patch limited to a specific 1986 ROM-TOS build. Do not treat these as safe general APIs.
