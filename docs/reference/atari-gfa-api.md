@@ -658,12 +658,6 @@ The source's detailed floppy format/boot-sector and virus discussion (pp. 630–
 **Page-image checks completed:** p. 605 confirms BIOS generic signature, L: longword marker, D0 result and GETMPB layout; p. 612 confirms the SUPER warning and stack/mode caveats; p. 618 confirms the VDISYS V3.0 argument form and workstation-handle source; p. 623 confirms XBIOS INITMOUSE/SSBRK/PHYSBASE/LOGBASE declarations. Other detailed XBIOS disk/sound examples remain text/OCR-derived pending targeted image review.
  
 
-## 9. System variables and absolute addresses
-
-Chapter 22 lists absolute TOS/Atari addresses for memory controller/reset vectors, physical/user memory bounds, floppy timing, system timer/keyboard configuration, screen/video pointers, interrupt vectors and saved processor state. [pp. 657–664]
-
-Direct POKE changes to floppy timing, interrupt handlers and BASIC Break behavior are highly version-specific and can crash the system. Classify these as unsafe/unsupported by default. Any emulation requires an explicitly selected Atari machine/TOS profile and safe virtualized memory model.
-
 ### 8.9 Source consistency correction: GETDFREE buffer size
 
 A line-by-line check of p. 614 confirms that GEMDOS(54) GETDFREE writes **four 32-bit longwords**, at buffer offsets +0, +4, +8 and +12. The required buffer is therefore **16 bytes**, not 12 bytes. The printed prose calls it a “12-Byte-Puffer”, but the fourth field is explicitly placed at +12 and occupies another longword. This is a source-internal contradiction; the field layout determines the minimum size. Treat the phrase “12-byte buffer” as a likely book typo and preserve the discrepancy in evidence notes. No host implementation should allocate only 12 bytes.
@@ -685,6 +679,12 @@ Primary cross-reference URLs:
 - Atari, *A Hitchhiker's Guide to the BIOS*, Rev. 1.1: https://manualzz.com/doc/26181874/atari-bios-rev-1.1-system-software-guide
 - *The Atari Compendium*, GEMDOS: https://bus-error.nokturnal.pl/atari_compendium/html/chap2.htm
 - *The Atari Compendium*, XBIOS: https://www.yardley.cc/atari/compendium/atari-compendium-chapter-4-XBIOS.htm
+
+## 9. System variables and absolute addresses
+
+Chapter 22 lists absolute TOS/Atari addresses for memory controller/reset vectors, physical/user memory bounds, floppy timing, system timer/keyboard configuration, screen/video pointers, interrupt vectors and saved processor state. [pp. 657–664]
+
+Direct POKE changes to floppy timing, interrupt handlers and BASIC Break behavior are highly version-specific and can crash the system. Classify these as unsafe/unsupported by default. Any emulation requires an explicitly selected Atari machine/TOS profile and safe virtualized memory model.
 
 ### 9.1 System-variable inventory (printed pp. 657–664)
 
