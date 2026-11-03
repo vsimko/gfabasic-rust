@@ -1,12 +1,25 @@
 # Documentation policy
 
+## Decision and scope
+
+**Decision (2026-11-03):** Use UTF-8 Markdown as the canonical source format for human-readable project documentation. Use GitHub-flavoured Markdown (GFM) features only where GitHub renders them consistently. Keep all documentation in this repository.
+
+Issue #14 refers to an “OKF format”, but the issue does not identify an expanded name, publisher, specification, version, or conformance profile. The repository contains no evidence that “OKF” names a specific documentation format. This is an unresolved requirement, not a format that can be implemented or validated as written.
+
+Do not describe Markdown as “OKF”, and do not claim compliance with an unidentified specification. If the requester supplies the intended expansion or a specification, review it in a separate decision before changing the canonical format.
+
+Markdown is the practical choice for the current project because it is plain text, open, readable in GitHub, accessible to contributors without a special authoring tool, and suitable for normal Git diffs and reviews. This decision does not prevent the project from generating other formats from the Markdown source in the future.
+
+This policy applies to human-readable project documentation. Machine-readable API declarations and configuration data must use separately defined, validated formats. They must not be maintained by scraping explanatory Markdown.
+
 ## Source format
 
-Use UTF-8 Markdown for human-readable documentation. Keep documentation in the repository so that it remains readable in GitHub and can be reviewed with normal Git diffs.
-
-Issue #14 refers to an “OKF format”. That name is ambiguous in the available project context. Do not label Markdown as OKF and do not claim compliance with an unidentified specification. Resolve the exact requested format, version, authoritative specification, tooling, and licensing requirements before making such a claim.
-
-Machine-readable API declarations, when designed, must be kept in a validated data format and treated as a separate source of truth from explanatory prose.
+- Encode text as UTF-8.
+- Use Markdown files with the `.md` extension.
+- Use GitHub-flavoured Markdown only for features supported by GitHub's renderer. Do not require a hosted documentation service or custom renderer to read essential project information.
+- Use relative links for files in this repository.
+- Keep generated documentation out of the canonical source unless a later decision defines a reproducible generation process.
+- Keep source files readable in a plain-text editor.
 
 ## Writing rules
 
@@ -18,26 +31,48 @@ Write technical documentation in clear, direct English. Use ASD-STE100 Simplifie
 - Expand abbreviations at first use.
 - Use numbered steps for procedures.
 - State prerequisites, expected results, and failure conditions.
-- Do not use vague claims such as “fully compatible”, “complete”, or “works everywhere”.
+- Use the same term for the same concept throughout the repository.
+- Avoid vague claims such as “fully compatible”, “complete”, or “works everywhere”.
 - Separate verified facts from assumptions and proposals.
 - Do not copy substantial text from copyrighted manuals.
 
-This project has not yet established a licensed ASD-STE100 dictionary or automated checker. Do not claim formal ASD-STE100 certification. Human review is required.
+This project has not established a licensed ASD-STE100 dictionary or an automated checker. Do not claim formal ASD-STE100 certification or full compliance. Human review is required. The rules above are project writing guidance, not a substitute for the complete standard.
 
-## Structure and links
+## Document structure and navigation
 
-- Use one H1 heading per document.
-- Use sequential heading levels.
-- Use relative links for files in this repository.
-- Use descriptive link text.
+- Use one H1 heading per document. The H1 must identify the document topic.
+- Use heading levels in sequence. Do not select a heading level only to change its visual size.
+- Give each document a clear audience and purpose.
+- Link to a canonical definition instead of duplicating it in multiple documents.
+- Use descriptive link text. Avoid phrases such as “click here”.
+- Use tables for compact, genuinely tabular information. Use lists for procedures and unrelated items.
 - Mark code blocks with a language identifier when known.
-- Include source citations for GFA BASIC behavior. Cite the document, edition/version, platform, and page/section.
-- Mark unresolved behavior explicitly. Do not fill gaps with rules from another BASIC dialect.
+- State the dialect, platform, and version when documenting GFA BASIC behavior.
+- Cite the source document, edition/version, platform, and printed page or section for each documented language/API rule.
+- Mark unresolved behavior explicitly. Do not fill evidence gaps with rules from another BASIC dialect.
+
+## Examples and technical claims
+
+- Prefer small, independently authored examples.
+- Identify the dialect/version and required API profile for each conformance example.
+- Distinguish syntax demonstrated by an example from semantics established by a primary reference.
+- Do not claim that a documented feature is implemented. State its implementation and test status separately.
+- Do not include copyrighted source code or substantial manual extracts unless redistribution rights are confirmed.
 
 ## Validation
 
-At minimum, review Markdown rendering, local links, headings, table readability, spelling, and code examples. Automated checks may be added after the CI and tooling architecture is established.
+For every documentation change, review:
+
+1. Markdown rendering on GitHub.
+2. Local links and referenced file paths.
+3. Heading hierarchy and document navigation.
+4. Table readability and code-block language identifiers.
+5. Spelling, terminology, and clarity.
+6. Source citations, dialect/version scope, and evidence status for GFA BASIC claims.
+7. Copyright and redistribution constraints for external material.
+
+These checks are currently a review checklist. Do not claim that they run automatically. Add automated Markdown, link, spelling, or reference validation only when the project defines the tooling, supported versions, and CI integration. The absence of an automated checker does not remove the review requirements.
 
 ## Copyright and source material
 
-Do not commit scans, substantial manual extracts, or copied examples unless redistribution rights are confirmed. Prefer original explanations with short citations to source pages. Keep bibliographic metadata and provenance in [reference-sources.md](reference-sources.md).
+Do not commit scans, substantial manual extracts, or copied examples unless redistribution rights are confirmed. Prefer original explanations with short citations to source pages. Keep bibliographic metadata, provenance, and evidence status in [reference-sources.md](reference-sources.md).
