@@ -142,3 +142,19 @@ This manual must not be used as direct evidence for Amiga screen/window/menu/eve
 ### Unresolved German Amiga book bibliography
 
 A further catalogue lead identifies *Das Grosse Buch zu GFA BASIC AMIGA* by Bleek, Hecht, and Litzkendorf, Data Becker, 1989, ISBN 3-89011-276-5, reportedly about 430 pages. This record is not yet backed by inspection of the physical title/copyright pages or contents. Keep it distinct from the searchable 1990 Data Becker scan (ISBN 3-89011-399-0, copyright 1990) and from the French 1989 translation (ISBN 2-86899-207-2). The similar titles and author list are not sufficient to conclude that these are the same edition, a translation, or a revision. Version coverage and page mapping remain unknown until the 1989 German candidate is independently verified.
+
+### Bibliographic cross-check: German Amiga book, 1989 (checked 2026-11-03)
+
+The 1989 German title is corroborated by multiple independent catalogue and historical references. BoekenWebsite's individual used-book record gives the title *Das grosse Buch zu GFA BASIC Amiga*, authors as “Bleek ea.”, publisher Data Becker, 430 pages, ISBN-10 3890112765, ISBN-13 9783890112763, German language, and publication year 1989. The ISBN-10 check digit and ISBN-13 are consistent. Retrobug independently lists the title, authors Bleek/Hecht/Litzkendorf, Data Becker, 1989, and ISBN 3890112765. An Amiga Future bibliography based on a 1992 market list includes *Das große Buch zu GFA-BASIC Amiga* and names Bleek and Hecht. A contemporary 1988 review independently establishes that GFA-Basic 3.0 Amiga shipped with a German manual of approximately 420 pages; it is not proof that this 430-page book is that manual or that both refer to the same edition.
+
+Amiga-News reported on 2026-09-03 that Thomas Werner offers the German 1989 book and the French translation as free PDFs with the authors' permission. This is a secondary report of authorization and availability, not direct inspection of the German scan. The reported download collection is associated with [ebook.pixas.de](http://ebook.pixas.de/), but the site was not accessible during this check. The French scan at gods69.com is a separate translation with ISBN 2-86899-207-2 and explicitly documents GFA BASIC Amiga interpreter 3.0; do not transfer its exact ISBN, version claims, or pagination to the German scan.
+
+**Current conclusion:** bibliographic identity for a distinct 1989 German Amiga book is strongly corroborated; the 430-page / ISBN 3-89011-276-5 metadata is supported by a bookshop catalogue and corroborating historical catalogue entries. The title page, imprint/copyright page, actual scan pagination, precise interpreter-version coverage, and correspondence (if any) with the 1990 ISBN 3-89011-399-0 edition remain unverified. Keep AM-BOOK-1989 as a candidate primary source, not yet a page-verified normative source.
+
+Sources checked:
+- BoekenWebsite individual catalogue record: https://www.boekenwebsite.nl/computers-software/das-grosse-buch-zu-gfa-basic-amiga
+- Retrobug catalogue record: https://www.retrobug.org/library/med0142
+- Amiga Future historical bibliography (article dated 2008, reproducing a 1992 market list): https://www.amigafuture.de/app.php/kb/viewarticle?a=2584
+- Contemporary review of GFA-Basic 3.0 Amiga, *Happy Computer* 12/1988: https://www.stcarchiv.de/happy-computer/1988/12/gfa-basic-amiga
+- Amiga-News report on author-authorized PDF availability, 2026-09-03: https://www.amiga-news.de/en/standard/?frm_perPage=21&frm_start=42
+- Reported PDF collection: http://ebook.pixas.de/ (not directly accessible during this check)
