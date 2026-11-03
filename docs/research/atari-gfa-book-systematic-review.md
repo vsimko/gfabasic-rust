@@ -651,11 +651,11 @@ The documented API families are:
 - **Form manager:** `FORM_ALERT`, `FORM_BUTTON`, `FORM_CENTER`, `FORM_DIAL`, `FORM_DO`, `FORM_ERROR`, `FORM_KEYBD` and `FORM_MOUSE`, plus file-selector/form routines. Forms operate on GEM object trees and return the selected exit object or edited text/state. [pp. 554–559]
 - **Graphics manager:** `GRAF_HANDLE`, `GRAF_MKSTATE`, `GRAF_MOUSE`, `GRAF_MOVEBOX`, `GRAF_GROWBOX`, `GRAF_SHRINKBOX`, `GRAF_RUBBERBOX`, `GRAF_SLIDEBOX` and `GRAF_WATCHBOX`. These query pointer/workstation state or produce AES interaction effects. [pp. 559–564]
 - **Menu manager:** `MENU_ICHECK`, `MENU_IENABLE`, `MENU_REGISTER`, `MENU_TEXT`, `MENU_TNORMAL` and `MENU_BAR`. These modify GEM menu-tree state, checkmarks, enablement and title highlighting. [pp. 564–566]
-- **Object manager:** `OBJC_ADD`, `OBJC_DELETE`, `OBJC_DRAW`, `OBJC_EDIT`, `OBJC_FIND`, `OBJC_OFFSET`, `OBJC_ORDER), `OBJC_CHANGE) and related calls. These navigate, draw and mutate typed object trees. [pp. 566–569]
+- **Object manager:** `OBJC_ADD`, `OBJC_DELETE`, `OBJC_DRAW`, `OBJC_EDIT`, `OBJC_FIND`, `OBJC_OFFSET`, `OBJC_ORDER`, `OBJC_CHANGE` and related calls. These navigate, draw and mutate typed object trees. [pp. 566–569]
 - **Resource manager:** `RSRC_FREE`, `RSRC_GADDR`, `RSRC_LOAD`, `RSRC_OBFIX` and `RSRC_SADDR`. Loading reserves GEM memory; freeing releases it. Pointers to nested structures may need adjustment when structures are moved. The author warns that `RSRC_SADDR` is not always reliable. [pp. 569–571]
 - **Scrap manager:** `SCRP_READ` and `SCRP_WRITE` access the shared GEM scrap/clipboard text buffer, with a documented maximum buffer size of 160 bytes in the described interface. [pp. 571–572]
 - **Shell manager:** `SHEL_FIND`, `SHEL_GET`, `SHEL_PUT`, `SHEL_READ`, `SHEL_WRITE` and related calls locate applications, exchange launch information and read/write command-line or environment data. [pp. 573–574]
-- **Window manager:** `WIND_CALC`, `WIND_CREATE`, `WIND_DELETE`, `WIND_FIND`, `WIND_GET`, `WIND_OPEN`, `WIND_CLOSE`, `WIND_SET) and `WIND_UPDATE). The API separates window creation/handle allocation, opening/closing, geometry/state queries and update locking. [pp. 575–580]
+- **Window manager:** `WIND_CALC`, `WIND_CREATE`, `WIND_DELETE`, `WIND_FIND`, `WIND_GET`, `WIND_OPEN`, `WIND_CLOSE`, `WIND_SET` and `WIND_UPDATE`. The API separates window creation/handle allocation, opening/closing, geometry/state queries and update locking. [pp. 575–580]
 
 The chapter includes examples of form/resource/menu use on pp. 580–584. These examples demonstrate sequencing and resource ownership, but should not be copied verbatim into the project's tests or treated as complete conformance coverage.
 
