@@ -21,6 +21,7 @@ The documentation is maintained in this repository.
 - [Dialect and version policy](docs/architecture/DIALECTS.md)
 - [Documentation policy](docs/DOCUMENTATION.md)
 - [GFA BASIC reference sources](docs/reference-sources.md)
+- [Language reference notes](docs/reference/README.md)
 - [Open project work](https://github.com/vsimko/gfabasic-rust/issues)
 
 ## Current scope and limitations
