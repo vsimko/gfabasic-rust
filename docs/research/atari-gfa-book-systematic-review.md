@@ -602,3 +602,187 @@ Remaining validation:
 - Test packed KEYGET/KEYTEST codes, KEYLOOK non-consuming behavior and KEYPRESS injection.
 - Verify MENU event IDs, MENU buffer field mapping and ON MENU BUTTON parameter behavior on real GEM/TOS.
 - Separate safe public GEM/AES calls from undocumented RAM patching examples.
+
+
+## 18. GDOS/VDI library (chapter 17, pp. 499–530)
+
+### 18.1 GDOS availability and device configuration
+
+The book states that most functions in this chapter require resident GDOS, installed during boot from `GDOS.PRG` and configured by `ASSIGN.SYS`. The two font-query helpers `VQT_EXTENT()` and `VQT_NAME()` are identified as exceptions. The ASSIGN.SYS examples distinguish screen, plotter, printer, metafile, camera and graphics-tablet drivers, with device IDs and font lists. [pp. 499–502]
+
+This is an optional Atari system service, not an intrinsic BASIC facility. Availability must be represented as a runtime capability; failure to load GDOS or a device driver must not be silently treated as a successful workstation open.
+
+### 18.2 Workstations and VDI state
+
+- V3.0 `V-H` reads or sets the current VDI handle. The documented special values distinguish the GFA-managed handle from a freely selected handle; VDI calls use the handle in the control block. [p. 503]
+- `V_CLRWK()` clears the output buffer/current workstation; for a printer it also emits a form feed. [p. 504]
+- `V_CLSWK()` closes a workstation opened with `V_OPNWK()`, flushes pending output and restores the GFA handle. [p. 505]
+- `V_OPNWK(driverId,...attributes...)` opens a physical output workstation (for example printer/plotter) and returns its VDI device handle. The driver ID comes from ASSIGN.SYS. [pp. 507–511]
+- `V_OPNVWK(...)` opens a virtual workstation for the screen; it returns a handle and output capabilities are exposed through `WORK_OUT(0..56)`. The V2.xx procedure form requires more explicit parameter setup. [pp. 505–507]
+- The book warns that closing a workstation after opening it but without issuing graphics output could produce a “RESERVE” error in its tested environment. Treat this as an observed compatibility warning, not a universal VDI rule. [p. 511]
+
+A workstation has a lifecycle (open, select/use, flush/close); the runtime must track handles and device capabilities separately from the default screen. Printer output is buffered and may have side effects such as form feed.
+
+### 18.3 Fonts and text metrics
+
+- `VST_LOAD_FONTS(0)` loads additional fonts listed in ASSIGN.SYS and reports the number actually loaded; memory may need to be reserved first. [p. 515]
+- `VQT_NAME(index,name$)` returns the VDI font ID and its name from the loaded font list; when GDOS is absent, the book describes fallback information for the current system font. [p. 514]
+- `VQT_EXTENT(text$[,coordinates...])` computes the bounding quadrilateral using current VDI text attributes; output coordinates are returned in PTSOUT. [pp. 512–513]
+- The examples use VDI text attributes, font selection and coordinate scaling for output on printer and screen workstations. [pp. 508–513]
+
+The chapter's remaining pages (pp. 516–530) describe custom font formats, font headers, conversion and direct manipulation of TOS/GEM font pointers. These examples include resident memory, supervisor-level patches and a ROM-TOS-specific assembler routine. They are historical low-level techniques, not safe portable font APIs. The book explicitly limits one patch to a particular 1986 ROM-TOS build. Do not reproduce those patches as general runtime behavior.
+
+## 19. AES library (chapter 18, pp. 531–584)
+
+### 19.1 Resource Construction Set and object-tree model
+
+The chapter introduces the Resource Construction Set (RCS) as the visual editor for GEM resource trees, including menus, alerts, dialogs, panels and other object trees. Resource files contain typed GEM objects and associated structures; object order, parent/child relationships and object flags determine interaction and drawing behavior. [pp. 531–547]
+
+A GEM resource tree is not equivalent to a generic UI widget tree. Preserve object indices, sibling/child links, flags, state, geometry and resource-owned strings/bitmaps where compatibility with RSC files is required. The RCS discussion is an editor/workflow description, not BASIC syntax.
+
+### 19.2 AES calling convention and managers
+
+The book describes approximately 70 AES functions and explains that V3.0 exposes AES calls as callable functions; V2.xx equivalents are shown where available. Calls exchange typed integer and address arrays through AES parameter blocks. Address parameters require 4-byte values; coordinate/value parameters require at least 2-byte integers. [pp. 547–549]
+
+The documented API families are:
+
+- **Application manager:** `APPL_INIT`, `APPL_EXIT`, `APPL_READ`, `APPL_WRITE`, and (where supported) application/event recording calls. Application IDs/handles identify other AES applications and message buffers. [pp. 548–551]
+- **Event manager:** `EVNT_BUTTON`, `EVNT_DCLICK`, `EVNT_KEYBD`, `EVNT_MESAG`, `EVNT_MOUSE`, `EVNT_MULTI`, and `EVNT_TIMER`. These are blocking/waiting AES event operations; message fields correspond to the event data exposed by `MENU()` in chapter 16. [pp. 551–554]
+- **Form manager:** `FORM_ALERT`, `FORM_BUTTON`, `FORM_CENTER`, `FORM_DIAL`, `FORM_DO`, `FORM_ERROR`, `FORM_KEYBD` and `FORM_MOUSE`, plus file-selector/form routines. Forms operate on GEM object trees and return the selected exit object or edited text/state. [pp. 554–559]
+- **Graphics manager:** `GRAF_HANDLE`, `GRAF_MKSTATE`, `GRAF_MOUSE`, `GRAF_MOVEBOX`, `GRAF_GROWBOX`, `GRAF_SHRINKBOX`, `GRAF_RUBBERBOX`, `GRAF_SLIDEBOX` and `GRAF_WATCHBOX`. These query pointer/workstation state or produce AES interaction effects. [pp. 559–564]
+- **Menu manager:** `MENU_ICHECK`, `MENU_IENABLE`, `MENU_REGISTER`, `MENU_TEXT`, `MENU_TNORMAL` and `MENU_BAR`. These modify GEM menu-tree state, checkmarks, enablement and title highlighting. [pp. 564–566]
+- **Object manager:** `OBJC_ADD`, `OBJC_DELETE`, `OBJC_DRAW`, `OBJC_EDIT`, `OBJC_FIND`, `OBJC_OFFSET`, `OBJC_ORDER), `OBJC_CHANGE) and related calls. These navigate, draw and mutate typed object trees. [pp. 566–569]
+- **Resource manager:** `RSRC_FREE`, `RSRC_GADDR`, `RSRC_LOAD`, `RSRC_OBFIX` and `RSRC_SADDR`. Loading reserves GEM memory; freeing releases it. Pointers to nested structures may need adjustment when structures are moved. The author warns that `RSRC_SADDR` is not always reliable. [pp. 569–571]
+- **Scrap manager:** `SCRP_READ` and `SCRP_WRITE` access the shared GEM scrap/clipboard text buffer, with a documented maximum buffer size of 160 bytes in the described interface. [pp. 571–572]
+- **Shell manager:** `SHEL_FIND`, `SHEL_GET`, `SHEL_PUT`, `SHEL_READ`, `SHEL_WRITE` and related calls locate applications, exchange launch information and read/write command-line or environment data. [pp. 573–574]
+- **Window manager:** `WIND_CALC`, `WIND_CREATE`, `WIND_DELETE`, `WIND_FIND`, `WIND_GET`, `WIND_OPEN`, `WIND_CLOSE`, `WIND_SET) and `WIND_UPDATE). The API separates window creation/handle allocation, opening/closing, geometry/state queries and update locking. [pp. 575–580]
+
+The chapter includes examples of form/resource/menu use on pp. 580–584. These examples demonstrate sequencing and resource ownership, but should not be copied verbatim into the project's tests or treated as complete conformance coverage.
+
+### 19.3 AES lifecycle and compatibility constraints
+
+1. Application registration and exit are explicit AES lifecycle operations; the book notes that GFA may manage some application-ID details internally.
+2. Event calls may block the BASIC program while waiting for user input. They must cooperate with the runtime's event pump and timer model.
+3. Form and menu operations depend on a valid resource/object tree and correct object indices/flags.
+4. Resource memory is allocated by GEM and must be released with the matching resource call. BASIC memory restoration/reservation may also be necessary.
+5. `WIND_UPDATE` locks/unlocks AES window update behavior while an application draws; incorrect pairing can leave other applications/accessories unable to redraw.
+6. The author reports bugs or unreliable behavior for some AES functions (including application event recording and resource pointer adjustment). Preserve these as source-specific warnings; do not assume every documented call works identically across TOS/GEM variants.
+
+AES is a platform API profile, not language-core behavior. It requires an explicit GEM/AES compatibility layer with event ordering, resource ownership, message formats and window state.
+
+## 20. GEM object variables and structures (chapter 19, pp. 585–596)
+
+### 20.1 Object-tree record
+
+The basic GEM OBJECT record is a fixed-size structure linked by object indices. The book documents the links `OB_NEXT`, `OB_HEAD` and `OB_TAIL`, followed by type, flags, state, specification pointer/value and relative geometry. [pp. 585–591]
+
+GFA exposes object fields through getter/setter functions:
+- `OB_ADR(address,object)`: byte offset/address of an object in its tree (not itself a field in the OBJECT record).
+- `OB_NEXT`, `OB_HEAD`, `OB_TAIL`: sibling/child navigation links.
+- `OB_TYPE`: object type.
+- `OB_FLAGS`: 9-bit object-attribute mask, including selectable/default/exit/touch-exit, hide-tree and indirect-specification behavior.
+- `OB_STATE`: 6-bit visual/interaction state mask, including selected, crossed, checked, disabled, outlined and shadowed state.
+- `OB_SPEC`: type-dependent value or pointer to a subordinate structure.
+- `OB_X`, `OB_Y`, `OB_W`, `OB_H`: relative object geometry. [pp. 586–591]
+
+The exact flag/state constants and all type-dependent `OB_SPEC` interpretations should be transcribed into a typed registry only after checking the page tables; the OCR is unreliable in several bit labels.
+
+### 20.2 Nested GEM structures
+
+The chapter documents the resource-file header and several subordinate structures:
+- `BOXINFO`: packed 32-bit color/pattern/border specification for box-like object types. [p. 592]
+- `TEDINFO`: text-edit structure containing pointers to initial text, input template and validation/format string, plus text/font/color/justification/length fields. [pp. 592–593]
+- `ICONBLK`: icon mask/data pointers, dimensions, character and label information. [p. 594]
+- `BITBLK`: bitmap pointer, dimensions, row/plane information and color. [pp. 594–595]
+- `G_IMAGE` and `G_ICON` data blocks: raster data and optional mask/label fields. [pp. 594–595]
+- `PARMBLK` / application-object block: tree/object identity, previous/current state, pixel geometry and redraw information passed to custom object drawing. [p. 596]
+
+These are 68k-era ABI structures with 16-bit words, 32-bit pointers and strict alignment/layout requirements. They must be modeled explicitly with target-width fields; host pointer size and host struct layout must never be used directly.
+
+## 21. GEM addresses and parameter blocks (chapter 20, pp. 597–604)
+
+The book documents direct access to the shared AES/VDI parameter arrays:
+
+- `ADDRIN`, `ADDROUT`: AES address input/output arrays; 4-byte pointer entries.
+- `GINTIN`, `GINTOUT`: AES integer input/output arrays; 2-byte entries.
+- `GCONTRL`: AES control block with opcode, integer-array byte lengths and address-array element counts.
+- `INTIN`, `INTOUT`: VDI integer input/output arrays.
+- `PTSIN`, `PTSOUT`: VDI point input/output arrays.
+- `CONTRL`: VDI control block with opcode, point/int array lengths, subfunction and workstation handle.
+- V3.0 array accessors expose these blocks as indexed arrays; the corresponding raw address forms remain available. [pp. 597–601]
+
+`VDIBASE` exposes a copy of VDI workstation state. The book warns that it is invalid on some Mega/Blitter TOS configurations and may contain incorrect values in GFA V3.0; it gives a ROM-TOS-specific fallback block address. The block contains text rotation, clipping, font count/current font, a copied font header, text color, line style and fill-pattern planes. [pp. 602–604]
+
+Treat all these blocks as transient shared call buffers, not independent application-owned data. Their contents are overwritten by subsequent AES/VDI calls. Exact array lengths and handle placement are call-specific; raw addresses and the hard-coded ROM-TOS fallback must remain profile- and OS-version-gated.
+
+## 22. BIOS, GEMDOS, VDISYS, AES and XBIOS system calls (chapter 21, pp. 605–656)
+
+### 22.1 Call interface
+
+The book defines generic `BIOS(opcode,...)`, `GEMDOS(opcode,...)`, `VDISYS(opcode,...)` and `XBIOS(opcode,...)` entry points. Longword parameters must be explicitly marked with `L:`; unmarked values are passed as words. Results are returned through the 68k D0 register and can be used as expressions. V3.0 exposes AES calls as functions, while VDISYS remains the direct VDI escape hatch. [pp. 605, 608, 618]
+
+These interfaces are raw Atari OS ABI calls, not portable BASIC functions. Parameter widths, signedness, register conventions, pointer validity, privilege level and error codes must be modeled explicitly.
+
+### 22.2 BIOS
+
+The chapter covers BIOS console input/output, raw disk I/O, device status and keyboard shift state. Notable calls include `BIOS(2)` console input, `BIOS(3)` console output, `BIOS(4)` sector read/write and `BIOS(7)` drive parameter block lookup. The parameter block describes sector size, cluster geometry, directory/FAT layout and data-area start. [pp. 605–608]
+
+### 22.3 GEMDOS
+
+The documented GEMDOS surface includes process termination/return, console input/output and status, default-drive selection, supervisor-mode switching, date/time, disk free-space, file open/close/read/write, file attributes, duplicate handles, process execution and directory search. Examples include:
+- `GEMDOS(0)` process termination (the book explicitly says GFA programs should use QUIT/SYSTEM instead).
+- `GEMDOS(1)`, `(6)`, `(7)`, `(8)`, `(9)`, `(10)`, `(11)`: console/key input/output and status.
+- `GEMDOS(14)`: set default drive.
+- `GEMDOS(32)`: enter/leave supervisor mode; dangerous privileged memory access.
+- `GEMDOS(42–45)`: date/time get/set in packed bit formats.
+- `GEMDOS(54)`: drive free-space information.
+- `GEMDOS(61–64)`: open, close, read and write.
+- `GEMDOS(67–70)`: file date/time/attribute and handle operations.
+- `GEMDOS(75–79)`: process execution/termination and directory search. [pp. 608–618]
+
+The book itself labels several low-level operations as dangerous, unsuitable or too complex to explain. Raw file handles and memory buffers must not be conflated with GFA's higher-level channel abstraction. Supervisor-mode and direct process termination calls require strict sandbox/privilege boundaries.
+
+### 22.4 VDISYS
+
+`VDISYS` invokes VDI functions using the shared parameter blocks. The book demonstrates querying current polyline and text attributes, using VDI escape functions (including cursor position, mouse availability and hardcopy), and manipulating interrupt-related VDI state. [pp. 618–623]
+
+This is the same VDI subsystem as chapter 17 but through raw opcode/array access. Keep it in the Atari VDI profile and validate opcode-specific array layouts against authoritative VDI documentation.
+
+### 22.5 XBIOS and hardware interfaces
+
+The XBIOS section covers mouse initialization, screen resolution and screen-base switching, floppy sector I/O/formatting, MIDI, RS232 buffers/configuration, keyboard translation tables, random values, sound, MFP interrupt/timer control, and hardcopy. Examples include `XBIOS(4)` GETREZ, `XBIOS(5)` SETSCREEN, `XBIOS(8)` FLOPREAD, `XBIOS(12)` MIDIWS, `XBIOS(15)` RSCONF, `XBIOS(17)` RANDOM and `XBIOS(36)` PRTBLK. [pp. 623–656]
+
+Pages 630–645 give a long diskette-structure and formatting example, including boot sector, FAT, directory and cluster layout, followed by a boot-sector virus discussion. Treat this as historical FAT12/Atari floppy material, not as a safe generic disk API. Do not reproduce disk-virus modification/cleaning procedures as implementation guidance. Pages 646–656 describe cursor timing, MFP bit/timer registers, sound-chip command bytes, MIDI vectors and printer blocks; these depend on specific Atari hardware and TOS versions.
+
+## 23. System variables (chapter 22, pp. 657–664)
+
+The final chapter lists absolute TOS/Atari memory addresses and hardware/system variables, including:
+- Memory controller and reset vectors (`membctrl`, `resvalid`, `resvector`).
+- Physical/user memory bounds (`phystop`, `membot`, `memtop`).
+- Floppy seek rate and system timer/keyboard-related configuration.
+- Screen/video state and pointers (`v_bas_ad`, `colorptr`, `screenptr`, VBL-related state).
+- Interrupt vectors/lists and saved processor-register state (`savptr`, `vbl_list`). [pp. 657–664]
+
+The book includes direct POKE-based changes to floppy timing, interrupt handlers and BASIC Break behavior. These are highly version-specific and potentially system-crashing. Record them as unsafe/unsupported low-level surfaces; do not implement them as ordinary language semantics. Any future emulation should use an explicitly selected Atari machine/TOS profile and safe virtualized memory model.
+
+## 24. Architecture implications and issue traceability (chapters 17–22)
+
+1. GDOS is optional and driver-configured; model it as a runtime capability and workstation lifecycle, not as always-present screen output.
+2. VDI workstation handles, output buffers, font state and device capabilities need a dedicated VDI API profile. Physical printer/plotter output differs from virtual screen workstations.
+3. AES requires a GEM object/resource model, application identity, event queue, form/menu/window managers and explicit resource ownership.
+4. GEM OBJECT/TEDINFO/ICONBLK/BITBLK/PARMBLK records must use target 68k field widths and target addresses; host-native pointers/layout are incompatible.
+5. AES/VDI parameter arrays are shared transient buffers. Calls can overwrite them; buffer lifetime and call ordering are observable.
+6. BIOS/GEMDOS/XBIOS and absolute system variables are privileged Atari OS/hardware interfaces. Keep them out of the portable language core and gate by machine/TOS profile.
+7. Disk formatting, supervisor-mode access, interrupt/vector changes and memory patching are unsafe operations. They need explicit support classification and must not be silently mapped to host OS operations.
+8. Do not assume that the 1989 Atari V2.xx/V3.0 book documents Amiga behavior or later Atari releases.
+
+This batch is covered by existing issues **#25 — Atari ST GFA BASIC API reference**, **#19 — language feature inventory**, **#3 — dialect/version compatibility policy**, **#18 — source provenance and licensing**, and **#42 — conformance test corpus**. No duplicate issue was opened.
+
+Remaining validation for chapters 17–22:
+- Check OCR-sensitive VDI function signatures, handle rules and font-header offsets against page images.
+- Verify the exact AES function list/signatures and V2.xx versus V3.0 availability.
+- Check all OBJECT flag/state bit positions and nested structure sizes/offsets against the printed tables.
+- Verify AES/VDI parameter-block lengths and the V3.0 array accessors.
+- Cross-check BIOS/GEMDOS/XBIOS opcode signatures and return/error conventions against Atari TOS documentation and real hardware/emulator behavior.
+- Resolve book-specific TOS/ROM addresses and identify which are invalid on Mega/Blitter TOS or later machines.
+- Do not mark runtime behavior as tested: this batch is a manual-backed first pass, not interpreter conformance testing.
