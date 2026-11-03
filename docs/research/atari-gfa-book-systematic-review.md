@@ -5,7 +5,7 @@
 - Scope stated by the book: Atari ST GFA BASIC V2.xx and V3.0.
 - Inspection started: 2026-11-03.
 - Evidence: searchable OCR extracted from the user-provided 300-dpi PDF; printed page numbers are retained below.
-- Status: **systematic review in progress**. This is not a complete transcription or a validated implementation specification.
+- Status: **first-pass review of all 24 chapters completed**. This is not a complete transcription or a validated implementation specification; targeted page-image, cross-source and runtime validation remain open.
 
 ## 1. Method and evidence rules
 
@@ -972,3 +972,27 @@ The detailed floppy/boot-sector/virus material (pp. 630–645) is destructive an
 - **p. 623:** XBIOS INITMOUSE, SSBRK, PHYSBASE and LOGBASE declarations confirmed.
 
 The rest of the chapter remains a searchable-text/OCR first pass; no TOS build, emulator or hardware probe was run. Do not mark any behavior as runtime-tested.
+
+
+## Chapter 22 follow-up: system variables (printed pp. 657–664)
+
+**Status: address inventory transcribed; selected page-image checks completed; no runtime validation.** The Atari API reference now contains a grouped inventory of the absolute addresses, widths and meanings listed in this chapter.
+
+The chapter covers memory-controller/reset state; physical/user RAM bounds; floppy timing and write verification; boot drive and video mode; logical screen pointer; VBL semaphore/count/queue; palette and screen pointers; hard-disk vectors; keyboard terminal flags; trap return and memory descriptors; saved processor state; drive bits and disk buffer; hardcopy/printer flags; OS and AES base pointers. [pp. 657–664]
+
+Important cautions:
+- The source's nvbls entry is headed as a Word at 0x0454 but one sentence calls it a Longword. Preserve the discrepancy; do not normalize silently.
+- vblsem can suppress VBL routines and BASIC Break handling. The examples that patch V2.xx interpreter bytes at p. 660 can also disable direct mode and make later ON BREAK behavior inconsistent.
+- vblqueue, colorptr, screenptr and hard-disk vectors are pointers into target memory; host pointers are never valid substitutes.
+- The author explicitly marks some fields read-only or says their internal behavior is not understood. Do not infer writable semantics from an address listing.
+
+Page-image checks on pp. 657, 660 and 663 confirm the listed addresses and key descriptions, including the 0x045A palette pointer, 0x045E screen pointer, 0x0462/0x0466 counters, 0x04CE VBL list and 0x04F0 printer timeout flag. No runtime probe was performed.
+
+## Chapters 23–24 completion status
+
+The chapter 23 RAMKART example and chapter 24 appendices already have detailed first-pass sections above. They are considered **reviewed for source coverage**, not validated implementations:
+
+- Chapter 23 records the fixed-size RAM card model, .DEF metadata, RAM/disk synchronization, UI/search/sort/edit workflows, memory assumptions and the intentionally defective sort pass. The example is not normative test data.
+- Chapter 24 records V2.xx compiler workflow/options, interpreter/compiler divergences, numeric/string/array memory representations, direct mode, editor workflows, quick lists, syntax/error appendices and version caveats. Editor UI is separate from language semantics; raw target memory layouts are not host ABI contracts.
+
+The systematic first-pass review now covers all 24 chapters. Remaining work is targeted verification and registry/test promotion, not an unreviewed chapter. OCR-sensitive claims and runtime behavior remain explicitly pending.
