@@ -595,3 +595,102 @@ No API entry in this document is currently claimed as implemented or runtime-con
 ## 12. Source and rights
 
 The source is the user-provided sixth revised and expanded edition of *Das große GFA-BASIC-Buch* (1988). This reference contains original summaries and short API identifiers, not a reproduction of the book. Keep the PDF/OCR and diskette source files outside the public repository unless redistribution rights are independently established.
+
+
+### 8.5 BIOS call inventory (printed pp. 605–608)
+
+The generic call convention is `BIOS(opcode[,parameters])`; `L:` marks a 32-bit longword argument and unmarked arguments are words. The function result is returned in D0. The following is the chapter's complete BIOS list, normalized from its entries:
+
+| Opcode | Name | Book-described contract |
+|---:|---|---|
+| 0 | GETMPB | Writes a 12-byte memory-parameter block: free-list, allocated-list and roving-pointer addresses. Each memory-list node is four longwords (link, start, length, owner/process descriptor). The author explicitly warns that this is unusable without detailed TOS knowledge. |
+| 1 | BCONSTAT | Tests whether bytes are available on a device/port. |
+| 2 | BCONIN | Waits for a byte from a device; the book describes a 4-byte return value, with keyboard device 2 corresponding to KEYGET-style packed input. |
+| 3 | BCONOUT | Outputs one byte to a device and waits until accepted. |
+| 4 | RWABS | Reads/writes logical sectors using a caller-owned buffer. Flags 0/1 read/write with disk-change errors; 2/3 read/write while ignoring disk-change. Buffer size is 512 × sector count in this book's context. |
+| 5 | SETEXEC | Replaces an exception vector and returns its previous address; exception number -1 queries the old address only. |
+| 6 | TICKCAL | Returns the millisecond duration between timer ticks (book says 20 ms). |
+| 7 | GETBPB | Returns the address of an 18-byte per-drive BIOS parameter block. |
+| 8 | BCOSTAT | Tests whether a device is ready to accept output. |
+| 9 | MEDIACH | Returns disk-change status: 0 definitely unchanged, 1 possibly changed, 2 definitely changed. |
+| 10 | DRVMAP | Returns drive-presence bit vector; the book notes the system assumes at least A and B and may return 3 even if only A is physically present. |
+| 11 | KBSHIFT | With -1, reads modifier state; a positive value sets/simulates the state. Bits 0–6 cover right/left Shift, Control, Alternate, CapsLock, Alt+ClrHome and Alt+Insert. |
+
+GETBPB's nine words are sector byte size, sectors/cluster, cluster byte size, directory sectors, FAT sectors, second FAT sector, first data-cluster sector, data-cluster count and flags (meaning not known to the author). [pp. 605–608]
+
+### 8.6 GEMDOS call inventory (printed pp. 608–618)
+
+GEMDOS uses the same word/longword marker convention. The book lists these calls; the table groups related entries while preserving the printed opcode numbers:
+
+| Opcode(s) | Name(s) | Book-described contract / caution |
+|---:|---|---|
+| 0 | PTERM | Terminates the process; explicitly do not use from GFA BASIC—use QUIT or SYSTEM. |
+| 1–8 | CONIN, CONOUT, AUXIN, AUXOUT, PRNOUT, RAWCONIO, RAWCONIN, RAWNECIN | Console, RS232, printer and raw keyboard I/O. CONIN/RAWCONIO may return packed 32-bit key data; Control-C can crash in some input paths. |
+| 9–10 | CONWS, CONRS | NUL-terminated console string output; buffered console input using a caller-provided length byte and buffer. |
+| 11 | CONSTAT | Keyboard-buffer status (0 or 65535). |
+| 14 | SETDRV | Changes default drive and returns the previously active drive. |
+| 16–19 | CONOUTSTAT, PRTOUTSTAT, AUXINSTAT, AUXOUTSTAT | Console/printer/RS232 readiness. The book explicitly says not to use CONOUTSTAT in GFA. |
+| 25 | CURDRV | Reads current default drive. |
+| 26 | SETDTA | Sets disk transfer address; described as equivalent to V3.0 FSETDTA. |
+| 32 | SUPER | Switches user/supervisor stack/mode. Privileged, register-sensitive and explicitly dangerous; never expose as an ordinary portable operation. |
+| 42–45 | GETDATE, SETDATE, GETTIME, SETTIME | Read/write packed date/time words. Prefer DATE$/TIME$/SETTIME GFA-level facilities where applicable. |
+| 47–48 | GETDTA, GETVERS | Read DTA address and GEMDOS version. |
+| 49 | KEEP PROCESS | Terminates while retaining a memory region; book says not to use in ordinary GFA programs. |
+| 54 | GETDFREE | Writes four longwords (free clusters, total clusters, sector bytes, sectors/cluster) to a caller buffer. |
+| 57–59 | MKDIR, RMDIR, CHDIR | Directory creation/removal/current-directory change using NUL-terminated target strings. |
+| 60–64 | CREATE, OPEN, CLOSE, READ, WRITE | Raw GEMDOS file handles and buffers; not equivalent to GFA channel numbers. |
+| 65–67 | UNLINK, LSEEK, CHMODE | Delete file, seek within handle, and get/set file date/time or attributes as described in the entry. |
+| 69–70 | DUP, FORCE | Duplicate a handle and force a standard handle to refer to another handle. |
+| 71 | GETDIR | Query current directory for a drive. |
+| 72–74 | MALLOC, MFREE, SETBLOCK | Allocate/free/resize GEMDOS memory blocks. Requires strict ownership and lifetime tracking. |
+| 75–76 | PEXEC, PTERM | Execute a process / terminate with a status value. Process control and memory ownership are OS-specific. |
+| 78–79 | SFIRST, SNEXT | Start/continue directory search using a DTA. |
+| 86–87 | RENAME, GSDTOF | Rename and date/time conversion helpers. |
+
+The book lists common negative error results: -32 invalid function, -33 file not found, -34 path not found, -35 too many open files, -36 access denied, -37 invalid handle, -39 insufficient memory, -40 invalid memory-block address, -46 invalid drive and -49 no more matching files. It states zero means success for the calls discussed; this is not a universal return convention for every Atari trap. [pp. 608–618]
+
+The book's raw GEMDOS file operations use NUL-terminated path strings, target addresses and OS handles. Do not route these directly to host file descriptors without an Atari-compatible handle table, path semantics, DTA/search model, error mapping and memory validation.
+
+### 8.7 VDISYS call shape and selected operations (printed pp. 618–623)
+
+Page-image check of p. 618 confirms the V3.0 form as `VDISYS(opcode[,I_len,P_len[,id]])`; the V2.xx form is `VDISYS(opcode)`. I_len and P_len describe INTIN and PTSIN array lengths; an optional subfunction ID is used by escape operations. If the same opcode is repeated without changing the VDI arrays, the opcode may be omitted. The active workstation handle is in CONTRL word 6 (byte offset 12); the book says V2.xx obtains it from VDIBASE+40 and V3.0 from V-H.
+
+The chapter gives these selected operations:
+- 35: query current polyline attributes.
+- 36: query current polymarker attributes.
+- 37: query current fill-area attributes.
+- 38: query current graphic-text attributes.
+- 104: set fill-perimeter visibility.
+- 118: exchange timer interrupt vector (explicitly marked V2.xx-only in the example).
+- 5: VDI escape functions, with subfunction IDs for screen character grid, pixel/character text mode, cursor movement/position, cursor/screen/line clearing, cursor position query, mouse availability, hardcopy, mouse positioning and system-font selection.
+
+These are examples of the book's generic VDI trap wrapper, not a complete VDI function catalogue. VDI arrays and CONTRL remain shared mutable target buffers. Interrupt-vector manipulation is unsafe and version-specific. [pp. 618–623]
+
+### 8.8 XBIOS call inventory and hardware boundaries (printed pp. 622–656)
+
+The book documents the following XBIOS calls. Names below follow its printed labels; spelling and availability must still be cross-checked against the selected TOS release.
+
+| Opcode | Name | Function family / notes |
+|---:|---|---|
+| 0 | INITMOUSE | Installs custom mouse handler with a target parameter block and code address; author gives no usable parameter-layout contract. |
+| 1 | SSBRK | ROM-module memory reservation during boot, not an ordinary application call. |
+| 2–3 | PHYSBASE, LOGBASE | Read physical and logical screen base addresses. |
+| 4–5 | GETREZ, SETSCREEN | Query/set screen resolution and screen base pointers; SETSCREEN's resolution parameter is not usable under GEM according to the book. |
+| 6–7 | SETPALETTE, SETCOLOR | Palette/register color operations. |
+| 8–10 | FLOPREAD, FLOPWRITE, FLOPFMT | Floppy sector read/write/format. Destructive disk operations; disabled by default. |
+| 11 | — | Book says “no effect”. |
+| 12–13 | MIDIWS, MFPINT | MIDI output and MFP interrupt-vector handling. |
+| 14–16 | IOREC, RSCONF, KEYTABLE | Serial I/O ring-buffer state, RS232 configuration and keyboard translation tables. |
+| 17–19 | RANDOM, PROTOBT, FLOPVER | Random value, floppy boot-sector operation and floppy verification/read-related operation. |
+| 20 | SCRDMP | Screen hardcopy. |
+| 21–25 | CURSCONF, SETTIME, GETTIME, BIOSKEYS, IKBDWS | Cursor configuration, system clock, BIOS keyboard table and IKBD commands. |
+| 26–30 | JDISINT, JENABINT, GIACCES, OFFGIBIT, ONGIBIT | MFP interrupt enable/disable and sound-chip access/interrupt handling. |
+| 31–32 | XBTIMER, DOSOUND | MFP timer installation and sound-chip register sequence execution. |
+| 33–36 | SETPRT, KBDVBASE, KBRATE, PRTBLK | Printer configuration, keyboard vector base/repeat and printer block output. |
+| 37–39 | VSYNC, SUPEXEC, PUNTAES | Vertical sync, supervisor callback and AES shutdown attempt. |
+
+XBIOS error values listed on p. 622 include -1 general error, -2 device not ready, -3 unknown command, -5 invalid command, -6 track not found, -7 invalid boot sector, -8 sector not found, -10 write error, -12 general error, -13 write-protected disk, -14 disk changed, -15 unknown device, -16 bad sector and -17 no disk inserted. The book says zero indicates success for the operations discussed.
+
+The source's detailed floppy format/boot-sector and virus discussion (pp. 630–645), sound-chip/interrupt routines (pp. 646–655), and supervisor/AES shutdown material (p. 656) are historical, privileged or destructive Atari-specific material. Do not implement these as host disk, audio, interrupt or process operations. Require a sandboxed machine profile and explicit safety policy before any emulation.
+
+**Page-image checks completed:** p. 605 confirms BIOS generic signature, L: longword marker, D0 result and GETMPB layout; p. 612 confirms the SUPER warning and stack/mode caveats; p. 618 confirms the VDISYS V3.0 argument form and workstation-handle source; p. 623 confirms XBIOS INITMOUSE/SSBRK/PHYSBASE/LOGBASE declarations. Other detailed XBIOS disk/sound examples remain text/OCR-derived pending targeted image review.
