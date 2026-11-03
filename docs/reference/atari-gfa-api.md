@@ -535,7 +535,7 @@ The chapter 19 structures were compared with *The Atari Compendium*, chapter 6 (
 
 The Compendium's OBJECT declaration confirms the 24-byte record: three 16-bit tree links, type/flags/state words, a 32-bit object-specific field and four 16-bit geometry values. It also confirms that object coordinates are relative to the parent object except for the root. This corroborates the book's 24-byte layout and parent/child navigation model. [Atari Compendium, ch. 6, “Objects”]
 
-**RSC header discrepancy**
+**RSC header discrepancy and companion-disk evidence**
 
 The GFA book describes a 38-byte (19-word) RSC header:
 - offset 0: reserved word, always 1;
@@ -544,10 +544,12 @@ The GFA book describes a 38-byte (19-word) RSC header:
 
 The Atari Compendium describes the original RSC header as 18 words (36 bytes):
 - offset 0: rsh_vrsn, with values 0 or 1 for the original format;
-- offsets 2–34: the same sequence of offsets/counts, ending with rsh_rssize at 34;
+- offsets 2–34: the object/string/image/tree offsets and counts, ending with rsh_rssize at 34;
 - no additional word at offset 36.
 
-This is a real source-format discrepancy, not a reason to silently resize either structure. The field at offset 0 also differs semantically (reserved constant versus RSC version). Preserve both layouts as source-specific evidence and inspect actual GFA-generated RSC files before choosing a parser contract. The Compendium additionally notes that TOS 4.0+ supports an extended RSC format; do not assume the old 36-byte header is the only RSC variant. [Atari Compendium, Appendix C, “The .RSC File Format”]
+I inspected the three RSC resources included in the user-provided book companion diskette archive: ALERT.RSC, FORMULAR.RSC and MENU.RSC. All three begin with the standard 36-byte / 18-word header, have rsh_vrsn = 0 at offset 0, and begin their string area at offset 36. FORMULAR.RSC and MENU.RSC have rsh_rssize values equal to their physical file lengths (730 and 2,630 bytes). ALERT.RSC has rsh_rssize = 1,130 while its physical file length is 1,154 bytes, leaving a 24-byte trailer outside the declared resource size; this trailer is not yet explained. The companion BASIC listings AES_ALRT.LST, AES_FORM.LST and AES_MENU.LST explicitly load these corresponding resources with RSRC_LOAD, establishing that they are actual book-diskette examples used by its GFA programs.
+
+This resolves the layout question for the supplied companion-disk resources: they use the classic 36-byte header, not the book's described 38-byte header. It does **not** prove which layout every GFA BASIC resource editor/compiler version can emit, because the archive does not establish the provenance of the resource-editor output. Retain the book's 38-byte table as a documented source discrepancy; use the 36-byte format for these verified fixtures. The Compendium also documents an extended RSC format on TOS 4.0+; do not assume the classic header is the only RSC variant. [Atari Compendium, Appendix C, “The .RSC File Format”]
 
 **Object flags and later AES extensions**
 
@@ -559,13 +561,13 @@ The Compendium and GEM Programmer's Guide corroborate the role of OBJECT.ob_spec
 
 **Implementation implications**
 
-1. Keep the original RSC 36-byte header and the GFA-book 38-byte header as distinct candidate layouts until a real GFA-produced file settles the question.
+1. Parse the verified companion-disk fixtures with the classic 36-byte header; preserve the book's 38-byte description as a source discrepancy and investigate the unexplained 24-byte ALERT.RSC trailer.
 2. Parse RSC offsets as file-relative big-endian values; after loading, resolve/fix up pointers into a target-memory representation. Never cast file offsets directly to host pointers.
 3. Preserve the book's OB_FLAGS/OB_STATE subset for its declared dialect/version. Gate AES 3.3/3.4 additions behind explicit OS-profile metadata.
 4. Keep RSC version/format detection separate from the GFA BASIC language version.
 5. Treat RSC resource loading, pointer fixups and screen-coordinate conversion as GEM resource-manager behavior, not as generic object-tree construction.
 
-No GFA-generated RSC fixture or runtime parser test was performed. The cross-source check confirms the OBJECT model and identifies unresolved RSC header/version differences; it does not establish which header layout the selected GFA BASIC build emits.
+No GFA resource-editor output or runtime parser test was available. The three companion-disk RSC fixtures establish the classic header for those examples, but not for every GFA resource-editor version.
 
 Independent sources:
 - [The Atari Compendium, Chapter 6 — AES](https://bus-error.nokturnal.pl/atari_compendium/html/chap6.htm)
