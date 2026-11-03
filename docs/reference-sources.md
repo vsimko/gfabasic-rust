@@ -113,3 +113,10 @@ The introduction (printed pp. 1-9 to 1-12) documents the book's syntax notation,
 - The online *Computers and Chaos* Amiga edition contains ASCII GFA BASIC examples. [Example book](https://amigasourcecodepreservation.gitlab.io/computers-and-chaos-amiga-edition/).
 
 Do not confuse these independent source categories: the 1989 book is a GFA BASIC 3.0 reference; 3.52 disk images are later executable releases; PDK and book listings are examples; Aminet tools may inspect tokenized files. Keep version and evidence provenance attached to every extracted feature.
+
+### Additional verification from the complete French scan
+
+- The book's preface says it presents approximately **360 commands and functions** available in the Amiga GFA BASIC 3.0 interpreter (printed p. 1-9). This is a broader count than the contemporary 1988 review's approximate 350 commands; retain both as approximate historical figures with different scope.
+- The complete searchable extraction has 12,360 lines and reaches the final appendices, printed pp. 377–379. Appendix A is an ASCII-code table; Appendix B is a GFA BASIC error-message list. The French book does **not** contain the alphabetical command index described by the 1988 review for the original German software manual.
+- Initial source-backed language-core findings now include the Amiga 3.0 book's no-reserved-words statement, type suffixes, Boolean representation (0/−1), four loop families, and bit/word/byte operations. See [Amiga GFA BASIC 3.0 research notes](reference/amiga-gfa-basic-3.0.md).
+- Important correction: the earlier note that searchable OCR stopped around printed p. 197 was wrong. Only the first extraction pass stopped there; the full PDF OCR is searchable through the end of the book.
