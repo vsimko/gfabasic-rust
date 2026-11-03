@@ -17,6 +17,8 @@ Compilation must be deterministic and must not require an LLM. An LLM may assist
 The documentation is maintained in this repository.
 
 - [Architecture](docs/architecture/README.md)
+- [Project goals and compatibility](docs/architecture/GOALS.md)
+- [Dialect and version policy](docs/architecture/DIALECTS.md)
 - [Documentation policy](docs/DOCUMENTATION.md)
 - [GFA BASIC reference sources](docs/reference-sources.md)
 - [Open project work](https://github.com/vsimko/gfabasic-rust/issues)
