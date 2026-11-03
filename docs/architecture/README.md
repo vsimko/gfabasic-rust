@@ -25,21 +25,21 @@ The language core is separate from platform API profiles. Amiga and Atari ST pro
 
 ## Architecture documents
 
-| Topic | Scope | Tracking |
-|---|---|---|
-| Project goals and compatibility | Purpose, non-goals, conformance dimensions | [#2](https://github.com/vsimko/gfabasic-rust/issues/2) |
-| Dialects and versions | Source dialect identity and version-specific rules | [#3](https://github.com/vsimko/gfabasic-rust/issues/3) |
-| Target model | Host/target distinction and target capabilities | [#4](https://github.com/vsimko/gfabasic-rust/issues/4) |
-| API profiles | Core, Amiga, and Atari ST profile boundaries | [#5](https://github.com/vsimko/gfabasic-rust/issues/5) |
-| Compiler pipeline and IR | Frontend stages, semantic analysis, typed IR, LLVM boundary | [#6](https://github.com/vsimko/gfabasic-rust/issues/6) |
-| Runtime | Runtime layers and SDL3 adapter boundary | [#7](https://github.com/vsimko/gfabasic-rust/issues/7) |
-| Memory model | Storage, pointers, hardware access, safety policy | [#8](https://github.com/vsimko/gfabasic-rust/issues/8) |
-| CLI and configuration | Inputs, profiles, outputs, reproducibility | [#9](https://github.com/vsimko/gfabasic-rust/issues/9) |
-| Compatibility testing | Test layers and release criteria | [#10](https://github.com/vsimko/gfabasic-rust/issues/10) |
-| Rust workspace | Crate/module boundaries and dependency policy | [#11](https://github.com/vsimko/gfabasic-rust/issues/11) |
-| API registry | Canonical machine-readable declarations | [#12](https://github.com/vsimko/gfabasic-rust/issues/12) |
+| Topic | Scope | Document | Tracking |
+|---|---|---|---|
+| Project goals and compatibility | Purpose, non-goals, compatibility dimensions | [GOALS.md](GOALS.md) | [#2](https://github.com/vsimko/gfabasic-rust/issues/2) |
+| Dialects and versions | Source dialect identity and version-specific rules | [DIALECTS.md](DIALECTS.md) | [#3](https://github.com/vsimko/gfabasic-rust/issues/3) |
+| Target model | Host/target distinction and target capabilities | [TARGETS.md](TARGETS.md) | [#4](https://github.com/vsimko/gfabasic-rust/issues/4) |
+| API profiles | Core, Amiga, and Atari ST profile boundaries | [API-PROFILES.md](API-PROFILES.md) | [#5](https://github.com/vsimko/gfabasic-rust/issues/5) |
+| Compiler pipeline and IR | Frontend stages, semantic analysis, typed IR, LLVM boundary | [PIPELINE-AND-IR.md](PIPELINE-AND-IR.md) | [#6](https://github.com/vsimko/gfabasic-rust/issues/6) |
+| Runtime | Runtime layers and SDL3 adapter boundary | [RUNTIME.md](RUNTIME.md) | [#7](https://github.com/vsimko/gfabasic-rust/issues/7) |
+| Memory model | Storage, pointers, hardware access, safety policy | [MEMORY.md](MEMORY.md) | [#8](https://github.com/vsimko/gfabasic-rust/issues/8) |
+| CLI and configuration | Inputs, profiles, outputs, reproducibility | [CLI-AND-CONFIG.md](CLI-AND-CONFIG.md) | [#9](https://github.com/vsimko/gfabasic-rust/issues/9) |
+| Compatibility testing | Test layers and release criteria | [TESTING.md](TESTING.md) | [#10](https://github.com/vsimko/gfabasic-rust/issues/10) |
+| Rust workspace | Crate/module boundaries and dependency policy | [WORKSPACE.md](WORKSPACE.md) | [#11](https://github.com/vsimko/gfabasic-rust/issues/11) |
+| API registry | Canonical machine-readable declarations | [API-REGISTRY.md](API-REGISTRY.md) | [#12](https://github.com/vsimko/gfabasic-rust/issues/12) |
 
-Detailed decisions remain open until the corresponding research and review are complete. This index does not claim that the linked architecture issues are resolved.
+Detailed decisions remain open until the corresponding research and review are complete. The existence of a document does not mean that its issue is resolved.
 
 ## Intended compiler pipeline
 
@@ -69,7 +69,7 @@ The frontend and project-owned IR must remain independent of SDL3 and of the ini
 
 ## Decision records
 
-Use numbered Architecture Decision Records in [adr/](adr/). Each record states context, decision, status, alternatives, consequences, and evidence. An accepted ADR can be superseded by a later ADR; do not silently rewrite the historical rationale.
+Use numbered Architecture Decision Records in [adr/](adr/). Each record states context, decision, status, alternatives, consequences, and evidence. An accepted ADR can be superseded by a later ADR; do not silently rewrite the historical rationale. The [ADR template](adr/TEMPLATE.md) defines the required structure.
 
 ## Glossary
 
