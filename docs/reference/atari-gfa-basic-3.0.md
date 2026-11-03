@@ -141,6 +141,29 @@ Evidence: printed pp. 113–116.
 
 The exact file-format byte layout, token assignments, escaping rules, and compatibility between interpreter versions are not specified here. Do not treat the book's example disk files as a complete or lossless corpus: its README says comments were removed to fit a single-sided disk and some programs require additional fragments to be merged as described in the book.
 
+
+
+### 4.7 V2.xx compiler execution-mode differences
+
+The book documents a **V2.xx compiler**, not a V3.0 compiler. It states that compiled programs are generally source-compatible with interpreter-developed programs, but lists important execution-mode differences (printed pp. 701–715):
+
+| Area | Interpreter | V2.xx compiled program | Evidence |
+|---|---|---|---|
+| Break handling | Interpreter controls program execution | Configurable with OPTION U0–U3; checks occur at different program points | pp. 705–706 |
+| Integer INC/DEC overflow | Interpreter checks signed 32-bit integer bounds | Direct machine instructions may wrap unless OPTION T+ adds checking | pp. 706–707 |
+| Error text | Descriptive interpreter errors | OPTION E- gives code/PC; E+ adds descriptive text | pp. 707–708 |
+| CPU exceptions | Interpreter handlers can translate selected exceptions | OPTION B- leaves bomb errors; B+ installs handlers | pp. 708–709 |
+| Interpreter commands | LIST, LLIST, TRON, TROFF, DEFLIST, SAVE, PSAVE, LOAD, STOP, CONT are available in the interpreter context | Compiler cannot process them; it reports and can ignore or abort | p. 711 |
+| RESUME / RESUME NEXT | Interpreter tracks the exact command location | Compiled mode requires an OPTION Ux program-counter checkpoint; U1/U2 may be approximate | pp. 712–713 |
+| CHAIN | Loads another BAS program for interpreter execution | Launches PRG/TOS/TTP through AES SHEL_WRITE and terminates the caller | pp. 713–714 |
+| FILESELECT | Editor screen buffer stores the background | Requires about 32.5 KB free memory for background storage | pp. 714–715 |
+| Mouse cursor | Interpreter routinely restores visibility | Compiled program does not restore it after every command | p. 711 |
+| 0/0 | Division-by-zero error | Book says result is 1 | p. 715 |
+
+Compiler options U, T, E and B are compiler-profile behavior, not general language declarations. The book says the last matching in-source OPTION takes precedence over the compiler-dialog default. U0 omits break support; U1 checks at its point; U2 checks at loop boundaries and before GOTO; U3 checks after every BASIC statement. Additional checks and richer error/exception handling increase output size and/or reduce speed (pp. 705–709, 715).
+
+The 0/0 result and the compiler's INC/DEC overflow behavior are particularly important compatibility quirks. Keep them scoped to the documented V2.xx compiler until tested against an identified compiler binary. Do not implement them as portable arithmetic semantics. The book's claims have not been runtime-verified by this project.
+
 ## 5. Platform API boundary
 
 The same book describes Atari ST-specific facilities in separate chapters:
