@@ -178,13 +178,12 @@ The first detailed pass confirms:
 
 ## 9. Next review batches
 
-1. Finish chapter 5 command-by-command: keyboard/screen I/O, disk and file commands, random-access records, port I/O, printer, sound.
-2. Review chapters 9–11: graphics, data conversion, arrays, memory, pointers.
-3. Review chapters 12–16: runtime control, error handling, user interaction, windows, menus, events.
-4. Review chapters 17–22: GDOS/VDI, AES, object structures, GEM memory layout, BIOS/GEMDOS/XBIOS, system variables.
-5. Review appendices 24.2–24.14: variable representation, editor/compiler differences, error catalogue, syntax list, alphabetical command list.
-6. For every promoted rule, add an independently authored positive/negative conformance test to issue #42 and retain source/page/version metadata.
-
+1. Complete chapter 5 page-image checks and target-interpreter validation for OCR-sensitive signatures, file-pointer semantics, and hardware-specific APIs.
+2. Review chapters 12–16: runtime control, error handling, user interaction, windows, menus, and events.
+3. Review chapters 17–22: GDOS/VDI, AES, object structures, GEM memory layout, BIOS/GEMDOS/XBIOS, and system variables.
+4. Review appendices 24.2–24.14: variable representation, editor/compiler differences, error catalogue, syntax list, and alphabetical command list.
+5. Promote verified rules into independently authored positive/negative conformance cases tracked by issue #42, retaining source/page/version metadata.
+6. Keep chapters 9–11 findings in this research note; promote exact signatures only after page-image checks.
 
 ## 10. Graphics, conversion, arrays and memory (chapters 9–11)
 
