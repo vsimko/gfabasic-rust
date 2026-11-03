@@ -936,3 +936,39 @@ Verified source details:
 Selected page-image checks: p. 503 (V-H read/write semantics), pp. 504–505 (clear/close/open virtual workstation signatures and lifecycle), p. 507 (physical V_OPNWK signature, ten optional parameters and crash warning). Other detailed font-layout fields and code examples remain OCR-derived and require additional image inspection before being treated as exact.
 
 No compiler/runtime implementation was changed. Existing issues #5, #12, #19, #25 and #42 continue to cover the profile, registry, language/API inventory, Atari reference and conformance corpus work.
+
+
+## Chapter 21 follow-up: BIOS, GEMDOS, VDISYS and XBIOS (printed pp. 605–656)
+
+**Status: detailed first-pass inventory added to the Atari API reference; selected page-image checks completed; runtime behavior unverified.** Existing issue #25 covers the reference, with #3, #18, #19 and #42 covering dialect scope, source provenance, inventory and conformance. No duplicate issue was opened.
+
+### BIOS (pp. 605–608)
+The book documents BIOS opcodes 0–11: GETMPB, BCONSTAT, BCONIN, BCONOUT, RWABS, SETEXEC, TICKCAL, GETBPB, BCOSTAT, MEDIACH, DRVMAP and KBSHIFT. The generic signature marks longword arguments with `L:`; unmarked parameters are words and the function result is returned in D0. GETMPB returns a 12-byte structure containing three pointers; GETBPB returns an 18-byte per-drive parameter block. RWABS uses a 512-byte sector assumption in this source. BIOS vector replacement and raw sector I/O are unsafe OS-level surfaces, not portable BASIC semantics.
+
+### GEMDOS (pp. 608–618)
+The book documents console/serial/printer I/O, keyboard input/status, drive and directory state, DTA access, supervisor mode, packed date/time, process termination/residency, free-space query, raw file handles, memory allocation, process execution and directory search. The complete opcode grouping and source-described error values are now listed in §8.6 of the Atari API reference.
+
+Important safety/compatibility distinctions:
+- GEMDOS(0) process termination is explicitly discouraged in GFA; use QUIT/SYSTEM.
+- GEMDOS(32) SUPER changes processor mode/stack and may alter registers; the book warns against casual use.
+- GEMDOS(60–64) raw file handles are not GFA BASIC channels.
+- GEMDOS(72–74) memory calls require exact block ownership/lifetime.
+- GEMDOS(75–76) process control and GEMDOS(49) resident termination are not ordinary program operations.
+- NUL-terminated target strings, DTA state, target pointers and negative error codes require an Atari compatibility layer; they must not be passed directly to host APIs.
+
+### VDISYS (pp. 618–623)
+A page-image check on p. 618 confirms the V3.0 call shape `VDISYS(opcode[,I_len,P_len[,id]])`, versus the V2.xx opcode-only wrapper. The active workstation handle is passed through CONTRL word 6 / byte offset 12; V2.xx obtains it from VDIBASE+40, V3.0 from V-H. The chapter demonstrates VDI opcodes 35–38, 104, 118 and escape opcode 5 with subfunction IDs. The VDI arrays are shared mutable target buffers. Timer-vector exchange is explicitly shown as V2.xx-only and must be treated as unsafe.
+
+### XBIOS (pp. 622–656)
+The chapter covers mouse initialization; screen base/resolution and palette; floppy sector I/O/format/verification; MIDI; MFP interrupts and timers; serial and keyboard configuration; sound-chip access; printer output; supervisor callbacks and AES shutdown. The complete grouped opcode inventory and error list are in §8.8 of the Atari API reference.
+
+The detailed floppy/boot-sector/virus material (pp. 630–645) is destructive and security-sensitive historical Atari material. Sound-chip, MFP, timer and interrupt examples (pp. 646–655) are machine/TOS-specific. None should be implemented as direct host filesystem, audio, interrupt or process calls.
+
+### Selected page-image verification
+
+- **p. 605:** BIOS generic signature, `L:` longword marker, D0 result, GETMPB 12-byte block and its three pointers confirmed.
+- **p. 612:** GEMDOS(32) SUPER description confirms supervisor-stack exchange, register caveat and explicit danger warning.
+- **p. 618:** VDISYS V3.0 signature and active-handle source confirmed.
+- **p. 623:** XBIOS INITMOUSE, SSBRK, PHYSBASE and LOGBASE declarations confirmed.
+
+The rest of the chapter remains a searchable-text/OCR first pass; no TOS build, emulator or hardware probe was run. Do not mark any behavior as runtime-tested.
