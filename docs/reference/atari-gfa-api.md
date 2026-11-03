@@ -527,6 +527,51 @@ The final field is a 32-bit application-defined parameter passed to the user dra
 
 These structures use 16-bit words and 32-bit target pointers. Rust representations must use explicit target-width integer fields and explicit endian conversion. Never store host pointers in these structures or rely on host-native struct layout. Resource-file offsets are offsets within the RSC image and must be relocated/validated separately from runtime addresses.
 
+### 6.1 Cross-source validation: GEM structures and RSC format
+
+The chapter 19 structures were compared with *The Atari Compendium*, chapter 6 (AES) and Appendix C (.RSC file format), plus Atari's *GEM Programmer's Guide*, Volume 2.
+
+**OBJECT record**
+
+The Compendium's OBJECT declaration confirms the 24-byte record: three 16-bit tree links, type/flags/state words, a 32-bit object-specific field and four 16-bit geometry values. It also confirms that object coordinates are relative to the parent object except for the root. This corroborates the book's 24-byte layout and parent/child navigation model. [Atari Compendium, ch. 6, “Objects”]
+
+**RSC header discrepancy**
+
+The GFA book describes a 38-byte (19-word) RSC header:
+- offset 0: reserved word, always 1;
+- offsets 2–34: object/string/image/tree offsets and counts, ending with file length at 34;
+- offset 36: an additional zero end-marker word.
+
+The Atari Compendium describes the original RSC header as 18 words (36 bytes):
+- offset 0: rsh_vrsn, with values 0 or 1 for the original format;
+- offsets 2–34: the same sequence of offsets/counts, ending with rsh_rssize at 34;
+- no additional word at offset 36.
+
+This is a real source-format discrepancy, not a reason to silently resize either structure. The field at offset 0 also differs semantically (reserved constant versus RSC version). Preserve both layouts as source-specific evidence and inspect actual GFA-generated RSC files before choosing a parser contract. The Compendium additionally notes that TOS 4.0+ supports an extended RSC format; do not assume the old 36-byte header is the only RSC variant. [Atari Compendium, Appendix C, “The .RSC File Format”]
+
+**Object flags and later AES extensions**
+
+The GFA book documents OB_FLAGS bits 0–8, including INDIRECT at bit 8, and six OB_STATE bits. The Compendium confirms those meanings but also documents additional OB_FLAGS bits 9–11 (3D appearance and submenu-related flags); several are explicitly available only from AES 3.4. It also documents G_CICON (object type 33) as available from AES 3.3. These are later AES extensions absent from the book's selected GFA BASIC V2.xx/V3.0 description. Keep them out of the 1988 GFA profile unless separate GFA-version evidence is found; they may belong in a separately versioned later-AES profile.
+
+**Nested structures**
+
+The Compendium and GEM Programmer's Guide corroborate the role of OBJECT.ob_spec as a type-dependent value/pointer and the use of TEDINFO, ICONBLK, BITBLK, APPLBLK and PARMBLK structures. The book's exact byte sizes remain source-backed and page-image-checked. Do not replace its ICONBLK 36-byte layout with a differently packed host-language structure; use explicit 68k-compatible field widths and offsets.
+
+**Implementation implications**
+
+1. Keep the original RSC 36-byte header and the GFA-book 38-byte header as distinct candidate layouts until a real GFA-produced file settles the question.
+2. Parse RSC offsets as file-relative big-endian values; after loading, resolve/fix up pointers into a target-memory representation. Never cast file offsets directly to host pointers.
+3. Preserve the book's OB_FLAGS/OB_STATE subset for its declared dialect/version. Gate AES 3.3/3.4 additions behind explicit OS-profile metadata.
+4. Keep RSC version/format detection separate from the GFA BASIC language version.
+5. Treat RSC resource loading, pointer fixups and screen-coordinate conversion as GEM resource-manager behavior, not as generic object-tree construction.
+
+No GFA-generated RSC fixture or runtime parser test was performed. The cross-source check confirms the OBJECT model and identifies unresolved RSC header/version differences; it does not establish which header layout the selected GFA BASIC build emits.
+
+Independent sources:
+- [The Atari Compendium, Chapter 6 — AES](https://bus-error.nokturnal.pl/atari_compendium/html/chap6.htm)
+- [The Atari Compendium, Appendix C — Native File Formats](https://bus-error.nokturnal.pl/atari_compendium/html/appendc.htm)
+- [Atari GEM Programmer's Guide, Volume 2 — AES](https://www.bitsavers.org/pdf/atari/ST/Atari_ST_GEM_Programming_1986/GEM_0464.pdf)
+
 ## 7. AES/VDI parameter blocks
 
 The book's parameter-block tables on pp. 597–601 were checked against page images. These are mutable shared buffers; calls overwrite input/output arrays and control words.
