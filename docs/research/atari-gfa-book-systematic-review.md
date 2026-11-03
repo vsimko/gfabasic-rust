@@ -1044,3 +1044,20 @@ Sources:
 - Atari, *A Hitchhiker's Guide to the BIOS*, Rev. 1.1 (1990): https://manualzz.com/doc/26181874/atari-bios-rev-1.1-system-software-guide
 - *The Atari Compendium*, GEMDOS: https://bus-error.nokturnal.pl/atari_compendium/html/chap2.htm
 - *The Atari Compendium*, XBIOS: https://www.yardley.cc/atari/compendium/atari-compendium-chapter-4-XBIOS.htm
+
+
+## Chapter 17 cross-source validation: VDI/GDOS (printed pp. 499–530)
+
+The chapter 17 notes were compared with *The Atari Compendium*, chapter 7 (VDI). The independent source confirms the central architectural split and adds important lifecycle/capability constraints:
+
+- TOS includes a ROM-resident VDI screen driver. GDOS is a separate, optional boot-loaded extension for disk-loaded device drivers and additional fonts. Screen output with the system font does not inherently require GDOS.
+- A physical workstation initializes one device; only one physical workstation may be open for a given device at a time. Multiple virtual workstations may share it, each with independent drawing attributes. Every VDI call requires the appropriate workstation handle.
+- AES initializes the physical screen workstation. graf_handle() supplies its handle; opening a screen virtual workstation uses the physical handle and device ID Getrez()+2. This differs from opening a printer/plotter physical workstation via GDOS.
+- The book's ASSIGN.SYS example IDs (01, 11, 21, 31, 41, 51) align with the Compendium's device-ID bands for screen, plotter, printer, metafile, camera and tablet. These IDs remain configuration-dependent, not guaranteed installed devices.
+- Not every VDI function is supported by every device driver. The runtime must expose per-workstation capabilities rather than assume that a printer/plotter supports screen operations.
+- The Compendium's vq_gdos() can distinguish original GDOS 1.x, FONTGDOS and FSM/Speedo variants. The book's GDOS? Boolean must not be promoted to a GDOS version query.
+- The Compendium confirms that additional bitmap fonts become available to applications after vst_load_fonts(). It does not independently verify GFA's exact wrapper return values or unload behavior.
+
+Implementation consequence: represent VDI availability, GDOS presence/version, physical devices, virtual workstation handles, and per-driver capabilities as separate runtime state. Preserve the book's exact GFA wrapper contracts and warnings as edition-specific until runtime probes are available. No interpreter/TOS probe was performed.
+
+Source: [The Atari Compendium, Chapter 7 — VDI](https://www.yardley.cc/atari/compendium/atari-compendium-chapter-7-Atari-VDI.htm).
