@@ -996,3 +996,16 @@ The chapter 23 RAMKART example and chapter 24 appendices already have detailed f
 - Chapter 24 records V2.xx compiler workflow/options, interpreter/compiler divergences, numeric/string/array memory representations, direct mode, editor workflows, quick lists, syntax/error appendices and version caveats. Editor UI is separate from language semantics; raw target memory layouts are not host ABI contracts.
 
 The systematic first-pass review now covers all 24 chapters. Remaining work is targeted verification and registry/test promotion, not an unreviewed chapter. OCR-sensitive claims and runtime behavior remain explicitly pending.
+
+
+## Selected page-image checks: chapters 23–24 (printed pp. 665–793)
+
+The following checks were made after the first-pass transcription:
+
+- **p. 667 — RAMKART storage model:** confirms RESERVE-based memory management, fixed-size records above HIMEM, the additional 20,000-byte offset specifically for V2.02, BMOVE as the main transfer operation, BGET#/BPUT# for disk updates, and the companion .DEF initialization file. This validates the source summary; the application remains example-only.
+- **p. 701 — compiler appendix:** confirms the beginning of the V2.xx compiler section and the author's framing of the compiler workflow as a separate execution environment. This is not evidence that the current Rust project implements compiler output.
+- **p. 707 — integer overflow options:** confirms the distinction between unchecked native INC/DEC behavior and the T-/T+ overflow-checking option, plus E+/E- error-support options. Keep these as compiler-profile semantics, not interpreter defaults.
+- **p. 717 — string representation:** confirms the six-byte string descriptor (32-bit pointer plus 16-bit length), a four-byte back-trailer, and the book's garbage-collection rationale. The memory representation is target-specific and must not be mapped to host pointers.
+- **p. 761 — editor/runtime error list:** confirms that the appendix distinguishes editor structural errors from runtime error numbers and explicitly labels selected entries as V3.0-only. Do not flatten this into a dialect-neutral error enum.
+
+These checks increase confidence in the cited source details only. No runtime/compiler probe was performed, and the full appendix remains a reference checklist rather than a complete transcription of every indexed command.
