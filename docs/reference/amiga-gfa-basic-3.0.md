@@ -311,3 +311,53 @@ These observations provide a concrete source-code corpus for future menu/event t
 - The book's general discussion of Amiga BASIC SCREEN/WINDOW commands must not be mistaken for GFA BASIC syntax. Only listings explicitly identified as GFA BASIC were used above.
 - Add these examples to the future conformance corpus only after checking source licensing and extracting the relevant GFA listing with provenance. The online book is CC BY-SA 4.0; preserve attribution and license obligations if any material is reused.
 - No runtime feature is implemented on the basis of this secondary source. Exact signatures and semantics remain subject to the Amiga GFA BASIC manual and interpreter probes.
+
+## Additional primary source: German expanded Amiga edition (1990)
+
+A second, distinct primary source is now available as searchable OCR:
+
+- Title: *Das große GFA-BASIC-Buch zum Amiga: Bis Version 3.5 und Compiler 3.5*.
+- Authors: Wolf-Gideon Bleek, Martin Hecht, Uwe Litzkendorf.
+- Publisher/year: Data Becker, Düsseldorf, 1990.
+- ISBN: 3-89011-399-0.
+- Online scan: [German OCR PDF](https://retro-commodore.eu/files/downloads/amigamanuals-xiik.net/eBooks/Das%20Grosse%20Buch%20zu%20GFA-Basic%20Amiga%20%28OCR%29%20-%20eBook-DE.pdf).
+- Source citation key: `AM-BOOK-DE-1990`.
+
+The title page identifies the 1990 Data Becker edition and the ISBN. Its preface says that it documents the commands and functions of the GFA V3.03 interpreter, and describes the book as including the newly released GFA BASIC compiler. The introduction reports approximately 360 commands and functions. This is therefore a primary source for the Amiga V3.03 interpreter and later compiler material, but it must not be silently treated as a V3.0-only or V3.52 reference.
+
+The book's own copyright notice states ©1990 Data Becker and prohibits reproduction or distribution without written permission. The scan is useful for research and citation, but this repository must not reproduce substantial text, tables, code, or page images, nor mirror the scan. The French 1989 edition has a different front-matter digitalization notice; do not transfer its distribution conditions to this German edition.
+
+### German edition chapter map
+
+Printed page numbers below refer to the German 1990 book and are not interchangeable with the French 1989 pagination:
+
+| Topic | Printed pages | Research use |
+|---|---:|---|
+| Graphics definitions, object graphics, line/point graphics, graphics operations, screen memory, animation | 225–278 | Amiga graphics API |
+| Program/user interaction | 363–374 | Input and interaction API |
+| Window and screen programming | 375–388 | Window/screen API |
+| Menu programming | 389–394 | Menu API |
+| BASIC event control | 395–404 | Event API |
+| GFA compiler | 405 onward | Compiler-specific behavior; not interpreter language semantics |
+
+The German edition's table of contents provides a better chapter map for these APIs than the French edition, but a chapter heading alone does not establish a command signature.
+
+### Graphics behavior corroborated by the German source
+
+The OCR contains a worked graphics example in the introductory chapter (printed pp. 73–74):
+
+- The example uses `GRAPHMODE 3` while drawing a temporary rectangle twice; the accompanying explanation explicitly identifies this as XOR mode.
+- It then uses `GRAPHMODE 1` and the text calls this REPLACE mode.
+- The example uses `BOX x,y,xx,yy`, `LINE x,y,xx,yy`, and `FILL xx,yy` in a mouse-driven drawing loop.
+- A separate example uses `PLOT 320,128` followed by `DRAW TO x%,y%` in a loop to draw a line.
+- The book explains that in its HiRes example coordinates cover 640 horizontal by 256 vertical pixels, and contrasts this with a 320-by-256 Lowres mode.
+
+These examples provide primary-source corroboration for the two specific GRAPHMODE values and the demonstrated command forms. They do not establish the complete GRAPHMODE enumeration, drawing-state lifetime, clipping behavior, or the full argument contracts of the commands. The example is described in the book's introductory material, while the normative graphics chapter remains the place to extract full syntax and semantics.
+
+### Version and evidence handling
+
+1. Keep `AM-BOOK-FR-1989` (French translation; Amiga interpreter 3.0) and `AM-BOOK-DE-1990` (German expanded edition; V3.03 interpreter plus compiler material) as separate sources.
+2. Cite the exact edition and printed page for every extracted command claim. Do not transfer printed page numbers between editions.
+3. Treat the 1990 book's compiler chapter and later-version material separately from interpreter 3.03 behavior.
+4. The 1990 edition is still not evidence for GFA BASIC 3.52 behavior. That requires separate release-specific documentation or interpreter probes.
+5. OCR-derived signatures must be checked against page images before they become normative registry entries.
