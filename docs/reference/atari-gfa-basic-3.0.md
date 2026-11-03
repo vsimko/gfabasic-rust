@@ -100,7 +100,7 @@ Additional representation details checked against printed pp. 716–718:
 - Unsuffixed real variables use 6 bytes in V2.xx and 8 bytes in V3.0; the book states up to 11 and 13 decimal digits of precision respectively, with maximum magnitudes documented as 1.0E+154 and 3.595386269725E+308.
 - `!` Boolean scalar variables use 2 bytes and are documented as holding only 0 (False) or -1 (True). Boolean array elements use 1 bit each, not 2 bytes.
 - A string variable uses a 6-byte descriptor: a 4-byte address followed by a 2-byte length. The book describes a 4-byte back-trailer pointing back to the descriptor and a possible padding byte to align that trailer.
-- The page 718 text identifies `LPEEK`/`DPEEK` and, in V3.0, `CARD{}`/`LONG{}` for reading the relevant words/longwords. Exact brace-token spelling should be checked against the corresponding syntax listing before parser decisions.
+- The page 718 image explicitly prints `CARD{}` and `LONG{}` as the V3.0 alternatives to `DPEEK` and `LPEEK` for reading words and longwords. The brace notation is therefore image-verified in this context.
 
 These are source-documented storage details, not a portable host representation or an endorsement of exposing raw Atari memory in a Linux runtime. Numeric conversion, overflow handling in every execution mode, string garbage-collection behavior under stress, and complete array layouts remain **not yet assessed**.
 
