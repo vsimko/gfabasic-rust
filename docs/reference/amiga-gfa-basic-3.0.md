@@ -363,3 +363,16 @@ These examples provide primary-source corroboration for the two specific GRAPHMO
 3. Treat the 1990 book's compiler chapter and later-version material separately from interpreter 3.03 behavior.
 4. The 1990 edition is still not evidence for GFA BASIC 3.52 behavior. That requires separate release-specific documentation or interpreter probes.
 5. OCR-derived signatures must be checked against page images before they become normative registry entries.
+
+## Cross-platform comparison guardrail: Atari ST GFA BASIC 3.0 manual
+
+A separate primary manual is available for the Atari ST: *GFA BASIC Version 3 User Manual*, GFA Software Technologies, Inc., July 1988, ISBN 1-85181-186-9, copyright ©1988 GFA Systemtechnik GmbH. It is explicitly an Atari ST manual, and its platform chapters describe GEMDOS/BIOS/XBIOS, VDI, AES, Line-A, and GEM window/event facilities. It is not an Amiga API reference.
+
+A limited language-core comparison is useful, provided each feature remains tagged with its own platform/version source:
+
+- The Atari ST manual independently documents the four familiar loop families FOR–NEXT, REPEAT–UNTIL, WHILE–WEND, and DO–LOOP (printed pp. 1–2), matching the four families identified in the Amiga 3.0 book.
+- The Atari ST manual additionally describes extensions DO–UNTIL, DO–WHILE, LOOP–UNTIL, and LOOP–WHILE (printed p. 2). The Amiga 3.0 source findings currently recorded here do not establish those extensions. Do not add them to the Amiga 3.0 grammar based on the Atari manual.
+- Both manuals document typed variables and byte/word/integer/floating/Boolean categories, but the Atari manual's exact representation and semantics must not be substituted for the Amiga source.
+- The Atari manual's editor-specific claims (syntax checking on cursor exit, command abbreviation expansion, one statement per line, editor formatting) are not automatically runtime/compiler language rules and must be evaluated separately for each platform.
+
+This comparison is a guardrail, not a merged specification. For the Linux compiler, common language-core declarations require explicit cross-platform evidence and dialect/version availability metadata. The Atari-specific graphics, VDI, AES, event, menu, and window APIs remain exclusively in the Atari ST profile.
