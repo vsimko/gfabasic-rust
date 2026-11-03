@@ -96,7 +96,118 @@ A `CONT` option immediately before a `CASE` can cause the following case branch 
 
 ### 4.3 Variable declarations
 
-The declaration section describes prefix-based type declarations and says an explicitly suffixed variable overrides the general declaration. The V3.0 additions include declarations for Boolean, byte, word, integer, floating-point, and string variables; exact names and declaration syntax are being kept in the main language reference pending table-by-table OCR review. [pp. 189–192]
+Page images for printed pp. 189–192 confirm the six V3.0 declarations and their abbreviations:
+
+| Declaration | Abbreviation | Type | Width / suffix |
+|---|---|---|---|
+| `DEFBIT` | — | Boolean | 2-byte scalar; 1-bit array element / `!` |
+| `DEFBYT` | `DEFB` | Unsigned integer | 1 byte / `|` |
+| `DEFWRD` | `DEFW` | Signed integer | 2 bytes / `&` |
+| `DEFINT` | `DEFI` | Signed integer | 4 bytes / `%` |
+| `DEFFLT` | `DEFFL` | Floating point | 8 bytes / `#` |
+| `DEFSTR` | `DEFS` | String | 6-byte descriptor / `# Systematic review of *Das große GFA-BASIC-Buch* (Atari ST)
+
+- Source ID: `ATARI-GFA-BOOK-1988`
+- Source: Uwe Litzkendorf, *Das große GFA-BASIC-Buch*, 6th revised and expanded edition, DATA BECKER, ISBN 3-89011-222-6.
+- Scope stated by the book: Atari ST GFA BASIC V2.xx and V3.0.
+- Inspection started: 2026-11-03.
+- Evidence: searchable OCR extracted from the user-provided 300-dpi PDF; printed page numbers are retained below.
+- Status: **first-pass review of all 24 chapters completed**. This is not a complete transcription or a validated implementation specification; targeted page-image, cross-source and runtime validation remain open.
+
+## 1. Method and evidence rules
+
+The book is being reviewed in its printed order, using its table of contents as the chapter checklist. Findings are recorded in original wording and linked to printed page numbers. OCR is used to locate and summarize passages, but OCR-sensitive operator glyphs, command signatures, tables, and code must be checked against the page image before being treated as exact syntax.
+
+Evidence labels:
+
+- **Book-backed** — the statement is legible in the extracted passage and tied to a printed page.
+- **OCR-sensitive** — the relevant passage exists, but one or more glyphs, symbols, or table cells may have been misrecognized.
+- **Example-only** — a construct appears in an accompanying listing, but this does not establish complete syntax or semantics.
+- **Unverified** — requires page-image checking, comparison with another edition, or a version-pinned interpreter test.
+
+The book's own preface says it organizes roughly 450 commands and functions available in the V3.0 interpreter. It also says many procedures/examples on the accompanying diskette were written with V2.0/V2.02 in mind to preserve compatibility with the V2.xx compiler. Therefore, the edition is mixed-version evidence and each feature must retain its version label.
+
+## 2. Full chapter/page map
+
+Printed page ranges below follow the book's table of contents. This map is a review checklist, not a claim that every page has already been analyzed.
+
+| Chapter | Printed pages | Subject | Review status |
+|---|---:|---|---|
+| 1 | 15–19 | How to read the reference; syntax notation; diskette instructions | Reviewed |
+| 2 | 21–22 | Atari ST hardware background | Context reviewed |
+| 3 | 23–25 | GFA BASIC overview and V3.0 changes | Reviewed |
+| 4 | 27–60 | BASIC foundations, names, variables, loops, comparisons, precedence | Reviewed |
+| 5 | 61–154 | Input/output, screen, disk, files, random access, ports, printer, sound | Detailed first pass reviewed; page-image checks and runtime tests pending |
+| 6 | 155–220 | Program structure, loops, branches, declarations, subprograms, external code | Reviewed |
+| 7 | 221–228 | String manipulation, analysis, formatting | Reviewed |
+| 8 | 229–250 | Operators, arithmetic, numeric/trigonometric functions, comparisons, bit operations, random values | Reviewed |
+| 9 | 251–328 | Graphics definitions, object/line/pixel graphics, Line-A, raster operations, screen memory | Reviewed (first pass) |
+| 10 | 329–340 | Data conversion and number systems | Reviewed (first pass) |
+| 11 | 341–392 | Arrays, memory operations/management, pointers | Reviewed (first pass) |
+| 12 | 393–452 | Program control, errors, time, keyboard, multitasking, debugging | First pass reviewed; command and compiler-version validation pending |
+| 13 | 453–470 | Program/user interaction | First pass reviewed; AES details and examples need validation |
+| 14 | 471–486 | BASIC window commands | First pass reviewed; WINDTAB offsets and GEM behavior need validation |
+| 15 | 487–490 | Menu programming | First pass reviewed; menu-array edge cases need validation |
+| 16 | 491–498 | Event monitoring | First pass reviewed; event IDs and buffer lifecycle need validation |
+| 17 | 499–530 | GDOS/VDI library and fonts | First pass reviewed; GDOS availability, workstation lifecycle and custom-font hazards need validation |
+| 18 | 531–584 | AES library and managers | First pass reviewed; function signatures and GEM/TOS variants need validation |
+| 19 | 585–596 | GEM object variables and structures | First pass reviewed; structure offsets and flag bits need page-image checks |
+| 20 | 597–604 | GEM addresses and fields | First pass reviewed; shared-buffer layouts and OCR need validation |
+| 21 | 605–656 | BIOS, GEMDOS, VDISYS, XBIOS and low-level examples | First pass reviewed; OS-call signatures and hardware-specific behavior need validation |
+| 22 | 657–664 | System variables | First pass reviewed; absolute addresses are TOS/version-specific and unsafe |
+| 23 | 665–700 | RAM card-index application example | First pass reviewed; example-only implementation and known sort defect recorded |
+| 24 | 701–793 | Compiler, interpreter, variables/types, editor, quick lists, errors and command index | First pass reviewed; compiler differences and OCR-sensitive appendices need validation |
+
+## 3. General source and editor model
+
+### 3.1 Source layout
+
+The book describes GFA BASIC as a structured language in which each source line contains one command. The interpreter/editor automatically formats and indents nested structures, making matching block terminators visible. This is a language/editor behavior claim for the Atari ST releases discussed by the book, not a universal claim about every GFA BASIC port. [pp. 23–24]
+
+The diskette instructions say examples are stored as `.LST` files and are loaded through the editor's `MERGE` command. Some examples require additional fragments to be merged at specified positions. Comments were removed from diskette listings to save space. This is packaging/editor workflow, not a lexical rule. [p. 19; diskette README]
+
+### 3.2 Command names, identifiers, labels
+
+The book states that from V2.02 command names can also be used as variable names, except for reserved variables such as `TIMER`, `GINTIN`, and `DATE$`. Procedures and functions are identified by their declarations; labels are standalone names followed by a colon. Procedure calls are shown with `GOSUB` or `@`, while function calls use `FN` or `@`. [p. 52]
+
+The described identifier character set is letters, digits, underscore, and period. Variable and function names must start with a letter; procedure names may start with a digit. [p. 53]
+
+The book describes suffixes for integer (`%`), Boolean (`!`), and string (`$`) variables; unsuffixed names are treated as real variables in the variable-organization appendix. The complete V3.0 type model, including BYTE and WORD, is described later in §6.4 and Appendix 24.2. Do not collapse the V2.xx and V3.0 type inventories. [pp. 52, 716–721]
+
+**Unverified:** exact maximum identifier length, case sensitivity, Unicode/Atari character-set treatment, name collision rules, and complete reserved-variable list require extraction from the appendix and/or interpreter tests.
+
+## 4. Control flow and declarations (chapter 6)
+
+### 4.1 Loop families
+
+The book explicitly identifies four loop forms. [pp. 54–57, 155–164]
+
+| Construct | Entry/exit model described | Evidence |
+|---|---|---|
+| `REPEAT … UNTIL condition` | Condition is tested at the end; body executes at least once. | Book-backed, pp. 54–55 |
+| `WHILE condition … WEND` | Condition is tested before the body; body may execute zero times. | Book-backed, p. 55 |
+| `FOR variable = start TO end [STEP step] … NEXT variable` | Counter-controlled loop; full variants still need command-entry extraction. | Basic model book-backed, p. 55 |
+| `DO … LOOP` | Unconditional loop; use an explicit exit such as `EXIT IF` or an external break mechanism. | Book-backed, pp. 56–57 |
+
+Loops may be nested, but their closing constructs must match in reverse nesting order. The book explicitly warns against crossing terminators (for example, closing an outer `FOR` before an inner `FOR`). [p. 56]
+
+The book says `GOTO` is not recognized as a structural loop element; structured loop forms should be preferred. [p. 57]
+
+### 4.2 Conditional branches
+
+The chapter covers `IF … THEN`, nested `IF`, `ELSE`, `ELSE IF`, `ENDIF`, and V3.0 `SELECT … CASE … ENDSELECT`. The latter is an expression-based selection construct, and the book compares it with C's switch/case. [pp. 159–175]
+
+For string selection, the book limits the string specified in a `CASE` clause to at most four characters and describes conversion of the selected string into a value for comparison. This unusual rule must be checked against the page image before being used as a parser requirement. [p. 173; OCR-sensitive]
+
+A `CONT` option immediately before a `CASE` can cause the following case branch to be executed in addition to the already selected branch. This is a V3.0-specific behavior described by the book and needs a focused conformance test. [p. 175]
+
+ |
+
+The definition argument is a string (constant, variable or expression) containing name-prefix specifications. Examples demonstrate a single initial, comma-separated initials, ranges, and longer prefixes. The match applies to the beginning of the variable name. The declarations are global; a later declaration replaces the previous declaration. An explicit suffix on a variable excludes it from the global prefix declaration and takes precedence. [pp. 189–192]
+
+The editor accepts `DEFSNG` and `DEFDBL` as alternatives to `DEFFLT`, but rewrites them to `DEFFLT` during syntax checking. Treat these as editor aliases unless separate runtime evidence establishes otherwise. [p. 191]
+
+The suffix/width relationship is cross-checked against the variable-organization appendix: Boolean scalar values are 0/−1 and occupy 2 bytes, while Boolean array elements occupy 1 bit; the byte type is unsigned 0–255; word and integer are signed 16-bit and 32-bit respectively. [pp. 716–717]
 
 ### 4.4 Procedures and functions
 
