@@ -893,11 +893,23 @@ Important source-specific findings:
 
 - The author explicitly describes the chapter as a selected subset of roughly 70 AES functions, not a complete V2.xx library. V3.0 uses C-like function-call syntax; printed `<<` markers identify output parameters and are editorial notation, not BASIC syntax. Address arguments/outputs use 4-byte integer variables; coordinate/value arguments use at least 2-byte integers. [pp. 547–548]
 - `APPL_INIT()` returns the application ID already assigned by GFA startup; `APPL_EXIT()` is described as unnecessary in GFA. `APPL_FIND` requires an exactly eight-character application name. [pp. 548–549]
-- Event calls are blocking. `EVNT_MESAG` can wait indefinitely if no installed menu/window can produce a message. `EVNT_MULTI` combines keyboard, mouse-button, two rectangle, message and timer events; the timer-bit transcription is ambiguous and must be checked against the scan. [pp. 551–554]
+- Event calls are blocking. `EVNT_MESAG` can wait indefinitely if no installed menu/window can produce a message. `EVNT_MULTI` combines keyboard, mouse-button, two rectangle, message and timer events; the printed table itself assigns the timer event to bit 0, duplicating the keyboard event bit; this is a confirmed source-level inconsistency, not OCR ambiguity. [pp. 551–554]
 - `FORM_DO` owns the form interaction loop; without an EXIT/TOUCHEXIT object the program may not return to BASIC through normal interaction. `FSEL_INPUT` is explicitly described as more fragile than GFA's `FILESELECT` wrapper because invalid string buffers can corrupt GEM state. [pp. 555–558]
 - Several graphics helpers are modal and require the left mouse button to be held; `GRAF_SLIDEBOX` does not update the object tree or redraw the final object. [pp. 558–563]
 - The author records implementation defects or limitations for `APPL_TPLAY`, `APPL_TRECORD`, `RSRC_GADDR`, and `RSRC_SADDR`; these must be represented as source warnings, not generalized AES guarantees. [pp. 549–550, 569–571]
 - `WIND_UPDATE` modes 0/1 control redraw-list locking; modes 2/3 transfer mouse control between AES and the application. Calls need balanced lifecycle semantics. [pp. 579–580]
-- The OCR of the `WIND_GET` mode table contains a duplicated output-variable label, and the `EVNT_MULTI` timer bit is unclear. These remain explicit verification tasks rather than silently corrected assumptions. [pp. 553–554, 577]
+- The OCR of the `WIND_GET` mode table contains a duplicated output-variable label, and the `EVNT_MULTI` timer bit is duplicated as bit 0 in the printed table. Page-image checks on pp. 549, 553–554 and 577 confirm the source wording/layout; do not silently infer a corrected bit. [pp. 553–554, 577]
 
 No implementation or API-registry declarations were added. Existing issues #5, #12, #19, #25 and #42 already cover the API profile, registry, feature inventory, Atari reference and conformance evidence. The current work remains documentation/research under those issues.
+
+
+### Page-image verification addendum (pp. 549, 553–554, 577)
+
+The 180-dpi page images were checked against the OCR for selected high-risk details:
+
+- **p. 549 — APPL_TPLAY:** speed values are exactly 50 (half), 100 (normal), 200 (double); Blitter-TOS-only restriction and always-1 return are visible.
+- **p. 553 — EVNT_MULTI:** the printed six-bit event vector assigns keyboard to bit 0 and timer also to bit 0. This is a confirmed source defect in the book's table. No replacement bit is inferred.
+- **p. 554 — EVNT_TIMER / FORM_ALERT:** timer units are 1/1000 second; FORM_ALERT syntax is `FORM_ALERT(Button,Text$)`.
+- **p. 577 — WIND_GET:** modes are 4, 5, 6, 7 (work area/current outer/previous outer/maximum outer), 8/9 (horizontal/vertical slider position), 10 (current handle), 11/12 (first/next visible rectangle), and 15/16 (slider size). Mode 4's fourth output is printed as Get1 a second time, where the surrounding four-output pattern strongly suggests Get4, but the book is retained verbatim as evidence and the correction is not assumed.
+
+These checks upgrade those exact source facts from OCR-only to page-image checked. They do not validate the runtime behavior against Atari hardware or GEM.
