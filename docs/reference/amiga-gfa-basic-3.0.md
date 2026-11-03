@@ -99,3 +99,24 @@ Use citations in this form:
 `AM-BOOK-FR-1989, GFA BASIC Amiga 3.0, printed p. N or §N`
 
 For OCR-derived statements, manually check the relevant page image before marking the feature as verified.
+## First OCR-pass inventory: numeric and bit operations
+
+This is a discovery index from chapter 8, not a normative command registry. The OCR text available for this pass reaches printed page 197. Command spellings and punctuation below must be checked against the page images before use in a parser or API registry.
+
+| Printed pages | OCR-discovered names | Status |
+|---|---|---|
+| 184–187 | ACOS, ASIN, ATN, COS, COSQ, DEG, PI, RAD, SIN, SINQ, TAN | Needs page-image check; OCR contains damaged punctuation and at least one apparent correction note for ACOS |
+| 188–189 | MAX, MIN | Names and broad purpose visible; exact argument grammar needs page-image check |
+| 189–195 | AND, BCHG, BCLR, BSET, BTST, BYTE, CARD, EQV, IMP, SHL, SHR, ROL, ROR, SWAP, WORD, XOR | Names visible; several overload/type-width spellings are OCR-sensitive |
+| 196–197 | RAND, RANDOMIZE, RND | Names and broad purpose visible; exact signatures and edge cases need page-image check |
+
+Examples of details that should be captured only after visual verification:
+
+- The book describes BYTE and CARD as unsigned low-width extraction operations, and WORD as a signed extension operation. Confirm the exact widths and signedness from the page image.
+- The shift/rotate family has long, word, and byte forms. OCR uses symbols such as ampersand and vertical bar in the spellings; these are particularly easy for OCR to corrupt.
+- RAND, RANDOMIZE, and RND have different ranges and result types in the book. Do not collapse them into one generic random function.
+- The OCR text reports a caveat for ACOS; preserve it as a version-specific historical note only after checking the printed page.
+
+## OCR coverage limitation
+
+The table of contents lists chapters through printed page 379, but the searchable text returned for this PDF currently ends around printed page 197. Therefore, the later chapter ranges in the topic map above are confirmed from the table of contents only; their full body text has not yet been validated as searchable or present in the scan. Check the actual PDF page count and obtain a complete authorized scan before treating the book as a complete page-addressable corpus.
