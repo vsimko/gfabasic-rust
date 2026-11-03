@@ -120,3 +120,67 @@ Examples of details that should be captured only after visual verification:
 ## OCR coverage limitation
 
 The table of contents lists chapters through printed page 379, but the searchable text returned for this PDF currently ends around printed page 197. Therefore, the later chapter ranges in the topic map above are confirmed from the table of contents only; their full body text has not yet been validated as searchable or present in the scan. Check the actual PDF page count and obtain a complete authorized scan before treating the book as a complete page-addressable corpus.
+## Verified language-core findings from the complete OCR text
+
+**Correction to the earlier OCR coverage note:** the searchable PDF extraction contains 12,360 lines and includes text through the end of the book, including printed pages 377–379. The earlier statement that OCR ends around printed page 197 was incorrect; it appears to have confused the initial chapter-8 extraction with the complete document. The table of contents identifies Appendix A as an ASCII-code table (p. 377) and Appendix B as GFA BASIC error messages (p. 379).
+
+### Names, keywords, labels, and type suffixes
+
+Source: *Le livre du GFA Basic Amiga*, printed pp. 4-43–4-45.
+
+- The book explicitly says Amiga GFA BASIC has no reserved words: variables may use names that are also instruction names, including key variables such as TIMER and DATES. This is a significant lexer/parser design constraint; token classification cannot simply reserve every command spelling in every syntactic context.
+- A procedure is introduced by `PROCEDURE`; a user-defined function by `DEFFN`. The book gives examples of procedure calls by name or with `@`, and function calls using `FN` or `@`.
+- Labels end in a colon and may optionally be followed by a `!` comment. The book warns that a label spelling that is also recognized as a command may be interpreted as that command (examples: `SAVE`, `FILESELECT`).
+- The book describes type suffixes: `%` integer, `|` byte, `&` word, `!` Boolean, `$` string, and `#` real. It says `#` is optional for real variables.
+- Variable and function names must start with a letter; the text permits letters, digits, dot, and underscore thereafter. The character-class notation in OCR is damaged, so confirm exact accepted character repertoire from the page image before implementing it.
+- The editor displays keywords in uppercase and variables in lowercase. This is editor presentation behavior; do not confuse it with a case-sensitive language rule.
+
+### Numeric representation and Boolean values
+
+Source: printed pp. 4-38–4-40.
+
+- Real variables are described as occupying 8 bytes, with approximately 13 significant decimal digits; excess fractional digits are rounded.
+- Integer variables use a 4-byte signed representation with range −2,147,483,648 to 2,147,483,647. The book also mentions 1-byte and 2-byte integer variables.
+- Boolean values are represented by 0 (false) and −1 (true). The book explains true as all bits set in a two's-complement long word.
+- The book describes integer assignment from a real value as discarding the fractional digits. The exact rounding/truncation behavior should be verified with a runtime probe.
+
+### Control-flow structures
+
+Source: printed pp. 4-45–4-50.
+
+- Four loop structures are documented: `FOR...NEXT`, `DO...LOOP`, `REPEAT...UNTIL`, and `WHILE...WEND`.
+- `REPEAT...UNTIL` tests its termination condition at the end of the loop body.
+- The book documents nested loops and states that their closing constructs must appear in reverse order to their opening constructs.
+- `DO...LOOP` without a condition can be interrupted by the interpreter's interrupt key combination or by an `EXIT IF` condition.
+- `GOTO` is available as a label jump but is not recognized as a structural block by the editor. Structured loops receive indentation in the editor.
+- The book states that `EXIT IF` is the named conditional loop-exit construct; exact placement and allowed loop types require extraction from its own command entry.
+
+### Arithmetic/bit operation inventory, checked against OCR near the end of the book
+
+Source: printed pp. 8-189–8-197. Names and broad semantics are present in the searchable source. Operator suffix glyphs and a few OCR-corrupted signatures still need page-image verification.
+
+| Name/family | Documented behavior | Evidence status |
+|---|---|---|
+| `BSET(value, bit)` | Sets the selected bit and returns the resulting integer value. | Verified from text, p. 8-191 |
+| `BTST(value, bit)` | Tests a bit; returns −1 when set, 0 otherwise. | Verified from text, p. 8-191 |
+| `BYTE(value)` | Returns the low 8 bits without sign. | Verified from text, p. 8-191 |
+| `CARD(value)` | Returns the low 16 bits without sign. | Verified from text, p. 8-191 |
+| `EQV(value1, value2)` | Bitwise equivalence operation. | Verified from text, p. 8-192 |
+| `IMP(value1, value2)` | Bitwise implication operation. | Verified from text, p. 8-192; second parameter is OCR-corrupted in one occurrence |
+| `SHL`, `SHR` | Bit shifts; long, word, and byte variants are documented. | Semantics verified, suffix spellings need page-image check, pp. 8-192–8-193 |
+| `ROL`, `ROR` | Bit rotations; long, word, and byte variants are documented. | Semantics verified, suffix spellings need page-image check, pp. 8-193–8-194 |
+| `SWAP(value)` | Swaps the low and high 16-bit words of a 32-bit value. | Verified from text, p. 8-195 |
+| `WORD(value)` | Sign-extends the low 16-bit word to a signed 32-bit result. | Verified from text, p. 8-195 |
+| `XOR(value1, value2)` | Bitwise exclusive OR. | Verified from text, p. 8-195 |
+| `RAND(n)` | Returns an unsigned 16-bit integer in [0, n); n above 65535 is reduced modulo 65535 according to the book. | Verified from text, p. 8-196; edge behavior merits runtime test |
+| `RANDOM(n)` | Returns a 32-bit integer in [0, n); negative n is permitted. | OCR spelling/signature needs page-image check, p. 8-197 |
+| `RANDOMIZE([start])` | Initializes the random generator; reusing a start value reproduces the same sequence. | Verified from text, p. 8-197 |
+
+Do not infer compiler implementation details from the prose alone. In particular, signed extension, integer conversion, Boolean representation, and width-specific bit operations should become conformance tests before code generation is committed.
+
+## Research implications
+
+1. The French book is not missing its final chapters: its OCR extraction includes the complete text and both appendices. Remove the earlier incomplete-OCR warning from planning.
+2. The book says it describes approximately 360 commands, instructions, reserved variable names, and arrays (printed p. 1-9 and p. 4-44). The 1988 magazine review independently reported about 350 commands in the original software package. These are approximate counts with different scopes, not a contradiction to resolve by inventing a precise total.
+3. The French book's appendices are ASCII codes and error messages, not an alphabetical command index. The contemporary 1988 review says the original German software manual had an alphabetical command list in its appendix. Locating that original manual remains a high-value task.
+4. The no-reserved-words statement and type suffixes materially affect lexer/parser design. Raise these as evidence-backed dialect requirements, but keep them version-scoped to the Amiga 3.0 book until cross-checked against 3.52.
