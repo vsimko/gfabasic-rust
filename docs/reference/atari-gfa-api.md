@@ -664,6 +664,28 @@ Chapter 22 lists absolute TOS/Atari addresses for memory controller/reset vector
 
 Direct POKE changes to floppy timing, interrupt handlers and BASIC Break behavior are highly version-specific and can crash the system. Classify these as unsafe/unsupported by default. Any emulation requires an explicitly selected Atari machine/TOS profile and safe virtualized memory model.
 
+### 8.9 Source consistency correction: GETDFREE buffer size
+
+A line-by-line check of p. 614 confirms that GEMDOS(54) GETDFREE writes **four 32-bit longwords**, at buffer offsets +0, +4, +8 and +12. The required buffer is therefore **16 bytes**, not 12 bytes. The printed prose calls it a “12-Byte-Puffer”, but the fourth field is explicitly placed at +12 and occupies another longword. This is a source-internal contradiction; the field layout determines the minimum size. Treat the phrase “12-byte buffer” as a likely book typo and preserve the discrepancy in evidence notes. No host implementation should allocate only 12 bytes.
+
+
+### 8.10 Cross-reference validation against Atari OS documentation
+
+The book's trap wrappers were cross-checked against Atari's *A Hitchhiker's Guide to the BIOS*, Rev. 1.1 (5 March 1990), and *The Atari Compendium* (GEMDOS/XBIOS chapters). These are independent Atari OS references; they do not prove that every GFA wrapper exposes every OS version's full contract.
+
+- BIOS uses TRAP #13; XBIOS uses TRAP #14; GEMDOS uses TRAP #1. Arguments are pushed on the 68k stack in reverse order, followed by the function opcode. The caller cleans the stack. The GFA wrapper hides this assembly-level calling sequence.
+- Atari's BIOS guide says XBIOS uses the same calling convention as BIOS. The Atari Compendium documents D0–D2 and A0–A2 as scratch registers for GEMDOS/XBIOS and says the function opcode on the stack is modified. The generic D0 return description in the GFA book is therefore insufficient as a complete ABI contract.
+- GEMDOS is not guaranteed re-entrant. BIOS and XBIOS have limited re-entrancy (the BIOS guide says three nested calls, without depth checking); this is not a promise that arbitrary callbacks or interrupt handlers may safely invoke them.
+- The Compendium recommends GEMDOS/VDI abstractions over XBIOS hardware calls where possible, and warns that hardware-specific calls may not transfer to later Atari systems.
+- The Atari BIOS Rev. 1.1 guide gives a concrete INITMOUS parameter block, whereas the GFA book explicitly does not provide a usable parameter layout. Keep the GFA-facing wrapper evidence and the OS-level structure as separate evidence records until the wrapper's marshaling is verified.
+- XBIOS opcode 11 is described as “no effect” by the GFA book. Atari's 1990 BIOS guide labels it “used-by-BIOS”; later Atari Compendium material identifies DBMSG as a debugger extension. Treat this as version/context-dependent, not as a stable no-op across all TOS variants.
+- The GFA book's BIOS(11) KBSHIFT description assigns bits 5–6 to Alt+ClrHome/Alt+Insert. Atari's BIOS Rev. 1.1 guide describes these bits as mouse-button states (and bit 7 as reserved). This is a concrete semantic discrepancy requiring an explicit source-version note; do not silently merge the tables.
+
+Primary cross-reference URLs:
+- Atari, *A Hitchhiker's Guide to the BIOS*, Rev. 1.1: https://manualzz.com/doc/26181874/atari-bios-rev-1.1-system-software-guide
+- *The Atari Compendium*, GEMDOS: https://bus-error.nokturnal.pl/atari_compendium/html/chap2.htm
+- *The Atari Compendium*, XBIOS: https://www.yardley.cc/atari/compendium/atari-compendium-chapter-4-XBIOS.htm
+
 ### 9.1 System-variable inventory (printed pp. 657–664)
 
 The book lists the following absolute Atari/TOS addresses. These are **source-documented target addresses**, not portable constants and not safe host memory locations.
@@ -717,28 +739,6 @@ The book lists the following absolute Atari/TOS addresses. These are **source-do
 The book's chapter 22 includes direct writes that change floppy timing/verification, VBL registration, screen/palette switching and GFA BASIC Break/direct-mode handling. The V2.xx interpreter patch example at p. 660 is particularly version- and build-specific. These are **unsafe/disabled** by default. Do not expose raw addresses through the host process address space; any future Atari emulation must use a virtual address map and machine/TOS profile.
 
 
-
-### 8.9 Source consistency correction: GETDFREE buffer size
-
-A line-by-line check of p. 614 confirms that GEMDOS(54) GETDFREE writes **four 32-bit longwords**, at buffer offsets +0, +4, +8 and +12. The required buffer is therefore **16 bytes**, not 12 bytes. The printed prose calls it a “12-Byte-Puffer”, but the fourth field is explicitly placed at +12 and occupies another longword. This is a source-internal contradiction; the field layout determines the minimum size. Treat the phrase “12-byte buffer” as a likely book typo and preserve the discrepancy in evidence notes. No host implementation should allocate only 12 bytes.
-
-
-### 8.10 Cross-reference validation against Atari OS documentation
-
-The book's trap wrappers were cross-checked against Atari's *A Hitchhiker's Guide to the BIOS*, Rev. 1.1 (5 March 1990), and *The Atari Compendium* (GEMDOS/XBIOS chapters). These are independent Atari OS references; they do not prove that every GFA wrapper exposes every OS version's full contract.
-
-- BIOS uses TRAP #13; XBIOS uses TRAP #14; GEMDOS uses TRAP #1. Arguments are pushed on the 68k stack in reverse order, followed by the function opcode. The caller cleans the stack. The GFA wrapper hides this assembly-level calling sequence.
-- Atari's BIOS guide says XBIOS uses the same calling convention as BIOS. The Atari Compendium documents D0–D2 and A0–A2 as scratch registers for GEMDOS/XBIOS and says the function opcode on the stack is modified. The generic D0 return description in the GFA book is therefore insufficient as a complete ABI contract.
-- GEMDOS is not guaranteed re-entrant. BIOS and XBIOS have limited re-entrancy (the BIOS guide says three nested calls, without depth checking); this is not a promise that arbitrary callbacks or interrupt handlers may safely invoke them.
-- The Compendium recommends GEMDOS/VDI abstractions over XBIOS hardware calls where possible, and warns that hardware-specific calls may not transfer to later Atari systems.
-- The Atari BIOS Rev. 1.1 guide gives a concrete INITMOUS parameter block, whereas the GFA book explicitly does not provide a usable parameter layout. Keep the GFA-facing wrapper evidence and the OS-level structure as separate evidence records until the wrapper's marshaling is verified.
-- XBIOS opcode 11 is described as “no effect” by the GFA book. Atari's 1990 BIOS guide labels it “used-by-BIOS”; later Atari Compendium material identifies DBMSG as a debugger extension. Treat this as version/context-dependent, not as a stable no-op across all TOS variants.
-- The GFA book's BIOS(11) KBSHIFT description assigns bits 5–6 to Alt+ClrHome/Alt+Insert. Atari's BIOS Rev. 1.1 guide describes these bits as mouse-button states (and bit 7 as reserved). This is a concrete semantic discrepancy requiring an explicit source-version note; do not silently merge the tables.
-
-Primary cross-reference URLs:
-- Atari, *A Hitchhiker's Guide to the BIOS*, Rev. 1.1: https://manualzz.com/doc/26181874/atari-bios-rev-1.1-system-software-guide
-- *The Atari Compendium*, GEMDOS: https://bus-error.nokturnal.pl/atari_compendium/html/chap2.htm
-- *The Atari Compendium*, XBIOS: https://www.yardley.cc/atari/compendium/atari-compendium-chapter-4-XBIOS.htm
 
 ### 9.2 System-variable cross-source discrepancies
 
