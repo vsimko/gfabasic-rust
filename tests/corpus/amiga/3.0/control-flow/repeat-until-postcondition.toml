@@ -1,0 +1,17 @@
+id = "amiga-3.0-repeat-until-postcondition"
+dialect = "GFA BASIC Amiga"
+version = "3.0"
+api_profiles = []
+kind = "semantic"
+status = "candidate"
+source_key = "AM-BOOK-FR-1989"
+source_pages = "printed pp. 4-45–4-50"
+evidence_status = "OCR-derived; page-image review required"
+expectation = "The loop tests its termination condition after the body. Starting at zero, the body increments COUNT% until it equals three; the final printed value is expected to be 3."
+expected_stdout = "3"
+expected_exit = "success"
+notes = [
+  "Original minimal fixture; not copied from the manual.",
+  "Verify statement layout, integer suffix syntax, assignment syntax, PRINT syntax, and REPEAT...UNTIL punctuation against page images.",
+  "Do not treat this candidate as a normative parser test until visual verification is complete.",
+]
