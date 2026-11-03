@@ -1014,3 +1014,33 @@ These checks increase confidence in the cited source details only. No runtime/co
 ### Chapter 21 page-image/text consistency check: GETDFREE (p. 614)
 
 A closer reading of the source reveals an internal contradiction in the GETDFREE description. It calls the destination a 12-byte buffer, but then lists four Longword fields at offsets +0, +4, +8 and +12. The fourth field makes the required extent 16 bytes. The API reference now records the 16-byte layout and preserves the printed “12-byte” wording as a source typo candidate. This is an evidence correction, not runtime validation.
+
+
+## Chapter 21 cross-source validation: Atari BIOS guide and Atari Compendium
+
+The BIOS/GEMDOS/XBIOS notes were compared with Atari's *A Hitchhiker's Guide to the BIOS*, Rev. 1.1 (5 March 1990), and *The Atari Compendium*.
+
+Confirmed ABI details:
+- BIOS uses TRAP #13, XBIOS TRAP #14, GEMDOS TRAP #1.
+- The trap ABI pushes arguments in reverse order followed by the opcode; the caller removes the arguments from the stack.
+- GEMDOS is not guaranteed re-entrant. BIOS/XBIOS have bounded re-entrancy and must not be treated as generally callback-safe.
+- The Atari Compendium documents D0–D2 and A0–A2 as scratch registers for GEMDOS/XBIOS; the function opcode on the stack is modified. The GFA book's statement that the result is returned in D0 does not define the complete machine ABI.
+
+Cross-source differences to retain:
+- BIOS(11) KBSHIFT bits 5–6: GFA book says Alt+ClrHome/Alt+Insert; Atari BIOS Rev. 1.1 says mouse-button states, with bit 7 reserved.
+- XBIOS opcode 11: GFA book says no effect; Atari BIOS Rev. 1.1 says used by BIOS; later Compendium material identifies DBMSG as a debugger extension.
+- INITMOUS: the GFA book does not provide a usable parameter layout; Atari BIOS Rev. 1.1 provides a parameter block. Do not assume GFA's generic wrapper exposes that raw layout unchanged.
+
+Chapter 22 low-memory discrepancies:
+- 0x0424 memctrl width: Word in the GFA book, Byte in BIOS Rev. 1.1.
+- 0x044A defshiftmod width: Word in the GFA book, Byte in BIOS Rev. 1.1.
+- 0x0454 nvbls: Word in the book's heading/address layout and in BIOS Rev. 1.1, but one sentence in the book calls it a Longword.
+- 0x04BA hz_200 and 0x04C2 drvbits in the GFA book differ from 0x04BC and 0x04C4 in BIOS Rev. 1.1.
+- BIOS Rev. 1.1 lists other low-memory variables omitted by the GFA book.
+
+The API reference now preserves these as source conflicts. The project must not collapse them into one universal Atari low-memory layout. No runtime probe or emulator comparison was run.
+
+Sources:
+- Atari, *A Hitchhiker's Guide to the BIOS*, Rev. 1.1 (1990): https://manualzz.com/doc/26181874/atari-bios-rev-1.1-system-software-guide
+- *The Atari Compendium*, GEMDOS: https://bus-error.nokturnal.pl/atari_compendium/html/chap2.htm
+- *The Atari Compendium*, XBIOS: https://www.yardley.cc/atari/compendium/atari-compendium-chapter-4-XBIOS.htm
