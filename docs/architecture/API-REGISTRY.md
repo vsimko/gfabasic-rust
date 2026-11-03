@@ -54,15 +54,17 @@ The following TOML-like examples illustrate the proposed model only. They are no
 ### 5.1 Core expression function
 
 ```toml
-id = "gfa.core.timer"
+id = "gfa.atari-st.timer"
 name = "TIMER"
 kind = "function"
 status = "proposed"
+tests = []
+docs = ["docs/reference/atari-gfa-basic-3.0.md"]
 
 [[availability]]
 dialect = "atari-st-gfa-basic"
 versions = ["2.x", "3.0"]
-profiles = ["core"]
+profiles = ["atari-st"]
 
 [[syntax]]
 form = "call"
@@ -89,8 +91,7 @@ state = "unimplemented"
 target = "linux-x86_64"
 classification = "unsupported"
 
-tests = []
-docs = ["docs/reference/atari-gfa-basic-3.0.md"]
+
 ```
 
 ### 5.2 Atari statement with alternative syntax
@@ -100,6 +101,8 @@ id = "gfa.atari-st.window.open"
 name = "OPENW"
 kind = "statement"
 status = "research"
+tests = []
+docs = ["docs/reference/atari-gfa-api.md#3-gfa-level-gemaes-wrappers"]
 
 [[availability]]
 dialect = "atari-st-gfa-basic"
@@ -148,8 +151,6 @@ state = "unimplemented"
 target = "linux-x86_64"
 classification = "unsupported"
 
-tests = []
-docs = ["docs/reference/atari-gfa-api.md#3-gfa-level-gemaes-wrappers"]
 ```
 
 The examples show why functions and statements need distinct syntax/context metadata and why a statement may have multiple argument forms.
