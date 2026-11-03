@@ -19,7 +19,7 @@ This register identifies candidate sources for language and API research. A list
 
 ## Candidate Amiga sources
 
-No Amiga manual has yet been identified and verified in this initial register. The Atari ST manual must not be treated as sufficient evidence for Amiga-specific commands or behavior.
+Amiga-specific book and manual candidates have since been identified and are listed below. Their applicability is version-scoped, and none is currently accepted as a complete normative source for Amiga 3.52. The Atari ST manual must not be treated as sufficient evidence for Amiga-specific commands or behavior.
 
 ## Historical/version context
 
@@ -228,3 +228,13 @@ Sources:
 The directory and README confirm that `gfalist` is a MorphOS/PPC tool for tokenized GFA BASIC 3.x. It is not an Amiga GFA BASIC language reference and must not be used to infer built-in commands or runtime behavior. The other three packages are catalogue leads only. Their names are not evidence that their functionality is built into GFA BASIC.
 
 This is a verified snapshot of selected catalogue entries, not a complete survey of `dev/basic`. Archive inspection, license checks, package dependency extraction, and classification of additional entries remain open work for issue #64.
+
+
+## Amiga emulator and experiment environment
+
+The proposed reproducible emulator procedure is documented in [the Amiga emulator experiment lab](research/amiga-emulator-lab.md). It uses FS-UAE as a Linux-hosted research tool, requires a legally usable Kickstart ROM and a separately authorized GFA BASIC copy, and does not claim that any interpreter or compiler image has been executed.
+
+| ID | Source | Applicability | Evidence status | Notes |
+|---|---|---|---|---|
+| AM-EMU-FS-UAE | FS-UAE official documentation and Linux downloads | Host emulator for Amiga experiments | Tool documentation; no GFA BASIC behavior evidence | FS-UAE is GPL-licensed and provides Linux x86-64 and ARM64 builds. Its documentation recommends original Kickstart ROMs for compatibility and notes that the built-in AROS replacement is less compatible. Record the exact emulator build and configuration used for every observation. [Linux downloads](https://fs-uae.net/download/linux/); [Kickstart ROM guidance](https://fs-uae.net/docs/kickstart-roms/); [release notes](https://fs-uae.net/news/). |
+| AM-EMU-ROM-LICENSE | Amiga Forever ROM/OS licensing FAQ | Legal acquisition/use of Amiga ROM and OS files | Vendor licensing guidance; not legal advice | The vendor describes the EULA scope for ROM/OS use and warns that third-party files have separate licensing conditions. A ROM/OS license does not establish rights to copy or redistribute GFA BASIC disks. Review the current EULA and the rights for each third-party component separately. [Use of ROM and OS files](https://www.amigaforever.com/kb/13-145). |
