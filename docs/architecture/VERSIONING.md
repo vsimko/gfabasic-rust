@@ -110,4 +110,6 @@ Each public release should include a changelog entry covering user-visible chang
 
 When the CLI exists, its version report should identify at least the compiler version and build revision. A diagnostic/support report should also expose the selected dialect/version, API profiles, output target, and relevant runtime/schema versions. Avoid machine-local paths and timestamps in reproducibility metadata unless explicitly requested.
 
+Reference: [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.html).
+
 No release command, version-reporting CLI, schema migration, or runtime ABI mechanism exists yet. This document defines a proposed policy, not implemented behavior.
