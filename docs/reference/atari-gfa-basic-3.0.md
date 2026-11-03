@@ -202,6 +202,21 @@ Do not treat .BAS and .GFA as interchangeable extensions or assume that either t
 
 V3.0 editor navigation also permits the right-Tab key to place the cursor beyond the current line end; vertical navigation and selected page/program navigation actions trigger syntax or structure checks (pp. 727–728). These are editor interactions, not lexical rules.
 
+
+
+### 4.9 Editor source formats and version-specific file handling
+
+The book distinguishes tokenized program files from ASCII listings (printed pp. 728–729):
+
+| Editor operation | V2.xx | V3.0 | Documented behavior |
+|---|---|---|---|
+| Program Save/Load | `.BAS` | `.GFA` | Program block; interpreter checking is bypassed |
+| Save,A / Merge | `.LST` | `.LST` | ASCII text; Merge inserts at cursor and checks imported lines |
+
+Program Load replaces the current program. Merge inserts text at the cursor and marks invalid lines with the book's `==>` marker. The book says Merge rejects lines containing NUL bytes or longer than 255 characters. This is a Merge-specific constraint, not an established universal source-line limit. The editor's horizontal scrolling after 79 visible characters is separate (pp. 726, 728–729).
+
+The exact tokenized `.BAS` and `.GFA` layouts and their cross-version compatibility remain unknown. Do not assume these formats are interchangeable. V3.0 right-Tab can position the cursor beyond the current line end; navigation can trigger syntax or structure checks (pp. 727–728). These are editor behaviors, not lexical rules.
+
 ## 5. Platform API boundary
 
 The same book describes Atari ST-specific facilities in separate chapters:
