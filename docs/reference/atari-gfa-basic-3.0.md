@@ -140,6 +140,33 @@ The same book describes Atari ST-specific facilities in separate chapters:
 
 These are Atari ST API/runtime profile topics, not automatically language-core semantics. Track their declarations and behavior under [issue #25](https://github.com/vsimko/gfabasic-rust/issues/25) and the API registry. Do not map them directly to Linux/SDL3 without an explicit compatibility design.
 
+### 5.1 Reviewed Atari API areas
+
+| API area | Book coverage | Main concerns | Evidence state |
+|---|---|---|---|
+| Screen, keyboard, sound, printer, file/device I/O | Chapter 5, pp. 61–154 | Channel semantics versus device APIs; binary/random access; hardware-specific sound and port behavior | First-pass reviewed; detailed signature/image validation pending |
+| Line-A, graphics and screen memory | Chapter 9, pp. 251–328 | Atari graphics structures, raster operations, screen addresses and target memory layout | First-pass reviewed; low-level details require page-image and TOS cross-checks |
+| Numeric conversion, arrays and memory | Chapters 10–11, pp. 329–392 | Numeric representation, array descriptors, pointers, block moves and memory allocation | First-pass reviewed; storage details are not host ABI |
+| Program control, errors, time and keyboard | Chapter 12, pp. 393–452 | CONT/RESUME behavior, error-handler lifecycle, timer units, packed keyboard codes and cooperative callbacks | First-pass reviewed; interpreter/compiler differences remain |
+| Alerts, file selector, mouse and joystick | Chapter 13, pp. 453–470 | AES dialogs, selector return states, pointer coordinates and input mode restoration | First-pass reviewed; API behavior must be isolated from core |
+| GEM windows | Chapter 14, pp. 471–486 | Four-window table, handle mapping, redraw responsibility and window attributes | First-pass reviewed; WINDTAB layout needs image verification |
+| Menus and event monitoring | Chapters 15–16, pp. 487–498 | Menu arrays, AES message/event vectors, event polling and handler reentrancy | First-pass reviewed; button-event parameter interactions need runtime probes |
+| GDOS/VDI and fonts | Chapter 17, pp. 499–530 | Optional driver availability, workstation lifecycle, parameter blocks, font metrics and device capabilities | First-pass reviewed; function signatures and font offsets need image/TOS verification |
+| AES managers and resources | Chapter 18, pp. 531–584 | Object/resource, event, menu, form, window and shell manager calls | First-pass reviewed; full function/signature validation pending |
+| GEM object structures and fields | Chapters 19–20, pp. 585–604 | OBJECT/TEDINFO/ICONBLK/BITBLK/PARMBLK layouts, field widths, flags and target pointers | First-pass reviewed; all offsets/bit masks need image verification |
+| BIOS, GEMDOS, VDISYS and XBIOS | Chapter 21, pp. 605–656 | Trap/opcode signatures, parameter blocks, handles, privilege, disk geometry and hardware registers | First-pass reviewed; cross-check against TOS documentation and probes required |
+| TOS/system variables | Chapter 22, pp. 657–664 | Absolute addresses, interrupt vectors, screen state and memory bounds | First-pass reviewed; machine/TOS-specific and unsafe by default |
+
+### 5.2 API/runtime classification rules
+
+- GFA BASIC statements that wrap GEM/AES/VDI calls remain part of the Atari API profile even when they use BASIC-like syntax.
+- MENU, OPENW, ALERT, FILESELECT, ON MENU, V_OPNWK and related facilities must not be treated as portable core semantics.
+- VDI workstation handles and AES window handles are different resource types. Keep their ownership and lifetimes separate.
+- AES/VDI parameter arrays and event/message buffers are mutable shared state. Calls can overwrite them; preserve call ordering and buffer lifetime.
+- Target 68k pointers, words, longwords, endianness and record offsets must be represented explicitly. Never cast host-native Rust structures to Atari layouts.
+- BIOS/GEMDOS/XBIOS calls, supervisor mode, interrupt vectors, absolute system variables, raw disk formatting and direct hardware access are privileged or unsafe surfaces. They require explicit support classification and a virtualized target memory/device model.
+- The V2.xx compiler and interpreter are separate execution profiles. Break polling, overflow checks, error support, RESUME, cursor handling and memory allocation can differ.
+
 ## 6. Book and diskette corpus observations
 
 The accompanying disk archive contains 162 .LST files plus support files. Its README states that comments were removed to reduce disk usage and that some programs need additional source fragments inserted with the editor's MERGE operation. This means:
@@ -159,17 +186,17 @@ Do not copy the book PDF or the complete sample disk into this repository. The s
 | Identifiers and case sensitivity | Partially described in examples | Variable chapter and lexical notes |
 | Keywords and abbreviations | Abbreviations are documented; complete list exists in appendices | Command abbreviation list and parser behavior |
 | Numeric/string/Boolean literals | Not yet assessed | Literal and expression sections |
-| Operators and precedence | Contents identify operator and comparison sections | Chapter 8, pp. 229–249 |
-| Numeric semantics | Not yet assessed | Numeric functions, precision, overflow and conversion |
-| String semantics | Not yet assessed | Chapter 7, pp. 221–228 |
-| Arrays | Not yet assessed | Chapter 11, pp. 341–353 |
-| Memory and pointers | Not yet assessed | Chapter 11, pp. 354–392 |
+| Operators and precedence | First-pass reviewed | Chapter 8, pp. 229–249; precedence and edge cases need normalization and tests |
+| Numeric semantics | First-pass reviewed | Chapters 8, 10 and 24; reconcile representation and compiler/interpreter differences |
+| String semantics | First-pass reviewed | Chapter 7, pp. 221–228; runtime representation also described in chapter 24 |
+| Arrays | First-pass reviewed | Chapter 11, pp. 341–353; descriptor/layout validation pending |
+| Memory and pointers | First-pass reviewed | Chapter 11, pp. 354–392; target memory model validation pending |
 | Control flow | Partially assessed | Chapter 6, pp. 155–220 |
 | I/O and files | Partially assessed | Chapter 5, pp. 61–154 |
 | Graphics | Platform-specific; not language core | Chapter 9, pp. 251–328 |
-| Error handling | Not yet assessed | Chapter 12, pp. 393–452 |
+| Error handling | First-pass reviewed | Chapter 12, pp. 393–452; interpreter/compiler behavior differs |
 | Editor and compiler behavior | Partially assessed | Chapter 24, pp. 701–793 |
-| Built-in command/function catalogue | Not yet assessed | Appendix and alphabetical command list, pp. 742–793 |
+| Built-in command/function catalogue | Indexed in first pass; signatures not yet normalized | Appendix and alphabetical command list, pp. 742–793 |
 
 ## 8. Required feature record
 
