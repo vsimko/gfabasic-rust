@@ -1227,3 +1227,38 @@ The appendix's variable organization section was checked against page images, re
 - The text describes `ARRPTR` as returning the string descriptor address. It describes reading descriptor fields with `LPEEK`/`DPEEK` and names V3.0 `CARD{}`/`LONG{}` forms on p. 718; exact lexical punctuation for those forms still needs page-image validation.
 
 The vertical-bar suffix is now image-verified. These memory layouts remain Atari interpreter implementation details and must not be projected onto the project's portable IR or Linux runtime. No interpreter execution was performed.
+
+
+## Chapter 24 compiler/interpreter differences: V2.xx compiler (printed pp. 701–715)
+
+The book has a dedicated description of the V2.xx compiler and explicitly warns that interpreter and compiled execution are not identical. The following points are compiler-mode contracts documented by this edition; they must not be generalized to the V3.0 interpreter or assumed to describe later compilers.
+
+- **Compiler workflow and input:** the documented compiler consumes a saved BASIC source file through its file selector. The author explicitly says not to use editor “Save,A”, LIST or PSAVE output as compiler input. The compiler first checks source structure, then compiles in a second pass, and writes a directly executable PRG. The book describes it as a RAM-only compiler. (pp. 701–705)
+- **OPTION precedence:** compiler-dialog settings act as initial defaults; the last matching OPTION encountered in the program takes precedence. (p. 709)
+- **Break handling (OPTION U0–U3):** U0 omits break handling; U1 checks at the point of the option; U2 inserts checks at loop boundaries and before GOTO; U3 checks after every BASIC statement. The book says the option also records a program-counter checkpoint used by compiled RESUME/RESUME NEXT. The more frequent checks increase code size and reduce speed. (pp. 705–706, 712–713)
+- **Integer overflow (OPTION T-/T+):** the interpreter is described as checking the signed 32-bit integer range. The compiler may emit direct machine INC/DEC instructions without that check. T+ adds overflow handling; T- leaves wraparound behavior. The exact exception path depends on B+ and is described separately. (pp. 706–707)
+- **Error reporting (OPTION E-/E+):** E- emits a compact error number and machine PC; E+ adds descriptive text similar to the interpreter. (pp. 707–708)
+- **CPU exceptions (OPTION B-/B+):** B- leaves selected CPU exceptions as system bomb errors; B+ installs handlers so they can be reported and routed through ON ERROR GOSUB. (pp. 708–709)
+- **Interpreter-only commands:** LIST, LLIST, TRON, TROFF, DEFLIST, SAVE, PSAVE, LOAD, STOP and CONT cannot be compiled. The book says the compiler reports the command and allows the user to continue with that command ignored or abort. (p. 711)
+- **RESUME:** RESUME Label has a known target address. RESUME and RESUME NEXT require a preceding Ux checkpoint; U1/U2 checkpoints can be less precise than the actual failing instruction. (pp. 712–713)
+- **CHAIN:** interpreter CHAIN loads another BAS program into the interpreter; compiled CHAIN instead launches an executable PRG/TOS/TTP through AES SHEL_WRITE and terminates the caller. This is a material mode-dependent semantic difference, not merely a file-extension change. (pp. 713–714)
+- **FILESELECT memory:** the compiler has no editor screen buffer to save the background. The book requires approximately 32.5 KB free memory at FILESELECT time and discusses RESERVE as a way to make that memory available. (pp. 714–715)
+- **Mouse cursor:** unlike the interpreter, the compiler does not automatically re-show the mouse pointer after every command. The book documents SHOWM, mouse queries, AES calls and Ux options as events that can re-enable it. (p. 711)
+- **Undefined arithmetic case:** the book explicitly says compiled 0/0 yields 1, whereas the interpreter reports division by zero. This is a surprising, edition-specific compiler behavior and should be a negative/compatibility test, not a portable language rule. (p. 715; page image inspected)
+- **Loop performance:** the book claims an integer-counter REPEAT…UNTIL loop is faster in compiled mode than the equivalent FOR…NEXT loop. Treat this as a historical performance observation, not a semantic guarantee. (p. 715)
+
+The printed text also claims interpreter/compiled source compatibility in general, then documents the exceptions above. The safe project model is therefore to keep source-language semantics distinct from execution-mode behavior and attach compiler options/limitations to an explicit compiler profile. The book documents a V2.xx compiler; no V3.0 compiler behavior was established by this section. No original compiler or interpreter was executed during this review.
+
+Candidate conformance cases for issue #42:
+1. OPTION resolution: dialog/default setting versus one or more in-source options; last matching in-source option wins.
+2. U0/U1/U2/U3 break-check placement and code-path instrumentation; test separately from ordinary language parsing.
+3. RESUME and RESUME NEXT with no Ux checkpoint, and with U1/U2/U3 checkpoints.
+4. Integer INC/DEC at signed 32-bit boundaries with T- and T+.
+5. E-/E+ error message detail and PC reporting; B-/B+ exception handling and ON ERROR GOSUB.
+6. Compiler rejection/ignore behavior for each interpreter-only command listed above.
+7. CHAIN target behavior under interpreter and compiled execution (BAS versus PRG/TOS/TTP).
+8. FILESELECT with constrained free memory and RESERVE.
+9. Mouse visibility after graphics operations and the documented re-enable triggers.
+10. 0/0 in interpreter versus compiled execution; preserve as a documented compiler quirk until tested on the exact compiler build.
+11. Compare REPEAT…UNTIL and FOR…NEXT performance only in a benchmark suite, never as a correctness assertion.
+
