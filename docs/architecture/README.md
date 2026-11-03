@@ -28,7 +28,7 @@ The language core is separate from platform API profiles. Amiga and Atari ST pro
 | Topic | Scope | Document | Tracking |
 |---|---|---|---|
 | Project goals and compatibility | Purpose, non-goals, compatibility dimensions | [GOALS.md](GOALS.md) | [#2](https://github.com/vsimko/gfabasic-rust/issues/2) |
-| Dialects and versions | Source dialect identity and version-specific rules | [DIALECTS.md](DIALECTS.md) | [#3](https://github.com/vsimko/gfabasic-rust/issues/3) |
+| Dialects and versions | Source dialect identity and version-specific rules | [DIALECTS.md](DIALECTS.md); [Atari ST GFA BASIC V2.xx/V3.0 research draft](../reference/atari-gfa-basic-3.0.md) | [#3](https://github.com/vsimko/gfabasic-rust/issues/3) |
 | Target model | Host/target distinction and target capabilities | [TARGETS.md](TARGETS.md) | [#4](https://github.com/vsimko/gfabasic-rust/issues/4) |
 | API profiles | Core, Amiga, and Atari ST profile boundaries | [API-PROFILES.md](API-PROFILES.md) | [#5](https://github.com/vsimko/gfabasic-rust/issues/5) |
 | Compiler pipeline and IR | Frontend stages, semantic analysis, typed IR, LLVM boundary | [PIPELINE-AND-IR.md](PIPELINE-AND-IR.md) | [#6](https://github.com/vsimko/gfabasic-rust/issues/6) |
