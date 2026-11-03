@@ -133,6 +133,104 @@ Important constraints:
 - WIND_UPDATE locking must be paired correctly; incorrect pairing can block redraws by other applications/accessories.
 - The book reports unreliable behavior for some AES calls, including event recording and resource pointer adjustment. Record these as source-specific warnings pending TOS-version tests.
 
+### 5.1 Signature notes transcribed from pp. 548–580
+
+The following signatures and contracts are transcribed from the book's AES chapter. This is a **first-pass OCR/text transcription**, not yet page-image-verified. Names and argument order are therefore useful research data, but must not be promoted into normative registry entries until checked against page images and, where necessary, a matching AES/TOS reference. The book explicitly says that its V3.0 call syntax follows C-style calls; the `<<` marks in printed signatures denote output parameters and are editorial notation, not BASIC syntax. [pp. 547–548]
+
+**Application manager**
+
+| Function | Signature / result | Documented behavior and constraints |
+|---|---|---|
+| `APPL_EXIT()` | Returns 0 on failure, nonzero on success | Deregisters the application; the book says this is unnecessary in GFA because startup/shutdown handling is automatic. [p. 548] |
+| `APPL_FIND(programName)` | Returns application ID; -1 if not found | Name must be exactly eight characters, padded with spaces if needed; longer input may crash. [pp. 548–549] |
+| `APPL_INIT()` | Returns the GFA application ID | Dummy wrapper: GFA already performed initialization at startup. [p. 549] |
+| `APPL_READ(handle,length,address)` | Returns 0/nonzero status | Reads a byte count from another application's AES message buffer; destination must be at least `length` bytes. [p. 549] |
+| `APPL_TPLAY(address,count,speed)` | Return value documented as always 1 | Replays recorded events; book restricts it to Blitter TOS and gives speed values 50/100/200? OCR needs page-image check. [pp. 549–550] |
+| `APPL_TRECORD(address,count)` | Returns number of events actually recorded | Blitter-TOS-only; six-byte records; the author reports Digital Research implementation defects and poor reliability. [p. 550] |
+| `APPL_WRITE(handle,length,address)` | Returns 0/nonzero status | Writes bytes to another application's AES message buffer. [p. 551] |
+
+**Event manager**
+
+| Function | Signature | Contract |
+|---|---|---|
+| `EVNT_BUTTON(clicks,button,status[,mouseX,mouseY,mouseButtons,shift])` | Returns actual click count | Waits for a mouse-button event. Button: 1 left, 2 right, 3 both; status selects which button state triggers. Optional outputs return pointer/button/modifier state. [p. 551] |
+| `EVNT_DCLICK(doubleClick,mode)` | Returns previous click interval | Mode 0 reads current setting; mode 1 sets it. Values are documented as 0 (slow) through 4 (fast). [p. 552] |
+| `EVNT_KEYBD()` | Returns packed 16-bit key value | Low byte is ASCII; high byte is scan code. [p. 552] |
+| `EVNT_MESAG(address)` | Return value documented as always 1 | Waits for a window/menu message in a 16-byte (8-word) buffer. Can wait forever if no installed menu/window can generate a message. [p. 552] |
+| `EVNT_MOUSE(flag,x,y,width,height[,mouseX,mouseY,mouseButtons,shift])` | Return value documented as always 1 | Waits for pointer to enter (0) or leave (1) a screen rectangle. Optional outputs match EVNT_BUTTON. [p. 553] |
+| `EVNT_MULTI(mask,clicks,button,status,box1...,box2...,address,time[,outputs])` | Returns event bitmask | Combines keyboard, button, two rectangle, message and timer waits. The OCR transcription of the timer bit is ambiguous (it appears to duplicate bit 0); verify the printed diagram before encoding the mask. [pp. 553–554] |
+| `EVNT_TIMER(milliseconds)` | Return value documented as always 1 | Blocks until the requested number of milliseconds elapses. [p. 554] |
+
+**Form and file-selector managers**
+
+| Function | Signature | Contract |
+|---|---|---|
+| `FORM_ALERT(defaultButton,text$)` | Returns selected button number | Alert format encodes icon, up to five text lines (30 chars each), and up to three buttons (10 chars each), separated by `|` inside bracketed components. [pp. 554–555] |
+| `FORM_BUTTON(tree,object,clicks[,nextObject])` | Returns 0 when an EXIT/TOUCHEXIT object is selected, otherwise positive | Internal helper used by FORM_DO; optional output gives next object. [p. 555] |
+| `FORM_CENTER(tree[,x,y,width,height])` | Return value documented as always 1 | Calculates centered form bounds; coordinates and dimensions are output parameters. [p. 555] |
+| `FORM_DIAL(mode,littleRect...,bigRect...)` | Returns 0/nonzero status | Mode 0 saves background; 1 grow-box; 2 shrink-box; 3 restores background. Window contents still require application redraw. [pp. 555–556] |
+| `FORM_DO(tree,firstObject)` | Returns selected EXIT object index | Runs the form interaction loop. A form without EXIT/TOUCHEXIT can trap control indefinitely; normal GFA abort/menu handling is unavailable while it owns input. [p. 556] |
+| `FORM_ERROR(code)` | Return value documented as 0 | Displays a TOS error alert. [p. 557] |
+| `FORM_KEYBD(tree,current,next,char$[,nextObject,nextChar$])` | Returns 0 on EXIT/TOUCHEXIT, otherwise positive | Internal form-editing helper; output values identify the next editable object/character. [p. 557] |
+| `FSEL_INPUT(path$,file$,button)` | Returns 0/nonzero status | Creates a file selector. Outputs chosen path, file and exit object (0 cancel, 1 accept). The book warns that malformed string buffers can corrupt GEM state and recommends the safer GFA FILESELECT wrapper. [pp. 557–558] |
+
+**Graphics, menu and object managers**
+
+| Function | Signature | Contract |
+|---|---|---|
+| `GRAF_DRAGBOX(boxW,boxH,startX,startY,boundsX,boundsY,boundsW,boundsH[,lastX,lastY])` | Returns 0/nonzero status | Drag operation requires left mouse button held; final position is output. [pp. 558–559] |
+| `GRAF_GROWBOX(smallRect,bigRect)`, `GRAF_SHRINKBOX(smallRect,bigRect)` | Returns 0/nonzero status | Visual transition only; does not alter screen contents. [pp. 559, 561–562] |
+| `GRAF_HANDLE([charW,charH,boxW,boxH])` | Returns current VDI handle | Optional outputs give standard font character and cell dimensions. [p. 560] |
+| `GRAF_MKSTATE([mouseX,mouseY,buttons,shift])` | Return value documented as 1 | Reads pointer and modifier state. [p. 560] |
+| `GRAF_MOUSE(shape,address)` | Returns 0/nonzero status | Selects predefined/custom pointer or hides/shows it; custom data is 37 words. [p. 560] |
+| `GRAF_MOVEBOX(width,height,startX,startY,endX,endY)` | Returns 0/nonzero status | Moves a rectangle without changing screen contents. [p. 561] |
+| `GRAF_RUBBERBOX(x,y,minW,minH[,width,height])` | Returns 0/nonzero status | Draws rubber-band rectangle while left button is held; final dimensions are outputs. [p. 561] |
+| `GRAF_SLIDEBOX(tree,frameObject,sliderObject,orientation)` | Returns 0–1000 slider position | Form-only helper; does not update object coordinates or redraw the object. Orientation 0 horizontal, 1 vertical. [pp. 562–563] |
+| `GRAF_WATCHBOX(tree,object,insideState,outsideState)` | Returns 1 if pointer is inside on release, else 0 | Form-only helper; changes object state as pointer enters/leaves while button is held. [p. 563] |
+| `MENU_BAR(tree,mode)` | Returns 0/nonzero status | Mode 0 removes menu bar; 1 draws it. [p. 563] |
+| `MENU_ICHECK(tree,object,mode)` | Returns 0/nonzero status | Mode 0 clears checkmark; 1 sets it. [p. 564] |
+| `MENU_IENABLE(tree,object,mode)` | Returns 0/nonzero status | Mode 0 disables; 1 enables item. [p. 564] |
+| `MENU_TEXT(tree,object,text$)` | Returns 0/nonzero status | Replaces menu line; new text must not exceed original buffer length. [p. 564] |
+| `MENU_TNORMAL(tree,object,mode)` | Returns 0/nonzero status | Mode 0 inverse title, 1 normal title. [p. 565] |
+| `MENU_REGISTER(handle,text$)` | Returns menu index 0–5, or -1 | Registers accessory title; maximum six entries. [p. 565] |
+| `OBJC_ADD(tree,parent,child)` | Returns 0/nonzero status | Inserts object and updates OB_NEXT, OB_HEAD and OB_TAIL; book notes this differs from raw GEMSYS behavior. [p. 565] |
+| `OBJC_CHANGE(tree,object,dummy,x,y,w,h,state,mode)` | Returns 0/nonzero status | Changes OB_STATE; mode 0 no redraw, 1 redraw within clipping rectangle. Dummy is always 0. [p. 566] |
+| `OBJC_DELETE(tree,object)` | Returns 0/nonzero status | Removes object from selectable tree by adjusting links; can be restored/reinserted. [p. 566] |
+| `OBJC_DRAW(tree,firstLevel,children,x,y,w,h)` | Returns 0/nonzero status | Draws tree levels inside clipping rectangle; child count 0 means only first level. [pp. 566–567] |
+| `OBJC_EDIT(tree,object,char$,position,mode[,nextPosition])` | Returns 0/nonzero status | Modes 1 initialize/formatted text and cursor, 2 insert character, 3 finish; optional output gives next character position. [p. 567] |
+| `OBJC_FIND(tree,startObject,levels,x,y)` | Returns object index or -1 | Finds object at screen position. [pp. 567–568] |
+| `OBJC_OFFSET(tree,object[,x,y])` | Returns 0/nonzero status | Outputs absolute screen coordinates of object's top-left corner. [p. 568] |
+| `OBJC_ORDER(tree,object,level)` | Returns 0/nonzero status | Moves object to another tree level. [p. 568] |
+
+**Resource, scrap, shell and window managers**
+
+| Function | Signature | Contract |
+|---|---|---|
+| `RSRC_FREE()` | Returns 0/nonzero status | Releases memory allocated by RSRC_LOAD and clears corresponding object tree. [p. 569] |
+| `RSRC_GADDR(type,object[,address])` | Returns 0/nonzero status | Reliable only for type 0 TREE and 15 AD_FRSTR according to the author; other documented type selectors are reported unreliable. [pp. 569–570] |
+| `RSRC_LOAD(name$)` | Returns 0/nonzero status | Loads RSC resource, converts character-cell coordinates to pixels; requires sufficient reserved memory. [p. 570] |
+| `RSRC_OBFIX(tree,object)` | Return value documented as always 1 | Converts object coordinates from character units to pixels. [p. 570] |
+| `RSRC_SADDR(type,object,pointer)` | Returns 0/nonzero status | Replaces a resource structure pointer; author warns it is not always reliable. [p. 571] |
+| `SCRP_READ([buffer$])` | Returns 0/nonzero status | Reads global Scrap buffer (about 160 bytes in this book's TOS context); caller prepares a sufficiently large string. [pp. 571–572] |
+| `SCRP_WRITE(text$)` | Returns 0/nonzero status | Writes up to 160 bytes to global Scrap buffer. [p. 572] |
+| `SHEL_ENVRN([address,string$])` | Returns offset; outputs environment address | Searches DOS environment string; source documents unusual offset/address semantics. [p. 572] |
+| `SHEL_FIND([path$])` | Returns 0/nonzero status | Input/output path buffer; searches current location and then drive A root. Wildcards are not expanded; buffer must allow longer output. [p. 573] |
+| `SHEL_GET(count[,buffer$])`, `SHEL_PUT(count,buffer$)` | Returns 0/nonzero status | Read/write up to 518 bytes of current desktop environment buffer. [pp. 573–574] |
+| `SHEL_READ([name$,command$])` | Returns 0/nonzero status | Returns caller program name and command tail; strings are NUL-terminated. [p. 574] |
+| `SHEL_WRITE(mode,graphics,gemFlag,command$,name$)` | Returns 0/nonzero status | Starts program or exits GEM; caller memory is released before launch. [p. 574] |
+| `WIND_CALC(mode,attributes,inX,inY,inW,inH[,outX,outY,outW,outH])` | Returns 0/nonzero status | Converts between window work-area and outer-frame geometry. [p. 575] |
+| `WIND_CLOSE(handle)` | Returns 0/nonzero status | Closes visible window but keeps handle allocated for later WIND_OPEN. [p. 575] |
+| `WIND_CREATE(attributes,maxX,maxY,maxW,maxH)` | Returns handle (>0), or <1 on failure | Allocates and registers a window. [p. 576] |
+| `WIND_DELETE(handle)` | Returns 0/nonzero status | Deregisters window and releases handle/resource. [p. 576] |
+| `WIND_FIND(x,y)` | Returns window handle, or 0 | Finds window at screen coordinates. [p. 576] |
+| `WIND_GET(handle,mode[,get1,get2,get3,get4])` | Returns 0/nonzero status | Mode selects work/outer/previous/max rectangle, slider positions/sizes, current handle, and visible rectangle-list entries. The OCR text around mode labels and one output label needs image verification. [p. 577] |
+| `WIND_OPEN(handle,x,y,width,height)` | Returns 0/nonzero status | Opens previously created window. [p. 578] |
+| `WIND_SET(handle,mode,set1,set2,set3,set4)` | Returns 0/nonzero status | Mode 1 attributes; 2 title pointer; 3 info-line pointer; 6 geometry; 8/9 slider positions; 10 top/activate; 14 desktop tree; 15/16 slider sizes. Pointer arguments are split into high/low words. [pp. 578–579] |
+| `WIND_UPDATE(mode)` | Returns 0/nonzero status | Modes 0/1 unlock/lock redraw rectangle lists; 2/3 hand mouse control to AES/program. Locking must be balanced and must not strand AES menu/window interaction. [pp. 579–580] |
+
+The book's page 577 transcription contains an apparent OCR/print-layout error in the mode-4 output description (the fourth output is described as height but is labelled Get1 again). Treat the four-value rectangle result as unresolved until the page image is checked. Likewise, do not infer missing AES calls from the manager family names: this chapter is intentionally a selected, incomplete catalogue, not the full AES API.
+
+
 ## 6. GEM object and resource structures
 
 The book's printed tables on pp. 585–596 were checked against page images at high resolution. The following sizes and field offsets are directly visible in those tables. They describe the Atari 68k GEM resource ABI, not host-native Rust structures.
