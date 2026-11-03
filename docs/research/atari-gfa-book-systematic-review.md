@@ -30,7 +30,7 @@ Printed page ranges below follow the book's table of contents. This map is a rev
 | 2 | 21–22 | Atari ST hardware background | Context reviewed |
 | 3 | 23–25 | GFA BASIC overview and V3.0 changes | Reviewed |
 | 4 | 27–60 | BASIC foundations, names, variables, loops, comparisons, precedence | Reviewed |
-| 5 | 61–154 | Input/output, screen, disk, files, random access, ports, printer, sound | Initial pass; detailed command-by-command extraction pending |
+| 5 | 61–154 | Input/output, screen, disk, files, random access, ports, printer, sound | Detailed first pass reviewed; page-image checks and runtime tests pending |
 | 6 | 155–220 | Program structure, loops, branches, declarations, subprograms, external code | Reviewed |
 | 7 | 221–228 | String manipulation, analysis, formatting | Reviewed |
 | 8 | 229–250 | Operators, arithmetic, numeric/trigonometric functions, comparisons, bit operations, random values | Reviewed |
@@ -265,3 +265,133 @@ These operations expose a version-specific memory model and should not be emulat
 4. Review chapters 17–22 as Atari platform API and data-structure documentation.
 5. Review appendix 24, especially variable representation, editor/compiler differences, errors, syntax list and alphabetical command list.
 6. Cross-check OCR-sensitive syntax and tables against page images; add focused tests under #42 only after the rule is sufficiently precise.
+
+
+## 11. Chapter 5 detailed command inventory (pp. 61–154)
+
+This section records the command families and the semantics visible in the book's first command-by-command pass. It is an inventory, not yet a normative parser/runtime specification. OCR-sensitive spellings and low-level Atari details remain subject to page-image verification.
+
+### 11.1 Keyboard and text input (pp. 69–81)
+
+| Construct | Syntax / behavior recorded | Version and evidence |
+|---|---|---|
+| `FORM INPUT` | `FORM INPUT length, stringVar`; formatted text input with a maximum length of 255 characters. | V3.0 notation appears in the entry; book-backed, pp. 69–70 |
+| `FORM INPUT … AS` | `FORM INPUT length AS stringVar`; edit an existing string value, replacing the variable's previous content after confirmation. | Book-backed, p. 70 |
+| `INKEY$` | Returns an empty string if no key is pending; ordinary keys return a one-byte string, special keys a two-byte string whose first byte is NUL and second is a pseudo scan code. | Book-backed, pp. 70–72 |
+| `INPUT` | `INPUT ["prompt";|,] var1 [,var2…]`; supports multiple variables and mixed string/numeric input. Semicolon form displays a space and question mark; comma form starts input immediately after the prompt. | Book-backed, pp. 75–78 |
+| `INPUT #` | `INPUT #channel, var1 [,var2…]`; reads values from an opened file or virtual device channel. | Book-backed, p. 78 |
+| `INPUT$(n)` | Returns up to the requested number of characters without echoing them during entry; the channel form `INPUT$(n,#channel)` reads a fixed byte count. | Book-backed, p. 79 |
+| `LINE INPUT` | `LINE INPUT ["prompt";|,] stringVar [,stringVar…]`; treats commas as text and ends each listed variable's input with Return. | Book-backed, pp. 79–80 |
+| `LINE INPUT #` | Reads a line from a channel. The book warns of a 254-character limit and reliable operation only with ASCII text and CR/LF line endings. | Book-backed, p. 80; test exact CR/LF pointer behavior |
+
+The book describes a 255-character maximum for ordinary string input and for the FORM INPUT field. It describes insertion mode as an additional V3.0 feature. INKEY$ scan-code interpretation is affected by V3.0 KEYPAD settings. [pp. 70–76]
+
+The keyboard buffer may retain repeated keypresses. The book shows clearing its count through low-level buffer access and describes BIOS(11,-1) for modifier-key state: right shift, left shift, Control, Alternate, and CapsLock occupy bits 0–4. It also gives GEMDOS(6,255) as a way to obtain a packed keyboard value containing ASCII, hardware scan code, and modifier status. These are Atari BIOS/GEMDOS integrations, not portable keyboard semantics. [pp. 71–75]
+
+### 11.2 Screen output and terminal control (pp. 82–94)
+
+- `PRINT`: screen output, with `AT(x,y)` positioning; file-channel form `PRINT #channel,`; semicolon joins adjacent expressions and suppresses CR/LF when trailing; comma advances to the next of five tab stops (x = 1, 17, 33, 49, 65); apostrophe inserts a space. The book gives screen dimensions of 80×25 for Hires/Midres and 40×25 for Lowres. [pp. 82–85]
+- `PRINT USING`: `PRINT USING format, expr [,expr…]` and `PRINT #channel, USING format, expr…`. The format language includes digit placeholders, decimal placement, sign handling, fill characters, currency prefix, thousands separators, exponential notation, first-character/full-string output, fixed-width substring output, and escaping of a following format character. V3.0 adds decimal-point/decimal-comma selection through MODE. [pp. 88–90]
+- `WRITE`: `WRITE [#channel,] ["text" [,var,expr…]]`. Unlike PRINT, it writes quotes around strings and commas between values; the book presents it particularly for sequential-file storage and subsequent INPUT# parsing. [pp. 90–91]
+- `LOCATE`: `LOCATE column,row`; described as available from V2.02 as an alternative to PRINT AT. V3.0 catches out-of-range low coordinates to avoid a Blitter-TOS fatal error. [p. 92]
+- `SPC(n)`: inserts the requested number of spaces in PRINT output. [p. 93]
+- VT52 escape strings: the book defines functions for cursor movement, screen/line clearing, insert/delete line, cursor position, foreground/background color, cursor visibility, save/restore cursor, reverse video, and line wrapping. These are Atari TOS terminal-control sequences rather than language-core syntax. [pp. 85–88]
+
+### 11.3 Disk and directory operations (pp. 94–120)
+
+The book documents these operations and related directory helpers:
+
+| Operation | Syntax / behavior | Evidence |
+|---|---|---|
+| `BLOAD` | `BLOAD "filename" [,startAddress]`; loads a binary file into memory. | pp. 97–98 |
+| `BSAVE` | `BSAVE "filename", startAddress, byteCount`; saves a memory region. | pp. 98–99 |
+| `CHDIR` | `CHDIR "directory"`; changes the current directory. A single backslash selects the root directory. | pp. 102–103 |
+| `CHDRIVE` | Drive/path selection helper; the book labels the compact path form as V3.0-specific. | p. 103; verify exact syntax from page image |
+| `DFREE(drive)` | Returns free disk space; drive 0 is current, 1 is A:, and subsequent values identify further drives. | p. 103 |
+| `DIR` | `DIR ["path"] [TO "file"]`; lists directory entries and can redirect output to a file or device. | pp. 103–104 |
+| `DIR$(drive)` | Returns the currently selected directory name for a drive, or an empty string when at its root. | p. 104 |
+| `EXIST(path)` | Tests whether a file/path exists; used as a Boolean guard before OPEN. | p. 105 |
+| `FGETDTA()` / `FSETDTA(address)` | Read/set the GEMDOS Disk Transfer Address buffer. The DTA contains file attributes, date/time and size fields at documented offsets. | pp. 105–108; Atari GEMDOS-specific |
+| `FILES` | `FILES ["path"] [TO "file"]`; DIR-like listing with file size, date and time metadata. | pp. 106–107 |
+| `FSFIRST(path,attributes)` / `FSNEXT()` | Find first/next matching directory entry, with results placed in the DTA buffer. | pp. 108–110; Atari GEMDOS-specific |
+| `KILL` | `KILL "filename"`; deletes a file. | p. 112 |
+| `LIST` | `LIST ["filename"]`; displays the current program or saves an ASCII listing; default extension is .LST. | pp. 112–114 |
+| `LOAD` | `LOAD "program"`; loads a BASIC program; default extension described as .BAS. | pp. 117–118 |
+| `MKDIR` | `MKDIR "directory"`; creates a directory. | p. 118 |
+| `NAME` / `RENAME` | `NAME "old" AS "new"`; renames or moves a file within the supported directory rules. RENAME is documented as an alias in V3.0. | pp. 119–120 |
+| `PSAVE` | `PSAVE "program"`; stores a protected/tokenized program that auto-starts on load and is not editable/listable through the normal interpreter workflow. | pp. 119–120 |
+| `RMDIR` | `RMDIR "directory"`; removes an empty directory. | p. 120 |
+| `SAVE` | `SAVE "program"`; saves the current program in token format; the book distinguishes V2.xx .BAS and V3.0 .GFA defaults. | p. 120 |
+| `CHAIN` | Example uses a temporary data file or the Atari Basepage command area to pass values to another program; the command entry and exact semantics need a focused reread. | pp. 100–102; example-led |
+
+The book says Atari disk-operation paths are generally normalized to uppercase by the system. The DTA layout and FSFIRST/FSNEXT behavior depend on GEMDOS and must remain in the Atari API profile. [pp. 105–110, 119]
+
+### 11.4 File channels and random-access records (pp. 121–134)
+
+| Operation | Syntax / behavior | Evidence |
+|---|---|---|
+| `BGET` | `BGET [#]channel, address, count`; reads bytes from a sequential file into memory at an address. | p. 121 |
+| `BPUT` | `BPUT [#]channel, address, count`; writes bytes from memory to a sequential file. | pp. 121–122 |
+| `CLOSE` | `CLOSE [#channel]`; closes one channel or all open channels. | p. 122 |
+| `EOF(channel)` | Tests end-of-file; the book shows it to prevent file-end errors during sequential reads. | p. 123 |
+| `FIELD` | `FIELD #channel, length AS stringVar [, ...]`; partitions a random-access record into fixed-width string fields. V3.0 adds an address-based form using `AT(address)`. | pp. 123–124 |
+| `GET #` | `GET #channel [,recordNumber]`; reads a record into FIELD variables. | p. 124 |
+| `LOC(#channel)` | Returns the current file-pointer byte position. | p. 124 |
+| `LOF(#channel)` | Returns the file length in bytes. | p. 125 |
+| `OPEN` | `OPEN "mode", #channel, "filename" [,recordLength]`; modes described include Output ("O"), Input ("I"), and Random ("R"). Up to 100 channels, numbered 0–99, are described. | pp. 125–127 |
+| `PUT #` | `PUT #channel [,recordNumber]`; writes FIELD variables to a random-access record. | p. 127 |
+| `RECALL` | `RECALL #channel, stringArray(), count, resultVar`; reads CR/LF-terminated text records into a string array and reports the actual count read. | pp. 127–128 |
+| `RELSEEK` | `RELSEEK #channel, [+|-]offset`; moves the file pointer relative to its current position. | p. 129 |
+| `SEEK` | `SEEK #channel, [+|-]offset`; sets the file pointer to a byte offset. | p. 129 |
+| `TOUCH` | `TOUCH #channel`; updates the file's directory timestamp from system time. | p. 130; V3.0 |
+| `STORE` | `STORE #channel, stringArray() [,count]`; writes array strings as CR/LF-terminated lines. | p. 130 |
+
+The random-access model is record-oriented: OPEN "R" establishes a record length, FIELD divides each record into byte-sized fields, and GET#/PUT# select records. The book describes a maximum record length of 65,535 bytes and up to 65,535 records. It warns that reopening an existing file with an incompatible record length or FIELD layout can make data inaccessible or corrupt record boundaries. [pp. 126–134]
+
+V2.xx permits only one FIELD declaration per random-access channel; V3.0 relaxes this and adds an address-based FIELD form. The default record length is described as 128 bytes when omitted. These version-sensitive rules require conformance tests before implementation. [pp. 123–124, 127, 131–134]
+
+### 11.5 Port input/output (pp. 135–145)
+
+- `INP(port)` and `INP(#channel)` read one byte from a hardware/device port or file channel. The port identifiers listed are 0=LST/Centronics, 1=AUX/RS232, 2=CON/keyboard, 3=MIDI, 4=IKB/keyboard processor, 5=VID/monitor. The book warns that INP waits for data and may not be interruptible through the normal Break mechanism. [pp. 135–138]
+- `INP?(port)` tests whether input is available; `OUT?(port)` tests whether a port is ready to accept output. [p. 138]
+- `INPAUX$` and `INPMID$` are V3.0 reserved string variables containing buffered bytes received since the previous read; reading empties the corresponding buffer. [p. 138]
+- `OUT`: `OUT #channel, byte` or `OUT port, byte`; V3.0 allows multiple byte values in one statement. [p. 139]
+- `OUT 4,n` sends commands to the Atari intelligent keyboard processor, changing mouse, joystick, and keyboard behavior. The book documents command values 7–31, several requiring trailing parameter bytes. It explicitly warns that incorrect values can cause unpredictable or persistent hardware/input failures. [pp. 139–145]
+
+The OUT 4 command table is hardware-specific, partly uncertain even to the book's author, and must not be implemented as a portable input API. The safe initial implementation stance is to classify it as an Atari-specific operation with explicit support status, not to map it directly to SDL input calls.
+
+### 11.6 Printer output (pp. 145–150)
+
+- `HARDCOPY`: prints the current screen dump; the book describes a timeout if the printer is unavailable and version-specific behavior in V3.0. [pp. 145–146]
+- `LLIST`: sends the current BASIC listing to the printer; interruptibility differs across V2.0, V2.02 and V3.0. [p. 146]
+- `LPOS(dummy)`: returns the virtual printer-buffer head position, not necessarily the physical print-head position. [p. 147]
+- `LPRINT`: printer analogue of PRINT, with no PRINT AT variant; printer control codes are device-specific. [pp. 147–150]
+
+The book's custom-character examples assume Epson FX-compatible printers and define 11-column glyph bitmaps. These are printer-specific examples, not a general printer abstraction. [pp. 148–150]
+
+### 11.7 Sound chip (pp. 150–153)
+
+- `SOUND channel, volume, note, octave, duration` or `SOUND channel, volume, #period, duration`. The period form is derived from frequency using approximately `TRUNC(125000/frequency + 0.5)`; values above 4100 are reduced modulo 4100. [pp. 150–151]
+- `WAVE channelMask, envelopeMask, shape, length, duration` configures the Yamaha YM-2149 sound generator. Channel/envelope masks select tone/noise generators; shape values 8–15 select envelope forms. Duration is described in 1/50-second units. [pp. 151–153]
+
+These commands are tightly coupled to the Atari ST YM-2149 sound chip. A Linux runtime may emulate their observable behavior, but must not assume SDL audio is equivalent without a defined YM-2149 model and timing tests.
+
+### 11.8 Implementation and specification implications
+
+1. Keep sequential-file byte operations (`BGET`, `BPUT`, `INP(#)`, `OUT(#)`) distinct from record-oriented random access (`FIELD`, `GET#`, `PUT#`).
+2. Define the file-pointer convention explicitly; the book's examples describe byte positions starting at 1, which may differ from a host runtime's zero-based offsets. [p. 124]
+3. Do not assume that Atari device names (`CON:`, `AUX:`, `MID:`, `VID:`, `LST:`, `PRN:`) are ordinary Linux files. They are virtual device channels in the Atari interpreter.
+4. Keep DTA, FSFIRST/FSNEXT, BIOS/GEMDOS keyboard access, IKB commands, printer ports, and YM-2149 sound in the Atari ST API profile.
+5. Preserve V2.xx/V3.0 differences for INKEY$/KEYPAD, OPEN/FIELD, TOUCH, OUT multiple-byte syntax, and directory/path conveniences.
+6. Do not infer exact on-disk numeric encoding, record padding, endianness, or error behavior solely from the book's examples. Verify them against the target interpreter and binary fixtures.
+
+### 11.9 Issue traceability and remaining validation
+
+This review batch belongs to existing issue **#23 — Document GFA BASIC file, disk, data, and resource operations**. Atari device, BIOS/GEMDOS, printer, and sound details also feed existing issue **#25 — Create Atari ST GFA BASIC API reference**. Cross-cutting feature inventory and version labels belong to **#19**, and executable compatibility checks belong to **#42**. No duplicate issue was opened.
+
+Remaining work for chapter 5:
+- Check page images for OCR-sensitive signatures and the full CHDRIVE/CHAIN entries.
+- Extract the full PRINT USING grammar into a small syntax table and verify ambiguous placeholders.
+- Verify file-pointer base, OPEN modes, random record limits, and record-length behavior against an exact Atari interpreter.
+- Verify the byte layouts and calling conventions for BLOAD/BSAVE, DTA, keyboard packed values, and YM-2149 timing.
+- Convert only verified language/core behavior into conformance cases; keep hardware-specific operations in Atari-profile tests.
