@@ -80,3 +80,34 @@ The contemporary December 1988 review is a useful early snapshot: it reports a r
 The online *Computers and Chaos* Amiga edition and the PDK listings provide promising source-code corpus leads. In particular, the PDK contents show examples using GFA BASIC and some third-party libraries. These must be classified individually so that library calls are not mistaken for built-in language statements.
 
 Aminet discovery is currently partial: the `gfalist.lha` entry is confirmed by an Aminet upload listing, while the earlier candidate filenames (`GFA_Enforcer.txt`, `GFA_Gadgets.lha`, `GFA_Menus.lha`, `GuiGfxDevBas.lha`) remain unverified leads until their live package records and contents are checked.
+
+
+| AM-BOOK-FR-1989 | *Le livre du GFA Basic Amiga*, Bleek, Hecht, Litzkendorf; French translation by Christian Frey, ©1989 | Explicitly GFA BASIC Amiga interpreter 3.0 | Primary published technical book; OCR/PDF inspected | A full searchable PDF is available at [PDF](https://www.gods69.com/download/Le_livre_du_GFA_BASIC_30_Amiga.pdf). The scan's front matter identifies the authors, Data Becker, 1989, ISBN 2-86899-207-2, and French translator Christian Frey. Its introduction explicitly says the book describes the commands/functions available in the GFA 3.0 interpreter. The author-approved digitalization notice and distribution conditions appear in the front matter; the original publisher copyright notice is also reproduced. Use for research and page/section citations; do not mirror or commit the PDF. |
+
+### Verified contents of AM-BOOK-FR-1989
+
+The searchable PDF has 12,360 extracted text lines. Its table of contents gives a detailed Amiga-specific map (printed page numbers shown in the book):
+
+- Ch. 5, pp. 61–124: input/output, screen, disk operations, file management, direct-access files, port I/O, AmigaDOS library, printing, sound.
+- Ch. 6, pp. 125–166: program structure, loops, conditional branches, ZONE and variable declarations, subprograms, calls to assembler/C/PRG programs.
+- Ch. 7, pp. 167–174: string operations and formatting.
+- Ch. 8, pp. 175–198: operators, mathematical and numeric functions, trigonometry, comparisons, random numbers.
+- Ch. 9, pp. 199–246: graphics definitions, graphics primitives, drawing, graphics memory, animation.
+- Ch. 10, pp. 247–258: data conversion and number systems.
+- Ch. 11, pp. 259–300: arrays, pointers, memory operations, user memory management, Amiga Exec library.
+- Ch. 12, pp. 301–330: program control, clearing, date/time, error handling, information, multitasking, debugging.
+- Ch. 13, pp. 331–338: program/user interaction.
+- Ch. 14, pp. 339–352: window and screen programming.
+- Ch. 15, pp. 353–358: menu programming.
+- Ch. 16, pp. 359–368: BASIC event control.
+- Ch. 17, pp. 369–376: advanced programming and newer commands, including GFA BASIC 3.04 environment.
+
+The introduction (printed pp. 1-9 to 1-12) documents the book's syntax notation, optional parameters, command abbreviations, parameter categories, expressions, and a GFA BASIC 3.0-specific rule for omission of GOSUB in ON...GOSUB forms. These are promising specification topics; every rule must be extracted with its exact printed page and checked against the German original or interpreter where possible.
+
+### Aminet and source-code leads verified beyond the initial directory
+
+- Aminet upload listing includes `gfalist.lha` under `dev/basic`, described as a tool that reads tokenized GFA BASIC versions. This may help inspect tokenized source files, but it is not itself a language specification. [Aminet upload listing](https://www.amiga-news.de/en/standard/?frm_pageType=news&frm_perPage=21&frm_start=7644).
+- Amiga Future's PDK 10 (5/1993) and PDK 11 (5/1994) contents identify GFA BASIC example programs with source, including graphics, mouse, file requester, and utility examples. [PDK contents](https://www.amigafuture.de/app.php/kb/viewarticle?a=2972).
+- The online *Computers and Chaos* Amiga edition contains ASCII GFA BASIC examples. [Example book](https://amigasourcecodepreservation.gitlab.io/computers-and-chaos-amiga-edition/).
+
+Do not confuse these independent source categories: the 1989 book is a GFA BASIC 3.0 reference; 3.52 disk images are later executable releases; PDK and book listings are examples; Aminet tools may inspect tokenized files. Keep version and evidence provenance attached to every extracted feature.
