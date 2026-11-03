@@ -674,18 +674,18 @@ AES is a platform API profile, not language-core behavior. It requires an explic
 
 ### 20.1 Object-tree record
 
-The basic GEM OBJECT record is a fixed-size structure linked by object indices. The book documents the links `OB_NEXT`, `OB_HEAD` and `OB_TAIL`, followed by type, flags, state, specification pointer/value and relative geometry. [pp. 585–591]
+The basic GEM OBJECT record is 24 bytes: six 16-bit link/type/flag/state words at offsets 0–10, a 32-bit OB_SPEC at offset 12, and four 16-bit geometry fields at offsets 16–22. Page images confirm this layout. [pp. 585–591]
 
 GFA exposes object fields through getter/setter functions:
 - `OB_ADR(address,object)`: byte offset/address of an object in its tree (not itself a field in the OBJECT record).
 - `OB_NEXT`, `OB_HEAD`, `OB_TAIL`: sibling/child navigation links.
 - `OB_TYPE`: object type.
-- `OB_FLAGS`: 9-bit object-attribute mask, including selectable/default/exit/touch-exit, hide-tree and indirect-specification behavior.
+- `OB_FLAGS`: 9-bit mask; bits 0–8 are SELECTABLE, DEFAULT, EXIT, EDITABLE, RBUTTON, LASTOB, TOUCHEXIT, HIDETREE and INDIRECT.
 - `OB_STATE`: 6-bit visual/interaction state mask, including selected, crossed, checked, disabled, outlined and shadowed state.
 - `OB_SPEC`: type-dependent value or pointer to a subordinate structure.
 - `OB_X`, `OB_Y`, `OB_W`, `OB_H`: relative object geometry. [pp. 586–591]
 
-The exact flag/state constants and all type-dependent `OB_SPEC` interpretations should be transcribed into a typed registry only after checking the page tables; the OCR is unreliable in several bit labels.
+Page-image checks confirm the nine OB_FLAGS bits (including INDIRECT at bit 8) and six OB_STATE bits. BOXINFO is a packed 32-bit value for G_BOX/G_IBOX/G_BOXCHAR; its fields are fill color, pattern, drawing mode, optional text color, border color/thickness and optional character. Exact normalized constants still need registry-level review. [pp. 588–592]
 
 ### 20.2 Nested GEM structures
 
@@ -697,7 +697,7 @@ The chapter documents the resource-file header and several subordinate structure
 - `G_IMAGE` and `G_ICON` data blocks: raster data and optional mask/label fields. [pp. 594–595]
 - `PARMBLK` / application-object block: tree/object identity, previous/current state, pixel geometry and redraw information passed to custom object drawing. [p. 596]
 
-These are 68k-era ABI structures with 16-bit words, 32-bit pointers and strict alignment/layout requirements. They must be modeled explicitly with target-width fields; host pointer size and host struct layout must never be used directly.
+Page-image validation confirms RSC-HEADER 38 bytes, TEDINFO 28 bytes, ICONBLK 36 bytes, BITBLK 14 bytes, APPLBLK/USERBLK 8 bytes and PARMBLK 30 bytes. These 68k-era ABI structures use 16-bit words and 32-bit pointers. They must be modeled explicitly with target-width fields; host pointer size and host struct layout must never be used directly.
 
 ## 21. GEM addresses and parameter blocks (chapter 20, pp. 597–604)
 
@@ -713,7 +713,7 @@ The book documents direct access to the shared AES/VDI parameter arrays:
 
 `VDIBASE` exposes a copy of VDI workstation state. The book warns that it is invalid on some Mega/Blitter TOS configurations and may contain incorrect values in GFA V3.0; it gives a ROM-TOS-specific fallback block address. The block contains text rotation, clipping, font count/current font, a copied font header, text color, line style and fill-pattern planes. [pp. 602–604]
 
-Treat all these blocks as transient shared call buffers, not independent application-owned data. Their contents are overwritten by subsequent AES/VDI calls. Exact array lengths and handle placement are call-specific; raw addresses and the hard-coded ROM-TOS fallback must remain profile- and OS-version-gated.
+Page-image validation confirms ADDRIN/ADDROUT use 4-byte elements, AES GINTIN/GINTOUT and GCONTRL use 2-byte words, and VDI INTIN/INTOUT/PTSIN/PTSOUT/CONTRL use 2-byte words. GCONTRL is five words (10 bytes); the GB pointer block contains six 32-bit pointers. VDI CONTRL has documented fields through offset 28. Treat these as transient shared call buffers, not independent application-owned data. VDIBASE is 308 bytes; its ROM-TOS fallback address remains profile- and OS-version-gated.
 
 ## 22. BIOS, GEMDOS, VDISYS, AES and XBIOS system calls (chapter 21, pp. 605–656)
 
