@@ -1362,3 +1362,41 @@ Pages 516–530 demonstrate direct TOS/GEM system-font pointer patching, VBL int
 - VQT_NAME's fallback behavior and VST_LOAD_FONTS/VST_UNLOAD_FONTS zero-argument contracts were checked on pp. 514–515.
 
 No implementation was performed. Existing issue #25 covers the Atari API reference, #5 API profiles, #12 registry, #19 language/API inventory and #42 conformance evidence; no duplicate issue was opened.
+
+
+## Chapter 21: BIOS, GEMDOS, GEMSYS, VDISYS and XBIOS (printed pp. 605–656)
+
+**Status: first-pass review completed; selected page-image checks performed on pp. 605–608, 612–617, 618–622, 623–629 and 649–651. No Atari runtime was executed.** Detailed call inventory is recorded in the Atari API reference, section 7.
+
+### Main findings
+
+- BIOS(opcode[,parameters]) and GEMDOS(opcode[,parameters]) use the book's explicit L: prefix for longword arguments; unmarked arguments are passed as words. This is a wrapper-level calling convention, not a declaration of host pointer width. [pp. 605, 608]
+- BIOS calls include memory-parameter-block inspection, device I/O, logical sector I/O (RWABS), exception-vector replacement, timer calibration, BPB access, media-change status, drive map and keyboard shift state. RWABS uses 512-byte sectors in the described environment. [pp. 605–608]
+- GEMDOS covers console/serial/printer I/O, DTA, supervisor switching, packed date/time, drive/directory handling, file handles and byte I/O, file attributes, redirection, memory allocation, process execution and directory search. The book explicitly directs GFA programs to use QUIT/SYSTEM instead of GEMDOS PTERM. [pp. 609–617]
+- GEMSYS is the V2.xx AES gateway over the shared AES arrays; V3.0 exposes AES calls as functions. This matches the version split already recorded for the AES chapter. [pp. 617–618]
+- VDISYS uses the VDI parameter arrays and active workstation handle. V3.0 adds explicit INTIN/PTSIN lengths and optional subfunction ID; V2.xx examples construct CONTRL manually. The chapter documents query opcodes 35–38, perimeter visibility 104, timer-vector exchange 118 and escape opcode 5. [pp. 618–622]
+- XBIOS spans screen bases/resolution/palette, floppy-sector I/O and formatting, MIDI, MFP interrupts, serial buffers/configuration, keyboard tables, random values, boot-sector construction, system timing and interrupt sound. Many calls are hardware-, TOS- or ROM-specific. [pp. 622–629, 636–637, 649–656]
+
+### Page-image checks and source discrepancies
+
+- p605 confirms BIOS(0,L:Address) writes a 12-byte block of three longword pointers, and the wrapper's L: convention.
+- p608 confirms KBSHIFT uses -1 to query the modifier state and positive values to set/simulate it.
+- pp. 612–613 show GEMDOS(32) SUPER as a stateful user/supervisor stack transition. Its example preserves and restores the old supervisor-stack value; this is not safe to expose as an ordinary portable API.
+- p617 confirms the AES gateway and that V3.0 AES calls are functions.
+- p618 confirms VDISYS's active handle requirement and V3.0 INTIN/PTSIN length/subfunction arguments.
+- pp. 620–621 document VDI opcodes 35–38, 104 and 118. The printed VDISYS 118 example appears to end by calling VDISYS 104; this is retained as a likely source/listing defect, not silently corrected.
+- p624 confirms XBIOS(5) requires screen bases aligned to 256-byte boundaries and documents the GEM restriction on changing resolution.
+- p625 warns that FLOPFMT may not report an error when the requested track exceeds the maximum.
+- p629 documents KEYTABLE's three 128-byte tables and the explicit restoration example using XBIOS(24).
+- pp. 649–651 describe interrupt-driven DOSOUND and explicitly warn that invalid command values can reach floppy-port registers.
+- The book says XBIOS opcode 11 has “no effect” (p626), while the separate Atari BIOS Rev. 1.1 guide records an XBIOS service at that number. This conflict remains source-/TOS-profile-specific; do not normalize it into one universal contract.
+
+### Compatibility and implementation consequences
+
+1. Keep BIOS, GEMDOS, AES/GEMSYS, VDI/VDISYS and XBIOS as distinct API families and do not map their raw opcodes directly to Linux syscalls or SDL3.
+2. Treat L: values as 32-bit Atari addresses within a virtual Atari address space. They are never native Rust pointers.
+3. Mark privileged memory, supervisor stack, interrupt vectors, raw disk/boot-sector operations, palette/screen-base writes, keyboard-table replacement and sound-chip register access as unsafe/disabled by default.
+4. Preserve the V2.xx procedure/shared-array versus V3.0 function-call distinction. Do not infer that every V2.xx trap example has an equivalent V3.0 wrapper.
+5. Candidate conformance work for issue #42 should use version-pinned, harmless query operations first. Destructive disk and interrupt tests require an isolated emulator/device model and must not touch host disks or host interrupts.
+
+No implementation was performed. Existing issues #25 (Atari API reference), #19 (language/API inventory), #23 (file/disk/resource operations), #5 (API profiles), #12 (API registry) and #42 (conformance corpus) already cover the work; no duplicate issue was opened.
