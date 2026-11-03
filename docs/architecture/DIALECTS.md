@@ -1,6 +1,6 @@
 # Dialects, versions, and compatibility policy
 
-- Status: Open. No initial source dialect/version has been accepted.
+- Status: Open. No initial source dialect/version has been accepted. A first Atari ST V2.xx/V3.0 research draft is now available in [atari-gfa-basic-3.0.md](../reference/atari-gfa-basic-3.0.md); it is evidence gathering, not an accepted compiler dialect.
 
 ## Required identity
 
@@ -15,7 +15,7 @@ Every source compilation must resolve an explicit dialect identity and version. 
 - Record compiler/interpreter differences when evidence is available.
 - Mark undocumented constructs unresolved until evidence supports a decision.
 
-## Topics requiring a specification
+## Initial Atari ST V2.xx/V3.0 evidence\n\nThe source register now includes the user-provided sixth revised and expanded edition of *Das große GFA-BASIC-Buch* (Uwe Litzkendorf, 1988, ISBN 3-89011-222-6). It explicitly covers V2.xx/V3.0 on Atari ST. Initial findings and their printed-page references are recorded in [the preliminary Atari specification](../reference/atari-gfa-basic-3.0.md). Do not apply these findings to Amiga GFA BASIC or later Atari releases without separate evidence.\n\n## Topics requiring a specification
 
 Encoding and line endings; identifiers and case rules; keywords; comments; statement boundaries; labels; literals; operators and precedence; type suffixes; arrays; procedures and functions; parameter passing; control flow; error behavior; built-ins; source composition; and version differences.
 
