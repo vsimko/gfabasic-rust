@@ -225,3 +225,48 @@ Source: chapter 5, printed pp. 5-61–5-98. This section describes interpreter I
 - The book documents a maximum of 100 channels and a default direct-access record length of 128 bytes when omitted (pp. 5-92, 5-97).
 - Host Rust file APIs cannot be treated as a drop-in semantic replacement for Amiga devices or direct-access record files. The compiler/runtime should expose these through a target API profile or explicit compatibility layer.
 - File-channel syntax should be parsed with the documented optional `#` marker in mind; the introduction says `#` is optional for most file operations, with exceptions `IN` and `OUT` (printed pp. 1-11–1-12).
+
+## Graphics, windows, screens, menus, and events: first verified extraction
+
+This section records only claims tied to the Amiga 3.0 book. It is a discovery baseline for issue #24, not a complete API registry. Do not implement command signatures from the topic list alone.
+
+### Graphics model and coordinate system
+
+Source: AM-BOOK-FR-1989, chapter 9 (printed pp. 199–246); introductory example in chapter 4 (printed pp. 4-59–4-60); OPENW example in chapter 5 (printed pp. 5-114–5-115).
+
+- The book documents two principal Amiga display modes: Hires at 640 × 256 pixels and Lowres at 320 × 256 pixels. It mentions 512 vertical points for interlaced mode; exact screen-mode selection and supported combinations need extraction from chapter 14.
+- The example places coordinate origin (0,0) at the upper-left corner in the normal screen/window context. Treat coordinate origin and offsets as state associated with the active drawing target, not as a global assumption, until the window/screen chapter is fully extracted.
+- ELLIPSE x,y,rx,ry is illustrated: the first two values specify the ellipse position/center, followed by horizontal and vertical radii. The source example is on printed pp. 4-59–4-60.
+- GRAPHMODE is a documented graphics-state command; the book's examples use GRAPHMODE 1 and refer to an XOR drawing mode. The complete mode enumeration and persistence rules still need page-level extraction.
+- OPENW 5 is shown opening a small centered BASIC window; the example then selects GRAPHMODE 1, draws ellipses, invokes HARDCOPY, and closes the window with CLOSEW 5 (printed pp. 5-114–5-115). This establishes a window lifecycle example, not the full OPENW signature or window resource semantics.
+- The graphics chapter is explicitly divided into graphics definitions (pp. 199–209), graphical primitives (pp. 210–216), lines/points (pp. 217–224), graphics operations (pp. 225–236), PUT-string organization (p. 232), graphics-memory organization (p. 235), and animation (pp. 237–246).
+
+### Window, screen, menu, and event API scope
+
+The table of contents establishes separate chapters and versioned scope, but is not itself sufficient evidence for each command's syntax:
+
+| Area | Printed pages | What can be asserted now | Status |
+|---|---:|---|---|
+| GFA BASIC window commands | 339–346 | Dedicated window-command section exists | Signatures/semantics not yet extracted |
+| GFA BASIC screen management | 347–352 | Dedicated screen-management section exists | Signatures/semantics not yet extracted |
+| Menus | 353–358 | Dedicated menu-programming chapter exists | Signatures/semantics not yet extracted |
+| BASIC event control | 359–368 | Dedicated event-control chapter exists | Signatures/semantics not yet extracted |
+| New graphics functions | 372–373 | Separate later-command section exists | Release applicability and command details not yet extracted |
+| GFA BASIC 3.04 environment | 374 | Explicitly version-scoped section exists | Do not assume it applies to 3.0 or 3.52 |
+
+### Implementation constraints inferred for architecture (not API semantics)
+
+1. Keep graphics state (drawing mode, fill/line/text definitions, clipping, active Rastport/Viewport/Colormap, and coordinate transforms) separate from SDL3 calls.
+2. Model screens and windows as explicit runtime resources with ownership and lifecycle. OPENW/CLOSEW examples demonstrate resource creation/destruction, but exact semantics remain to be extracted.
+3. Preserve Amiga display-mode and pixel-coordinate semantics in the compatibility layer. Convert to the Linux presentation format only at the backend boundary.
+4. Treat sprite/BOB animation, graphics memory, bitmap transfer, menus, and event handling as separate subsystems; do not collapse them into a single generic drawing API.
+5. Keep the 3.0 book's commands distinct from later 3.04 additions and 3.52 observed behavior.
+
+### Next source extraction checklist
+
+- [ ] Manually inspect chapter 9 page images and extract exact syntax for every graphics-definition and drawing command.
+- [ ] Extract GET/PUT/SGET/SPUT and graphics-memory semantics, including string-buffer layout and ownership.
+- [ ] Extract exact OPENW/CLOSEW/screen-management signatures and resource rules from chapter 14.
+- [ ] Extract menu construction, selection return values, and event-handler signatures from chapters 15–16.
+- [ ] Identify which chapter-17 additions belong specifically to 3.04.
+- [ ] Cross-check all command spellings and signatures against the German original and an Amiga 3.52 interpreter before treating them as implementation contracts.
