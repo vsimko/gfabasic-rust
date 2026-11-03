@@ -184,3 +184,44 @@ Do not infer compiler implementation details from the prose alone. In particular
 2. The book says it describes approximately 360 commands, instructions, reserved variable names, and arrays (printed p. 1-9 and p. 4-44). The 1988 magazine review independently reported about 350 commands in the original software package. These are approximate counts with different scopes, not a contradiction to resolve by inventing a precise total.
 3. The French book's appendices are ASCII codes and error messages, not an alphabetical command index. The contemporary 1988 review says the original German software manual had an alphabetical command list in its appendix. Locating that original manual remains a high-value task.
 4. The no-reserved-words statement and type suffixes materially affect lexer/parser design. Raise these as evidence-backed dialect requirements, but keep them version-scoped to the Amiga 3.0 book until cross-checked against 3.52.
+## First Amiga I/O command inventory
+
+Source: chapter 5, printed pp. 5-61–5-98. This section describes interpreter I/O commands with Amiga-specific file and device behavior. The entries below are source-backed summaries; OCR-sensitive punctuation and all edge cases still require visual checking and conformance tests.
+
+### Keyboard and text input
+
+| Construct | Signature/behavior | Source |
+|---|---|---|
+| `FORM INPUT` | `FORM INPUT length, string_var`; bounded text entry, maximum 255 characters. The `AS` form edits an existing string from its beginning. | pp. 5-61–5-62 |
+| `INKEY$` | Returns the most recently pressed key as a string; the book says function keys, cursor keys, and many modifier combinations can be detected. | p. 5-62 |
+| `INPUT` | Reads values into a variable list; a comma separates fields, and a comma inside a string must be quoted. Supports input from an opened file/device channel. | pp. 5-64–5-66 |
+| `INPUT$(count[, #channel])` | Returns a string of up to the specified number of characters; channel form reads from an opened file. Keyboard input is hidden and continues when the requested character count is reached. | pp. 5-66–5-67 |
+| `LINE INPUT [prompt;] string_var` / `LINE INPUT #channel, string_var` | Reads a text line; commas are part of the text rather than field separators. | pp. 5-67 onward |
+
+### File and device operations
+
+| Construct | Signature/behavior | Source |
+|---|---|---|
+| `OPEN` | `OPEN mode, #channel, filename[, record_length]`. Modes documented: `O` output/create or truncate; `I` input/read; `A` append; `U` update/read and write; `R` random/direct-access records. | pp. 5-91–5-93 |
+| Channel range | The book documents up to 100 simultaneously open files, channel numbers 0–99, normally referenced with `#`. | p. 5-92 |
+| Amiga device names | The book lists `CON:`, `PRT:`, `PAR:`, `SER:`, `COM:`, `PIPE:`, `SPEAK:`, `RAW:`, `NEWCON:`, and `AUX:` as file-like device interfaces. | pp. 5-92–5-93 |
+| `BGET [#]channel, start, count` | Reads a number of bytes from the current file position into memory at `start`. | p. 5-87 |
+| `BPUT [#]channel, start, count` | Writes bytes from memory at `start` into the file at the current file position. | p. 5-87 |
+| `CLOSE [#channel]` | Closes one channel; bare `CLOSE` closes all channels. | p. 5-88 |
+| `EOF(#channel)` | Returns −1 when the file pointer is at the final byte, otherwise 0, according to the book's description. Verify empty-file and past-end behavior. | p. 5-88 |
+| `FIELD` | Maps portions of a random-access record to string variables (`AS`) or memory addresses (`AT`). Multiple FIELD declarations may contribute to one record layout. | pp. 5-88–5-89 |
+| `GET #channel[, record_number]` / `PUT #channel[, record_number]` | Reads/writes a selected direct-access record using the current FIELD layout. | pp. 5-89, 5-93 |
+| `LOC(#channel)` | Returns the current file pointer position in bytes from the beginning. | p. 5-90 |
+| `LOF(#channel)` | Returns the file length in bytes. | p. 5-90 |
+| `RECORD [#]channel, record_number` | Selects the record for subsequent GET/PUT operations. | p. 5-94 |
+| `RELSEEK #channel, offset` | Moves the file pointer relative to its current position; negative offsets move toward the beginning. | pp. 5-94–5-95 |
+| `SEEK #channel, offset` | Positions the file pointer using an offset from the beginning or, for negative values, from the end as described in the book. | p. 5-95 |
+| `STORE #channel, string_array[, count]` / `RECALL` | Writes/reads lines between a text file and a string array; STORE appends CR/LF per line. | pp. 5-95–5-96 |
+
+### Amiga-specific implications
+
+- `OPEN` is not just host filesystem I/O: the documented device names expose Amiga console, printer, parallel, serial, speech, pipe, and shell-console endpoints.
+- The `R` mode and `FIELD`/`GET`/`PUT` family describe record-oriented direct access, distinct from sequential byte/line I/O.
+- The book documents a maximum of 100 channels and a default direct-access record length of 128 bytes when omitted (pp. 5-92, 5-97).
+- Host Rust file APIs cannot be treated as a drop-in semantic replacement for Amiga devices or direct-access record files. The compiler/runtime should expose these through a target API profile or explicit compatibility layer.
+- File-channel syntax should be parsed with the documented optional `#` marker in mind; the introduction says `#` is optional for most file operations, with exceptions `IN` and `OUT` (printed pp. 1-11–1-12).
