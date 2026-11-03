@@ -117,9 +117,9 @@ Examples of details that should be captured only after visual verification:
 - RAND, RANDOMIZE, and RND have different ranges and result types in the book. Do not collapse them into one generic random function.
 - The OCR text reports a caveat for ACOS; preserve it as a version-specific historical note only after checking the printed page.
 
-## OCR coverage limitation
+## OCR coverage
 
-The table of contents lists chapters through printed page 379, but the searchable text returned for this PDF currently ends around printed page 197. Therefore, the later chapter ranges in the topic map above are confirmed from the table of contents only; their full body text has not yet been validated as searchable or present in the scan. Check the actual PDF page count and obtain a complete authorized scan before treating the book as a complete page-addressable corpus.
+The searchable PDF extraction contains 12,360 lines and includes text through the end of the book, including printed pages 377–379. The initial research pass had only inspected chapter 8 through page 197; that was a limitation of the first extraction pass, not a limitation of the PDF. The final two appendices are an ASCII-code table (p. 377) and GFA BASIC error messages (p. 379).
 ## Verified language-core findings from the complete OCR text
 
 **Correction to the earlier OCR coverage note:** the searchable PDF extraction contains 12,360 lines and includes text through the end of the book, including printed pages 377–379. The earlier statement that OCR ends around printed page 197 was incorrect; it appears to have confused the initial chapter-8 extraction with the complete document. The table of contents identifies Appendix A as an ASCII-code table (p. 377) and Appendix B as GFA BASIC error messages (p. 379).
