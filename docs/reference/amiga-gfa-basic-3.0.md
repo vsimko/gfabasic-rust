@@ -270,3 +270,44 @@ The table of contents establishes separate chapters and versioned scope, but is 
 - [ ] Extract menu construction, selection return values, and event-handler signatures from chapters 15–16.
 - [ ] Identify which chapter-17 additions belong specifically to 3.04.
 - [ ] Cross-check all command spellings and signatures against the German original and an Amiga 3.52 interpreter before treating them as implementation contracts.
+
+
+## Cross-check from an Amiga GFA BASIC example corpus (1993)
+
+Source: Conrad Bessant, *Computers and Chaos* (Amiga edition), 1993; online transcription at https://amigasourcecodepreservation.gitlab.io/computers-and-chaos-amiga-edition/. This is a published example corpus, not a normative GFA manual. The author explicitly says the GFA listings use version 3.0 syntax and should run on 3.0 and 3.5 without alteration (book §1, online lines 117–118). Use it as corroborating evidence and for future conformance fixtures, not as the sole source for command semantics.
+
+### Graphics operations found in tested listings
+
+| Construct | What the example demonstrates | Evidence / limitation |
+|---|---|---|
+| `PLOT x,y` | Plots a point at integer screen coordinates; used in nested loops to render a Julia set. | GFA listing in chapter 5; syntax and practical usage corroborated by examples, exact clipping/rounding behavior unspecified. |
+| `COLOR n` | Selects the drawing colour before plotting. | Used before PLOT and PSET; palette-index range and invalid-index behavior unspecified. |
+| `GRAPHMODE 3` | Selects XOR mode for drawing a temporary zoom rectangle; `GRAPHMODE 0` restores normal mode. | GFA listing in chapter 5; supports these two observed values only, not a complete mode enumeration. |
+| `BOX x0,y0,x1,y1` | Draws a rectangle used as a reversible XOR zoom-selection outline. | Example demonstrates four-coordinate form; fill/outline semantics need primary-manual confirmation. |
+| `MOUSEK`, `MOUSEX`, `MOUSEY` | Polls mouse-button state and current pointer coordinates during interactive selection. | Example usage only; bit mapping and coordinate frame need primary-manual confirmation. |
+| `OPENS 1,0,0,640,256,4,32768` | Opens a 16-colour high-resolution non-interlaced screen in the example. | Literal example from chapter 5; parameter meanings require the primary manual. |
+| `OPENW 1,0,0,640,256,4096,4096` | Opens a window associated with the screen in the example. | Literal example; parameter meanings and ownership remain unverified. |
+| `TITLEW #1, text` | Sets the window title. | Used in example; channel marker and exact lifecycle semantics need manual confirmation. |
+| `CLOSEW #3` and `CLOSEW #0` | Closes a temporary window and then selects/closes the main screen/window context in the example's helper routine. | Do not infer the exact meaning of channel 0 from this one example. |
+
+The same book's conversion appendix explicitly maps Amiga BASIC `PSET(x,y)` to GFA BASIC `PLOT x,y`, and Amiga BASIC `SCREEN`/`WINDOW` to GFA BASIC `OPENS`/`OPENW` as approximate rather than exact replacements. This is useful corroboration that these are distinct GFA APIs, not syntax aliases to implement blindly.
+
+### Menus and event dispatch in a complete GFA example
+
+The 1993 GFA BASIC menu example demonstrates the following design:
+
+- `MENU menu$()` creates/installs a menu from a string array. Empty strings delimit menus and a pair of empty strings terminate the menu structure.
+- `MENU item,status` changes an item's status. The example uses values 80 (enabled, unticked), 336 (enabled, ticked), and 0 (disabled/light); treat these as observed example values until confirmed in the primary reference.
+- `MENU(0)` returns the selected menu item index in the example.
+- `ON MENU GOSUB branch` installs a menu-selection handler. The example's handler uses `ON MENU(0) GOSUB ...` to dispatch by item index.
+- `MENU KILL` removes the menu before processing and the program reinstalls it afterward.
+- The main loop uses `DO : SLEEP : LOOP` while the menu handler performs dispatch.
+
+These observations provide a concrete source-code corpus for future menu/event tests. They do not establish callback reentrancy, event queue ordering, or whether SLEEP is required in every program.
+
+### Version and evidence guardrails
+
+- The corpus author identifies the examples as GFA BASIC 3.0 syntax and states compatibility with 3.5; this is not proof of compatibility with 3.52.
+- The book's general discussion of Amiga BASIC SCREEN/WINDOW commands must not be mistaken for GFA BASIC syntax. Only listings explicitly identified as GFA BASIC were used above.
+- Add these examples to the future conformance corpus only after checking source licensing and extracting the relevant GFA listing with provenance. The online book is CC BY-SA 4.0; preserve attribution and license obligations if any material is reused.
+- No runtime feature is implemented on the basis of this secondary source. Exact signatures and semantics remain subject to the Amiga GFA BASIC manual and interpreter probes.
