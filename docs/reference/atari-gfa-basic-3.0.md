@@ -185,6 +185,23 @@ The DSAVE, DLOAD and DLINE procedures printed on pp. 724–725 are user-authored
 
 Page 725 only introduces the editor chapter's organization: common V2.xx/V3.0 functions are discussed separately from V3.0 additions, with small Replace and cursor-Tab differences noted. Detailed editor semantics require later pages and are not inferred here.
 
+
+
+### 4.9 Editor source formats and version-specific file handling
+
+The book distinguishes tokenized program files from ASCII listings (printed pp. 728–729):
+
+| Editor operation | V2.xx | V3.0 | Behavior documented by the book |
+|---|---|---|---|
+| Program Save/Load | .BAS | .GFA | Saves/loads program code as one block without interpreter checking |
+| Save,A / Merge | .LST | .LST | Saves/loads ASCII text; Merge inserts at the cursor and checks merged lines |
+
+Program Save/Load bypasses interpreter checking. Program Load overwrites the current program and, once started, cannot be cancelled except by a system reset. Save,A writes ASCII; Merge inserts the text at the cursor position and marks lines that cannot be interpreted with ==> . The book says Merge rejects lines containing NUL bytes or longer than 255 characters, aborting the merge (pp. 728–729).
+
+Do not treat .BAS and .GFA as interchangeable extensions or assume that either tokenized format is portable across GFA versions. The exact tokenized layout and compatibility rules remain unknown. The 255-character rejection is specifically documented for Merge; it is not established as a universal source-line limit. The editor's horizontal scrolling after 79 visible characters is a separate display behavior (p. 726).
+
+V3.0 editor navigation also permits the right-Tab key to place the cursor beyond the current line end; vertical navigation and selected page/program navigation actions trigger syntax or structure checks (pp. 727–728). These are editor interactions, not lexical rules.
+
 ## 5. Platform API boundary
 
 The same book describes Atari ST-specific facilities in separate chapters:
