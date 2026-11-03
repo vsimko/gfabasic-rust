@@ -5,6 +5,7 @@ This directory contains original research notes and technical summaries. These d
 | Document | Platform and version | Status |
 |---|---|---|
 | [Atari ST GFA BASIC V2.xx / V3.0](atari-gfa-basic-3.0.md) | Atari ST, V2.xx/V3.0 | Preliminary research draft; not an accepted compiler dialect |
+| [Atari ST API reference](atari-gfa-api.md) | Atari ST, V2.xx/V3.0 | Initial API inventory; signatures and runtime behavior require validation |
 | [Systematic Atari book review](../research/atari-gfa-book-systematic-review.md) | Atari ST, V2.xx/V3.0 | First pass complete for all 24 chapters; validation and page-image checks pending |
 | [Amiga GFA BASIC 3.0](amiga-gfa-basic-3.0.md) | Amiga, interpreter 3.0 | Source-backed research notes; not an accepted compiler dialect |
 | [Atari book diskette corpus](../research/atari-gfa-book-diskette.md) | Atari ST, examples accompanying the 1988 book | Static corpus analysis; examples are not normative specifications |
