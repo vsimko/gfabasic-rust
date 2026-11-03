@@ -1,0 +1,7 @@
+schema_version = 1
+corpus_status = "research_only"
+description = "Initial source-backed candidate fixtures for GFA BASIC dialects."
+fixtures = [
+  "amiga/3.0/control-flow/repeat-until-postcondition",
+  "amiga/3.0/control-flow/nested-loop-close-order",
+]

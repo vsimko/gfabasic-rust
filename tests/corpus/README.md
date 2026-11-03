@@ -1,0 +1,52 @@
+# GFA BASIC conformance corpus
+
+## Purpose
+
+This directory contains small, independently authored GFA BASIC programs and metadata for future compiler/runtime conformance tests. It is a source corpus, not an executable test suite yet.
+
+The repository does not currently contain a Rust workspace, compiler, runtime, test runner, or CI workflow. Do not report these fixtures as passing tests. Their source syntax and expected behavior require validation against the cited edition and, where marked, manual page-image review.
+
+## Layout
+
+- `manifest.toml`: corpus version and fixture index.
+- `<dialect>/<version>/<area>/<case>.bas`: standalone BASIC source.
+- `<dialect>/<version>/<area>/<case>.toml`: metadata and expected behavior.
+
+Use lowercase, stable fixture IDs. Each source file must be original and self-contained. Do not require external assets, host paths, locale settings, or network access.
+
+## Metadata contract
+
+Each sidecar TOML file must define:
+
+- `id`: stable unique identifier.
+- `dialect` and `version`: exact source dialect and release.
+- `api_profiles`: required platform API profiles; use an empty array for language-core tests.
+- `kind`: `positive`, `negative`, or `semantic`.
+- `status`: `candidate`, `verified`, `blocked`, or `retired`.
+- `source_key`, `source_pages`, and `evidence_status`: source identity, printed page/section, and evidence quality.
+- `expectation`: expected parse/compile/runtime outcome. State `expected_stdout`, `expected_stderr`, and `expected_exit` when applicable.
+
+The manifest stores fixture paths relative to the corpus root, without the `.bas` or `.toml` suffix. The corresponding source and metadata files use the same path stem.
+- `notes`: unresolved syntax, OCR, edition, or runtime questions.
+
+A fixture may use `verified` only after its syntax and expected behavior are checked against the cited page image or a named trusted interpreter. OCR text alone is not sufficient for OCR-sensitive punctuation or signatures. A candidate fixture must not be used as a compiler acceptance rule.
+
+## Evidence policy
+
+- Keep Amiga and Atari ST fixtures in separate trees.
+- Do not promote a construct from one platform/version into another dialect.
+- Every expected result must cite an applicable source or a reproducible observation.
+- Distinguish documented interpreter behavior from editor behavior and compiler-specific behavior.
+- Do not mark a construct invalid merely because it is absent from the current inventory. Negative tests require an explicit source rule or a documented compatibility observation.
+- Preserve the source edition and printed page numbers. Do not cite PDF viewer page numbers as printed pages.
+
+## Adding fixtures
+
+1. Check the relevant issue and architecture decisions.
+2. Add one focused `.bas` file and its TOML sidecar.
+3. Add the fixture ID to `manifest.toml`.
+4. Record the source claim and expected outcome.
+5. Keep the status at `candidate` until evidence review is complete.
+6. When a runner exists, record the runner version and actual result separately from the expected result.
+
+Tracking: [issue #42](https://github.com/vsimko/gfabasic-rust/issues/42).
