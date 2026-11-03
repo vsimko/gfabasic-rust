@@ -87,7 +87,18 @@ Every release should publish a compatibility matrix that identifies:
 - known deviations, unsupported constructs, and unresolved behavior;
 - project configuration, registry, corpus, and runtime ABI schema versions.
 
-Use separate status values for evidence, implementation, and target support. A source-backed feature may be documented but unimplemented; an implemented feature may be experimental; a feature may be supported on one target and unsupported on another.
+Use separate status values for feature maturity, evidence, implementation, and target support.
+
+Proposed feature-maturity labels:
+
+- **Research**: evidence is being collected; no accepted specification or implementation is implied.
+- **Proposed**: a specification or design is written but has not been accepted.
+- **Experimental**: an implementation exists, but the behavior or interface may change and must not be presented as stable.
+- **Stable**: the exact behavior is documented, implemented, and covered by relevant tests for the stated dialect/version/profile/target. The compatibility matrix identifies the tested scope and known deviations.
+- **Deprecated**: a previously stable feature remains available but has a documented replacement and earliest removal release.
+- **Removed**: the feature is no longer available in the stated compiler release.
+
+Evidence status (for example, verified, inferred, disputed, or unknown) describes the quality of the source or observation. Implementation status describes whether code exists. Target support describes whether the implementation is native, emulated, partial, unsupported, or unknown. None of these dimensions can substitute for another. A source-backed feature may be documented but unimplemented; an implemented feature may be experimental; a stable feature may be supported on one target and unsupported on another.
 
 Never use an unqualified “GFA BASIC compatible” claim. State the exact dialect/version/profile/target and the evidence level.
 
