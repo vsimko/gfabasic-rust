@@ -135,21 +135,182 @@ Important constraints:
 
 ## 6. GEM object and resource structures
 
-The book documents a fixed-size OBJECT record linked by object indices. The fields include OB_NEXT, OB_HEAD, OB_TAIL, type, flags, state, specification and relative geometry. [pp. 585–591]
+The book's printed tables on pp. 585–596 were checked against page images at high resolution. The following sizes and field offsets are directly visible in those tables. They describe the Atari 68k GEM resource ABI, not host-native Rust structures.
 
-GFA field accessors documented in the book:
+### 6.1 OBJECT record
 
-- OB_ADR(address,object): byte offset/address of an object in its tree.
-- OB_NEXT, OB_HEAD, OB_TAIL: sibling/child links.
-- OB_TYPE: object type.
-- OB_FLAGS: 9-bit attribute mask.
-- OB_STATE: 6-bit visual/interaction state mask.
-- OB_SPEC: type-dependent value or pointer.
-- OB_X, OB_Y, OB_W, OB_H: relative geometry.
+The OBJECT record contains 11 fields and occupies **24 bytes**:
 
-Nested structures include BOXINFO, TEDINFO, ICONBLK, BITBLK, G_IMAGE, G_ICON and PARMBLK/application-object data blocks. [pp. 592–596]
+| Offset | Field | Width | Meaning |
+|---:|---|---:|---|
+| 0 | OB_NEXT | Word (16-bit) | Next object at the same level; root/sibling termination uses the documented special index |
+| 2 | OB_HEAD | Word | First child object, or -1 when no child level exists |
+| 4 | OB_TAIL | Word | Last child object, or -1 when no child level exists |
+| 6 | OB_TYPE | Word | Object type index |
+| 8 | OB_FLAGS | Word | Object attributes |
+| 10 | OB_STATE | Word | Object visual/interaction state |
+| 12 | OB_SPEC | Long (32-bit) | Type-dependent value or target pointer |
+| 16 | OB_X | Word | Relative X coordinate |
+| 18 | OB_Y | Word | Relative Y coordinate |
+| 20 | OB_W | Word | Width |
+| 22 | OB_H | Word | Height |
 
-These are 68k ABI structures with 16-bit words and 32-bit pointers. Use explicit target-width fields and documented offsets. Do not use host pointers or native Rust struct layout. Exact flags, field offsets, structure sizes and type-dependent OB_SPEC interpretations remain page-image validation tasks.
+All object fields are word-aligned. OB_ADR(address,object) returns the byte offset of the selected object relative to the object-tree base; it is not an OBJECT field. The top-level object's coordinates are relative to screen origin; child coordinates are relative to the parent object's origin. [pp. 585–591]
+
+Object types listed in the book include:
+
+| Index | Type | OB_SPEC interpretation |
+|---:|---|---|
+| 20 | G_BOX | BOXINFO packed 32-bit value |
+| 21 | G_TEXT | TEDINFO pointer |
+| 22 | G_BOXTEXT | TEDINFO pointer |
+| 23 | G_IMAGE | BITBLK pointer |
+| 24 | G_PROGDEF | APPLBLK/USERBLK pointer |
+| 25 | G_IBOX | BOXINFO packed 32-bit value |
+| 26 | G_BUTTON | C-string pointer |
+| 27 | G_BOXCHAR | BOXINFO packed 32-bit value |
+| 28 | G_STRING | C-string pointer |
+| 29 | G_FTEXT | TEDINFO pointer |
+| 30 | G_FBOXTEXT | TEDINFO pointer |
+| 31 | G_ICON | ICONBLK pointer |
+| 32 | G_TITLE | C-string pointer |
+
+The exact spelling and semantics of object-type constants should still be cross-checked against the matching Atari GEM version before implementation. [p. 587]
+
+### 6.2 OB_FLAGS and OB_STATE masks
+
+OB_FLAGS is described as a 9-bit mask. The page tables list:
+
+| Bit | Name | Meaning |
+|---:|---|---|
+| 0 | SELECTABLE | Object can be selected |
+| 1 | DEFAULT | Activated by Return; normally an EXIT object |
+| 2 | EXIT | Selection returns control from FORM_DO |
+| 3 | EDITABLE | Object can be edited |
+| 4 | RBUTTON | Radio-button grouping behavior |
+| 5 | LASTOB | Last object in the current tree |
+| 6 | TOUCHEXIT | EXIT behavior without waiting for mouse-button release |
+| 7 | HIDETREE | Hide this object and descendants from drawing/hit-testing |
+| 8 | INDIRECT | OB_SPEC contains a pointer to the actual specification rather than the value itself |
+
+OB_STATE is a 6-bit mask:
+
+| Bit | Name | Meaning |
+|---:|---|---|
+| 0 | SELECTED | Draw selected/inverted |
+| 1 | CROSSED | Draw diagonal cross |
+| 2 | CHECKED | Draw check mark |
+| 3 | DISABLED | Draw disabled/lightened |
+| 4 | OUTLINED | Draw additional outline |
+| 5 | SHADOWED | Draw drop shadow |
+
+These masks are page-image checked against pp. 588–589. The descriptions above are concise summaries, not replacements for the GEM object manager's complete drawing rules.
+
+### 6.3 RSC file header
+
+The book labels the resource-file header as **38 bytes**, consisting of 19 16-bit words:
+
+| Offset | Field | Width |
+|---:|---|---:|
+| 0 | Reserved; value 1 | Word |
+| 2 | Object table position | Word |
+| 4 | TEDINFO table position | Word |
+| 6 | ICONBLK table position | Word |
+| 8 | BITBLK table position | Word |
+| 10 | Free-string area position | Word |
+| 12 | Free-image area position | Word |
+| 14 | Image-data area position | Word |
+| 16 | Free-image table position | Word |
+| 18 | Object-tree table position | Word |
+| 20 | Object count | Word |
+| 22 | Tree count | Word |
+| 24 | TEDINFO count | Word |
+| 26 | ICONBLK count | Word |
+| 28 | BITBLK count | Word |
+| 30 | String count | Word |
+| 32 | Image count | Word |
+| 34 | RSC file length | Word |
+| 36 | End marker; value 0 | Word |
+
+The names above are normalized English descriptions of the German table. Keep the original word offsets and widths as the normative evidence. [pp. 591–592]
+
+### 6.4 Nested structures
+
+**BOXINFO** is a packed 32-bit value stored directly in OB_SPEC for G_BOX, G_IBOX and G_BOXCHAR. Its fields total 32 bits: fill-pattern color (4), fill pattern (3), drawing mode (1), text color (4; G_BOXCHAR only), border color (4), border thickness (8, signed interpretation described by the book), and ASCII character (8; G_BOXCHAR only). The bit diagram is on p. 592; do not replace it with host bitfields.
+
+**TEDINFO** is 28 bytes:
+
+| Offset | Field | Width |
+|---:|---|---:|
+| 0 | te_ptext | Long |
+| 4 | te_ptmplt | Long |
+| 8 | te_pvalid | Long |
+| 12 | te_font | Word |
+| 14 | te_resvd | Word |
+| 16 | te_just | Word |
+| 18 | te_color | Word |
+| 20 | te_resvd2 | Word |
+| 22 | te_thickness | Word |
+| 24 | te_txtlen | Word |
+| 26 | te_tmplen | Word |
+
+The first three fields are pointers to C strings. The book documents font, justification, color, border thickness and string-length fields; some validation characters are explicitly marked unreliable and potentially crash-prone. [pp. 592–593]
+
+**ICONBLK** is 36 bytes:
+
+| Offset | Field | Width |
+|---:|---|---:|
+| 0 | ib_pmask | Long |
+| 4 | ib_pdata | Long |
+| 8 | ib_ptext | Long |
+| 12 | ib_col | Byte |
+| 13 | ib_char | Byte |
+| 14 | ib_xchar | Word |
+| 16 | ib_ychar | Word |
+| 18 | ib_xicon | Word |
+| 20 | ib_yicon | Word |
+| 22 | ib_wicon | Word |
+| 24 | ib_hicon | Word |
+| 26 | ib_xtext | Word |
+| 28 | ib_ytext | Word |
+| 30 | ib_wtext | Word |
+| 32 | ib_htext | Word |
+| 34 | ib_resvd | Word |
+
+**BITBLK** is 14 bytes:
+
+| Offset | Field | Width |
+|---:|---|---:|
+| 0 | bi_pdata | Long |
+| 4 | bi_wb (bitmap width in bytes) | Word |
+| 6 | bi_hl (bitmap height in pixels) | Word |
+| 8 | bi_x | Word |
+| 10 | bi_y | Word |
+| 12 | bi_color | Word |
+
+**APPLBLK/USERBLK** is 8 bytes: a 32-bit code pointer at offset 0 and a 32-bit parameter pointer at offset 4. The book describes it as the callback structure for G_PROGDEF. [p. 595]
+
+**PARMBLK** is 30 bytes:
+
+| Offset | Field | Width |
+|---:|---|---:|
+| 0 | pb_tree | Long |
+| 4 | pb_obj | Word |
+| 6 | pb_prevstate | Word |
+| 8 | pb_currstate | Word |
+| 10 | pb_x | Word |
+| 12 | pb_y | Word |
+| 14 | pb_w | Word |
+| 16 | pb_h | Word |
+| 18 | pb_xc | Word |
+| 20 | pb_yc | Word |
+| 22 | pb_wc | Word |
+| 24 | pb_hc | Word |
+| 26 | pb_parm | Long |
+
+The final field is a 32-bit application-defined parameter passed to the user drawing routine. [p. 596]
+
+These structures use 16-bit words and 32-bit target pointers. Rust representations must use explicit target-width integer fields and explicit endian conversion. Never store host pointers in these structures or rely on host-native struct layout. Resource-file offsets are offsets within the RSC image and must be relocated/validated separately from runtime addresses.
 
 ## 7. AES/VDI parameter blocks
 
@@ -232,7 +393,7 @@ No API entry in this document is currently claimed as implemented or runtime-con
 
 1. Inspect page images for VDI signatures, font header offsets, WINDTAB layout, menu attribute values and AES event fields.
 2. Transcribe complete AES signatures and V2.xx/V3.0 availability from pp. 547–580.
-3. Verify OBJECT, TEDINFO, ICONBLK, BITBLK and PARMBLK sizes/offsets and all flag/state bits from pp. 585–596.
+3. **Page-image checked:** OBJECT (24 bytes), RSC header (38 bytes), TEDINFO (28 bytes), ICONBLK (36 bytes), BITBLK (14 bytes), USERBLK/APPLBLK (8 bytes), PARMBLK (30 bytes), and OB_FLAGS/OB_STATE masks, pp. 585–596. Runtime ABI and RSC parser validation remain pending.
 4. Verify AES/VDI parameter-block lengths and call-specific array layouts from pp. 597–604.
 5. Cross-check BIOS/GEMDOS/XBIOS opcode signatures, register conventions and error results against authoritative TOS documentation.
 6. Record machine/TOS applicability for absolute addresses, VDIBASE and hardware registers.
