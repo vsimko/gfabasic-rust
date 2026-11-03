@@ -149,6 +149,33 @@ Workstation handles, capabilities and lifecycle must be explicit. Do not assume 
 
 The font-header and direct TOS/GEM font-pointer material on pp. 516–530 is low-level and OS-specific. It includes resident-memory and supervisor-level patches, including one patch limited to a specific 1986 ROM-TOS build. Do not treat these as safe general APIs.
 
+### 4.4 Cross-source validation: VDI, GDOS and workstation lifecycle
+
+The chapter 17 inventory was compared with *The Atari Compendium*, chapter 7 (VDI), especially its VDI overview, workstation model, GDOS detection and bitmap-font sections. This is an independent Atari OS reference, not evidence that every GFA wrapper has been runtime-tested.
+
+Confirmed architectural distinctions:
+
+- **VDI is part of the TOS/GEM graphics environment; GDOS is optional.** Atari systems with TOS in ROM provide a screen VDI driver. GDOS is a boot-loaded extension that supplies disk-loaded device drivers and additional fonts. Screen-only output using the system font does not inherently require GDOS. [Atari Compendium, ch. 7, “Overview”]
+- **Physical and virtual workstations are different resources.** A physical workstation initializes a device; only one physical workstation may be open for a given device at a time. Multiple virtual workstations can share that physical device while keeping separate drawing attributes. Every VDI call uses a workstation handle. [Atari Compendium, ch. 7, “VDI Workstations”]
+- **The screen physical workstation is already initialized by AES.** Its handle is obtained through graf_handle(). A screen virtual workstation is opened against that physical handle; the documented device ID is Getrez()+2. This is distinct from opening an external physical device through GDOS. [Atari Compendium, ch. 7, “Virtual Workstations”]
+- **GDOS driver IDs are configuration IDs.** The Compendium gives ranges 1–10 screen, 11–20 plotter, 21–30 printer, 31–40 metafile, 41–50 camera, 51–60 tablet and 61–70 memory; the selected ID corresponds to the ASSIGN.SYS entry. The book's sample IDs 01, 11, 21, 31, 41 and 51 fit those ranges. Do not treat these as guaranteed present devices or host device classes. [Atari Compendium, ch. 7, “Physical Workstations”]
+- **Driver capability is not uniform.** The Compendium warns that not every VDI function is supported by every driver and recommends inspecting workstation capability results. A printer or plotter profile must not inherit screen capabilities by default. [Atari Compendium, ch. 7, “Device Types vs. Required Functions”]
+- **GDOS presence and GDOS version are separate questions.** The Compendium describes a non-standard vq_gdos() query that distinguishes no GDOS, original GDOS 1.x, FONTGDOS and FSM/Speedo variants. The GFA GDOS? Boolean documented in the book only establishes its stated presence test; it must not be interpreted as a version detector. [Atari Compendium, ch. 7, “Determining the Version of GDOS Present”]
+- **Additional bitmap fonts become available after vst_load_fonts().** The Compendium confirms that fonts listed for the device in ASSIGN.SYS are not exposed to applications until fonts are loaded. This corroborates the role of VST_LOAD_FONTS(0); it does not independently validate GFA's exact return value or unload semantics. [Atari Compendium, ch. 7, “Bitmap Fonts”]
+
+Reconciliation and implementation implications:
+
+1. The book's V_OPNWK is the physical-workstation path for an ASSIGN.SYS/GDOS device. Keep the resident-GDOS precondition and invalid-driver crash warning attached to this wrapper.
+2. V_OPNVWK is the virtual-workstation path. Do not model it as equivalent to loading a GDOS driver; the screen's physical workstation is already provided by AES/TOS. The GFA wrapper's exact parameter adaptation remains book-scoped.
+3. Keep physical-device handle, virtual-workstation handle and GFA's internally managed screen handle distinct. A virtual workstation is a separate attribute context, not a new physical device.
+4. Treat the book's screen/plotter/printer/etc. IDs as examples from its ASSIGN.SYS configuration, not a promise that every installation has those drivers.
+5. Model GDOS as a runtime capability with a possible implementation/version identity. A Boolean GDOS? result is insufficient to claim compatibility with FONTGDOS, FSMGDOS or SpeedoGDOS extensions.
+6. Workstation support and individual VDI operation support must be capability-checked per driver. Do not silently emulate unsupported printer/plotter operations as screen output.
+
+No GFA BASIC interpreter or Atari TOS runtime probe was performed. These cross-source confirmations validate the general VDI/GDOS architecture and resource distinctions, not every GFA wrapper signature or the book's reported buffer/error behavior.
+
+Independent source: [The Atari Compendium, Chapter 7 — VDI](https://www.yardley.cc/atari/compendium/atari-compendium-chapter-7-Atari-VDI.htm).
+
 ## 5. AES function families
 
 The book describes approximately 70 AES functions. V3.0 exposes AES calls as callable functions; V2.xx equivalents are shown where available. Calls exchange integer and address arrays through AES parameter blocks. Address parameters require 4-byte values; coordinate/value parameters require at least 2-byte integers. [pp. 547–549]
