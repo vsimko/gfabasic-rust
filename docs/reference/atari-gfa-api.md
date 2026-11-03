@@ -145,7 +145,7 @@ The following signatures and contracts are transcribed from the book's AES chapt
 | `APPL_FIND(programName)` | Returns application ID; -1 if not found | Name must be exactly eight characters, padded with spaces if needed; longer input may crash. [pp. 548–549] |
 | `APPL_INIT()` | Returns the GFA application ID | Dummy wrapper: GFA already performed initialization at startup. [p. 549] |
 | `APPL_READ(handle,length,address)` | Returns 0/nonzero status | Reads a byte count from another application's AES message buffer; destination must be at least `length` bytes. [p. 549] |
-| `APPL_TPLAY(address,count,speed)` | Return value documented as always 1 | Replays recorded events; book restricts it to Blitter TOS and gives speed values 50/100/200? OCR needs page-image check. [pp. 549–550] |
+| `APPL_TPLAY(address,count,speed)` | Return value documented as always 1 | Replays recorded events; book restricts it to Blitter TOS and gives speed values 50 = half speed, 100 = normal, 200 = double speed. [pp. 549–550] |
 | `APPL_TRECORD(address,count)` | Returns number of events actually recorded | Blitter-TOS-only; six-byte records; the author reports Digital Research implementation defects and poor reliability. [p. 550] |
 | `APPL_WRITE(handle,length,address)` | Returns 0/nonzero status | Writes bytes to another application's AES message buffer. [p. 551] |
 
@@ -158,7 +158,7 @@ The following signatures and contracts are transcribed from the book's AES chapt
 | `EVNT_KEYBD()` | Returns packed 16-bit key value | Low byte is ASCII; high byte is scan code. [p. 552] |
 | `EVNT_MESAG(address)` | Return value documented as always 1 | Waits for a window/menu message in a 16-byte (8-word) buffer. Can wait forever if no installed menu/window can generate a message. [p. 552] |
 | `EVNT_MOUSE(flag,x,y,width,height[,mouseX,mouseY,mouseButtons,shift])` | Return value documented as always 1 | Waits for pointer to enter (0) or leave (1) a screen rectangle. Optional outputs match EVNT_BUTTON. [p. 553] |
-| `EVNT_MULTI(mask,clicks,button,status,box1...,box2...,address,time[,outputs])` | Returns event bitmask | Combines keyboard, button, two rectangle, message and timer waits. The OCR transcription of the timer bit is ambiguous (it appears to duplicate bit 0); verify the printed diagram before encoding the mask. [pp. 553–554] |
+| `EVNT_MULTI(mask,clicks,button,status,box1...,box2...,address,time[,outputs])` | Returns event bitmask | Combines keyboard, button, two rectangle, message and timer waits. The printed table itself duplicates bit 0 for the timer event (bit 0 is also assigned to keyboard). This is a source-level inconsistency confirmed on the page image; do not silently infer a corrected bit position. [pp. 553–554] |
 | `EVNT_TIMER(milliseconds)` | Return value documented as always 1 | Blocks until the requested number of milliseconds elapses. [p. 554] |
 
 **Form and file-selector managers**
@@ -223,7 +223,7 @@ The following signatures and contracts are transcribed from the book's AES chapt
 | `WIND_CREATE(attributes,maxX,maxY,maxW,maxH)` | Returns handle (>0), or <1 on failure | Allocates and registers a window. [p. 576] |
 | `WIND_DELETE(handle)` | Returns 0/nonzero status | Deregisters window and releases handle/resource. [p. 576] |
 | `WIND_FIND(x,y)` | Returns window handle, or 0 | Finds window at screen coordinates. [p. 576] |
-| `WIND_GET(handle,mode[,get1,get2,get3,get4])` | Returns 0/nonzero status | Mode selects work/outer/previous/max rectangle, slider positions/sizes, current handle, and visible rectangle-list entries. The OCR text around mode labels and one output label needs image verification. [p. 577] |
+| `WIND_GET(handle,mode[,get1,get2,get3,get4])` | Returns 0/nonzero status | Mode 4 = work area; 5 = current outer rectangle; 6 = previous outer rectangle; 7 = maximum outer rectangle; 8/9 = horizontal/vertical slider position; 10 = current window handle; 11/12 = first/next visible rectangle; 15/16 = horizontal/vertical slider size. The printed mode-4 description labels the height output as Get1 again instead of Get4; this is a confirmed source-table error, not merely OCR noise. [p. 577] |
 | `WIND_OPEN(handle,x,y,width,height)` | Returns 0/nonzero status | Opens previously created window. [p. 578] |
 | `WIND_SET(handle,mode,set1,set2,set3,set4)` | Returns 0/nonzero status | Mode 1 attributes; 2 title pointer; 3 info-line pointer; 6 geometry; 8/9 slider positions; 10 top/activate; 14 desktop tree; 15/16 slider sizes. Pointer arguments are split into high/low words. [pp. 578–579] |
 | `WIND_UPDATE(mode)` | Returns 0/nonzero status | Modes 0/1 unlock/lock redraw rectangle lists; 2/3 hand mouse control to AES/program. Locking must be balanced and must not strand AES menu/window interaction. [pp. 579–580] |
