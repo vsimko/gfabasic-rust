@@ -1061,3 +1061,21 @@ The chapter 17 notes were compared with *The Atari Compendium*, chapter 7 (VDI).
 Implementation consequence: represent VDI availability, GDOS presence/version, physical devices, virtual workstation handles, and per-driver capabilities as separate runtime state. Preserve the book's exact GFA wrapper contracts and warnings as edition-specific until runtime probes are available. No interpreter/TOS probe was performed.
 
 Source: [The Atari Compendium, Chapter 7 — VDI](https://www.yardley.cc/atari/compendium/atari-compendium-chapter-7-Atari-VDI.htm).
+
+
+## Chapter 18 cross-source validation: AES event masks and window lifecycle (printed pp. 547–580)
+
+The GFA AES chapter was compared with *The Atari Compendium*, chapter 6 (AES), and Atari's *GEM Programmer's Guide*, Volume 2.
+
+- **EVNT_MULTI timer-bit discrepancy:** the GFA book's printed table assigns bit 0 to both keyboard and timer events; page-image inspection confirms this is in the source, not an OCR error. The Compendium documents the standard AES event masks as MU_KEYBD=0x01, MU_BUTTON=0x02, MU_M1=0x04, MU_M2=0x08, MU_MESAG=0x10 and MU_TIMER=0x20. Therefore the standard AES timer bit is 5 (0x20). Retain the book's transcription as a source defect and record the standard OS value separately; do not silently alter the source note or assume the GFA wrapper passes the mask unchanged without a runtime probe.
+- **Blocking event model:** the Compendium describes EVNT_BUTTON, EVNT_KEYBD, EVNT_MESAG, EVNT_MOUSE and EVNT_TIMER as waiting calls and EVNT_MULTI as the combined wait operation. This corroborates treating GFA EVNT_* functions as potentially blocking control-flow operations.
+- **AES ABI:** the Compendium confirms TRAP #2, D0 magic value 0xC8, D1 pointer to the AES parameter block and the six pointer fields CONTRL/GLOBAL/INTIN/INTOUT/ADDRIN/ADDROUT. This independently corroborates the parameter-block layout recorded in the API reference.
+- **Window lifecycle:** the GEM Programmer's Guide distinguishes WIND_CREATE (allocate/obtain handle), WIND_OPEN, WIND_CLOSE and WIND_DELETE (release allocation). WIND_GET/WIND_SET operate on window state; WIND_UPDATE brackets redraw/update operations. This supports separate lifecycle states and paired update-lock handling.
+- **Redraw ownership:** AES sends window-manager messages; applications process redraw requests and redraw the affected work area. A host windowing system must not be allowed to bypass this event/message contract.
+
+The API reference records the source discrepancy and the standard AES contract separately. Exact GFA wrapper event-mask conversion, message-buffer behavior and return values remain runtime-unverified. No implementation or registry entries were changed.
+
+Sources:
+- The Atari Compendium, AES overview: https://bus-error.nokturnal.pl/atari_compendium/html/chap6.htm
+- The Atari Compendium, AES function reference: https://bus-error.nokturnal.pl/atari_compendium/html/aes.htm
+- Atari GEM Programmer's Guide, Volume 2: https://www.bitsavers.org/pdf/atari/ST/Atari_ST_GEM_Programming_1986/GEM_0464.pdf
