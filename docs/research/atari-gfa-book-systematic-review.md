@@ -1324,3 +1324,41 @@ The page images confirm two distinct editor save/load paths:
 - V3.0 right-Tab can place the cursor beyond the current line end. Vertical navigation and selected page/program navigation actions trigger syntax or structure checks (pp. 727–728). These are editor interactions, not lexical rules.
 
 Candidate checks for issue #42: verify extension/version selection; compare tokenized Program Save/Load with ASCII Save,A/Merge; test Merge insertion and invalid-line reporting; test NUL and 255/256-character boundaries separately from the editor's 79-character display width; verify V3.0 right-Tab behavior. No original interpreter was executed; these remain documented editor behaviors, not runtime observations.
+
+
+## Chapter 17 follow-up: GDOS/VDI and custom fonts (printed pp. 499–530)
+
+**Status: first-pass chapter review completed; selected page-image checks performed on pp. 499, 500, 503, 507, 512, 514 and 515. Runtime behavior remains unverified.** Detailed contracts are recorded in the Atari API reference.
+
+### Verified GDOS configuration facts
+
+- GDOS must be resident before the functions in this chapter are used, except `VQT_EXTENT` and `VQT_NAME`. The book describes loading `GDOS.PRG` from AUTO before system initialization and requiring a valid root-level `ASSIGN.SYS`. It compares GDOS 1.1 and 1.8 from the author's historical tests. [p. 499]
+- The driver IDs visible in the printed table are 01 screen pseudo-driver, 11 plotter, 21 printer, 31 metafile, 41 camera, and 51 graphics tablet. The OCR's apparent 4/61 values were corrected from the scan. ID 01 is only for `V_OPNVWK` and has the same effect as ID 04. [p. 500]
+- `ASSIGN.SYS` maps driver IDs to `.SYS` drivers and associated `.FNT` files; the example's screen pseudo-drivers 02/03/04 associate fonts with low/mid/high screen resolutions. [pp. 500–502]
+
+### VDI call and lifecycle facts
+
+- `V-H` reads/selects the active VDI handle. A nonnegative handle selects a workstation; -1 restores GFA's internal screen handle and unbuffered output. [p. 503]
+- `V_OPNVWK` opens a screen virtual workstation and returns its handle. GFA normally opens its own screen workstation automatically; screen output is immediate and does not require `V_UPDWK`. [pp. 505–506]
+- `V_OPNWK` opens a GDOS physical workstation. It accepts a driver ID and ten optional graphics defaults; the printed defaults are 1,1,1,1,1,1,1,1,1,2. The book explicitly warns that calling it without GDOS or with an invalid driver ID can crash the system. Screen output must instead use `V_OPNVWK` with resolution ID `XBIOS(4)+2`. [pp. 507–508]
+- `V_UPDWK` flushes the active physical workstation buffer; it is unnecessary for screen virtual workstations. [p. 512]
+- The author reports a RESERVE error when a physical workstation is opened and closed without graphics output, and internal problems when buffered output is not flushed before close. This remains a historical observation, not a universal VDI rule. [p. 511]
+
+### Font and text facts
+
+- `VQT_EXTENT` uses the current GEM text attributes, returns the bounding quadrilateral, and places its upper-left corner at (0,0); PTSOUT(0..7) carries the same eight coordinates. [pp. 512–513]
+- `VQT_NAME(index,name$)` returns the VDI face ID and font-header name for a font in the ASSIGN.SYS list. Without resident GDOS, it returns face 1 and the current ROM system-font name. [p. 514]
+- `VST_LOAD_FONTS(0)` returns the count actually loaded and may require memory to be reserved first. `VST_UNLOAD_FONTS(0)` unregisters those fonts and allows GEM to release the memory. [p. 515]
+- V2.xx procedure equivalents use direct VDISYS/GEMSYS parameter blocks and pointer-based output conventions; they must not be conflated with V3.0 function syntax. [pp. 513–516]
+
+### Custom-font material and safety classification
+
+Pages 516–530 demonstrate direct TOS/GEM system-font pointer patching, VBL interrupt code, memory reservation around HIMEM, Degas/STAD bitmap conversion and a custom PUT-based font renderer. One AUTO-folder patch is explicitly restricted to ROM-TOS dated 6 February 1986. Another routine warns that changing RESERVE while its font is active can cause BASIC/font-memory collision and requires restoring original font pointers. The SUPER.FON example is a program-level bitmap renderer, not a standard VDI/GDOS API. These techniques are classified as unsafe, machine/ROM-specific research and are excluded from portable runtime support.
+
+### Image-check corrections
+
+- OCR values for the GDOS driver table were corrected to camera **41** and graphics tablet **51** (p. 500).
+- The default optional V_OPNWK settings were checked against the printed line on p. 507.
+- VQT_NAME's fallback behavior and VST_LOAD_FONTS/VST_UNLOAD_FONTS zero-argument contracts were checked on pp. 514–515.
+
+No implementation was performed. Existing issue #25 covers the Atari API reference, #5 API profiles, #12 registry, #19 language/API inventory and #42 conformance evidence; no duplicate issue was opened.
