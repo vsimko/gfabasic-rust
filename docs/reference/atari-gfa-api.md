@@ -218,9 +218,9 @@ The book labels the resource-file header as **38 bytes**, consisting of 19 16-bi
 | 6 | ICONBLK table position | Word |
 | 8 | BITBLK table position | Word |
 | 10 | Free-string area position | Word |
-| 12 | Free-image area position | Word |
+| 12 | Bound-string area position | Word |
 | 14 | Image-data area position | Word |
-| 16 | Free-image table position | Word |
+| 16 | Free-image area position | Word |
 | 18 | Object-tree table position | Word |
 | 20 | Object count | Word |
 | 22 | Tree count | Word |
@@ -236,7 +236,7 @@ The names above are normalized English descriptions of the German table. Keep th
 
 ### 6.4 Nested structures
 
-**BOXINFO** is a packed 32-bit value stored directly in OB_SPEC for G_BOX, G_IBOX and G_BOXCHAR. Its fields total 32 bits: fill-pattern color (4), fill pattern (3), drawing mode (1), text color (4; G_BOXCHAR only), border color (4), border thickness (8, signed interpretation described by the book), and ASCII character (8; G_BOXCHAR only). The bit diagram is on p. 592; do not replace it with host bitfields.
+**BOXINFO** is a packed 32-bit value stored directly in OB_SPEC for G_BOX, G_IBOX and G_BOXCHAR. Its fields total 32 bits: fill-pattern color at bits 31–28 (4), fill pattern at 27–25 (3), drawing mode at bit 24 (1), text color at 23–20 (4; G_BOXCHAR only), border color at 19–16 (4), border thickness at 15–8 (8, signed interpretation described by the book), and ASCII character at 7–0 (8; G_BOXCHAR only). The bit diagram is on p. 592; do not replace it with host bitfields.
 
 **TEDINFO** is 28 bytes:
 
