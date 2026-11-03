@@ -636,7 +636,7 @@ GEMDOS uses the same word/longword marker convention. The book lists these calls
 | 42–45 | GETDATE, SETDATE, GETTIME, SETTIME | Read/write packed date/time words. Prefer DATE$/TIME$/SETTIME GFA-level facilities where applicable. |
 | 47–48 | GETDTA, GETVERS | Read DTA address and GEMDOS version. |
 | 49 | KEEP PROCESS | Terminates while retaining a memory region; book says not to use in ordinary GFA programs. |
-| 54 | GETDFREE | Writes four longwords (free clusters, total clusters, sector bytes, sectors/cluster) to a caller buffer. |
+| 54 | GETDFREE | Writes four longwords (16 bytes total: free clusters, total clusters, sector bytes, sectors/cluster) to a caller buffer. The source's four fields are at offsets 0, 4, 8 and 12. |
 | 57–59 | MKDIR, RMDIR, CHDIR | Directory creation/removal/current-directory change using NUL-terminated target strings. |
 | 60–64 | CREATE, OPEN, CLOSE, READ, WRITE | Raw GEMDOS file handles and buffers; not equivalent to GFA channel numbers. |
 | 65–67 | UNLINK, LSEEK, CHMODE | Delete file, seek within handle, and get/set file date/time or attributes as described in the entry. |
@@ -748,3 +748,8 @@ The book lists the following absolute Atari/TOS addresses. These are **source-do
 
 The book's chapter 22 includes direct writes that change floppy timing/verification, VBL registration, screen/palette switching and GFA BASIC Break/direct-mode handling. The V2.xx interpreter patch example at p. 660 is particularly version- and build-specific. These are **unsafe/disabled** by default. Do not expose raw addresses through the host process address space; any future Atari emulation must use a virtual address map and machine/TOS profile.
 
+
+
+### 8.9 Source consistency correction: GETDFREE buffer size
+
+A line-by-line check of p. 614 confirms that GEMDOS(54) GETDFREE writes **four 32-bit longwords**, at buffer offsets +0, +4, +8 and +12. The required buffer is therefore **16 bytes**, not 12 bytes. The printed prose calls it a “12-Byte-Puffer”, but the fourth field is explicitly placed at +12 and occupies another longword. This is a source-internal contradiction; the field layout determines the minimum size. Treat the phrase “12-byte buffer” as a likely book typo and preserve the discrepancy in evidence notes. No host implementation should allocate only 12 bytes.
