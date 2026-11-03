@@ -6,6 +6,8 @@
 
 The initial source corpus is maintained in [tests/corpus/](../../tests/corpus/README.md). It currently contains research-only Amiga GFA BASIC 3.0 candidate fixtures. Candidate status means that page-image and/or interpreter validation is still required; these files are not compiler acceptance tests. See [issue #42](https://github.com/vsimko/gfabasic-rust/issues/42).
 
+See the [current compatibility matrix](COMPATIBILITY-MATRIX.md) for the explicit statement of which dialects, profiles, and targets are not yet supported.
+
 ## Test layers
 
 1. Source loading and diagnostics.

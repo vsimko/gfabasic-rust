@@ -77,7 +77,7 @@ Any incompatible runtime ABI change must be visible in release metadata and docu
 
 ## 6. Compatibility and support reporting
 
-Every release should publish a compatibility matrix that identifies:
+Every release should publish the [compatibility matrix](COMPATIBILITY-MATRIX.md) that identifies:
 
 - compiler product version and source revision;
 - supported dialects and exact version subsets;
