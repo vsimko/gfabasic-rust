@@ -1,6 +1,6 @@
 # Rust workspace and dependency policy
 
-- Status: Proposed; the initial crate split is described in [ADR 0001](adr/0001-initial-rust-workspace.md). Maintainer review remains open under [issue #11](https://github.com/vsimko/gfabasic-rust/issues/11).
+- Status: Proposed; the initial crate split is described in [ADR 0002](adr/0002-initial-rust-workspace.md). Maintainer review remains open under [issue #11](https://github.com/vsimko/gfabasic-rust/issues/11).
 
 ## Logical components
 
