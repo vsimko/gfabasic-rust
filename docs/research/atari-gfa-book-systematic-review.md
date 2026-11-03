@@ -1079,3 +1079,14 @@ Sources:
 - The Atari Compendium, AES overview: https://bus-error.nokturnal.pl/atari_compendium/html/chap6.htm
 - The Atari Compendium, AES function reference: https://bus-error.nokturnal.pl/atari_compendium/html/aes.htm
 - Atari GEM Programmer's Guide, Volume 2: https://www.bitsavers.org/pdf/atari/ST/Atari_ST_GEM_Programming_1986/GEM_0464.pdf
+
+
+## RSC fixture validation from the companion diskette
+
+The supplied book companion-disk archive contains three RSC files: ALERT.RSC (1,154 bytes), FORMULAR.RSC (730 bytes) and MENU.RSC (2,630 bytes). Their first 36 bytes decode as the classic 18-word RSC header described by the Atari Compendium: `rsh_vrsn` is zero at offset 0, and the first resource data/string area begins at offset 36. The `rsh_rssize` field at offset 34 is 730 for FORMULAR.RSC and 2,630 for MENU.RSC, matching physical file sizes. ALERT.RSC declares 1,130 bytes while the archive entry is 1,154 bytes, leaving a 24-byte trailer that remains unexplained.
+
+The companion BASIC listings AES_ALRT.LST, AES_FORM.LST and AES_MENU.LST load these exact resources through RSRC_LOAD. This ties the files to the book's example programs, but does not establish which resource-editor version created them. The verified fixtures therefore settle the format for these examples, not every possible GFA resource-editor output.
+
+The book's 38-byte / 19-word header table remains a documented source discrepancy. No files from the companion diskette were copied into the public repository.
+
+Source: user-provided *Das große GFA-BASIC-Buch* companion-disk archive; Atari Compendium Appendix C: https://bus-error.nokturnal.pl/atari_compendium/html/appendc.htm
