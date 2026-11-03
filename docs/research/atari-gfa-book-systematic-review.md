@@ -1311,3 +1311,16 @@ Candidate conformance and compatibility checks for issue #42:
 9. Treat the rare crash warning as a robustness/recovery test, not a deterministic language conformance test.
 
 No original interpreter or Run-Only binary was executed. These findings remain documented source behavior, not runtime observations.
+
+
+## Chapter 24 editor file operations (printed pp. 728–729)
+
+The page images confirm two distinct editor save/load paths:
+
+- Program Save/Load uses `.BAS` in V2.xx and `.GFA` in V3.0. The book describes this as a single program block written/read without interpreter checking. Loading replaces the current program.
+- Save,A and Merge use ASCII `.LST` files. Merge inserts at the cursor position and checks the imported lines. Invalid lines are marked with the book's `==>` marker. Lines containing NUL bytes or longer than 255 characters are rejected and abort Merge.
+- The 255-character limit is specifically documented for Merge. It is not established as a universal source-line limit. The editor's horizontal scrolling after 79 visible characters is a separate display behavior (p. 726).
+- The exact tokenized `.BAS`/`.GFA` layouts, token tables, and cross-version compatibility remain unknown. Treat these as distinct source-manager inputs; do not assume the extensions are interchangeable.
+- V3.0 right-Tab can place the cursor beyond the current line end. Vertical navigation and selected page/program navigation actions trigger syntax or structure checks (pp. 727–728). These are editor interactions, not lexical rules.
+
+Candidate checks for issue #42: verify extension/version selection; compare tokenized Program Save/Load with ASCII Save,A/Merge; test Merge insertion and invalid-line reporting; test NUL and 255/256-character boundaries separately from the editor's 79-character display width; verify V3.0 right-Tab behavior. No original interpreter was executed; these remain documented editor behaviors, not runtime observations.
