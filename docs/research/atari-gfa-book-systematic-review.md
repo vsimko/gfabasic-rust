@@ -883,3 +883,21 @@ Issue traceability remains covered by existing **#3**, **#18**, **#19**, **#25**
 - Verify selected behaviors against version-pinned interpreter/compiler builds or emulators. Keep observed results distinct from manual claims.
 - Convert the reviewed inventory into normalized reference/API registry entries and conformance-test candidates, retaining printed page, version, evidence status and unresolved questions.
 - Continue respecting source rights: retain the source PDF/OCR locally; publish only concise original summaries and citations unless redistribution rights are confirmed.
+
+
+## Chapter 18 follow-up: AES function catalogue (printed pp. 547–580)
+
+**Status: first-pass OCR transcription completed; page-image verification and runtime validation pending.** The companion API reference now contains a per-function signature/contract inventory for the application, event, form, file-selector, graphics, menu, object, resource, scrap, shell and window managers.
+
+Important source-specific findings:
+
+- The author explicitly describes the chapter as a selected subset of roughly 70 AES functions, not a complete V2.xx library. V3.0 uses C-like function-call syntax; printed `<<` markers identify output parameters and are editorial notation, not BASIC syntax. Address arguments/outputs use 4-byte integer variables; coordinate/value arguments use at least 2-byte integers. [pp. 547–548]
+- `APPL_INIT()` returns the application ID already assigned by GFA startup; `APPL_EXIT()` is described as unnecessary in GFA. `APPL_FIND` requires an exactly eight-character application name. [pp. 548–549]
+- Event calls are blocking. `EVNT_MESAG` can wait indefinitely if no installed menu/window can produce a message. `EVNT_MULTI` combines keyboard, mouse-button, two rectangle, message and timer events; the timer-bit transcription is ambiguous and must be checked against the scan. [pp. 551–554]
+- `FORM_DO` owns the form interaction loop; without an EXIT/TOUCHEXIT object the program may not return to BASIC through normal interaction. `FSEL_INPUT` is explicitly described as more fragile than GFA's `FILESELECT` wrapper because invalid string buffers can corrupt GEM state. [pp. 555–558]
+- Several graphics helpers are modal and require the left mouse button to be held; `GRAF_SLIDEBOX` does not update the object tree or redraw the final object. [pp. 558–563]
+- The author records implementation defects or limitations for `APPL_TPLAY`, `APPL_TRECORD`, `RSRC_GADDR`, and `RSRC_SADDR`; these must be represented as source warnings, not generalized AES guarantees. [pp. 549–550, 569–571]
+- `WIND_UPDATE` modes 0/1 control redraw-list locking; modes 2/3 transfer mouse control between AES and the application. Calls need balanced lifecycle semantics. [pp. 579–580]
+- The OCR of the `WIND_GET` mode table contains a duplicated output-variable label, and the `EVNT_MULTI` timer bit is unclear. These remain explicit verification tasks rather than silently corrected assumptions. [pp. 553–554, 577]
+
+No implementation or API-registry declarations were added. Existing issues #5, #12, #19, #25 and #42 already cover the API profile, registry, feature inventory, Atari reference and conformance evidence. The current work remains documentation/research under those issues.
