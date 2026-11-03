@@ -48,8 +48,8 @@ Printed page ranges below follow the book's table of contents. This map is a rev
 | 20 | 597–604 | GEM addresses and fields | First pass reviewed; shared-buffer layouts and OCR need validation |
 | 21 | 605–656 | BIOS, GEMDOS, VDISYS, XBIOS and low-level examples | First pass reviewed; OS-call signatures and hardware-specific behavior need validation |
 | 22 | 657–664 | System variables | First pass reviewed; absolute addresses are TOS/version-specific and unsafe |
-| 23 | 665–700 | RAM card-index application example | Example review pending |
-| 24 | 701–793 | Compiler, interpreter, variables/types, editor, quick lists, errors and command index | Pending |
+| 23 | 665–700 | RAM card-index application example | First pass reviewed; example-only implementation and known sort defect recorded |
+| 24 | 701–793 | Compiler, interpreter, variables/types, editor, quick lists, errors and command index | First pass reviewed; compiler differences and OCR-sensitive appendices need validation |
 
 ## 3. General source and editor model
 
@@ -786,3 +786,100 @@ Remaining validation for chapters 17–22:
 - Cross-check BIOS/GEMDOS/XBIOS opcode signatures and return/error conventions against Atari TOS documentation and real hardware/emulator behavior.
 - Resolve book-specific TOS/ROM addresses and identify which are invalid on Mega/Blitter TOS or later machines.
 - Do not mark runtime behavior as tested: this batch is a manual-backed first pass, not interpreter conformance testing.
+
+
+## 25. Vario-RAM-Kartei application example (chapter 23, pp. 665–700)
+
+The chapter presents RAMKART, a RAM-resident card-index/file-management application. It is explicitly a teaching example and a design study, not a language/API reference. The author says it replaces the simpler program from earlier editions and intentionally leaves a small sorting defect in the example: each sort pass shifts one card, and the final card is filled with ASCII 255. [pp. 665–666]
+
+### 25.1 Storage model and file format
+
+- The application reserves most of the BASIC memory with `RESERVE` and places fixed-size card records consecutively above `HIMEM`; V2.02 uses an additional 20,000-byte offset because of the interpreter's directory placement, while V2.0 and V3.0 do not need that offset. [p. 667]
+- `BMOVE` is the primary in-memory block-transfer operation. `BGET#` and `BPUT#` transfer blocks to/from disk when disk updating is enabled. Individual cards are copied into string buffers for string-level search/edit operations. [p. 667]
+- A companion `.DEF` initialization file stores field labels, field lengths, number of cards, data-file name and display title. A separate data file stores the fixed-size card area. [pp. 667–668]
+- The whole card file is loaded into RAM at startup; the disk copy is updated only when the user requests it or when the Updating mode is enabled. [pp. 668–669]
+
+### 25.2 User operations and implementation patterns
+
+The example implements search (including two-term AND/OR search), browse, sort, updating toggle, jump-to-card, import, quit, alphabetic/numeric index tabs, row-based overview, in-place editing, cancel/restore, and commit-to-memory behavior. [pp. 668–670]
+
+The listing demonstrates:
+- UI/event loops combining `ON MENU`, mouse/key state, GEM alerts, file selection and custom drawing.
+- Fixed-size record arithmetic and direct memory access.
+- Search and sort over RAM buffers.
+- Explicit dirty/update state and delayed disk persistence.
+- Color palette access and restoration through XBIOS in the later helper routines. [pp. 671–700]
+
+The program contains version-specific memory assumptions, direct screen/GEM access and low-level palette handling. Treat it as a source of architectural patterns and edge cases only. Do not import its implementation wholesale, and do not use its intentionally flawed sorting routine as an expected result. No new language feature is established by this example.
+
+## 26. Compiler, variable organization, interpreter/editor and reference appendices (chapter 24, pp. 701–793)
+
+### 26.1 V2.xx compiler model and options
+
+The book describes the V2.xx compiler as producing standalone Atari PRG machine-code programs. The recommended workflow is to develop/debug in the interpreter, then compile from the desktop. The author claims interpreter/compiler compatibility, but also documents behavioral and runtime differences that must be preserved. [pp. 701–705]
+
+Compiler options include:
+- `OPTION "U1"`, `"U2"`, `"U3"`: select where/how Break checks are emitted. These affect whether Break is checked at explicit program points, loops or other runtime boundaries as documented in the option section. [pp. 706–707]
+- Integer overflow checking can be enabled/disabled; the book notes compiled `INC`/`DEC` may use native machine instructions and wrap at signed 32-bit boundaries when unchecked. [p. 707]
+- `OPTION "E+"` / `"E-"`: include or omit compiled error-message/handling support. [pp. 708–709]
+- `OPTION "B+"` / `"B-"`: control bomb-error handling and recovery behavior. [pp. 709–710]
+- The compiler's dialog options and source-level OPTION directives interact; the source directives take effect at their program position. [pp. 704–710]
+
+The book further documents compiled-program differences for screen clearing, mouse cursor visibility, RESUME address recovery and process memory reservation. For example, the interpreter knows source-statement addresses directly, while a compiled program may need a label-based recovery target. [pp. 710–715]
+
+Compiler semantics are a distinct execution profile. Do not assume that interpreter-only debugging, error recovery, cursor visibility, Break polling or memory allocation behavior transfers unchanged to compiled programs.
+
+### 26.2 Variable representation and memory layout
+
+The book documents target-specific variable storage:
+- Unsuffixed numeric variables (and V3.0 `#` variables under the relevant DEFNUM/DEFLIST settings) are floating-point values: 6 bytes in V2.xx and 8 bytes in V3.0, with different decimal precision. [pp. 716–717]
+- Integer suffixes select integer storage; integer array elements have a more compact representation than standalone variables in some cases. [pp. 717, 722]
+- String variables use a 6-byte descriptor containing a 32-bit data pointer and 16-bit length. String contents are stored separately and managed through descriptor/trailer structures. [pp. 717–719]
+- Array descriptors contain dimension and storage metadata; the book walks through how to locate string and numeric array elements through pointers and descriptors. [pp. 719–722]
+
+These layouts are useful for understanding the Atari interpreter's memory model, but are not portable ABI guarantees. The compiler/runtime must not expose raw host pointers or reuse the 68k memory representation without a deliberate compatibility layer. Garbage collection and descriptor relocation are observable constraints for pointer-based code.
+
+### 26.3 Direct mode and editor
+
+The direct mode executes each submitted command immediately rather than waiting for RUN. It does not support multi-statement block constructs that require several separately entered lines; procedures defined in the editor can be invoked from direct mode. V3.0 includes a history of the last eight direct-mode commands. [pp. 723–725]
+
+The editor section documents version-dependent keyboard shortcuts, syntax/structure checks, block operations, search/replace, load/save, listing and printer formatting, menus and editor configuration. V2.xx and V3.0 differ in several shortcut and menu details. [pp. 725–742]
+
+This is an editor UX specification, not necessarily part of the language grammar. The compiler project should only model editor behavior if an editor compatibility target is explicitly in scope.
+
+### 26.4 Quick lists, syntax tables, errors and indexes
+
+The appendix contains:
+- A procedure index for the accompanying book examples. [p. 743]
+- Quick lists of IKB commands, system functions and API families, including BIOS/GEMDOS/XBIOS and AES/VDI calls. [pp. 744–759]
+- An ASCII table. [p. 760]
+- Editor and runtime error lists, including version-specific entries and bomb/68000 exception messages. [pp. 761–763]
+- Syntax summaries grouped by I/O, sound, control flow, procedures/functions, operators, graphics, memory, time, events and system calls. [pp. 764–780]
+- Alphabetical command/function index with page references. [pp. 780–793]
+
+These indexes are useful as a completeness checklist and cross-reference aid, but OCR and typography make them unsuitable as the sole authority for exact signatures. Cross-check every indexed entry against its main chapter before adding it to the feature/API registry.
+
+## 27. Overall conclusions after first-pass review of all 24 chapters
+
+The complete printed chapter sequence has now received a first-pass review. This does **not** mean the book has been fully validated: OCR-sensitive tables and signatures, page images, version differences, conflicting sources and actual interpreter/compiler behavior still require separate verification.
+
+Key architecture conclusions:
+
+1. The book is evidence for Atari ST GFA BASIC V2.xx/V3.0 only. It must not be used as an Amiga specification or as proof of later Atari dialect behavior.
+2. Separate language-core semantics, interpreter/editor behavior, compiler behavior, GEM/AES, VDI/GDOS, TOS system calls and hardware-specific interfaces.
+3. Model target 68k words, longwords, pointers, endianness, alignment and memory descriptors explicitly; host-native data layouts are not compatible.
+4. Preserve the distinction between BASIC channels and raw GEMDOS handles, and between normal screen output and VDI workstation output.
+5. Event handling, timer callbacks, AES blocking waits, menu/window messages and redraw responsibilities are cooperative and stateful; they cannot be reduced to stateless command wrappers.
+6. Low-level memory writes, supervisor mode, interrupt vectors, system variables, disk formatting and direct font-pointer patches are unsafe Atari-specific operations. They require explicit support policy and a virtualized target memory model, not direct host OS access.
+7. The compiler and interpreter have documented differences in Break handling, overflow checks, error support, RESUME, cursor visibility and memory behavior.
+8. The book's own example program contains a known sort defect; examples must not be treated as normative tests without independent expected results.
+
+Issue traceability remains covered by existing **#3**, **#18**, **#19**, **#25** and **#42**. No new feature was implemented and no duplicate issue was opened.
+
+### Remaining work after the first-pass book review
+
+- Manually inspect page images for OCR-sensitive syntax, bit masks, structure layouts and command signatures, prioritizing language-core rules and frequently used APIs.
+- Compare the Atari book against the project's other Atari references and the separately documented Amiga sources; resolve conflicts by dialect/version rather than merging them.
+- Verify selected behaviors against version-pinned interpreter/compiler builds or emulators. Keep observed results distinct from manual claims.
+- Convert the reviewed inventory into normalized reference/API registry entries and conformance-test candidates, retaining printed page, version, evidence status and unresolved questions.
+- Continue respecting source rights: retain the source PDF/OCR locally; publish only concise original summaries and citations unless redistribution rights are confirmed.
