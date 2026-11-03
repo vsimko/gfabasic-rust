@@ -4,7 +4,7 @@
 - Platform: Atari ST
 - Source coverage: GFA BASIC V2.xx and V3.0, as described by the sixth revised and expanded edition of *Das große GFA-BASIC-Buch* (1988)
 - Tracking: [issue #3](https://github.com/vsimko/gfabasic-rust/issues/3), [issue #19](https://github.com/vsimko/gfabasic-rust/issues/19), [issue #25](https://github.com/vsimko/gfabasic-rust/issues/25)
-- Source register: [ATARI-GFA-BOOK-1988](../reference-sources.md#atari-gfa-book-1988)
+- Source register: [ATARI-GFA-BOOK-1988](../reference-sources.md)
 
 ## 1. Purpose and limits
 
