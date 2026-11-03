@@ -23,8 +23,10 @@ Each sidecar TOML file must define:
 - `api_profiles`: required platform API profiles; use an empty array for language-core tests.
 - `kind`: `positive`, `negative`, or `semantic`.
 - `status`: `candidate`, `verified`, `blocked`, or `retired`.
-- `source`: source key, printed page/section, and evidence status.
-- `expectation`: expected parse/compile/runtime outcome. State stdout/stderr or exit behavior when applicable.
+- `source_key`, `source_pages`, and `evidence_status`: source identity, printed page/section, and evidence quality.
+- `expectation`: expected parse/compile/runtime outcome. State `expected_stdout`, `expected_stderr`, and `expected_exit` when applicable.
+
+The manifest stores fixture paths relative to the corpus root, without the `.bas` or `.toml` suffix. The corresponding source and metadata files use the same path stem.
 - `notes`: unresolved syntax, OCR, edition, or runtime questions.
 
 A fixture may use `verified` only after its syntax and expected behavior are checked against the cited page image or a named trusted interpreter. OCR text alone is not sufficient for OCR-sensitive punctuation or signatures. A candidate fixture must not be used as a compiler acceptance rule.
