@@ -168,3 +168,12 @@ Sources checked:
 - Contemporary review of GFA-Basic 3.0 Amiga, *Happy Computer* 12/1988: https://www.stcarchiv.de/happy-computer/1988/12/gfa-basic-amiga
 - Amiga-News report on author-authorized PDF availability, 2026-09-03: https://www.amiga-news.de/en/standard/?frm_perPage=21&frm_start=42
 - Reported PDF collection: http://ebook.pixas.de/ (not directly accessible during this check)
+
+
+### Additional Amiga GFA BASIC 3.0 reference-book lead (2026-11-03)
+
+| ID | Source | Applicability | Evidence status | Notes |
+|---|---|---|---|---|
+| AM-BOOK-KOFLER-1989 | *Amiga GFA-Basic 3.0 Referenzbuch*, attributed to Kofler; Markt & Technik (bibliography shorthand: [mut]), 1989 | Explicitly catalogued as an Amiga GFA-BASIC 3.0 reference book; exact edition, author full name, ISBN, page count, and interpreter build coverage not yet verified | Bibliographic lead corroborated by the author's own bibliography and a separate Amiga book-order catalogue; no scan inspected | Michael Kofler's bibliography lists “Amiga GFA-Basic 3.0 Referenzbuch” under 1989. A 1991 Amiga book-order listing separately lists “GFA-Basic 3.0 Referenzbuch” by Kofler as an Amiga title (order no. 3347), distinct from “GFA Basic” by Bleek (order no. 3336). This may be another valuable German-language reference for checking the 3.0 book, but do not assume it is the 420-page software manual reviewed in 1988 or the Bleek/Hecht/Litzkendorf title. The exact bibliographic identity and contents remain to be verified from the scan's front matter. [Kofler bibliography](https://kofler.info/ueber/bibliografie/); [1991 Amiga book-order listing](https://www.sharp-pc-1600.de/allesfuersharp/ASFC_1991_06.pdf). |
+
+The 1988 *Happy Computer* review independently confirms that the GFA-BASIC 3.0 Amiga package was accompanied by a German handbook of approximately 420 pages and that its appendix contained an alphabetical command index with page references. This is a useful identification clue for newly acquired scans, but it does not prove that the Kofler reference book is that same handbook. [Contemporary review](https://www.stcarchiv.de/happy-computer/1988/12/gfa-basic-amiga).
