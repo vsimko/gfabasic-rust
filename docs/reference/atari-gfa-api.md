@@ -176,6 +176,57 @@ No GFA BASIC interpreter or Atari TOS runtime probe was performed. These cross-s
 
 Independent source: [The Atari Compendium, Chapter 7 — VDI](https://www.yardley.cc/atari/compendium/atari-compendium-chapter-7-Atari-VDI.htm).
 
+### 4.1 GDOS installation and driver identifiers
+
+GDOS is a resident GEM extension, not an unconditional part of the GFA BASIC runtime. In the book's setup it must be launched from the AUTO folder before normal system initialization and must find a valid `ASSIGN.SYS` at the boot volume root. The book distinguishes GDOS 1.1 from 1.8 and reports better reliability/performance for 1.8 based on the author's tests; this is historical source evidence, not a recommendation for every later GDOS clone. `VQT_EXTENT` and `VQT_NAME` are the two chapter functions explicitly stated to remain usable without GDOS. [pp. 499, 502]
+
+The printed driver identifiers are:
+
+| ID | Device |
+|---:|---|
+| 01 | Screen pseudo-driver; usable only with `V_OPNVWK`, with the same effect as ID 04 |
+| 11 | Plotter |
+| 21 | Printer |
+| 31 | Metafile |
+| 41 | Camera |
+| 51 | Graphics tablet |
+
+The screen-resolution pseudo-drivers 02/03/04 in the example `ASSIGN.SYS` associate fonts with low/mid/high resolution; their drivers are expected in ROM. The source says driver files use `.SYS`, font files use `.FNT`, the path is optional, and names are case-insensitive. [pp. 499–502] These are identifiers from this book's GDOS configuration examples, not a promise that every GDOS release supplies every device driver.
+
+### 4.2 Workstation lifecycle and V-H
+
+| Interface | Signature / behavior | Compatibility notes |
+|---|---|---|
+| `GDOS?` | Boolean: TRUE (-1) if GDOS 1.1+ is resident, else FALSE (0) | V3.0 only in the book; no V2.xx replacement is given. [p. 502] |
+| `V-H` | Read current GFA VDI handle; assign a handle to select a workstation | A nonnegative value selects the handle used by subsequent VDI calls. Assigning -1 restores GFA's own screen handle and unbuffered screen output, even if another workstation remains open. [p. 503] |
+| `V_CLRWK()` | Clear current workstation output buffer; return status | Printer clear additionally emits form feed. [p. 504] |
+| `V_CLSVWK()` | Close virtual screen workstation selected by V-H | Restore GFA handle; normally unnecessary for GFA's automatically opened screen. Close this before closing a physical workstation. [pp. 504–505] |
+| `V_CLSWK()` | Flush and close physical workstation selected by V-H | Restore GFA handle. The V2.xx procedure must explicitly restore the GFA handle in CONTRL+12. [p. 505] |
+| `V_OPNVWK(driverId[,lineType,lineColor,markerType,markerColor,textStyle,textColor,fillStyle,fillPattern,fillColor,coordinateFlag])` | Open screen virtual workstation; returns VDI handle | Screen output is immediate and does not require V_UPDWK. GFA normally opens the standard screen workstation itself. [pp. 505–506] |
+| `V_OPNWK(driverId[,lineType,lineColor,markerType,markerColor,textStyle,textColor,fillStyle,fillPattern,fillColor,coordinateFlag])` | Open GDOS physical workstation; returns VDI handle | The ten optional values preconfigure INTIN(1..10); defaults shown are `1,1,1,1,1,1,1,1,1,2`. Without GDOS, or with an invalid ID such as screen ID 1, the book warns of a system crash. [pp. 507–508] |
+| `V_UPDWK()` | Flush current workstation graphics buffer | Not needed for screen virtual workstations; required to emit buffered output on physical devices. [pp. 511–512] |
+
+For a screen virtual workstation, the book gives the resolution ID as `XBIOS(4)+2`; screen ID 01 is not accepted by `V_OPNWK`. [pp. 505–507] `WORK_OUT(0..56)` exposes 57 workstation capability words; the physical workstation's dimensions and capabilities are device-dependent. A workstation may require approximately `(width*height/8) * 1.2` bytes for its bitmap and working buffer according to the author's estimate. [pp. 506–511]
+
+Lifecycle is order-sensitive. The book reports a `RESERVE` memory error in its test setup when a physical workstation is opened and closed without any graphics output. It also reports internal problems if buffered graphics are not flushed with `V_UPDWK` before closing. Treat these as source-reported compatibility hazards pending runtime reproduction, not universal VDI guarantees. [p. 511]
+
+### 4.3 Text extent and GDOS fonts
+
+| Interface | Signature / behavior | Notes |
+|---|---|---|
+| `VQT_EXTENT(text$[,xlo,ylo,xro,yro,xru,yru,xlu,ylu])` | Returns status and optionally eight coordinates of the text bounding quadrilateral | Uses current GEM text attributes (DEFTEXT). Upper-left is always (0,0); lower-right coordinates provide width/height. Coordinates are also available in PTSOUT(0..7); string bytes are passed through INTIN low bytes. [pp. 512–513] |
+| `VQT_NAME(index,name$)` | Returns VDI font face ID and writes font name | Index is the font's position in the applicable ASSIGN.SYS list after loading. Without resident GDOS, returns face 1 and the current system font name. [p. 514] |
+| `VST_LOAD_FONTS(0)` | Returns number of additional GDOS fonts loaded | Allocates memory (RESERVE may be needed); zero means none loaded. The zero parameter is a Digital Research placeholder. [p. 515] |
+| `VST_UNLOAD_FONTS(0)` | Unregisters fonts loaded by VST_LOAD_FONTS | GEM may free the allocated memory automatically. [p. 515] |
+
+The source provides V2.xx procedure equivalents using VDISYS/GEMSYS and direct parameter-block access. They are not interchangeable with the V3.0 function-call syntax without adapting output-pointer conventions. In particular, the V2.xx VQT_NAME procedure requires pointers for both the returned string and the integer face ID. [pp. 513–515]
+
+### 4.4 Own fonts and direct system-font patching (unsafe research)
+
+Pages 516–530 are not a general GDOS API. They present custom machine-code and BASIC techniques that patch TOS/GEM system-font pointers, reserve memory above HIMEM, install VBL interrupt routines, or reinterpret Degas/STAD font bitmaps. One supplied AUTO-folder program is explicitly limited to ROM-TOS dated 6 February 1986. Another routine warns that increasing BASIC memory with RESERVE while a font is active can overwrite font data; restoring original font pointers is necessary before leaving BASIC. [pp. 516–523]
+
+The later SUPER.FON example loads a bitmap-font file into caller-provided memory and draws each character through PUT operations; it is a program-level technique, not a VDI/GDOS workstation service. [pp. 524–530] These routines must remain classified as unsafe, ROM/TOS-specific research. Do not implement them as ordinary portable GFA built-ins or run them in the Linux compatibility runtime.
+
 ## 5. AES function families
 
 The book describes approximately 70 AES functions. V3.0 exposes AES calls as callable functions; V2.xx equivalents are shown where available. Calls exchange integer and address arrays through AES parameter blocks. Address parameters require 4-byte values; coordinate/value parameters require at least 2-byte integers. [pp. 547–549]
