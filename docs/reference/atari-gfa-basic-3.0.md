@@ -72,18 +72,24 @@ Evidence: printed p. 24. This is a version-difference summary, not a complete gr
 
 ### 4.3 Variable types and declarations
 
-The book describes these V3.0 declaration families (printed pp. 189–192):
+The book describes these V3.0 declaration commands (printed pp. 189–192). The page-image check confirms the names, type categories, storage widths and abbreviations:
 
-| Declaration | Documented type category | Storage width stated by the book | Status |
-|---|---|---:|---|
-| DEFBIT | Boolean | Not stated in the inspected declaration passage | Verified name/category |
-| DEFBYT | Integer | 1 byte | Verified |
-| DEFWRD | Integer | 2 bytes | Verified |
-| DEFINT | Integer | 4 bytes | Verified |
-| DEFFLT | Floating point | 8 bytes | Verified |
-| DEFSTR | String | Variable-sized/representation not specified here | Verified name/category |
+| Declaration | Abbreviation | Declared type | Width | Suffix |
+|---|---|---|---:|---|
+| `DEFBIT` | — | Boolean | 2 bytes for scalar variables; 1 bit per array element | `!` |
+| `DEFBYT` | `DEFB` | Unsigned integer | 1 byte | `|` |
+| `DEFWRD` | `DEFW` | Signed integer | 2 bytes | `&` |
+| `DEFINT` | `DEFI` | Signed integer | 4 bytes | `%` |
+| `DEFFLT` | `DEFFL` | Floating point | 8 bytes | `#` |
+| `DEFSTR` | `DEFS` | String | Descriptor-based; see below | `$` |
 
-The declaration commands assign types to variables by matching name prefixes against a definition string. The book gives examples of individual letters, ranges, and comma-separated prefixes. A later explicit type suffix on a variable takes precedence over the global prefix declaration.
+All six declarations are marked Version 3.0 in the command reference. The definition argument is a string (constant, variable or expression) describing the name prefixes to match. Examples on pp. 190–191 show individual initial letters (`"a"`), comma-separated prefixes (`"b,c"`), ranges (`"g-l"`) and multi-character prefixes (`"word"`). Matching is against the beginning of the variable name.
+
+The declarations are global. The book says a later declaration invalidates the previous one. A variable with an explicit type suffix is excluded from the global prefix declaration and the explicit suffix takes precedence. The example on p. 191 demonstrates this with `DEFINT "i"`, an explicitly suffixed string variable `I_string$`, and an unsuffixed integer variable `I_4byte`.
+
+The editor accepts `DEFSNG` and `DEFDBL` as alternatives for `DEFFLT`, but converts those spellings to `DEFFLT` during syntax checking. They should therefore be modeled as editor input aliases, not automatically as separate runtime declarations.
+
+These are V3.0 language declarations; do not assume their availability in V2.xx merely because the book's companion listings also contain V2.xx examples.
 
 The book also documents these type suffixes in the declaration discussion:
 
