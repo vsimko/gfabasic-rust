@@ -34,9 +34,9 @@ Printed page ranges below follow the book's table of contents. This map is a rev
 | 6 | 155–220 | Program structure, loops, branches, declarations, subprograms, external code | Reviewed |
 | 7 | 221–228 | String manipulation, analysis, formatting | Reviewed |
 | 8 | 229–250 | Operators, arithmetic, numeric/trigonometric functions, comparisons, bit operations, random values | Reviewed |
-| 9 | 251–328 | Graphics definitions, object/line/pixel graphics, Line-A, raster operations, screen memory | Pending |
-| 10 | 329–340 | Data conversion and number systems | Pending |
-| 11 | 341–392 | Arrays, memory operations/management, pointers | Pending |
+| 9 | 251–328 | Graphics definitions, object/line/pixel graphics, Line-A, raster operations, screen memory | Reviewed (first pass) |
+| 10 | 329–340 | Data conversion and number systems | Reviewed (first pass) |
+| 11 | 341–392 | Arrays, memory operations/management, pointers | Reviewed (first pass) |
 | 12 | 393–452 | Program control, errors, time, keyboard, multitasking, debugging | Pending |
 | 13 | 453–470 | Program/user interaction | Pending |
 | 14 | 471–486 | BASIC window commands | Pending |
@@ -184,3 +184,84 @@ The first detailed pass confirms:
 4. Review chapters 17–22: GDOS/VDI, AES, object structures, GEM memory layout, BIOS/GEMDOS/XBIOS, system variables.
 5. Review appendices 24.2–24.14: variable representation, editor/compiler differences, error catalogue, syntax list, alphabetical command list.
 6. For every promoted rule, add an independently authored positive/negative conformance test to issue #42 and retain source/page/version metadata.
+
+
+## 10. Graphics, conversion, arrays and memory (chapters 9–11)
+
+This review batch covers the book's Atari-specific graphics chapter, data-conversion chapter, and array/memory chapter. These facilities are not all language-core features: many depend directly on Atari ST screen modes, VDI, Line-A, TOS memory layout, or hardware.
+
+### 10.1 Graphics definitions and state (chapter 9, pp. 251–270)
+
+The book separates graphics state/configuration from drawing primitives. The first group includes:
+
+- `BOUNDARY`: enables/disables the outline around P-graphics objects. [p. 251; V3.0]
+- `DEFFILL`: configures fill color, style, and pattern, including user-defined patterns. [pp. 254–256]
+- `DEFLINE`: configures line style, width, and line-end form for line-drawing operations. [pp. 257–258]
+- `DEFMARK`: configures marker type and size. [p. 258]
+- `DEFMOUSE`: selects built-in or user-defined mouse forms; the manual describes the data layout of a 16×16 mouse cursor. [pp. 259–262]
+- `DEFTEXT`: configures text color, style, rotation, size, and face. [pp. 262–264]
+- `GRAPHMODE`: selects raster drawing mode; the book explains replace, transparent, XOR and related logical drawing modes. [pp. 265–266]
+- `SETCOLOR` and V3.0 `VSETCOLOR`: set Atari color registers; VSETCOLOR addresses VDI-indexed color registers. [pp. 267–270]
+
+The color-register descriptions are resolution-dependent (Hires/Midres/Lowres) and must remain part of the Atari graphics profile. They must not be represented as a platform-neutral color model. [pp. 253, 267–270]
+
+### 10.2 Drawing primitives and raster operations (chapter 9, pp. 271–328)
+
+The chapter's object-graphics group includes rectangle, circle/ellipse, arc, polygon, marker, and text operations. Examples and command entries include `BOX`/`PBOX`, `PCIRCLE`, `POLYLINE`, `POLYFILL`, `POLYMARK`, `DRAW`, and `LINE`. Polygon operations use point-count and coordinate arrays; some forms support an offset. [pp. 271–287]
+
+The later part of the chapter documents Line-A operations such as `ALINE` and `PSET`, clipping, graphics-origin offsets, and raster-copy/combination operations. It also discusses screen-plane layout, screen-memory organization, image strings, `GET`/`PUT`, `RC_COPY`, `RC_INTERSECT`, sprites and vertical synchronization. [pp. 288–328]
+
+Important architectural distinction: VDI raster operations, Line-A operations, P-graphics objects, screen-memory access, and helper functions such as RC_COPY/RC_INTERSECT have different dependencies and semantics. They should be separate API families in the Atari profile, not one generic graphics abstraction. Exact signatures and supported-version labels still need command-by-command extraction.
+
+### 10.3 Data conversion (chapter 10, pp. 329–340)
+
+The chapter covers conversion between numeric representations and binary/string encodings. The command families visible in the chapter include:
+
+- ASCII/character conversion.
+- Binary, hexadecimal, decimal and octal representations.
+- Integer/long and floating-point serialization to strings, including `MKI$`, `MKL$`, `MKS$`, `MKF$`, and `MKD$`.
+- Reverse conversion functions, including `CVI$`, `CVL$`, `CVS$`, `CVF$`, and `CVD$`.
+
+The book notes the `&O` prefix for octal numeric literals and documents an optional width/number-of-digits argument for V3.0 formatting. [p. 337] The exact byte order, storage widths, floating-point encoding, overflow, and malformed-input behavior must be recorded per function after the syntax tables and examples are checked. Do not infer a portable serialization format from these names.
+
+### 10.4 Arrays (chapter 11.1, pp. 341–353)
+
+The chapter covers array initialization and manipulation. Entries include:
+
+- `ARRAYFILL`: fills an array with a value matching the array's element type. [p. 341]
+- `DELETE`: removes one element and shifts subsequent elements. [p. 341–348]
+- `ERASE`: removes an array's dimensions and releases its allocated storage; V3.0 supports deleting multiple arrays in one statement. [p. 348]
+- `INSERT`: inserts an element at a specified index. [p. 348]
+- `QSORT`: V3.0 quicksort for numeric or string arrays, with ascending/descending selection, optional element count and optional parallel index array. String sorting can use a supplied collation/order table. [pp. 350–352]
+- `SSORT`: V3.0 Shellsort counterpart; the book describes it as using less memory but generally being slower than QSORT. [p. 353]
+
+The array examples and sorting descriptions make `OPTION BASE` important: index ranges in examples and optional counts depend on whether the lower bound is zero or one. The exact default and scope of OPTION BASE must be checked in the relevant command entry before compiler implementation.
+
+### 10.5 Absolute variables, raster blocks and memory access (chapter 11.2, pp. 354–380)
+
+The chapter describes `ABSOLUTE` as binding a BASIC variable to a specified memory address. The address-bound variable can be used to inspect or modify system-managed memory, but writes to incorrect or protected locations can crash the system. The book warns that addresses in the supervisor area below 2048 cannot be accessed as ordinary user data. [pp. 355–357]
+
+`BITBLT` is documented in more than one form: VDI raster-copy parameters and Line-A forms available only in V3.0. The VDI form uses source and destination raster descriptors plus a parameter block; the Line-A form uses a memory block/parameter array whose fields are documented in a table. [pp. 358–361] These are distinct low-level APIs.
+
+`BMOVE` copies a specified number of bytes from source to destination and permits overlapping source/destination ranges. The manual warns that a zero byte count can cause a crash and that addresses must not be in the supervisor area; even alignment affects speed. [p. 362]
+
+The book also documents direct memory reads/writes and typed access. In V3.0, `BYTE{address}`, `CARD{address}`, and `LONG{address}` read/write 1, 2, and 4 bytes respectively; CARD/LONG accesses require even addresses. The manual says these typed accessors use user mode and cannot access supervisor memory. A four-byte access may omit LONG in the syntax. [p. 373; V3.0]
+
+### 10.6 Memory management and pointers (chapter 11.3–11.4, pp. 381–392)
+
+- `INLINE address%, bytes`: reserves an embedded memory region within the BASIC listing; the editor reserves it when the line is entered, and the reserved content is saved/loaded with the program. The book gives a maximum region size of 32,700 bytes. [pp. 381–382; V3.0]
+- `MALLOC(bytes)`: allocates system memory above HIMEM and returns its start address, or zero on failure; `MALLOC(-1)` reports remaining allocatable space. [pp. 383–387; V3.0]
+- `MSHRINK` and `MFREE`: reduce or release allocated memory. Correct release order matters; a leaked allocation can make later memory unavailable to BASIC. [pp. 383–387]
+- `RESERVE`: adjusts the BASIC-managed memory region. V2.xx and V3.0 differ; V3.0 permits a negative size to reduce the upper end and allows a no-argument form to restore the original configuration where possible. [pp. 388–389]
+- `VARPTR(variable)`: returns the address of a numeric variable or the address of the first character of a string; V3.0 permits the `V:` shorthand. [p. 392]
+
+These operations expose a version-specific memory model and should not be emulated as ordinary Rust references. They require an explicit virtual-memory/address-space design if the compiler/runtime is to support them safely.
+
+## 11. Updated review priorities
+
+1. Finish chapter 5 command-by-command, especially file handles, random-access records, disk functions, ports, printer and sound.
+2. Review chapter 12 runtime control and error handling before attempting runtime semantics.
+3. Review chapters 13–16 as a coherent GEM interaction/event subsystem.
+4. Review chapters 17–22 as Atari platform API and data-structure documentation.
+5. Review appendix 24, especially variable representation, editor/compiler differences, errors, syntax list and alphabetical command list.
+6. Cross-check OCR-sensitive syntax and tables against page images; add focused tests under #42 only after the rule is sufficiently precise.
