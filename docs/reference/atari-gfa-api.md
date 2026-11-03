@@ -314,19 +314,70 @@ These structures use 16-bit words and 32-bit target pointers. Rust representatio
 
 ## 7. AES/VDI parameter blocks
 
-The book documents these shared arrays and control blocks: [pp. 597–604]
+The book's parameter-block tables on pp. 597–601 were checked against page images. These are mutable shared buffers; calls overwrite input/output arrays and control words.
 
-| Name | Subsystem | Purpose |
-|---|---|---|
-| ADDRIN, ADDROUT | AES | Address input/output arrays; 4-byte pointer entries |
-| GINTIN, GINTOUT | AES | Integer input/output arrays; 2-byte entries |
-| GCONTRL | AES | Control block: opcode and integer/address array counts |
-| INTIN, INTOUT | VDI | Integer input/output arrays |
-| PTSIN, PTSOUT | VDI | Point input/output arrays |
-| CONTRL | VDI | Control block: opcode, array lengths, subfunction and workstation handle |
-| VDIBASE | VDI | Copy of workstation state, including text/line/fill attributes |
+### 7.1 AES arrays and control block
 
-V3.0 exposes indexed array accessors as well as raw address forms. These are transient shared call buffers and can be overwritten by later AES/VDI calls. Exact lengths are call-specific. VDIBASE is reported unreliable on some Mega/Blitter TOS configurations and in GFA V3.0; the book also gives a ROM-TOS-specific fallback address. Do not use that hard-coded address without an exact machine/OS profile.
+| Name | Element width | Accessor/index semantics |
+|---|---:|---|
+| ADDRIN, ADDROUT | 4 bytes | V3.0 indexed arrays; index = byte offset DIV 4 |
+| GINTIN, GINTOUT | 2 bytes | V3.0 indexed arrays; index = byte offset DIV 2 |
+| GCONTRL | 2 bytes | V3.0 indexed array; index = byte offset DIV 2 |
+| GB | 4-byte pointers | Pointer block for AES arrays; raw address-based access |
+
+GCONTRL is a 12-byte control block:
+
+| Offset | Field | Direction / meaning |
+|---:|---|---|
+| 0 | Function opcode | Input |
+| 2 | GINTIN array length in bytes | Input |
+| 4 | GINTOUT array length in bytes | Output |
+| 6 | ADDRIN array length, in 4-byte elements | Input |
+| 8 | ADDROUT array length, in 4-byte elements | Output |
+
+The GB pointer block contains six 32-bit pointers:
+
+| Offset | Points to |
+|---:|---|
+| 0 | GCONTRL array |
+| 4 | Global array |
+| 8 | GINTIN array |
+| 12 | GINTOUT array |
+| 16 | ADDRIN array |
+| 20 | ADDROUT array |
+
+[pp. 597–600]
+
+### 7.2 VDI arrays and control block
+
+| Name | Element width | Accessor/index semantics |
+|---|---:|---|
+| INTIN, INTOUT | 2 bytes | V3.0 indexed arrays; index = byte offset DIV 2 |
+| PTSIN, PTSOUT | 2 bytes | V3.0 indexed arrays; index = byte offset DIV 2 |
+| CONTRL | 2 bytes | V3.0 indexed array; index = byte offset DIV 2 |
+
+The VDI CONTRL block is documented with these fields:
+
+| Offset | Field |
+|---:|---|
+| 0 | Function opcode |
+| 2 | PTSIN array length divided by 2 |
+| 4 | PTSOUT array length divided by 2 |
+| 6 | INTIN array length |
+| 8 | INTOUT array length |
+| 10 | Optional subfunction identifier |
+| 12 | Device/workstation handle |
+| 14–28 | Function-dependent information |
+
+The source explicitly describes these as 2-byte fields. Do not confuse this VDI CONTRL block with AES GCONTRL; they are different layouts and use different arrays. [pp. 598–601]
+
+### 7.3 VDIBASE and font header
+
+VDIBASE is a 308-byte copy of VDI workstation state. The book says it is invalid for Mega/Blitter TOS and may contain incorrect values in GFA BASIC V3.0. For standard ROM-TOS it gives a virtual-workstation parameter-block address of 0x578C, also 308 bytes. That absolute address is a ROM/TOS-specific workaround and must not be used as a generic constant. [pp. 602–604]
+
+The block includes current text rotation and clipping state, font-header pointer, fill-pattern state, text style/color, line and marker attributes, VDI handle, available/current font indices, an 88-byte copy of the current font header, text color, user line/fill patterns, vertical text alignment, graphics mode, coordinate mode and clipping rectangle.
+
+The font header includes identifiers, pixel font size, a 32-byte font name, character range, line metrics, character widths, style flags and pointers to horizontal/character offset tables and font data. The book describes the horizontal-offset table as 512 bytes after the 88-byte header. Do not treat any of these pointers as host pointers.
 
 ## 8. BIOS, GEMDOS, VDISYS and XBIOS
 
