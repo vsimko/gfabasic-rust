@@ -93,9 +93,16 @@ The book also documents these type suffixes in the declaration discussion:
 - # — 8-byte floating point.
 - $ — string.
 
-The 1-byte integer suffix is OCR-sensitive in the available text and must be checked against the page image before being recorded as a definitive lexical rule. Do not infer the suffix from a different BASIC dialect.
+The V3.0 1-byte integer suffix is **`|` (vertical bar)**, confirmed directly from the page image (printed p. 716); it is not an OCR substitute for another punctuation mark. It denotes an unsigned byte with values 0–255. The same page documents `&` as a signed 16-bit integer (-32768…32767), and `%` as a signed 32-bit integer (-2147483648…2147483647). Both are V3.0-only for `|` and `&`; the book explicitly labels those types as V3.0 additions.
 
-The exact numeric range, signedness, overflow behavior, conversion rules, string representation, default typing rules, and array element layout remain **not yet assessed**.
+Additional representation details checked against printed pp. 716–718:
+
+- Unsuffixed real variables use 6 bytes in V2.xx and 8 bytes in V3.0; the book states up to 11 and 13 decimal digits of precision respectively, with maximum magnitudes documented as 1.0E+154 and 3.595386269725E+308.
+- `!` Boolean scalar variables use 2 bytes and are documented as holding only 0 (False) or -1 (True). Boolean array elements use 1 bit each, not 2 bytes.
+- A string variable uses a 6-byte descriptor: a 4-byte address followed by a 2-byte length. The book describes a 4-byte back-trailer pointing back to the descriptor and a possible padding byte to align that trailer.
+- The page 718 text identifies `LPEEK`/`DPEEK` and, in V3.0, `CARD{}`/`LONG{}` for reading the relevant words/longwords. Exact brace-token spelling should be checked against the corresponding syntax listing before parser decisions.
+
+These are source-documented storage details, not a portable host representation or an endorsement of exposing raw Atari memory in a Linux runtime. Numeric conversion, overflow handling in every execution mode, string garbage-collection behavior under stress, and complete array layouts remain **not yet assessed**.
 
 ### 4.4 Functions and procedures
 
