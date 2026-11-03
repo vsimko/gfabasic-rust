@@ -1102,3 +1102,17 @@ The companion diskette includes paired listings `TEIL1/PCODE_2X.LST` and `TEIL1/
 - The procedures named PCODE/PREAD in these listings are user-defined routines that serialize memory contents into DATA statements and restore them. They are **not** evidence of the compiler's internal p-code or bytecode format; the shared filename stem must not be confused with interpreter/compiler internals.
 
 This companion material corroborates the book's version split and provides candidate syntax/semantic tests for issue #19 and the test corpus in issue #42. It is source evidence only; the routines were not executed in a GFA interpreter.
+
+
+## Chapter 24 page-image validation: variable representation and suffixes (printed pp. 716–718)
+
+The appendix's variable organization section was checked against page images, resolving an OCR-sensitive V3.0 byte suffix and adding storage details to the preliminary language reference.
+
+- The 1-byte unsigned integer suffix is the literal vertical bar `|`, not an OCR placeholder. It is V3.0-only and has the documented range 0–255. (p. 716)
+- The `&` suffix is a signed 2-byte integer, range -32768…32767, V3.0-only. The `%` suffix is a signed 4-byte integer, range -2147483648…2147483647. (p. 716)
+- Unsuffixed real variables occupy 6 bytes in V2.xx and 8 bytes in V3.0. The book gives decimal precision limits of 11 and 13 digits, and maximum values 1.0E+154 and 3.595386269725E+308 respectively. These are book claims; they are not independently runtime-validated. (p. 716)
+- Boolean scalar variables (`!`) occupy 2 bytes and are documented as 0/−1; Boolean array elements occupy one bit each. (pp. 716–717)
+- String variables use a 6-byte descriptor containing a 4-byte character address and 2-byte length. The described string allocation also has a 4-byte back-trailer pointing to the descriptor and may include one alignment byte. (p. 717)
+- The text describes `ARRPTR` as returning the string descriptor address. It describes reading descriptor fields with `LPEEK`/`DPEEK` and names V3.0 `CARD{}`/`LONG{}` forms on p. 718; exact lexical punctuation for those forms still needs page-image validation.
+
+The vertical-bar suffix is now image-verified. These memory layouts remain Atari interpreter implementation details and must not be projected onto the project's portable IR or Linux runtime. No interpreter execution was performed.
