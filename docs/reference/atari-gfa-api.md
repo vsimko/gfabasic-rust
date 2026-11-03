@@ -694,3 +694,57 @@ XBIOS error values listed on p. 622 include -1 general error, -2 device not read
 The source's detailed floppy format/boot-sector and virus discussion (pp. 630–645), sound-chip/interrupt routines (pp. 646–655), and supervisor/AES shutdown material (p. 656) are historical, privileged or destructive Atari-specific material. Do not implement these as host disk, audio, interrupt or process operations. Require a sandboxed machine profile and explicit safety policy before any emulation.
 
 **Page-image checks completed:** p. 605 confirms BIOS generic signature, L: longword marker, D0 result and GETMPB layout; p. 612 confirms the SUPER warning and stack/mode caveats; p. 618 confirms the VDISYS V3.0 argument form and workstation-handle source; p. 623 confirms XBIOS INITMOUSE/SSBRK/PHYSBASE/LOGBASE declarations. Other detailed XBIOS disk/sound examples remain text/OCR-derived pending targeted image review.
+ 
+
+### 9.1 System-variable inventory (printed pp. 657–664)
+
+The book lists the following absolute Atari/TOS addresses. These are **source-documented target addresses**, not portable constants and not safe host memory locations.
+
+| Address | Width | Name | Book-described meaning / caveat |
+|---:|---:|---|---|
+| 0x0424 | Word | membctrl | Copy of memory-controller configuration. |
+| 0x0426 | Long | resvalid | Reset validation magic 0x31415926; author says internal mechanism is not sufficiently understood. |
+| 0x042A | Long | resvector | Reset callback vector. |
+| 0x042E | Long | phystop | End of physical RAM. |
+| 0x0432 | Long | membot | Start of user memory above OS-reserved low memory. |
+| 0x0436 | Long | memtop | End of user memory; normally beginning of screen memory. |
+| 0x0440 | Word | seekrate | Floppy step rate; write changes drive mechanics timing. |
+| 0x0442 | Word | timer_ms | Milliseconds between system timer ticks; source says normally 20. |
+| 0x0444 | Word | fverify | Floppy write-verify enable; zero disables verification. |
+| 0x0446 | Word | bootdev | Drive number used to boot. |
+| 0x0448 | Word | palmode | PAL/NTSC mode; source says changing it after boot has no effect. |
+| 0x044A | Word | defshiftmod | Desired color resolution when switching from monochrome; read-only without system knowledge. |
+| 0x044C | Word | sshiftmd | Current screen resolution; same information as XBIOS(4). |
+| 0x044E | Long | v_bas_ad | Logical screen base pointer; use XBIOS(5) rather than direct modification. |
+| 0x0452 | Word | vblsem | VBL routine semaphore; zero disables VBL routines and can disable BASIC Break handling. |
+| 0x0454 | Word | nvbls | Number of VBL routines. The text calls it a Longword once, but the entry heading and address layout say Word; retain this source inconsistency for verification. |
+| 0x0456 | Long | vblqueue | Pointer to VBL routine address list; changing it requires coordinated table/count updates. |
+| 0x045A | Long | colorptr | Pointer to 16-word palette loaded on next VBL; zero disables palette reload. |
+| 0x045E | Long | screenptr | Pending logical screen base installed on next VBL; zero disables repeated install. |
+| 0x0462 | Long | vbclock | VBL interrupt count since boot. |
+| 0x0466 | Long | frclock | Interrupt routine count since boot. |
+| 0x046A | Long | hdv_init | Hard-disk initialization jump-table pointer. |
+| 0x046E | Long | swv_vec | Color-mode resolution-change vector. |
+| 0x0472 | Long | hdv_bpb | Hard-disk BPB lookup vector. |
+| 0x0476 | Long | hdv_rw | Hard-disk read/write routine pointer. |
+| 0x047A | Long | hdv_boot | Hard-disk boot routine pointer. |
+| 0x047E | Long | hdv_mediach | Hard-disk media-change routine pointer. |
+| 0x0484 | Byte | conterm | Four-bit keyboard click/repeat/bell/BIOS(2) high-byte status configuration. |
+| 0x0486 | Long | trpl4ret | Return address after TRAP #14 (XBIOS). |
+| 0x048E | 4 Longs | themd | Memory descriptor block referenced by BIOS(0). |
+| 0x04A2 | Long | savptr | Pointer to saved processor register state. |
+| 0x04A6 | Word | nflops | Floppy count; source notes minimum A/B assumption. |
+| 0x04AC | Word | save_row | Cursor-position buffer. |
+| 0x04AE | Long | save_context | Exception-processing buffer pointer. |
+| 0x04BA | Long | hz_200 | 200 Hz system timer used by BASIC TIMER. |
+| 0x04C2 | Long | drvbits | Drive-presence bit vector, with the same A/B minimum assumption. |
+| 0x04C6 | Long | dskbufp | Pointer to 1,024-byte disk buffer containing current boot sector. |
+| 0x04CE | 8 Longs | vbl_list | Default VBL routine list; can be relocated/extended only with coordinated nvbls/vblqueue changes. |
+| 0x04EE | Word | dumpflg | Set while hardcopy is in progress. |
+| 0x04F0 | Word | prtabt | Printer timeout-abort flag; meaning uncertain to the author, default 252. |
+| 0x04F2 | Long | sysbase | OS start address. |
+| 0x04FA | Long | end_os | End of OS RAM area. |
+| 0x04FE | Long | exec_os | AES start address within OS. |
+
+The book's chapter 22 includes direct writes that change floppy timing/verification, VBL registration, screen/palette switching and GFA BASIC Break/direct-mode handling. The V2.xx interpreter patch example at p. 660 is particularly version- and build-specific. These are **unsafe/disabled** by default. Do not expose raw addresses through the host process address space; any future Atari emulation must use a virtual address map and machine/TOS profile.
+
