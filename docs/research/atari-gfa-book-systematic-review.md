@@ -1009,3 +1009,8 @@ The following checks were made after the first-pass transcription:
 - **p. 761 — editor/runtime error list:** confirms that the appendix distinguishes editor structural errors from runtime error numbers and explicitly labels selected entries as V3.0-only. Do not flatten this into a dialect-neutral error enum.
 
 These checks increase confidence in the cited source details only. No runtime/compiler probe was performed, and the full appendix remains a reference checklist rather than a complete transcription of every indexed command.
+
+
+### Chapter 21 page-image/text consistency check: GETDFREE (p. 614)
+
+A closer reading of the source reveals an internal contradiction in the GETDFREE description. It calls the destination a 12-byte buffer, but then lists four Longword fields at offsets +0, +4, +8 and +12. The fourth field makes the required extent 16 bytes. The API reference now records the 16-byte layout and preserves the printed “12-byte” wording as a source typo candidate. This is an evidence correction, not runtime validation.
