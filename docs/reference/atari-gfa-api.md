@@ -559,44 +559,6 @@ The chapter covers mouse initialization, screen resolution/base switching, flopp
 
 The diskette structure/formatting example and boot-sector virus discussion on pp. 630–645 are historical low-level material, not safe generic disk guidance. MFP, sound-chip, MIDI, interrupt and printer operations on pp. 646–656 depend on Atari hardware and TOS versions.
 
-## 9. System variables and absolute addresses
-
-Chapter 22 lists absolute TOS/Atari addresses for memory controller/reset vectors, physical/user memory bounds, floppy timing, system timer/keyboard configuration, screen/video pointers, interrupt vectors and saved processor state. [pp. 657–664]
-
-Direct POKE changes to floppy timing, interrupt handlers and BASIC Break behavior are highly version-specific and can crash the system. Classify these as unsafe/unsupported by default. Any emulation requires an explicitly selected Atari machine/TOS profile and safe virtualized memory model.
-
-## 10. Runtime support classification
-
-Use these categories per individual API entry. Do not assign one blanket support status to an entire subsystem.
-
-| Classification | Meaning |
-|---|---|
-| Native-compatible | Same semantics can be implemented directly by a documented host capability without exposing host-specific behavior |
-| Emulated | Atari behavior is reproduced by project-owned runtime code |
-| Adapter-backed | A host service is used behind an Atari-compatible semantic adapter |
-| Partial | Only a documented subset is supported |
-| Unsupported | Not implemented for the selected target/profile |
-| Unsafe/disabled | Requires privileged, raw hardware, arbitrary address or destructive disk behavior and is disabled by default |
-| Unknown | Evidence is insufficient to classify |
-
-No API entry in this document is currently claimed as implemented or runtime-conformant.
-
-## 11. Validation backlog
-
-1. Inspect page images for VDI signatures, font header offsets, WINDTAB layout, menu attribute values and AES event fields.
-2. Transcribe complete AES signatures and V2.xx/V3.0 availability from pp. 547–580.
-3. **Page-image checked:** OBJECT (24 bytes), RSC header (38 bytes), TEDINFO (28 bytes), ICONBLK (36 bytes), BITBLK (14 bytes), USERBLK/APPLBLK (8 bytes), PARMBLK (30 bytes), and OB_FLAGS/OB_STATE masks, pp. 585–596. Runtime ABI and RSC parser validation remain pending.
-4. Verify AES/VDI parameter-block lengths and call-specific array layouts from pp. 597–604.
-5. Cross-check BIOS/GEMDOS/XBIOS opcode signatures, register conventions and error results against authoritative TOS documentation.
-6. Record machine/TOS applicability for absolute addresses, VDIBASE and hardware registers.
-7. Create original minimal probes only where a lawful, version-pinned interpreter/TOS environment is available.
-8. Promote individual entries into the canonical API registry only after signature, evidence, runtime mapping and test metadata are complete.
-
-## 12. Source and rights
-
-The source is the user-provided sixth revised and expanded edition of *Das große GFA-BASIC-Buch* (1988). This reference contains original summaries and short API identifiers, not a reproduction of the book. Keep the PDF/OCR and diskette source files outside the public repository unless redistribution rights are independently established.
-
-
 ### 8.5 BIOS call inventory (printed pp. 605–608)
 
 The generic call convention is `BIOS(opcode[,parameters])`; `L:` marks a 32-bit longword argument and unmarked arguments are words. The function result is returned in D0. The following is the chapter's complete BIOS list, normalized from its entries:
@@ -696,6 +658,12 @@ The source's detailed floppy format/boot-sector and virus discussion (pp. 630–
 **Page-image checks completed:** p. 605 confirms BIOS generic signature, L: longword marker, D0 result and GETMPB layout; p. 612 confirms the SUPER warning and stack/mode caveats; p. 618 confirms the VDISYS V3.0 argument form and workstation-handle source; p. 623 confirms XBIOS INITMOUSE/SSBRK/PHYSBASE/LOGBASE declarations. Other detailed XBIOS disk/sound examples remain text/OCR-derived pending targeted image review.
  
 
+## 9. System variables and absolute addresses
+
+Chapter 22 lists absolute TOS/Atari addresses for memory controller/reset vectors, physical/user memory bounds, floppy timing, system timer/keyboard configuration, screen/video pointers, interrupt vectors and saved processor state. [pp. 657–664]
+
+Direct POKE changes to floppy timing, interrupt handlers and BASIC Break behavior are highly version-specific and can crash the system. Classify these as unsafe/unsupported by default. Any emulation requires an explicitly selected Atari machine/TOS profile and safe virtualized memory model.
+
 ### 9.1 System-variable inventory (printed pp. 657–664)
 
 The book lists the following absolute Atari/TOS addresses. These are **source-documented target addresses**, not portable constants and not safe host memory locations.
@@ -786,3 +754,35 @@ The Atari BIOS Rev. 1.1 guide does not match every low-memory field in the GFA b
 | XBIOS opcode 11 | “No effect” | Used by BIOS | Version/context conflict |
 
 The BIOS Rev. 1.1 guide also lists additional variables omitted from the GFA book's table, so absence from the book must not be interpreted as absence from TOS. Any future absolute-memory emulation must select a precise machine/TOS map and must not use this book's addresses as universal constants.
+
+## 10. Runtime support classification
+
+Use these categories per individual API entry. Do not assign one blanket support status to an entire subsystem.
+
+| Classification | Meaning |
+|---|---|
+| Native-compatible | Same semantics can be implemented directly by a documented host capability without exposing host-specific behavior |
+| Emulated | Atari behavior is reproduced by project-owned runtime code |
+| Adapter-backed | A host service is used behind an Atari-compatible semantic adapter |
+| Partial | Only a documented subset is supported |
+| Unsupported | Not implemented for the selected target/profile |
+| Unsafe/disabled | Requires privileged, raw hardware, arbitrary address or destructive disk behavior and is disabled by default |
+| Unknown | Evidence is insufficient to classify |
+
+No API entry in this document is currently claimed as implemented or runtime-conformant.
+
+## 11. Validation backlog
+
+1. Inspect page images for VDI signatures, font header offsets, WINDTAB layout, menu attribute values and AES event fields.
+2. Transcribe complete AES signatures and V2.xx/V3.0 availability from pp. 547–580.
+3. **Page-image checked:** OBJECT (24 bytes), RSC header (38 bytes), TEDINFO (28 bytes), ICONBLK (36 bytes), BITBLK (14 bytes), USERBLK/APPLBLK (8 bytes), PARMBLK (30 bytes), and OB_FLAGS/OB_STATE masks, pp. 585–596. Runtime ABI and RSC parser validation remain pending.
+4. Verify AES/VDI parameter-block lengths and call-specific array layouts from pp. 597–604.
+5. Cross-check BIOS/GEMDOS/XBIOS opcode signatures, register conventions and error results against authoritative TOS documentation.
+6. Record machine/TOS applicability for absolute addresses, VDIBASE and hardware registers.
+7. Create original minimal probes only where a lawful, version-pinned interpreter/TOS environment is available.
+8. Promote individual entries into the canonical API registry only after signature, evidence, runtime mapping and test metadata are complete.
+
+## 12. Source and rights
+
+The source is the user-provided sixth revised and expanded edition of *Das große GFA-BASIC-Buch* (1988). This reference contains original summaries and short API identifiers, not a reproduction of the book. Keep the PDF/OCR and diskette source files outside the public repository unless redistribution rights are independently established.
+
