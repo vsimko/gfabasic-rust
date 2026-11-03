@@ -913,3 +913,26 @@ The 180-dpi page images were checked against the OCR for selected high-risk deta
 - **p. 577 — WIND_GET:** modes are 4, 5, 6, 7 (work area/current outer/previous outer/maximum outer), 8/9 (horizontal/vertical slider position), 10 (current handle), 11/12 (first/next visible rectangle), and 15/16 (slider size). Mode 4's fourth output is printed as Get1 a second time, where the surrounding four-output pattern strongly suggests Get4, but the book is retained verbatim as evidence and the correction is not assumed.
 
 These checks upgrade those exact source facts from OCR-only to page-image checked. They do not validate the runtime behavior against Atari hardware or GEM.
+
+
+## Chapter 17 follow-up: GDOS/VDI and font handling (printed pp. 499–530)
+
+**Status: first-pass transcription complete; selected function headings/contracts checked against page images. Runtime behavior remains unverified.**
+
+The Atari API reference now records GDOS availability/configuration, VDI workstation lifecycle, font loading/querying and the book's own-font material.
+
+Verified source details:
+
+- GDOS functions in this chapter generally require resident GDOS and a valid boot-time `ASSIGN.SYS`; the source exempts `VQT_EXTENT()` and `VQT_NAME()`. The author recommends GDOS 1.8 over 1.1. [pp. 499–502]
+- ASSIGN.SYS driver IDs documented: 01 screen virtual workstation only, 11 plotter, 21 printer, 31 metafile, 41 camera, 51 graphics tablet; 02/03/04 are screen-resolution pseudo-drivers for low/mid/high resolution. [pp. 500–502]
+- `GDOS?` returns TRUE (-1)/FALSE (0). `V-H` reads/writes the active VDI handle; -1 restores GFA's own handle. [pp. 502–503]
+- The page-image check confirms the V3.0 workstation calls and lifecycle: `V_CLRWK()`, `V_CLSVWK()`, `V_CLSWK()`, `V_OPNVWK(...)`, `V_OPNWK(...)`. A physical `V_OPNWK` requires resident GDOS and a valid non-screen driver ID; the book explicitly warns that missing GDOS or an invalid ID crashes the system. [pp. 504–507]
+- `V_OPNWK` accepts ten optional VDI attribute defaults; the printed default call is `V_OPNWK(id,1,1,1,1,1,1,1,1,1,2)`. `V_OPNVWK` is for the screen and outputs directly without an update call. [pp. 505–507]
+- The chapter documents `V_UPDWK()`, `VQT_EXTENT()`, `VQT_NAME()`, `VST_LOAD_FONTS(0)` and `VST_UNLOAD_FONTS(0)`. Font loading can allocate memory; the author recommends reserving memory first and unloading fonts before restoring BASIC memory. [pp. 510–515]
+- The book reports that opening and closing a physical workstation without drawing may produce a RESERVE error; closing with pending buffered graphics but without `V_UPDWK()` may leave GEM in a faulty state. Keep this as an author-reported test observation. [p. 511]
+- The own-font section (pp. 516–530) contains direct system pointer modification and low-level memory patches. These are unsafe/Atari-specific examples, not candidates for a general Linux runtime API.
+- File layouts documented for high-resolution fonts: Degas 2,050 bytes; STAD/OLIFONT 4,096 bytes; 8×16 system font 4,698 bytes including a 602-byte header. [pp. 528–530]
+
+Selected page-image checks: p. 503 (V-H read/write semantics), pp. 504–505 (clear/close/open virtual workstation signatures and lifecycle), p. 507 (physical V_OPNWK signature, ten optional parameters and crash warning). Other detailed font-layout fields and code examples remain OCR-derived and require additional image inspection before being treated as exact.
+
+No compiler/runtime implementation was changed. Existing issues #5, #12, #19, #25 and #42 continue to cover the profile, registry, language/API inventory, Atari reference and conformance corpus work.
