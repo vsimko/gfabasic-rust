@@ -325,7 +325,7 @@ The book's parameter-block tables on pp. 597–601 were checked against page ima
 | GCONTRL | 2 bytes | V3.0 indexed array; index = byte offset DIV 2 |
 | GB | 4-byte pointers | Pointer block for AES arrays; raw address-based access |
 
-GCONTRL is a 12-byte control block:
+GCONTRL is a 10-byte control block (five 16-bit words):
 
 | Offset | Field | Direction / meaning |
 |---:|---|---|
