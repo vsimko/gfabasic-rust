@@ -327,6 +327,8 @@ The title page identifies the 1990 Data Becker edition and the ISBN. Its preface
 
 The book's own copyright notice states ©1990 Data Becker and prohibits reproduction or distribution without written permission. The scan is useful for research and citation, but this repository must not reproduce substantial text, tables, code, or page images, nor mirror the scan. The French 1989 edition has a different front-matter digitalization notice; do not transfer its distribution conditions to this German edition.
 
+**OCR/access limitation:** the currently indexed searchable text exposes the front matter and body only through approximately printed p. 198. The table of contents lists later chapters, but their body text was not available in the searchable extraction during this pass. A request to inspect the corresponding later PDF page image also failed at the source host (HTTP 404). Therefore the page map below is confirmed from the table of contents only; do not claim that signatures or semantics in chapters 14–16 have been extracted from this German scan.
+
 ### German edition chapter map
 
 Printed page numbers below refer to the German 1990 book and are not interchangeable with the French 1989 pagination:
