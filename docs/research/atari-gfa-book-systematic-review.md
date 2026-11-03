@@ -1090,3 +1090,15 @@ The companion BASIC listings AES_ALRT.LST, AES_FORM.LST and AES_MENU.LST load th
 The book's 38-byte / 19-word header table remains a documented source discrepancy. No files from the companion diskette were copied into the public repository.
 
 Source: user-provided *Das große GFA-BASIC-Buch* companion-disk archive; Atari Compendium Appendix C: https://bus-error.nokturnal.pl/atari_compendium/html/appendc.htm
+
+
+## Chapter 24 companion-listing check: V2.xx versus V3.0 memory access
+
+The companion diskette includes paired listings `TEIL1/PCODE_2X.LST` and `TEIL1/PCODE_30.LST`. Their own comments explicitly identify the target versions and provide a concrete cross-check of the book's V2.xx/V3.0 language differences.
+
+- The V2.xx example declares `PROCEDURE pread_v2(p.frm%,p.anz%,p.adr%)` and writes through pointer arithmetic using `POKE`, `DPOKE` and `LPOKE`. It reads values with `PEEK`, `DPEEK` and `LPEEK`.
+- The V3.0 example declares `PROCEDURE pread(p.adr%,VAR p.frm%,p.anz%)`, demonstrating an explicit `VAR` parameter, and uses typed memory references `BYTE{address}`, `CARD{address}` and `{address}` for byte, word and longword access.
+- The V3.0 sample uses `MUL(b%,a%)` where the V2.xx sample uses ordinary multiplication, another source-backed indication that the examples are not intended to be syntax-identical across versions.
+- The procedures named PCODE/PREAD in these listings are user-defined routines that serialize memory contents into DATA statements and restore them. They are **not** evidence of the compiler's internal p-code or bytecode format; the shared filename stem must not be confused with interpreter/compiler internals.
+
+This companion material corroborates the book's version split and provides candidate syntax/semantic tests for issue #19 and the test corpus in issue #42. It is source evidence only; the routines were not executed in a GFA interpreter.
