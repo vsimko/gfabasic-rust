@@ -301,6 +301,53 @@ The following signatures and contracts are transcribed from the book's AES chapt
 The book's page 577 transcription contains an apparent OCR/print-layout error in the mode-4 output description (the fourth output is described as height but is labelled Get1 again). Treat the four-value rectangle result as unresolved until the page image is checked. Likewise, do not infer missing AES calls from the manager family names: this chapter is intentionally a selected, incomplete catalogue, not the full AES API.
 
 
+### 5.2 Cross-source validation: AES events, messages and windows
+
+The chapter 18 AES catalogue was compared with *The Atari Compendium*, chapter 6 (AES), and Atari's *GEM Programmer's Guide*. These references corroborate the general AES contracts and expose one important source discrepancy.
+
+**EVNT_MULTI event mask**
+
+The GFA book's printed event table assigns bit 0 to both keyboard and timer events. The Compendium's AES reference defines the standard event mask as:
+
+| Event | Standard AES mask |
+|---|---:|
+| MU_KEYBD | 0x01 |
+| MU_BUTTON | 0x02 |
+| MU_M1 | 0x04 |
+| MU_M2 | 0x08 |
+| MU_MESAG | 0x10 |
+| MU_TIMER | 0x20 |
+
+This independently confirms that the GFA book's timer-bit entry is inconsistent with the standard AES event mask: standard AES uses bit 5 (0x20), not bit 0. Preserve both pieces of evidence: the book's page-image-confirmed transcription remains a source defect, while the standard AES mask is the independently documented OS contract. Do not silently rewrite the book transcription or assume that the GFA wrapper forwards the mask unchanged without a runtime probe. [Atari Compendium, AES event library; book pp. 553–554]
+
+**Blocking and event-loop semantics**
+
+The Compendium describes the five basic event calls (message, button, keyboard, timer and mouse rectangle) as wait operations and EVNT_MULTI as the combined wait for any selected subset. Its typical GEM application uses an event/message loop. This supports treating GFA EVNT_* calls as blocking control-flow operations, not as non-blocking polling primitives. Exact GFA wrapper behavior, timer units and return values remain tied to the book's version-specific descriptions. [Atari Compendium, ch. 6, “Event Dispatcher”]
+
+**AES parameter-block ABI**
+
+The Compendium confirms that AES is called through TRAP #2 with magic value 0xC8 in D0 and a pointer to the AES parameter block in D1. The parameter block contains six pointers: CONTRL, GLOBAL, INTIN, INTOUT, ADDRIN and ADDROUT. The GEM Programmer's Guide independently describes the same six-pointer layout and the control array's opcode/count fields. This corroborates the 32-bit address elements and five-word control block already recorded in sections 7 and 7.1. [Atari Compendium, ch. 6, “AES Function Calling Procedure”; Atari GEM Programmer's Guide, Vol. 2]
+
+**Window ownership and redraw**
+
+The GEM Programmer's Guide identifies WIND_CREATE as allocating a window and returning its handle, WIND_OPEN as opening it, WIND_CLOSE as closing it, and WIND_DELETE as releasing the allocation. WIND_GET/WIND_SET query and change window state; WIND_UPDATE brackets application redraw/update operations. The Compendium's AES window model likewise uses messages for window-manager actions and requires the application to process redraw requests. This supports keeping create/open/close/delete as separate lifecycle operations and keeping redraw/message handling in the application event loop. [GEM Programmer's Guide, Vol. 2, §11.3; Atari Compendium, ch. 6]
+
+**Implementation implications**
+
+1. Keep the GFA book's EVNT_MULTI transcription verbatim and mark the timer-bit conflict resolved at the standard AES layer (MU_TIMER = 0x20), pending a GFA wrapper probe.
+2. Model EVNT_* as potentially blocking operations that suspend BASIC execution until the selected event occurs.
+3. Keep the AES message buffer as a 16-byte message structure where the book specifies that size; its contents and lifetime must be associated with the event/message call.
+4. Model window creation, opening, closing and deletion as distinct state transitions; do not collapse them into one host window constructor/destructor.
+5. Treat WIND_UPDATE as a paired lock/unlock protocol and ensure cleanup on every exit path.
+6. Do not infer newer AES opcodes or version-specific calls from the generic Compendium list; each declaration still needs Atari GFA version evidence.
+
+No GFA BASIC interpreter/TOS runtime probe was performed. The external references validate standard AES structure and behavior, not every GFA wrapper signature or the exact wrapper's event-mask conversion.
+
+Independent sources:
+- [The Atari Compendium, Chapter 6 — AES](https://bus-error.nokturnal.pl/atari_compendium/html/chap6.htm)
+- [The Atari Compendium, AES function reference](https://bus-error.nokturnal.pl/atari_compendium/html/aes.htm)
+- [Atari GEM Programmer's Guide, Volume 2 — AES](https://www.bitsavers.org/pdf/atari/ST/Atari_ST_GEM_Programming_1986/GEM_0464.pdf)
+
 ## 6. GEM object and resource structures
 
 The book's printed tables on pp. 585–596 were checked against page images at high resolution. The following sizes and field offsets are directly visible in those tables. They describe the Atari 68k GEM resource ABI, not host-native Rust structures.
