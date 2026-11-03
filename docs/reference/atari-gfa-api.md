@@ -958,3 +958,114 @@ No API entry in this document is currently claimed as implemented or runtime-con
 
 The source is the user-provided sixth revised and expanded edition of *Das große GFA-BASIC-Buch* (1988). This reference contains original summaries and short API identifiers, not a reproduction of the book. Keep the PDF/OCR and diskette source files outside the public repository unless redistribution rights are independently established.
 
+
+
+## 7. BIOS, GEMDOS, GEMSYS, VDISYS and XBIOS system calls (pp. 605–656)
+
+These are low-level Atari system-call interfaces, not portable GFA BASIC core commands. All pointer arguments refer to the Atari process address space; they must never be treated as host pointers in the Linux runtime.
+
+### 7.1 Wrapper conventions and subsystem boundaries
+
+| Wrapper | Documented form | Contract |
+|---|---|---|
+| BIOS() | BIOS(opcode[,parameters...]) | BIOS trap wrapper. Longword arguments require the L: prefix; unmarked values are passed as words. [p. 605] |
+| GEMDOS() | GEMDOS(opcode[,parameters...]) | GEMDOS trap wrapper with the same L: longword marker convention. [p. 608] |
+| GEMSYS | GEMSYS [opcode] | Invokes AES using prepared AES parameter arrays. Omitting the opcode permits changing arrays and repeating the last AES operation. [pp. 617–618] |
+| VDISYS | VDISYS [opcode] | Invokes VDI using its parameter arrays and workstation handle in CONTRL+12. V2.xx reads the handle from VDIBASE+40; V3.0 uses V-H. [p. 618] |
+| VDISYS V3.0 | VDISYS(opcode,I_len,P_len[,id]) | Optional INTIN/PTSIN lengths and a subfunction identifier are supplied for V3.0 calls. [p. 618] |
+| XBIOS() | XBIOS(opcode[,parameters...]) | Extended hardware/I/O trap wrapper; returns subsystem result/error code. [pp. 622–623] |
+
+The book states that V3.0 exposes AES calls as functions, while V2.xx uses GEMSYS procedures plus shared AES arrays. The earlier AES and VDI parameter-block sections remain the structural reference.
+
+### 7.2 BIOS inventory
+
+| Opcode | Name | Documented purpose and constraints |
+|---:|---|---|
+| 0 | GETMPB | Writes a 12-byte block containing three longword pointers: memory-free list, allocated list and roving pointer. Each list entry is four longwords (link, start, length, owner). The book warns that this requires detailed TOS knowledge. [p. 605] |
+| 1 | BCONSTAT | Tests whether bytes are available at a device. [p. 605] |
+| 2 | BCONIN | Waits for input from a device; returns a 4-byte value. Keyboard device uses the packed key representation described for KEYGET. [p. 606] |
+| 3 | BCONOUT | Writes one byte to a device and waits until output is possible. [p. 606] |
+| 4 | RWABS | Reads/writes logical sectors using a caller-provided buffer; flags 0/1 are read/write with disk-change checking, 2/3 ignore disk change. Sector size is 512 bytes; drive IDs are 0=A, 1=B, 2=hard disk in this source. [p. 606] |
+| 5 | SETEXEC | Replaces an exception vector; returns the old vector address. Opcode argument -1 queries the old address. [p. 606] |
+| 6 | TICKCAL | Returns the millisecond interval between timer ticks. [p. 607] |
+| 7 | GETBPB | Returns the address of an 18-byte BIOS parameter block for a floppy drive. Nine words describe sector/cluster/FAT/directory geometry and flags. [p. 607] |
+| 8 | BCOSTAT | Tests whether a device can accept output bytes. [p. 608] |
+| 9 | MEDIACH | Reports disk-change state as 0 (certainly unchanged), 1 (possibly changed), or 2 (certainly changed). [p. 608] |
+| 10 | DRVMAP | Returns a drive-presence bit vector. The book notes the system's A/B minimum assumption, even if only A is physically present. [p. 608] |
+| 11 | KBSHIFT | Reads modifier-key state when passed -1, or sets/simulates the state when passed a positive bit mask. [p. 608] |
+
+### 7.3 GEMDOS inventory
+
+GEMDOS is the book's general-purpose TOS file, console, device and memory service.
+
+| Opcode | Label | Documented GFA-level purpose |
+|---:|---|---|
+| 0 | PTERM | Terminates the process. The book explicitly says GFA programs should use QUIT/SYSTEM instead. [p. 609] |
+| 1–8 | CONIN, CONOUT, AUXIN, AUXOUT, PRNOUT, RAWCONIO, RAWCONIN, RAWNECIN | Console, serial and printer byte I/O; raw input differs in echo and Control-C behavior. [pp. 609–610] |
+| 9–10 | CONWS, CONRS | Null-terminated string output and buffered console-line input using a caller-built buffer. [pp. 610–611] |
+| 11 | CONSTAT | Console input-buffer status (0 or 65535). [p. 611] |
+| 14 | SETDRV | Changes default drive and returns the previously active drive. [p. 611] |
+| 16–19 | CONOUTSTAT, PRTOUTSTAT, AUXINSTAT, AUXOUTSTAT | Console/printer/serial readiness queries; the book warns against using CONOUTSTAT from GFA. [p. 611] |
+| 25–26 | CURDRV, SETDTA | Get current drive; set the Disk Transfer Address (equivalent to V3.0 FSETDTA). [p. 611] |
+| 32 | SUPER | Switches user/supervisor stack context and exposes privileged memory. Register/stack effects and the two-step restore protocol make this unsafe without exact TOS knowledge. [pp. 612–613] |
+| 42–45 | GETDATE, SETDATE, GETTIME, SETTIME | Read/write packed system date/time values. Prefer DATE$/TIME$/SETTIME language facilities where possible. [pp. 612–613] |
+| 47–49 | GETDTA, GETVERS, KEEP PROCESS | Get DTA, TOS version, and retain a process/memory area. [pp. 613–614] |
+| 64 | GETDFREE | Writes free/total cluster counts, sector size and sectors per cluster to a caller buffer. [p. 614] |
+| 57–59 | MKDIR, RMDIR, CHDIR | Create/remove directory and change default directory; path arguments are null-terminated pointers. [p. 614] |
+| 60–66 | CREATE, OPEN, CLOSE, READ, WRITE, UNLINK, LSEEK | File lifecycle, byte I/O, deletion and seek operations using GEMDOS handles and caller buffers. [pp. 614–616] |
+| 67 | CHMODE | Read or set file attributes. [pp. 615–616] |
+| 69–70 | DUP, FORCE | Redirect/duplicate standard I/O handles. [p. 616] |
+| 71 | GETDIR | Writes current directory path into a caller buffer. [p. 616] |
+| 72–74 | MALLOC, MFREE, SETBLOCK | Allocate/free memory and resize a process block; described as equivalents of V3.0 MALLOC/MFREE/MSHRINK. [p. 616] |
+| 75–76 | PEXEC, PTERM | Execute a program with mode, program, command and environment pointers; terminate/keep-process variant. [p. 617] |
+| 78–79 | SFIRST, SNEXT | Directory search, corresponding to V3.0 FSFIRST/FSNEXT. [p. 617] |
+| 86 | RENAME | Rename a file using two null-terminated path pointers. [p. 617] |
+| 87 | GSDTOF | Read/change a file's date/time through a GEMDOS handle; described as similar to V3.0 TOUCH. [p. 617] |
+
+The book gives a common subset of GEMDOS/BIOS error values: -32 invalid function, -33 file not found, -34 path not found, -35 too many open files, -36 access denied, -37 invalid handle, -39 insufficient memory, -40 invalid memory-block address, -46 invalid drive and -49 no more search entries. Zero means success in the documented cases. These are not a universal error mapping for every trap or TOS release. [pp. 608–609]
+
+### 7.4 GEMSYS and VDISYS
+
+GEMSYS is the V2.xx AES trap gateway over the AES arrays; AES signatures and manager contracts are recorded in section 5. V3.0 wraps the AES operations as functions. [pp. 617–618]
+
+| Opcode | VDI operation | Documented use |
+|---:|---|---|
+| 35 | Current polyline attributes | Query current line type, color, width, start/end style and writing mode. [pp. 619–620] |
+| 36 | Current polymarker attributes | Query marker color/type/size and writing mode. [p. 620] |
+| 37 | Current fill-area attributes | Query fill style/color/pattern, writing mode and perimeter visibility. [p. 620] |
+| 38 | Current graphic-text attributes | Query font, color, rotation, alignment, character size/box and writing mode. [p. 620] |
+| 104 | Set fill perimeter visibility | V2.xx helper constructs CONTRL/INTIN and calls VDISYS 104. [p. 620] |
+| 118 | Exchange timer interrupt vector | V2.xx-only example; installs a machine routine and returns prior interval/vector information. The printed example's final call line appears inconsistent with the stated opcode 118; preserve as a source discrepancy pending a higher-resolution check. [pp. 620–621] |
+| 5 | VDI escape functions | Uses subfunction IDs for screen character grid, text/pixel mode, cursor movement/position, screen/line clear, text output, cursor query, mouse availability, hardcopy, mouse positioning and system-font selection. [pp. 621–622] |
+
+VDI calls must set the active workstation handle. V3.0 can pass INTIN/PTSIN lengths and subfunction ID in the VDISYS call; V2.xx examples manually fill CONTRL and parameter arrays. [p. 618]
+
+### 7.5 XBIOS inventory and risk boundaries
+
+The book lists XBIOS error returns -1, -2, -3, -5, -6, -7, -8, -10, -12 through -17; zero denotes success in the described cases. [pp. 622–623]
+
+| Opcode | Label | Documented purpose |
+|---:|---|---|
+| 0 | INITMOUSE | Install custom mouse routine via a parameter block; the author explicitly says the structure is not explained. Unknown/unsafe. [p. 623] |
+| 1 | SSBRK | ROM-startup memory reservation; not a normal application API. [p. 623] |
+| 2–3 | PHYSBASE, LOGBASE | Query physical/logical screen base addresses. [pp. 623–624] |
+| 4–5 | GETREZ, SETSCREEN | Query resolution; change logical/physical screen bases. Screen bases must be 256-byte aligned; the book says resolution change is not usable under GEM and passes -1. [p. 624] |
+| 6–7 | SETPALETTE, SETCOLOR | Set all 16 palette words or query/set one color register. [p. 624] |
+| 8–9 | FLOPREAD, FLOPWRITE | Read/write floppy sectors into/from a caller buffer. [p. 625] |
+| 10 | FLOPFMT | Format one track using an 8,000-byte work buffer and low-level geometry/magic/fill parameters. The book warns that exceeding maximum track count may not report an error. Destructive and unsafe. [p. 625] |
+| 11 | No effect (book claim) | The source says this opcode has no effect; this conflicts with the separate Atari BIOS Rev. 1.1 reference in section 9.2. Do not encode as universal. [p. 626] |
+| 12 | MIDIWS | Write a byte sequence to MIDI output; the book recommends the MID: device interface as simpler. [p. 626] |
+| 13 | MFPINT | Replace an MFP interrupt vector with a machine-code routine address. Unsafe. [p. 626] |
+| 14–15 | IOREC, RSCONF | Query serial/console/MIDI ring-buffer structures; configure serial baud, handshake and UART/MFP settings. [pp. 626–627] |
+| 16 | KEYTABLE | Query/change normal, shifted and CapsLock keyboard translation table pointers. [pp. 627–629] |
+| 17 | RANDOM | Return a 24-bit random value. [p. 629] |
+| 18 | PROTOBT | Write a prepared 512-byte boot sector, including disk serial/media descriptor and checksum. [pp. 636–637] |
+| 19 | Not sufficiently transcribed | Listed in the chapter index but exact contract needs separate source verification. [p. 622] |
+| 20 | Referenced as hardcopy | Used by the text as a hardcopy facility; full contract not transcribed in this pass. [p. 622] |
+| 21–38 | Mixed machine/keyboard/timer/sound calls | Includes cursor configuration, system time, keyboard vectors/rate, printer block, sync, supervisor execution and DOSOUND. Exact individual signatures should be promoted only from page-checked entries. [pp. 649–656] |
+| 64 | Blitter mode/status | Explicitly restricted to Blitter TOS; query/enable/disable the blitter. [p. 637] |
+
+XBIOS(32,L:address) starts an interrupt-driven sound string; XBIOS(32,L:-1) is used in the example to query the active sound-string byte pointer. The bytecode controls sound-chip registers and timed delays; malformed values can affect floppy-port registers. Treat as machine-specific and unsafe, not as a portable SOUND implementation. [pp. 649–651]
+
+**Safety classification:** raw sector reads/writes, track formatting, boot-sector writes, supervisor-mode changes, screen-base/palette writes, interrupt-vector installation, keyboard-table replacement and direct sound-chip control must be disabled by default. A future Atari runtime may expose only virtualized, profile-gated devices and must never pass host pointers or host memory addresses into these calls.
+
