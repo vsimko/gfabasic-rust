@@ -37,11 +37,11 @@ Printed page ranges below follow the book's table of contents. This map is a rev
 | 9 | 251–328 | Graphics definitions, object/line/pixel graphics, Line-A, raster operations, screen memory | Reviewed (first pass) |
 | 10 | 329–340 | Data conversion and number systems | Reviewed (first pass) |
 | 11 | 341–392 | Arrays, memory operations/management, pointers | Reviewed (first pass) |
-| 12 | 393–452 | Program control, errors, time, keyboard, multitasking, debugging | Pending |
-| 13 | 453–470 | Program/user interaction | Pending |
-| 14 | 471–486 | BASIC window commands | Pending |
-| 15 | 487–490 | Menu programming | Pending |
-| 16 | 491–498 | Event monitoring | Pending |
+| 12 | 393–452 | Program control, errors, time, keyboard, multitasking, debugging | First pass reviewed; command and compiler-version validation pending |
+| 13 | 453–470 | Program/user interaction | First pass reviewed; AES details and examples need validation |
+| 14 | 471–486 | BASIC window commands | First pass reviewed; WINDTAB offsets and GEM behavior need validation |
+| 15 | 487–490 | Menu programming | First pass reviewed; menu-array edge cases need validation |
+| 16 | 491–498 | Event monitoring | First pass reviewed; event IDs and buffer lifecycle need validation |
 | 17 | 499–530 | GDOS/VDI library and fonts | Pending |
 | 18 | 531–584 | AES library and managers | Pending |
 | 19 | 585–596 | GEM object variables and structures | Pending |
@@ -394,3 +394,211 @@ Remaining work for chapter 5:
 - Verify file-pointer base, OPEN modes, random record limits, and record-length behavior against an exact Atari interpreter.
 - Verify the byte layouts and calling conventions for BLOAD/BSAVE, DTA, keyboard packed values, and YM-2149 timing.
 - Convert only verified language/core behavior into conformance cases; keep hardware-specific operations in Atari-profile tests.
+
+
+## 12. Program control, errors, time, keyboard and debugging (chapter 12, pp. 393–452)
+
+Chapter 12 mixes language/runtime control with Atari process, memory, keyboard and GEM/TOS integration. The inventory below deliberately keeps these classes separate.
+
+### 12.1 Program lifecycle and clearing (pp. 393–397)
+
+| Construct | Behavior recorded | Version / evidence |
+|---|---|---|
+| `CONT` | Resumes after `STOP` in the line following STOP. It is unavailable after CLEAR, program-listing edits, or introducing new variables. | Book-backed, p. 393 |
+| `EDIT` | Ends execution and returns directly to the editor in interpreter mode, or to the desktop for a compiled program. | Book-backed, pp. 393–394 |
+| `END` | Ends the current program. In the interpreter, variables and open files remain available in direct mode until program modification or CLEAR. | Book-backed, pp. 393–394 |
+| `QUIT` / `SYSTEM` | Exits to desktop or caller without a confirmation prompt. V3.0 accepts an optional 16-bit return code. | V3.0 return-code form; book-backed, pp. 394, 396 |
+| `RUN` | Restarts the current program and clears variables and screen. V3.0 accepts a program name to load and run. | Named form V3.0; book-backed, pp. 394–395 |
+| `STOP` | Suspends execution and presents a choice to continue or enter direct mode. Variables and open files are retained; CONT may resume if the program has not been altered. | Book-backed, p. 396 |
+| `CLEAR` | Resets numeric variables to zero, strings to empty, and erases arrays/dimensions. Prohibited inside procedures and FOR/NEXT loops; executed automatically at program start. | Book-backed, p. 397 |
+| `CLR var[,var…]` | Clears listed scalar variables; array variables are excluded. | Book-backed, p. 397 |
+| `CLS [#channel]` | Clears the active screen/window and homes the cursor; the file-channel form writes the clear-screen control sequence into the file. | Book-backed, p. 397 |
+| `NEW` | Clears the BASIC workspace, program and variables. | Book-backed, p. 397 |
+
+`QUIT x` return-code conventions are described as 0 for normal completion, positive for BASIC/bomb errors, and negative for GEMDOS/BIOS/XBIOS errors. These are Atari process conventions, not a portable exit-code ABI. [p. 394]
+
+### 12.2 Date, time and delay (pp. 398–404)
+
+- `DATE$`: reserved string containing `DD.MM.YYYY`; V3.0 allows assignment to set the system date. [p. 398]
+- `TIME$`: reserved string containing `hh:mm:ss`; V3.0 allows assignment to set system time. [p. 403]
+- `SETTIME time$,date$`: sets date and/or time. European format is documented for V2.xx and V3.0; US date/time format is V3.0 and controlled by MODE. Invalid formats are ignored. Seconds are represented in two-second steps. [pp. 399–400]
+- `DELAY seconds`: pauses for the specified number of seconds. [p. 398]
+- `PAUSE ticks`: pauses in 1/50-second units; during the pause, only the Break function remains active. ON ERROR, ON MENU and AFTER/EVERY callbacks are not serviced during this wait according to the book. [pp. 398–399]
+- `TIMER`: reserved counter of elapsed 1/200-second ticks since system start. The book notes it can be modified through the Atari system timer address, so it is not an immutable monotonic clock if low-level memory writes are allowed. [pp. 403–404]
+
+The timer frequency, wraparound, and relationship to the host monotonic clock must be explicitly specified for any compatibility runtime. PAUSE/DELAY must not be treated as interchangeable with an event-pumping wait.
+
+### 12.3 Error handling (pp. 405–409)
+
+| Construct | Behavior recorded | Evidence |
+|---|---|---|
+| `ERR` | Reserved numeric variable containing the last error identifier. | p. 405 |
+| `ERR$(index)` | V3.0 returns the message text for an error index, formatted for use with FORM_ALERT. | V3.0, p. 405 |
+| `ERROR number` | Raises/simulates the specified error; if ON ERROR GOSUB is active, transfers control to its handler. | V3.0 spelling/short form; p. 405 |
+| `FATAL` | Reserved variable distinguishes ordinary errors (0) from fatal/bomb errors (-1), according to the book's runtime description. | p. 406; reliability explicitly questioned by author |
+| `ON ERROR GOSUB procedure` | Installs an error handler; normal error display is suppressed and handler must decide what to do. Bare ON ERROR restores normal error handling. | V3.0 permits omitting GOSUB; pp. 407–408 |
+| `RESUME` | Continues by retrying the failing statement. | p. 408 |
+| `RESUME NEXT` | Continues at the statement after the failing statement. | p. 408 |
+| `RESUME label` | Continues at the specified label; after fatal errors, the book says to use this form only. | p. 408 |
+
+The handler is automatically disabled after its invocation; it must be reinstalled before RESUME if further errors should be caught. The book also describes RESUME label as a way to jump out of a procedure, and warns that this may clear the GOSUB stack and restore globals. This unusual control transfer requires exact interpreter tests before being represented in the compiler's control-flow model. [pp. 408–409]
+
+### 12.4 Runtime and system information (pp. 409–417)
+
+- `BASEPAGE`: address of the Atari TOS 256-byte process basepage. The book documents offsets for TPA, text/data/BSS segments, DTA, parent process, environment and command tail. [pp. 409–410]
+- `CRSCOL` / `CRSLIN`: reserved variables for the current TOS text cursor column and row. Their ranges depend on screen resolution and font. [pp. 410–411]
+- `FRE(dummy)` / V3.0 `FRE()`: runs garbage collection and reports free BASIC memory; V3.0 empty parentheses avoid a collection before measurement. The book recommends forcing collection before querying variable addresses. [pp. 411–412]
+- `HIMEM`: address of the first byte after memory occupied by BASIC or the compiled program. [p. 412]
+- `L-A`: base address of Atari Line-A/VDI system variables. The book lists many offsets into Line-A, VDI, mouse, font and workstation state. V2.xx is said to use fixed base address `&H293A`, with TOS-version caveats. [pp. 412–416]
+- `TYPE(pointer)`: returns a numeric type identifier for the variable represented by a pointer. V3.0 adds identifiers for 2-byte and 1-byte integer variables and arrays. [pp. 415–416]
+- `WORK_OUT(index)`: V3.0 exposes the VDI workstation output arrays captured during initial workstation opening; the book maps indices 0–56 to screen, font, color and device capabilities. [pp. 416–417]
+
+BASEPAGE, L-A, raw offsets and WORK_OUT are Atari/TOS/VDI ABI surfaces. Their addresses and layouts must not leak into the platform-independent language core. TYPE is language/runtime introspection, but its numeric type IDs must be pinned to the documented dialect and variable model.
+
+### 12.5 Keyboard control (pp. 417–425)
+
+| Construct | Behavior recorded | Version / evidence |
+|---|---|---|
+| `KEYDEF key,text` | Assigns up to 31 characters to F1–F10 or Shift+F1–F10; strings can be inserted in programs/editor and dialog/file-selection input. | V3.0, pp. 417–420 |
+| `KEYGET var` | Waits for a key and returns a packed 32-bit value: ASCII byte, scan-code byte, and modifier-status byte. | V3.0, pp. 420–421 |
+| `KEYLOOK var` | Reads the first pending key from the keyboard buffer without removing it. | V3.0, p. 421 |
+| `KEYPAD vector` | Configures NumLock, cursor control, Alt-character input and KEYDEF function-key activation through six bits. | V3.0, p. 421 |
+| `KEYPRESS code` | Injects a simulated key event; packed long values can include scan code and modifier state. | V3.0, pp. 422–424 |
+| `KEYTEST var` | Non-blocking keyboard check; returns the same packed representation as KEYGET or zero if no key is pressed. | V3.0, p. 425 |
+
+The book provides V2.xx DEFFN equivalents for KEYGET and KEYTEST via GEMDOS calls. The packed key representation is distinct from the one-/two-byte string returned by INKEY$. Do not collapse these interfaces into one key type without preserving scan code, ASCII, modifier and buffer-consumption semantics.
+
+### 12.6 Timer callbacks and multitasking (pp. 425–430)
+
+- `AFTER ticks [GOSUB] procedure`: invokes a procedure once after the specified number of ticks; one second is 200 ticks. Execution is deferred until the current BASIC statement completes. [pp. 425–426]
+- `AFTER STOP` / `AFTER CONT`: suspend/resume the pending single-shot callback. [p. 427]
+- `EVERY ticks [GOSUB] procedure`: invokes a procedure repeatedly at the specified tick interval; it is also deferred until the current BASIC statement completes. [pp. 428–429]
+- `EVERY STOP` / `EVERY CONT`: suspend/resume recurring callbacks. [p. 429]
+
+The book states that AFTER and EVERY share a single GEM event-timer vector, so a later AFTER/EVERY registration replaces the earlier one; they are not independent concurrent timer queues. It also demonstrates re-entrancy hazards: a recurring callback that invokes a routine which itself can be called by the same EVERY timer must suspend EVERY around that call. These are cooperative/deferred callbacks, not arbitrary preemptive multithreading. [pp. 426–429]
+
+### 12.7 Debugging and miscellaneous runtime commands (pp. 430–452)
+
+- `DUMP [filter$] [TO file$]`: V3.0 outputs variable contents, array dimensions, labels, procedures and functions. Filters select names by prefix or select labels/routines; output can be redirected to a file/device. [pp. 430–432]
+- `TRACE$`: V3.0 reserved string containing the next source line in a TRON Proc handler; empty outside that handler. [p. 434]
+- `TROFF`: disables TRON and TRON Proc. [p. 434]
+- `TRON [#channel]`: traces executed source lines to screen or an opened channel. [p. 434]
+- `TRON procedure`: V3.0 redirects tracing to a procedure, allowing custom inspection using TRACE$ and DUMP. Interrupt callbacks and the trace handler itself are excluded from the trace stream. [pp. 435–446]
+- `DEFLIST format`: interpreter direct-mode listing format control; not a normal runtime statement. [p. 447]
+- `DEFNUM digits`: controls displayed numeric precision/rounding for subsequent output without changing internal numeric precision. [pp. 447–448]
+- `FALSE` and `TRUE`: reserved constants 0 and -1. [pp. 448, 450]
+- `LET variable=value`: assignment form retained for compatibility; largely unnecessary from V2.02. [p. 448]
+- `MODE flags`: V3.0 locale settings for date and numeric formatting. [pp. 448–449]
+- `OPTION "directive"`: V2.xx compiler directives affecting Break checks, integer overflow checking, error messages and bomb-error handling. [pp. 449–450]
+- `SWAP a,b`: exchanges compatible scalar, array, array-element or pointer/array descriptors; V3.0 adds SWAP() as a function and permits VAR array parameters in procedures. [pp. 451–452]
+- `VOID functionCall`: invokes a function while discarding its result, avoiding a dummy assignment. [p. 452]
+
+The large TRON Proc example is an interpreter-debugger utility built from screen-memory access, keyboard scan codes, memory copies and V3.0 tracing. It is an example, not a specification of a debugger API. OPTION is compiler-specific and the documented options are explicitly for V2.xx; do not treat them as V3.0 language statements.
+
+## 13. Program/user interaction (chapter 13, pp. 453–470)
+
+### 13.1 Dialogs and file selection
+
+- `ALERT icon,text$,defaultButton,buttonText$,result`: displays a GEM alert with icon 0–3, up to four text lines of 30 characters, up to three buttons, and button labels up to eight characters. The pipe character separates lines/buttons. [pp. 453–454]
+- V3.0 `FORM_ALERT(...)`: exposes the underlying GEM alert routine with fewer interpreter-side safety restrictions. The book warns that malformed or overlong strings can crash the system; its V2.xx workaround directly calls GEMSYS and is likewise unsafe. [pp. 454–455]
+- `FILESELECT path$,selection$,result$`: opens the GEM file selector and returns the selected name/path. The documented return cases distinguish selection, OK with/without a name, and cancel. [pp. 459–460]
+- The author demonstrates changing GEM alert icons and the FILESELECT caption by locating and modifying internal GEM RAM structures. This is undocumented, version-/TOS-sensitive memory patching and must not be considered a supported API. [pp. 455–459]
+
+### 13.2 Mouse and joystick interaction
+
+- `MOUSE x,y,buttons`: returns mouse coordinates and button mask (left=bit 0, right=bit 1). In V3.0, coordinates may be negative relative to a GEM window or CLIP OFFSET origin. [pp. 464–466]
+- `MOUSEX`, `MOUSEY`, `MOUSEK`: separate accessors for pointer coordinates and button state. [p. 466]
+- V3.0 `SETMOUSE x,y[,button]`: moves the pointer and optionally simulates a button state; AES behavior is described as limited. [p. 466]
+- `STICK mode`: switches the mouse/joystick port between mouse mode (0) and joystick mode (1). The book advises restoring mouse mode before AES calls and program exit. [pp. 467–468]
+- V3.0 `STICK(port)`: returns joystick direction bits (up/down/left/right). The V2.xx DEFFN equivalent reads a hardware address and also includes fire-button state in bit 7. [pp. 468–469]
+- V3.0 `STRIG(port)`: returns the joystick fire-button state. [p. 470]
+
+The Rubberbox routine is an author-supplied example that draws a resizable rectangle by saving/restoring screen fragments; it is not a built-in command. The joystick port mapping and OUT/PEEK forms are Atari hardware-specific.
+
+## 14. Window programming (chapter 14, pp. 471–486)
+
+The window API is primarily V3.0 in the forms documented here. It manages four application windows plus a special background/menu window 0.
+
+| Command/function | Syntax / behavior | Version / evidence |
+|---|---|---|
+| `CLEARW [#]number` | Clears the specified window (0–4); V3.0. | p. 471 |
+| `CLOSEW [#]number` | Closes the specified window; V3.0 form. | p. 471 |
+| `FULLW [#]number` | Expands a window to the maximum area below the menu bar. | p. 472 |
+| `INFOW [#]number,text$` | Defines the information line below the title bar; must be configured before OPENW. | p. 472 |
+| `OPENW number[,xCenter,yCenter]` | Opens/activates one of four tiled windows around a configurable intersection point. | pp. 472–473 |
+| `OPENW #number,x,y,width,height,attributes` | Defines geometry and attributes and opens a window in one statement. | V3.0, pp. 472–474 |
+| `TITLEW [#]number,text$` | Sets title-bar text; an empty string makes the window immovable, while two spaces suppress the title. | V3.0, pp. 474–475 |
+| `TOPW #number` | Brings an already-open window to the top without closing/reopening it. | V3.0, p. 475 |
+| `W_HAND(number)` | Maps GFA window number to original GEM handle. | V3.0, p. 475 |
+| `W_INDEX(handle)` | Maps GEM handle back to GFA window number. | V3.0, p. 475 |
+| `WINDTAB` / `WINDTAB(number,index)` | Exposes the window-management table; V3.0 array-like accessor permits reading/writing fields. | pp. 476–478 |
+
+The book documents 12-bit window attributes: title/name, close, full, move, info line, size, vertical arrows/slider and horizontal arrows/slider. WINDTAB stores per-window handles, attributes and geometry, plus screen bounds and graphics origin. The manual's text has an OCR-sensitive index table (the Y-coordinate/width/height index labels are misrecognized in places); use the underlying six-word layout and page image before freezing the exact accessor indices. [pp. 476–478]
+
+Window 0 is a special non-visible GEM work area that reserves the menu bar. Opening it changes the effective output origin; closing it restores full-screen TOS/GEM output. The book warns that window contents are the application's responsibility: after move/resize/redraw, text and graphics must be restored by the program. The large example demonstrates handling WM_TOPPED, WM_CLOSED, WM_FULLED, WM_ARROWED, WM_HSLID, WM_VSLID, WM_SIZED and WM_MOVED messages, and closing all windows on Break to avoid leaving GEM in an inconsistent state. [pp. 473–486]
+
+## 15. Menu programming (chapter 15, pp. 487–490)
+
+- `MENU array$()`: installs a pull-down menu from a one-dimensional string array. The first menu contains the desktop/accessory title, one information item, a dash separator sized for accessory names, accessory placeholders, and a null-string terminator. Further menus consist of a title and item strings, each terminated by a null string; the complete structure also needs a final terminator. [pp. 487–489]
+- A menu item beginning with a dash is initially disabled/grey. Two leading spaces reserve room for a checkmark. [p. 488]
+- `MENU itemIndex,attribute`: changes checkmark/disabled/enabled state. The OCR shows a duplicated attribute value for checkmark clear/set; this must be checked against the page image and a real interpreter before exact numeric constants are published. [p. 487]
+- `MENU KILL`: disables the menu without discarding the menu text array. [p. 490]
+- `MENU OFF`: restores the menu title's normal appearance after a selection. [p. 490]
+
+The menu is a GEM/AES menu tree, not merely a textual menu. The book's accessory example temporarily creates an accessory menu, services it through ON MENU, and restores the screen background. Menu array sizing includes all strings and empty terminators; malformed layouts can corrupt menu construction.
+
+## 16. Event monitoring (chapter 16, pp. 491–498)
+
+### 16.1 Event buffer
+
+`MENU(index)` exposes the current GEM multi-event buffer. The book maps MENU(0)–MENU(8) to the GEM message buffer and MENU(9)–MENU(15) to the VDI INTOUT array. Important fields include event ID, window handle, geometry, event flags, pointer coordinates, button state, modifier state, key code and click count. [pp. 491–493]
+
+Documented message identifiers include:
+- 10: menu item selected.
+- 20: window redraw.
+- 21: window topped/activated.
+- 22: window closed.
+- 23: window full-size requested.
+- 24: window arrow/scroll action, with subcodes for page/line movement.
+- 25 / 26: horizontal / vertical slider moved.
+- 27: window resized.
+- 28: window moved.
+- 29: next window exposed after closing the top window.
+- 30 / 31: accessory opened / closed. [pp. 491–492]
+
+The event flag at MENU(9) uses bits 0–5 for keyboard, mouse button, IBOX1, IBOX2, message and timer events. MENU(10)–MENU(15) hold coordinates, button state, modifiers, packed key code and click count. [pp. 492–493]
+
+### 16.2 Event registration and polling
+
+| Construct | Behavior recorded | Evidence |
+|---|---|---|
+| `ON MENU [time]` | Polls/dispatches GEM multi-events; optional timeout in milliseconds from V2.02. Must be called repeatedly, including inside wait loops, or event messages can be overwritten/not serviced. | pp. 493–494 |
+| `ON MENU GOSUB procedure` | Registers a handler for pull-down menu selections; MENU(0) identifies selected item. | p. 494 |
+| `ON MENU BUTTON count,button,status GOSUB procedure` | Registers mouse-button/click-count conditions. The author explicitly says the parameter interactions are difficult to predict and should be tested. | pp. 494–495 |
+| `ON MENU IBOX id,x,y,w,h GOSUB procedure` | Watches entry into one of two absolute screen rectangles. | p. 496 |
+| `ON MENU OBOX id,x,y,w,h GOSUB procedure` | Watches exit from one of two absolute screen rectangles. | p. 496 |
+| `ON MENU KEY GOSUB procedure` | Registers keyboard event handler; MENU(14) returns packed key code. | p. 497 |
+| `ON MENU MESSAGE GOSUB procedure` | Registers general GEM message/multi-event handler; inspect MENU(index) for details. | p. 497 |
+
+The book warns that the event buffer is continuously updated. A handler must inspect the current buffer promptly; delayed reads can observe a later event instead. The ON MENU polling call is required for ON MENU ... GOSUB callbacks to run. The ON MENU BUTTON description is explicitly empirical/uncertain in the source, so do not turn its parameter semantics into a firm rule without runtime tests.
+
+## 17. Architecture implications and issue traceability (chapters 12–16)
+
+1. Keep program lifecycle and error semantics in the GFA BASIC runtime core, but model TOS process exit codes and basepage behavior as Atari-specific.
+2. Keep AFTER/EVERY as a single Atari interpreter timer facility with deferred callbacks and documented replacement/re-entrancy behavior; do not implement them as unrestricted preemptive threads.
+3. Treat keyboard packed codes, GEM mouse state, joystick ports and function-key definitions as separate input surfaces with explicit versioned semantics.
+4. Keep ALERT/FORM_ALERT/FILESELECT, window management, menus and ON MENU events in the Atari GEM/AES API profile.
+5. Do not emulate GEM window/message/menu behavior by merely forwarding names to SDL3; the compatibility layer must reproduce observable GEM state and message ordering.
+6. Raw Line-A, Basepage, DTA and internal GEM RAM modifications are low-level/unsafe operations and need explicit support classification.
+7. The large code examples in chapters 13–16 are demonstrations and should not be copied as normative API definitions; the author's own warning about uncertain ON MENU BUTTON behavior is especially important.
+
+This batch is covered by existing issue **#25 — Create Atari ST GFA BASIC API reference**, issue **#19 — Build complete GFA BASIC language feature inventory and compatibility matrix**, issue **#3 — Specify supported dialects and versions**, and issue **#42 — Build reference and conformance test corpus**. The menu/window/event behavior belongs primarily to the Atari API profile; no duplicate issue was opened.
+
+Remaining validation:
+- Page-image inspection of MENU attribute values and WINDTAB(index) element mapping.
+- Confirm whether every window command is V3.0-only and identify any V2.xx equivalents.
+- Test STOP/CONT restrictions, RESUME label stack effects and fatal-error recovery on exact interpreter builds.
+- Test AFTER/EVERY replacement, callback timing, suspension and re-entrancy.
+- Test packed KEYGET/KEYTEST codes, KEYLOOK non-consuming behavior and KEYPRESS injection.
+- Verify MENU event IDs, MENU buffer field mapping and ON MENU BUTTON parameter behavior on real GEM/TOS.
+- Separate safe public GEM/AES calls from undocumented RAM patching examples.
