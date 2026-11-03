@@ -164,6 +164,27 @@ Compiler options U, T, E and B are compiler-profile behavior, not general langua
 
 The 0/0 result and the compiler's INC/DEC overflow behavior are particularly important compatibility quirks. Keep them scoped to the documented V2.xx compiler until tested against an identified compiler binary. Do not implement them as portable arithmetic semantics. The book's claims have not been runtime-verified by this project.
 
+
+
+### 4.8 Interpreter operating contexts: editor, Run-Only and direct mode
+
+The book distinguishes the full editor-interpreter, a Run-Only Interpreter, and the interpreter's direct mode (printed pp. 722–725). These are execution and interaction contexts, not dialects or separate syntax versions.
+
+| Context | Documented capability | Restrictions / version differences | Evidence |
+|---|---|---|---|
+| Full editor-interpreter | Edit, load and run BASIC programs; auto-start is also supported | Direct mode has its own command restrictions | pp. 722–724 |
+| Run-Only Interpreter | Load and start BAS programs; disk BAS files can auto-start when clicked | Editing the loaded program is not possible | p. 722 |
+| Direct mode | Execute each entered command immediately after Return; call an editor-defined PROCEDURE using GOSUB | No command sequences; constructs requiring multiple commands, e.g. FOR…NEXT, cannot be entered as a direct sequence | pp. 723–724 |
+| V3.0 direct-mode history | Recall, edit and rerun the last eight direct commands; Insert toggles insert/overwrite | V2.xx history is documented only as Undo for the last input line | p. 724 |
+
+The book describes the Run-Only Interpreter as freely copyable and suitable for distribution with programs. This is a historical source statement, not a verified license grant for any binary currently available. No binary was redistributed or executed.
+
+The book documents direct-mode recovery through Ed+Return, Esc then Return, or Control+Shift+Alternate. It also describes separate color-register behavior for editor and direct mode: V2.xx may require a color correction on return to the editor, while V3.0 restores the original editor colors. A rare incompletely handled system error may crash during the transition into direct mode (pp. 723–724).
+
+The DSAVE, DLOAD and DLINE procedures printed on pp. 724–725 are user-authored extensions that manipulate the eight-entry history buffer. They are not built-in commands and do not establish a supported history-buffer ABI. Do not implement their BASEPAGE offsets as language or runtime contracts.
+
+Page 725 only introduces the editor chapter's organization: common V2.xx/V3.0 functions are discussed separately from V3.0 additions, with small Replace and cursor-Tab differences noted. Detailed editor semantics require later pages and are not inferred here.
+
 ## 5. Platform API boundary
 
 The same book describes Atari ST-specific facilities in separate chapters:
