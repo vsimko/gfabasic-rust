@@ -102,80 +102,6 @@ GDOS is an optional resident Atari service, normally installed at boot and confi
 | `VQT_NAME(index,name$)` | Query VDI font ID and name | p. 514 | Book describes fallback behavior without GDOS |
 | `VQT_EXTENT(text$[,coordinates...])` | Measure text bounding quadrilateral | pp. 512–513 | Results are returned through PTSOUT and depend on current text attributes |
 
-### 4.1 GDOS availability, workstation lifecycle and font calls
-
-The book's GDOS chapter is specific to the Atari ST environment and to the Digital Research GDOS releases named by the author. Except for `VQT_EXTENT()` and `VQT_NAME()`, the chapter's functions require GDOS to be resident. The author recommends GDOS 1.8 over 1.1 and notes that a valid `ASSIGN.SYS` must be found at boot. [pp. 499–502]
-
-The `ASSIGN.SYS` driver identifiers documented in the example are 01 (screen virtual workstation only), 11 (plotter), 21 (printer), 31 (metafile), 41 (camera) and 51 (graphics tablet). The screen pseudo-drivers 02/03/04 represent low/mid/high resolution font lists. Driver IDs are configuration identifiers, not portable device classes. [pp. 500–502]
-
-| GFA BASIC function | Signature | Documented contract |
-|---|---|---|
-| `GDOS?` | `GDOS?` | Returns TRUE (-1) if GDOS 1.1+ is resident, otherwise FALSE (0). No V2.xx equivalent is documented. [p. 502] |
-| `V-H` | Read: `V-H`; write: `V-H = handle` | Reads/sets the active VDI handle. Nonnegative values select a handle; -1 restores the handle assigned internally to GFA BASIC. [p. 503] |
-| `V_CLRWK()` | `V_CLRWK()` | Clears the selected workstation output buffer; on printer workstation also emits form feed. [p. 504] |
-| `V_CLSVWK()` | `V_CLSVWK()` | Closes a virtual screen workstation and restores GFA's VDI handle. GFA's own screen virtual workstation normally makes this unnecessary. [pp. 504–505] |
-| `V_CLSWK()` | `V_CLSWK()` | Flushes pending output, closes the selected physical workstation and restores GFA's handle. Close any separately opened virtual workstation first. [p. 505] |
-| `V_OPNVWK(driverId[,lineType,lineColor,markerType,markerColor,textStyle,textColor,fillStyle,fillPattern,fillColor,coordinateFlag])` | Returns VDI handle | Opens/configures a virtual screen workstation. Output is direct/unbuffered; `V_UPDWK()` is not needed. GFA already opens its own screen workstation. [pp. 505–506] |
-| `V_OPNWK(driverId[,lineType,lineColor,markerType,markerColor,textStyle,textColor,fillStyle,fillPattern,fillColor,coordinateFlag])` | Returns VDI handle | Opens the GDOS driver selected by `ASSIGN.SYS`; output is buffered until update/close. The ten optional values initialize VDI attributes; defaults are 1,1,1,1,1,1,1,1,1,2. Calling without resident GDOS or with an invalid ID is documented to crash the system. [pp. 507–509] |
-| `V_UPDWK()` | `V_UPDWK()` | Sends the current workstation output buffer to the device. Not needed for direct virtual-screen output. [p. 512] |
-| `VQT_EXTENT(text$[,xlo,ylo,xro,yro,xru,yru,xlu,ylu])` | Returns text extent; eight optional coordinate outputs | Measures the bounding quadrilateral using current GEM text attributes. Coordinates are also returned in PTSOUT(0–7); upper-left is (0,0), lower-right gives width/height. Available without GDOS according to the chapter. [pp. 512–513] |
-| `VQT_NAME(index,name$)` | Returns VDI font face; fills name$ | Looks up the VDI face/name for a font in the most recently loaded GDOS font list. Without GDOS, returns the system-font face/name. [p. 514] |
-| `VST_LOAD_FONTS(0)` | Returns number of fonts loaded | Loads fonts listed for the active resolution in `ASSIGN.SYS`; may allocate memory and require prior `RESERVE`. [p. 515] |
-| `VST_UNLOAD_FONTS(0)` | Returns status (not specified precisely) | Unregisters fonts loaded by VST_LOAD_FONTS and attempts to release their memory. [p. 515] |
-
-The V2.xx examples use VDISYS opcodes 3 (clear workstation), 101 (close virtual workstation), 2 (close workstation), 100 (open virtual workstation), 1 (open workstation), 4 (update workstation), 116 (text extent), 130 (font name), 119 (load fonts) and 120 (unload fonts). These are book-documented wrapper examples; they must not be assumed to be the full or universal VDI opcode contract. [pp. 504–515]
-
-The V2.xx `V_OPNVWK`/ `V_OPNWK` procedures require all eleven integer setup parameters plus a pointer to an integer result variable. The V3.0 form makes the ten attribute values optional. The book's examples construct the VDI INTIN array explicitly and return the device handle from CONTRL(6). [pp. 506–507, 511]
-
-### 4.2 Workstation and font lifecycle constraints
-
-- Keep the GFA screen handle, virtual workstation handles and GDOS physical workstation handles distinct. `V-H=-1` switches back to GFA's own screen output even while another workstation remains open. [p. 503]
-- For a physical workstation, reserve enough memory for its output buffer. The book estimates at least one bit per output pixel plus approximately 20% overhead; high-resolution printer pages can require over 1 MB. [pp. 509–510]
-- Flush buffered output with `V_UPDWK()` before closing. The author reports RESERVE errors if a workstation is opened and closed without drawing, and internal GEM problems if buffered drawing is closed without update. This is a test observation, not a universal VDI guarantee. [p. 511]
-- Load fonts only after confirming the relevant GDOS configuration. Query each font with `VQT_NAME`, select its face through `DEFTEXT`, and unload fonts before restoring BASIC memory/terminating. [pp. 510–515]
-- The `VQT_NAME` V2.xx example reads GEM's original INTOUT buffer through an absolute address. Treat that implementation detail as version-/memory-layout-specific, not as a portable API. [p. 514]
-
-### 4.3 Own-font material (pp. 516–530)
-
-The remainder of the chapter describes loading custom 8×16 system fonts, changing TOS/GEM font pointers, converting Degas and STAD/OLIFONT font data, and a custom GFA-specific font format. It includes supervisor-/memory-address-dependent patches and direct writes to system font pointers (notably addresses around 0x607E and 0x2924). These examples are historical Atari-specific techniques, not safe general GFA BASIC APIs. They must be classified as unsafe/disabled unless a future Atari machine/TOS profile provides a fully virtualized memory model and explicit compatibility evidence.
-
-The source describes these file layouts:
-- Degas high-resolution font: 2,050 bytes (2-byte header plus 2,048 bytes for 128 glyphs × 16 scanlines).
-- STAD/OLIFONT high-resolution font: 4,096 bytes (256 glyphs × 16 scanlines).
-- 8×16 system font: 4,698 bytes (602-byte header plus 4,096 glyph bytes).
-These are source-described file formats; do not infer that all Atari font loaders accept them interchangeably. [pp. 528–530]
-
-Workstation handles, capabilities and lifecycle must be explicit. Do not assume a printer/plotter workstation behaves like the screen. The book reports a RESERVE error in one tested environment when closing a newly opened workstation without first issuing graphics output; treat this as a compatibility warning, not a universal VDI rule. [p. 511]
-
-The font-header and direct TOS/GEM font-pointer material on pp. 516–530 is low-level and OS-specific. It includes resident-memory and supervisor-level patches, including one patch limited to a specific 1986 ROM-TOS build. Do not treat these as safe general APIs.
-
-### 4.4 Cross-source validation: VDI, GDOS and workstation lifecycle
-
-The chapter 17 inventory was compared with *The Atari Compendium*, chapter 7 (VDI), especially its VDI overview, workstation model, GDOS detection and bitmap-font sections. This is an independent Atari OS reference, not evidence that every GFA wrapper has been runtime-tested.
-
-Confirmed architectural distinctions:
-
-- **VDI is part of the TOS/GEM graphics environment; GDOS is optional.** Atari systems with TOS in ROM provide a screen VDI driver. GDOS is a boot-loaded extension that supplies disk-loaded device drivers and additional fonts. Screen-only output using the system font does not inherently require GDOS. [Atari Compendium, ch. 7, “Overview”]
-- **Physical and virtual workstations are different resources.** A physical workstation initializes a device; only one physical workstation may be open for a given device at a time. Multiple virtual workstations can share that physical device while keeping separate drawing attributes. Every VDI call uses a workstation handle. [Atari Compendium, ch. 7, “VDI Workstations”]
-- **The screen physical workstation is already initialized by AES.** Its handle is obtained through graf_handle(). A screen virtual workstation is opened against that physical handle; the documented device ID is Getrez()+2. This is distinct from opening an external physical device through GDOS. [Atari Compendium, ch. 7, “Virtual Workstations”]
-- **GDOS driver IDs are configuration IDs.** The Compendium gives ranges 1–10 screen, 11–20 plotter, 21–30 printer, 31–40 metafile, 41–50 camera, 51–60 tablet and 61–70 memory; the selected ID corresponds to the ASSIGN.SYS entry. The book's sample IDs 01, 11, 21, 31, 41 and 51 fit those ranges. Do not treat these as guaranteed present devices or host device classes. [Atari Compendium, ch. 7, “Physical Workstations”]
-- **Driver capability is not uniform.** The Compendium warns that not every VDI function is supported by every driver and recommends inspecting workstation capability results. A printer or plotter profile must not inherit screen capabilities by default. [Atari Compendium, ch. 7, “Device Types vs. Required Functions”]
-- **GDOS presence and GDOS version are separate questions.** The Compendium describes a non-standard vq_gdos() query that distinguishes no GDOS, original GDOS 1.x, FONTGDOS and FSM/Speedo variants. The GFA GDOS? Boolean documented in the book only establishes its stated presence test; it must not be interpreted as a version detector. [Atari Compendium, ch. 7, “Determining the Version of GDOS Present”]
-- **Additional bitmap fonts become available after vst_load_fonts().** The Compendium confirms that fonts listed for the device in ASSIGN.SYS are not exposed to applications until fonts are loaded. This corroborates the role of VST_LOAD_FONTS(0); it does not independently validate GFA's exact return value or unload semantics. [Atari Compendium, ch. 7, “Bitmap Fonts”]
-
-Reconciliation and implementation implications:
-
-1. The book's V_OPNWK is the physical-workstation path for an ASSIGN.SYS/GDOS device. Keep the resident-GDOS precondition and invalid-driver crash warning attached to this wrapper.
-2. V_OPNVWK is the virtual-workstation path. Do not model it as equivalent to loading a GDOS driver; the screen's physical workstation is already provided by AES/TOS. The GFA wrapper's exact parameter adaptation remains book-scoped.
-3. Keep physical-device handle, virtual-workstation handle and GFA's internally managed screen handle distinct. A virtual workstation is a separate attribute context, not a new physical device.
-4. Treat the book's screen/plotter/printer/etc. IDs as examples from its ASSIGN.SYS configuration, not a promise that every installation has those drivers.
-5. Model GDOS as a runtime capability with a possible implementation/version identity. A Boolean GDOS? result is insufficient to claim compatibility with FONTGDOS, FSMGDOS or SpeedoGDOS extensions.
-6. Workstation support and individual VDI operation support must be capability-checked per driver. Do not silently emulate unsupported printer/plotter operations as screen output.
-
-No GFA BASIC interpreter or Atari TOS runtime probe was performed. These cross-source confirmations validate the general VDI/GDOS architecture and resource distinctions, not every GFA wrapper signature or the book's reported buffer/error behavior.
-
-Independent source: [The Atari Compendium, Chapter 7 — VDI](https://www.yardley.cc/atari/compendium/atari-compendium-chapter-7-Atari-VDI.htm).
-
 ### 4.1 GDOS installation and driver identifiers
 
 GDOS is a resident GEM extension, not an unconditional part of the GFA BASIC runtime. In the book's setup it must be launched from the AUTO folder before normal system initialization and must find a valid `ASSIGN.SYS` at the boot volume root. The book distinguishes GDOS 1.1 from 1.8 and reports better reliability/performance for 1.8 based on the author's tests; this is historical source evidence, not a recommendation for every later GDOS clone. `VQT_EXTENT` and `VQT_NAME` are the two chapter functions explicitly stated to remain usable without GDOS. [pp. 499, 502]
@@ -221,11 +147,51 @@ Lifecycle is order-sensitive. The book reports a `RESERVE` memory error in its t
 
 The source provides V2.xx procedure equivalents using VDISYS/GEMSYS and direct parameter-block access. They are not interchangeable with the V3.0 function-call syntax without adapting output-pointer conventions. In particular, the V2.xx VQT_NAME procedure requires pointers for both the returned string and the integer face ID. [pp. 513–515]
 
+The book's V2.xx examples use VDISYS opcodes 3 (clear workstation), 101 (close virtual workstation), 2 (close workstation), 100 (open virtual workstation), 1 (open workstation), 4 (update workstation), 116 (text extent), 130 (font name), 119 (load fonts) and 120 (unload fonts). These are book-documented wrapper examples, not a complete or universal VDI opcode contract. [pp. 504–515]
+
 ### 4.4 Own fonts and direct system-font patching (unsafe research)
 
 Pages 516–530 are not a general GDOS API. They present custom machine-code and BASIC techniques that patch TOS/GEM system-font pointers, reserve memory above HIMEM, install VBL interrupt routines, or reinterpret Degas/STAD font bitmaps. One supplied AUTO-folder program is explicitly limited to ROM-TOS dated 6 February 1986. Another routine warns that increasing BASIC memory with RESERVE while a font is active can overwrite font data; restoring original font pointers is necessary before leaving BASIC. [pp. 516–523]
 
+The examples include direct writes to TOS/GEM system-font pointers at addresses around 0x607E and 0x2924. These are machine-/ROM-specific addresses, not portable API constants. One supplied AUTO-folder patch is explicitly limited to a ROM-TOS build dated 6 February 1986. [pp. 516–523]
+
+The source describes these font data layouts:
+
+- Degas high-resolution font: 2,050 bytes (2-byte header plus 2,048 bytes for 128 glyphs × 16 scanlines).
+- STAD/OLIFONT high-resolution font: 4,096 bytes (256 glyphs × 16 scanlines).
+- 8×16 system font: 4,698 bytes (602-byte header plus 4,096 glyph bytes).
+
+These are source-described formats; do not infer that every Atari font loader accepts them interchangeably. [pp. 528–530]
+
 The later SUPER.FON example loads a bitmap-font file into caller-provided memory and draws each character through PUT operations; it is a program-level technique, not a VDI/GDOS workstation service. [pp. 524–530] These routines must remain classified as unsafe, ROM/TOS-specific research. Do not implement them as ordinary portable GFA built-ins or run them in the Linux compatibility runtime.
+
+
+### 4.5 Cross-source validation: VDI, GDOS and workstation lifecycle
+
+The chapter 17 inventory was compared with *The Atari Compendium*, chapter 7 (VDI), especially its VDI overview, workstation model, GDOS detection and bitmap-font sections. This is an independent Atari OS reference, not evidence that every GFA wrapper has been runtime-tested.
+
+Confirmed architectural distinctions:
+
+- **VDI is part of the TOS/GEM graphics environment; GDOS is optional.** Atari systems with TOS in ROM provide a screen VDI driver. GDOS is a boot-loaded extension that supplies disk-loaded device drivers and additional fonts. Screen-only output using the system font does not inherently require GDOS. [Atari Compendium, ch. 7, “Overview”]
+- **Physical and virtual workstations are different resources.** A physical workstation initializes a device; only one physical workstation may be open for a given device at a time. Multiple virtual workstations can share that physical device while keeping separate drawing attributes. Every VDI call uses a workstation handle. [Atari Compendium, ch. 7, “VDI Workstations”]
+- **The screen physical workstation is already initialized by AES.** Its handle is obtained through graf_handle(). A screen virtual workstation is opened against that physical handle; the documented device ID is Getrez()+2. This is distinct from opening an external physical device through GDOS. [Atari Compendium, ch. 7, “Virtual Workstations”]
+- **GDOS driver IDs are configuration IDs.** The Compendium gives ranges 1–10 screen, 11–20 plotter, 21–30 printer, 31–40 metafile, 41–50 camera, 51–60 tablet and 61–70 memory; the selected ID corresponds to the ASSIGN.SYS entry. The book's sample IDs 01, 11, 21, 31, 41 and 51 fit those ranges. Do not treat these as guaranteed present devices or host device classes. [Atari Compendium, ch. 7, “Physical Workstations”]
+- **Driver capability is not uniform.** The Compendium warns that not every VDI function is supported by every driver and recommends inspecting workstation capability results. A printer or plotter profile must not inherit screen capabilities by default. [Atari Compendium, ch. 7, “Device Types vs. Required Functions”]
+- **GDOS presence and GDOS version are separate questions.** The Compendium describes a non-standard vq_gdos() query that distinguishes no GDOS, original GDOS 1.x, FONTGDOS and FSM/Speedo variants. The GFA GDOS? Boolean documented in the book only establishes its stated presence test; it must not be interpreted as a version detector. [Atari Compendium, ch. 7, “Determining the Version of GDOS Present”]
+- **Additional bitmap fonts become available after vst_load_fonts().** The Compendium confirms that fonts listed for the device in ASSIGN.SYS are not exposed to applications until fonts are loaded. This corroborates the role of VST_LOAD_FONTS(0); it does not independently validate GFA's exact return value or unload semantics. [Atari Compendium, ch. 7, “Bitmap Fonts”]
+
+Reconciliation and implementation implications:
+
+1. The book's V_OPNWK is the physical-workstation path for an ASSIGN.SYS/GDOS device. Keep the resident-GDOS precondition and invalid-driver crash warning attached to this wrapper.
+2. V_OPNVWK is the virtual-workstation path. Do not model it as equivalent to loading a GDOS driver; the screen's physical workstation is already provided by AES/TOS. The GFA wrapper's exact parameter adaptation remains book-scoped.
+3. Keep physical-device handle, virtual-workstation handle and GFA's internally managed screen handle distinct. A virtual workstation is a separate attribute context, not a new physical device.
+4. Treat the book's screen/plotter/printer/etc. IDs as examples from its ASSIGN.SYS configuration, not a promise that every installation has those drivers.
+5. Model GDOS as a runtime capability with a possible implementation/version identity. A Boolean GDOS? result is insufficient to claim compatibility with FONTGDOS, FSMGDOS or SpeedoGDOS extensions.
+6. Workstation support and individual VDI operation support must be capability-checked per driver. Do not silently emulate unsupported printer/plotter operations as screen output.
+
+No GFA BASIC interpreter or Atari TOS runtime probe was performed. These cross-source confirmations validate the general VDI/GDOS architecture and resource distinctions, not every GFA wrapper signature or the book's reported buffer/error behavior.
+
+Independent source: [The Atari Compendium, Chapter 7 — VDI](https://www.yardley.cc/atari/compendium/atari-compendium-chapter-7-Atari-VDI.htm).
 
 ## 5. AES function families
 
@@ -822,6 +788,7 @@ The book documents the following XBIOS calls. Names below follow its printed lab
 | 31–32 | XBTIMER, DOSOUND | MFP timer installation and sound-chip register sequence execution. |
 | 33–36 | SETPRT, KBDVBASE, KBRATE, PRTBLK | Printer configuration, keyboard vector base/repeat and printer block output. |
 | 37–39 | VSYNC, SUPEXEC, PUNTAES | Vertical sync, supervisor callback and AES shutdown attempt. |
+| 64 | BLITTER | Query, enable or disable the blitter; the source explicitly restricts this call to Blitter TOS. [p. 637] |
 
 XBIOS error values listed on p. 622 include -1 general error, -2 device not ready, -3 unknown command, -5 invalid command, -6 track not found, -7 invalid boot sector, -8 sector not found, -10 write error, -12 general error, -13 write-protected disk, -14 disk changed, -15 unknown device, -16 bad sector and -17 no disk inserted. The book says zero indicates success for the operations discussed.
 
@@ -959,113 +926,4 @@ No API entry in this document is currently claimed as implemented or runtime-con
 The source is the user-provided sixth revised and expanded edition of *Das große GFA-BASIC-Buch* (1988). This reference contains original summaries and short API identifiers, not a reproduction of the book. Keep the PDF/OCR and diskette source files outside the public repository unless redistribution rights are independently established.
 
 
-
-## 7. BIOS, GEMDOS, GEMSYS, VDISYS and XBIOS system calls (pp. 605–656)
-
-These are low-level Atari system-call interfaces, not portable GFA BASIC core commands. All pointer arguments refer to the Atari process address space; they must never be treated as host pointers in the Linux runtime.
-
-### 7.1 Wrapper conventions and subsystem boundaries
-
-| Wrapper | Documented form | Contract |
-|---|---|---|
-| BIOS() | BIOS(opcode[,parameters...]) | BIOS trap wrapper. Longword arguments require the L: prefix; unmarked values are passed as words. [p. 605] |
-| GEMDOS() | GEMDOS(opcode[,parameters...]) | GEMDOS trap wrapper with the same L: longword marker convention. [p. 608] |
-| GEMSYS | GEMSYS [opcode] | Invokes AES using prepared AES parameter arrays. Omitting the opcode permits changing arrays and repeating the last AES operation. [pp. 617–618] |
-| VDISYS | VDISYS [opcode] | Invokes VDI using its parameter arrays and workstation handle in CONTRL+12. V2.xx reads the handle from VDIBASE+40; V3.0 uses V-H. [p. 618] |
-| VDISYS V3.0 | VDISYS(opcode,I_len,P_len[,id]) | Optional INTIN/PTSIN lengths and a subfunction identifier are supplied for V3.0 calls. [p. 618] |
-| XBIOS() | XBIOS(opcode[,parameters...]) | Extended hardware/I/O trap wrapper; returns subsystem result/error code. [pp. 622–623] |
-
-The book states that V3.0 exposes AES calls as functions, while V2.xx uses GEMSYS procedures plus shared AES arrays. The earlier AES and VDI parameter-block sections remain the structural reference.
-
-### 7.2 BIOS inventory
-
-| Opcode | Name | Documented purpose and constraints |
-|---:|---|---|
-| 0 | GETMPB | Writes a 12-byte block containing three longword pointers: memory-free list, allocated list and roving pointer. Each list entry is four longwords (link, start, length, owner). The book warns that this requires detailed TOS knowledge. [p. 605] |
-| 1 | BCONSTAT | Tests whether bytes are available at a device. [p. 605] |
-| 2 | BCONIN | Waits for input from a device; returns a 4-byte value. Keyboard device uses the packed key representation described for KEYGET. [p. 606] |
-| 3 | BCONOUT | Writes one byte to a device and waits until output is possible. [p. 606] |
-| 4 | RWABS | Reads/writes logical sectors using a caller-provided buffer; flags 0/1 are read/write with disk-change checking, 2/3 ignore disk change. Sector size is 512 bytes; drive IDs are 0=A, 1=B, 2=hard disk in this source. [p. 606] |
-| 5 | SETEXEC | Replaces an exception vector; returns the old vector address. Opcode argument -1 queries the old address. [p. 606] |
-| 6 | TICKCAL | Returns the millisecond interval between timer ticks. [p. 607] |
-| 7 | GETBPB | Returns the address of an 18-byte BIOS parameter block for a floppy drive. Nine words describe sector/cluster/FAT/directory geometry and flags. [p. 607] |
-| 8 | BCOSTAT | Tests whether a device can accept output bytes. [p. 608] |
-| 9 | MEDIACH | Reports disk-change state as 0 (certainly unchanged), 1 (possibly changed), or 2 (certainly changed). [p. 608] |
-| 10 | DRVMAP | Returns a drive-presence bit vector. The book notes the system's A/B minimum assumption, even if only A is physically present. [p. 608] |
-| 11 | KBSHIFT | Reads modifier-key state when passed -1, or sets/simulates the state when passed a positive bit mask. [p. 608] |
-
-### 7.3 GEMDOS inventory
-
-GEMDOS is the book's general-purpose TOS file, console, device and memory service.
-
-| Opcode | Label | Documented GFA-level purpose |
-|---:|---|---|
-| 0 | PTERM | Terminates the process. The book explicitly says GFA programs should use QUIT/SYSTEM instead. [p. 609] |
-| 1–8 | CONIN, CONOUT, AUXIN, AUXOUT, PRNOUT, RAWCONIO, RAWCONIN, RAWNECIN | Console, serial and printer byte I/O; raw input differs in echo and Control-C behavior. [pp. 609–610] |
-| 9–10 | CONWS, CONRS | Null-terminated string output and buffered console-line input using a caller-built buffer. [pp. 610–611] |
-| 11 | CONSTAT | Console input-buffer status (0 or 65535). [p. 611] |
-| 14 | SETDRV | Changes default drive and returns the previously active drive. [p. 611] |
-| 16–19 | CONOUTSTAT, PRTOUTSTAT, AUXINSTAT, AUXOUTSTAT | Console/printer/serial readiness queries; the book warns against using CONOUTSTAT from GFA. [p. 611] |
-| 25–26 | CURDRV, SETDTA | Get current drive; set the Disk Transfer Address (equivalent to V3.0 FSETDTA). [p. 611] |
-| 32 | SUPER | Switches user/supervisor stack context and exposes privileged memory. Register/stack effects and the two-step restore protocol make this unsafe without exact TOS knowledge. [pp. 612–613] |
-| 42–45 | GETDATE, SETDATE, GETTIME, SETTIME | Read/write packed system date/time values. Prefer DATE$/TIME$/SETTIME language facilities where possible. [pp. 612–613] |
-| 47–49 | GETDTA, GETVERS, KEEP PROCESS | Get DTA, TOS version, and retain a process/memory area. [pp. 613–614] |
-| 64 | GETDFREE | Writes free/total cluster counts, sector size and sectors per cluster to a caller buffer. [p. 614] |
-| 57–59 | MKDIR, RMDIR, CHDIR | Create/remove directory and change default directory; path arguments are null-terminated pointers. [p. 614] |
-| 60–66 | CREATE, OPEN, CLOSE, READ, WRITE, UNLINK, LSEEK | File lifecycle, byte I/O, deletion and seek operations using GEMDOS handles and caller buffers. [pp. 614–616] |
-| 67 | CHMODE | Read or set file attributes. [pp. 615–616] |
-| 69–70 | DUP, FORCE | Redirect/duplicate standard I/O handles. [p. 616] |
-| 71 | GETDIR | Writes current directory path into a caller buffer. [p. 616] |
-| 72–74 | MALLOC, MFREE, SETBLOCK | Allocate/free memory and resize a process block; described as equivalents of V3.0 MALLOC/MFREE/MSHRINK. [p. 616] |
-| 75–76 | PEXEC, PTERM | Execute a program with mode, program, command and environment pointers; terminate/keep-process variant. [p. 617] |
-| 78–79 | SFIRST, SNEXT | Directory search, corresponding to V3.0 FSFIRST/FSNEXT. [p. 617] |
-| 86 | RENAME | Rename a file using two null-terminated path pointers. [p. 617] |
-| 87 | GSDTOF | Read/change a file's date/time through a GEMDOS handle; described as similar to V3.0 TOUCH. [p. 617] |
-
-The book gives a common subset of GEMDOS/BIOS error values: -32 invalid function, -33 file not found, -34 path not found, -35 too many open files, -36 access denied, -37 invalid handle, -39 insufficient memory, -40 invalid memory-block address, -46 invalid drive and -49 no more search entries. Zero means success in the documented cases. These are not a universal error mapping for every trap or TOS release. [pp. 608–609]
-
-### 7.4 GEMSYS and VDISYS
-
-GEMSYS is the V2.xx AES trap gateway over the AES arrays; AES signatures and manager contracts are recorded in section 5. V3.0 wraps the AES operations as functions. [pp. 617–618]
-
-| Opcode | VDI operation | Documented use |
-|---:|---|---|
-| 35 | Current polyline attributes | Query current line type, color, width, start/end style and writing mode. [pp. 619–620] |
-| 36 | Current polymarker attributes | Query marker color/type/size and writing mode. [p. 620] |
-| 37 | Current fill-area attributes | Query fill style/color/pattern, writing mode and perimeter visibility. [p. 620] |
-| 38 | Current graphic-text attributes | Query font, color, rotation, alignment, character size/box and writing mode. [p. 620] |
-| 104 | Set fill perimeter visibility | V2.xx helper constructs CONTRL/INTIN and calls VDISYS 104. [p. 620] |
-| 118 | Exchange timer interrupt vector | V2.xx-only example; installs a machine routine and returns prior interval/vector information. The printed example's final call line appears inconsistent with the stated opcode 118; preserve as a source discrepancy pending a higher-resolution check. [pp. 620–621] |
-| 5 | VDI escape functions | Uses subfunction IDs for screen character grid, text/pixel mode, cursor movement/position, screen/line clear, text output, cursor query, mouse availability, hardcopy, mouse positioning and system-font selection. [pp. 621–622] |
-
-VDI calls must set the active workstation handle. V3.0 can pass INTIN/PTSIN lengths and subfunction ID in the VDISYS call; V2.xx examples manually fill CONTRL and parameter arrays. [p. 618]
-
-### 7.5 XBIOS inventory and risk boundaries
-
-The book lists XBIOS error returns -1, -2, -3, -5, -6, -7, -8, -10, -12 through -17; zero denotes success in the described cases. [pp. 622–623]
-
-| Opcode | Label | Documented purpose |
-|---:|---|---|
-| 0 | INITMOUSE | Install custom mouse routine via a parameter block; the author explicitly says the structure is not explained. Unknown/unsafe. [p. 623] |
-| 1 | SSBRK | ROM-startup memory reservation; not a normal application API. [p. 623] |
-| 2–3 | PHYSBASE, LOGBASE | Query physical/logical screen base addresses. [pp. 623–624] |
-| 4–5 | GETREZ, SETSCREEN | Query resolution; change logical/physical screen bases. Screen bases must be 256-byte aligned; the book says resolution change is not usable under GEM and passes -1. [p. 624] |
-| 6–7 | SETPALETTE, SETCOLOR | Set all 16 palette words or query/set one color register. [p. 624] |
-| 8–9 | FLOPREAD, FLOPWRITE | Read/write floppy sectors into/from a caller buffer. [p. 625] |
-| 10 | FLOPFMT | Format one track using an 8,000-byte work buffer and low-level geometry/magic/fill parameters. The book warns that exceeding maximum track count may not report an error. Destructive and unsafe. [p. 625] |
-| 11 | No effect (book claim) | The source says this opcode has no effect; this conflicts with the separate Atari BIOS Rev. 1.1 reference in section 9.2. Do not encode as universal. [p. 626] |
-| 12 | MIDIWS | Write a byte sequence to MIDI output; the book recommends the MID: device interface as simpler. [p. 626] |
-| 13 | MFPINT | Replace an MFP interrupt vector with a machine-code routine address. Unsafe. [p. 626] |
-| 14–15 | IOREC, RSCONF | Query serial/console/MIDI ring-buffer structures; configure serial baud, handshake and UART/MFP settings. [pp. 626–627] |
-| 16 | KEYTABLE | Query/change normal, shifted and CapsLock keyboard translation table pointers. [pp. 627–629] |
-| 17 | RANDOM | Return a 24-bit random value. [p. 629] |
-| 18 | PROTOBT | Write a prepared 512-byte boot sector, including disk serial/media descriptor and checksum. [pp. 636–637] |
-| 19 | Not sufficiently transcribed | Listed in the chapter index but exact contract needs separate source verification. [p. 622] |
-| 20 | Referenced as hardcopy | Used by the text as a hardcopy facility; full contract not transcribed in this pass. [p. 622] |
-| 21–38 | Mixed machine/keyboard/timer/sound calls | Includes cursor configuration, system time, keyboard vectors/rate, printer block, sync, supervisor execution and DOSOUND. Exact individual signatures should be promoted only from page-checked entries. [pp. 649–656] |
-| 64 | Blitter mode/status | Explicitly restricted to Blitter TOS; query/enable/disable the blitter. [p. 637] |
-
-XBIOS(32,L:address) starts an interrupt-driven sound string; XBIOS(32,L:-1) is used in the example to query the active sound-string byte pointer. The bytecode controls sound-chip registers and timed delays; malformed values can affect floppy-port registers. Treat as machine-specific and unsafe, not as a portable SOUND implementation. [pp. 649–651]
-
-**Safety classification:** raw sector reads/writes, track formatting, boot-sector writes, supervisor-mode changes, screen-base/palette writes, interrupt-vector installation, keyboard-table replacement and direct sound-chip control must be disabled by default. A future Atari runtime may expose only virtualized, profile-gated devices and must never pass host pointers or host memory addresses into these calls.
 
