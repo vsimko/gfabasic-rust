@@ -71,7 +71,7 @@ For every documentation change, review:
 6. Source citations, dialect/version scope, and evidence status for GFA BASIC claims.
 7. Copyright and redistribution constraints for external material.
 
-These checks are currently a review checklist. Do not claim that they run automatically. Add automated Markdown, link, spelling, or reference validation only when the project defines the tooling, supported versions, and CI integration. The absence of an automated checker does not remove the review requirements.
+The GitHub Actions workflow runs structural Markdown linting and offline local-link/anchor validation. Heading hierarchy, table readability, source correctness, spelling/terminology, dialect/version scope, copyright review, and semantic/API-reference accuracy remain human-review responsibilities. Do not claim that the automated tools certify ASD-STE100 compliance or GFA BASIC correctness.
 
 ## Automated checks
 
