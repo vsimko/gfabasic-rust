@@ -44,8 +44,6 @@ jobs:
           path: bench/Cargo.lock
           retention-days: 7
 
-        run: cargo +1.99.1 check --manifest-path bench/Cargo.toml --target-dir bench/target --benches
-
   benchmark:
     if: github.event_name != 'pull_request'
     name: Source-loading benchmark
