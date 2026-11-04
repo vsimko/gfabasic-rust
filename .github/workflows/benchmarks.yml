@@ -66,6 +66,7 @@ jobs:
           echo "kernel=$(uname -r)" >> "$GITHUB_OUTPUT"
 
       - name: Restore same-host Criterion baseline
+        id: criterion-cache
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
         with:
           path: bench/target/criterion
@@ -75,6 +76,10 @@ jobs:
         run: cargo +1.99.1 bench --manifest-path bench/Cargo.toml --target-dir bench/target --bench source_loading --locked -- --noplot
 
       - name: Record benchmark environment
+        env:
+          CPU_MODEL: ${{ steps.host.outputs.cpu_model }}
+          KERNEL_RELEASE: ${{ steps.host.outputs.kernel }}
+          CRITERION_CACHE_HIT: ${{ steps.criterion-cache.outputs.cache-hit }}
         run: |
           {
             printf 'commit=%s\n' "$GITHUB_SHA"
