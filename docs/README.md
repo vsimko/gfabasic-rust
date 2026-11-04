@@ -21,6 +21,7 @@ This index is the entry point for project documentation. It separates user guida
 |---|---|---|
 | Project overview | [`README.md`](../README.md) | All readers; concise project status and direction |
 | Documentation policy | [`DOCUMENTATION.md`](DOCUMENTATION.md) | Authors and reviewers; format, writing, evidence, copyright, and validation rules |
+| AI agent and blocker policy | [`AGENTS.md`](../AGENTS.md) | AI agents and maintainers; mandatory issue tracking for human actions that block progress |
 | User entry point | [`user/README.md`](user/README.md) | Users; current support status and future user-guide structure |
 | Contributor entry point | [`contributor/README.md`](contributor/README.md) | Contributors; current development constraints and contribution workflow |
 | Architecture | [`architecture/README.md`](architecture/README.md) | Implementers; system boundaries and architecture document index |

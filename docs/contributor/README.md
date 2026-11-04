@@ -44,6 +44,10 @@ cargo build --workspace --all-targets
 
 The same Rust checks run in [rust.yml](../../.github/workflows/rust.yml). The documentation-only workflow in [docs.yml](../../.github/workflows/docs.yml) runs Markdown linting, API registry validation, and offline local-link/anchor validation. Passing these checks validates only the empty workspace skeleton; it does not validate a compiler or runtime implementation. Platform integration, conformance, fuzz, security, and release workflows remain unimplemented.
 
+## Human blockers and AI agent workflow
+
+Follow the repository-wide [AI agent and human-blocker policy](../../AGENTS.md). Any progress-blocking human decision, approval, permission, credential, or manual action must be recorded as an open issue with the `needs-human` label. The issue must specify the requested action and affected work. Do not make owner-only decisions on a maintainer's behalf. Continue independent work while a blocker is waiting for human input.
+
 ## Pull request expectations
 
 - Keep changes small and scoped to an issue or a clearly described defect.
