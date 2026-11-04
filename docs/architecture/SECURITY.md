@@ -13,7 +13,7 @@ The dedicated [security audit workflow](../../.github/workflows/security-audit.y
 - The audit uses no write-capable token. Workflow permissions are limited to `contents: read`; the command's exit status and package/advisory details provide the actionable failure output.
 - The audit is an advisory-database check, not a complete security review. It does not replace code review, static analysis, secret scanning, binary analysis, or OS-level dependency checks.
 
-The current lockfile contains only the three local workspace packages and no third-party crates. The first successful audit therefore establishes the workflow baseline, not a claim that future dependencies are safe.
+The current lockfile contains only the three local workspace packages and no third-party crates. The first successful audit on 2026-11-04 ([workflow run 41832754189](https://github.com/vsimko/gfabasic-rust/actions/runs/41832754189)) loaded the RustSec advisory database and passed against those three workspace package entries. This establishes the workflow baseline, not a claim that future dependencies are safe.
 
 ## Exceptions
 
