@@ -1,9 +1,10 @@
 # ADR 0008: Initial source dialect — Amiga GFA BASIC interpreter 3.0
 
-- Status: Accepted
+- Status: Superseded
 - Date: 2026-11-04
 - Decision owner: Repository maintainer
 - Tracking: [issue #3](https://github.com/vsimko/gfabasic-rust/issues/3)
+- Superseded by: [ADR 0009](0009-initial-source-dialect-amiga-gfa-basic-3.5.md)
 
 ## Context
 
