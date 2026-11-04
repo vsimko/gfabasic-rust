@@ -17,7 +17,7 @@ This roadmap is the project-level view of delivery order for `gfabasic-rust`. Gi
 
 | Area | Current state | Evidence / tracking |
 |---|---|---|
-| Rust workspace | Three crates exist: compiler, generated-program runtime, Linux platform adapter; module placeholders only | [Cargo workspace](Cargo.toml), [workspace design](docs/architecture/WORKSPACE.md) |
+| Rust workspace | Three crates exist: compiler, generated-program runtime, Linux platform adapter; compiler includes source-map and strict UTF-8 loading primitives, while frontend/backend/CLI/runtime/platform behavior remains unimplemented | [Cargo workspace](Cargo.toml), [workspace design](docs/architecture/WORKSPACE.md) |
 | Compiler frontend, semantic analysis, IR | Not implemented beyond source-map/loading primitives | [#46–#49](https://github.com/vsimko/gfabasic-rust/issues?q=is%3Aissue+is%3Aopen+label%3Acompiler), [#120](https://github.com/vsimko/gfabasic-rust/issues/120), [#121](https://github.com/vsimko/gfabasic-rust/issues/121) |
 | LLVM backend and native executable | Not implemented | [#50](https://github.com/vsimko/gfabasic-rust/issues/50) |
 | CLI and configuration | Architecture documented; CLI implementation is tracked separately | [#9](https://github.com/vsimko/gfabasic-rust/issues/9), [#111](https://github.com/vsimko/gfabasic-rust/issues/111) |
