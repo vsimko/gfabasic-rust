@@ -213,10 +213,7 @@ fn render_location(sources: &SourceMap, span: SourceSpan) -> Option<String> {
     // Validate both bounds and UTF-8 boundaries before presenting coordinates.
     sources.slice(span)?;
     let (line, column) = file.line_column(span.start)?;
-    Some(format!(
-        "{}:{line}:{column}",
-        escape_controls(file.name())
-    ))
+    Some(format!("{}:{line}:{column}", escape_controls(file.name())))
 }
 
 fn render_snippet(sources: &SourceMap, span: SourceSpan) -> Option<String> {
@@ -233,7 +230,10 @@ fn render_snippet(sources: &SourceMap, span: SourceSpan) -> Option<String> {
         if end_line == line {
             end_column.saturating_sub(column)
         } else {
-            line_text.chars().count().saturating_sub(column.saturating_sub(1))
+            line_text
+                .chars()
+                .count()
+                .saturating_sub(column.saturating_sub(1))
         }
     };
     let selected: String = line_text
@@ -389,6 +389,9 @@ mod tests {
             "invalid range",
         )
         .with_primary_span(SourceSpan::new(source, 1, 2));
-        assert_eq!(invalid.render(&sources), "error[GFA-PARSE-0002]: invalid range");
+        assert_eq!(
+            invalid.render(&sources),
+            "error[GFA-PARSE-0002]: invalid range"
+        );
     }
 }
