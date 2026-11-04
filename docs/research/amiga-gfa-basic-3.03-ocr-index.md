@@ -20,6 +20,16 @@ A contemporary Amiga-News announcement dated 2026-09-03 says Thomas Werner is of
 
 A bibliographic listing distinguishes ISBN 3-89011-399-0 (508 pages) from ISBN 3-89011-276-5 (430 pages): [bibliographic comparison](https://diebuchsuche.at/buch-isbn-9783890113999.html). The PDF front matter matches ISBN 3-89011-399-0. Do not merge it with the separate French translation or the other German ISBN record.
 
+## Contemporary evidence for separate Amiga interpreter/compiler versions
+
+A March 1991 *Amiga Magazine* issue (anno 4, no. 21) contains an ALEX Computers price list on printed page 17. The list names **GFA BASIC Interpreter 3.51** and **GFA BASIC Compiler 3.52** as separate products: [issue PDF](https://www.amigamagazine.info/pdf/AM_21.pdf).
+
+This is contemporaneous commercial-catalogue evidence, not a manual and not a statement about the compiler's language semantics. It establishes that the two product labels were distinguished in a March 1991 listing. It does **not** prove that the 1990 German book's compiler chapter documents compiler 3.52, nor that interpreter 3.51 and compiler 3.52 share every language/API behavior.
+
+The Amiga version table on the GFA-Basic FAQ also lists Amiga editor/compiler/linker 3.52, but the site states that it focuses on Atari ST support and that its non-Atari information is informational only and may be questionable: [FAQ](https://gfabasic.net/htm/gfa_faq.htm). Keep this as secondary corroboration, not normative evidence.
+
+The magazine PDF's copyright page reserves reproduction and translation rights. This repository records only the bibliographic identity and product-version distinction; it does not reproduce the catalogue page or magazine contents.
+
 ## Version applicability: unresolved discrepancy
 
 The front matter does not support a single unambiguous version label:
