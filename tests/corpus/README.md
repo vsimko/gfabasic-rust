@@ -6,7 +6,7 @@ This directory contains small, independently authored GFA BASIC programs and met
 
 All fixtures must be independently authored. Do not copy historical program listings or require historical manuals, ROMs, disk images, or other third-party artifacts to be present in the repository or a release. Cite external evidence by bibliographic source and page/section; do not embed the source material itself.
 
-The repository does not currently contain a Rust workspace, compiler, runtime, test runner, or CI workflow. Do not report these fixtures as passing tests. Their source syntax and expected behavior require validation against the cited edition and, where marked, manual page-image review.
+The repository contains a three-crate Rust workspace skeleton and baseline CI checks, but no compiler, runtime behavior, or conformance test runner. Do not report these fixtures as passing tests. Their source syntax and expected behavior require validation against the cited edition and, where marked, manual page-image review.
 
 ## Layout
 
