@@ -88,6 +88,7 @@ jobs:
             printf 'commit=%s\n' "$GITHUB_SHA"
             printf 'benchmark=source_loading/in_memory_utf8\n'
             printf 'workload=synthetic-source-loader-v1\n'
+            printf 'benchmark-lock-sha256=%s\n' "$(sha256sum bench/Cargo.lock | cut -d' ' -f1)"
             printf 'target=x86_64-unknown-linux-gnu\n'
             printf 'runner=ubuntu-24.04\n'
             printf 'kernel=%s\n' "$(uname -srmo)"
