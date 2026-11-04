@@ -3,7 +3,7 @@
 This roadmap is the project-level view of delivery order for `gfabasic-rust`. GitHub Issues remain the source of truth for task scope, acceptance criteria, blockers, and implementation discussion.
 
 **Snapshot:** 2026-11-04  
-**Current maturity:** architecture and research baseline; Rust workspace bootstrap, source-map and strict UTF-8 transport primitives, and a minimal help/version CLI. Amiga GFA BASIC interpreter 3.0 is the accepted normative source dialect; Atari ST V2.xx/V3.0 remains research-only. The language frontend, backend, project configuration, runtime behavior, and GFA BASIC conformance are not implemented.
+**Current maturity:** architecture and research baseline; Rust workspace bootstrap, source-map and strict UTF-8 transport primitives, and a minimal help/version CLI. Amiga GFA BASIC interpreter 3.5 is the accepted normative source dialect; Atari ST V2.xx/V3.0 remains research-only. The language frontend, backend, project configuration, runtime behavior, and GFA BASIC conformance are not implemented.
 
 ## Status rules
 
@@ -23,7 +23,7 @@ This roadmap is the project-level view of delivery order for `gfabasic-rust`. Gi
 | CLI and configuration | Minimal `gfabasic` executable supports help/version; build/check explicitly reject compilation. Project configuration and compilation integration remain open | [#9](https://github.com/vsimko/gfabasic-rust/issues/9), [#111](https://github.com/vsimko/gfabasic-rust/issues/111) |
 | Runtime and platform integration | Not implemented; SDL3, Amiga and Atari ST runtime layers remain planned | [#51–#54](https://github.com/vsimko/gfabasic-rust/issues?q=is%3Aissue+is%3Aopen) |
 | API registry | Schema and metadata validation are complete; runtime handler resolution remains unimplemented | [#115](https://github.com/vsimko/gfabasic-rust/issues/115) |
-| Dialect and API research | Amiga GFA BASIC interpreter 3.0 is the accepted normative source dialect; Atari ST V2.xx/V3.0 remains research-only. Neither dialect is implemented or conformant | [ADR 0008](docs/architecture/adr/0008-initial-source-dialect-amiga-gfa-basic-3.0.md), [#3](https://github.com/vsimko/gfabasic-rust/issues/3), [#63–#66](https://github.com/vsimko/gfabasic-rust/issues?q=is%3Aissue+is%3Aopen) |
+| Dialect and API research | Amiga GFA BASIC interpreter 3.5 is the accepted normative source dialect; 3.0/3.03 material is historical research requiring 3.5 confirmation, and Atari ST V2.xx/V3.0 remains research-only. No dialect is implemented or conformant | [ADR 0009](docs/architecture/adr/0009-initial-source-dialect-amiga-gfa-basic-3.5.md), [#3](https://github.com/vsimko/gfabasic-rust/issues/3), [#63–#66](https://github.com/vsimko/gfabasic-rust/issues?q=is%3Aissue+is%3Aopen) |
 | Tests | Test strategy and registry metadata checks exist; no compiler conformance runner, fuzz harness, or executable end-to-end tests | [#42](https://github.com/vsimko/gfabasic-rust/issues/42), [#43](https://github.com/vsimko/gfabasic-rust/issues/43), [#116](https://github.com/vsimko/gfabasic-rust/issues/116), [#118](https://github.com/vsimko/gfabasic-rust/issues/118) |
 | Documentation | README, documentation index, architecture, source register, research notes, compatibility matrix, and policies exist; user quick start is correctly withheld until a working CLI exists | [#16](https://github.com/vsimko/gfabasic-rust/issues/16) |
 | CI and supply chain | Documentation and fast workspace checks are documented; dependency/license policy and reproducible SBOM remain open | [#39](https://github.com/vsimko/gfabasic-rust/issues/39) |
@@ -50,10 +50,10 @@ Keep the architecture, documentation, and research evidence internally consisten
 
 Choose a precise dialect/version and document only source-verified syntax and semantics. This phase is the prerequisite for parser and runtime behavior.
 
-- [x] Select Amiga GFA BASIC interpreter 3.0 as the first normative dialect; keep Atari ST V2.xx/V3.0 research-only — [#3](https://github.com/vsimko/gfabasic-rust/issues/3), [ADR 0008](docs/architecture/adr/0008-initial-source-dialect-amiga-gfa-basic-3.0.md)
-- [ ] Complete the Amiga 3.0 feature-level compatibility policy and evidence review — [#19](https://github.com/vsimko/gfabasic-rust/issues/19), [#20](https://github.com/vsimko/gfabasic-rust/issues/20)
+- [x] Select Amiga GFA BASIC interpreter 3.5 as the first normative dialect; keep Atari ST V2.xx/V3.0 research-only — [#3](https://github.com/vsimko/gfabasic-rust/issues/3), [ADR 0009](docs/architecture/adr/0009-initial-source-dialect-amiga-gfa-basic-3.5.md)
+- [ ] Complete the Amiga 3.5 feature-level compatibility policy and evidence review — [#19](https://github.com/vsimko/gfabasic-rust/issues/19), [#20](https://github.com/vsimko/gfabasic-rust/issues/20)
 - [ ] Complete the language feature inventory and compatibility matrix — [#19](https://github.com/vsimko/gfabasic-rust/issues/19)
-- [ ] Verify lexical rules, syntax, types, operators and expressions — [#20](https://github.com/vsimko/gfabasic-rust/issues/20)
+- [ ] Verify Amiga 3.5 lexical rules, syntax, types, operators and expressions — [#20](https://github.com/vsimko/gfabasic-rust/issues/20)
 - [ ] Verify statements, control flow and built-in functions — [#21](https://github.com/vsimko/gfabasic-rust/issues/21), [#22](https://github.com/vsimko/gfabasic-rust/issues/22)
 - [ ] Verify file, disk, data and resource operations — [#23](https://github.com/vsimko/gfabasic-rust/issues/23)
 - [ ] Resolve Amiga/Atari platform API evidence separately — [#24](https://github.com/vsimko/gfabasic-rust/issues/24), [#25](https://github.com/vsimko/gfabasic-rust/issues/25), [#63–#66](https://github.com/vsimko/gfabasic-rust/issues?q=is%3Aissue+is%3Aopen)
@@ -101,7 +101,7 @@ The first end-to-end MVP integration gate is tracked separately in [#113](https:
 
 ## Blockers and sequencing rules
 
-1. The initial dialect/version is selected (Amiga GFA BASIC interpreter 3.0); feature-level source evidence still gates language semantics, parser acceptance criteria, and conformance claims.
+1. The initial dialect/version is selected (Amiga GFA BASIC interpreter 3.5); 3.0/3.03 rules remain inherited candidates until confirmed for 3.5, and feature-level source evidence still gates language semantics, parser acceptance criteria, and conformance claims.
 2. Source manager, lexer, parser, semantic analysis and typed IR are sequential dependencies for the first compiler path.
 3. LLVM backend and runtime integration depend on a stable typed IR and runtime ABI.
 4. Platform APIs depend on verified profile declarations; Amiga and Atari ST evidence must not be conflated.
