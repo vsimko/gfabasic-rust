@@ -2,7 +2,7 @@
 
 - Status: **Proposed; no release workflow, compiler artifact, or runtime package exists.**
 - Tracking: [issue #40](https://github.com/vsimko/gfabasic-rust/issues/40).
-- Related work: [versioning #58](https://github.com/vsimko/gfabasic-rust/issues/58), [packaging #59](https://github.com/vsimko/gfabasic-rust/issues/59), [security and supply chain #39](https://github.com/vsimko/gfabasic-rust/issues/39).
+- Related work: [versioning #58](https://github.com/vsimko/gfabasic-rust/issues/58), [packaging #62](https://github.com/vsimko/gfabasic-rust/issues/62), [security and supply chain #39](https://github.com/vsimko/gfabasic-rust/issues/39).
 
 This document defines a release workflow design. It does not claim that the project can currently build or publish a compiler.
 
@@ -81,7 +81,7 @@ A package name should identify at least the product version, operating system, a
 
 This is an example naming convention, not a currently available artifact.
 
-Keep compiler installation separate from generated application assets. Do not bundle copyrighted manuals, ROMs, disk images, or research archives. The package layout, install/uninstall procedure, and runtime deployment model are defined under [issue #59](https://github.com/vsimko/gfabasic-rust/issues/59).
+Keep compiler installation separate from generated application assets. Do not bundle copyrighted manuals, ROMs, disk images, or research archives. The package layout, install/uninstall procedure, and runtime deployment model are defined under [issue #59](https://github.com/vsimko/gfabasic-rust/issues/62).
 
 ## 6. Build metadata
 
