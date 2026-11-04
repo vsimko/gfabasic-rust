@@ -196,7 +196,10 @@ impl fmt::Display for SourceLoadError {
                     self.path.display()
                 )
             }
-            SourceLoadErrorKind::InvalidUtf8 { valid_up_to, error_len } => {
+            SourceLoadErrorKind::InvalidUtf8 {
+                valid_up_to,
+                error_len,
+            } => {
                 write!(
                     formatter,
                     "source file {} is not valid UTF-8 (invalid sequence at byte {valid_up_to}, length {error_len:?})",
@@ -243,8 +246,7 @@ impl SourceMap {
     /// implicit encoding conversion is performed.
     pub fn load_utf8(&mut self, path: impl AsRef<Path>) -> Result<SourceId, SourceLoadError> {
         let path = path.as_ref().to_path_buf();
-        let bytes = fs::read(&path)
-            .map_err(|error| SourceLoadError::io(path.clone(), error))?;
+        let bytes = fs::read(&path).map_err(|error| SourceLoadError::io(path.clone(), error))?;
         let text = String::from_utf8(bytes)
             .map_err(|error| SourceLoadError::invalid_utf8(path.clone(), error))?;
         let name: Arc<str> = path.to_string_lossy().into_owned().into();
@@ -409,5 +411,4 @@ mod tests {
         assert!(matches!(error.kind(), super::SourceLoadErrorKind::Io(_)));
         assert!(map.is_empty());
     }
-
 }
