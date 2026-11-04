@@ -3,7 +3,7 @@
 This roadmap is the project-level view of delivery order for `gfabasic-rust`. GitHub Issues remain the source of truth for task scope, acceptance criteria, blockers, and implementation discussion.
 
 **Snapshot:** 2026-11-04  
-**Current maturity:** architecture and research baseline; Rust workspace bootstrap only. The compiler, runtime behavior, CLI, and GFA BASIC conformance are not implemented.
+**Current maturity:** architecture and research baseline; Rust workspace bootstrap plus source-map and strict UTF-8 transport primitives. The language frontend, backend, runtime behavior, CLI, and GFA BASIC conformance are not implemented.
 
 ## Status rules
 
@@ -94,6 +94,7 @@ A release must publish an explicit support matrix and known deviations. Do not p
 - [x] Define release workflow and artifact policy baseline — [#40](https://github.com/vsimko/gfabasic-rust/issues/40)
 - [ ] Package compiler, runtime and installation artifacts — [#62](https://github.com/vsimko/gfabasic-rust/issues/62)
 - [ ] Implement executable conformance and release test gates — [#116](https://github.com/vsimko/gfabasic-rust/issues/116)
+- [ ] Write tested installation and first compiler quick-start documentation — [#126](https://github.com/vsimko/gfabasic-rust/issues/126)
 
 The first end-to-end MVP integration gate is tracked separately in [#113](https://github.com/vsimko/gfabasic-rust/issues/113). Registry/runtime handler resolution is tracked in [#115](https://github.com/vsimko/gfabasic-rust/issues/115).
 
