@@ -126,15 +126,35 @@ of measurement per benchmark. It reports throughput and Criterion statistics.
 Benchmark-only dependencies live in the independent `bench` workspace and
 are excluded from ordinary workspace builds and the release SBOM. The
 benchmark workflow compiles the harness on relevant pull requests but runs
-measurements only on a weekly schedule or manual dispatch. Results and host
-metadata are uploaded as 30-day artifacts. There are no hard performance
-thresholds.
+measurements on relevant main-branch updates, a weekly schedule, or manual
+dispatch. Results and host metadata are uploaded as 30-day artifacts. There
+are no hard performance thresholds.
 
 The workflow records commit, toolchain, kernel, architecture, CPU model,
-logical CPU count, memory, target, and synthetic workload revision. GitHub
-hosted runner hardware can vary; compare results only when the recorded host
-and toolchain metadata match. Initial results from the scheduled/manual workflow will be observational,
-not a controlled-machine regression baseline.
+logical CPU count, memory, target, workload revision, and whether the
+same-host Criterion cache was hit. Criterion's `base` data is cached using a
+key that includes OS/architecture, CPU model, kernel release, Rust toolchain,
+benchmark lockfile hash, and workload version. The artifact records the
+lockfile SHA-256 and whether the cache was hit. Matching runs compare against
+the same baseline; a changed host/toolchain/lock/workload starts a fresh one.
+GitHub-hosted machines are still shared infrastructure, so results are
+observational rather than a controlled-machine regression gate.
+
+
+Initial pre-cache sample (2026-11-04, main commit `b61f7d3`):
+
+| Workload | Median | Standard deviation |
+|---|---:|---:|
+| Single 4 KiB source | 2.864 µs | 0.093 µs |
+| Single 64 KiB source | 43.816 µs | 1.122 µs |
+| Single 1 MiB source | 986.582 µs | 30.565 µs |
+| 128 × 1 KiB sources | 138.733 µs | 1.173 µs |
+
+Environment: Ubuntu 24.04, Linux 7.0.0-1017-azure, Intel Xeon Platinum
+8370C @ 2.80 GHz, four logical CPUs, 16 GB RAM, rustc 1.99.1. This sample
+predates the same-host cache and is not a regression comparison. See
+[workflow run 41911241816](https://github.com/vsimko/gfabasic-rust/actions/runs/41911241816)
+for the full Criterion artifact and environment metadata.
 
 Run locally with:
 
@@ -162,10 +182,10 @@ As of 2026-11-04:
 - The repository has a three-crate Rust workspace and a baseline CI workflow.
 - The compiler frontend beyond source loading, runtime behavior, and LLVM/SDL3 integration are not implemented.
 - A source-loading microbenchmark harness exists; other compiler/runtime benchmark workloads remain unavailable.
-- No stable cross-run performance baseline or regression gate exists yet.
+- Same-host cache-backed comparisons are configured; a controlled-machine baseline and hard regression gate do not exist yet.
 - The broader benchmark categories, measurement protocol, correctness requirements, profiling workflow, and regression policy remain design guidance; only source loading currently has an executable benchmark.
 - Criterion 0.8.2 is selected for the isolated benchmark workspace; Linux profiling tools remain candidates.
-- CI cache performance is not yet measured. Do not infer cache effectiveness from a successful build or cache hit alone.
+- The first pre-cache sample below is observational; the first cache-enabled main-branch run seeds the repeatable same-host baseline.
 
 The next implementation steps are to add deterministic benchmarks for lexer/parser, semantic, IR, backend, and runtime components as those components become executable. Keep timed measurements out of the fast pull-request path until their runtime and variance are understood. Do not create empty targets or claim baselines before there is executable work to measure.
 
