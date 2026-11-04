@@ -21,14 +21,14 @@ The project intends to provide a reusable GFA BASIC compiler and runtime in Rust
 
 These are planning assumptions, not evidence that these components are implemented or that a particular GFA BASIC dialect is fully supported.
 
-The language core is separate from platform API profiles. Amiga and Atari ST profiles are planned as independent choices. The selected source dialect/version, API profile set, build host, and output target must be represented as separate configuration concepts.
+The first normative source-language target is Amiga GFA BASIC interpreter 3.0, accepted in [ADR 0008](adr/0008-initial-source-dialect-amiga-gfa-basic-3.0.md). Atari ST GFA BASIC V2.xx/V3.0 remains research-only for the initial compiler target. The language core is separate from platform API profiles. Amiga and Atari ST profiles are planned as independent choices. The selected source dialect/version, API profile set, build host, and output target must be represented as separate configuration concepts.
 
 ## Architecture documents
 
 | Topic | Scope | Document | Tracking |
 |---|---|---|---|
 | Project goals and compatibility | Purpose, non-goals, compatibility dimensions | [GOALS.md](GOALS.md) | [#2](https://github.com/vsimko/gfabasic-rust/issues/2) |
-| Dialects and versions | Source dialect identity and version-specific rules | [DIALECTS.md](DIALECTS.md); [Atari ST GFA BASIC V2.xx/V3.0 research draft](../reference/atari-gfa-basic-3.0.md) | [#3](https://github.com/vsimko/gfabasic-rust/issues/3) |
+| Dialects and versions | Source dialect identity and version-specific rules | [DIALECTS.md](DIALECTS.md); [ADR 0008](adr/0008-initial-source-dialect-amiga-gfa-basic-3.0.md); [Amiga GFA BASIC 3.0 research](../reference/amiga-gfa-basic-3.0.md); [Atari ST GFA BASIC V2.xx/V3.0 research draft](../reference/atari-gfa-basic-3.0.md) | [#3](https://github.com/vsimko/gfabasic-rust/issues/3) |
 | Target model | Host/target distinction and target capabilities | [TARGETS.md](TARGETS.md); [ADR 0003](adr/0003-target-model.md) | [#4](https://github.com/vsimko/gfabasic-rust/issues/4) |
 | API profiles | Language core and independently selectable Amiga/Atari ST API profiles | [API-PROFILES.md](API-PROFILES.md); [ADR 0004](adr/0004-api-profile-model.md); [Amiga API research draft](../reference/amiga-gfa-api.md); [Atari ST API research draft](../reference/atari-gfa-api.md) | [#5](https://github.com/vsimko/gfabasic-rust/issues/5), [#24](https://github.com/vsimko/gfabasic-rust/issues/24), [#25](https://github.com/vsimko/gfabasic-rust/issues/25) |
 | Compiler pipeline and IR | Frontend stages, semantic analysis, typed IR, LLVM boundary | [PIPELINE-AND-IR.md](PIPELINE-AND-IR.md); [ADR 0007](adr/0007-compiler-pipeline-and-ir.md) | [#6](https://github.com/vsimko/gfabasic-rust/issues/6) |
@@ -92,7 +92,7 @@ Use numbered Architecture Decision Records in [adr/](adr/). Each record states c
 
 ## Open questions
 
-- Which exact dialect/version is the first normative source-language target?
+- Which Amiga GFA BASIC 3.0 manual edition(s) are authoritative, and which research findings still need page-image verification?
 - Which Amiga and Atari ST manual editions are authoritative for each profile?
 - What is the exact documentation format requirement referred to as “OKF” in issue #14?
 - Which LLVM version and Rust binding are suitable for the chosen Rust toolchain?
