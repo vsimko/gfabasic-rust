@@ -12,6 +12,10 @@
 4. For language or API research, consult the [source register](../reference-sources.md) and keep Amiga and Atari ST evidence separate.
 5. For test design, read [compatibility testing and release criteria](../architecture/TESTING.md) and the [conformance corpus instructions](../../tests/corpus/README.md).
 
+## Development setup
+
+Follow the [development setup guide](development-setup.md) for the pinned Rust toolchain, local build/test commands, documentation checks, and troubleshooting.
+
 ## Current development constraints
 
 The default branch contains a Cargo workspace with compiler, runtime, and Linux platform crates. The crates currently contain architectural placeholders only. The pinned toolchain is Rust 1.99.1; LLVM and SDL3 are not required for the current skeleton and remain deferred. The project license is not yet selected; see [issue #78](https://github.com/vsimko/gfabasic-rust/issues/78), and do not assume reuse permission from repository visibility.
