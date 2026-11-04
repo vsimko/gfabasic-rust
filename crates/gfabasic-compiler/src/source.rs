@@ -4,6 +4,9 @@
 //! encoding rules and source-composition semantics are not yet verified, so
 //! this module does not read files or implement MERGE/include.
 
+use std::fmt;
+use std::fs;
+use std::path::{Path, PathBuf};
 use std::sync::Arc;
 
 /// Identifies a source file within one source map.
@@ -133,6 +136,89 @@ impl SourceFile {
     }
 }
 
+/// A failure encountered while loading a source file as UTF-8.
+#[derive(Debug)]
+pub struct SourceLoadError {
+    path: PathBuf,
+    kind: SourceLoadErrorKind,
+}
+
+/// The reason a source file could not be loaded.
+#[derive(Debug)]
+pub enum SourceLoadErrorKind {
+    /// The file could not be read from the filesystem.
+    Io(std::io::Error),
+    /// The file contains bytes that are not valid UTF-8.
+    InvalidUtf8 {
+        /// Byte offset of the first invalid UTF-8 sequence.
+        valid_up_to: usize,
+        /// Length of the invalid sequence, if it can be determined.
+        error_len: Option<usize>,
+    },
+}
+
+impl SourceLoadError {
+    fn io(path: PathBuf, error: std::io::Error) -> Self {
+        Self {
+            path,
+            kind: SourceLoadErrorKind::Io(error),
+        }
+    }
+
+    fn invalid_utf8(path: PathBuf, error: std::string::FromUtf8Error) -> Self {
+        Self {
+            path,
+            kind: SourceLoadErrorKind::InvalidUtf8 {
+                valid_up_to: error.utf8_error().valid_up_to(),
+                error_len: error.utf8_error().error_len(),
+            },
+        }
+    }
+
+    /// Returns the path that failed to load.
+    pub fn path(&self) -> &Path {
+        &self.path
+    }
+
+    /// Returns the failure category and details.
+    pub fn kind(&self) -> &SourceLoadErrorKind {
+        &self.kind
+    }
+}
+
+impl fmt::Display for SourceLoadError {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match &self.kind {
+            SourceLoadErrorKind::Io(error) => {
+                write!(
+                    formatter,
+                    "could not read source file {}: {error}",
+                    self.path.display()
+                )
+            }
+            SourceLoadErrorKind::InvalidUtf8 {
+                valid_up_to,
+                error_len,
+            } => {
+                write!(
+                    formatter,
+                    "source file {} is not valid UTF-8 (invalid sequence at byte {valid_up_to}, length {error_len:?})",
+                    self.path.display()
+                )
+            }
+        }
+    }
+}
+
+impl std::error::Error for SourceLoadError {
+    fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
+        match &self.kind {
+            SourceLoadErrorKind::Io(error) => Some(error),
+            SourceLoadErrorKind::InvalidUtf8 { .. } => None,
+        }
+    }
+}
+
 /// Owns source files and resolves source spans.
 #[derive(Clone, Debug, Default)]
 pub struct SourceMap {
@@ -150,6 +236,21 @@ impl SourceMap {
         let id = SourceId(self.files.len());
         self.files.push(SourceFile::new(name.into(), text.into()));
         id
+    }
+
+    /// Reads a file and adds it to this map after strict UTF-8 validation.
+    ///
+    /// This is a transport-level UTF-8 loader, not a claim that every GFA BASIC
+    /// dialect uses UTF-8. The caller must select this method only when the
+    /// selected dialect/configuration requires UTF-8. No lossy replacement or
+    /// implicit encoding conversion is performed.
+    pub fn load_utf8(&mut self, path: impl AsRef<Path>) -> Result<SourceId, SourceLoadError> {
+        let path = path.as_ref().to_path_buf();
+        let bytes = fs::read(&path).map_err(|error| SourceLoadError::io(path.clone(), error))?;
+        let text = String::from_utf8(bytes)
+            .map_err(|error| SourceLoadError::invalid_utf8(path.clone(), error))?;
+        let name: Arc<str> = path.to_string_lossy().into_owned().into();
+        Ok(self.add_source(name, text))
     }
 
     /// Returns a source file by ID.
@@ -246,5 +347,68 @@ mod tests {
         assert_eq!(file.line_count(), 1);
         assert_eq!(file.line_column(0), Some((1, 1)));
         assert_eq!(file.line_text(1), Some(""));
+    }
+
+    #[test]
+    fn utf8_loader_reads_file_and_preserves_source_identity() {
+        use std::fs;
+        use std::sync::atomic::{AtomicUsize, Ordering};
+
+        static NEXT: AtomicUsize = AtomicUsize::new(0);
+        let path = std::env::temp_dir().join(format!(
+            "gfabasic-source-{}-{}.gfa",
+            std::process::id(),
+            NEXT.fetch_add(1, Ordering::Relaxed)
+        ));
+        fs::write(&path, "PRINT \"héllo\"\r\n").unwrap();
+
+        let mut map = SourceMap::new();
+        let source = map.load_utf8(&path).unwrap();
+        let file = map.get(source).unwrap();
+        assert_eq!(file.name(), path.to_string_lossy().as_ref());
+        assert_eq!(file.text(), "PRINT \"héllo\"\r\n");
+        assert_eq!(file.line_text(1), Some("PRINT \"héllo\""));
+        fs::remove_file(path).unwrap();
+    }
+
+    #[test]
+    fn utf8_loader_reports_invalid_encoding_without_lossy_replacement() {
+        use std::fs;
+        use std::sync::atomic::{AtomicUsize, Ordering};
+
+        static NEXT: AtomicUsize = AtomicUsize::new(0);
+        let path = std::env::temp_dir().join(format!(
+            "gfabasic-source-invalid-{}-{}.gfa",
+            std::process::id(),
+            NEXT.fetch_add(1, Ordering::Relaxed)
+        ));
+        fs::write(&path, [0x50, 0x52, 0xFF, 0x4E, 0x54]).unwrap();
+
+        let mut map = SourceMap::new();
+        let error = map.load_utf8(&path).unwrap_err();
+        assert_eq!(error.path(), path.as_path());
+        assert!(matches!(
+            error.kind(),
+            super::SourceLoadErrorKind::InvalidUtf8 { valid_up_to: 2, .. }
+        ));
+        assert!(map.is_empty());
+        fs::remove_file(path).unwrap();
+    }
+
+    #[test]
+    fn utf8_loader_reports_missing_file_path() {
+        use std::sync::atomic::{AtomicUsize, Ordering};
+
+        static NEXT: AtomicUsize = AtomicUsize::new(0);
+        let path = std::env::temp_dir().join(format!(
+            "gfabasic-source-missing-{}-{}.gfa",
+            std::process::id(),
+            NEXT.fetch_add(1, Ordering::Relaxed)
+        ));
+        let mut map = SourceMap::new();
+        let error = map.load_utf8(&path).unwrap_err();
+        assert_eq!(error.path(), path.as_path());
+        assert!(matches!(error.kind(), super::SourceLoadErrorKind::Io(_)));
+        assert!(map.is_empty());
     }
 }
