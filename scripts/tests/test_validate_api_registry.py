@@ -105,8 +105,10 @@ anchors = []
         second = self.valid_declaration().replace(
             "gfa.atari-st.system.timer", "gfa.atari-st.system.timer-copy"
         )
-        temp, root = self.make_root(first + "\\n" + second)
+        temp, root = self.make_root(first)
         self.addCleanup(temp.cleanup)
+        duplicate = root / "api/registry/atari-st/timer-copy.toml"
+        duplicate.write_text(second)
         self.assertTrue(any("conflicting declaration name" in error for error in validate_registry(root)))
 
     def test_profile_mismatch_fails(self):
