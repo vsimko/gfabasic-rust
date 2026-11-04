@@ -81,8 +81,8 @@ Create these pages only when the implementation or workflow provides verified in
 | First compilation and CLI usage | `user/quick-start.md` | A working CLI and a redistributable example |
 | Language support and limitations | `user/language-support.md` | A maintained compatibility matrix and verified implementation status |
 | Troubleshooting | `user/troubleshooting.md` | Known user-visible failure modes and diagnostic behavior |
-| Development environment | [`contributor/development-setup.md`](contributor/development-setup.md) | Pinned Rust toolchain, workspace build/test commands, and troubleshooting |
-| Build and test commands | `contributor/build-and-test.md` | Executable local checks and corresponding CI jobs |
+| Development environment | [`contributor/development-setup.md`](contributor/development-setup.md) | Current pinned Rust toolchain, workspace build/test commands, and troubleshooting |
+| Separate build and test reference | Not currently needed; commands are in [`contributor/development-setup.md`](contributor/development-setup.md) | Create a separate page only when the test matrix or workflows become too large for the setup guide |
 | Contribution workflow | `contributor/contribution-workflow.md` | Agreed review, branch, and release practices |
 
 Until those prerequisites exist, the README and the entry-point pages must state the limitation instead of inventing commands.
