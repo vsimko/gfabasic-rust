@@ -121,4 +121,4 @@ As of 2026-11-04:
 
 The next implementation step is to add a small deterministic benchmark for a real, measurable compiler or runtime component after that component exists. Keep the benchmark out of the default fast pull-request path until its runtime and variance are understood. Do not create empty benchmark targets or claim a baseline before there is executable work to measure.
 
-Issue #57 can be closed only after the benchmark harness and representative workloads exist, a baseline can be reproduced on a documented environment, and the project has a repeatable way to compare results. The strategy in this document is necessary groundwork, but it does not satisfy those implementation and baseline criteria by itself.
+Issue #60 can be closed only after the benchmark harness and representative workloads exist, a baseline can be reproduced on a documented environment, and the project has a repeatable way to compare results. The strategy in this document is necessary groundwork, but it does not satisfy those implementation and baseline criteria by itself.
