@@ -4,7 +4,7 @@
 
 The CLI should support a single source file and, after source composition semantics are verified, multi-file projects. Configuration must permit explicit dialect/version, API profile set, and output target selection. The compiler must not infer profile or target in a way that silently overrides explicit user settings.
 
-Decide the project-file format, schema version, discovery rules, explicit config option, precedence between CLI and configuration, and validation behavior. Invalid or conflicting settings must produce actionable diagnostics.
+Decide the project-file format, schema version, discovery rules, explicit config option, precedence between CLI and configuration, and validation behavior. Invalid or conflicting settings must produce actionable diagnostics. The proposed diagnostic fields, support outcomes, and machine-readable reporting constraints are defined in [DIAGNOSTICS.md](DIAGNOSTICS.md).
 
 Native executable output is the primary planned artifact. Object files, intermediate representations, debug data, and compatibility reports may be optional outputs.
 
