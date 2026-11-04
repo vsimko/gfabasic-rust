@@ -1,0 +1,192 @@
+#!/usr/bin/env python3
+"""Validate the declarative GFA BASIC API registry without requiring the Rust workspace."""
+
+from __future__ import annotations
+
+import json
+import re
+import sys
+import tomllib
+from collections import defaultdict
+from pathlib import Path
+
+from jsonschema import Draft202012Validator
+
+
+ROOT = Path(__file__).resolve().parents[1]
+REGISTRY_ROOT = ROOT / "api" / "registry"
+NAMESPACE_PREFIX = {
+    "language-core": "gfa.language.",
+    "amiga": "gfa.amiga.",
+    "atari-st": "gfa.atari-st.",
+}
+SUPPORTED = {"supported", "partial", "adapter-backed", "emulated"}
+PRIMARY_EVIDENCE = {
+    "book-documented",
+    "primary-reference-cross-checked",
+    "runtime-observed",
+}
+
+
+def read_source_ids(root: Path) -> set[str]:
+    text = (root / "docs" / "reference-sources.md").read_text(encoding="utf-8")
+    return {
+        match.group(1)
+        for line in text.splitlines()
+        if (match := re.match(r"^\|\s*([A-Z][A-Z0-9-]+)\s*\|", line))
+    }
+
+
+def read_test_ids(root: Path) -> set[str]:
+    path = root / "tests" / "corpus" / "manifest.toml"
+    if not path.exists():
+        return set()
+    manifest = tomllib.loads(path.read_text(encoding="utf-8"))
+    return set(manifest.get("fixtures", []))
+
+
+def heading_anchors(path: Path) -> set[str]:
+    text = path.read_text(encoding="utf-8")
+    counts: dict[str, int] = defaultdict(int)
+    anchors: set[str] = set()
+    for line in text.splitlines():
+        match = re.match(r"^\s{0,3}#{1,6}\s+(.+?)\s*#*\s*$", line)
+        if not match:
+            continue
+        heading = match.group(1).strip().lower()
+        heading = re.sub(r"<[^>]+>", "", heading)
+        heading = re.sub(r"[^\w\- ]", "", heading)
+        base = re.sub(r"\s+", "-", heading).strip("-")
+        count = counts[base]
+        counts[base] += 1
+        anchors.add(base if count == 0 else f"{base}-{count}")
+    return anchors
+
+
+def validate_registry(root: Path = ROOT) -> list[str]:
+    errors: list[str] = []
+    registry_root = root / "api" / "registry"
+    schema_path = root / "api" / "schema" / "registry-v1.json"
+    if not schema_path.exists():
+        return ["missing api/schema/registry-v1.json"]
+
+    schema = json.loads(schema_path.read_text(encoding="utf-8"))
+    Draft202012Validator.check_schema(schema)
+    validator = Draft202012Validator(schema)
+
+    try:
+        source_ids = read_source_ids(root)
+    except FileNotFoundError:
+        source_ids = set()
+        errors.append("missing docs/reference-sources.md")
+    test_ids = read_test_ids(root)
+
+    files = sorted(registry_root.rglob("*.toml")) if registry_root.exists() else []
+    seen_ids: dict[str, str] = {}
+    seen_names: dict[tuple[str, str, str], tuple[str, str | None]] = {}
+
+    for path in files:
+        relative = path.relative_to(registry_root)
+        namespace = relative.parts[0] if relative.parts else ""
+        if namespace not in NAMESPACE_PREFIX:
+            errors.append(f"{path}: unknown registry namespace directory {namespace!r}")
+            continue
+        try:
+            data = tomllib.loads(path.read_text(encoding="utf-8"))
+        except (OSError, tomllib.TOMLDecodeError) as exc:
+            errors.append(f"{path}: invalid TOML: {exc}")
+            continue
+
+        for error in sorted(validator.iter_errors(data), key=lambda item: list(item.path)):
+            location = ".".join(str(part) for part in error.absolute_path) or "<root>"
+            errors.append(f"{path}:{location}: {error.message}")
+
+        for declaration in data.get("declarations", []):
+            declaration_id = declaration.get("id", "")
+            name = declaration.get("name", "")
+            prefix = NAMESPACE_PREFIX[namespace]
+            if declaration_id and not declaration_id.startswith(prefix):
+                errors.append(f"{path}: {declaration_id}: ID does not match namespace {namespace!r}")
+            if declaration_id in seen_ids:
+                errors.append(f"{path}: duplicate ID {declaration_id} also in {seen_ids[declaration_id]}")
+            elif declaration_id:
+                seen_ids[declaration_id] = str(path.relative_to(root))
+
+            for availability in declaration.get("availability", []):
+                profile = availability.get("profile")
+                if namespace == "language-core" and profile is not None:
+                    errors.append(f"{path}: language-core declaration {declaration_id} must not select an API profile")
+                if namespace in {"amiga", "atari-st"} and profile != namespace:
+                    errors.append(f"{path}: declaration {declaration_id} must use profile {namespace!r}")
+                dialect = availability.get("dialect", "")
+                for version in availability.get("versions", []):
+                    key = (name.casefold(), dialect, version)
+                    group = declaration.get("overload-group")
+                    if key in seen_names:
+                        previous_file, previous_group = seen_names[key]
+                        if not group or group != previous_group:
+                            errors.append(
+                                f"{path}: conflicting declaration name {name!r} for {dialect} {version}; "
+                                f"also declared in {previous_file}"
+                            )
+                    else:
+                        seen_names[key] = (str(path.relative_to(root)), group)
+
+            evidence = declaration.get("evidence", {})
+            for source_id in evidence.get("sources", []):
+                if source_id not in source_ids:
+                    errors.append(f"{path}: {declaration_id}: unknown source ID {source_id!r}")
+
+            docs = declaration.get("docs", {})
+            docs_path = root / docs.get("path", "")
+            if not docs_path.is_file():
+                errors.append(f"{path}: {declaration_id}: missing documentation path {docs.get('path')!r}")
+                anchors: set[str] = set()
+            else:
+                anchors = heading_anchors(docs_path)
+                for anchor in docs.get("anchors", []):
+                    if anchor not in anchors:
+                        errors.append(f"{path}: {declaration_id}: missing documentation anchor {anchor!r}")
+
+            implementation = declaration.get("implementation", {})
+            if implementation.get("status") in {"implemented", "partial"} and not implementation.get("handler"):
+                errors.append(f"{path}: {declaration_id}: implemented entry has no handler ID")
+
+            for support in declaration.get("support", []):
+                classification = support.get("classification")
+                tests = support.get("tests", [])
+                for test_id in tests:
+                    if test_id not in test_ids:
+                        errors.append(f"{path}: {declaration_id}: unknown test ID {test_id!r}")
+                if classification in SUPPORTED:
+                    if evidence.get("status") not in PRIMARY_EVIDENCE:
+                        errors.append(f"{path}: {declaration_id}: supported entry lacks primary/observed evidence")
+                    if implementation.get("status") not in {"implemented", "partial"}:
+                        errors.append(f"{path}: {declaration_id}: supported entry has no implementation")
+                    if support.get("conformance") != "passing" or not tests:
+                        errors.append(f"{path}: {declaration_id}: supported entry needs passing conformance tests")
+                    if not docs.get("anchors"):
+                        errors.append(f"{path}: {declaration_id}: supported entry needs at least one documentation anchor")
+                if classification in {"partial", "adapter-backed", "emulated"} and not implementation.get("handler"):
+                    errors.append(f"{path}: {declaration_id}: partial/adapter/emulated support needs a handler ID")
+
+    return errors
+
+
+def main() -> int:
+    errors = validate_registry()
+    if errors:
+        for error in errors:
+            print(f"ERROR: {error}", file=sys.stderr)
+        return 1
+    count = sum(
+        len(tomllib.loads(path.read_text(encoding="utf-8")).get("declarations", []))
+        for path in REGISTRY_ROOT.rglob("*.toml")
+    ) if REGISTRY_ROOT.exists() else 0
+    files = len(list(REGISTRY_ROOT.rglob("*.toml"))) if REGISTRY_ROOT.exists() else 0
+    print(f"API registry validation passed: {count} declaration(s) across {files} file(s).")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
