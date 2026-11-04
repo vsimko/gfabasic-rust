@@ -49,12 +49,7 @@ fn benchmark_source_loading(criterion: &mut Criterion) {
 
     let small_source = synthetic_source(SMALL_SOURCE_SIZE);
     let many_sources: Vec<(String, Vec<u8>)> = (0..MANY_SOURCE_COUNT)
-        .map(|index| {
-            (
-                format!("synthetic-{index:03}.gfa"),
-                small_source.clone(),
-            )
-        })
+        .map(|index| (format!("synthetic-{index:03}.gfa"), small_source.clone()))
         .collect();
     group.throughput(Throughput::Bytes(
         (MANY_SOURCE_COUNT * SMALL_SOURCE_SIZE) as u64,
