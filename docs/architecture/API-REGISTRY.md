@@ -145,22 +145,22 @@ anchors = []
 
 ## 8. Validation rules
 
-The validator in `scripts/validate_api_registry.py` currently rejects or flags:
+The implemented validator in `scripts/validate_api_registry.py` and its unit tests currently check:
 
-1. Missing or duplicate stable IDs.
-2. Invalid schema versions, unknown fields, or missing required metadata.
-3. Invalid version ranges or unknown dialect/profile identifiers.
-4. Duplicate names whose availability overlaps without an explicit overload/conflict rule.
-5. Functions without return metadata or statements without statement syntax.
-6. Parameters with missing types, invalid optional ordering, or inconsistent overload arity.
-7. Implemented/partial records without a handler ID. The current validator checks that the ID is present, but does not yet resolve it to a Rust runtime implementation; that requires the runtime handler registry/code.
-8. Supported declarations without source evidence and conformance tests.
-9. Broken documentation anchors or test IDs.
-10. Amiga/Atari declarations assigned to the wrong namespace/profile.
-11. Unsafe operations without explicit safety classification.
-12. Syntax alternatives that collide in the same enabled dialect/version/profile.
+1. JSON Schema structure, required fields, value types, and enumerated status values.
+2. Namespace prefixes and the required Amiga/Atari profile assignment.
+3. Duplicate stable declaration IDs.
+4. Conflicting declaration names for the same dialect/version unless declarations share an explicit overload group.
+5. Source IDs against the source register.
+6. Documentation paths and heading anchors.
+7. Test IDs against the conformance-corpus manifest.
+8. The presence of a handler ID on implemented or partial declarations.
+9. Primary/observed evidence, an implementation, passing conformance tests, and documentation anchors before a declaration can claim supported/partial/adapter-backed/emulated support.
+10. A handler ID for partial, adapter-backed, or emulated support.
 
-Research entries may omit implementation and tests only when the omission is explicit and support is not claimed. The validator must distinguish errors from warnings so that an incomplete research record can be committed without being mistaken for a supported declaration.
+The validator does not yet resolve handler IDs to Rust symbols or runtime registrations. It also does not generate reference pages or compare generated output with checked-in pages. The schema and validator do not yet enforce all semantic constraints described by the architecture, including argument ordering rules, full version-range semantics, complete dialect/profile identifier registries, or syntax collision analysis across all enabled profile combinations. Treat those as open work, not implemented guarantees.
+
+The current registry has one research-status Atari ST `TIMER` declaration. It is explicitly unsupported and has no implementation or conformance test. No declaration currently claims support.
 
 ## 9. Documentation generation
 
