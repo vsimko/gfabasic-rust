@@ -18,7 +18,11 @@ Follow the [development setup guide](development-setup.md) for the pinned Rust t
 
 ## Current development constraints
 
-The default branch contains a Cargo workspace with compiler, runtime, and Linux platform crates. The crates currently contain architectural placeholders only. The pinned toolchain is Rust 1.99.1; LLVM and SDL3 are not required for the current skeleton and remain deferred. The project license is not yet selected; see [issue #78](https://github.com/vsimko/gfabasic-rust/issues/78), and do not assume reuse permission from repository visibility.
+The default branch contains a Cargo workspace with compiler, runtime, and Linux platform crates. The crates currently contain architectural placeholders only. The pinned toolchain is Rust 1.99.1; LLVM and SDL3 are not required for the current skeleton and remain deferred. The project source code and original project documentation are licensed under MIT; see the root [LICENSE](../../LICENSE) file and the [license section in the README](../../README.md#license).
+
+The MIT license does not grant redistribution rights to third-party manuals, ROMs, disk images, sample programs, or other externally sourced materials. Check their individual rights and the documentation policy before adding or redistributing them.
+
+## Documentation and workspace checks
 
 Run the same documentation checks locally from the repository root:
 
@@ -45,9 +49,10 @@ The same Rust checks run in [rust.yml](../../.github/workflows/rust.yml). The do
 - Keep changes small and scoped to an issue or a clearly described defect.
 - Preserve accepted architecture decisions. Mark proposals as proposals.
 - Cite the applicable dialect, platform, version, source edition, and page/section for language/API claims.
-- Keep copyrighted manuals, ROMs, disk images, and unlicensed examples out of the repository.
+- Do not add copyrighted manuals, ROMs, disk images, or unlicensed examples without a separate documented rights basis.
 - Distinguish research candidates from verified conformance tests.
 - Report checks that were actually run and state when a check is unavailable.
+- By submitting a contribution, you agree that the contribution may be distributed as part of this project under the MIT License. You retain copyright in your contribution; no separate copyright assignment is implied.
 
 ## Future development setup
 
