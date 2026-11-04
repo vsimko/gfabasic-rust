@@ -62,7 +62,7 @@ Initial Amiga 3.0 extraction notes: [Amiga GFA BASIC 3.0 reference research](ref
 
 ### Aminet survey leads
 
-The Aminet `dev/basic` category is a relevant discovery point: [Aminet dev/basic](https://aminet.net/dev/basic/). The complete current mirror listing was surveyed on 2026-11-04; selected GFA-related archive candidates and their displayed dates/sizes are recorded in the [Aminet package catalogue](research/aminet-catalogue.md). The archive readmes and contents still require inspection. Treat all unverified entries as discovery leads, not normative language documentation. Third-party libraries and wrappers must not be mistaken for built-in GFA BASIC commands.
+The Aminet `dev/basic` category is a relevant discovery point: [Aminet dev/basic](https://aminet.net/dev/basic/). The complete current mirror listing was surveyed on 2026-11-04; selected archive candidates and their displayed dates/sizes are recorded in the [Aminet package catalogue](research/aminet-catalogue.md). A package-page inspection classified GTBoxConv v4.50 as a GadToolsBox-to-Blitz2 generator, not GFA BASIC. Most other package readmes and archive contents still require inspection. Treat unverified entries as discovery leads, not normative language documentation. Third-party libraries and wrappers must not be mistaken for built-in GFA BASIC commands.
 
 ### Initial findings and cautions
 
@@ -227,7 +227,7 @@ Sources:
 - Exact `gfalist` metadata: [gfalist.readme](https://ftp.fau.de/aminet/dev/basic/gfalist.readme).
 - Independent contemporary upload notice: [Amiga-News, Aminet uploads through 2021-02-20](https://www.amiga-news.de/en/standard/?frm_start=1883).
 
-The directory and README confirm that `gfalist` is a MorphOS/PPC tool for tokenized GFA BASIC 3.x. It is not an Amiga GFA BASIC language reference and must not be used to infer built-in commands or runtime behavior. The other three packages are catalogue leads only. Their names are not evidence that their functionality is built into GFA BASIC.
+The directory and README confirm that `gfalist` is a MorphOS/PPC tool for tokenized GFA BASIC 3.x. It is not an Amiga GFA BASIC language reference and must not be used to infer built-in commands or runtime behavior. The GFA_Gadgets, GFA_Menus, and GuiGfxDevBas packages remain catalogue leads only. GTBoxConv is a verified false positive: it generates Blitz2 code from GadToolsBox input and is not a GFA BASIC tool. Package names and category placement are not evidence that functionality is built into GFA BASIC.
 
 This is a verified snapshot of selected catalogue entries, not a complete survey of `dev/basic`. Archive inspection, license checks, package dependency extraction, and classification of additional entries remain open work for issue #64.
 
