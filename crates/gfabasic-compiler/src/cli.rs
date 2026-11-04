@@ -39,7 +39,11 @@ where
     let args: Vec<String> = args.into_iter().collect();
 
     match args.as_slice() {
-        [] | [arg] if args.is_empty() || arg == "-h" || arg == "--help" || arg == "help" => {
+        [] => {
+            let _ = out.write_all(HELP.as_bytes());
+            0
+        }
+        [arg] if arg == "-h" || arg == "--help" || arg == "help" => {
             let _ = out.write_all(HELP.as_bytes());
             0
         }
