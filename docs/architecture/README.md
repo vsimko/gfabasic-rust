@@ -42,6 +42,7 @@ The language core is separate from platform API profiles. Amiga and Atari ST pro
 | API registry | Canonical machine-readable declarations | [API-REGISTRY.md](API-REGISTRY.md) | [#12](https://github.com/vsimko/gfabasic-rust/issues/12) |
 | Versioning and compatibility lifecycle | Compiler releases, schema versions, runtime ABI, deprecation | [VERSIONING.md](VERSIONING.md) | [#58](https://github.com/vsimko/gfabasic-rust/issues/58) |
 | Performance benchmarks | Compiler, generated-program, runtime, and build measurements | [BENCHMARKING.md](BENCHMARKING.md) | [#57](https://github.com/vsimko/gfabasic-rust/issues/57) |
+| Release and artifacts | Tag triggers, validation gates, artifact metadata, checksums, provenance, reproducibility | [RELEASES.md](RELEASES.md) | [#40](https://github.com/vsimko/gfabasic-rust/issues/40) |
 
 Detailed decisions remain open until the corresponding research and review are complete. The existence of a document does not mean that its issue is resolved.
 
