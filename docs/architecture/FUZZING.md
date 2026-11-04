@@ -1,7 +1,7 @@
 # Frontend fuzzing and robustness strategy
 
-- Status: Proposed; no compiler frontend, fuzz harness, or fuzzing CI job exists yet.
-- Tracking: [issue #43](https://github.com/vsimko/gfabasic-rust/issues/43).
+- Status: Strategy documented; no compiler frontend, fuzz harness, or fuzzing CI job exists yet.
+- Tracking: [strategy #43 (completed)](https://github.com/vsimko/gfabasic-rust/issues/43); [implementation #118](https://github.com/vsimko/gfabasic-rust/issues/118).
 
 ## Goals and non-goals
 
