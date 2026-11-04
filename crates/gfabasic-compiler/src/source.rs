@@ -261,12 +261,6 @@ impl SourceMap {
     /// dialect uses UTF-8. The caller must select this method only when the
     /// selected dialect/configuration requires UTF-8. No lossy replacement or
     /// implicit encoding conversion is performed.
-    /// Reads a file and adds it to this map after strict UTF-8 validation.
-    ///
-    /// This is a transport-level UTF-8 loader, not a claim that every GFA BASIC
-    /// dialect uses UTF-8. The caller must select this method only when the
-    /// selected dialect/configuration requires UTF-8. No lossy replacement or
-    /// implicit encoding conversion is performed.
     pub fn load_utf8(&mut self, path: impl AsRef<Path>) -> Result<SourceId, SourceLoadError> {
         let path = path.as_ref().to_path_buf();
         let bytes = fs::read(&path).map_err(|error| SourceLoadError::io(path.clone(), error))?;
