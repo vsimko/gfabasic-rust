@@ -16,7 +16,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: benchmarks-\${{ github.event.pull_request.number || github.ref }}
+  group: benchmarks-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -38,12 +38,12 @@ jobs:
         run: cargo +1.99.1 generate-lockfile --manifest-path bench/Cargo.toml
 
       - name: Compile benchmark without running measurements
-        run: cargo +1.99.1 check --manifest-path bench/Cargo.toml --benches --locked
+        run: cargo +1.99.1 check --manifest-path bench/Cargo.toml --target-dir bench/target --benches --locked
 
       - name: Upload resolved benchmark lockfile
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         with:
-          name: benchmark-lockfile-\${{ github.run_id }}
+          name: benchmark-lockfile-${{ github.run_id }}
           path: bench/Cargo.lock
           retention-days: 7
 
@@ -62,31 +62,31 @@ jobs:
           rustup default 1.99.1
 
       - name: Run source-loading benchmarks
-        run: cargo +1.99.1 bench --manifest-path bench/Cargo.toml --bench source_loading --locked -- --noplot
+        run: cargo +1.99.1 bench --manifest-path bench/Cargo.toml --target-dir bench/target --bench source_loading --locked -- --noplot
 
       - name: Record benchmark environment
         run: |
           {
-            printf 'commit=%s\\n' "$GITHUB_SHA"
-            printf 'benchmark=source_loading/in_memory_utf8\\n'
-            printf 'workload=synthetic-source-loader-v1\\n'
-            printf 'target=x86_64-unknown-linux-gnu\\n'
-            printf 'runner=ubuntu-24.04\\n'
-            printf 'kernel=%s\\n' "$(uname -srmo)"
-            printf 'architecture=%s\\n' "$(uname -m)"
-            printf 'logical-cpus=%s\\n' "$(nproc)"
-            printf 'cpu-model=%s\\n' "$(grep -m1 'model name' /proc/cpuinfo | cut -d: -f2- | xargs)"
-            printf 'memory-total-kib=%s\\n' "$(awk '/MemTotal/ {print $2}' /proc/meminfo)"
+            printf 'commit=%s\n' "$GITHUB_SHA"
+            printf 'benchmark=source_loading/in_memory_utf8\n'
+            printf 'workload=synthetic-source-loader-v1\n'
+            printf 'target=x86_64-unknown-linux-gnu\n'
+            printf 'runner=ubuntu-24.04\n'
+            printf 'kernel=%s\n' "$(uname -srmo)"
+            printf 'architecture=%s\n' "$(uname -m)"
+            printf 'logical-cpus=%s\n' "$(nproc)"
+            printf 'cpu-model=%s\n' "$(grep -m1 'model name' /proc/cpuinfo | cut -d: -f2- | xargs)"
+            printf 'memory-total-kib=%s\n' "$(awk '/MemTotal/ {print $2}' /proc/meminfo)"
           } > "$RUNNER_TEMP/benchmark-metadata.txt"
           rustc +1.99.1 --version --verbose > "$RUNNER_TEMP/rustc-version.txt"
 
       - name: Upload Criterion reports and environment metadata
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         with:
-          name: source-loading-benchmark-\${{ github.run_id }}
+          name: source-loading-benchmark-${{ github.run_id }}
           path: |
             bench/target/criterion/
-            \${{ runner.temp }}/benchmark-metadata.txt
-            \${{ runner.temp }}/rustc-version.txt
+            ${{ runner.temp }}/benchmark-metadata.txt
+            ${{ runner.temp }}/rustc-version.txt
           if-no-files-found: error
           retention-days: 30

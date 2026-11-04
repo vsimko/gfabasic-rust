@@ -160,13 +160,13 @@ artifact details.
 As of 2026-11-04:
 
 - The repository has a three-crate Rust workspace and a baseline CI workflow.
-- The compiler, runtime behavior, CLI, and LLVM/SDL3 integration are not implemented.
+- The compiler frontend beyond source loading, runtime behavior, and LLVM/SDL3 integration are not implemented.
 - A source-loading microbenchmark harness exists; other compiler/runtime benchmark workloads remain unavailable.
 - No stable cross-run performance baseline or regression gate exists yet.
 - The benchmark categories, measurement protocol, correctness requirements, profiling workflow, and proposed CI rollout are documented as a design only.
 - Criterion 0.8.2 is selected for the isolated benchmark workspace; Linux profiling tools remain candidates.
 - CI cache performance is not yet measured. Do not infer cache effectiveness from a successful build or cache hit alone.
 
-The next implementation step is to add a small deterministic benchmark for a real, measurable compiler or runtime component after that component exists. Keep the benchmark out of the default fast pull-request path until its runtime and variance are understood. Do not create empty benchmark targets or claim a baseline before there is executable work to measure.
+The next implementation steps are to add deterministic benchmarks for lexer/parser, semantic, IR, backend, and runtime components as those components become executable. Keep timed measurements out of the fast pull-request path until their runtime and variance are understood. Do not create empty targets or claim baselines before there is executable work to measure.
 
 Issue #60 can be closed only after the benchmark harness and representative workloads exist, a baseline can be reproduced on a documented environment, and the project has a repeatable way to compare results. The strategy in this document is necessary groundwork, but it does not satisfy those implementation and baseline criteria by itself.
