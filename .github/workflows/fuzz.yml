@@ -114,15 +114,23 @@ jobs:
             fi
           done
 
+      - name: Package fuzzer output for portable artifact upload
+        if: always()
+        run: |
+          mkdir -p "$RUNNER_TEMP/source-loader-fuzz" "$RUNNER_TEMP/source-loader-minimized"
+          touch "$RUNNER_TEMP/source-loader-fuzz-metadata.txt"
+          tar -czf "$RUNNER_TEMP/source-loader-fuzz-results.tar.gz" \
+            --transform='s/:/_/g' \
+            -C "$RUNNER_TEMP" \
+            source-loader-fuzz source-loader-minimized source-loader-fuzz-metadata.txt
+
       - name: Upload fuzzer output and resolved lockfile
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         with:
           name: source-loader-fuzz-${{ github.run_id }}
           path: |
-            ${{ runner.temp }}/source-loader-fuzz/
-            ${{ runner.temp }}/source-loader-minimized/
-            ${{ runner.temp }}/source-loader-fuzz-metadata.txt
+            ${{ runner.temp }}/source-loader-fuzz-results.tar.gz
             fuzz/Cargo.lock
           if-no-files-found: ignore
           retention-days: 7

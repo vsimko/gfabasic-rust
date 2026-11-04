@@ -42,7 +42,9 @@ invariants. It does not establish the source encoding of any GFA BASIC
 dialect, parse source text, or test MERGE/include behavior. Its seed corpus is
 synthetic transport data, not a language-conformance corpus.
 
-Fuzzer output is generated data and must not be committed. For a reproducible
-failure, preserve the original input, minimize it, record the target/toolchain
+Fuzzer output is generated data and must not be committed. CI packages the raw
+output and best-effort minimized inputs into a tarball; AFL++ queue filenames
+are sanitized in the archive for cross-platform artifact handling. For a
+reproducible failure, preserve the original input, record the target/toolchain
 and campaign settings, and add the smallest appropriate regression case to
 the deterministic test suite.
