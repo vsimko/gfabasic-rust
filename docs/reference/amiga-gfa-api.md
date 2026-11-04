@@ -35,10 +35,10 @@ Some constructs may belong to the language core rather than the Amiga API profil
 
 | Item | Extracted form or behavior | Source | Evidence |
 |---|---|---|---|
-| `OPEN` | `OPEN mode, #channel, filename[, record_length]`. The book lists modes `O` (output/create or truncate), `I` (input/read), `A` (append), `U` (update/read and write), and `R` (random/direct access). | pp. 5-91–5-93 | Book-documented; OCR review pending |
+| `OPEN` | `OPEN mode, #channel, filename[, record_length]`. The book lists modes `O` (output/create or truncate), `I` (input/read), `A` (append), `U` (update/read and write), and `R` (random/direct access). The `R` form describes a direct-access file held in memory, with a total data limit of 65,535 bytes. | pp. 5-91–5-93; 5-97–5-98 | Book-documented; OCR review pending |
 | Channel range | Up to 100 simultaneously open files; channel numbers 0–99. The introductory notation says `#` is optional for most file operations, with `IN` and `OUT` exceptions. | pp. 5-92; 1-11–1-12 | Book-documented; OCR review pending |
-| Default record length | The research extraction records 128 bytes when the optional direct-access record length is omitted. | p. 5-97 | Book-documented; OCR review pending |
-| Amiga device names | `CON:`, `PRT:`, `PAR:`, `SER:`, `COM:`, `PIPE:`, `SPEAK:`, `RAW:`, `NEWCON:`, and `AUX:` are listed as file-like device interfaces. | pp. 5-92–5-93 | Book-documented; OCR review pending |
+| Record length | The default direct-access record length is 128 bytes when omitted. The book also states a maximum record length of 65,535 bytes. The combined FIELD layout must not exceed the selected record length. | pp. 5-92–5-93; 5-97–5-98 | Book-documented; OCR review pending |
+| Amiga device names | `CON:`, `PRT:`, `PAR:`, `SER:`, `COM:`, `PIPE:`, `SPEAK:`, `RAW:`, `NEWCON:`, and `AUX:` are listed as file-like device interfaces. The full name including the colon is supplied as the filename; the book says the OPEN mode may be omitted for these interfaces. | pp. 5-92–5-93 | Book-documented; OCR review pending |
 
 Device names are AmigaDOS endpoints, not ordinary host file paths. Their availability and behavior depend on the relevant Amiga device handlers. A Linux implementation must not silently reinterpret these names as local files or substitute a host terminal, printer, serial port, pipe, or speech service.
 
@@ -46,18 +46,19 @@ Device names are AmigaDOS endpoints, not ordinary host file paths. Their availab
 
 | Construct | Extracted form or behavior | Source | Evidence |
 |---|---|---|---|
-| `BGET` | `BGET [#]channel, start, count`; reads bytes from the current file position into memory beginning at `start`. | p. 5-87 | Book-documented; OCR review pending |
-| `BPUT` | `BPUT [#]channel, start, count`; writes bytes from memory beginning at `start` to the file's current position. | p. 5-87 | Book-documented; OCR review pending |
+| `BGET` | `BGET [#]channel, start, count`; reads bytes from the current file position into memory beginning at `start`. The OCR text appears to restrict the opened channel to mode `T` or `U`, but `T` conflicts with the chapter's listed OPEN modes and is not interpreted here pending page-image review. | p. 5-87 | Book-documented; mode glyph unresolved |
+| `BPUT` | `BPUT [#]channel, start, count`; writes bytes from memory beginning at `start` to the file's current position. The book describes use with files opened in `O` or `U` mode. | p. 5-87 | Book-documented; OCR review pending |
 | `CLOSE` | `CLOSE [#channel]`; the extraction says that bare `CLOSE` closes all channels. | p. 5-88 | Book-documented; OCR review pending |
 | `EOF` | `EOF(#channel)`; the book's description reports −1 when the file pointer is at the final byte and 0 otherwise. Empty-file and past-end behavior are not established by the current extraction. | p. 5-88 | Book-documented; edge cases unknown |
-| `FIELD` | Associates portions of a random-access record with string variables using `AS` or memory addresses using `AT`. Multiple declarations may contribute to one record layout. A complete syntax form has not yet been transcribed. | pp. 5-88–5-89 | Book-documented; signature incomplete |
-| `GET` / `PUT` | Extracted forms: `GET #channel[, record_number]` and `PUT #channel[, record_number]`. They read/write a selected direct-access record using the current FIELD layout. | pp. 5-89, 5-93 | Book-documented; OCR review pending |
-| `LOC` | `LOC(#channel)`; returns the current file position in bytes from the beginning. | p. 5-90 | Book-documented; OCR review pending |
+| `FIELD` | Two extracted forms: `FIELD #channel, length AS string_var[, length AS string_var...]` and `FIELD #channel, length AT(address)[, length AT(address)...]`. `AS` and `AT` forms may be mixed and continued across multiple program lines for one file. | pp. 5-88–5-89 | Book-documented; OCR review pending |
+| `GET` / `PUT` | Extracted forms: `GET #channel[, record_number]` and `PUT #channel[, record_number]`. They read/write a selected direct-access record using the current FIELD layout. If the record number is omitted, the book describes using the next record after the last GET or the record selected by RECORD. | pp. 5-89, 5-93 | Book-documented; OCR review pending |
+| `LOC` | `LOC(#channel)`; returns the current file position in bytes from the beginning. The example reports 4 when the pointer is on byte 4; do not assume a host-style zero-based offset without a compatibility probe. | p. 5-90 | Book-documented; OCR review pending |
 | `LOF` | `LOF(#channel)`; returns the file length in bytes. | p. 5-90 | Book-documented; OCR review pending |
 | `RECORD` | `RECORD [#]channel, record_number`; selects the record for subsequent GET/PUT operations. | p. 5-94 | Book-documented; OCR review pending |
-| `RELSEEK` | `RELSEEK #channel, offset`; moves the file position relative to the current position. The extraction says negative offsets move toward the beginning. | pp. 5-94–5-95 | Book-documented; OCR review pending |
-| `SEEK` | `SEEK #channel, offset`; positions relative to the beginning, with negative values described as offsets from the end. Exact boundary behavior remains to be checked. | p. 5-95 | Book-documented; OCR review pending |
-| `STORE` / `RECALL` | Transfer lines between a text file and a string array. The extraction records `STORE #channel, string_array[, count]` and says STORE appends CR/LF per line. The complete RECALL signature and edge cases remain to be checked. | pp. 5-95–5-96 | Book-documented; RECALL signature incomplete |
+| `RELSEEK` | `RELSEEK #channel, [-] offset`; moves the file position relative to the current position. Negative offsets move toward the beginning. The book warns against selecting nonexistent positions. | pp. 5-94–5-95 | Book-documented; OCR review pending |
+| `SEEK` | `SEEK #channel, [-] offset`; a positive value positions from the beginning and a negative value from the end. The book warns against nonexistent positions; boundary behavior needs a runtime probe. | p. 5-95 | Book-documented; OCR review pending |
+| `STORE` | `STORE #channel, string_array()[, count]`; writes array elements in order and appends CR/LF for each line. The optional count limits the number of elements; a `from TO to` range form is also described. | p. 5-96 | Book-documented; OCR review pending |
+| `RECALL` | `RECALL #channel, string_array(), count, bytes_read_var`; reads lines into the array. The book describes CR/LF control codes as line terminators, stops silently at EOF or when the array is full, and returns the number of bytes read through the numeric variable. A `from TO to` range form is also described. | pp. 5-94–5-95 | Book-documented; OCR review pending |
 
 The distinction between sequential byte/line I/O and random/direct-access records is important. `FIELD`, `GET`, `PUT`, and `RECORD` must be described as one related record-layout contract after the original pages have been visually checked. Do not infer byte order, padding, numeric representation, or string layout from the command names.
 
@@ -72,6 +73,9 @@ These are recorded because the Amiga book describes their interaction with the c
 | `INPUT` | Reads values into a variable list; comma-separated fields are described, with quoted commas for string data. The book also describes input from an opened file/device channel. | pp. 5-64–5-66 | Book-documented; OCR review pending |
 | `INPUT$` | `INPUT$(count[, #channel])`; returns a string of up to the requested character count. The channel form reads from an opened file. | pp. 5-66–5-67 | Book-documented; OCR review pending |
 | `LINE INPUT` | Extracted forms: `LINE INPUT [prompt;] string_var` and `LINE INPUT #channel, string_var`; reads a line where commas are text rather than field separators. | p. 5-67 onward | Book-documented; OCR review pending |
+| `INP` | `INP(#channel)`; reads one byte from the specified data channel. | p. 5-99 | Book-documented; OCR review pending |
+| `OUT` | `OUT #channel, byte1[, byte2...]`; writes byte values to the specified data channel. | p. 5-99 | Book-documented; OCR review pending |
+| `TOUCH` | `TOUCH #channel`; assigns the current system date to the file's internal date fields. | p. 5-95 | Book-documented; OCR review pending |
 
 ## 3. Initial graphics and window evidence
 
