@@ -2,7 +2,7 @@
 
 ## Scope
 
-The current workspace is a compileable architectural skeleton. It does not yet implement a GFA BASIC compiler, runtime behavior, or command-line interface. These instructions validate the Rust workspace only; they do not compile GFA BASIC programs.
+The current workspace includes a compiler source-map and strict UTF-8 file-loading primitive. It does not yet implement GFA BASIC language parsing, semantic analysis, code generation, runtime behavior, or a command-line interface. These instructions validate the Rust workspace only; they do not compile GFA BASIC programs.
 
 The initial CI host is Linux x86-64 using the GitHub-hosted Ubuntu runner. Other development hosts may work with Rust, but are not yet part of the project's validated environment matrix.
 
