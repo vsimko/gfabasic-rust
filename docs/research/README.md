@@ -2,6 +2,8 @@
 
 This directory contains research procedures and analysis of historical material. It is not a normative language specification and does not define implementation support.
 
+| [Aminet GFA BASIC package survey](aminet-catalogue.md) | Amiga Aminet `dev/basic` archive listing | Initial package inventory; readmes, archive contents, and rights remain unverified |
+
 | Document | Scope | Status |
 |---|---|---|
 | [Amiga emulator experiment lab](amiga-emulator-lab.md) | Proposed FS-UAE setup and procedure for future Amiga interpreter experiments | Procedure documented; no GFA BASIC image has been executed |
