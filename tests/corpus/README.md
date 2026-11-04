@@ -31,6 +31,14 @@ Each sidecar TOML file must define:
 The manifest stores fixture paths relative to the corpus root, without the `.bas` or `.toml` suffix. The corresponding source and metadata files use the same path stem.
 - `notes`: unresolved syntax, OCR, edition, or runtime questions.
 
+Validate the manifest, companion paths, stable IDs, evidence-source keys, and required metadata without compiling or executing any fixture:
+
+```sh
+python scripts/validate_corpus.py
+```
+
+This validation only checks corpus metadata. It does not make a candidate fixture a passing conformance test.
+
 A fixture may use `verified` only after its syntax and expected behavior are checked against the cited page image or a named trusted interpreter. OCR text alone is not sufficient for OCR-sensitive punctuation or signatures. A candidate fixture must not be used as a compiler acceptance rule.
 
 ## Evidence policy

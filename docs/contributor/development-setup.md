@@ -52,6 +52,7 @@ npx --yes markdownlint-cli2@0.24.0 "**/*.md" "#node_modules"
 lychee --offline --include-fragments anchor-only --root-dir "$PWD" "**/*.md"
 python -m pip install --disable-pip-version-check jsonschema==4.25.1
 python scripts/validate_api_registry.py
+python scripts/validate_corpus.py
 python -m unittest discover -s scripts/tests -p "test_*.py"
 ```
 
