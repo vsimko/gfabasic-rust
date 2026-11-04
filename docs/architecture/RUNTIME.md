@@ -1,9 +1,9 @@
 # Runtime architecture
 
-- Status: Proposed baseline; language-specific contracts remain open under [issue #7](https://github.com/vsimko/gfabasic-rust/issues/7).
+- Status: Approved architectural baseline (2026-11-04); language-specific contracts and implementation details remain deferred to their respective issues.
 - Implementation status: no generated-program runtime behavior or runtime ABI is implemented.
 
-This document defines boundaries and minimum interface properties. It does not define GFA BASIC semantics, source data layouts, or a stable ABI.
+This document defines the approved boundaries and minimum interface properties. It does not define GFA BASIC semantics, source data layouts, or a stable ABI. The project maintainer approved the layering, project-owned generated-code/runtime boundary, opaque-handle/resource lifecycle principles, and SDL3-as-Linux-adapter boundary on 2026-11-04.
 
 ## Layers and dependency direction
 
