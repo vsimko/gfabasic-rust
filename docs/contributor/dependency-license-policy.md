@@ -60,8 +60,7 @@ The generation process must be reproducible and tested, and the SBOM must
 describe the dependencies actually included in the corresponding release
 artifacts.
 
-The maintainer has approved the requirement in principle. The format
-(SPDX or CycloneDX), exact generation tooling, and retention/publication
-location remain to be decided and are tracked in issue #39. Until those
-details are approved, do not treat a particular format or publication
-location as mandated.
+**SPDX is the approved SBOM format.** Use SPDX for release SBOMs. The exact
+SPDX version, generation tooling, and retention/publication location remain
+to be decided and are tracked in issue #39. Do not infer a specific SPDX
+version or publication destination from this format decision.
