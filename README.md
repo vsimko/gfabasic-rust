@@ -2,7 +2,7 @@
 
 A planned general-purpose GFA BASIC compiler and runtime implemented in Rust.
 
-> **Project status:** Planning and architecture definition. The repository does not yet contain a compiler implementation. No GFA BASIC dialect or platform API is currently claimed as implemented or conformant.
+> **Project status:** Architecture and workspace bootstrap. The Rust workspace skeleton and baseline CI checks are present, but the compiler, runtime behavior, and CLI are not implemented. No GFA BASIC dialect or platform API is currently claimed as implemented or conformant.
 
 ## Project direction
 
@@ -29,7 +29,7 @@ Key documents:
 
 ## Current scope and limitations
 
-This repository is at the planning stage. There is no Rust workspace, compiler, runtime, or CLI. A documentation-only CI workflow validates Markdown style and local links; compiler/runtime build and test workflows are not yet available. Planned targets, API profiles, and language features are not implementation or compatibility claims.
+The Rust workspace contains three architectural crates: compiler, generated-program runtime, and Linux platform adapter. These crates currently contain module placeholders only. The pinned Rust toolchain and fast workspace checks are defined in CI. There is still no compiler, runtime behavior, or CLI, and no GFA BASIC dialect or API profile is implemented. Planned targets, API profiles, and language features are not implementation or compatibility claims.
 
 See the architecture documents for decisions, assumptions, and unresolved questions.
 
