@@ -1,0 +1,44 @@
+schema-version = 1
+
+[[declarations]]
+id = "gfa.atari-st.system.timer"
+name = "TIMER"
+kind = "variable"
+
+[[declarations.availability]]
+dialect = "atari-st-gfa-basic"
+versions = ["3.0"]
+profile = "atari-st"
+
+[[declarations.syntax]]
+form = "variable-reference"
+contexts = ["expression"]
+arguments = []
+
+[declarations.signature]
+type = "integer"
+
+[declarations.semantics]
+summary = "Reserved counter of elapsed 1/200-second ticks since system start."
+side-effects = ["The value may be modified through the Atari system timer address."]
+errors = []
+
+[declarations.evidence]
+status = "book-documented"
+sources = ["ATARI-GFA-BOOK-1988"]
+printed-pages = ["403-404"]
+notes = ["Treat the counter as mutable when low-level memory access is enabled."]
+
+[declarations.implementation]
+status = "not-implemented"
+
+[[declarations.support]]
+target = "x86_64-unknown-linux-gnu"
+classification = "unsupported"
+conformance = "not-tested"
+tests = []
+pending-reason = "No compiler/runtime implementation or Atari timer compatibility test exists yet."
+
+[declarations.docs]
+path = "docs/research/atari-gfa-book-systematic-review.md"
+anchors = []
