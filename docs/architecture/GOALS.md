@@ -1,6 +1,6 @@
 # Project goals and compatibility objectives
 
-- Status: Proposed baseline; review under issue #2.
+- Status: **Accepted project baseline**; unresolved language/version choices are tracked separately under issue #3 and the related research issues.
 
 ## Purpose
 
