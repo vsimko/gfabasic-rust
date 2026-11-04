@@ -69,3 +69,23 @@ For each selected archive:
 - The listing contains material for multiple BASIC dialects. The category name alone does not establish GFA BASIC applicability.
 - No license is inferred from an Aminet listing or from the presence of a downloadable archive.
 - No package is currently promoted to a conformance fixture or normative language/API evidence.
+
+## Readme inspection update (2026-11-04)
+
+A second pass retrieved selected readmes from the Aminet mirror. This provides package-level evidence for three additional classifications; it does not constitute archive extraction or execution.
+
+| Archive | Readme evidence | Updated classification | Rights / corpus consequence |
+|---|---|---|---|
+| [`GFABasicFIX.lha`](https://ftp.fau.de/mirrors/aminet/dev/basic/GFABasicFIX.lha) | Readme identifies Andre Pfeiffer as author, version 1.0, requires **GFA BASIC + Compiler 3.5**, and describes a fix for AmigaOS 3.x / 68060 compatibility. | **GFA BASIC 3.5 compatibility patch/tool**; useful as evidence of a release-specific environment/compatibility fix, not a language reference or source fixture. | Readme says “Freely Distributable”. Preserve the exact attribution and terms if later retaining any material; archive members remain uninspected. |
+| [`GetCDDB_src.lha`](https://ftp.fau.de/mirrors/aminet/dev/basic/GetCDDB_src.lha) | Readme identifies Roger Light, version 0.08b, and explicitly calls the source **Blitz Basic II**. It names `newgetcddb.bb2` as the program/GUI entry point and `GetCDDB_BigFunc.bb2` as a function source. | **Unrelated to GFA BASIC: Blitz Basic II source archive.** The `.bb2` filenames and readme agree. | Author states the files are freeware except third-party material and retains copyright; users should credit the author. Do not add as GFA BASIC corpus material. |
+| [`HotShotsSRC.lha`](https://ftp.fau.de/mirrors/aminet/dev/basic/HotShotsSRC.lha) | Readme identifies Chris Nash, version 1.2, and explicitly describes an unfinished **Blitz Basic II** game source. | **Unrelated to GFA BASIC: Blitz Basic II game source.** | Author permits inclusion on media and modification/reuse, but expressly prohibits selling the archive, parts, or converted results. This is not an unrestricted redistribution license; exclude from the GFA corpus. |
+
+The mirror's current directory index confirms the associated archive names, listing dates, and sizes. The readme files are independently linked above: [GFABasicFIX readme](https://ftp.fau.de/mirrors/aminet/dev/basic/GFABasicFIX.readme), [GetCDDB source readme](https://ftpmirror2.infania.net/sites/aminet.net/dev/basic/GetCDDB_src.readme), and [HotShots source readme](https://ftpmirror2.infania.net/sites/aminet.net/dev/basic/HotShotsSRC.readme). Readme retrieval for some other legacy entries failed because of unsupported text encodings or content types; those entries remain unverified rather than being classified by guesswork.
+
+## Current limitations (updated)
+
+- No archive has been downloaded, unpacked, checksummed, or executed in this pass.
+- `GFABasicFIX` is now confirmed as a patch for GFA BASIC/Compiler 3.5, but its patch contents and exact affected components are not yet inspected.
+- `GetCDDB_src` and `HotShotsSRC` are excluded as Blitz Basic II material; neither is a GFA BASIC example.
+- The paired readmes for `GFA_CLI`, `GFA_Gadgets`, `GFA_Menus`, and `GuiGfxDevBas` could not be decoded by the available reader. Their listing metadata is confirmed, but their contents and terms remain unverified.
+- No package is promoted to a conformance fixture or normative language/API evidence.
