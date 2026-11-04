@@ -24,11 +24,12 @@ separators.
 ## Run locally
 
 ```sh
-cargo +1.99.1 bench --manifest-path bench/Cargo.toml --bench source_loading --locked -- --noplot
+cargo +1.99.1 bench --manifest-path bench/Cargo.toml --target-dir bench/target --bench source_loading --locked -- --noplot
 ```
 
-The committed `bench/Cargo.lock` pins the benchmark dependency graph and is
-checked by the RustSec workflow. Criterion uses 20 samples, a one-second
+Criterion 0.8.2 is dual-licensed Apache-2.0 OR MIT, within the approved
+allowlist. The committed `bench/Cargo.lock` pins the benchmark dependency
+graph and is checked by the RustSec workflow. Criterion uses 20 samples, a one-second
 warm-up, and two seconds of measurement per benchmark. Reports are written
 under `bench/target/criterion`.
 

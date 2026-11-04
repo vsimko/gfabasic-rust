@@ -20,7 +20,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  resolve-lock:
+  validate-benchmark:
     if: github.event_name == 'pull_request'
     name: Validate benchmark workspace
     runs-on: ubuntu-24.04

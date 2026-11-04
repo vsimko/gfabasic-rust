@@ -98,7 +98,7 @@ There should be no hard performance threshold before a stable baseline exists.
 
 Proposed rollout:
 
-1. Add benchmark workloads and local instructions with the first executable compiler/runtime components.
+1. Add a workload as each compiler/runtime component becomes executable; source loading is the first implemented workload.
 2. Establish baselines on a known runner and publish machine/toolchain metadata with every result.
 3. Run a small smoke set on pull requests only after its duration and variance are understood.
 4. Run the broader suite on a scheduled or release workflow.
@@ -133,8 +133,8 @@ thresholds.
 The workflow records commit, toolchain, kernel, architecture, CPU model,
 logical CPU count, memory, target, and synthetic workload revision. GitHub
 hosted runner hardware can vary; compare results only when the recorded host
-and toolchain metadata match. These first results are observational, not a
-controlled-machine regression baseline.
+and toolchain metadata match. Initial results from the scheduled/manual workflow will be observational,
+not a controlled-machine regression baseline.
 
 Run locally with:
 
@@ -163,7 +163,7 @@ As of 2026-11-04:
 - The compiler frontend beyond source loading, runtime behavior, and LLVM/SDL3 integration are not implemented.
 - A source-loading microbenchmark harness exists; other compiler/runtime benchmark workloads remain unavailable.
 - No stable cross-run performance baseline or regression gate exists yet.
-- The benchmark categories, measurement protocol, correctness requirements, profiling workflow, and proposed CI rollout are documented as a design only.
+- The broader benchmark categories, measurement protocol, correctness requirements, profiling workflow, and regression policy remain design guidance; only source loading currently has an executable benchmark.
 - Criterion 0.8.2 is selected for the isolated benchmark workspace; Linux profiling tools remain candidates.
 - CI cache performance is not yet measured. Do not infer cache effectiveness from a successful build or cache hit alone.
 
