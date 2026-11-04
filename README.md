@@ -29,7 +29,7 @@ Key documents:
 
 ## Current scope and limitations
 
-This repository is at the planning stage. There is no Rust workspace, compiler, runtime, CLI, or CI workflow yet. Planned targets, API profiles, and language features are not implementation or compatibility claims.
+This repository is at the planning stage. There is no Rust workspace, compiler, runtime, or CLI. A documentation-only CI workflow validates Markdown style and local links; compiler/runtime build and test workflows are not yet available. Planned targets, API profiles, and language features are not implementation or compatibility claims.
 
 See the architecture documents for decisions, assumptions, and unresolved questions.
 
