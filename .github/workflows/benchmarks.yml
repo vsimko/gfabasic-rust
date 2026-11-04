@@ -58,6 +58,19 @@ jobs:
           rustup toolchain install 1.99.1 --profile minimal
           rustup default 1.99.1
 
+      - name: Identify benchmark host for a comparable baseline
+        id: host
+        run: |
+          cpu_model="$(grep -m1 'model name' /proc/cpuinfo | cut -d: -f2- | sed 's/^[[:space:]]*//; s/[[:space:]]*$//' | sed 's/[^A-Za-z0-9._-]/_/g')"
+          echo "cpu_model=$cpu_model" >> "$GITHUB_OUTPUT"
+          echo "kernel=$(uname -r)" >> "$GITHUB_OUTPUT"
+
+      - name: Restore same-host Criterion baseline
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+        with:
+          path: bench/target/criterion
+          key: criterion-source-loading-${{ runner.os }}-${{ runner.arch }}-${{ steps.host.outputs.cpu_model }}-${{ steps.host.outputs.kernel }}-rust-1.99.1-${{ hashFiles('bench/Cargo.lock') }}-workload-v1
+
       - name: Run source-loading benchmarks
         run: cargo +1.99.1 bench --manifest-path bench/Cargo.toml --target-dir bench/target --bench source_loading --locked -- --noplot
 

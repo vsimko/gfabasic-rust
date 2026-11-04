@@ -133,8 +133,9 @@ thresholds.
 The workflow records commit, toolchain, kernel, architecture, CPU model,
 logical CPU count, memory, target, and synthetic workload revision. GitHub
 hosted runner hardware can vary; compare results only when the recorded host
-and toolchain metadata match. Initial results from the scheduled/manual workflow will be observational,
-not a controlled-machine regression baseline.
+and toolchain metadata match. Initial results are observational, not a controlled-machine regression
+baseline. The cache prevents comparisons across different recorded hosts, but
+GitHub-hosted machines are still shared infrastructure.
 
 Run locally with:
 
