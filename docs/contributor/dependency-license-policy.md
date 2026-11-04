@@ -61,5 +61,10 @@ describe the dependencies actually included in the corresponding release
 artifacts.
 
 **SPDX 2.3 is the approved SBOM specification version.** Generate release
-SBOMs using SPDX 2.3. The generation tooling and retention/publication
+SBOMs using SPDX 2.3 JSON output.
+
+**`cargo-sbom` is the approved generation tool.** Pin the tool version in
+release automation and invoke its `spdx_json_2_3` output format. Validate the
+generated document and verify that its component/dependency inventory matches
+the release build inputs. The exact tool version and retention/publication
 location remain to be decided and are tracked in issue #39.
