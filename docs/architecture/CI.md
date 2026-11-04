@@ -1,6 +1,6 @@
 # GitHub Actions workflow architecture
 
-- Status: Proposed full CI architecture. The documentation workflow and the fast Rust workspace-check workflow are implemented. Selective test matrices, compiler/runtime integration, fuzzing, security, release, and branch-protection configuration remain open.
+- Status: Proposed full CI architecture. The documentation workflow, fast Rust workspace-check workflow, and RustSec advisory-audit workflow are implemented. Selective test matrices, compiler/runtime integration, fuzzing, license/SBOM policy, release, and branch-protection configuration remain open.
 - Tracking: [issue #27](https://github.com/vsimko/gfabasic-rust/issues/27).
 
 ## Goals
@@ -27,7 +27,7 @@ Release and artifact requirements are specified in [RELEASES.md](RELEASES.md). T
 | `main.yml` | `push` to `main` | Broader integration checks after merge | No separate PR requirement |
 | `fuzz.yml` | `schedule`, `workflow_dispatch` | Longer frontend fuzz campaigns after harnesses exist | No |
 | `release.yml` | `release` and controlled `workflow_dispatch` | Reproducible release validation and artifact publication after packaging exists | Release-specific |
-| `security.yml` | `schedule`, `workflow_dispatch`; selected dependency changes | Dependency, license, and supply-chain review when package metadata exists | Policy to be decided under #39 |
+| `security-audit.yml` | `pull_request`, `push` to `main` (Cargo/toolchain paths), weekly `schedule`, `workflow_dispatch` | RustSec advisory audit of the committed `Cargo.lock` | Runs for matching dependency changes; branch protection is not configured. License and SBOM checks remain open under #39 |
 
 Do not add empty placeholder workflows. Introduce each workflow when its checks have an executable command and a clean-environment validation path.
 
@@ -85,7 +85,7 @@ A branch-protection rule or repository ruleset must require the final gate after
 - Pin third-party actions to immutable commit SHAs where practical, and include a human-readable version comment. Review action updates like dependency changes.
 - Prefer maintained actions and avoid downloading unpinned executables in build scripts.
 - Keep release publishing in a separate workflow with explicit environment approval and narrowly scoped write permissions.
-- Record native toolchain and system-library versions used by CI so failures can be reproduced locally.
+- Record native toolchain and system-library versions used by CI so failures can be reproduced locally.\n- The [security audit workflow](../../.github/workflows/security-audit.yml) uses a read-only token, immutable checkout SHA, Rust 1.99.1, and pinned `cargo-audit` 0.22.2. It audits all Cargo dependencies against the current RustSec database and fails on vulnerability advisories. License allowlists and SBOM output are intentionally not guessed; see [SECURITY.md](SECURITY.md).
 
 ## Timeouts, artifacts, and diagnostics
 
@@ -101,7 +101,7 @@ A branch-protection rule or repository ruleset must require the final gate after
 2. Add the minimal pull-request workflow and stable gate when the first executable workspace checks exist.
 3. Test path selection and gate behavior with representative synthetic changes before making the gate required.
 4. Add compiler, runtime, and platform jobs as those components become buildable.
-5. Add fuzz, security, benchmark, and release workflows only when their respective tools and policies are ready.
+5. Add fuzz, license/SBOM, benchmark, and release workflows only when their respective tools and policies are ready. The RustSec advisory workflow is already implemented separately.
 6. Configure and verify branch protection/rulesets after the required gate has run successfully on a real pull request.
 
 No workflow should claim to validate a component that does not yet exist. A green documentation-only gate is not evidence that the compiler, runtime, or GFA BASIC conformance is correct.
