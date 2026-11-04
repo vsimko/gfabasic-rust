@@ -1,0 +1,18 @@
+id = "amiga-3.0-bit-set-test"
+dialect = "GFA BASIC Amiga"
+version = "3.0"
+api_profiles = []
+kind = "semantic"
+status = "candidate"
+source_key = "AM-BOOK-FR-1989"
+source_pages = "printed pp. 8-191"
+evidence_status = "OCR-derived; page-image review required"
+expectation = "BSET sets bit 1 in zero and returns the resulting value (2). BTST tests bit 1 and returns -1 when it is set."
+expected_stdout = "2\n-1"
+expected_exit = "success"
+notes = [
+  "Original minimal fixture; not copied from the manual.",
+  "The source notes identify BSET(value, bit) and BTST(value, bit), but exact punctuation/signature and bit-index convention require page-image verification.",
+  "Expected output is a candidate semantic expectation, not an observed interpreter result.",
+  "Do not use as an acceptance test until the source page is visually reviewed and a named Amiga interpreter confirms the behavior.",
+]
