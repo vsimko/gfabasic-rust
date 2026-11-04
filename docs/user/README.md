@@ -10,6 +10,8 @@ The project is in the planning and architecture stage. There is no compiler exec
 
 Start with the [project README](../../README.md) for the current project direction and limitations. Use the [compatibility matrix](../architecture/COMPATIBILITY-MATRIX.md) for the current support status.
 
+See [Understanding compiler diagnostics](diagnostics.md) for the proposed diagnostic and feature-support vocabulary. The diagnostic renderer is not implemented.
+
 ## Research is not a support claim
 
 The [language and API reference notes](../reference/README.md) record source-backed research and unresolved questions. Their presence does not mean that a feature is implemented, tested, or supported by this project. Amiga and Atari ST material is kept separate.
