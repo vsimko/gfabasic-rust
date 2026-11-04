@@ -37,7 +37,7 @@ See the architecture documents for decisions, assumptions, and unresolved questi
 
 The project source code and original project documentation are licensed under the [MIT License](LICENSE). Copyright remains with the respective contributors; the license grants the permissions stated in the license text.
 
-This license does **not** cover third-party materials such as GFA BASIC manuals, books, ROMs, disk images, sample programs, trademarks, or other externally sourced assets. Their copyright, licensing, and redistribution status must be assessed separately; see [issue #18](https://github.com/vsimko/gfabasic-rust/issues/18) and the [reference source register](docs/reference-sources.md).
+The project does not distribute historical GFA BASIC manuals or books, ROMs, disk images, or historical sample programs. They may be consulted as external research sources where lawfully accessible, but they must not be copied into this repository or bundled with project releases. Research outputs must use bibliographic metadata, concise citations, original explanations, and independently authored test fixtures. The MIT license applies only to project-owned code and documentation; it does not grant rights to third-party materials.
 
 ## Contributing
 
