@@ -17,7 +17,7 @@ This matrix separates accepted normative source scope from research evidence, co
 ## Project-wide implementation status
 
 - Rust workspace: bootstrapped with compiler, runtime, and Linux platform crates; compiler source-map and strict UTF-8 file-loading primitives are implemented, while the language frontend, semantic analysis, IR, backend, CLI, runtime behavior, and platform adapter are not implemented.
-- Compiler frontend, semantic analysis, IR, LLVM backend, and CLI: not implemented.
+- Compiler frontend, semantic analysis, IR, and LLVM backend: not implemented. The minimal CLI supports help/version only; build/check and project configuration are not implemented.
 - GFA BASIC core runtime: not implemented.
 - Amiga and Atari ST compatibility runtimes: not implemented.
 - Linux platform layer and SDL3 integration: not implemented.
