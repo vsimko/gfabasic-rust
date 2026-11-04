@@ -24,7 +24,7 @@ This index is the entry point for project documentation. It separates user guida
 | User entry point | [`user/README.md`](user/README.md) | Users; current support status and future user-guide structure |
 | Contributor entry point | [`contributor/README.md`](contributor/README.md) | Contributors; current development constraints and contribution workflow |
 | Architecture | [`architecture/README.md`](architecture/README.md) | Implementers; system boundaries and architecture document index |
-| Architecture decisions | [`architecture/adr/`](architecture/README.md) | Maintainers; numbered, reviewable decisions and their history |
+| Architecture decisions | [`architecture/adr/`](architecture/adr/TEMPLATE.md) | Maintainers; numbered, reviewable decisions and their history |
 | Language and API research | [`reference/README.md`](reference/README.md) | Researchers; source-backed, dialect/version-specific notes |
 | Source provenance | [`reference-sources.md`](reference-sources.md) | Researchers and reviewers; source identity, access, licensing, and evidence |
 | Research procedures and corpora | [`research/`](reference/README.md) | Researchers; experiment procedures and analysis of historical material |
@@ -54,7 +54,7 @@ docs/
     └── README.md
 ```
 
-The architecture, reference, and research directories contain the detailed material. User and contributor directories currently provide entry points only. Add a detailed page when its content can be stated accurately and reviewed; do not create empty placeholder pages or copy the same definition into multiple locations.
+The architecture, reference, and research directories contain the detailed material. The templates directory has its own index. User and contributor directories currently provide entry points only. Add a detailed page when its content can be stated accurately and reviewed; do not create empty placeholder pages or copy the same definition into multiple locations.
 
 ## Navigation conventions
 
