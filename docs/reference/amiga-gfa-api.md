@@ -62,7 +62,7 @@ Device names are AmigaDOS endpoints, not ordinary host file paths. Their availab
 
 The distinction between sequential byte/line I/O and random/direct-access records is important. `FIELD`, `GET`, `PUT`, and `RECORD` must be described as one related record-layout contract after the original pages have been visually checked. Do not infer byte order, padding, numeric representation, or string layout from the command names.
 
-### 2.3 Keyboard and text input constructs
+### 2.3 Keyboard, text, and byte-channel I/O constructs
 
 These are recorded because the Amiga book describes their interaction with the console and file channels. Their eventual classification as core language constructs or profile-specific behavior is unresolved.
 
