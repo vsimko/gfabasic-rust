@@ -27,6 +27,7 @@ pub enum TokenKind {
     Identifier { text: String, suffix: Option<char> },
     Number(String),
     StringLiteral(String),
+    Comment(String),
     Newline,
     Comma,
     Semicolon,
@@ -127,12 +128,17 @@ impl<'a> Lexer<'a> {
     }
 
     fn comment(&mut self) {
+        let start = self.offset;
+        self.offset += 1;
+        let content_start = self.offset;
         while self.offset < self.bytes.len()
             && self.bytes[self.offset] != b'\r'
             && self.bytes[self.offset] != b'\n'
         {
-            self.offset += 1;
+            let ch = self.text[self.offset..].chars().next().expect("valid UTF-8");
+            self.offset += ch.len_utf8();
         }
+        self.push(TokenKind::Comment(self.text[content_start..self.offset].to_owned()), start);
     }
 
     fn string(&mut self) {
@@ -275,8 +281,9 @@ mod tests {
         assert!(matches!(output.tokens[0].kind, TokenKind::Identifier { .. }));
         assert!(matches!(output.tokens[1].kind, TokenKind::Colon));
         assert!(matches!(output.tokens[3].kind, TokenKind::StringLiteral(ref s) if s == "hello"));
-        assert!(matches!(output.tokens[4].kind, TokenKind::Newline));
-        assert!(matches!(output.tokens[5].kind, TokenKind::Identifier { .. }));
+        assert!(matches!(output.tokens[4].kind, TokenKind::Comment(ref text) if text == " note"));
+        assert!(matches!(output.tokens[5].kind, TokenKind::Newline));
+        assert!(matches!(output.tokens[6].kind, TokenKind::Identifier { .. }));
     }
 
     #[test]
