@@ -8,6 +8,7 @@ This directory contains original research notes and technical summaries. These d
 | [Atari ST API reference](atari-gfa-api.md) | Atari ST, V2.xx/V3.0 | Initial API inventory; signatures and runtime behavior require validation |
 | [Systematic Atari book review](../research/atari-gfa-book-systematic-review.md) | Atari ST, V2.xx/V3.0 | First pass complete for all 24 chapters; validation and page-image checks pending |
 | [Amiga GFA BASIC 3.0](amiga-gfa-basic-3.0.md) | Amiga, interpreter 3.0 | Source-backed language and API research notes; not an accepted compiler dialect |
+| [German Amiga GFA BASIC book OCR index](../research/amiga-gfa-basic-3.03-ocr-index.md) | Amiga, German 1990 edition | OCR-derived chapter map; version applicability disputed between 3.0 and 3.03; not normative yet |
 | [Amiga API reference](amiga-gfa-api.md) | Amiga, interpreter 3.0 | Initial evidence-gated API inventory; OCR/page-image review and complete signatures pending |
 | [Atari book diskette corpus](../research/atari-gfa-book-diskette.md) | Atari ST, examples accompanying the 1988 book | Static corpus analysis; examples are not normative specifications |
 | [Amiga emulator experiment lab](../research/amiga-emulator-lab.md) | Amiga, emulator-based research procedure | Proposed procedure; no GFA BASIC image executed |

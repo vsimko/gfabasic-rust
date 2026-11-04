@@ -3,6 +3,7 @@
 This directory contains research procedures and analysis of historical material. It is not a normative language specification and does not define implementation support.
 
 | [Aminet GFA BASIC package survey](aminet-catalogue.md) | Amiga Aminet `dev/basic` archive listing | Initial package inventory; readmes, archive contents, and rights remain unverified |
+| [German Amiga book OCR index](amiga-gfa-basic-3.03-ocr-index.md) | Amiga GFA BASIC, German 1990 edition | OCR table-of-contents map; version coverage and page-image validation remain open |
 
 | Document | Scope | Status |
 |---|---|---|
