@@ -35,7 +35,8 @@ under `bench/target/criterion`.
 
 The main-branch/weekly/manual GitHub Actions workflow records commit, Rust
 toolchain, kernel, architecture, CPU model, logical CPU count, memory, target,
-workload revision, and whether the Criterion baseline cache was hit. It caches
+workload revision, benchmark lockfile SHA-256, and whether the Criterion
+baseline cache was hit. It caches
 Criterion's `base` data only for matching OS/architecture, CPU model, kernel,
 toolchain, lockfile, and workload version; other hosts start a fresh baseline.
 It uploads Criterion reports and metadata as a 30-day artifact. It does not run

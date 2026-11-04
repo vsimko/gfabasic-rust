@@ -134,7 +134,8 @@ The workflow records commit, toolchain, kernel, architecture, CPU model,
 logical CPU count, memory, target, workload revision, and whether the
 same-host Criterion cache was hit. Criterion's `base` data is cached using a
 key that includes OS/architecture, CPU model, kernel release, Rust toolchain,
-benchmark lockfile hash, and workload version. Matching runs compare against
+benchmark lockfile hash, and workload version. The artifact records the
+lockfile SHA-256 and whether the cache was hit. Matching runs compare against
 the same baseline; a changed host/toolchain/lock/workload starts a fresh one.
 GitHub-hosted machines are still shared infrastructure, so results are
 observational rather than a controlled-machine regression gate.
