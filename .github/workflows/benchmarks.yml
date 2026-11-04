@@ -82,7 +82,7 @@ jobs:
         env:
           CPU_MODEL: ${{ steps.host.outputs.cpu_model }}
           KERNEL_RELEASE: ${{ steps.host.outputs.kernel }}
-          CRITERION_CACHE_HIT: ${{ steps.criterion-cache.outputs.cache-hit }}
+          CRITERION_CACHE_HIT: ${{ steps.criterion-cache.outputs.cache-hit == 'true' }}
         run: |
           {
             printf 'commit=%s\n' "$GITHUB_SHA"
