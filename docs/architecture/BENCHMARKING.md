@@ -1,7 +1,7 @@
 # Performance benchmarks and profiling strategy
 
 - Status: **Proposed; no benchmark harness or executable implementation exists yet.**
-- Tracking: [issue #57](https://github.com/vsimko/gfabasic-rust/issues/57).
+- Tracking: [issue #60](https://github.com/vsimko/gfabasic-rust/issues/60).
 - Purpose: define repeatable measurements that can guide optimization without confusing compiler speed, generated-program speed, and build-system performance.
 
 ## 1. Benchmark categories
