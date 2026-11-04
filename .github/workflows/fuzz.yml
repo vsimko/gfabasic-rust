@@ -28,6 +28,8 @@ jobs:
       AFL_NO_UI: "1"
       AFL_SKIP_CPUFREQ: "1"
       AFL_NO_AFFINITY: "1"
+      AFL_I_DONT_CARE_ABOUT_MISSING_CRASHES: "1"
+      AFL_IGNORE_UNKNOWN_ENVS: "1"
       FUZZ_SECONDS: ${{ github.event_name == 'pull_request' && '30' || '600' }}
     steps:
       - name: Check out repository
@@ -58,6 +60,7 @@ jobs:
             printf 'max-input-bytes=1048576\n'
             printf 'per-input-timeout-ms=1000\n'
             printf 'memory-limit-mb=256\n'
+            printf 'core-pattern-check=bypassed-for-github-hosted-runner; crash-and-hang-files-are-still-checked\n'
             printf 'corpus-sha256:\n'
             sha256sum fuzz/corpus/source_loader/*
             printf 'skipped=lexer,parser,expressions,diagnostics,source-composition (prerequisites #46,#47,#120)\n'
@@ -73,6 +76,34 @@ jobs:
             -m 256 \
             -G 1048576 \
             fuzz/target/release/source_loader
+
+      - name: Minimize crash and hang inputs
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          output="$RUNNER_TEMP/source-loader-fuzz/default"
+          minimized="$RUNNER_TEMP/source-loader-minimized"
+          mkdir -p "$minimized"
+          for finding in crashes hangs; do
+            input_dir="$output/$finding"
+            [ -d "$input_dir" ] || continue
+            count=0
+            for input in "$input_dir"/*; do
+              [ -f "$input" ] || continue
+              [ "$(basename "$input")" = "README.txt" ] && continue
+              count=$((count + 1))
+              destination="$minimized/$finding-$(basename "$input")"
+              if timeout 30s cargo +1.99.1 afl tmin \
+                -i "$input" -o "$destination" -t 1000 -m 256 -- \
+                fuzz/target/release/source_loader; then
+                [ -f "$destination" ] || cp "$input" "$destination.original"
+              else
+                cp "$input" "$destination.original"
+              fi
+              [ "$count" -ge 3 ] && break
+            done
+          done
 
       - name: Fail if AFL++ found a crash or hang
         run: |
@@ -91,6 +122,7 @@ jobs:
           name: source-loader-fuzz-${{ github.run_id }}
           path: |
             ${{ runner.temp }}/source-loader-fuzz/
+            ${{ runner.temp }}/source-loader-minimized/
             ${{ runner.temp }}/source-loader-fuzz-metadata.txt
             fuzz/Cargo.lock
           if-no-files-found: ignore
