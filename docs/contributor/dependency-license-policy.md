@@ -60,7 +60,6 @@ The generation process must be reproducible and tested, and the SBOM must
 describe the dependencies actually included in the corresponding release
 artifacts.
 
-**SPDX is the approved SBOM format.** Use SPDX for release SBOMs. The exact
-SPDX version, generation tooling, and retention/publication location remain
-to be decided and are tracked in issue #39. Do not infer a specific SPDX
-version or publication destination from this format decision.
+**SPDX 2.3 is the approved SBOM specification version.** Generate release
+SBOMs using SPDX 2.3. The generation tooling and retention/publication
+location remain to be decided and are tracked in issue #39.
