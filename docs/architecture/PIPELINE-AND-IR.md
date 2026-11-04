@@ -65,12 +65,12 @@ entry:
     branch %condition, then_block, else_block
 
 then_block:
-    jump merge_block
+    jump merge_block(%then_value)
 
 else_block:
-    jump merge_block
+    jump merge_block(%else_value)
 
-merge_block:
+merge_block(%result:i32):
     return %result
 ```
 
