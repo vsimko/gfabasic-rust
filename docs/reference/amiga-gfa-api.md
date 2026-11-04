@@ -59,6 +59,7 @@ Device names are AmigaDOS endpoints, not ordinary host file paths. Their availab
 | `SEEK` | `SEEK #channel, [-] offset`; a positive value positions from the beginning and a negative value from the end. The book warns against nonexistent positions; boundary behavior needs a runtime probe. | p. 5-95 | Book-documented; OCR review pending |
 | `STORE` | `STORE #channel, string_array()[, count]`; writes array elements in order and appends CR/LF for each line. The optional count limits the number of elements; a `from TO to` range form is also described. | p. 5-96 | Book-documented; OCR review pending |
 | `RECALL` | `RECALL #channel, string_array(), count, bytes_read_var`; reads lines into the array. The book describes CR/LF control codes as line terminators, stops silently at EOF or when the array is full, and returns the number of bytes read through the numeric variable. A `from TO to` range form is also described. | pp. 5-94–5-95 | Book-documented; OCR review pending |
+| `TOUCH` | `TOUCH #channel`; assigns the current system date to the file's internal date fields. | p. 5-95 | Book-documented; OCR review pending |
 
 The distinction between sequential byte/line I/O and random/direct-access records is important. `FIELD`, `GET`, `PUT`, and `RECORD` must be described as one related record-layout contract after the original pages have been visually checked. Do not infer byte order, padding, numeric representation, or string layout from the command names.
 
@@ -75,7 +76,6 @@ These are recorded because the Amiga book describes their interaction with the c
 | `LINE INPUT` | Extracted forms: `LINE INPUT [prompt;] string_var` and `LINE INPUT #channel, string_var`; reads a line where commas are text rather than field separators. | p. 5-67 onward | Book-documented; OCR review pending |
 | `INP` | `INP(#channel)`; reads one byte from the specified data channel. | p. 5-99 | Book-documented; OCR review pending |
 | `OUT` | `OUT #channel, byte1[, byte2...]`; writes byte values to the specified data channel. | p. 5-99 | Book-documented; OCR review pending |
-| `TOUCH` | `TOUCH #channel`; assigns the current system date to the file's internal date fields. | p. 5-95 | Book-documented; OCR review pending |
 
 ## 3. Initial graphics and window evidence
 
