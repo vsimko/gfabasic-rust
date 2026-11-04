@@ -2,7 +2,7 @@
 
 A planned general-purpose GFA BASIC compiler and runtime implemented in Rust.
 
-> **Project status:** Architecture and workspace bootstrap. The Rust workspace skeleton and baseline CI checks are present, but the compiler, runtime behavior, and CLI are not implemented. No GFA BASIC dialect or platform API is currently claimed as implemented or conformant.
+> **Project status:** Architecture and workspace bootstrap, with a minimal CLI executable. `gfabasic --help` and `gfabasic --version` are implemented; source compilation, project configuration, and runtime behavior are not. No GFA BASIC dialect or platform API is currently claimed as implemented or conformant.
 
 ## Project direction
 
@@ -31,7 +31,7 @@ Key documents:
 
 ## Current scope and limitations
 
-The Rust workspace contains three architectural crates: compiler, generated-program runtime, and Linux platform adapter. The compiler crate includes tested source-map and strict UTF-8 file-loading primitives; the lexer, parser, semantic analysis, IR, backend, CLI, runtime behavior, and Linux platform adapter remain unimplemented. The pinned Rust toolchain and fast workspace checks are defined in CI. There is still no compiler, runtime behavior, or CLI, and no GFA BASIC dialect or API profile is implemented. Planned targets, API profiles, and language features are not implementation or compatibility claims.
+The Rust workspace contains three architectural crates: compiler, generated-program runtime, and Linux platform adapter. The compiler crate includes tested source-map and strict UTF-8 file-loading primitives plus a minimal `gfabasic` CLI. The CLI currently supports help and version output only; `build` and `check` explicitly report that compilation is unavailable. The lexer, parser, semantic analysis, IR, backend, project configuration, runtime behavior, and Linux platform adapter remain unimplemented. The pinned Rust toolchain and fast workspace checks are defined in CI. No GFA BASIC dialect or API profile is implemented. Planned targets, API profiles, and language features are not implementation or compatibility claims.
 
 See the roadmap and architecture documents for decisions, assumptions, dependencies, and unresolved questions.
 
