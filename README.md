@@ -30,7 +30,7 @@ Key documents:
 
 ## Current scope and limitations
 
-The Rust workspace contains three architectural crates: compiler, generated-program runtime, and Linux platform adapter. These crates currently contain module placeholders only. The pinned Rust toolchain and fast workspace checks are defined in CI. There is still no compiler, runtime behavior, or CLI, and no GFA BASIC dialect or API profile is implemented. Planned targets, API profiles, and language features are not implementation or compatibility claims.
+The Rust workspace contains three architectural crates: compiler, generated-program runtime, and Linux platform adapter. The compiler crate includes tested source-map and strict UTF-8 file-loading primitives; the lexer, parser, semantic analysis, IR, backend, CLI, runtime behavior, and Linux platform adapter remain unimplemented. The pinned Rust toolchain and fast workspace checks are defined in CI. There is still no compiler, runtime behavior, or CLI, and no GFA BASIC dialect or API profile is implemented. Planned targets, API profiles, and language features are not implementation or compatibility claims.
 
 See the roadmap and architecture documents for decisions, assumptions, dependencies, and unresolved questions.
 
