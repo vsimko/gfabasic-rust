@@ -11,6 +11,9 @@ The initial CI host is Linux x86-64 using the GitHub-hosted Ubuntu runner. Other
 - Rust 1.99.1, pinned by `rust-toolchain.toml`.
 - The `rustfmt` and `clippy` Rust components.
 - Git.
+- Node.js 22 and npm/npx for Markdown linting.
+- Python 3.12 and `jsonschema==4.25.1` for API registry validation.
+- lychee v0.24.2 for local Markdown link and anchor checks.
 
 The workspace currently has no third-party Cargo dependencies or required native system libraries. LLVM and SDL3 are deliberately deferred and are not required to build the skeleton. Do not install arbitrary LLVM or SDL3 versions for this stage.
 
@@ -47,9 +50,12 @@ For documentation changes, run the separate checks:
 ```sh
 npx --yes markdownlint-cli2@0.24.0 "**/*.md" "#node_modules"
 lychee --offline --include-fragments anchor-only --root-dir "$PWD" "**/*.md"
+python -m pip install --disable-pip-version-check jsonschema==4.25.1
+python scripts/validate_api_registry.py
+python -m unittest discover -s scripts/tests -p "test_*.py"
 ```
 
-The documentation workflow also validates the API registry and its validator tests.
+The documentation workflow also validates the API registry and its validator tests. Run the same checks locally after installing the pinned Python dependency and lychee version:
 
 ## Troubleshooting
 
