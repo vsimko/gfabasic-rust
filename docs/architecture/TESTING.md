@@ -94,4 +94,4 @@ A fixture does not become authoritative merely because it passes. OCR-derived cl
 
 A release must state compiler version, supported dialect/version subset, target, API profile statuses, known deviations, and required runtime dependencies. Do not claim full compatibility based only on unit-test coverage or successful compilation.
 
-Tracking: [issue #10](https://github.com/vsimko/gfabasic-rust/issues/10), [test taxonomy #41](https://github.com/vsimko/gfabasic-rust/issues/41), [conformance corpus #42](https://github.com/vsimko/gfabasic-rust/issues/42), and [fuzzing strategy #43](https://github.com/vsimko/gfabasic-rust/issues/43).
+Tracking: [testing strategy #10 (completed)](https://github.com/vsimko/gfabasic-rust/issues/10), [executable conformance/release gates #116](https://github.com/vsimko/gfabasic-rust/issues/116), [test taxonomy #41](https://github.com/vsimko/gfabasic-rust/issues/41), [conformance corpus #42](https://github.com/vsimko/gfabasic-rust/issues/42), and [fuzzing strategy #43](https://github.com/vsimko/gfabasic-rust/issues/43).
