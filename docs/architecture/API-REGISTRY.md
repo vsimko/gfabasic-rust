@@ -115,7 +115,7 @@ errors = []
 
 [declarations.evidence]
 status = "book-documented"
-sources = ["ATARI-GFA-BOOK-1988"]
+sources = ["ATARI-GFA3-UM-1988"]
 printed-pages = ["chapter 12, pp. 393-452"]
 notes = ["Verify OCR-sensitive details against the page image before accepting the exact contract."]
 
