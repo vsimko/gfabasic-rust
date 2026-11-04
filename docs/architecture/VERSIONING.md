@@ -1,6 +1,6 @@
 # Versioning and compatibility lifecycle
 
-- Status: **Proposed; no versioning or compatibility guarantee is implemented yet.**
+- Status: **Policy accepted by [ADR 0002](adr/0002-versioning-and-compatibility-lifecycle.md); CLI/schema/ABI mechanisms are not implemented yet.**
 - Tracking: [issue #58](https://github.com/vsimko/gfabasic-rust/issues/58).
 - Scope: compiler product releases, machine-readable schemas, language dialects, API profiles, runtime ABI, target support, and deprecation.
 
@@ -23,7 +23,7 @@ The compiler version does not prove that a dialect or API profile is supported. 
 
 ## 2. Compiler product version
 
-**Proposal:** use Semantic Versioning 2.0.0 for public compiler releases.
+Use Semantic Versioning 2.0.0 for public compiler releases.
 
 - Before the first stable release, use `0.y.z`.
 - During the `0.y` series, minor releases may contain breaking changes. Patch releases should be limited to compatible fixes where practical.
@@ -89,7 +89,7 @@ Every release should publish the [compatibility matrix](COMPATIBILITY-MATRIX.md)
 
 Use separate status values for feature maturity, evidence, implementation, and target support.
 
-Proposed feature-maturity labels:
+Feature-maturity labels:
 
 - **Research**: evidence is being collected; no accepted specification or implementation is implied.
 - **Proposed**: a specification or design is written but has not been accepted.
