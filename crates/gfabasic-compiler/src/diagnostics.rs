@@ -156,11 +156,11 @@ impl Diagnostic {
     pub fn render(&self, sources: &SourceMap) -> String {
         let mut output = String::new();
 
-        if let Some(span) = self.primary_span {
-            if let Some(location) = render_location(sources, span) {
-                output.push_str(&location);
-                output.push_str(": ");
-            }
+        if let Some(span) = self.primary_span
+            && let Some(location) = render_location(sources, span)
+        {
+            output.push_str(&location);
+            output.push_str(": ");
         }
 
         output.push_str(self.severity.as_str());
@@ -169,11 +169,11 @@ impl Diagnostic {
         output.push_str("]: ");
         output.push_str(&escape_controls(&self.message));
 
-        if let Some(span) = self.primary_span {
-            if let Some(snippet) = render_snippet(sources, span) {
-                output.push('\n');
-                output.push_str(&snippet);
-            }
+        if let Some(span) = self.primary_span
+            && let Some(snippet) = render_snippet(sources, span)
+        {
+            output.push('\n');
+            output.push_str(&snippet);
         }
 
         for related in &self.related {
