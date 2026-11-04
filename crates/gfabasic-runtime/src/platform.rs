@@ -1,1 +1,2 @@
 //! Project-owned platform-service contracts, independent of SDL3.
+
