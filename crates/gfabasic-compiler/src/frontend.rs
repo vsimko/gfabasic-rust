@@ -352,6 +352,21 @@ mod tests {
     }
 
     #[test]
+    fn comments_preserve_unicode_and_stop_before_classic_newline() {
+        let output = lex_text("PRINT 1 ! Grüße\rPRINT 2");
+        assert!(output.diagnostics.is_empty());
+        let comment = output
+            .tokens
+            .iter()
+            .find(|token| matches!(token.kind, TokenKind::Comment(_)))
+            .unwrap();
+        assert!(matches!(&comment.kind, TokenKind::Comment(text) if text == " Grüße"));
+        assert_eq!(&comment.span.start, &8);
+        assert_eq!(&comment.span.end, &16);
+        assert!(output.tokens.iter().any(|token| matches!(token.kind, TokenKind::Newline)));
+    }
+
+    #[test]
     fn preserves_utf8_byte_offsets() {
         let output = lex_text("PRINT \"é\"");
         let string = output
