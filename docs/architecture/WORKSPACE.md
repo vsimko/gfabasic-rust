@@ -1,6 +1,6 @@
 # Rust workspace and dependency policy
 
-- Status: Proposed; the initial crate split is described in [ADR 0002](adr/0002-initial-rust-workspace.md). Maintainer review remains open under [issue #11](https://github.com/vsimko/gfabasic-rust/issues/11).
+- Status: Accepted; see [ADR 0002](adr/0002-initial-rust-workspace.md).
 
 ## Logical components
 
@@ -8,7 +8,7 @@ The compiler responsibilities are source management/diagnostics, lexing/parsing/
 
 Keep small components as modules. Create a Cargo crate only when it has a distinct ownership, reuse, build-isolation, testing, or dependency-boundary reason.
 
-## Proposed initial crate layout
+## Initial crate layout
 
 ```text
 crates/
@@ -45,7 +45,7 @@ Do not create separate crates for the lexer, parser, semantic analyzer, IR, LLVM
 - API profiles are selected by compiler/project configuration for each compilation. Cargo features are build-time capability switches only; they must not select the source dialect or API profile.
 - Keep the default compiler/frontend and runtime builds free of LLVM and SDL3 system dependencies. Add those dependencies only to the backend or platform boundary that needs them.
 
-The proposed dependency direction is:
+The dependency direction is:
 
 ```text
 gfabasic-compiler  -- emits runtime ABI references --> generated program
