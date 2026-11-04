@@ -73,6 +73,12 @@ For every documentation change, review:
 
 The GitHub Actions workflow runs structural Markdown linting and offline local-link/anchor validation. Heading hierarchy, table readability, source correctness, spelling/terminology, dialect/version scope, copyright review, and semantic/API-reference accuracy remain human-review responsibilities. Do not claim that the automated tools certify ASD-STE100 compliance or GFA BASIC correctness.
 
+## Spelling and terminology
+
+The current CI does not run an automatic spell-checker or automatic correction tool. Markdown linting is structural and does not rewrite source files. Spelling, terminology, and GFA BASIC identifiers remain subject to human review.
+
+This is intentional until the project has a reviewed terminology dictionary. If a spell-checker is introduced, configure explicit terms for dialect names, keywords, built-in identifiers, API names, file extensions, and platform terminology. The checker must report candidates only; it must never auto-correct source text or silently rewrite GFA BASIC identifiers. Review false positives and dictionary changes as code.
+
 ## Automated checks
 
 The repository runs the following documentation checks in GitHub Actions for documentation-related pull requests and pushes to `main`:
