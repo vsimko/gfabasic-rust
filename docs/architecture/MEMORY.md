@@ -1,6 +1,6 @@
 # Memory model and hardware access
 
-- Status: **Safety baseline proposed; dialect-specific memory semantics remain open.**
+- Status: **Approved safety baseline (2026-11-04); dialect-specific memory semantics remain subject to evidence-based research.**
 - Tracking: [issue #8](https://github.com/vsimko/gfabasic-rust/issues/8), dependent on [dialect/version selection #3](https://github.com/vsimko/gfabasic-rust/issues/3) and the language inventory #19–#23.
 
 This document sets a conservative implementation boundary. It does not claim that any particular PEEK/POKE, BYTE/WORD, address, or memory command exists in a supported dialect.
@@ -39,11 +39,11 @@ Any verified raw-memory operation must be classified before implementation:
 3. **Explicit unsafe/privileged extension** — only if separately designed, opt-in, isolated, and documented with a clear threat model. This is not part of the default compatibility baseline.
 4. **Unsupported** — the operation depends on original hardware, OS memory maps, or privileged state that cannot be reproduced safely.
 
-The default Linux policy is **unsupported** for arbitrary physical addresses, memory-mapped hardware registers, and unbounded process-memory reads/writes. Never silently map them to a host pointer.
+The approved Linux policy is **unsupported by default** for direct access to hardware registers and arbitrary memory, including unbounded process-memory reads/writes. Physical addresses from Amiga or Atari programs must never be interpreted as pointers into the Linux process. Never silently map a source address to a host pointer.
 
 ## 4. Bounds, alignment, and representation
 
-Where a bounded emulation is explicitly justified, define:
+Emulation is permitted only for an explicitly defined, bounded region and only when its observable behavior is supported by evidence. Before implementation, define all of the following:
 
 - address-space size and valid regions;
 - byte order and word/longword representation;
@@ -62,8 +62,8 @@ Do not select little-endian or host-native representation by default. Original p
 - IR must represent address calculation, loads, stores, and allocation explicitly.
 - The IR verifier must check types and address-space boundaries.
 - The backend must not synthesize raw pointer operations for unresolved semantics.
-- Unsafe code and FFI must remain in the narrowest platform adapter possible.
-- Unsupported memory/hardware operations must produce a source-located diagnostic before executable emission.
+- Privileged/unsafe memory-access modes are out of scope for the approved baseline.
+- Unsupported or unsafe memory/hardware operations must produce a source-located diagnostic before executable-program creation/emission.
 - No runtime check may convert an invalid access into an apparently successful result.
 
 ## 6. Required research before language support
@@ -80,6 +80,6 @@ A future compatibility report may identify memory operations that are unsupporte
 - What storage and lifetime rules apply to strings and arrays?
 - Which original memory regions are observable to ordinary GFA BASIC programs?
 - Which operations can be bounded and emulated without changing behavior?
-- Are any unsafe/privileged extensions justified, or should all hardware-dependent access remain unsupported?
+- Hardware-dependent access remains unsupported unless a separately approved, bounded emulation can reproduce its behavior.
 
 These questions cannot be closed until a normative dialect/version is selected and its source evidence is reviewed.
