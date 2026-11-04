@@ -20,14 +20,14 @@ This roadmap is the project-level view of delivery order for `gfabasic-rust`. Gi
 | Rust workspace | Three crates exist: compiler, generated-program runtime, Linux platform adapter; module placeholders only | [Cargo workspace](Cargo.toml), [workspace design](docs/architecture/WORKSPACE.md) |
 | Compiler frontend, semantic analysis, IR | Not implemented | [#45–#49](https://github.com/vsimko/gfabasic-rust/issues?q=is%3Aissue+is%3Aopen+label%3Acompiler) |
 | LLVM backend and native executable | Not implemented | [#50](https://github.com/vsimko/gfabasic-rust/issues/50) |
-| CLI and configuration | Architecture documented; CLI implementation not tracked as a dedicated implementation issue | [#9](https://github.com/vsimko/gfabasic-rust/issues/9), [#111](https://github.com/vsimko/gfabasic-rust/issues/67) |
+| CLI and configuration | Architecture documented; CLI implementation is tracked separately | [#9](https://github.com/vsimko/gfabasic-rust/issues/9), [#111](https://github.com/vsimko/gfabasic-rust/issues/111) |
 | Runtime and platform integration | Not implemented; SDL3, Amiga and Atari ST runtime layers remain planned | [#51–#54](https://github.com/vsimko/gfabasic-rust/issues?q=is%3Aissue+is%3Aopen) |
 | API registry | Schema and validation exist; runtime handler resolution and generated-reference consistency remain incomplete | [#55](https://github.com/vsimko/gfabasic-rust/issues/55) |
 | Dialect and API research | Atari ST and Amiga research drafts exist; no dialect is accepted or implemented | [#3](https://github.com/vsimko/gfabasic-rust/issues/3), [#63–#66](https://github.com/vsimko/gfabasic-rust/issues?q=is%3Aissue+is%3Aopen) |
 | Tests | Rust workspace and documentation checks exist; no compiler conformance runner or executable end-to-end compiler tests | [#10](https://github.com/vsimko/gfabasic-rust/issues/10), [#42](https://github.com/vsimko/gfabasic-rust/issues/42), [#43](https://github.com/vsimko/gfabasic-rust/issues/43) |
-| Documentation | README, documentation index, architecture, source register, research notes, compatibility matrix and policies exist; user quick start is correctly withheld until a working CLI exists | [#16](https://github.com/vsimko/gfabasic-rust/issues/16), [#112](https://github.com/vsimko/gfabasic-rust/issues/68) |
+| Documentation | README, documentation index, architecture, source register, research notes, compatibility matrix and policies exist; user quick start is correctly withheld until a working CLI exists | [#16](https://github.com/vsimko/gfabasic-rust/issues/16), [#112](https://github.com/vsimko/gfabasic-rust/issues/112) |
 | CI and supply chain | Documentation and fast workspace checks are documented; dependency/license policy and reproducible SBOM remain open | [#39](https://github.com/vsimko/gfabasic-rust/issues/39) |
-| Releases | Release policy work is tracked, but no compiler artifacts can currently be produced | [#40](https://github.com/vsimko/gfabasic-rust/issues/40), [#59](https://github.com/vsimko/gfabasic-rust/issues/59) |
+| Releases | Release policy work is tracked, but no compiler artifacts can currently be produced | [#40](https://github.com/vsimko/gfabasic-rust/issues/40), [#62](https://github.com/vsimko/gfabasic-rust/issues/62) |
 
 ## Delivery phases
 
@@ -43,7 +43,8 @@ Keep the architecture, documentation, and research evidence internally consisten
 - [x] Workspace architecture — [#11](https://github.com/vsimko/gfabasic-rust/issues/11)
 - [x] API registry architecture — [#12](https://github.com/vsimko/gfabasic-rust/issues/12)
 - [x] Documentation policy; “OKF” ambiguity explicitly unresolved — [#14](https://github.com/vsimko/gfabasic-rust/issues/14)
-- [ ] Reconcile README, roadmap and user-facing documentation with actual buildable capabilities — [#16](https://github.com/vsimko/gfabasic-rust/issues/16), [#112](https://github.com/vsimko/gfabasic-rust/issues/68)
+- [x] Reconcile the project README and roadmap with actual buildable capabilities — [#16](https://github.com/vsimko/gfabasic-rust/issues/16)
+- [ ] Verify contributor setup instructions against a clean supported Linux environment — [#112](https://github.com/vsimko/gfabasic-rust/issues/112)
 
 ### Phase 1 — Establish an evidence-backed first language subset
 
@@ -67,7 +68,7 @@ Implement the smallest useful source-to-native-executable path for the accepted 
 - [ ] Symbol resolution and semantic analysis — [#48](https://github.com/vsimko/gfabasic-rust/issues/48)
 - [ ] Typed, target-independent IR — [#49](https://github.com/vsimko/gfabasic-rust/issues/49)
 - [ ] LLVM backend and Linux x86-64 output — [#50](https://github.com/vsimko/gfabasic-rust/issues/50)
-- [ ] Implement a usable CLI and project configuration — [#111](https://github.com/vsimko/gfabasic-rust/issues/67)
+- [ ] Implement a usable CLI and project configuration — [#111](https://github.com/vsimko/gfabasic-rust/issues/111)
 - [ ] Implement the GFA BASIC core runtime as required by the accepted subset — [#51](https://github.com/vsimko/gfabasic-rust/issues/51)
 
 ### Phase 3 — Add platform APIs and robustness
@@ -80,7 +81,7 @@ Only implement platform behavior backed by accepted references and tests.
 - [ ] Resolve API registry declarations to actual runtime handlers and generated references — [#55](https://github.com/vsimko/gfabasic-rust/issues/55)
 - [ ] Compatibility report and optional migration analysis — [#56](https://github.com/vsimko/gfabasic-rust/issues/56)
 - [ ] Parser fuzzing and robustness checks — [#43](https://github.com/vsimko/gfabasic-rust/issues/43)
-- [ ] Benchmark strategy and measurements — [#57](https://github.com/vsimko/gfabasic-rust/issues/57)
+- [ ] Benchmark strategy and measurements — [#60](https://github.com/vsimko/gfabasic-rust/issues/60)
 
 ### Phase 4 — Release readiness
 
