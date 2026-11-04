@@ -18,7 +18,6 @@ required.
 
 ```sh
 cargo +1.99.1 install cargo-afl --version 0.18.2 --locked
-cargo +1.99.1 generate-lockfile --manifest-path fuzz/Cargo.toml
 cargo +1.99.1 afl build --manifest-path fuzz/Cargo.toml --target-dir fuzz/target --release --bin source_loader --locked
 AFL_NO_UI=1 AFL_SKIP_CPUFREQ=1 AFL_NO_AFFINITY=1 \
   cargo +1.99.1 afl fuzz \
@@ -30,9 +29,11 @@ AFL_NO_UI=1 AFL_SKIP_CPUFREQ=1 AFL_NO_AFFINITY=1 \
 
 Use `-V 600` for a 10-minute campaign. The pull-request workflow uses
 30 seconds; the weekly and manually dispatched workflow uses 10 minutes.
-The workflow generates a separate `fuzz/Cargo.lock` for each run and uploads
-it with the fuzzer output so the exact dependency resolution is retained for
-triage.
+The separate `fuzz/Cargo.lock` is committed and audited by the security
+workflow. The campaign artifact also includes that lockfile, preserving the
+exact dependency resolution used for each run. Update it only when deliberately
+changing fuzz dependencies, then review the new dependency licenses and
+advisories.
 
 ## Target boundary
 

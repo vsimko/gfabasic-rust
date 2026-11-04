@@ -43,9 +43,6 @@ jobs:
       - name: Install pinned cargo-afl
         run: cargo +1.99.1 install cargo-afl --version 0.18.2 --locked
 
-      - name: Resolve the separate fuzz workspace
-        run: cargo +1.99.1 generate-lockfile --manifest-path fuzz/Cargo.toml
-
       - name: Build source-loader fuzz target
         run: cargo +1.99.1 afl build --manifest-path fuzz/Cargo.toml --target-dir fuzz/target --release --bin source_loader --locked
 
@@ -61,6 +58,8 @@ jobs:
             printf 'per-input-timeout-ms=1000\n'
             printf 'memory-limit-mb=256\n'
             printf 'core-pattern-check=bypassed-for-github-hosted-runner; crash-and-hang-files-are-still-checked\n'
+            printf 'fuzz-lock-sha256:\n'
+            sha256sum fuzz/Cargo.lock
             printf 'corpus-sha256:\n'
             sha256sum fuzz/corpus/source_loader/*
             printf 'skipped=lexer,parser,expressions,diagnostics,source-composition (prerequisites #46,#47,#120)\n'

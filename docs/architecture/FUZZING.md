@@ -117,7 +117,7 @@ CI runs a 30-second smoke campaign on relevant pull requests and a 10-minute
 campaign on the weekly schedule or manual dispatch. Both modes cap individual
 inputs at 1 MiB, use a 1-second per-input timeout and a 256 MiB target memory
 limit, and run under a 15-minute job timeout. The workflow uploads the raw AFL++ output, attempted minimized crash/hang
-inputs, target/toolchain/corpus metadata, and generated fuzz-workspace lockfile
+inputs, target/toolchain/corpus metadata, and committed fuzz-workspace lockfile
 for seven days. It records the commit, corpus checksums, campaign limits, and
 frontend stages explicitly skipped because their entry points are not ready.
 On GitHub-hosted runners it bypasses AFL++'s core-pattern preflight because the
