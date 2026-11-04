@@ -42,7 +42,7 @@ cargo test --workspace --all-targets
 cargo build --workspace --all-targets
 ```
 
-The same Rust checks run in [rust.yml](../../.github/workflows/rust.yml). The documentation-only workflow in [docs.yml](../../.github/workflows/docs.yml) runs Markdown linting, API registry validation, and offline local-link/anchor validation. Passing these checks validates only the empty workspace skeleton; it does not validate a compiler or runtime implementation. Platform integration, conformance, fuzz, security, and release workflows remain unimplemented.
+The same Rust checks run in [rust.yml](../../.github/workflows/rust.yml). The documentation-only workflow in [docs.yml](../../.github/workflows/docs.yml) runs Markdown linting, API registry validation, and offline local-link/anchor validation. Passing these checks validates the Rust workspace and source-map/file-loading primitives only; it does not validate a GFA BASIC compiler or runtime implementation. Platform integration, conformance, fuzz, security, and release workflows remain unimplemented.
 
 ## Human blockers and AI agent workflow
 
