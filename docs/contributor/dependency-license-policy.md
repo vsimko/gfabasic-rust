@@ -55,6 +55,13 @@ default.
 
 ## SBOM
 
-This policy does not decide whether release SBOMs are mandatory, which format
-(SPDX or CycloneDX) should be used, or where SBOMs should be retained or
-published. Those decisions remain tracked separately in issue #39.
+A Software Bill of Materials (SBOM) is required for every project release.
+The generation process must be reproducible and tested, and the SBOM must
+describe the dependencies actually included in the corresponding release
+artifacts.
+
+The maintainer has approved the requirement in principle. The format
+(SPDX or CycloneDX), exact generation tooling, and retention/publication
+location remain to be decided and are tracked in issue #39. Until those
+details are approved, do not treat a particular format or publication
+location as mandated.
