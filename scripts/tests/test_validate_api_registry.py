@@ -136,7 +136,8 @@ anchors = []
         temp, root = self.make_root(content)
         self.addCleanup(temp.cleanup)
         self.assertTrue(any("implemented entry has no handler ID" in error for error in validate_registry(root)))
-\n    def test_unknown_source_fails(self):
+
+    def test_unknown_source_fails(self):
         content = self.valid_declaration().replace("TEST-SOURCE", "MISSING-SOURCE")
         temp, root = self.make_root(content)
         self.addCleanup(temp.cleanup)
