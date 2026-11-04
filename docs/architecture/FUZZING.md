@@ -7,7 +7,7 @@
 
 Fuzzing is intended to find implementation defects when the future source frontend receives malformed, unusual, deeply nested, or adversarial input. It complements unit, property-based, regression, and manual-derived conformance tests; it does not establish language conformance by itself.
 
-The fuzz targets must be usable without LLVM, SDL3, an Amiga/Atari emulator, or network access. They must not execute generated programs or invoke external interpreters as part of an ordinary fuzz iteration.
+The fuzz targets must be usable without the project LLVM backend, SDL3, an Amiga/Atari emulator, or network access. They must not execute generated programs or invoke external interpreters as part of an ordinary fuzz iteration.
 
 Fuzzing must not define new GFA BASIC syntax or semantics. A crash-free parser is not proof that it accepts the right language, and a fuzzer-generated input is not a normative language example.
 
@@ -17,7 +17,7 @@ Create separate targets when the corresponding frontend boundary exists and can 
 
 | Logical target | Input | Main robustness properties |
 |---|---|---|
-| Source loading | Bounded source bytes or text, after the source-encoding contract is defined | No panic on malformed input; bounded allocation; stable source identity and diagnostics |
+| Source loading | Bounded bytes passed through the generic strict UTF-8 transport helper; dialect encoding remains separate | No panic on malformed input; bounded allocation; stable source identity and diagnostics |
 | Lexer | Source text using the selected dialect/version configuration | No panic or hang; token spans remain within source bounds; repeated runs are deterministic |
 | Parser | Source text or a stable token-stream entry point | No panic or hang; malformed input produces controlled diagnostics; nesting cannot cause uncontrolled resource exhaustion |
 | Expressions and statements | Source fragments parsed through the ordinary frontend entry point | Robust precedence, delimiter, nesting, and recovery paths without inventing acceptance rules |
@@ -66,13 +66,13 @@ Use explicit limits so fuzzing is useful in CI and cannot consume an unbounded r
 | Individual input | Use the fuzzer's per-input timeout where supported; begin with 1 second and tune from measurements | Isolate pathological cases |
 | Input size | Begin with a 1 MiB maximum generated input and adjust using real source-size requirements | Prevent oversized mutations from dominating the campaign |
 
-The CI job should also have an outer timeout of no more than 5 minutes for the smoke mode. If the selected engine cannot enforce an individual-input timeout or a reliable outer job timeout, document the limitation and use process isolation before enabling it in CI.
+Give the fuzzer process a bounded execution time and configure a separate outer CI timeout that includes tool installation and compilation. The current source-loader workflow uses a 15-minute outer job limit.
 
 Do not use a low recursion limit as a substitute for correct parser design. Deep nesting should be tested deliberately; a stack overflow or uncontrolled memory growth is a defect, while any supported-language nesting limit must be separately specified and tested.
 
 ## CI execution policy
 
-After a harness and stable target interfaces exist:
+For each available harness and stable target interface:
 
 1. Run bounded smoke fuzzing on pull requests that change the frontend, fuzz harnesses, fuzz dictionaries, or relevant corpus seeds.
 2. Keep smoke execution separate from formatting, compilation, and deterministic unit tests so failures identify the responsible stage.
@@ -81,7 +81,7 @@ After a harness and stable target interfaces exist:
 5. Do not introduce a coverage-percentage gate before a repeatable baseline exists. First collect and review coverage trends.
 6. Treat a timeout, crash, sanitizer finding, or unexpected panic as a failed fuzz job. Do not silently retry until green; retain the original failure artifact for triage.
 
-The exact fuzzer engine and Rust toolchain arrangement remain open. Evaluate maintenance, supported platforms, reproducibility, sanitizer support, corpus minimization, CI integration, and whether the engine requires a separate nightly toolchain. If nightly is required, isolate it to the fuzz job and do not change the project's pinned stable development toolchain solely for fuzzing.
+The engine and toolchain are selected for the source-loader target; see Current implementation below. Add further targets only when their ordinary compiler entry points and input contracts are stable.
 
 ## Failure triage and regression workflow
 

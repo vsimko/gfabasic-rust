@@ -136,7 +136,7 @@ impl SourceFile {
     }
 }
 
-/// A failure encountered while loading a source file as UTF-8.
+/// A failure encountered while decoding or loading source bytes as UTF-8.
 #[derive(Debug)]
 pub struct SourceLoadError {
     path: PathBuf,
@@ -148,7 +148,7 @@ pub struct SourceLoadError {
 pub enum SourceLoadErrorKind {
     /// The file could not be read from the filesystem.
     Io(std::io::Error),
-    /// The file contains bytes that are not valid UTF-8.
+    /// The source contains bytes that are not valid UTF-8.
     InvalidUtf8 {
         /// Byte offset of the first invalid UTF-8 sequence.
         valid_up_to: usize,
@@ -238,12 +238,6 @@ impl SourceMap {
         id
     }
 
-    /// Reads a file and adds it to this map after strict UTF-8 validation.
-    ///
-    /// This is a transport-level UTF-8 loader, not a claim that every GFA BASIC
-    /// dialect uses UTF-8. The caller must select this method only when the
-    /// selected dialect/configuration requires UTF-8. No lossy replacement or
-    /// implicit encoding conversion is performed.
     /// Decodes in-memory bytes as strict UTF-8 and adds the resulting source.
     ///
     /// This transport-level helper is also suitable for virtual sources and
@@ -261,6 +255,12 @@ impl SourceMap {
         Ok(self.add_source(name, text))
     }
 
+    /// Reads a file and adds it to this map after strict UTF-8 validation.
+    ///
+    /// This is a transport-level UTF-8 loader, not a claim that every GFA BASIC
+    /// dialect uses UTF-8. The caller must select this method only when the
+    /// selected dialect/configuration requires UTF-8. No lossy replacement or
+    /// implicit encoding conversion is performed.
     /// Reads a file and adds it to this map after strict UTF-8 validation.
     ///
     /// This is a transport-level UTF-8 loader, not a claim that every GFA BASIC
