@@ -159,7 +159,10 @@ pub enum SourceLoadErrorKind {
 
 impl SourceLoadError {
     fn io(path: PathBuf, error: std::io::Error) -> Self {
-        Self { path, kind: SourceLoadErrorKind::Io(error) }
+        Self {
+            path,
+            kind: SourceLoadErrorKind::Io(error),
+        }
     }
 
     fn invalid_utf8(path: PathBuf, error: std::string::FromUtf8Error) -> Self {
@@ -187,7 +190,11 @@ impl fmt::Display for SourceLoadError {
     fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
         match &self.kind {
             SourceLoadErrorKind::Io(error) => {
-                write!(formatter, "could not read source file {}: {error}", self.path.display())
+                write!(
+                    formatter,
+                    "could not read source file {}: {error}",
+                    self.path.display()
+                )
             }
             SourceLoadErrorKind::InvalidUtf8 { valid_up_to, error_len } => {
                 write!(
@@ -236,8 +243,10 @@ impl SourceMap {
     /// implicit encoding conversion is performed.
     pub fn load_utf8(&mut self, path: impl AsRef<Path>) -> Result<SourceId, SourceLoadError> {
         let path = path.as_ref().to_path_buf();
-        let bytes = fs::read(&path).map_err(|error| SourceLoadError::io(path.clone(), error))?;
-        let text = String::from_utf8(bytes).map_err(|error| SourceLoadError::invalid_utf8(path.clone(), error))?;
+        let bytes = fs::read(&path)
+            .map_err(|error| SourceLoadError::io(path.clone(), error))?;
+        let text = String::from_utf8(bytes)
+            .map_err(|error| SourceLoadError::invalid_utf8(path.clone(), error))?;
         let name: Arc<str> = path.to_string_lossy().into_owned().into();
         Ok(self.add_source(name, text))
     }
@@ -396,7 +405,7 @@ mod tests {
         ));
         let mut map = SourceMap::new();
         let error = map.load_utf8(&path).unwrap_err();
-        assert_eq!(error.path(), path);
+        assert_eq!(error.path(), path.as_path());
         assert!(matches!(error.kind(), super::SourceLoadErrorKind::Io(_)));
         assert!(map.is_empty());
     }
