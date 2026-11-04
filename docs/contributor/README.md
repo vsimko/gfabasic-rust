@@ -2,7 +2,7 @@
 
 **Audience:** People who want to review, research, or contribute to this repository.
 
-**Status:** The repository does not yet have a Rust workspace or executable build/test workflow.
+**Status:** Documentation-only CI is implemented. The repository does not yet have a Rust workspace or executable compiler/runtime build/test workflow.
 
 ## Before making a change
 
@@ -14,9 +14,16 @@
 
 ## Current development constraints
 
-There is no `Cargo.toml`, Rust workspace, compiler, runtime, CLI, or GitHub Actions workflow on the default branch. Therefore, there are currently no verified project commands for `cargo build`, `cargo test`, linting, or local CI.
+There is no `Cargo.toml`, Rust workspace, compiler, runtime, or CLI on the default branch. Therefore, `cargo build` and `cargo test` are not available as project commands. The documentation-only GitHub Actions workflow is implemented in [docs.yml](../../.github/workflows/docs.yml); it runs Markdown linting and offline local-link/anchor validation.
 
-Do not add speculative setup instructions or claim that a local command passes. The [workspace architecture](../architecture/WORKSPACE.md) describes the current proposal. The CI workflow design remains under review in [PR #80](https://github.com/vsimko/gfabasic-rust/pull/80); it is not an implemented workflow.
+Run the same documentation checks locally from the repository root:
+
+```sh
+npx --yes markdownlint-cli2@0.24.0 "**/*.md" "#node_modules"
+lychee --offline --include-fragments anchor-only --root-dir "$PWD" "**/*.md"
+```
+
+Do not claim that a compiler/runtime build or test passes. The [workspace architecture](../architecture/WORKSPACE.md) describes the current proposal. The full CI workflow design remains proposed in [CI architecture](../architecture/CI.md); compiler/runtime, integration, fuzz, security, and release workflows are not implemented.
 
 ## Pull request expectations
 
