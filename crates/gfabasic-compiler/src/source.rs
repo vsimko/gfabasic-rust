@@ -1,8 +1,8 @@
 //! Source identity and source-map primitives.
 //!
-//! This module accepts already-decoded UTF-8 text. The source dialect's file
-//! encoding rules and source-composition semantics are not yet verified, so
-//! this module does not read files or implement MERGE/include.
+//! This module stores decoded UTF-8 text and provides a strict UTF-8 transport
+//! loader. Dialect-specific source encoding and source-composition semantics
+//! remain separate decisions; this module does not implement MERGE/include.
 
 use std::fmt;
 use std::fs;
@@ -391,7 +391,7 @@ mod tests {
             .add_utf8_bytes("virtual-invalid.gfa", vec![0x50, 0x52, 0xFF, 0x4E, 0x54])
             .unwrap_err();
 
-        assert_eq!(error.path(), Path::new("virtual-invalid.gfa"));
+        assert_eq!(error.path(), std::path::Path::new("virtual-invalid.gfa"));
         assert!(matches!(
             error.kind(),
             super::SourceLoadErrorKind::InvalidUtf8 { valid_up_to: 2, .. }
