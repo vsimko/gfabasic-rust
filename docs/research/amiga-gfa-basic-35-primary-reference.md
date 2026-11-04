@@ -1,0 +1,32 @@
+# Amiga GFA-BASIC 3.5 primary reference and target decision
+
+Decision: target the **Amiga GFA-BASIC 3.5 interpreter and its documented 3.5 addendum**. Do not select 3.51 or 3.52 merely from secondary catalog listings; the available 3.5 interpreter manual is the governing reference in this project.
+
+## Available source set
+
+### GFA BASIC 3.5 Interpreter
+
+File supplied in the project workspace: `GFA_Basic_3.5_Interpreter.pdf` (469 PDF pages). Its introductory page states: “The software included with this manual is GFA BASIC 3.5”; it also explains that the manual was originally printed for version 3.0 and that Chapter 13 is an addendum describing the extra features provided in version 3.5. Chapter 13 is headed “GFA-BASIC 3.5 Addendum”. This is the primary version-specific source for the 3.5 interpreter target.
+
+The addendum documents editor changes: two extra bytes per program row compared with editor versions 3.0–3.07, faster backward scrolling, folding functions, searching procedure/function headers while closed, and adjusted label listing. It adds tab navigation/editing operations. It introduces linear operations for one- and two-dimensional floating-point fields, including MAT BASE, MAT CLR, MAT SET, MAT ONE, MAT READ, MAT PRINT, MAT INPUT, MAT CPY, MAT XCPY, and MAT TRANS. The addendum itself must be consulted for exact syntax and semantics; this summary is not a replacement for it.
+
+### Das große GFA-BASIC-Buch zum Amiga
+
+File supplied in the project workspace: `Das Grosse Buch zu GFA-Basic 3.5 Amiga.pdf` (515 PDF pages). Title/copyright pages identify DATA BECKER, 1990, ISBN 3-89011-399-0. Its foreword says the book documents, tests, and explains the commands/functions of Amiga GFA-BASIC version 3.0, and separately covers the then newly released GFA-BASIC compiler. The cover says “Bis Version 3.5 und Compiler 3.5”, but the foreword's explicit statement about the main command reference is version 3.0. Treat this book as the broad Amiga platform and compiler reference, not as sole proof of 3.5 interpreter additions.
+
+### Das große GFA-BASIC-Buch (1989)
+
+The separate 1989 first edition, ISBN 3-89011-276-5, explicitly documents Amiga GFA-BASIC 3.0. Retain it as historical corroboration only; do not label it a 3.5 source.
+
+## Compatibility evidence rules
+
+1. Use the 3.5 Interpreter manual and its Chapter 13 addendum as the normative reference for the selected 3.5 interpreter.
+2. Use the 1990 German Amiga book for Amiga-specific environment, APIs, examples, and compiler coverage, while preserving its explicit 3.0 scope for the main command reference.
+3. Use the 1989 German book as an earlier 3.0 cross-check.
+4. Mark any 3.0-documented behavior not explicitly reconfirmed in the 3.5 manual as inherited-from-3.0 / confirmation-needed, rather than assuming it changed or remained unchanged.
+5. Keep interpreter and compiler behavior separate. The compiler is described in the German Amiga book; do not infer interpreter equivalence for compiler-only behavior.
+6. Do not import Atari ST-only 3.5 claims into the Amiga target unless corroborated by the supplied Amiga materials.
+
+## Next work
+
+Extract Chapter 13 into a structured command/editor feature inventory with exact printed/PDF page references. Then map the German Amiga book's command reference and compiler chapter to the interpreter manual, marking source scope and any unresolved differences. Build conformance tests from exact source examples and separately record actual interpreter observations.
