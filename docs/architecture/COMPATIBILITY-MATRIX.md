@@ -16,7 +16,7 @@ This matrix separates research evidence from compiler implementation, API profil
 
 ## Project-wide implementation status
 
-- Rust workspace: bootstrapped with compiler, runtime, and Linux platform crates; modules are placeholders only.
+- Rust workspace: bootstrapped with compiler, runtime, and Linux platform crates; compiler source-map and strict UTF-8 file-loading primitives are implemented, while the language frontend, semantic analysis, IR, backend, CLI, runtime behavior, and platform adapter are not implemented.
 - Compiler frontend, semantic analysis, IR, LLVM backend, and CLI: not implemented.
 - GFA BASIC core runtime: not implemented.
 - Amiga and Atari ST compatibility runtimes: not implemented.
