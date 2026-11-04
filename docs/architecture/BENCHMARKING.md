@@ -141,20 +141,24 @@ GitHub-hosted machines are still shared infrastructure, so results are
 observational rather than a controlled-machine regression gate.
 
 
-Initial pre-cache sample (2026-11-04, main commit `b61f7d3`):
+Initial and cache-seed samples (2026-11-04):
 
-| Workload | Median | Standard deviation |
-|---|---:|---:|
-| Single 4 KiB source | 2.864 µs | 0.093 µs |
-| Single 64 KiB source | 43.816 µs | 1.122 µs |
-| Single 1 MiB source | 986.582 µs | 30.565 µs |
-| 128 × 1 KiB sources | 138.733 µs | 1.173 µs |
+| Workload | Pre-cache median ± SD | Cache-seed median ± SD | Change |
+|---|---:|---:|---:|
+| Single 4 KiB source | 2.864 ± 0.093 µs | 2.792 ± 0.059 µs | -2.5% |
+| Single 64 KiB source | 43.816 ± 1.122 µs | 44.200 ± 1.518 µs | +0.9% |
+| Single 1 MiB source | 986.582 ± 30.565 µs | 1,024.333 ± 36.697 µs | +3.8% |
+| 128 × 1 KiB sources | 138.733 ± 1.173 µs | 138.461 ± 2.553 µs | -0.2% |
 
-Environment: Ubuntu 24.04, Linux 7.0.0-1017-azure, Intel Xeon Platinum
-8370C @ 2.80 GHz, four logical CPUs, 16 GB RAM, rustc 1.99.1. This sample
-predates the matching-host-profile cache and is not a regression comparison. See
-[workflow run 41911241816](https://github.com/vsimko/gfabasic-rust/actions/runs/41911241816)
-for the full Criterion artifact and environment metadata.
+Both samples used Ubuntu 24.04, Linux 7.0.0-1017-azure, Intel Xeon Platinum
+8370C @ 2.80 GHz, four logical CPUs, 16 GB RAM, and rustc 1.99.1. The
+pre-cache sample is [run 41911241816](https://github.com/vsimko/gfabasic-rust/actions/runs/41911241816);
+the cache-seed sample is [run 41913047961](https://github.com/vsimko/gfabasic-rust/actions/runs/41913047961).
+The second run reported a cache miss and saved the first baseline for this
+host profile. The small differences are observational only; two samples on
+shared infrastructure do not establish a statistical regression threshold.
+A later run with the same host-profile key should restore and compare against
+this baseline.
 
 Run locally with:
 
@@ -185,7 +189,7 @@ As of 2026-11-04:
 - Same-host cache-backed comparisons are configured; a controlled-machine baseline and hard regression gate do not exist yet.
 - The broader benchmark categories, measurement protocol, correctness requirements, profiling workflow, and regression policy remain design guidance; only source loading currently has an executable benchmark.
 - Criterion 0.8.2 is selected for the isolated benchmark workspace; Linux profiling tools remain candidates.
-- The first pre-cache sample below is observational; the first cache-enabled main-branch run seeds the repeatable same-host baseline.
+- The first pre-cache sample below is observational; the first cache-enabled main-branch run seeds the repeatable matching-host-profile baseline.
 
 The next implementation steps are to add deterministic benchmarks for lexer/parser, semantic, IR, backend, and runtime components as those components become executable. Keep timed measurements out of the fast pull-request path until their runtime and variance are understood. Do not create empty targets or claim baselines before there is executable work to measure.
 

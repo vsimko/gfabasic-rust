@@ -42,10 +42,12 @@ toolchain, lockfile, and workload version; other hosts start a fresh baseline.
 It uploads Criterion reports and metadata as a 30-day artifact. It does not run
 timed benchmarks on pull requests and does not enforce a performance threshold.
 
-The first pre-cache sample was recorded at main commit `b61f7d3`: 2.864 µs
-for 4 KiB, 43.816 µs for 64 KiB, 986.582 µs for 1 MiB, and 138.733 µs for
-128 × 1 KiB sources (median estimates). It is observational only; the first
-cache-enabled main run seeds the repeatable matching-host-profile comparison baseline.
+The initial pre-cache sample and the cache-seed sample used the same runner
+profile. Their median estimates were respectively 2.864/2.792 µs (4 KiB),
+43.816/44.200 µs (64 KiB), 986.582/1,024.333 µs (1 MiB), and
+138.733/138.461 µs (128 × 1 KiB). The cache-seed run saved the first baseline
+for that profile; a later matching run should restore it. These two samples
+are observational only, not a statistical regression threshold.
 
 GitHub-hosted runners are not a controlled benchmark machine. Compare
 artifacts only when host and toolchain metadata match. Treat these results as
