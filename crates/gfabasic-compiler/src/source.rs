@@ -244,13 +244,33 @@ impl SourceMap {
     /// dialect uses UTF-8. The caller must select this method only when the
     /// selected dialect/configuration requires UTF-8. No lossy replacement or
     /// implicit encoding conversion is performed.
-    pub fn load_utf8(&mut self, path: impl AsRef<Path>) -> Result<SourceId, SourceLoadError> {
-        let path = path.as_ref().to_path_buf();
-        let bytes = fs::read(&path).map_err(|error| SourceLoadError::io(path.clone(), error))?;
+    /// Decodes in-memory bytes as strict UTF-8 and adds the resulting source.
+    ///
+    /// This transport-level helper is also suitable for virtual sources and
+    /// fuzzing. It does not define the source encoding of any GFA BASIC dialect.
+    /// On failure, the source map is left unchanged.
+    pub fn add_utf8_bytes(
+        &mut self,
+        name: impl AsRef<Path>,
+        bytes: Vec<u8>,
+    ) -> Result<SourceId, SourceLoadError> {
+        let path = name.as_ref().to_path_buf();
         let text = String::from_utf8(bytes)
             .map_err(|error| SourceLoadError::invalid_utf8(path.clone(), error))?;
         let name: Arc<str> = path.to_string_lossy().into_owned().into();
         Ok(self.add_source(name, text))
+    }
+
+    /// Reads a file and adds it to this map after strict UTF-8 validation.
+    ///
+    /// This is a transport-level UTF-8 loader, not a claim that every GFA BASIC
+    /// dialect uses UTF-8. The caller must select this method only when the
+    /// selected dialect/configuration requires UTF-8. No lossy replacement or
+    /// implicit encoding conversion is performed.
+    pub fn load_utf8(&mut self, path: impl AsRef<Path>) -> Result<SourceId, SourceLoadError> {
+        let path = path.as_ref().to_path_buf();
+        let bytes = fs::read(&path).map_err(|error| SourceLoadError::io(path.clone(), error))?;
+        self.add_utf8_bytes(&path, bytes)
     }
 
     /// Returns a source file by ID.
@@ -347,6 +367,36 @@ mod tests {
         assert_eq!(file.line_count(), 1);
         assert_eq!(file.line_column(0), Some((1, 1)));
         assert_eq!(file.line_text(1), Some(""));
+    }
+
+    #[test]
+    fn utf8_byte_loader_adds_valid_source_without_filesystem_access() {
+        let mut map = SourceMap::new();
+        let source = map
+            .add_utf8_bytes("virtual.gfa", "PRINT \"héllo\"\r\n".as_bytes().to_vec())
+            .unwrap();
+
+        let file = map.get(source).unwrap();
+        assert_eq!(file.name(), "virtual.gfa");
+        assert_eq!(file.text(), "PRINT \"héllo\"\r\n");
+        assert_eq!(file.line_count(), 2);
+        assert_eq!(file.line_text(1), Some("PRINT \"héllo\""));
+        assert_eq!(file.line_text(2), Some(""));
+    }
+
+    #[test]
+    fn utf8_byte_loader_rejects_invalid_bytes_without_mutating_source_map() {
+        let mut map = SourceMap::new();
+        let error = map
+            .add_utf8_bytes("virtual-invalid.gfa", vec![0x50, 0x52, 0xFF, 0x4E, 0x54])
+            .unwrap_err();
+
+        assert_eq!(error.path(), Path::new("virtual-invalid.gfa"));
+        assert!(matches!(
+            error.kind(),
+            super::SourceLoadErrorKind::InvalidUtf8 { valid_up_to: 2, .. }
+        ));
+        assert!(map.is_empty());
     }
 
     #[test]

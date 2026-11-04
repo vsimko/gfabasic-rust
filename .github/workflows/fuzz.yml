@@ -1,0 +1,70 @@
+name: Fuzzing
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/fuzz.yml"
+      - "crates/gfabasic-compiler/src/source.rs"
+      - "docs/architecture/FUZZING.md"
+      - "fuzz/**"
+      - "rust-toolchain.toml"
+  schedule:
+    - cron: "17 4 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: fuzz-\${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  source-loader:
+    name: Source-loader fuzzing
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      AFL_NO_UI: "1"
+      AFL_SKIP_CPUFREQ: "1"
+      AFL_NO_AFFINITY: "1"
+      FUZZ_SECONDS: \${{ github.event_name == 'pull_request' && '30' || '600' }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+
+      - name: Install pinned Rust toolchain
+        run: |
+          rustup toolchain install 1.99.1 --profile minimal
+          rustup default 1.99.1
+
+      - name: Install pinned cargo-afl
+        run: cargo +1.99.1 install cargo-afl --version 0.18.2 --locked
+
+      - name: Resolve the separate fuzz workspace
+        run: cargo +1.99.1 generate-lockfile --manifest-path fuzz/Cargo.toml
+
+      - name: Build source-loader fuzz target
+        run: cargo +1.99.1 afl build --manifest-path fuzz/Cargo.toml --target-dir fuzz/target --release --bin source_loader --locked
+
+      - name: Run bounded source-loader campaign
+        run: |
+          cargo +1.99.1 afl fuzz \
+            -i fuzz/corpus/source_loader \
+            -o "$RUNNER_TEMP/source-loader-fuzz" \
+            -V "$FUZZ_SECONDS" \
+            -t 1000 \
+            -m 256 \
+            -G 1048576 \
+            fuzz/target/release/source_loader
+
+      - name: Upload fuzzer output and resolved lockfile
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: source-loader-fuzz-\${{ github.run_id }}
+          path: |
+            \${{ runner.temp }}/source-loader-fuzz/
+            fuzz/Cargo.lock
+          if-no-files-found: ignore
+          retention-days: 7

@@ -1,6 +1,6 @@
 # Frontend fuzzing and robustness strategy
 
-- Status: Strategy documented; no compiler frontend, fuzz harness, or fuzzing CI job exists yet.
+- Status: Source-loader fuzz target and bounded CI campaign are implemented; lexer/parser targets remain pending.
 - Tracking: [strategy #43 (completed)](https://github.com/vsimko/gfabasic-rust/issues/43); [implementation #118](https://github.com/vsimko/gfabasic-rust/issues/118).
 
 ## Goals and non-goals
@@ -96,11 +96,39 @@ For each reproducible failure:
 
 Do not commit ROMs, disk images, copyrighted sample collections, secrets, host paths, or large raw crash corpora. Follow the source-provenance and redistribution rules in [the reference-source register](../reference-sources.md).
 
-## Decisions still required
+## Current implementation
 
-- Select and pin a fuzzer engine after the Rust workspace and frontend entry points exist.
-- Define the source encoding and source-composition contracts before implementing byte-level and include-resolution targets.
-- Establish a baseline for input sizes, per-input timeouts, total CI cost, and useful coverage.
-- Add the smoke and scheduled/manual workflows only after the harness is reproducible in a clean environment.
+The first target is the generic source-loader byte boundary. It exercises
+`SourceMap::add_utf8_bytes`, which is also used by the filesystem loader.
+It checks strict UTF-8 rejection, source-map immutability on decode failure,
+source identity, line indexing, and valid line/column boundaries. This is a
+transport-level UTF-8 test only: it does **not** assert that Amiga GFA BASIC
+source files use UTF-8, and it does not test MERGE/include behavior.
 
-Until these prerequisites are met, this document is a test strategy only. It does not claim that fuzz targets, regression harnesses, or fuzzing workflows have been implemented.
+The selected engine is AFL++ through the Rust `afl` and `cargo-afl`
+integration, both pinned to version `0.18.2`. Their published package
+manifests declare Apache-2.0, which is in the approved dependency allowlist.
+The fuzz workspace is separate from the normal Cargo workspace so its
+fuzz-only dependencies do not enter ordinary builds. CI uses the project's
+pinned stable Rust 1.99.1 toolchain on Linux x86-64; this engine does not
+require switching the project toolchain to nightly.
+
+CI runs a 30-second smoke campaign on relevant pull requests and a 10-minute
+campaign on the weekly schedule or manual dispatch. Both modes cap individual
+inputs at 1 MiB, use a 1-second per-input timeout and a 256 MiB target memory
+limit, and run under a 15-minute job timeout. The workflow uploads the AFL++
+output and the generated fuzz-workspace lockfile for seven days so failures
+can be reproduced and triaged. No language dictionary is used until its tokens
+are supported by the selected dialect evidence.
+
+Local usage and corpus handling are documented in [`fuzz/README.md`](../../fuzz/README.md).
+Fuzzer output is local/generated data; do not commit it. Minimize any crash or
+hang and promote a permitted reproducer into the deterministic regression
+suite before treating it as fixed.
+
+## Remaining implementation decisions
+
+- Add a lexer target after the Amiga 3.0 lexical rules and token entry point are sufficiently specified in #46.
+- Add a parser target after the parser/AST entry point exists in #47.
+- Add source-composition fuzzing only after #120 defines deterministic resolution and filesystem sandbox rules.
+- Establish useful coverage baselines before adding coverage-percentage gates.

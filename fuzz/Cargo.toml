@@ -1,0 +1,19 @@
+[package]
+name = "gfabasic-fuzz"
+version = "0.0.0"
+edition = "2024"
+publish = false
+
+# Keep fuzz-only dependencies outside the normal workspace and its lockfile.
+[workspace]
+
+[dependencies]
+afl = "=0.18.2"
+gfabasic-compiler = { path = "../crates/gfabasic-compiler" }
+
+[[bin]]
+name = "source_loader"
+path = "fuzz_targets/source_loader.rs"
+test = false
+doc = false
+bench = false
