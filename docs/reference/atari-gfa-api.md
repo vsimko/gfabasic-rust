@@ -795,7 +795,7 @@ XBIOS error values listed on p. 622 include -1 general error, -2 device not read
 The source's detailed floppy format/boot-sector and virus discussion (pp. 630–645), sound-chip/interrupt routines (pp. 646–655), and supervisor/AES shutdown material (p. 656) are historical, privileged or destructive Atari-specific material. Do not implement these as host disk, audio, interrupt or process operations. Require a sandboxed machine profile and explicit safety policy before any emulation.
 
 **Page-image checks completed:** p. 605 confirms BIOS generic signature, L: longword marker, D0 result and GETMPB layout; p. 612 confirms the SUPER warning and stack/mode caveats; p. 618 confirms the VDISYS V3.0 argument form and workstation-handle source; p. 623 confirms XBIOS INITMOUSE/SSBRK/PHYSBASE/LOGBASE declarations. Other detailed XBIOS disk/sound examples remain text/OCR-derived pending targeted image review.
- 
+
 
 ### 8.9 Source consistency correction: GETDFREE buffer size
 
