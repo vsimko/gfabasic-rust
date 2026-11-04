@@ -24,7 +24,7 @@ Do not create separate crates for the lexer, parser, semantic analyzer, IR, back
 
 Cargo features are build-time capability switches. They may enable an optional LLVM backend or SDL3 adapter after those dependencies are selected, but they must not select a GFA BASIC dialect or API profile. Dialect and API-profile selection belong to compiler/project configuration.
 
-Use Rust edition 2024 and Cargo workspace resolver 3. Pin an exact stable development toolchain and install `rustfmt` and `clippy`. Rust 1.99.1 is the current candidate for the initial bootstrap as of this proposal; the pin must be checked again when the workspace is created. Keep the declared MSRV separate and do not promise one until CI tests it.
+Use Rust edition 2024 and Cargo workspace resolver 3. Pin an exact stable development toolchain and install `rustfmt` and `clippy`. The initial workspace pins Rust 1.99.1 in `rust-toolchain.toml`. Re-evaluate this pin deliberately when upgrading the toolchain. Keep the declared MSRV separate and do not promise one until CI tests it.
 
 Commit `Cargo.lock`, use explicit dependency versions, and review dependency maintenance, license, security, native build requirements, platform support, and reproducibility. Do not add LLVM or SDL3 bindings until their versions and clean-build strategies are evaluated. Keep unsafe FFI within narrow platform/backend adapters and document its invariants.
 
@@ -50,7 +50,7 @@ This would separate compiler dependencies from generated-program support, but th
 - API profile selection remains a per-compilation concern rather than a Cargo build feature.
 - The workspace starts with three packages, not one package per logical compiler stage.
 - The exact cross-crate runtime interfaces and generated-program link model still require separate design.
-- This ADR is a proposal. It does not authorize implementation of unverified GFA BASIC behavior or claim that any compiler/runtime component exists.
+- The crate split is accepted and the workspace bootstrap is implemented. The workspace currently contains architectural placeholders; this ADR does not claim compiler/runtime behavior or GFA BASIC compatibility.
 
 ## Evidence and references
 
