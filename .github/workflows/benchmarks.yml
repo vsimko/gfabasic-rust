@@ -38,8 +38,11 @@ jobs:
 
       - name: Install pinned Rust toolchain
         run: |
-          rustup toolchain install 1.99.1 --profile minimal
+          rustup toolchain install 1.99.1 --profile minimal --component rustfmt
           rustup default 1.99.1
+
+      - name: Check benchmark formatting
+        run: cargo +1.99.1 fmt --manifest-path bench/Cargo.toml -- --check
 
       - name: Compile benchmark without running measurements
         run: cargo +1.99.1 check --manifest-path bench/Cargo.toml --target-dir bench/target --benches --locked
