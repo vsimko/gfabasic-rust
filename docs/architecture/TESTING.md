@@ -1,12 +1,79 @@
 # Compatibility testing and release criteria
 
-- Status: Proposed; release gates remain open under issue #10.
+- Status: Proposed; test conventions are defined, but executable release gates remain open under issue #10.
 
 ## Conformance corpus
 
 The initial source corpus is maintained in [tests/corpus/](../../tests/corpus/README.md). It currently contains research-only Amiga GFA BASIC 3.0 candidate fixtures. Candidate status means that page-image and/or interpreter validation is still required; these files are not compiler acceptance tests. See [issue #42](https://github.com/vsimko/gfabasic-rust/issues/42).
 
 See the [current compatibility matrix](COMPATIBILITY-MATRIX.md) for the explicit statement of which dialects, profiles, and targets are not yet supported.
+
+## Test categories
+
+Use the category that best describes the contract under test. Categories may overlap; for example, a conformance test can be an end-to-end test.
+
+1. **Unit tests** check one function, module, or invariant in isolation. They should avoid external processes and filesystem access unless those are the subject of the test.
+2. **Golden/snapshot tests** compare stable, user-visible or compiler-produced output, such as diagnostics or normalized intermediate representations. Snapshot changes require review of the semantic diff; do not update snapshots only to make a failing test pass.
+3. **Property-based tests** check general invariants across generated inputs. Record the generator configuration and seed when a failure must be reproduced.
+4. **Fuzz tests** explore malformed and adversarial inputs for crashes, hangs, panics, and violated invariants. Keep fuzzing strategy and resource budgets under [issue #43](https://github.com/vsimko/gfabasic-rust/issues/43); do not make long fuzz campaigns part of every fast pull-request check.
+5. **Integration tests** exercise boundaries between compiler stages, crates, runtime components, or platform adapters.
+6. **Conformance tests** compare behavior with an applicable manual rule or a named trusted reference implementation. Each test must identify the exact dialect/version and API profile, expected behavior, and source page/section or reproducible observation.
+7. **End-to-end tests** exercise the complete source-to-executable path and, where applicable, run the generated program. State the target and runtime prerequisites explicitly.
+8. **Regression tests** preserve a minimal reproducer for each fixed defect. Link the test to the issue or change that introduced it.
+
+The test layer (for example, lexer, semantic analysis, IR, backend, or runtime) and the test category are separate labels. Do not infer conformance from a unit, snapshot, or end-to-end test unless its expected behavior has an independent source of truth.
+
+## Fixture layout and naming
+
+Keep GFA BASIC source fixtures in [tests/corpus/](../../tests/corpus/README.md). They have their own dialect/version metadata and evidence policy; do not mix them with implementation-only fixtures.
+
+When Cargo crates and test harnesses exist, keep crate-specific fixtures next to the owning crate, for example:
+
+```text
+crates/<crate>/tests/
+  <suite>_tests.rs
+  fixtures/
+    <suite>/<case-id>/
+      input.txt
+      expected.stdout
+      expected.stderr
+      expected.exit
+```
+
+- Use stable lowercase kebab-case case IDs and descriptive Rust test names.
+- Use a case directory when a test needs multiple input or expected-output files.
+- Keep expected stdout, stderr, exit status, and diagnostic snapshots separate. Omit files that are not part of the contract.
+- Put shared fixtures in a common location only when multiple crates genuinely test the same contract. Otherwise, keep ownership with the nearest crate.
+- Do not store machine-specific absolute paths, developer home-directory data, generated binaries, secrets, or copyrighted source material without redistribution permission.
+- Every fixture must state its purpose and any non-obvious provenance. Conformance fixtures must also follow the metadata contract in [tests/corpus/README.md](../../tests/corpus/README.md).
+
+## Determinism and isolation
+
+Tests must not depend on ambient developer-machine state.
+
+- Inject or freeze clocks when behavior depends on time. Do not use wall-clock time as an implicit expected value.
+- Seed pseudo-random generators explicitly. On failure, report the seed and enough generator settings to reproduce the case.
+- Set locale, timezone, encoding, and relevant environment variables explicitly when they can affect results.
+- Use unique temporary directories and clean them up automatically. Never rely on a fixed path under the repository or a developer's home directory.
+- Avoid network access in ordinary unit and integration tests. Any test that requires an external service must be explicitly classified and isolated.
+- Do not share mutable files, ports, process-global state, or fixed resource names between parallel tests.
+- Mark a test as serial only when isolation is not practical, and document the shared resource that requires serialization.
+- Record required operating systems, architectures, system libraries, devices, and runtime capabilities. Skip unsupported environments with an explicit reason; do not silently treat a skipped test as passed.
+
+## Failure reporting
+
+A failing test should provide enough information to reproduce and diagnose the failure without inspecting a developer's local machine.
+
+Where applicable, report:
+
+- test name, fixture ID, and failing compiler/runtime stage;
+- source dialect/version, API profile, and target;
+- expected and actual exit status, stdout, stderr, or structured diagnostic;
+- random seed and generator settings;
+- relevant toolchain versions and explicitly configured environment;
+- a reproducible command or test invocation.
+
+Normalize temporary paths and other unstable values before comparing snapshots. Do not remove meaningful source locations, diagnostic codes, or semantic differences merely to make output stable.
 
 ## Test layers
 
@@ -21,10 +88,10 @@ See the [current compatibility matrix](COMPATIBILITY-MATRIX.md) for the explicit
 9. Manual-derived conformance tests for verified rules.
 10. Regression tests for every fixed defect.
 
-Each conformance test must identify dialect/version, API profile, expected behavior, and source page/section or trusted reference implementation. A fixture does not become authoritative merely because it passes.
+A fixture does not become authoritative merely because it passes. OCR-derived claims require the page-image review specified by the source record; interpreter observations must name the tested release and remain distinct from manual-backed facts.
 
-Fix locale, timezone, random seeds, environment variables, temporary paths, and external resources where they affect test behavior. Mark nondeterministic tests and isolate them.
+## Release criteria
 
 A release must state compiler version, supported dialect/version subset, target, API profile statuses, known deviations, and required runtime dependencies. Do not claim full compatibility based only on unit-test coverage or successful compilation.
 
-Tracking: [issue #10](https://github.com/vsimko/gfabasic-rust/issues/10).
+Tracking: [issue #10](https://github.com/vsimko/gfabasic-rust/issues/10), [test taxonomy #41](https://github.com/vsimko/gfabasic-rust/issues/41), [conformance corpus #42](https://github.com/vsimko/gfabasic-rust/issues/42), and [fuzzing strategy #43](https://github.com/vsimko/gfabasic-rust/issues/43).

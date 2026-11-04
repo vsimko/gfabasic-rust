@@ -35,7 +35,7 @@ The language core is separate from platform API profiles. Amiga and Atari ST pro
 | Runtime | Runtime layers and SDL3 adapter boundary | [RUNTIME.md](RUNTIME.md) | [#7](https://github.com/vsimko/gfabasic-rust/issues/7) |
 | Memory model | Storage, pointers, hardware access, safety policy | [MEMORY.md](MEMORY.md) | [#8](https://github.com/vsimko/gfabasic-rust/issues/8) |
 | CLI and configuration | Inputs, profiles, outputs, reproducibility | [CLI-AND-CONFIG.md](CLI-AND-CONFIG.md) | [#9](https://github.com/vsimko/gfabasic-rust/issues/9) |
-| Compatibility testing | Test layers and release criteria | [TESTING.md](TESTING.md) | [#10](https://github.com/vsimko/gfabasic-rust/issues/10) |
+| Compatibility testing | Test taxonomy, fixtures, conformance, deterministic behavior, release criteria | [TESTING.md](TESTING.md); [corpus conventions](../../tests/corpus/README.md) | [#10](https://github.com/vsimko/gfabasic-rust/issues/10), [#41](https://github.com/vsimko/gfabasic-rust/issues/41), [#42](https://github.com/vsimko/gfabasic-rust/issues/42), [#43](https://github.com/vsimko/gfabasic-rust/issues/43) |
 | Compatibility matrix | Current dialect/version/profile/target support status | [COMPATIBILITY-MATRIX.md](COMPATIBILITY-MATRIX.md) | [#10](https://github.com/vsimko/gfabasic-rust/issues/10), [#58](https://github.com/vsimko/gfabasic-rust/issues/58) |
 | Rust workspace | Crate/module boundaries and dependency policy | [WORKSPACE.md](WORKSPACE.md) | [#11](https://github.com/vsimko/gfabasic-rust/issues/11) |
 | API registry | Canonical machine-readable declarations | [API-REGISTRY.md](API-REGISTRY.md) | [#12](https://github.com/vsimko/gfabasic-rust/issues/12) |
