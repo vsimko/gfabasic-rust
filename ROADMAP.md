@@ -44,7 +44,7 @@ Keep the architecture, documentation, and research evidence internally consisten
 - [x] API registry architecture — [#12](https://github.com/vsimko/gfabasic-rust/issues/12)
 - [x] Documentation policy; “OKF” ambiguity explicitly unresolved — [#14](https://github.com/vsimko/gfabasic-rust/issues/14)
 - [x] Reconcile the project README and roadmap with actual buildable capabilities — [#16](https://github.com/vsimko/gfabasic-rust/issues/16)
-- [ ] Verify contributor setup instructions against a clean supported Linux environment — [#112](https://github.com/vsimko/gfabasic-rust/issues/112)
+- [x] Verify contributor setup instructions against a clean supported Linux environment — [#112](https://github.com/vsimko/gfabasic-rust/issues/112)
 
 ### Phase 1 — Establish an evidence-backed first language subset
 
