@@ -1,6 +1,6 @@
 # Performance benchmarks and profiling strategy
 
-- Status: **Proposed; no benchmark harness or executable implementation exists yet.**
+- Status: **Initial source-loading microbenchmark implemented; compiler/frontend/runtime benchmarks and stable regression comparisons remain pending.**
 - Tracking: [issue #60](https://github.com/vsimko/gfabasic-rust/issues/60).
 - Purpose: define repeatable measurements that can guide optimization without confusing compiler speed, generated-program speed, and build-system performance.
 
@@ -98,7 +98,7 @@ There should be no hard performance threshold before a stable baseline exists.
 
 Proposed rollout:
 
-1. Add benchmark workloads and local instructions with the first executable compiler/runtime components.
+1. Add a workload as each compiler/runtime component becomes executable; source loading is the first implemented workload.
 2. Establish baselines on a known runner and publish machine/toolchain metadata with every result.
 3. Run a small smoke set on pull requests only after its duration and variance are understood.
 4. Run the broader suite on a scheduled or release workflow.
@@ -107,18 +107,66 @@ Proposed rollout:
 
 Do not fail every pull request because of a small timing fluctuation. A regression gate must use comparable hardware, a known baseline, and a threshold larger than normal run-to-run noise. Revisit thresholds when the runner, compiler, LLVM, or benchmark corpus changes.
 
-## 7. Initial project status
+## 7. Current source-loading benchmark
+
+A first microbenchmark is implemented in the separate `bench` workspace. It
+measures the generic strict UTF-8 byte decoder and source-map construction,
+not GFA BASIC syntax, dialect encoding, filesystem I/O, or source composition.
+The synthetic workload is deliberately not a language-conformance fixture.
+
+The Criterion 0.8.2 harness measures:
+- one source of 4 KiB, 64 KiB, and 1 MiB;
+- 128 independent 1 KiB sources in one source map.
+
+Input preparation is outside the timed routine. The timed routine constructs
+the source map, decodes the owned byte buffers, builds line indexes, and adds
+the sources. The harness uses 20 samples, a one-second warm-up, and two seconds
+of measurement per benchmark. It reports throughput and Criterion statistics.
+
+Benchmark-only dependencies live in the independent `bench` workspace and
+are excluded from ordinary workspace builds and the release SBOM. The
+benchmark workflow compiles the harness on relevant pull requests but runs
+measurements only on a weekly schedule or manual dispatch. Results and host
+metadata are uploaded as 30-day artifacts. There are no hard performance
+thresholds.
+
+The workflow records commit, toolchain, kernel, architecture, CPU model,
+logical CPU count, memory, target, and synthetic workload revision. GitHub
+hosted runner hardware can vary; compare results only when the recorded host
+and toolchain metadata match. Initial results from the scheduled/manual workflow will be observational,
+not a controlled-machine regression baseline.
+
+Run locally with:
+
+```sh
+cargo +1.99.1 bench --manifest-path bench/Cargo.toml --target-dir bench/target --bench source_loading --locked -- --noplot
+```
+
+See [`bench/README.md`](../../bench/README.md) for workload boundaries and
+artifact details.
+
+## 8. Remaining benchmark work
+
+- Add frontend benchmarks after lexer/parser entry points exist (#46/#47).
+- Add semantic/IR/backend benchmarks only when those stages have real,
+  deterministic inputs and outputs.
+- Add runtime/API benchmarks after runtime contracts and implementations exist
+  (#51–#55).
+- Establish comparable baselines on a controlled, stable machine before
+  introducing regression alerts or hard gates.
+
+## 9. Initial project status
 
 As of 2026-11-04:
 
 - The repository has a three-crate Rust workspace and a baseline CI workflow.
-- The compiler, runtime behavior, CLI, and LLVM/SDL3 integration are not implemented.
-- No benchmark harness or executable benchmark workload exists.
-- No performance baseline can be collected or compared yet.
-- The benchmark categories, measurement protocol, correctness requirements, profiling workflow, and proposed CI rollout are documented as a design only.
-- Criterion and Linux profiling tools remain candidates; no benchmark or profiling dependency has been selected.
+- The compiler frontend beyond source loading, runtime behavior, and LLVM/SDL3 integration are not implemented.
+- A source-loading microbenchmark harness exists; other compiler/runtime benchmark workloads remain unavailable.
+- No stable cross-run performance baseline or regression gate exists yet.
+- The broader benchmark categories, measurement protocol, correctness requirements, profiling workflow, and regression policy remain design guidance; only source loading currently has an executable benchmark.
+- Criterion 0.8.2 is selected for the isolated benchmark workspace; Linux profiling tools remain candidates.
 - CI cache performance is not yet measured. Do not infer cache effectiveness from a successful build or cache hit alone.
 
-The next implementation step is to add a small deterministic benchmark for a real, measurable compiler or runtime component after that component exists. Keep the benchmark out of the default fast pull-request path until its runtime and variance are understood. Do not create empty benchmark targets or claim a baseline before there is executable work to measure.
+The next implementation steps are to add deterministic benchmarks for lexer/parser, semantic, IR, backend, and runtime components as those components become executable. Keep timed measurements out of the fast pull-request path until their runtime and variance are understood. Do not create empty targets or claim baselines before there is executable work to measure.
 
 Issue #60 can be closed only after the benchmark harness and representative workloads exist, a baseline can be reproduced on a documented environment, and the project has a repeatable way to compare results. The strategy in this document is necessary groundwork, but it does not satisfy those implementation and baseline criteria by itself.
