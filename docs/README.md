@@ -2,7 +2,7 @@
 
 This index is the entry point for project documentation. It separates user guidance, contributor guidance, architecture decisions, language/API references, and research material.
 
-> **Project status:** The repository is still in the planning and architecture stage. It does not yet contain a compiler, runtime, command-line interface, or Rust workspace. A documentation-only CI workflow is available; compiler/runtime build and test workflows are not. A planned document location does not mean that the corresponding feature is available.
+> **Project status:** The repository has an accepted architecture and a bootstrapped three-crate Rust workspace. Compiler, runtime, and CLI behavior are not implemented. Documentation checks and fast Rust workspace checks are available; platform integration, conformance, fuzz, security, and release workflows are not. A module placeholder does not mean that the corresponding feature is available.
 
 ## Start here
 
