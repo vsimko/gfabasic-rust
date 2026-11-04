@@ -263,6 +263,17 @@ Primary catalogue snapshot: [Aminet `dev/basic` directory index](https://ftp.fau
 | `GTBoxConv.lha` | 44 KB; 1996-05-05; README version 4.50 | False positive; Blitz2 code generator | The README explicitly describes a GadToolsBox-to-Blitz2 code generator for AmigaOS/m68k. It is not a GFA BASIC language tool. [README](https://ftp.fau.de/mirrors/aminet/dev/basic/GTBoxConv.readme). |
 | `ACE_*.lha`, `PureBasic*.lha`, `Brandy.lha`, `ABasiC.lha`, `AmigaBASIC-Info.lha` | Multiple archive dates and sizes in the same directory | Other BASIC systems or uncertain BASIC-related material | Directory placement does not make these GFA BASIC references. Exclude them from the GFA feature inventory unless an individual item is explicitly cross-identified and its scope verified. |
 
+Additional source/archive leads from the same directory snapshot:
+
+| Candidate | Catalogue metadata | Current classification | Next verification |
+|---|---|---|---|
+| `GFA_Enforcer.txt` | 2.0 KB; 1998-08-18; README 559 B | GFA-named text/tool candidate; the legacy text encoding prevented reliable decoding in the web reader | Decode the text and README, identify whether it is source, a style/checking tool, or documentation, and record its license |
+| `GetCDDB_src.lha` | 20 KB; 2000-01-08; README 2.4 KB | Source-archive candidate, not yet confirmed as GFA BASIC | Inspect README and archive file extensions/compiler markers before adding any sample to #42 |
+| `BallMasterSrc.lha` | 48 KB; 2001-01-01; README 526 B | Source-archive candidate, language/compiler unverified | Inspect README and archive contents; do not assume GFA BASIC from the directory |
+| `HotShotsSRC.lha` | 403 KB; 2000-01-09; README 966 B | Larger source-archive candidate, language/compiler unverified | Inspect README and archive contents; check included third-party assets and redistribution terms |
+
+The archive and README links are available under the [Aminet `dev/basic` mirror](https://ftp.fau.de/mirrors/aminet/dev/basic/). These are discovery leads, not verified GFA BASIC programs or conformance fixtures. Their checksums and license terms have not yet been recorded. Keep them out of the normative feature inventory and do not commit their contents until provenance and redistribution permissions are established.
+
 The directory also contains many names ending in `DevBas`, examples, source archives, and GUI/graphics helpers. Treat these as leads for a later package-by-package review. Do not count a package as a GFA BASIC extension until its README or archive contents identify the target interpreter/compiler and version. Do not copy archive contents into this repository until each package's redistribution terms are checked.
 
 **Survey status:** the directory listing has been reviewed and several relevant candidates and a concrete false positive have been recorded. This is not yet a complete package inventory: several README files could not be decoded by the available web reader, and archive contents, licenses, checksums, and sample-source provenance remain unverified. Continue with a compatible local LHA/README inspection workflow before using any package as a test-corpus source. This survey does not establish any built-in GFA BASIC command or API.
