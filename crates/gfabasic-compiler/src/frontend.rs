@@ -361,8 +361,8 @@ mod tests {
             .find(|token| matches!(token.kind, TokenKind::Comment(_)))
             .unwrap();
         assert!(matches!(&comment.kind, TokenKind::Comment(text) if text == " Grüße"));
-        assert_eq!(&comment.span.start, &8);
-        assert_eq!(&comment.span.end, &16);
+        assert_eq!(comment.span.start, 8);
+        assert_eq!(comment.span.end, 17);
         assert!(output.tokens.iter().any(|token| matches!(token.kind, TokenKind::Newline)));
     }
 
