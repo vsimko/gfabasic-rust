@@ -71,3 +71,7 @@ upgrades require an explicit version change, review of upstream changes, and
 successful SBOM validation before merge. Publish each release's SBOM as a
 JSON asset attached to the corresponding GitHub Release. The GitHub Release
 asset is the canonical publication and retention location.
+
+The SBOM scope is the complete Cargo workspace: `gfabasic-compiler`,
+`gfabasic-runtime`, and `gfabasic-platform-linux`, including their workspace
+relationships and dependencies. Generate one workspace-level SBOM per release.
