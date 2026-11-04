@@ -1,6 +1,12 @@
 name: Release SBOM
 
 on:
+  pull_request:
+    paths:
+      - "Cargo.toml"
+      - "Cargo.lock"
+      - "crates/**"
+      - ".github/workflows/release-sbom.yml"
   release:
     types:
       - published
@@ -49,6 +55,7 @@ jobs:
           ' workspace.spdx.json > /dev/null
 
       - name: Attach SBOM to the GitHub Release
+        if: github.event_name == 'release'
         env:
           GH_TOKEN: ${{ github.token }}
           RELEASE_TAG: ${{ github.event.release.tag_name }}
