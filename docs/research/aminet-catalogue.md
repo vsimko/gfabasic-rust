@@ -1,6 +1,6 @@
 # Aminet GFA BASIC package survey
 
-- **Status:** Initial catalogue from the live directory listing; archive contents, package readmes, source languages, and redistribution terms have not yet been inspected.
+- **Status:** Initial catalogue from the live directory listing; one package-page false positive has been classified. Most archive contents, package readmes, source languages, and redistribution terms remain uninspected.
 - **Tracking:** [issue #64](https://github.com/vsimko/gfabasic-rust/issues/64).
 - **Directory surveyed:** [Aminet `dev/basic`](https://ftp.fau.de/mirrors/aminet/dev/basic/), mirrored by [Aminet mirror index](https://aminet.net/dev/basic/).
 - **Survey date:** 2026-11-04.
@@ -23,7 +23,7 @@ The date and size below are the values displayed by the mirror index. Archive co
 | [`GFA_CLI.lha`](https://ftp.fau.de/mirrors/aminet/dev/basic/GFA_CLI.lha) | 2000-07-17 | 2.2 KB | CLI/tool candidate | A paired readme exists. Verify intended GFA BASIC version and actual contents. |
 | [`GuiGfxDevBas.lha`](https://ftp.fau.de/mirrors/aminet/dev/basic/GuiGfxDevBas.lha) | 2003-07-21 | 31 KB | GUI/graphics development-library candidate | A paired readme exists. Inspect declarations and distinguish wrappers from built-ins. |
 | [`GFABasicFIX.lha`](https://ftp.fau.de/mirrors/aminet/dev/basic/GFABasicFIX.lha) | 1998-01-23 | 32 KB | Fix/patch candidate | A paired readme exists. Identify affected interpreter/compiler release and patch terms. |
-| [`GTBoxConv.lha`](https://ftp.fau.de/mirrors/aminet/dev/basic/GTBoxConv.lha) | 1996-05-05 | 44 KB | Conversion-tool candidate | A paired readme exists. Determine input/output formats and whether any GFA source is included. |
+| [`GTBoxConv.lha`](https://ftp.fau.de/mirrors/aminet/dev/basic/GTBoxConv.lha) | 1996-05-05 | 44 KB | **Unrelated/false positive:** GadToolsBox-to-Blitz2 converter | Aminet package page identifies version 4.50 by Fabio Rotondo for m68k AmigaOS; its two listed members are a guide and converter executable. It generates Blitz2 code, not GFA BASIC. License remains unknown. |
 | [`GetCDDB_src.lha`](https://ftp.fau.de/mirrors/aminet/dev/basic/GetCDDB_src.lha) | 2000-01-08 | 20 KB | Source-archive candidate | The `_src` suffix is only a clue. Inspect file list, language, author, and rights. |
 | [`HotShotsSRC.lha`](https://ftp.fau.de/mirrors/aminet/dev/basic/HotShotsSRC.lha) | 2000-01-09 | 403 KB | Source-archive candidate | Inspect for GFA BASIC source, dependencies, and redistribution terms before considering test-corpus use. |
 | [`OutTakesSRC.lha`](https://ftp.fau.de/mirrors/aminet/dev/basic/OutTakesSRC.lha) | 2000-01-10 | 82 KB | Source-archive candidate | Inspect for GFA BASIC source, dependencies, and redistribution terms before considering test-corpus use. |
@@ -31,6 +31,12 @@ The date and size below are the values displayed by the mirror index. Archive co
 | [`PointerDevBas.lha`](https://ftp.fau.de/mirrors/aminet/dev/basic/PointerDevBas.lha) | 2017-01-09 | 34 KB | Developer-library candidate | Inspect pointer-related declarations and examples; do not infer core pointer semantics. |
 | [`ReqAttDevBas.lha`](https://ftp.fau.de/mirrors/aminet/dev/basic/ReqAttDevBas.lha) | 2002-06-23 | 27 KB | Requester/attribute library candidate | Inspect declarations and dependencies; likely relevant to platform API research only if contents confirm it. |
 | [`HotShotsSRC.readme`](https://ftp.fau.de/mirrors/aminet/dev/basic/HotShotsSRC.readme) | 2005-11-19 | 966 B | Package metadata | Readme is listed; contents were not retrieved in this pass. |
+
+## Verified false positive: GTBoxConv
+
+The [Aminet package page](https://aminet.net/package/dev/basic/GTBoxConv) identifies GTBoxConv as version 4.50, author Fabio Rotondo, architecture m68k AmigaOS, dated 1996-05-05. Its description calls it a GadToolsBox-to-Blitz2 code generator. The package member listing contains only `GTBox.guide` and the `GTBoxConv` executable. It is therefore unrelated to GFA BASIC despite appearing in the `dev/basic` category. The page does not state a license; do not redistribute or use it as a GFA BASIC fixture.
+
+This is metadata and the archive member listing exposed by Aminet's package page; the executable was not downloaded or run.
 
 ## Classification rules
 
@@ -59,7 +65,7 @@ For each selected archive:
 
 ## Current limitations
 
-- Only the directory listing was surveyed; package readmes and archive members remain uninspected.
+- The complete directory listing was surveyed. GTBoxConv's package metadata and member listing were inspected through its Aminet page, but its executable was not downloaded or run; other selected package readmes and archive members remain uninspected.
 - The listing contains material for multiple BASIC dialects. The category name alone does not establish GFA BASIC applicability.
 - No license is inferred from an Aminet listing or from the presence of a downloadable archive.
 - No package is currently promoted to a conformance fixture or normative language/API evidence.
