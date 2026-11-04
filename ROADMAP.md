@@ -3,7 +3,7 @@
 This roadmap is the project-level view of delivery order for `gfabasic-rust`. GitHub Issues remain the source of truth for task scope, acceptance criteria, blockers, and implementation discussion.
 
 **Snapshot:** 2026-11-04  
-**Current maturity:** architecture and research baseline; Rust workspace bootstrap, source-map and strict UTF-8 transport primitives, and a minimal help/version CLI. Amiga GFA BASIC interpreter 3.5 is the accepted normative source dialect; Atari ST V2.xx/V3.0 remains research-only. The language frontend, backend, project configuration, runtime behavior, and GFA BASIC conformance are not implemented.
+**Current maturity:** architecture and research baseline; Rust workspace bootstrap, source-map and strict UTF-8 transport primitives, and a minimal help/version CLI. Amiga GFA BASIC interpreter 3.5 is the accepted normative source dialect; 3.0/3.03 sources are historical candidates requiring 3.5 confirmation, and Atari ST V2.xx/V3.0 remains research-only. The language frontend, backend, project configuration, runtime behavior, and GFA BASIC conformance are not implemented.
 
 ## Status rules
 
