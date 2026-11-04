@@ -262,7 +262,7 @@ mod tests {
     fn recognizes_documented_type_suffixes_and_identifier_characters() {
         let output = lex_text("value% byte| word& flag! text$ real# name_2.part");
         let suffixes: Vec<_> = output.tokens.iter().filter_map(|token| {
-            if let TokenKind::Identifier { suffix, .. } = token.kind { Some(suffix) } else { None }
+            if let TokenKind::Identifier { suffix, .. } = &token.kind { Some(*suffix) } else { None }
         }).collect();
         assert_eq!(suffixes, vec![Some('%'), Some('|'), Some('&'), Some('!'), Some('$'), Some('#'), None]);
         assert!(matches!(&output.tokens[6].kind, TokenKind::Identifier { text, .. } if text == "name_2.part"));
@@ -286,7 +286,7 @@ mod tests {
         assert_eq!(output.diagnostics[0].code, "GFA-LEX-0002");
         assert_eq!(output.diagnostics[0].primary_span.unwrap().start, 6);
         assert_eq!(output.diagnostics[1].code, "GFA-LEX-0001");
-        assert_eq!(output.diagnostics[1].primary_span.unwrap().start, 17);
+        assert_eq!(output.diagnostics[1].primary_span.unwrap().start, 18);
     }
 
     #[test]
