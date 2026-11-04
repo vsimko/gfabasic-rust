@@ -1,18 +1,18 @@
 # Current compatibility matrix
 
-- Status: **Current project snapshot; no GFA BASIC dialect/version is accepted or implemented.**
+- Status: **Amiga GFA BASIC interpreter 3.0 is the accepted initial normative source dialect; no GFA BASIC dialect is implemented or conformant.**
 - Updated: 2026-11-04.
 - Tracking: [dialect policy #3](https://github.com/vsimko/gfabasic-rust/issues/3), [compatibility testing #10](https://github.com/vsimko/gfabasic-rust/issues/10), [versioning policy #58](https://github.com/vsimko/gfabasic-rust/issues/58).
 
-This matrix separates research evidence from compiler implementation, API profile implementation, output target, and conformance status. A source listed here is not a supported dialect.
+This matrix separates accepted normative source scope from research evidence, compiler implementation, API profile implementation, output target, and conformance status. Selecting a source dialect does not mean that it is implemented or supported.
 
 ## Current status
 
-| Evidence target | Research evidence | Language implementation | API profile implementation | Output target | Conformance status |
+| Evidence target | Policy status | Research evidence | Language implementation | API profile implementation | Output target | Conformance status |
 |---|---|---|---|---|---|
-| Atari ST GFA BASIC V2.xx/V3.0 | Preliminary source-backed research from the 1988 Atari book and July 1988 user manual; detailed OCR-sensitive rules still need review | Not implemented | Not implemented | Linux x86-64 is planned, not implemented | Research only; no compiler acceptance suite |
-| Amiga GFA BASIC interpreter 3.0 | French 1989 Amiga book identifies interpreter 3.0; research notes contain source-backed findings with remaining page-image checks | Not implemented | Not implemented | Linux x86-64 is planned, not implemented | Research only; two candidate corpus fixtures are not verified |
-| Amiga interpreter/compiler 3.51/3.52 | Contemporary 1991 product listing distinguishes interpreter 3.51 and compiler 3.52; catalogue-labelled ADF images have not been inspected | Not implemented | Not implemented | Linux x86-64 is planned, not implemented | Blocked; component identity and runtime observations are unavailable |
+| Atari ST GFA BASIC V2.xx/V3.0 | Research-only; not in initial compiler contract | Preliminary source-backed research from the 1988 Atari book and July 1988 user manual; detailed OCR-sensitive rules still need review | Not implemented | Not implemented | Linux x86-64 is planned, not implemented | Research only; no compiler acceptance suite |
+| Amiga GFA BASIC interpreter 3.0 | **Accepted initial normative source dialect** | French 1989 Amiga book identifies interpreter 3.0; research notes contain source-backed findings with remaining page-image checks | Not implemented | Not implemented | Linux x86-64 is planned, not implemented | Research/specification target; no compiler acceptance suite |
+| Amiga interpreter/compiler 3.51/3.52 | Unselected; future research | Contemporary 1991 product listing distinguishes interpreter 3.51 and compiler 3.52; catalogue-labelled ADF images have not been inspected | Not implemented | Not implemented | Linux x86-64 is planned, not implemented | Blocked; component identity and runtime observations are unavailable |
 
 ## Project-wide implementation status
 
@@ -22,7 +22,7 @@ This matrix separates research evidence from compiler implementation, API profil
 - Amiga and Atari ST compatibility runtimes: not implemented.
 - Linux platform layer and SDL3 integration: not implemented.
 - CI: documentation validation and fast Rust workspace checks are present; no GFA BASIC conformance runner or compiler/runtime integration workflows exist.
-- No dialect/version or API profile is currently claimed as accepted, stable, supported, or conformant.
+- No dialect/version or API profile is currently claimed as implemented, stable, supported, or conformant. Amiga GFA BASIC interpreter 3.0 is selected as the normative target only.
 
 ## Rules for updating the matrix
 
