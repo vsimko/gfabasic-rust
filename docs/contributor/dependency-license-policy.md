@@ -68,5 +68,6 @@ Release automation must install exactly version `0.10.0` and invoke its
 `spdx_json_2_3` output format. Validate the generated document and verify that
 its component/dependency inventory matches the release build inputs. Tool
 upgrades require an explicit version change, review of upstream changes, and
-successful SBOM validation before merge. The retention/publication location
-remains to be decided and is tracked in issue #39.
+successful SBOM validation before merge. Publish each release's SBOM as a
+JSON asset attached to the corresponding GitHub Release. The GitHub Release
+asset is the canonical publication and retention location.
