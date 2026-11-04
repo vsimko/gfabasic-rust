@@ -71,6 +71,6 @@ The crate split is an implementation boundary, not a promise that every Rust ite
 
 ## Deferred decisions
 
-The accepted workspace bootstrap does not select an LLVM version or Rust binding, an SDL3 binding, a runtime ABI, a dynamic/static linking policy, or stable API-profile identifiers. Record each decision after compatibility and clean-build evaluation. Do not add a placeholder dependency or claim an integration exists merely to reserve a future interface. Cargo package license metadata is intentionally omitted until the project owner resolves [issue #78](https://github.com/vsimko/gfabasic-rust/issues/78).
+The accepted workspace bootstrap does not select an LLVM version or Rust binding, an SDL3 binding, a runtime ABI, a dynamic/static linking policy, or stable API-profile identifiers. Record each decision after compatibility and clean-build evaluation. Do not add a placeholder dependency or claim an integration exists merely to reserve a future interface. The project owner selected MIT for project-owned source and documentation; the root workspace declares `license = "MIT"`, and all three crates inherit it. The complete license and scope boundary are recorded in [issue #78](https://github.com/vsimko/gfabasic-rust/issues/78) and the root [LICENSE](../../LICENSE). This license does not grant rights to redistribute historical GFA BASIC materials.
 
 Tracking: [issue #11](https://github.com/vsimko/gfabasic-rust/issues/11); workspace bootstrap [issue #44](https://github.com/vsimko/gfabasic-rust/issues/44).
