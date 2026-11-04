@@ -45,7 +45,7 @@ timed benchmarks on pull requests and does not enforce a performance threshold.
 The first pre-cache sample was recorded at main commit `b61f7d3`: 2.864 µs
 for 4 KiB, 43.816 µs for 64 KiB, 986.582 µs for 1 MiB, and 138.733 µs for
 128 × 1 KiB sources (median estimates). It is observational only; the first
-cache-enabled main run seeds the repeatable same-host comparison baseline.
+cache-enabled main run seeds the repeatable matching-host-profile comparison baseline.
 
 GitHub-hosted runners are not a controlled benchmark machine. Compare
 artifacts only when host and toolchain metadata match. Treat these results as

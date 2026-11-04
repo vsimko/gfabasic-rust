@@ -61,14 +61,14 @@ jobs:
           rustup toolchain install 1.99.1 --profile minimal
           rustup default 1.99.1
 
-      - name: Identify benchmark host for a comparable baseline
+      - name: Identify benchmark host profile for a comparable baseline
         id: host
         run: |
           cpu_model="$(grep -m1 'model name' /proc/cpuinfo | cut -d: -f2- | sed 's/^[[:space:]]*//; s/[[:space:]]*$//' | sed 's/[^A-Za-z0-9._-]/_/g')"
           echo "cpu_model=$cpu_model" >> "$GITHUB_OUTPUT"
           echo "kernel=$(uname -r)" >> "$GITHUB_OUTPUT"
 
-      - name: Restore same-host Criterion baseline
+      - name: Restore matching-host-profile Criterion baseline
         id: criterion-cache
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
         with:

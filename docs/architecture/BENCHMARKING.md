@@ -132,7 +132,7 @@ are no hard performance thresholds.
 
 The workflow records commit, toolchain, kernel, architecture, CPU model,
 logical CPU count, memory, target, workload revision, and whether the
-same-host Criterion cache was hit. Criterion's `base` data is cached using a
+matching-host-profile Criterion cache was hit. Criterion's `base` data is cached using a
 key that includes OS/architecture, CPU model, kernel release, Rust toolchain,
 benchmark lockfile hash, and workload version. The artifact records the
 lockfile SHA-256 and whether the cache was hit. Matching runs compare against
@@ -152,7 +152,7 @@ Initial pre-cache sample (2026-11-04, main commit `b61f7d3`):
 
 Environment: Ubuntu 24.04, Linux 7.0.0-1017-azure, Intel Xeon Platinum
 8370C @ 2.80 GHz, four logical CPUs, 16 GB RAM, rustc 1.99.1. This sample
-predates the same-host cache and is not a regression comparison. See
+predates the matching-host-profile cache and is not a regression comparison. See
 [workflow run 41911241816](https://github.com/vsimko/gfabasic-rust/actions/runs/41911241816)
 for the full Criterion artifact and environment metadata.
 
