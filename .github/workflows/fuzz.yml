@@ -50,13 +50,17 @@ jobs:
       - name: Record fuzz run metadata
         run: |
           {
-            printf 'target=source_loader\\n'
-            printf 'commit=%s\\n' "$GITHUB_SHA"
-            printf 'rustc=%s\\n' "$(rustc +1.99.1 --version)"
-            printf 'cargo-afl=0.18.2\\n'
-            printf 'corpus-sha256:\\n'
+            printf 'target=source_loader\n'
+            printf 'commit=%s\n' "$GITHUB_SHA"
+            printf 'rustc=%s\n' "$(rustc +1.99.1 --version)"
+            printf 'cargo-afl=0.18.2\n'
+            printf 'fuzz-seconds=%s\n' "$FUZZ_SECONDS"
+            printf 'max-input-bytes=1048576\n'
+            printf 'per-input-timeout-ms=1000\n'
+            printf 'memory-limit-mb=256\n'
+            printf 'corpus-sha256:\n'
             sha256sum fuzz/corpus/source_loader/*
-            printf 'skipped=lexer,parser,expressions,diagnostics,source-composition (prerequisites #46,#47,#120)\\n'
+            printf 'skipped=lexer,parser,expressions,diagnostics,source-composition (prerequisites #46,#47,#120)\n'
           } > "$RUNNER_TEMP/source-loader-fuzz-metadata.txt"
 
       - name: Run bounded source-loader campaign
