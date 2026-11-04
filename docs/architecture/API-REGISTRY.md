@@ -1,7 +1,7 @@
 # API registry and declaration source of truth
 
-- Status: **Accepted by [ADR 0006](adr/0006-api-registry.md).** The v1 JSON Schema, Python validator, validator unit tests, and documentation CI check are implemented. The registry currently contains one unsupported Atari ST TIMER research declaration. No documentation generator or Rust runtime-handler resolution is implemented yet.
-- Tracking: [issue #12](https://github.com/vsimko/gfabasic-rust/issues/12), [validation #55](https://github.com/vsimko/gfabasic-rust/issues/55).
+- Status: **Accepted by [ADR 0006](adr/0006-api-registry.md).** The v1 JSON Schema, Python validator, validator unit tests, and documentation CI check are implemented. The registry currently contains one unsupported Atari ST TIMER research declaration. Runtime handler resolution is tracked separately in #115; no documentation generator is implemented yet.
+- Tracking: [issue #12](https://github.com/vsimko/gfabasic-rust/issues/12), [metadata validation #55 (completed)](https://github.com/vsimko/gfabasic-rust/issues/55).
 
 ## 1. Purpose and ownership
 
@@ -189,4 +189,4 @@ Acceptance of a registry record does not mean implementation is complete. The re
 
 ADR 0006 accepts TOML as the canonical registry format, the directory structure above, the stable ID convention, and the separated evidence/implementation/support/conformance model. The v1 JSON Schema, Python validator, validator tests, and CI invocation are now implemented. The registry contains one unsupported Atari ST TIMER declaration; no supported GFA BASIC declaration, runtime handler mapping, or documentation generator is implemented. The presence of a research record is not a compiler or runtime feature claim.
 
-Tracking: [issue #12](https://github.com/vsimko/gfabasic-rust/issues/12), [validation #55](https://github.com/vsimko/gfabasic-rust/issues/55), [conformance corpus #42](https://github.com/vsimko/gfabasic-rust/issues/42).
+Tracking: [issue #12](https://github.com/vsimko/gfabasic-rust/issues/12), [metadata validation #55 (completed)](https://github.com/vsimko/gfabasic-rust/issues/55), [runtime handler resolution #115](https://github.com/vsimko/gfabasic-rust/issues/115), [conformance corpus #42](https://github.com/vsimko/gfabasic-rust/issues/42).
