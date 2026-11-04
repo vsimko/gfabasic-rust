@@ -93,6 +93,7 @@ impl<'a> Lexer<'a> {
                 _ => self.invalid_character(),
             }
         }
+
         let end = self.offset;
         self.output.tokens.push(Token {
             kind: TokenKind::EndOfFile,
@@ -157,11 +158,12 @@ impl<'a> Lexer<'a> {
             && self.bytes[self.offset] != b'\n'
         {
             let ch = self.text[self.offset..]
-            .chars()
-            .next()
-            .expect("valid UTF-8");
+                .chars()
+                .next()
+                .expect("valid UTF-8");
             self.offset += ch.len_utf8();
         }
+
         if self.bytes.get(self.offset) == Some(&b'"') {
             let value = self.text[content_start..self.offset].to_owned();
             self.offset += 1;
@@ -181,6 +183,7 @@ impl<'a> Lexer<'a> {
         while self.offset < self.bytes.len() && self.bytes[self.offset].is_ascii_digit() {
             self.offset += 1;
         }
+
         if self.bytes.get(self.offset) == Some(&b'.')
             && self
                 .bytes
@@ -192,6 +195,7 @@ impl<'a> Lexer<'a> {
                 self.offset += 1;
             }
         }
+
         self.push(
             TokenKind::Number(self.text[start..self.offset].to_owned()),
             start,
@@ -209,12 +213,14 @@ impl<'a> Lexer<'a> {
                 break;
             }
         }
+
         let suffix = self.bytes.get(self.offset).copied().and_then(|byte| {
-            matches!(byte, b'%' | b'|' | b'&' | b'!' | b'
+            matches!(byte, b'%' | b'|' | b'&' | b'!' | b'$' | b'#').then_some(byte as char)
         });
         if suffix.is_some() {
             self.offset += 1;
         }
+
         let end_name = if suffix.is_some() {
             self.offset - 1
         } else {
@@ -237,7 +243,7 @@ impl<'a> Lexer<'a> {
             && self
                 .bytes
                 .get(self.offset)
-                .is_some_and(|b| *b == b'=' || (first == b'<' && *b == b'>'))
+                .is_some_and(|byte| *byte == b'=' || (first == b'<' && *byte == b'>'))
         {
             self.offset += 1;
         }
@@ -249,7 +255,10 @@ impl<'a> Lexer<'a> {
 
     fn invalid_character(&mut self) {
         let start = self.offset;
-        let ch = self.text[self.offset..].chars().next().expect("valid UTF-8");
+        let ch = self.text[self.offset..]
+            .chars()
+            .next()
+            .expect("valid UTF-8");
         self.offset += ch.len_utf8();
         self.error(
             "GFA-LEX-0001",
@@ -288,15 +297,18 @@ mod tests {
     fn command_names_are_identifiers_not_reserved_keywords() {
         let output = lex_text("PRINT TIMER DATES");
         assert!(output.diagnostics.is_empty());
-        assert!(
-            matches!(&output.tokens[0].kind, TokenKind::Identifier { text, .. } if text == "PRINT")
-        );
-        assert!(
-            matches!(&output.tokens[1].kind, TokenKind::Identifier { text, .. } if text == "TIMER")
-        );
-        assert!(
-            matches!(&output.tokens[2].kind, TokenKind::Identifier { text, .. } if text == "DATES")
-        );
+        assert!(matches!(
+            &output.tokens[0].kind,
+            TokenKind::Identifier { text, .. } if text == "PRINT"
+        ));
+        assert!(matches!(
+            &output.tokens[1].kind,
+            TokenKind::Identifier { text, .. } if text == "TIMER"
+        ));
+        assert!(matches!(
+            &output.tokens[2].kind,
+            TokenKind::Identifier { text, .. } if text == "DATES"
+        ));
     }
 
     #[test]
@@ -320,7 +332,15 @@ mod tests {
                 Some('|'),
                 Some('&'),
                 Some('!'),
-                Some('
+                Some('$'),
+                Some('#'),
+                None
+            ]
+        );
+        assert!(matches!(
+            &output.tokens[6].kind,
+            TokenKind::Identifier { text, .. } if text == "name_2.part"
+        ));
     }
 
     #[test]
@@ -332,8 +352,14 @@ mod tests {
             TokenKind::Identifier { .. }
         ));
         assert!(matches!(output.tokens[1].kind, TokenKind::Colon));
-        assert!(matches!(output.tokens[3].kind, TokenKind::StringLiteral(ref s) if s == "hello"));
-        assert!(matches!(output.tokens[4].kind, TokenKind::Comment(ref text) if text == " note"));
+        assert!(matches!(
+            output.tokens[3].kind,
+            TokenKind::StringLiteral(ref value) if value == "hello"
+        ));
+        assert!(matches!(
+            output.tokens[4].kind,
+            TokenKind::Comment(ref value) if value == " note"
+        ));
         assert!(matches!(output.tokens[5].kind, TokenKind::Newline));
         assert!(matches!(
             output.tokens[6].kind,
@@ -362,7 +388,7 @@ mod tests {
             .unwrap();
         assert!(matches!(
             &comment.kind,
-            TokenKind::Comment(text) if text == " Grüße"
+            TokenKind::Comment(value) if value == " Grüße"
         ));
         assert_eq!(comment.span.start, 8);
         assert_eq!(comment.span.end, 17);
@@ -382,272 +408,6 @@ mod tests {
             .iter()
             .find(|token| matches!(token.kind, TokenKind::StringLiteral(_)))
             .unwrap();
-        assert_eq!(string.span.start, 6);
-        assert_eq!(string.span.end, 10);
-    }
-}
- | b'#').then_some(byte as char)
-        });
-        if suffix.is_some() {
-            self.offset += 1;
-        }
-        let end_name = if suffix.is_some() { self.offset - 1 } else { self.offset };
-        self.push(
-            TokenKind::Identifier {
-                text: self.text[start..end_name].to_owned(),
-                suffix,
-            },
-            start,
-        );
-    }
-
-    fn operator(&mut self) {
-        let start = self.offset;
-        let first = self.bytes[self.offset];
-        self.offset += 1;
-        if matches!(first, b'<' | b'>')
-            && self.bytes.get(self.offset).is_some_and(|b| *b == b'=' || (first == b'<' && *b == b'>'))
-        {
-            self.offset += 1;
-        }
-        self.push(TokenKind::Operator(self.text[start..self.offset].to_owned()), start);
-    }
-
-    fn invalid_character(&mut self) {
-        let start = self.offset;
-        let ch = self.text[self.offset..].chars().next().expect("valid UTF-8");
-        self.offset += ch.len_utf8();
-        self.error(
-            "GFA-LEX-0001",
-            format!("invalid character {ch:?}"),
-            start,
-            self.offset,
-        );
-    }
-
-    fn error(&mut self, code: &str, message: impl Into<String>, start: usize, end: usize) {
-        self.output.diagnostics.push(
-            Diagnostic::new(
-                code,
-                DiagnosticSeverity::Error,
-                DiagnosticCategory::Lexical,
-                message,
-            )
-            .with_primary_span(SourceSpan::new(self.source, start, end))
-            .with_reference("docs/reference/amiga-gfa-basic-3.0.md"),
-        );
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::{lex, SourceDialect, TokenKind};
-    use crate::source::SourceMap;
-
-    fn lex_text(text: &str) -> super::LexOutput {
-        let mut sources = SourceMap::new();
-        let source = sources.add_source("test.gfa", text);
-        lex(source, text, SourceDialect::AmigaGfaBasic30)
-    }
-
-    #[test]
-    fn command_names_are_identifiers_not_reserved_keywords() {
-        let output = lex_text("PRINT TIMER DATES");
-        assert!(output.diagnostics.is_empty());
-        assert!(matches!(&output.tokens[0].kind, TokenKind::Identifier { text, .. } if text == "PRINT"));
-        assert!(matches!(&output.tokens[1].kind, TokenKind::Identifier { text, .. } if text == "TIMER"));
-        assert!(matches!(&output.tokens[2].kind, TokenKind::Identifier { text, .. } if text == "DATES"));
-    }
-
-    #[test]
-    fn recognizes_documented_type_suffixes_and_identifier_characters() {
-        let output = lex_text("value% byte| word& flag! text$ real# name_2.part");
-        let suffixes: Vec<_> = output.tokens.iter().filter_map(|token| {
-            if let TokenKind::Identifier { suffix, .. } = &token.kind { Some(*suffix) } else { None }
-        }).collect();
-        assert_eq!(suffixes, vec![Some('%'), Some('|'), Some('&'), Some('!'), Some('$'), Some('#'), None]);
-        assert!(matches!(&output.tokens[6].kind, TokenKind::Identifier { text, .. } if text == "name_2.part"));
-    }
-
-    #[test]
-    fn handles_strings_comments_labels_and_line_endings() {
-        let output = lex_text("start: PRINT \"hello\" ! note\r\nNEXT");
-        assert!(output.diagnostics.is_empty());
-        assert!(matches!(output.tokens[0].kind, TokenKind::Identifier { .. }));
-        assert!(matches!(output.tokens[1].kind, TokenKind::Colon));
-        assert!(matches!(output.tokens[3].kind, TokenKind::StringLiteral(ref s) if s == "hello"));
-        assert!(matches!(output.tokens[4].kind, TokenKind::Comment(ref text) if text == " note"));
-        assert!(matches!(output.tokens[5].kind, TokenKind::Newline));
-        assert!(matches!(output.tokens[6].kind, TokenKind::Identifier { .. }));
-    }
-
-    #[test]
-    fn reports_unterminated_strings_and_invalid_characters_with_spans() {
-        let output = lex_text("PRINT \"oops\nPRINT @");
-        assert_eq!(output.diagnostics.len(), 2);
-        assert_eq!(output.diagnostics[0].code, "GFA-LEX-0002");
-        assert_eq!(output.diagnostics[0].primary_span.unwrap().start, 6);
-        assert_eq!(output.diagnostics[1].code, "GFA-LEX-0001");
-        assert_eq!(output.diagnostics[1].primary_span.unwrap().start, 18);
-    }
-
-    #[test]
-    fn preserves_utf8_byte_offsets() {
-        let output = lex_text("PRINT \"é\"");
-        let string = output.tokens.iter().find(|token| matches!(token.kind, TokenKind::StringLiteral(_))).unwrap();
-        assert_eq!(string.span.start, 6);
-        assert_eq!(string.span.end, 10);
-    }
-}
-),
-                Some('#'),
-                None
-            ]
-        );
-        assert!(
-            matches!(&output.tokens[6].kind, TokenKind::Identifier { text, .. } if text == "name_2.part")
-        );
-    }
-
-    #[test]
-    fn handles_strings_comments_labels_and_line_endings() {
-        let output = lex_text("start: PRINT \"hello\" ! note\r\nNEXT");
-        assert!(output.diagnostics.is_empty());
-        assert!(matches!(output.tokens[0].kind, TokenKind::Identifier { .. }));
-        assert!(matches!(output.tokens[1].kind, TokenKind::Colon));
-        assert!(matches!(output.tokens[3].kind, TokenKind::StringLiteral(ref s) if s == "hello"));
-        assert!(matches!(output.tokens[4].kind, TokenKind::Comment(ref text) if text == " note"));
-        assert!(matches!(output.tokens[5].kind, TokenKind::Newline));
-        assert!(matches!(output.tokens[6].kind, TokenKind::Identifier { .. }));
-    }
-
-    #[test]
-    fn reports_unterminated_strings_and_invalid_characters_with_spans() {
-        let output = lex_text("PRINT \"oops\nPRINT @");
-        assert_eq!(output.diagnostics.len(), 2);
-        assert_eq!(output.diagnostics[0].code, "GFA-LEX-0002");
-        assert_eq!(output.diagnostics[0].primary_span.unwrap().start, 6);
-        assert_eq!(output.diagnostics[1].code, "GFA-LEX-0001");
-        assert_eq!(output.diagnostics[1].primary_span.unwrap().start, 18);
-    }
-
-    #[test]
-    fn preserves_utf8_byte_offsets() {
-        let output = lex_text("PRINT \"é\"");
-        let string = output.tokens.iter().find(|token| matches!(token.kind, TokenKind::StringLiteral(_))).unwrap();
-        assert_eq!(string.span.start, 6);
-        assert_eq!(string.span.end, 10);
-    }
-}
- | b'#').then_some(byte as char)
-        });
-        if suffix.is_some() {
-            self.offset += 1;
-        }
-        let end_name = if suffix.is_some() { self.offset - 1 } else { self.offset };
-        self.push(
-            TokenKind::Identifier {
-                text: self.text[start..end_name].to_owned(),
-                suffix,
-            },
-            start,
-        );
-    }
-
-    fn operator(&mut self) {
-        let start = self.offset;
-        let first = self.bytes[self.offset];
-        self.offset += 1;
-        if matches!(first, b'<' | b'>')
-            && self.bytes.get(self.offset).is_some_and(|b| *b == b'=' || (first == b'<' && *b == b'>'))
-        {
-            self.offset += 1;
-        }
-        self.push(TokenKind::Operator(self.text[start..self.offset].to_owned()), start);
-    }
-
-    fn invalid_character(&mut self) {
-        let start = self.offset;
-        let ch = self.text[self.offset..].chars().next().expect("valid UTF-8");
-        self.offset += ch.len_utf8();
-        self.error(
-            "GFA-LEX-0001",
-            format!("invalid character {ch:?}"),
-            start,
-            self.offset,
-        );
-    }
-
-    fn error(&mut self, code: &str, message: impl Into<String>, start: usize, end: usize) {
-        self.output.diagnostics.push(
-            Diagnostic::new(
-                code,
-                DiagnosticSeverity::Error,
-                DiagnosticCategory::Lexical,
-                message,
-            )
-            .with_primary_span(SourceSpan::new(self.source, start, end))
-            .with_reference("docs/reference/amiga-gfa-basic-3.0.md"),
-        );
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::{lex, SourceDialect, TokenKind};
-    use crate::source::SourceMap;
-
-    fn lex_text(text: &str) -> super::LexOutput {
-        let mut sources = SourceMap::new();
-        let source = sources.add_source("test.gfa", text);
-        lex(source, text, SourceDialect::AmigaGfaBasic30)
-    }
-
-    #[test]
-    fn command_names_are_identifiers_not_reserved_keywords() {
-        let output = lex_text("PRINT TIMER DATES");
-        assert!(output.diagnostics.is_empty());
-        assert!(matches!(&output.tokens[0].kind, TokenKind::Identifier { text, .. } if text == "PRINT"));
-        assert!(matches!(&output.tokens[1].kind, TokenKind::Identifier { text, .. } if text == "TIMER"));
-        assert!(matches!(&output.tokens[2].kind, TokenKind::Identifier { text, .. } if text == "DATES"));
-    }
-
-    #[test]
-    fn recognizes_documented_type_suffixes_and_identifier_characters() {
-        let output = lex_text("value% byte| word& flag! text$ real# name_2.part");
-        let suffixes: Vec<_> = output.tokens.iter().filter_map(|token| {
-            if let TokenKind::Identifier { suffix, .. } = &token.kind { Some(*suffix) } else { None }
-        }).collect();
-        assert_eq!(suffixes, vec![Some('%'), Some('|'), Some('&'), Some('!'), Some('$'), Some('#'), None]);
-        assert!(matches!(&output.tokens[6].kind, TokenKind::Identifier { text, .. } if text == "name_2.part"));
-    }
-
-    #[test]
-    fn handles_strings_comments_labels_and_line_endings() {
-        let output = lex_text("start: PRINT \"hello\" ! note\r\nNEXT");
-        assert!(output.diagnostics.is_empty());
-        assert!(matches!(output.tokens[0].kind, TokenKind::Identifier { .. }));
-        assert!(matches!(output.tokens[1].kind, TokenKind::Colon));
-        assert!(matches!(output.tokens[3].kind, TokenKind::StringLiteral(ref s) if s == "hello"));
-        assert!(matches!(output.tokens[4].kind, TokenKind::Comment(ref text) if text == " note"));
-        assert!(matches!(output.tokens[5].kind, TokenKind::Newline));
-        assert!(matches!(output.tokens[6].kind, TokenKind::Identifier { .. }));
-    }
-
-    #[test]
-    fn reports_unterminated_strings_and_invalid_characters_with_spans() {
-        let output = lex_text("PRINT \"oops\nPRINT @");
-        assert_eq!(output.diagnostics.len(), 2);
-        assert_eq!(output.diagnostics[0].code, "GFA-LEX-0002");
-        assert_eq!(output.diagnostics[0].primary_span.unwrap().start, 6);
-        assert_eq!(output.diagnostics[1].code, "GFA-LEX-0001");
-        assert_eq!(output.diagnostics[1].primary_span.unwrap().start, 18);
-    }
-
-    #[test]
-    fn preserves_utf8_byte_offsets() {
-        let output = lex_text("PRINT \"é\"");
-        let string = output.tokens.iter().find(|token| matches!(token.kind, TokenKind::StringLiteral(_))).unwrap();
         assert_eq!(string.span.start, 6);
         assert_eq!(string.span.end, 10);
     }
