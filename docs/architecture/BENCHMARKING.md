@@ -109,11 +109,16 @@ Do not fail every pull request because of a small timing fluctuation. A regressi
 
 ## 7. Initial project status
 
-As of 2026-11-03:
+As of 2026-11-04:
 
-- The repository has no Rust workspace, compiler, runtime, benchmark harness, or CI workflow.
-- No executable baseline can be collected yet.
-- The benchmark categories and measurement policy are documented as a proposal only.
-- Tool selection, workload implementation, runner provisioning, and regression thresholds remain open.
+- The repository has a three-crate Rust workspace and a baseline CI workflow.
+- The compiler, runtime behavior, CLI, and LLVM/SDL3 integration are not implemented.
+- No benchmark harness or executable benchmark workload exists.
+- No performance baseline can be collected or compared yet.
+- The benchmark categories, measurement protocol, correctness requirements, profiling workflow, and proposed CI rollout are documented as a design only.
+- Criterion and Linux profiling tools remain candidates; no benchmark or profiling dependency has been selected.
+- CI cache performance is not yet measured. Do not infer cache effectiveness from a successful build or cache hit alone.
 
-The next implementation step is to add a small deterministic microbenchmark only after the relevant compiler/runtime component exists. Do not create empty benchmark targets or claim a baseline before there is executable work to measure.
+The next implementation step is to add a small deterministic benchmark for a real, measurable compiler or runtime component after that component exists. Keep the benchmark out of the default fast pull-request path until its runtime and variance are understood. Do not create empty benchmark targets or claim a baseline before there is executable work to measure.
+
+Issue #57 can be closed only after the benchmark harness and representative workloads exist, a baseline can be reproduced on a documented environment, and the project has a repeatable way to compare results. The strategy in this document is necessary groundwork, but it does not satisfy those implementation and baseline criteria by itself.
