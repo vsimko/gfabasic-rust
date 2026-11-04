@@ -26,6 +26,7 @@ Key documents:
 - [GFA BASIC reference sources](docs/reference-sources.md)
 - [Language reference notes](docs/reference/README.md)
 - [Conformance test corpus](tests/corpus/README.md)
+- [Frontend fuzzing strategy](docs/architecture/FUZZING.md)
 - [Open project work](https://github.com/vsimko/gfabasic-rust/issues)
 
 ## Current scope and limitations
