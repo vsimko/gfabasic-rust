@@ -37,7 +37,7 @@ The detailed policy is maintained in [CLI-AND-CONFIG.md](../CLI-AND-CONFIG.md). 
 - The project-file schema must be independently versioned and validated.
 - Source dialect/version selection is mandatory and explicit.
 - The initial target has a documented default, but cross-compilation is not implied.
-- The accepted interface is not implemented; the workspace, parser, CLI, diagnostics, and artifact writer remain future work.
+- The accepted interface is only partially implemented: the workspace includes a minimal executable with help/version output. Project loading, configuration validation, parser integration, source diagnostics, build/check execution, and artifact writing remain future work.
 
 ## References
 
