@@ -14,10 +14,11 @@ Compilation must be deterministic and must not require an LLM. An LLM may assist
 
 ## Documentation
 
-Start with the [documentation index](docs/README.md). It separates user guidance, contributor guidance, architecture decisions, language/API research, and reusable page templates.
+Start with the [documentation index](docs/README.md). The [project roadmap](ROADMAP.md) describes delivery phases, dependencies, and current maturity. The documentation separates user guidance, contributor guidance, architecture decisions, language/API research, and reusable page templates.
 
 Key documents:
 
+- [Project roadmap](ROADMAP.md)
 - [Architecture overview](docs/architecture/README.md)
 - [Project goals and compatibility](docs/architecture/GOALS.md)
 - [Dialect and version policy](docs/architecture/DIALECTS.md)
@@ -31,7 +32,7 @@ Key documents:
 
 The Rust workspace contains three architectural crates: compiler, generated-program runtime, and Linux platform adapter. These crates currently contain module placeholders only. The pinned Rust toolchain and fast workspace checks are defined in CI. There is still no compiler, runtime behavior, or CLI, and no GFA BASIC dialect or API profile is implemented. Planned targets, API profiles, and language features are not implementation or compatibility claims.
 
-See the architecture documents for decisions, assumptions, and unresolved questions.
+See the roadmap and architecture documents for decisions, assumptions, dependencies, and unresolved questions.
 
 ## License
 
@@ -41,4 +42,4 @@ The project does not distribute historical GFA BASIC manuals or books, ROMs, dis
 
 ## Contributing
 
-Start with the [contributor documentation](docs/contributor/README.md), then read the [architecture overview](docs/architecture/README.md) and check the open issues before proposing implementation work.
+Start with the [contributor documentation](docs/contributor/README.md), then read the [architecture overview](docs/architecture/README.md) and check the [roadmap](ROADMAP.md) and open issues before proposing implementation work.
