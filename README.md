@@ -14,10 +14,11 @@ Compilation must be deterministic and must not require an LLM. An LLM may assist
 
 ## Documentation
 
-The documentation is maintained in this repository.
+Start with the [documentation index](docs/README.md). It separates user guidance, contributor guidance, architecture decisions, language/API research, and reusable page templates.
 
-- [Architecture](docs/architecture/README.md)
-- [CI workflow architecture](docs/architecture/CI.md) (proposed)
+Key documents:
+
+- [Architecture overview](docs/architecture/README.md)
 - [Project goals and compatibility](docs/architecture/GOALS.md)
 - [Dialect and version policy](docs/architecture/DIALECTS.md)
 - [Documentation policy](docs/DOCUMENTATION.md)
@@ -34,4 +35,4 @@ See the architecture documents for decisions, assumptions, and unresolved questi
 
 ## Contributing
 
-See [the architecture overview](docs/architecture/README.md) and the open issues before proposing implementation work. New language claims must cite an applicable GFA BASIC reference source and identify its edition/version and platform.
+Start with the [contributor documentation](docs/contributor/README.md), then read the [architecture overview](docs/architecture/README.md) and check the open issues before proposing implementation work. New language claims must cite an applicable GFA BASIC reference source and identify its edition/version and platform.
