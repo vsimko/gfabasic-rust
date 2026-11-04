@@ -103,3 +103,9 @@ The gfalist lead is now better identified through its package metadata and a pub
 References: [mmuman/gfalist README](https://github.com/mmuman/gfalist/blob/master/README.md), [license](https://github.com/mmuman/gfalist/blob/master/COPYING), and [Aminet directory entry](https://ftp.fau.de/mirrors/aminet/dev/basic/gfalist.readme).
 
 The remaining research step is to inspect the exact Aminet archive contents and determine whether its executable/build matches the public source repository, including its supported tokenized file variants.
+
+## Additional false-positive classification: HB2Gads (2026-11-04)
+
+The paired [HB2Gads readme](https://ftpmirror2.infania.net/sites/aminet.net/dev/basic/HB2Gads.readme) identifies the package as “GadTools Gadgets in HBasic2”, with Benito Lombardi as author/uploader and m68k AmigaOS as its architecture. The archive is therefore an HBasic2/Blitz Basic II ecosystem library candidate, not a GFA BASIC language or API reference. The five-line readme does not state redistribution terms, so its license remains unknown. The archive itself was not downloaded or inspected.
+
+This is another example of why the Aminet directory category and BASIC-related filename are insufficient to establish GFA BASIC applicability.
