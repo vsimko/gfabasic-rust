@@ -25,7 +25,7 @@ This roadmap is the project-level view of delivery order for `gfabasic-rust`. Gi
 | API registry | Schema and validation exist; runtime handler resolution and generated-reference consistency remain incomplete | [#55](https://github.com/vsimko/gfabasic-rust/issues/55) |
 | Dialect and API research | Atari ST and Amiga research drafts exist; no dialect is accepted or implemented | [#3](https://github.com/vsimko/gfabasic-rust/issues/3), [#63–#66](https://github.com/vsimko/gfabasic-rust/issues?q=is%3Aissue+is%3Aopen) |
 | Tests | Rust workspace and documentation checks exist; no compiler conformance runner or executable end-to-end compiler tests | [#10](https://github.com/vsimko/gfabasic-rust/issues/10), [#42](https://github.com/vsimko/gfabasic-rust/issues/42), [#43](https://github.com/vsimko/gfabasic-rust/issues/43) |
-| Documentation | README, documentation index, architecture, source register, research notes, compatibility matrix and policies exist; user quick start is correctly withheld until a working CLI exists | [#16](https://github.com/vsimko/gfabasic-rust/issues/16), [#112](https://github.com/vsimko/gfabasic-rust/issues/112) |
+| Documentation | README, documentation index, architecture, source register, research notes, compatibility matrix, and policies exist; user quick start is correctly withheld until a working CLI exists | [#16](https://github.com/vsimko/gfabasic-rust/issues/16) |
 | CI and supply chain | Documentation and fast workspace checks are documented; dependency/license policy and reproducible SBOM remain open | [#39](https://github.com/vsimko/gfabasic-rust/issues/39) |
 | Releases | Release policy work is tracked, but no compiler artifacts can currently be produced | [#40](https://github.com/vsimko/gfabasic-rust/issues/40), [#62](https://github.com/vsimko/gfabasic-rust/issues/62) |
 
@@ -70,6 +70,7 @@ Implement the smallest useful source-to-native-executable path for the accepted 
 - [ ] LLVM backend and Linux x86-64 output — [#50](https://github.com/vsimko/gfabasic-rust/issues/50)
 - [ ] Implement a usable CLI and project configuration — [#111](https://github.com/vsimko/gfabasic-rust/issues/111)
 - [ ] Implement the GFA BASIC core runtime as required by the accepted subset — [#51](https://github.com/vsimko/gfabasic-rust/issues/51)
+- [ ] Integrate the first end-to-end compiler vertical slice — [#113](https://github.com/vsimko/gfabasic-rust/issues/113)
 
 ### Phase 3 — Add platform APIs and robustness
 
@@ -91,6 +92,8 @@ A release must publish an explicit support matrix and known deviations. Do not p
 - [x] Define release workflow and artifact policy baseline — [#40](https://github.com/vsimko/gfabasic-rust/issues/40)
 - [ ] Package compiler, runtime and installation artifacts — [#59](https://github.com/vsimko/gfabasic-rust/issues/59)
 - [ ] Establish release gates, reproducible builds and end-to-end conformance evidence — [#10](https://github.com/vsimko/gfabasic-rust/issues/10)
+
+The first end-to-end MVP integration gate is tracked separately in [#113](https://github.com/vsimko/gfabasic-rust/issues/113).
 
 ## Blockers and sequencing rules
 
