@@ -91,7 +91,7 @@ A release must publish an explicit support matrix and known deviations. Do not p
 - [ ] Complete dependency/license/security and SBOM policy — [#39](https://github.com/vsimko/gfabasic-rust/issues/39)
 - [x] Define release workflow and artifact policy baseline — [#40](https://github.com/vsimko/gfabasic-rust/issues/40)
 - [ ] Package compiler, runtime and installation artifacts — [#59](https://github.com/vsimko/gfabasic-rust/issues/59)
-- [ ] Establish release gates, reproducible builds and end-to-end conformance evidence — [#10](https://github.com/vsimko/gfabasic-rust/issues/10)
+- [ ] Implement executable conformance and release test gates — [#116](https://github.com/vsimko/gfabasic-rust/issues/116)
 
 The first end-to-end MVP integration gate is tracked separately in [#113](https://github.com/vsimko/gfabasic-rust/issues/113).
 
