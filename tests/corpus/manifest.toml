@@ -4,4 +4,5 @@ description = "Initial source-backed candidate fixtures for GFA BASIC dialects."
 fixtures = [
   "amiga/3.0/control-flow/repeat-until-postcondition",
   "amiga/3.0/control-flow/nested-loop-close-order",
+  "amiga/3.0/bit-operations/bset-btst-basic",
 ]
