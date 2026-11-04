@@ -100,6 +100,8 @@ Proposed feature-maturity labels:
 
 Evidence status (for example, verified, inferred, disputed, or unknown) describes the quality of the source or observation. Implementation status describes whether code exists. Target support describes whether the implementation is native, emulated, partial, unsupported, or unknown. None of these dimensions can substitute for another. A source-backed feature may be documented but unimplemented; an implemented feature may be experimental; a stable feature may be supported on one target and unsupported on another.
 
+The user-facing meaning of support outcomes and their relationship to diagnostics are defined in [DIAGNOSTICS.md](DIAGNOSTICS.md). Do not treat a support outcome as a replacement for feature maturity or evidence status.
+
 Never use an unqualified “GFA BASIC compatible” claim. State the exact dialect/version/profile/target and the evidence level.
 
 ## 7. Deprecation and breaking changes

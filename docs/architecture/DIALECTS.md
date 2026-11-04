@@ -29,7 +29,7 @@ Each feature should include a stable identifier, applicable dialect/version/prof
 
 ## Diagnostics
 
-Unknown or unsupported syntax must not be skipped. Diagnostics must identify the source location and explain whether the construct is invalid, unsupported, ambiguous, or unavailable in the selected dialect/profile.
+Unknown or unsupported syntax must not be skipped. Diagnostics must identify the source location and explain whether the construct is invalid, unsupported, ambiguous, or unavailable in the selected dialect/profile. The proposed structured diagnostic and support-outcome contract is defined in [DIAGNOSTICS.md](DIAGNOSTICS.md).
 
 Until the first dialect/version is accepted and its evidence reviewed, the compiler supports no GFA BASIC dialect. Future milestones must state a bounded subset and cite sources.
 

@@ -32,6 +32,7 @@ The language core is separate from platform API profiles. Amiga and Atari ST pro
 | Target model | Host/target distinction and target capabilities | [TARGETS.md](TARGETS.md) | [#4](https://github.com/vsimko/gfabasic-rust/issues/4) |
 | API profiles | Core, Amiga, and Atari ST profile boundaries | [API-PROFILES.md](API-PROFILES.md); [Atari ST API research draft](../reference/atari-gfa-api.md) | [#5](https://github.com/vsimko/gfabasic-rust/issues/5), [#25](https://github.com/vsimko/gfabasic-rust/issues/25) |
 | Compiler pipeline and IR | Frontend stages, semantic analysis, typed IR, LLVM boundary | [PIPELINE-AND-IR.md](PIPELINE-AND-IR.md) | [#6](https://github.com/vsimko/gfabasic-rust/issues/6) |
+| Diagnostics and compatibility reporting | Stable diagnostic codes, source locations, support outcomes, migration guidance | [DIAGNOSTICS.md](DIAGNOSTICS.md) | [#26](https://github.com/vsimko/gfabasic-rust/issues/26) |
 | Runtime | Runtime layers and SDL3 adapter boundary | [RUNTIME.md](RUNTIME.md) | [#7](https://github.com/vsimko/gfabasic-rust/issues/7) |
 | Memory model | Storage, pointers, hardware access, safety policy | [MEMORY.md](MEMORY.md) | [#8](https://github.com/vsimko/gfabasic-rust/issues/8) |
 | CLI and configuration | Inputs, profiles, outputs, reproducibility | [CLI-AND-CONFIG.md](CLI-AND-CONFIG.md) | [#9](https://github.com/vsimko/gfabasic-rust/issues/9) |
