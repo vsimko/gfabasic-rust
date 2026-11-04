@@ -81,7 +81,7 @@ A package name should identify at least the product version, operating system, a
 
 This is an example naming convention, not a currently available artifact.
 
-Keep compiler installation separate from generated application assets. Do not bundle copyrighted manuals, ROMs, disk images, or research archives. The package layout, install/uninstall procedure, and runtime deployment model are defined under [issue #59](https://github.com/vsimko/gfabasic-rust/issues/62).
+Keep compiler installation separate from generated application assets. Do not bundle copyrighted manuals, ROMs, disk images, or research archives. The package layout, install/uninstall procedure, and runtime deployment model are defined under [issue #62](https://github.com/vsimko/gfabasic-rust/issues/62).
 
 ## 6. Build metadata
 
@@ -153,7 +153,7 @@ If a published artifact is defective, withdraw or mark the release as superseded
 ## 11. Implementation sequence
 
 1. Establish the Rust workspace and verified build commands.
-2. Implement compiler/runtime packaging and installation layout under #59.
+2. Implement compiler/runtime packaging and installation layout under #62.
 3. Establish dependency and provenance policy under #39.
 4. Add release validation to CI only after each check has an executable command.
 5. Test artifact naming, metadata, checksums, and clean-install behavior on a release candidate.
