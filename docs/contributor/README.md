@@ -18,7 +18,7 @@ Follow the [development setup guide](development-setup.md) for the pinned Rust t
 
 ## Current development constraints
 
-The default branch contains a Cargo workspace with compiler, runtime, and Linux platform crates. The crates currently contain architectural placeholders only. The pinned toolchain is Rust 1.99.1; LLVM and SDL3 are not required for the current skeleton and remain deferred. The project source code and original project documentation are licensed under MIT; see the root [LICENSE](../../LICENSE) file and the [license section in the README](../../README.md#license).
+The default branch contains a Cargo workspace with compiler, runtime, and Linux platform crates. The compiler crate implements source-map and strict UTF-8 file-loading primitives; the frontend, semantic analysis, IR, backend, CLI, runtime behavior, and Linux platform adapter remain placeholders. The pinned toolchain is Rust 1.99.1; LLVM and SDL3 are not required for the current skeleton and remain deferred. The project source code and original project documentation are licensed under MIT; see the root [LICENSE](../../LICENSE) file and the [license section in the README](../../README.md#license).
 
 The MIT license does not grant redistribution rights to third-party manuals, ROMs, disk images, sample programs, or other externally sourced materials. Check their individual rights and the documentation policy before adding or redistributing them.
 
