@@ -92,7 +92,49 @@ anchors = []
         self.assertTrue(any("supported entry has no implementation" in error for error in errors))
         self.assertTrue(any("supported entry needs passing conformance tests" in error for error in errors))
 
-    def test_unknown_source_fails(self):
+
+    def test_duplicate_ids_fail(self):
+        temp, root = self.make_root(self.valid_declaration())
+        self.addCleanup(temp.cleanup)
+        duplicate = root / "api/registry/atari-st/duplicate.toml"
+        duplicate.write_text(self.valid_declaration())
+        self.assertTrue(any("duplicate ID" in error for error in validate_registry(root)))
+
+    def test_duplicate_name_for_same_dialect_and_version_fails(self):
+        first = self.valid_declaration()
+        second = self.valid_declaration().replace(
+            "gfa.atari-st.system.timer", "gfa.atari-st.system.timer-copy"
+        )
+        temp, root = self.make_root(first + "\\n" + second)
+        self.addCleanup(temp.cleanup)
+        self.assertTrue(any("conflicting declaration name" in error for error in validate_registry(root)))
+
+    def test_profile_mismatch_fails(self):
+        content = self.valid_declaration().replace('profile = "atari-st"', 'profile = "amiga"')
+        temp, root = self.make_root(content)
+        self.addCleanup(temp.cleanup)
+        self.assertTrue(any("must use profile" in error for error in validate_registry(root)))
+
+    def test_missing_documentation_anchor_fails(self):
+        content = self.valid_declaration().replace("anchors = []", 'anchors = ["missing-section"]')
+        temp, root = self.make_root(content)
+        self.addCleanup(temp.cleanup)
+        self.assertTrue(any("missing documentation anchor" in error for error in validate_registry(root)))
+
+    def test_unknown_test_id_fails(self):
+        content = self.valid_declaration().replace("tests = []", 'tests = ["missing-fixture"]')
+        temp, root = self.make_root(content)
+        self.addCleanup(temp.cleanup)
+        self.assertTrue(any("unknown test ID" in error for error in validate_registry(root)))
+
+    def test_implemented_entry_requires_handler_id(self):
+        content = self.valid_declaration().replace(
+            'status = "not-implemented"', 'status = "implemented"'
+        )
+        temp, root = self.make_root(content)
+        self.addCleanup(temp.cleanup)
+        self.assertTrue(any("implemented entry has no handler ID" in error for error in validate_registry(root)))
+\n    def test_unknown_source_fails(self):
         content = self.valid_declaration().replace("TEST-SOURCE", "MISSING-SOURCE")
         temp, root = self.make_root(content)
         self.addCleanup(temp.cleanup)
