@@ -1,0 +1,11 @@
+{
+  "config": {
+    "default": false,
+    "MD003": true,
+    "MD009": true,
+    "MD010": true,
+    "MD031": true,
+    "MD040": true,
+    "MD047": true
+  }
+}
