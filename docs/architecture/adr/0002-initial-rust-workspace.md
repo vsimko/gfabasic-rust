@@ -1,6 +1,6 @@
 # ADR 0002: Initial Rust workspace crate boundaries
 
-- Status: Proposed
+- Status: Accepted
 - Date: 2026-11-04
 - Decision makers: Project maintainers
 
@@ -14,7 +14,7 @@ The existing architecture requires the frontend and project-owned IR to remain i
 
 ## Decision
 
-This ADR proposes the following initial workspace split:
+The initial workspace uses the following three-package split:
 
 1. **`gfabasic-compiler`** — one compiler package containing the source manager, diagnostics, lexer/parser/AST, semantic analysis, project IR, LLVM backend, and CLI as modules. The CLI remains a binary target of this package until it has a separate ownership or distribution requirement.
 2. **`gfabasic-runtime`** — one generated-program runtime package containing language-core runtime support, API-profile runtime modules, and project-owned platform-service contracts. It must not depend on the compiler, LLVM, or SDL3.
@@ -61,7 +61,7 @@ This would separate compiler dependencies from generated-program support, but th
 - [Versioning and compatibility lifecycle](../VERSIONING.md).
 - Rust 1.99.1 stable release announcement, 2026-10-15: https://blog.rust-lang.org/2026/10/15/Rust-1.99.1/.
 
-The crate split is an architectural proposal, not an implementation or compatibility claim. LLVM and SDL3 binding choices, runtime ABI, and linking behavior remain unverified and deferred.
+The crate split is an accepted architectural boundary, not an implementation or compatibility claim. LLVM and SDL3 binding choices, runtime ABI, and linking behavior remain unverified and deferred.
 
 ## Supersedes / superseded by
 
