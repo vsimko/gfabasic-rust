@@ -33,6 +33,12 @@ The Rust workspace contains three architectural crates: compiler, generated-prog
 
 See the architecture documents for decisions, assumptions, and unresolved questions.
 
+## License
+
+The project source code and original project documentation are licensed under the [MIT License](LICENSE). Copyright remains with the respective contributors; the license grants the permissions stated in the license text.
+
+This license does **not** cover third-party materials such as GFA BASIC manuals, books, ROMs, disk images, sample programs, trademarks, or other externally sourced assets. Their copyright, licensing, and redistribution status must be assessed separately; see [issue #18](https://github.com/vsimko/gfabasic-rust/issues/18) and the [reference source register](docs/reference-sources.md).
+
 ## Contributing
 
-Start with the [contributor documentation](docs/contributor/README.md), then read the [architecture overview](docs/architecture/README.md) and check the open issues before proposing implementation work. New language claims must cite an applicable GFA BASIC reference source and identify its edition/version and platform.
+Start with the [contributor documentation](docs/contributor/README.md), then read the [architecture overview](docs/architecture/README.md) and check the open issues before proposing implementation work.
