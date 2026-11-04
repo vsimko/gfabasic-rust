@@ -60,7 +60,7 @@ Initial Amiga 3.0 extraction notes: [Amiga GFA BASIC 3.0 reference research](ref
 
 ### Aminet survey leads
 
-The Aminet `dev/basic` category is a relevant discovery point: [Aminet dev/basic](https://aminet.net/dev/basic/). Initial candidate filenames mentioned for follow-up include `GFA_Enforcer.txt`, `GFA_Gadgets.lha`, `GFA_Menus.lha`, and `GuiGfxDevBas.lha`. These entries have not yet been independently re-checked in the live index or their archive contents; classify them as unverified leads, not normative language documentation. Third-party libraries and wrappers must not be mistaken for built-in GFA BASIC commands.
+The Aminet `dev/basic` category is a relevant discovery point: [Aminet dev/basic](https://aminet.net/dev/basic/). The complete current mirror listing was surveyed on 2026-11-04; selected GFA-related archive candidates and their displayed dates/sizes are recorded in the [Aminet package catalogue](research/aminet-catalogue.md). The archive readmes and contents still require inspection. Treat all unverified entries as discovery leads, not normative language documentation. Third-party libraries and wrappers must not be mistaken for built-in GFA BASIC commands.
 
 ### Initial findings and cautions
 
