@@ -34,18 +34,8 @@ jobs:
           rustup toolchain install 1.99.1 --profile minimal
           rustup default 1.99.1
 
-      - name: Resolve benchmark workspace lockfile
-        run: cargo +1.99.1 generate-lockfile --manifest-path bench/Cargo.toml
-
       - name: Compile benchmark without running measurements
         run: cargo +1.99.1 check --manifest-path bench/Cargo.toml --target-dir bench/target --benches --locked
-
-      - name: Upload resolved benchmark lockfile
-        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
-        with:
-          name: benchmark-lockfile-${{ github.run_id }}
-          path: bench/Cargo.lock
-          retention-days: 7
 
   benchmark:
     if: github.event_name != 'pull_request'

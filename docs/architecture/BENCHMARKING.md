@@ -139,7 +139,7 @@ controlled-machine regression baseline.
 Run locally with:
 
 ```sh
-cargo +1.99.1 bench --manifest-path bench/Cargo.toml --bench source_loading --locked -- --noplot
+cargo +1.99.1 bench --manifest-path bench/Cargo.toml --target-dir bench/target --bench source_loading --locked -- --noplot
 ```
 
 See [`bench/README.md`](../../bench/README.md) for workload boundaries and

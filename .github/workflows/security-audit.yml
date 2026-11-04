@@ -65,8 +65,5 @@ jobs:
       - name: Audit fuzz-only dependencies against the current RustSec database
         run: cargo +1.99.1 audit --file fuzz/Cargo.lock
 
-      - name: Resolve benchmark workspace lockfile
-        run: cargo +1.99.1 generate-lockfile --manifest-path bench/Cargo.toml
-
       - name: Audit benchmark-only dependencies against the current RustSec database
         run: cargo +1.99.1 audit --file bench/Cargo.lock

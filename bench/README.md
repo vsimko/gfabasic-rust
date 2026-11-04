@@ -27,8 +27,10 @@ separators.
 cargo +1.99.1 bench --manifest-path bench/Cargo.toml --bench source_loading --locked -- --noplot
 ```
 
-Criterion uses 20 samples, a one-second warm-up, and two seconds of
-measurement per benchmark. Reports are written under `bench/target/criterion`.
+The committed `bench/Cargo.lock` pins the benchmark dependency graph and is
+checked by the RustSec workflow. Criterion uses 20 samples, a one-second
+warm-up, and two seconds of measurement per benchmark. Reports are written
+under `bench/target/criterion`.
 
 The weekly/manual GitHub Actions workflow records commit, Rust toolchain,
 kernel, architecture, CPU model, logical CPU count, memory, target, and
