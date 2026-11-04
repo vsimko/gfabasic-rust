@@ -1,8 +1,8 @@
 //! Source identity and source-map primitives.
 //!
-//! This module accepts already-decoded UTF-8 text. The source dialect's file
-//! encoding rules and source-composition semantics are not yet verified, so
-//! this module does not read files or implement MERGE/include.
+//! This module stores decoded UTF-8 text and provides a strict UTF-8 transport
+//! loader. Dialect-specific source encoding and source-composition semantics
+//! remain separate decisions; this module does not implement MERGE/include.
 
 use std::fmt;
 use std::fs;
@@ -136,7 +136,7 @@ impl SourceFile {
     }
 }
 
-/// A failure encountered while loading a source file as UTF-8.
+/// A failure encountered while decoding or loading source bytes as UTF-8.
 #[derive(Debug)]
 pub struct SourceLoadError {
     path: PathBuf,
@@ -148,7 +148,7 @@ pub struct SourceLoadError {
 pub enum SourceLoadErrorKind {
     /// The file could not be read from the filesystem.
     Io(std::io::Error),
-    /// The file contains bytes that are not valid UTF-8.
+    /// The source contains bytes that are not valid UTF-8.
     InvalidUtf8 {
         /// Byte offset of the first invalid UTF-8 sequence.
         valid_up_to: usize,
@@ -238,6 +238,23 @@ impl SourceMap {
         id
     }
 
+    /// Decodes in-memory bytes as strict UTF-8 and adds the resulting source.
+    ///
+    /// This transport-level helper is also suitable for virtual sources and
+    /// fuzzing. It does not define the source encoding of any GFA BASIC dialect.
+    /// On failure, the source map is left unchanged.
+    pub fn add_utf8_bytes(
+        &mut self,
+        name: impl AsRef<Path>,
+        bytes: Vec<u8>,
+    ) -> Result<SourceId, SourceLoadError> {
+        let path = name.as_ref().to_path_buf();
+        let text = String::from_utf8(bytes)
+            .map_err(|error| SourceLoadError::invalid_utf8(path.clone(), error))?;
+        let name: Arc<str> = path.to_string_lossy().into_owned().into();
+        Ok(self.add_source(name, text))
+    }
+
     /// Reads a file and adds it to this map after strict UTF-8 validation.
     ///
     /// This is a transport-level UTF-8 loader, not a claim that every GFA BASIC
@@ -247,10 +264,7 @@ impl SourceMap {
     pub fn load_utf8(&mut self, path: impl AsRef<Path>) -> Result<SourceId, SourceLoadError> {
         let path = path.as_ref().to_path_buf();
         let bytes = fs::read(&path).map_err(|error| SourceLoadError::io(path.clone(), error))?;
-        let text = String::from_utf8(bytes)
-            .map_err(|error| SourceLoadError::invalid_utf8(path.clone(), error))?;
-        let name: Arc<str> = path.to_string_lossy().into_owned().into();
-        Ok(self.add_source(name, text))
+        self.add_utf8_bytes(&path, bytes)
     }
 
     /// Returns a source file by ID.
@@ -347,6 +361,36 @@ mod tests {
         assert_eq!(file.line_count(), 1);
         assert_eq!(file.line_column(0), Some((1, 1)));
         assert_eq!(file.line_text(1), Some(""));
+    }
+
+    #[test]
+    fn utf8_byte_loader_adds_valid_source_without_filesystem_access() {
+        let mut map = SourceMap::new();
+        let source = map
+            .add_utf8_bytes("virtual.gfa", "PRINT \"héllo\"\r\n".as_bytes().to_vec())
+            .unwrap();
+
+        let file = map.get(source).unwrap();
+        assert_eq!(file.name(), "virtual.gfa");
+        assert_eq!(file.text(), "PRINT \"héllo\"\r\n");
+        assert_eq!(file.line_count(), 2);
+        assert_eq!(file.line_text(1), Some("PRINT \"héllo\""));
+        assert_eq!(file.line_text(2), Some(""));
+    }
+
+    #[test]
+    fn utf8_byte_loader_rejects_invalid_bytes_without_mutating_source_map() {
+        let mut map = SourceMap::new();
+        let error = map
+            .add_utf8_bytes("virtual-invalid.gfa", vec![0x50, 0x52, 0xFF, 0x4E, 0x54])
+            .unwrap_err();
+
+        assert_eq!(error.path(), std::path::Path::new("virtual-invalid.gfa"));
+        assert!(matches!(
+            error.kind(),
+            super::SourceLoadErrorKind::InvalidUtf8 { valid_up_to: 2, .. }
+        ));
+        assert!(map.is_empty());
     }
 
     #[test]

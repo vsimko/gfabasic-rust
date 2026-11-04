@@ -1,0 +1,136 @@
+name: Fuzzing
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/fuzz.yml"
+      - "crates/gfabasic-compiler/src/source.rs"
+      - "docs/architecture/FUZZING.md"
+      - "fuzz/**"
+      - "rust-toolchain.toml"
+  schedule:
+    - cron: "17 4 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: fuzz-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  source-loader:
+    name: Source-loader fuzzing
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      AFL_NO_UI: "1"
+      AFL_SKIP_CPUFREQ: "1"
+      AFL_NO_AFFINITY: "1"
+      AFL_I_DONT_CARE_ABOUT_MISSING_CRASHES: "1"
+      AFL_IGNORE_UNKNOWN_ENVS: "1"
+      FUZZ_SECONDS: ${{ github.event_name == 'pull_request' && '30' || '600' }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+
+      - name: Install pinned Rust toolchain
+        run: |
+          rustup toolchain install 1.99.1 --profile minimal
+          rustup default 1.99.1
+
+      - name: Install pinned cargo-afl
+        run: cargo +1.99.1 install cargo-afl --version 0.18.2 --locked
+
+      - name: Build source-loader fuzz target
+        run: cargo +1.99.1 afl build --manifest-path fuzz/Cargo.toml --target-dir fuzz/target --release --bin source_loader --locked
+
+      - name: Record fuzz run metadata
+        run: |
+          {
+            printf 'target=source_loader\n'
+            printf 'commit=%s\n' "$GITHUB_SHA"
+            printf 'rustc=%s\n' "$(rustc +1.99.1 --version)"
+            printf 'cargo-afl=0.18.2\n'
+            printf 'fuzz-seconds=%s\n' "$FUZZ_SECONDS"
+            printf 'max-input-bytes=1048576\n'
+            printf 'per-input-timeout-ms=1000\n'
+            printf 'memory-limit-mb=256\n'
+            printf 'core-pattern-check=bypassed-for-github-hosted-runner; crash-and-hang-files-are-still-checked\n'
+            printf 'fuzz-lock-sha256:\n'
+            sha256sum fuzz/Cargo.lock
+            printf 'corpus-sha256:\n'
+            sha256sum fuzz/corpus/source_loader/*
+            printf 'skipped=lexer,parser,expressions,diagnostics,source-composition (prerequisites #46,#47,#120)\n'
+          } > "$RUNNER_TEMP/source-loader-fuzz-metadata.txt"
+
+      - name: Run bounded source-loader campaign
+        run: |
+          cargo +1.99.1 afl fuzz \
+            -i fuzz/corpus/source_loader \
+            -o "$RUNNER_TEMP/source-loader-fuzz" \
+            -V "$FUZZ_SECONDS" \
+            -t 1000 \
+            -m 256 \
+            -G 1048576 \
+            fuzz/target/release/source_loader
+
+      - name: Minimize crash and hang inputs
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          output="$RUNNER_TEMP/source-loader-fuzz/default"
+          minimized="$RUNNER_TEMP/source-loader-minimized"
+          mkdir -p "$minimized"
+          for finding in crashes hangs; do
+            input_dir="$output/$finding"
+            [ -d "$input_dir" ] || continue
+            count=0
+            for input in "$input_dir"/*; do
+              [ -f "$input" ] || continue
+              [ "$(basename "$input")" = "README.txt" ] && continue
+              count=$((count + 1))
+              destination="$minimized/$finding-$(basename "$input")"
+              if timeout 30s cargo +1.99.1 afl tmin \
+                -i "$input" -o "$destination" -t 1000 -m 256 -- \
+                fuzz/target/release/source_loader; then
+                [ -f "$destination" ] || cp "$input" "$destination.original"
+              else
+                cp "$input" "$destination.original"
+              fi
+              [ "$count" -ge 3 ] && break
+            done
+          done
+
+      - name: Fail if AFL++ found a crash or hang
+        run: |
+          for finding in crashes hangs; do
+            directory="$RUNNER_TEMP/source-loader-fuzz/default/$finding"
+            if [ -d "$directory" ] && find "$directory" -maxdepth 1 -type f ! -name README.txt -print -quit | grep -q .; then
+              echo "AFL++ found $finding; inspect the uploaded fuzz artifact." >&2
+              exit 1
+            fi
+          done
+
+      - name: Package fuzzer output for portable artifact upload
+        if: always()
+        run: |
+          mkdir -p "$RUNNER_TEMP/source-loader-fuzz" "$RUNNER_TEMP/source-loader-minimized"
+          touch "$RUNNER_TEMP/source-loader-fuzz-metadata.txt"
+          tar -czf "$RUNNER_TEMP/source-loader-fuzz-results.tar.gz" \
+            --transform='s/:/_/g' \
+            -C "$RUNNER_TEMP" \
+            source-loader-fuzz source-loader-minimized source-loader-fuzz-metadata.txt
+
+      - name: Upload fuzzer output and resolved lockfile
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: source-loader-fuzz-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/source-loader-fuzz-results.tar.gz
+            fuzz/Cargo.lock
+          if-no-files-found: ignore
+          retention-days: 7
