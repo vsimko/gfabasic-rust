@@ -23,11 +23,7 @@ The build and check commands are not implemented yet.
 
 /// Run the implemented CLI subset and return its process exit code.
 pub fn run(args: impl IntoIterator<Item = String>) -> u8 {
-    run_with_io(
-        args,
-        &mut io::stdout().lock(),
-        &mut io::stderr().lock(),
-    )
+    run_with_io(args, &mut io::stdout().lock(), &mut io::stderr().lock())
 }
 
 fn run_with_io<I, W, E>(args: I, out: &mut W, err: &mut E) -> u8
