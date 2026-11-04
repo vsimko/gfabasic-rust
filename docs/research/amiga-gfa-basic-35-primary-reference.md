@@ -6,7 +6,7 @@ Decision: target the **Amiga GFA-BASIC 3.5 interpreter and its documented 3.5 ad
 
 ### GFA BASIC 3.5 Interpreter
 
-File supplied in the project workspace: `GFA_Basic_3.5_Interpreter.pdf` (469 PDF pages). Its introductory page states: “The software included with this manual is GFA BASIC 3.5”; it also explains that the manual was originally printed for version 3.0 and that Chapter 13 is an addendum describing the extra features provided in version 3.5. Chapter 13 is headed “GFA-BASIC 3.5 Addendum”. This is the primary version-specific source for the 3.5 interpreter target.
+File supplied in the project workspace: `GFA_Basic_3.5_Interpreter.pdf` (469 PDF pages). Its introductory page states: “The software included with this manual is GFA BASIC 3.5”; it also explains that the manual was originally printed for version 3.0 and that Chapter 13 is an addendum describing the extra features provided in version 3.5. Chapter 13 is headed “GFA-BASIC 3.5 Addendum”. The manual also contains Chapter 14, “Further new commands in Version 3.5” (printed addendum pp. 13-32–13-36). These Chapter 13/14 additions are summarized with page references in the [3.5 addendum inventory](amiga-gfa-basic-35-addendum-inventory.md). This is the primary version-specific source for the 3.5 interpreter target.
 
 The addendum documents editor changes: two extra bytes per program row compared with editor versions 3.0–3.07, faster backward scrolling, folding functions, searching procedure/function headers while closed, and adjusted label listing. It adds tab navigation/editing operations. It introduces linear operations for one- and two-dimensional floating-point fields, including MAT BASE, MAT CLR, MAT SET, MAT ONE, MAT READ, MAT PRINT, MAT INPUT, MAT CPY, MAT XCPY, and MAT TRANS. The addendum itself must be consulted for exact syntax and semantics; this summary is not a replacement for it.
 
@@ -26,6 +26,19 @@ The separate 1989 first edition, ISBN 3-89011-276-5, explicitly documents Amiga 
 4. Mark any 3.0-documented behavior not explicitly reconfirmed in the 3.5 manual as inherited-from-3.0 / confirmation-needed, rather than assuming it changed or remained unchanged.
 5. Keep interpreter and compiler behavior separate. The compiler is described in the German Amiga book; do not infer interpreter equivalence for compiler-only behavior.
 6. Do not import Atari ST-only 3.5 claims into the Amiga target unless corroborated by the supplied Amiga materials.
+
+## Unresolved source-language evidence
+
+The current extraction identifies the 3.5 source and its version-specific additions, but it does **not** yet establish the complete source-language contract. In particular, no 3.5-specific rule is currently claimed here for:
+
+- source character encoding/code page, BOM handling, or invalid-byte behavior;
+- accepted line endings and physical-line/statement-boundary rules;
+- identifier character repertoire and case handling;
+- string literal escaping and complete numeric literal grammar;
+- the complete operator set, precedence, and evaluation order;
+- MERGE/source-composition behavior and relative-path resolution.
+
+These areas remain open under [issue #20](https://github.com/vsimko/gfabasic-rust/issues/20) and [issue #120](https://github.com/vsimko/gfabasic-rust/issues/120). The generic strict UTF-8 source loader is a transport primitive, not evidence that GFA BASIC source files are UTF-8. Do not infer language encoding, BOM, line-ending, or composition semantics from the Rust loader or from OCR-only 3.0 notes. Promote a rule only after its 3.5 source passage or a named interpreter observation is recorded.
 
 ## Next work
 
