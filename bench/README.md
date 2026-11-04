@@ -33,7 +33,7 @@ graph and is checked by the RustSec workflow. Criterion uses 20 samples, a one-s
 warm-up, and two seconds of measurement per benchmark. Reports are written
 under `bench/target/criterion`.
 
-The weekly/manual GitHub Actions workflow records commit, Rust toolchain,
+The main-branch/weekly/manual GitHub Actions workflow records commit, Rust toolchain,
 kernel, architecture, CPU model, logical CPU count, memory, target, and
 workload revision. It uploads Criterion reports and metadata as a 30-day
 artifact. It does not run timed benchmarks on pull requests and does not

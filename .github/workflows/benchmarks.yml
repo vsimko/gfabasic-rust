@@ -8,6 +8,13 @@ on:
       - "bench/**"
       - "crates/gfabasic-compiler/src/source.rs"
       - "docs/architecture/BENCHMARKING.md"
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/benchmarks.yml"
+      - "bench/**"
+      - "crates/gfabasic-compiler/src/source.rs"
   schedule:
     - cron: "37 5 * * 1"
   workflow_dispatch:
