@@ -16,6 +16,8 @@ The workflow design must preserve the repository's current architecture:
 
 This document defines a proposed workflow structure. It does not claim that any workflow, branch-protection rule, or CI check is currently configured.
 
+Release and artifact requirements are specified in [RELEASES.md](RELEASES.md). That policy remains proposed until the workspace, compiler/runtime, and packaging commands exist.
+
 ## Proposed workflow set
 
 | Workflow | Events | Purpose | Required on pull requests |
