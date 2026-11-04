@@ -4,12 +4,10 @@
 //! encoding rules and source-composition semantics are not yet verified, so
 //! this module does not read files or implement MERGE/include.
 
-use std::sync::Arc;
-
 use std::fmt;
 use std::fs;
 use std::path::{Path, PathBuf};
-
+use std::sync::Arc;
 
 /// Identifies a source file within one source map.
 ///
@@ -138,8 +136,6 @@ impl SourceFile {
     }
 }
 
-
-
 /// A failure encountered while loading a source file as UTF-8.
 #[derive(Debug)]
 pub struct SourceLoadError {
@@ -231,7 +227,6 @@ impl SourceMap {
         self.files.push(SourceFile::new(name.into(), text.into()));
         id
     }
-
 
     /// Reads a file and adds it to this map after strict UTF-8 validation.
     ///
@@ -359,7 +354,7 @@ mod tests {
         let mut map = SourceMap::new();
         let source = map.load_utf8(&path).unwrap();
         let file = map.get(source).unwrap();
-        assert_eq!(file.name(), path.to_string_lossy());
+        assert_eq!(file.name(), path.to_string_lossy().as_ref());
         assert_eq!(file.text(), "PRINT \"héllo\"\r\n");
         assert_eq!(file.line_text(1), Some("PRINT \"héllo\""));
         fs::remove_file(path).unwrap();
@@ -380,7 +375,7 @@ mod tests {
 
         let mut map = SourceMap::new();
         let error = map.load_utf8(&path).unwrap_err();
-        assert_eq!(error.path(), path);
+        assert_eq!(error.path(), path.as_path());
         assert!(matches!(
             error.kind(),
             super::SourceLoadErrorKind::InvalidUtf8 { valid_up_to: 2, .. }
@@ -391,9 +386,13 @@ mod tests {
 
     #[test]
     fn utf8_loader_reports_missing_file_path() {
+        use std::sync::atomic::{AtomicUsize, Ordering};
+
+        static NEXT: AtomicUsize = AtomicUsize::new(0);
         let path = std::env::temp_dir().join(format!(
-            "gfabasic-source-missing-{}.gfa",
-            std::process::id()
+            "gfabasic-source-missing-{}-{}.gfa",
+            std::process::id(),
+            NEXT.fetch_add(1, Ordering::Relaxed)
         ));
         let mut map = SourceMap::new();
         let error = map.load_utf8(&path).unwrap_err();
