@@ -18,7 +18,7 @@ This roadmap is the project-level view of delivery order for `gfabasic-rust`. Gi
 | Area | Current state | Evidence / tracking |
 |---|---|---|
 | Rust workspace | Three crates exist: compiler, generated-program runtime, Linux platform adapter; module placeholders only | [Cargo workspace](Cargo.toml), [workspace design](docs/architecture/WORKSPACE.md) |
-| Compiler frontend, semantic analysis, IR | Not implemented | [#45–#49](https://github.com/vsimko/gfabasic-rust/issues?q=is%3Aissue+is%3Aopen+label%3Acompiler) |
+| Compiler frontend, semantic analysis, IR | Not implemented beyond source-map/loading primitives | [#46–#49](https://github.com/vsimko/gfabasic-rust/issues?q=is%3Aissue+is%3Aopen+label%3Acompiler), [#120](https://github.com/vsimko/gfabasic-rust/issues/120), [#121](https://github.com/vsimko/gfabasic-rust/issues/121) |
 | LLVM backend and native executable | Not implemented | [#50](https://github.com/vsimko/gfabasic-rust/issues/50) |
 | CLI and configuration | Architecture documented; CLI implementation is tracked separately | [#9](https://github.com/vsimko/gfabasic-rust/issues/9), [#111](https://github.com/vsimko/gfabasic-rust/issues/111) |
 | Runtime and platform integration | Not implemented; SDL3, Amiga and Atari ST runtime layers remain planned | [#51–#54](https://github.com/vsimko/gfabasic-rust/issues?q=is%3Aissue+is%3Aopen) |
@@ -62,7 +62,9 @@ Choose a precise dialect/version and document only source-verified syntax and se
 
 Implement the smallest useful source-to-native-executable path for the accepted subset. Keep frontend and IR independent of LLVM and SDL3.
 
-- [ ] Source manager and source composition — [#45](https://github.com/vsimko/gfabasic-rust/issues/45)
+- [x] Generic source map and strict UTF-8 transport loader — [#45](https://github.com/vsimko/gfabasic-rust/issues/45)
+- [ ] Dialect-aware source decoding and composition — [#120](https://github.com/vsimko/gfabasic-rust/issues/120)
+- [ ] Source-map integration with compiler diagnostics — [#121](https://github.com/vsimko/gfabasic-rust/issues/121)
 - [ ] Dialect-aware lexer — [#46](https://github.com/vsimko/gfabasic-rust/issues/46)
 - [ ] Parser and AST — [#47](https://github.com/vsimko/gfabasic-rust/issues/47)
 - [ ] Symbol resolution and semantic analysis — [#48](https://github.com/vsimko/gfabasic-rust/issues/48)
@@ -79,9 +81,9 @@ Only implement platform behavior backed by accepted references and tests.
 - [ ] Linux platform adapter and SDL3 integration — [#52](https://github.com/vsimko/gfabasic-rust/issues/52)
 - [ ] Amiga API compatibility runtime — [#53](https://github.com/vsimko/gfabasic-rust/issues/53)
 - [ ] Atari ST API compatibility runtime — [#54](https://github.com/vsimko/gfabasic-rust/issues/54)
-- [ ] Resolve API registry declarations to actual runtime handlers and generated references — [#55](https://github.com/vsimko/gfabasic-rust/issues/55)
+- [ ] Resolve API registry declarations to actual runtime handlers — [#115](https://github.com/vsimko/gfabasic-rust/issues/115)
 - [ ] Compatibility report and optional migration analysis — [#56](https://github.com/vsimko/gfabasic-rust/issues/56)
-- [ ] Parser fuzzing and robustness checks — [#43](https://github.com/vsimko/gfabasic-rust/issues/43)
+- [ ] Fuzzing strategy and robustness checks — [#43](https://github.com/vsimko/gfabasic-rust/issues/43), [#118](https://github.com/vsimko/gfabasic-rust/issues/118)
 - [ ] Benchmark strategy and measurements — [#60](https://github.com/vsimko/gfabasic-rust/issues/60)
 
 ### Phase 4 — Release readiness
@@ -90,7 +92,7 @@ A release must publish an explicit support matrix and known deviations. Do not p
 
 - [ ] Complete dependency/license/security and SBOM policy — [#39](https://github.com/vsimko/gfabasic-rust/issues/39)
 - [x] Define release workflow and artifact policy baseline — [#40](https://github.com/vsimko/gfabasic-rust/issues/40)
-- [ ] Package compiler, runtime and installation artifacts — [#59](https://github.com/vsimko/gfabasic-rust/issues/59)
+- [ ] Package compiler, runtime and installation artifacts — [#62](https://github.com/vsimko/gfabasic-rust/issues/62)
 - [ ] Implement executable conformance and release test gates — [#116](https://github.com/vsimko/gfabasic-rust/issues/116)
 
 The first end-to-end MVP integration gate is tracked separately in [#113](https://github.com/vsimko/gfabasic-rust/issues/113). Registry/runtime handler resolution is tracked in [#115](https://github.com/vsimko/gfabasic-rust/issues/115).
