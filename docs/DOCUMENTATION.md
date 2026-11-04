@@ -92,7 +92,7 @@ Install lychee 0.24.2 and run:
 lychee --offline --include-fragments anchor-only --root-dir "$PWD" "**/*.md"
 ```
 
-These tools do not certify ASD-STE100 compliance, validate the correctness of GFA BASIC semantics, or check external URL availability. Human review remains required. API-reference/registry consistency checks are deferred until the machine-readable registry is accepted and implemented under [issue #12](https://github.com/vsimko/gfabasic-rust/issues/12) and [issue #55](https://github.com/vsimko/gfabasic-rust/issues/55). The current proposed registry document is not a machine-readable source of truth.
+These tools do not certify ASD-STE100 compliance, validate the correctness of GFA BASIC semantics, or check external URL availability. Human review remains required. The accepted machine-readable API registry is validated by the API-registry job; generated-reference consistency and runtime-handler verification remain limited by the fact that the registry generator and compiler/runtime are not yet implemented.
 
 ## Copyright and source material
 
