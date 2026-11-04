@@ -1,6 +1,7 @@
 # Amiga GFA BASIC 3.0 reference research notes
 
-- Status: Research baseline. This document is not a complete language specification.
+- Status: Historical 3.0 research baseline. This document is not a complete language specification or the selected 3.5 target contract.
+- Current project target: Amiga GFA BASIC interpreter 3.5; confirm 3.0-only rules against the 3.5 manual before implementation (see [ADR 0009](../architecture/adr/0009-initial-source-dialect-amiga-gfa-basic-3.5.md)).
 - Dialect: GFA BASIC for Commodore Amiga.
 - Version covered by the main book: interpreter 3.0, with some later-version notes.
 - Primary source: *Le livre du GFA Basic Amiga*, Wolf-Gideon Bleek, Martin Hecht, Uwe Litzkendorf; French translation by Christian Frey; Data Becker / Micro Application, ©1989; ISBN 2-86899-207-2.

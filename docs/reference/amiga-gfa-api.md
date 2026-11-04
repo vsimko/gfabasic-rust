@@ -1,7 +1,8 @@
 # Amiga GFA BASIC API reference — initial research inventory
 
 - **Status:** Research draft; not an accepted API profile or implementation contract.
-- **Source scope:** Amiga GFA BASIC interpreter 3.0 as described by the French 1989 edition identified as `AM-BOOK-FR-1989`.
+- **Source scope:** Historical Amiga GFA BASIC interpreter 3.0 evidence from the French 1989 edition identified as `AM-BOOK-FR-1989`.
+- **Target warning:** The selected project dialect is Amiga interpreter 3.5. This 3.0 API inventory is not the 3.5 API contract; confirm each declaration against 3.5 sources before implementation.
 - **Tracking:** [issue #24](https://github.com/vsimko/gfabasic-rust/issues/24).
 - **Related material:** [Amiga GFA BASIC 3.0 language and API research notes](amiga-gfa-basic-3.0.md), [source register](../reference-sources.md), [API profile architecture](../architecture/API-PROFILES.md), and [proposed API registry model](../architecture/API-REGISTRY.md).
 

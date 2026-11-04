@@ -1,11 +1,15 @@
 # Amiga GFA BASIC interpreter 3.0 — feature inventory (working draft)
 
 - Status: Initial inventory; incomplete and not an implementation contract.
-- Normative research target: Amiga GFA BASIC interpreter 3.0.
+- Source scope: Amiga GFA BASIC interpreter 3.0; this is a historical source-specific inventory, not the selected project target.
+- Current normative target: Amiga GFA BASIC interpreter 3.5 (see [ADR 0009](../architecture/adr/0009-initial-source-dialect-amiga-gfa-basic-3.5.md)).
 - Primary source: `AM-BOOK-FR-1989`, *Le livre du GFA Basic Amiga*, Bleek, Hecht, and Litzkendorf, French translation by Christian Frey, Data Becker / Micro Application, ©1989, ISBN 2-86899-207-2.
 - Companion source: `AM-BOOK-DE-1990`, *Das große GFA-BASIC-Buch zum Amiga*, Data Becker, 1990, ISBN 3-89011-399-0. This edition describes the V3.03 interpreter and compiler material; do not merge its version-specific claims into the 3.0 baseline.
-- Related policy: [DIALECTS.md](../architecture/DIALECTS.md), [ADR 0008](../architecture/adr/0008-initial-source-dialect-amiga-gfa-basic-3.0.md).
+- Related policy: [DIALECTS.md](../architecture/DIALECTS.md), [ADR 0009](../architecture/adr/0009-initial-source-dialect-amiga-gfa-basic-3.5.md), superseded [ADR 0008](../architecture/adr/0008-initial-source-dialect-amiga-gfa-basic-3.0.md).
+- 3.5 source comparison: [primary reference notes](../research/amiga-gfa-basic-35-primary-reference.md) and [3.5 addendum inventory](../research/amiga-gfa-basic-35-addendum-inventory.md).
 - Detailed research notes: [amiga-gfa-basic-3.0.md](amiga-gfa-basic-3.0.md).
+
+This inventory records what the 3.0 sources say. It must not be used as a 3.5 language specification: every 3.0-only rule remains an inherited candidate until confirmed against the selected 3.5 interpreter manual.
 
 ## Evidence conventions
 
