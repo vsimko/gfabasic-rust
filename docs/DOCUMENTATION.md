@@ -102,4 +102,8 @@ These tools do not certify ASD-STE100 compliance, validate the correctness of GF
 
 ## Copyright and source material
 
-Do not commit scans, substantial manual extracts, or copied examples unless redistribution rights are confirmed. Prefer original explanations with short citations to source pages. Keep bibliographic metadata, provenance, and evidence status in [reference-sources.md](reference-sources.md).
+**Distribution policy:** This project does not distribute historical GFA BASIC manuals or books, ROMs, disk images, or historical sample programs. Treat these items as external research sources only. Do not commit them to the repository, include them in release archives, or make them prerequisites for building, testing, or using the project.
+
+Research may refer to materials that are lawfully accessible to the researcher. Record bibliographic metadata, provenance, platform/version applicability, and concise page/section citations in [reference-sources.md](reference-sources.md). Write original explanations and independently authored conformance fixtures. Do not copy substantial manual text, source listings, scans, OCR dumps, ROM contents, or disk images.
+
+The project MIT license covers only project-owned source code and original documentation. It does not grant rights to third-party reference materials. Any future proposal to distribute such material would require a separate explicit project-owner decision and a documented rights basis before inclusion.

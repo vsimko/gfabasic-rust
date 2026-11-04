@@ -2,6 +2,8 @@
 
 This register identifies candidate sources for language and API research. A listed source is not automatically authoritative for every dialect or version. No feature should be promoted to “verified” until the relevant edition, platform, and page/section have been checked.
 
+**Research-only; not for distribution:** Historical manuals/books, ROMs, disk images, and historical sample programs are not project deliverables. Do not commit or bundle these artifacts. Record bibliographic metadata, lawful access/provenance notes, concise citations, and original findings only. The project conformance corpus must contain independently authored fixtures, not copied historical listings.
+
 ## Evidence status
 
 - **Verified**: the exact source passage and applicability have been checked.

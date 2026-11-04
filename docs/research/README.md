@@ -2,6 +2,8 @@
 
 This directory contains research procedures and analysis of historical material. It is not a normative language specification and does not define implementation support.
 
+**Research-only policy:** Historical manuals, books, ROMs, disk images, and historical sample programs are external references, not project deliverables. Do not add these artifacts to the repository or bundle them with releases. Keep only source metadata, concise citations, original analysis, and independently authored tests.
+
 | [Aminet GFA BASIC package survey](aminet-catalogue.md) | Amiga Aminet `dev/basic` archive listing | Initial package inventory; readmes, archive contents, and rights remain unverified |
 | [German Amiga book OCR index](amiga-gfa-basic-3.03-ocr-index.md) | Amiga GFA BASIC, German 1990 edition | OCR table-of-contents map; version coverage and page-image validation remain open |
 
@@ -17,7 +19,7 @@ This directory contains research procedures and analysis of historical material.
 - Separate direct source statements, observed behavior, interpretation, and implementation decisions.
 - Do not infer Amiga behavior from Atari ST sources or the reverse.
 - Treat archive names and catalogue descriptions as leads until the underlying material is inspected.
-- Record copyright and redistribution constraints. Do not commit scans or unlicensed binaries.
+- Record provenance and applicability, but do not distribute historical manuals/books, ROMs, disk images, or historical sample programs. Do not commit scans, OCR dumps, archive images, or copied source listings. Keep only metadata, concise citations, original analysis, and independently authored fixtures.
 - Promote a research claim into a language/API reference only after its evidence has been reviewed.
 
 See the [reference source register](../reference-sources.md), [language reference notes](../reference/README.md), and [documentation policy](../DOCUMENTATION.md).
