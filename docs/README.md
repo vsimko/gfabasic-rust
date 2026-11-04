@@ -2,7 +2,7 @@
 
 This index is the entry point for project documentation. It separates user guidance, contributor guidance, architecture decisions, language/API references, and research material.
 
-> **Project status:** The repository is still in the planning and architecture stage. It does not yet contain a compiler, runtime, command-line interface, or Rust workspace. A documentation-only CI workflow is available; compiler/runtime build and test workflows are not. A planned document location does not mean that the corresponding feature is available.
+> **Project status:** The repository has an accepted architecture and a bootstrapped three-crate Rust workspace. Compiler, runtime, and CLI behavior are not implemented. Documentation checks and fast Rust workspace checks are available; platform integration, conformance, fuzz, security, and release workflows are not. A module placeholder does not mean that the corresponding feature is available.
 
 ## Start here
 
@@ -80,7 +80,7 @@ Create these pages only when the implementation or workflow provides verified in
 | First compilation and CLI usage | `user/quick-start.md` | A working CLI and a redistributable example |
 | Language support and limitations | `user/language-support.md` | A maintained compatibility matrix and verified implementation status |
 | Troubleshooting | `user/troubleshooting.md` | Known user-visible failure modes and diagnostic behavior |
-| Development environment | `contributor/development-setup.md` | Accepted toolchain and reproducible workspace bootstrap |
+| Development environment | [`contributor/development-setup.md`](contributor/development-setup.md) | Pinned Rust toolchain, workspace build/test commands, and troubleshooting |
 | Build and test commands | `contributor/build-and-test.md` | Executable local checks and corresponding CI jobs |
 | Contribution workflow | `contributor/contribution-workflow.md` | Agreed review, branch, and release practices |
 

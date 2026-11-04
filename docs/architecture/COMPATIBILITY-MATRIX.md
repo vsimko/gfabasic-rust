@@ -1,7 +1,7 @@
 # Current compatibility matrix
 
 - Status: **Current project snapshot; no GFA BASIC dialect/version is accepted or implemented.**
-- Updated: 2026-11-03.
+- Updated: 2026-11-04.
 - Tracking: [dialect policy #3](https://github.com/vsimko/gfabasic-rust/issues/3), [compatibility testing #10](https://github.com/vsimko/gfabasic-rust/issues/10), [versioning policy #58](https://github.com/vsimko/gfabasic-rust/issues/58).
 
 This matrix separates research evidence from compiler implementation, API profile implementation, output target, and conformance status. A source listed here is not a supported dialect.
@@ -16,12 +16,12 @@ This matrix separates research evidence from compiler implementation, API profil
 
 ## Project-wide implementation status
 
-- Rust workspace: not present.
+- Rust workspace: bootstrapped with compiler, runtime, and Linux platform crates; modules are placeholders only.
 - Compiler frontend, semantic analysis, IR, LLVM backend, and CLI: not implemented.
 - GFA BASIC core runtime: not implemented.
 - Amiga and Atari ST compatibility runtimes: not implemented.
 - Linux platform layer and SDL3 integration: not implemented.
-- Automated test runner and CI workflows: not present.
+- CI: documentation validation and fast Rust workspace checks are present; no GFA BASIC conformance runner or compiler/runtime integration workflows exist.
 - No dialect/version or API profile is currently claimed as accepted, stable, supported, or conformant.
 
 ## Rules for updating the matrix

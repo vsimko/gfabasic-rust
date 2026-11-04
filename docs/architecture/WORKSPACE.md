@@ -58,7 +58,7 @@ The generated program links the runtime components required by its selected targ
 ## Cargo and toolchain policy
 
 - Use a Cargo workspace with resolver version 3 and Rust edition 2024 for new workspace packages.
-- Pin the development toolchain to an exact stable Rust release in `rust-toolchain.toml`, including `rustfmt` and `clippy`. The current candidate for the initial bootstrap is Rust 1.99.1; refresh this candidate if a newer stable release is available when issue #44 is implemented.
+- Pin the development toolchain to an exact stable Rust release in `rust-toolchain.toml`, including `rustfmt` and `clippy`. The initial workspace pins Rust 1.99.1 in `rust-toolchain.toml`. Re-evaluate the pin deliberately when upgrading the toolchain.
 - Keep the package `rust-version` (MSRV) separate from the pinned developer toolchain. Do not publish an MSRV guarantee until the declared minimum is tested in CI.
 - Commit the workspace `Cargo.lock`. Use explicit dependency versions and workspace dependency declarations when multiple packages share a dependency.
 - Keep LLVM bindings and SDL3 bindings out of the initial manifests until the selected versions and clean-build strategy have been evaluated. Add them as optional dependencies at their owning boundary, not as workspace-wide defaults.
@@ -71,6 +71,6 @@ The crate split is an implementation boundary, not a promise that every Rust ite
 
 ## Deferred decisions
 
-This proposal does not select an LLVM version or Rust binding, an SDL3 binding, a runtime ABI, a dynamic/static linking policy, or stable API-profile identifiers. Record each decision after compatibility and clean-build evaluation. Do not add a placeholder dependency or claim an integration exists merely to reserve a future interface.
+The accepted workspace bootstrap does not select an LLVM version or Rust binding, an SDL3 binding, a runtime ABI, a dynamic/static linking policy, or stable API-profile identifiers. Record each decision after compatibility and clean-build evaluation. Do not add a placeholder dependency or claim an integration exists merely to reserve a future interface. Cargo package license metadata is intentionally omitted until the project owner resolves [issue #78](https://github.com/vsimko/gfabasic-rust/issues/78).
 
 Tracking: [issue #11](https://github.com/vsimko/gfabasic-rust/issues/11); workspace bootstrap [issue #44](https://github.com/vsimko/gfabasic-rust/issues/44).

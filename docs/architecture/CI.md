@@ -1,6 +1,6 @@
 # GitHub Actions workflow architecture
 
-- Status: Proposed architecture; a documentation-only workflow is implemented. Compiler, runtime, test-matrix, security, release, and branch-protection workflows are not yet implemented/configured.
+- Status: Proposed full CI architecture. The documentation workflow and the fast Rust workspace-check workflow are implemented. Selective test matrices, compiler/runtime integration, fuzzing, security, release, and branch-protection configuration remain open.
 - Tracking: [issue #27](https://github.com/vsimko/gfabasic-rust/issues/27).
 
 ## Goals
@@ -14,7 +14,7 @@ The workflow design must preserve the repository's current architecture:
 - Documentation and research-only corpus changes must not imply language conformance.
 - Long fuzzing, compatibility experiments, and benchmarks must not slow every pull request.
 
-This document defines the proposed full CI structure. The documentation-only workflow in [`.github/workflows/docs.yml`](../../.github/workflows/docs.yml) is implemented and runs Markdown linting plus offline local-link/anchor checks. No compiler/runtime build or test workflow exists, and no branch-protection requirement is claimed.
+This document defines the proposed full CI structure. The documentation workflow in [`.github/workflows/docs.yml`](../../.github/workflows/docs.yml) runs Markdown linting, API registry validation, and offline local-link/anchor checks. The fast Rust workflow in [`.github/workflows/rust.yml`](../../.github/workflows/rust.yml) runs formatting, Clippy, workspace tests, and a workspace build on the pinned Rust toolchain. These checks validate the current skeleton only; no compiler/runtime behavior or conformance is tested, and no branch-protection requirement is claimed.
 
 Release and artifact requirements are specified in [RELEASES.md](RELEASES.md). That policy remains proposed until the workspace, compiler/runtime, and packaging commands exist.
 
