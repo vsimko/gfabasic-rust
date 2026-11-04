@@ -16,7 +16,7 @@
 
 There is no `Cargo.toml`, Rust workspace, compiler, runtime, CLI, or GitHub Actions workflow on the default branch. Therefore, there are currently no verified project commands for `cargo build`, `cargo test`, linting, or local CI.
 
-Do not add speculative setup instructions or claim that a local command passes. The [workspace architecture](../architecture/WORKSPACE.md) and [CI architecture](../architecture/README.md) describe planning material; proposals must be reviewed before they become implementation requirements.
+Do not add speculative setup instructions or claim that a local command passes. The [workspace architecture](../architecture/WORKSPACE.md) describes the current proposal. The CI workflow design remains under review in [PR #80](https://github.com/vsimko/gfabasic-rust/pull/80); it is not an implemented workflow.
 
 ## Pull request expectations
 
