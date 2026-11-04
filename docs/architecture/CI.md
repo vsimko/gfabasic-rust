@@ -1,6 +1,6 @@
 # GitHub Actions workflow architecture
 
-- Status: Proposed; no GitHub Actions workflows exist yet.
+- Status: Proposed architecture; a documentation-only workflow is implemented. Compiler, runtime, test-matrix, security, release, and branch-protection workflows are not yet implemented/configured.
 - Tracking: [issue #27](https://github.com/vsimko/gfabasic-rust/issues/27).
 
 ## Goals
@@ -14,7 +14,7 @@ The workflow design must preserve the repository's current architecture:
 - Documentation and research-only corpus changes must not imply language conformance.
 - Long fuzzing, compatibility experiments, and benchmarks must not slow every pull request.
 
-This document defines a proposed workflow structure. It does not claim that any workflow, branch-protection rule, or CI check is currently configured.
+This document defines the proposed full CI structure. The documentation-only workflow in [`.github/workflows/docs.yml`](../../.github/workflows/docs.yml) is implemented and runs Markdown linting plus offline local-link/anchor checks. No compiler/runtime build or test workflow exists, and no branch-protection requirement is claimed.
 
 Release and artifact requirements are specified in [RELEASES.md](RELEASES.md). That policy remains proposed until the workspace, compiler/runtime, and packaging commands exist.
 
@@ -22,7 +22,8 @@ Release and artifact requirements are specified in [RELEASES.md](RELEASES.md). T
 
 | Workflow | Events | Purpose | Required on pull requests |
 |---|---|---|---|
-| `pull-request.yml` | `pull_request` | Change detection, fast relevant checks, and one stable gate result | Yes, through the final gate |
+| `docs.yml` | `pull_request`, `push` to `main` (documentation paths) | Markdown structural lint and offline local links/anchors | Runs for matching documentation changes; branch protection is not configured |
+| `pull-request.yml` | `pull_request` | Change detection, fast relevant checks, and one stable gate result | Proposed; not implemented |
 | `main.yml` | `push` to `main` | Broader integration checks after merge | No separate PR requirement |
 | `fuzz.yml` | `schedule`, `workflow_dispatch` | Longer frontend fuzz campaigns after harnesses exist | No |
 | `release.yml` | `release` and controlled `workflow_dispatch` | Reproducible release validation and artifact publication after packaging exists | Release-specific |
@@ -58,7 +59,7 @@ The pull-request workflow should detect these categories once a workspace and im
 
 The exact path patterns must be maintained alongside the repository layout. A new or unclassified path must select a safe broad check rather than silently skipping validation. Changes to manifests, lockfiles, toolchain pins, workflow definitions, or shared test infrastructure should trigger the broadest relevant check set.
 
-Documentation-only changes may skip compiler/runtime builds when the change detector proves that no code, manifest, toolchain, test harness, or workflow input changed. They must still run documentation checks once #33 has executable tooling.
+Documentation-only changes currently run `docs.yml` and do not run compiler/runtime builds because those components and their workflows do not exist. Once the compiler workflow is implemented, path-aware change detection may skip compiler/runtime jobs only when it proves that no code, manifest, toolchain, test harness, or workflow input changed.
 
 ## Required-check contract
 
