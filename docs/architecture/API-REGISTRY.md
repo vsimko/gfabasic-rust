@@ -1,6 +1,6 @@
 # API registry and declaration source of truth
 
-- Status: **Accepted by [ADR 0006](adr/0006-api-registry.md).** No registry files, schema validator, or generator are implemented yet.
+- Status: **Accepted by [ADR 0006](adr/0006-api-registry.md).** The v1 JSON Schema, Python validator, validator unit tests, and documentation CI check are implemented. The registry currently contains one unsupported Atari ST TIMER research declaration. No documentation generator or Rust runtime-handler resolution is implemented yet.
 - Tracking: [issue #12](https://github.com/vsimko/gfabasic-rust/issues/12), [validation #55](https://github.com/vsimko/gfabasic-rust/issues/55).
 
 ## 1. Purpose and ownership
@@ -145,7 +145,7 @@ anchors = []
 
 ## 8. Validation rules
 
-The validator under issue #55 must reject or flag:
+The validator in `scripts/validate_api_registry.py` currently rejects or flags:
 
 1. Missing or duplicate stable IDs.
 2. Invalid schema versions, unknown fields, or missing required metadata.
@@ -153,7 +153,7 @@ The validator under issue #55 must reject or flag:
 4. Duplicate names whose availability overlaps without an explicit overload/conflict rule.
 5. Functions without return metadata or statements without statement syntax.
 6. Parameters with missing types, invalid optional ordering, or inconsistent overload arity.
-7. Implemented/partial records without a valid implementation handler.
+7. Implemented/partial records without a handler ID. The current validator checks that the ID is present, but does not yet resolve it to a Rust runtime implementation; that requires the runtime handler registry/code.
 8. Supported declarations without source evidence and conformance tests.
 9. Broken documentation anchors or test IDs.
 10. Amiga/Atari declarations assigned to the wrong namespace/profile.
@@ -187,6 +187,6 @@ Acceptance of a registry record does not mean implementation is complete. The re
 
 ## 11. Implementation boundary
 
-This ADR accepts TOML as the canonical registry format, the directory structure above, the stable ID convention, and the separated evidence/implementation/support/conformance model. It does not implement the registry, schema, validator, code generator, or any GFA BASIC declaration.
+ADR 0006 accepts TOML as the canonical registry format, the directory structure above, the stable ID convention, and the separated evidence/implementation/support/conformance model. The v1 JSON Schema, Python validator, validator tests, and CI invocation are now implemented. The registry contains one unsupported Atari ST TIMER declaration; no supported GFA BASIC declaration, runtime handler mapping, or documentation generator is implemented. The presence of a research record is not a compiler or runtime feature claim.
 
 Tracking: [issue #12](https://github.com/vsimko/gfabasic-rust/issues/12), [validation #55](https://github.com/vsimko/gfabasic-rust/issues/55), [conformance corpus #42](https://github.com/vsimko/gfabasic-rust/issues/42).
