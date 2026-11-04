@@ -1,0 +1,15 @@
+[workspace]
+members = [
+    "crates/gfabasic-compiler",
+    "crates/gfabasic-runtime",
+    "crates/gfabasic-platform-linux",
+]
+resolver = "3"
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[workspace.lints.rust]
+unsafe_op_in_unsafe_fn = "deny"
