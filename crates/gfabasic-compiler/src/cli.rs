@@ -1,1 +1,2 @@
 //! Command-line interface boundary. No commands are implemented yet.
+
