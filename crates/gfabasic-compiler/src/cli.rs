@@ -77,11 +77,7 @@ mod tests {
     fn invoke(args: &[&str]) -> (u8, String, String) {
         let mut out = Vec::new();
         let mut err = Vec::new();
-        let code = run_with_io(
-            args.iter().map(|arg| (*arg).to_owned()),
-            &mut out,
-            &mut err,
-        );
+        let code = run_with_io(args.iter().map(|arg| (*arg).to_owned()), &mut out, &mut err);
         (
             code,
             String::from_utf8(out).expect("stdout is UTF-8"),
