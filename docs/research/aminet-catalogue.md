@@ -89,3 +89,17 @@ The mirror's current directory index confirms the associated archive names, list
 - `GetCDDB_src` and `HotShotsSRC` are excluded as Blitz Basic II material; neither is a GFA BASIC example.
 - The paired readmes for `GFA_CLI`, `GFA_Gadgets`, `GFA_Menus`, and `GuiGfxDevBas` could not be decoded by the available reader. Their listing metadata is confirmed, but their contents and terms remain unverified.
 - No package is promoted to a conformance fixture or normative language/API evidence.
+
+
+## Tokenized-source utility follow-up: gfalist (2026-11-04)
+
+The gfalist lead is now better identified through its package metadata and a public source repository:
+
+- The Aminet/MorphOS package record describes gfalist as reading tokenized GFA BASIC version 3.x files, lists version 0.01, authors Peter Backes and Markus Hoffmann, uploader Stefan Haubenthal, MorphOS/PPC architecture, upload date 2021-02-18, size 149 KB, and MD5 37f5ea38e38ef4bb0c73805aef9d0b92. See the [MorphOS Storage package record](https://www.morphos-storage.net/?id=1613594).
+- The public [mmuman/gfalist source repository](https://github.com/mmuman/gfalist) describes the utility as converting tokenized .GFA files into readable ASCII .LST listings. Its source repository includes a GPL-2.0 license file. This is useful corroboration for the tool's function and for locating source code, but the exact license and contents of the separate Aminet MorphOS archive still need to be verified independently.
+- The tool is a **tokenized-source inspection/conversion utility**, not a GFA BASIC compiler, language specification, or conformance corpus. Its documented target is GFA BASIC 3.x; do not assume that it decodes every Amiga-specific binary variant or every release without testing.
+- No source code or archive content from the external project was copied into this repository.
+
+References: [mmuman/gfalist README](https://github.com/mmuman/gfalist/blob/master/README.md), [license](https://github.com/mmuman/gfalist/blob/master/COPYING), and [Aminet directory entry](https://ftp.fau.de/mirrors/aminet/dev/basic/gfalist.readme).
+
+The remaining research step is to inspect the exact Aminet archive contents and determine whether its executable/build matches the public source repository, including its supported tokenized file variants.
