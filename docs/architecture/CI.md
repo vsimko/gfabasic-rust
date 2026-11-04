@@ -105,3 +105,20 @@ A branch-protection rule or repository ruleset must require the final gate after
 6. Configure and verify branch protection/rulesets after the required gate has run successfully on a real pull request.
 
 No workflow should claim to validate a component that does not yet exist. A green documentation-only gate is not evidence that the compiler, runtime, or GFA BASIC conformance is correct.
+
+## Cache policy and measured baseline
+
+Do not add a shared build-artifact cache until it is likely to reduce total workflow time. The current workspace has no third-party Cargo dependencies: the committed `Cargo.lock` contains only the three local workspace packages. There are therefore no meaningful registry/git dependency downloads to reuse, and the current build outputs are small.
+
+A baseline review on 2026-11-04 measured two successful Rust workflow runs at approximately 20 seconds each (GitHub Actions runs [41831742392](https://github.com/vsimko/gfabasic-rust/actions/runs/41831742392) and [41831868187](https://github.com/vsimko/gfabasic-rust/actions/runs/41831868187)). This is shorter than a typical cache restore/save cycle can reliably improve, and does not justify mutable shared build artifacts at this stage.
+
+**Current decision: no Cargo registry, Git, LLVM, SDL3, or `target/` cache is configured.** This avoids stale native artifacts, cross-toolchain reuse, cache-key complexity, and concurrent writers while there is no measurable benefit. Clean builds remain the source of truth.
+
+Re-evaluate caching when one or more of these triggers occurs:
+
+- The workspace adds external crates and registry/git downloads become material.
+- LLVM or SDL3 must be downloaded or built in CI.
+- Repeated clean Rust workflow runs exceed 60 seconds and build/restore measurements identify a reusable expensive step.
+- Multiple compatible jobs need the same immutable toolchain/dependency artifacts.
+
+When a cache is introduced, keys must include OS/architecture, the exact Rust toolchain, `Cargo.lock`, relevant native dependency versions, target triple, and build profile. Prefer immutable dependency/toolchain caches first. Cache build artifacts only after measuring restore/save cost against a clean build. Never cache credentials, final release artifacts, or outputs whose provenance cannot be reproduced. A cache miss or corruption must fall back to a clean build.
