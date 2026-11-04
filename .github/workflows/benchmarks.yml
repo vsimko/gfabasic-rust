@@ -88,9 +88,11 @@ jobs:
             printf 'target=x86_64-unknown-linux-gnu\n'
             printf 'runner=ubuntu-24.04\n'
             printf 'kernel=%s\n' "$(uname -srmo)"
+            printf 'kernel-release=%s\n' "$KERNEL_RELEASE"
             printf 'architecture=%s\n' "$(uname -m)"
             printf 'logical-cpus=%s\n' "$(nproc)"
-            printf 'cpu-model=%s\n' "$(grep -m1 'model name' /proc/cpuinfo | cut -d: -f2- | xargs)"
+            printf 'cpu-model=%s\n' "$CPU_MODEL"
+            printf 'criterion-cache-hit=%s\n' "$CRITERION_CACHE_HIT"
             printf 'memory-total-kib=%s\n' "$(awk '/MemTotal/ {print $2}' /proc/meminfo)"
           } > "$RUNNER_TEMP/benchmark-metadata.txt"
           rustc +1.99.1 --version --verbose > "$RUNNER_TEMP/rustc-version.txt"
