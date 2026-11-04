@@ -122,3 +122,11 @@ Re-evaluate caching when one or more of these triggers occurs:
 - Multiple compatible jobs need the same immutable toolchain/dependency artifacts.
 
 When a cache is introduced, keys must include OS/architecture, the exact Rust toolchain, `Cargo.lock`, relevant native dependency versions, target triple, and build profile. Prefer immutable dependency/toolchain caches first. Cache build artifacts only after measuring restore/save cost against a clean build. Never cache credentials, final release artifacts, or outputs whose provenance cannot be reproduced. A cache miss or corruption must fall back to a clean build.
+
+## Selective job execution: deferred until component suites exist
+
+The current executable CI surface has one Rust workspace-check job, one documentation-check workflow, and one RustSec audit workflow. Workflow-level path filters already keep documentation-only changes out of Rust builds and keep Rust checks scoped to Cargo/toolchain/crate changes. There are not yet separate frontend, semantic/IR, LLVM, runtime, Amiga, Atari, or SDL3 integration test suites to select between.
+
+**Do not add a job-level change detector or empty matrix now.** It would add a second source of path truth without reducing any existing test work, and there are no component jobs against which to validate dependency fan-out. The path-to-test matrix above remains the design reference, not a claim that selective component execution exists.
+
+Reopen the selective-execution implementation when at least two independent component test suites exist (for example, frontend and platform integration). At that point add a tested change map, conservative handling for unknown paths, explicit dependency fan-out, and a stable final PR gate. Until then the workflow-level path filters are the proportionate implementation.
