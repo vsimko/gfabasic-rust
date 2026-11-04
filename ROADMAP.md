@@ -22,9 +22,9 @@ This roadmap is the project-level view of delivery order for `gfabasic-rust`. Gi
 | LLVM backend and native executable | Not implemented | [#50](https://github.com/vsimko/gfabasic-rust/issues/50) |
 | CLI and configuration | Architecture documented; CLI implementation is tracked separately | [#9](https://github.com/vsimko/gfabasic-rust/issues/9), [#111](https://github.com/vsimko/gfabasic-rust/issues/111) |
 | Runtime and platform integration | Not implemented; SDL3, Amiga and Atari ST runtime layers remain planned | [#51–#54](https://github.com/vsimko/gfabasic-rust/issues?q=is%3Aissue+is%3Aopen) |
-| API registry | Schema and validation exist; runtime handler resolution and generated-reference consistency remain incomplete | [#55](https://github.com/vsimko/gfabasic-rust/issues/55) |
+| API registry | Schema and metadata validation are complete; runtime handler resolution remains unimplemented | [#115](https://github.com/vsimko/gfabasic-rust/issues/115) |
 | Dialect and API research | Atari ST and Amiga research drafts exist; no dialect is accepted or implemented | [#3](https://github.com/vsimko/gfabasic-rust/issues/3), [#63–#66](https://github.com/vsimko/gfabasic-rust/issues?q=is%3Aissue+is%3Aopen) |
-| Tests | Rust workspace and documentation checks exist; no compiler conformance runner or executable end-to-end compiler tests | [#10](https://github.com/vsimko/gfabasic-rust/issues/10), [#42](https://github.com/vsimko/gfabasic-rust/issues/42), [#43](https://github.com/vsimko/gfabasic-rust/issues/43) |
+| Tests | Test strategy and registry metadata checks exist; no compiler conformance runner, fuzz harness, or executable end-to-end tests | [#42](https://github.com/vsimko/gfabasic-rust/issues/42), [#43](https://github.com/vsimko/gfabasic-rust/issues/43), [#116](https://github.com/vsimko/gfabasic-rust/issues/116) |
 | Documentation | README, documentation index, architecture, source register, research notes, compatibility matrix, and policies exist; user quick start is correctly withheld until a working CLI exists | [#16](https://github.com/vsimko/gfabasic-rust/issues/16) |
 | CI and supply chain | Documentation and fast workspace checks are documented; dependency/license policy and reproducible SBOM remain open | [#39](https://github.com/vsimko/gfabasic-rust/issues/39) |
 | Releases | Release policy work is tracked, but no compiler artifacts can currently be produced | [#40](https://github.com/vsimko/gfabasic-rust/issues/40), [#62](https://github.com/vsimko/gfabasic-rust/issues/62) |
@@ -93,7 +93,7 @@ A release must publish an explicit support matrix and known deviations. Do not p
 - [ ] Package compiler, runtime and installation artifacts — [#59](https://github.com/vsimko/gfabasic-rust/issues/59)
 - [ ] Implement executable conformance and release test gates — [#116](https://github.com/vsimko/gfabasic-rust/issues/116)
 
-The first end-to-end MVP integration gate is tracked separately in [#113](https://github.com/vsimko/gfabasic-rust/issues/113).
+The first end-to-end MVP integration gate is tracked separately in [#113](https://github.com/vsimko/gfabasic-rust/issues/113). Registry/runtime handler resolution is tracked in [#115](https://github.com/vsimko/gfabasic-rust/issues/115).
 
 ## Blockers and sequencing rules
 
