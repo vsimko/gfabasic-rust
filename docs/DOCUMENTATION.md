@@ -73,6 +73,27 @@ For every documentation change, review:
 
 These checks are currently a review checklist. Do not claim that they run automatically. Add automated Markdown, link, spelling, or reference validation only when the project defines the tooling, supported versions, and CI integration. The absence of an automated checker does not remove the review requirements.
 
+## Automated checks
+
+The repository runs the following documentation checks in GitHub Actions for documentation-related pull requests and pushes to `main`:
+
+- `markdownlint-cli2` (pinned to 0.24.0) checks selected structural Markdown rules: heading levels, heading style, trailing whitespace, tabs, spacing around headings/lists/fenced code, fenced-code language identifiers, and final newlines.
+- `lychee` (pinned to 0.24.2) checks local Markdown file links and anchors in offline mode. It does not test whether external websites are reachable.
+
+Run the same checks locally from the repository root:
+
+```sh
+npx --yes markdownlint-cli2@0.24.0 "**/*.md" "#node_modules"
+```
+
+Install lychee 0.24.2 and run:
+
+```sh
+lychee --offline --include-fragments anchor-only --root-dir "$PWD" "**/*.md"
+```
+
+These tools do not certify ASD-STE100 compliance, validate the correctness of GFA BASIC semantics, or check external URL availability. Human review remains required. API-reference/registry consistency checks are deferred until the machine-readable registry is accepted and implemented under [issue #12](https://github.com/vsimko/gfabasic-rust/issues/12) and [issue #55](https://github.com/vsimko/gfabasic-rust/issues/55). The current proposed registry document is not a machine-readable source of truth.
+
 ## Copyright and source material
 
 Do not commit scans, substantial manual extracts, or copied examples unless redistribution rights are confirmed. Prefer original explanations with short citations to source pages. Keep bibliographic metadata, provenance, and evidence status in [reference-sources.md](reference-sources.md).
