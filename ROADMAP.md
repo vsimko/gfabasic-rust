@@ -3,7 +3,7 @@
 This roadmap is the project-level view of delivery order for `gfabasic-rust`. GitHub Issues remain the source of truth for task scope, acceptance criteria, blockers, and implementation discussion.
 
 **Snapshot:** 2026-11-04  
-**Current maturity:** architecture and research baseline; Rust workspace bootstrap plus source-map and strict UTF-8 transport primitives. The language frontend, backend, runtime behavior, CLI, and GFA BASIC conformance are not implemented.
+**Current maturity:** architecture and research baseline; Rust workspace bootstrap, source-map and strict UTF-8 transport primitives, and a minimal help/version CLI. The language frontend, backend, project configuration, runtime behavior, and GFA BASIC conformance are not implemented.
 
 ## Status rules
 
@@ -17,15 +17,15 @@ This roadmap is the project-level view of delivery order for `gfabasic-rust`. Gi
 
 | Area | Current state | Evidence / tracking |
 |---|---|---|
-| Rust workspace | Three crates exist: compiler, generated-program runtime, Linux platform adapter; compiler includes source-map and strict UTF-8 loading primitives, while frontend/backend/CLI/runtime/platform behavior remains unimplemented | [Cargo workspace](Cargo.toml), [workspace design](docs/architecture/WORKSPACE.md) |
+| Rust workspace | Three crates exist: compiler, generated-program runtime, Linux platform adapter; compiler includes source-map and strict UTF-8 loading primitives plus a help/version CLI, while frontend/backend/project configuration/runtime/platform behavior remains unimplemented | [Cargo workspace](Cargo.toml), [workspace design](docs/architecture/WORKSPACE.md) |
 | Compiler frontend, semantic analysis, IR | Not implemented beyond source-map/loading primitives | [#46–#49](https://github.com/vsimko/gfabasic-rust/issues?q=is%3Aissue+is%3Aopen+label%3Acompiler), [#120](https://github.com/vsimko/gfabasic-rust/issues/120), [#121](https://github.com/vsimko/gfabasic-rust/issues/121) |
 | LLVM backend and native executable | Not implemented | [#50](https://github.com/vsimko/gfabasic-rust/issues/50) |
-| CLI and configuration | Architecture documented; CLI implementation is tracked separately | [#9](https://github.com/vsimko/gfabasic-rust/issues/9), [#111](https://github.com/vsimko/gfabasic-rust/issues/111) |
+| CLI and configuration | Minimal `gfabasic` executable supports help/version; build/check explicitly reject compilation. Project configuration and compilation integration remain open | [#9](https://github.com/vsimko/gfabasic-rust/issues/9), [#111](https://github.com/vsimko/gfabasic-rust/issues/111) |
 | Runtime and platform integration | Not implemented; SDL3, Amiga and Atari ST runtime layers remain planned | [#51–#54](https://github.com/vsimko/gfabasic-rust/issues?q=is%3Aissue+is%3Aopen) |
 | API registry | Schema and metadata validation are complete; runtime handler resolution remains unimplemented | [#115](https://github.com/vsimko/gfabasic-rust/issues/115) |
 | Dialect and API research | Atari ST and Amiga research drafts exist; no dialect is accepted or implemented | [#3](https://github.com/vsimko/gfabasic-rust/issues/3), [#63–#66](https://github.com/vsimko/gfabasic-rust/issues?q=is%3Aissue+is%3Aopen) |
 | Tests | Test strategy and registry metadata checks exist; no compiler conformance runner, fuzz harness, or executable end-to-end tests | [#42](https://github.com/vsimko/gfabasic-rust/issues/42), [#43](https://github.com/vsimko/gfabasic-rust/issues/43), [#116](https://github.com/vsimko/gfabasic-rust/issues/116), [#118](https://github.com/vsimko/gfabasic-rust/issues/118) |
-| Documentation | README, documentation index, architecture, source register, research notes, compatibility matrix, and policies exist; user quick start is correctly withheld until a working CLI exists | [#16](https://github.com/vsimko/gfabasic-rust/issues/16) |
+| Documentation | README, documentation index, architecture, source register, research notes, compatibility matrix, and policies exist; user quick start is correctly withheld until an end-to-end compiler and distributable artifact exist | [#16](https://github.com/vsimko/gfabasic-rust/issues/16) |
 | CI and supply chain | Documentation and fast workspace checks are documented; dependency/license policy and reproducible SBOM remain open | [#39](https://github.com/vsimko/gfabasic-rust/issues/39) |
 | Releases | Release policy work is tracked, but no compiler artifacts can currently be produced | [#40](https://github.com/vsimko/gfabasic-rust/issues/40), [#62](https://github.com/vsimko/gfabasic-rust/issues/62) |
 
