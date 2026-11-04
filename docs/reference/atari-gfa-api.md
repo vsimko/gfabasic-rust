@@ -147,9 +147,21 @@ Lifecycle is order-sensitive. The book reports a `RESERVE` memory error in its t
 
 The source provides V2.xx procedure equivalents using VDISYS/GEMSYS and direct parameter-block access. They are not interchangeable with the V3.0 function-call syntax without adapting output-pointer conventions. In particular, the V2.xx VQT_NAME procedure requires pointers for both the returned string and the integer face ID. [pp. 513–515]
 
+The book's V2.xx examples use VDISYS opcodes 3 (clear workstation), 101 (close virtual workstation), 2 (close workstation), 100 (open virtual workstation), 1 (open workstation), 4 (update workstation), 116 (text extent), 130 (font name), 119 (load fonts) and 120 (unload fonts). These are book-documented wrapper examples, not a complete or universal VDI opcode contract. [pp. 504–515]
+
 ### 4.4 Own fonts and direct system-font patching (unsafe research)
 
 Pages 516–530 are not a general GDOS API. They present custom machine-code and BASIC techniques that patch TOS/GEM system-font pointers, reserve memory above HIMEM, install VBL interrupt routines, or reinterpret Degas/STAD font bitmaps. One supplied AUTO-folder program is explicitly limited to ROM-TOS dated 6 February 1986. Another routine warns that increasing BASIC memory with RESERVE while a font is active can overwrite font data; restoring original font pointers is necessary before leaving BASIC. [pp. 516–523]
+
+The examples include direct writes to TOS/GEM system-font pointers at addresses around 0x607E and 0x2924. These are machine-/ROM-specific addresses, not portable API constants. One supplied AUTO-folder patch is explicitly limited to a ROM-TOS build dated 6 February 1986. [pp. 516–523]
+
+The source describes these font data layouts:
+
+- Degas high-resolution font: 2,050 bytes (2-byte header plus 2,048 bytes for 128 glyphs × 16 scanlines).
+- STAD/OLIFONT high-resolution font: 4,096 bytes (256 glyphs × 16 scanlines).
+- 8×16 system font: 4,698 bytes (602-byte header plus 4,096 glyph bytes).
+
+These are source-described formats; do not infer that every Atari font loader accepts them interchangeably. [pp. 528–530]
 
 The later SUPER.FON example loads a bitmap-font file into caller-provided memory and draws each character through PUT operations; it is a program-level technique, not a VDI/GDOS workstation service. [pp. 524–530] These routines must remain classified as unsafe, ROM/TOS-specific research. Do not implement them as ordinary portable GFA built-ins or run them in the Linux compatibility runtime.
 
