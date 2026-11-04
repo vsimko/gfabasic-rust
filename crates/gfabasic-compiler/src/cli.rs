@@ -47,9 +47,7 @@ where
             let _ = writeln!(out, "gfabasic {}", env!("CARGO_PKG_VERSION"));
             0
         }
-        [arg, verbose]
-            if (arg == "--version" || arg == "version") && verbose == "--verbose" =>
-        {
+        [arg, verbose] if (arg == "--version" || arg == "version") && verbose == "--verbose" => {
             let _ = writeln!(out, "gfabasic {}", env!("CARGO_PKG_VERSION"));
             let build_id = option_env!("GFA_BASIC_BUILD_ID").unwrap_or("unknown");
             let _ = writeln!(out, "build-id: {build_id}");
