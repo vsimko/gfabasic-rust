@@ -14,7 +14,7 @@ The initial CI host is Linux x86-64 using the GitHub-hosted Ubuntu runner. Other
 
 The workspace currently has no third-party Cargo dependencies or required native system libraries. LLVM and SDL3 are deliberately deferred and are not required to build the skeleton. Do not install arbitrary LLVM or SDL3 versions for this stage.
 
-The project license is not yet selected. See [issue #78](https://github.com/vsimko/gfabasic-rust/issues/78); repository visibility does not grant permission to reuse the code.
+The project source code and original documentation are licensed under MIT. See the root [LICENSE](../../LICENSE) and [project README](../../README.md#license). This license does not grant redistribution rights to third-party manuals, ROMs, disk images, or sample programs.
 
 ## Install the toolchain
 
