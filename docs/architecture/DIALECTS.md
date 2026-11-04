@@ -1,6 +1,12 @@
 # Dialects, versions, and compatibility policy
 
-- Status: Open. No initial source dialect/version has been accepted. A first Atari ST V2.xx/V3.0 research draft is now available in [atari-gfa-basic-3.0.md](../reference/atari-gfa-basic-3.0.md); it is evidence gathering, not an accepted compiler dialect.
+- Status: **Accepted initial target: Amiga GFA BASIC interpreter 3.0.** Atari ST GFA BASIC V2.xx/V3.0 remains research-only for the initial compiler target. See [ADR 0008](adr/0008-initial-source-dialect-amiga-gfa-basic-3.0.md).
+
+## Initial normative target
+
+The first normative source-language target is **Amiga GFA BASIC interpreter 3.0**. The Amiga research identifies interpreter 3.0 in a French 1989 reference book; page-image verification and completion of the feature-by-feature evidence inventory remain outstanding. This decision selects the target for specification and implementation; it does not claim that any language feature is implemented or conformant.
+
+Atari ST GFA BASIC V2.xx/V3.0 remains research-only. Its manual and book evidence may be developed as a separate profile, but Atari-specific syntax or semantics must not be imported into the Amiga 3.0 contract. Constructs documented only by the Atari source remain unsupported or unresolved for Amiga until independently evidenced.
 
 ## Required identity
 
@@ -15,7 +21,7 @@ Every source compilation must resolve an explicit dialect identity and version. 
 - Record compiler/interpreter differences when evidence is available.
 - Mark undocumented constructs unresolved until evidence supports a decision.
 
-## Initial Atari ST V2.xx/V3.0 evidence
+## Separate Atari ST V2.xx/V3.0 research
 
 The source register now includes the user-provided sixth revised and expanded edition of *Das große GFA-BASIC-Buch* (Uwe Litzkendorf, 1988, ISBN 3-89011-222-6). It explicitly covers V2.xx/V3.0 on Atari ST. Initial findings and their printed-page references are recorded in [the preliminary Atari specification](../reference/atari-gfa-basic-3.0.md). Do not apply these findings to Amiga GFA BASIC or later Atari releases without separate evidence.
 
@@ -31,6 +37,6 @@ Each feature should include a stable identifier, applicable dialect/version/prof
 
 Unknown or unsupported syntax must not be skipped. Diagnostics must identify the source location and explain whether the construct is invalid, unsupported, ambiguous, or unavailable in the selected dialect/profile. The proposed structured diagnostic and support-outcome contract is defined in [DIAGNOSTICS.md](DIAGNOSTICS.md).
 
-Until the first dialect/version is accepted and its evidence reviewed, the compiler supports no GFA BASIC dialect. Future milestones must state a bounded subset and cite sources.
+Selecting Amiga GFA BASIC interpreter 3.0 establishes the normative target, not a supported language subset. Future milestones must state a bounded implemented subset and cite sources.
 
 Tracking: [issue #3](https://github.com/vsimko/gfabasic-rust/issues/3); [reference register](../reference-sources.md).
