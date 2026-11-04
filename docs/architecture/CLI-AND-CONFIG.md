@@ -1,6 +1,6 @@
 # CLI, configuration, and build artifacts
 
-- Status: **Accepted by [ADR 0005](adr/0005-cli-and-project-configuration.md).** The CLI, project loader, and artifact writer are not implemented.
+- Status: **Accepted by [ADR 0005](adr/0005-cli-and-project-configuration.md).** A minimal executable implements help and version output only. Project loading, configuration validation, compilation commands, and artifact writing are not implemented.
 - Tracking: [issue #9](https://github.com/vsimko/gfabasic-rust/issues/9).
 
 ## Command model
@@ -137,4 +137,4 @@ The same exit code must not be used for success and failure. Human-readable diag
 
 ## Deferred implementation
 
-The CLI executable, TOML parser/schema validator, project discovery, source composition, diagnostic renderer, compatibility report, native output, and artifact manifest are not implemented. This specification accepts the interface model; it does not claim any command is currently usable.
+The CLI executable currently implements only help and version output. The TOML parser/schema validator, project discovery, source composition, configuration diagnostics, compatibility report, native output, and artifact manifest are not implemented; `build` and `check` explicitly fail rather than claiming compilation support. This specification accepts the interface model; it does not claim any command is currently usable.
