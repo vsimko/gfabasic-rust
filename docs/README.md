@@ -47,7 +47,9 @@ docs/
 ├── reference/
 │   └── README.md
 ├── research/
+│   └── README.md
 ├── templates/
+│   ├── README.md
 │   ├── GUIDE.md
 │   └── REFERENCE.md
 └── user/
