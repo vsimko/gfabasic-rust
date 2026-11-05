@@ -1,6 +1,6 @@
 schema_version = 1
 corpus_status = "research_only"
-description = "Initial source-backed candidate fixtures for GFA BASIC dialects."
+description = "Mixed research candidates and page-image-verified Amiga 3.5 addendum fixtures; metadata only, not a runnable conformance suite."
 fixtures = [
   "amiga/3.0/control-flow/repeat-until-postcondition",
   "amiga/3.0/control-flow/nested-loop-close-order",
