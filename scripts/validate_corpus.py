@@ -59,7 +59,7 @@ def fixture_path(value: object) -> Path | None:
     if (
         path.is_absolute()
         or path.suffix
-        or len(path.parts) < 4
+        or len(path.parts) != 4
         or any(part in {"", ".", ".."} for part in path.parts)
     ):
         return None
@@ -103,7 +103,7 @@ def validate_fixture(
             error(errors, metadata_path, f"{field} must be a non-empty string", corpus_root)
 
     path_parts = Path(expected_stem).parts
-    if len(path_parts) >= 4:
+    if len(path_parts) == 4:
         dialect_directory, version_directory = path_parts[:2]
         expected_dialect = DIALECT_DIRECTORY_NAMES.get(dialect_directory)
         if expected_dialect is None:

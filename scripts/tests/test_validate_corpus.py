@@ -71,6 +71,20 @@ class CorpusValidationTests(unittest.TestCase):
         metadata.write_text(metadata.read_text().replace('version = "3.0"', 'version = "3.5"'))
         self.assertTrue(any("does not match directory '3.0'" in item for item in validate_corpus(root)))
 
+    def test_fixture_path_requires_exactly_four_components(self):
+        temp, root = self.make_root()
+        self.addCleanup(temp.cleanup)
+        manifest = root / "tests/corpus/manifest.toml"
+        original = manifest.read_text()
+        valid_path = "amiga/3.0/control-flow/fixture-one"
+        for invalid_path in (
+            "amiga/3.0/fixture-one",
+            "amiga/3.0/control-flow/nested/fixture-one",
+        ):
+            with self.subTest(path=invalid_path):
+                manifest.write_text(original.replace(valid_path, invalid_path))
+                self.assertTrue(any("invalid fixture path" in item for item in validate_corpus(root)))
+
     def test_missing_source_register_fails(self):
         temp, root = self.make_root()
         self.addCleanup(temp.cleanup)
