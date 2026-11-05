@@ -1,6 +1,6 @@
 # Host and target model
 
-- Status: **Sole supported output target: Linux x86-64, GNU ABI, ELF 64-bit.** See [ADR 0003](adr/0003-target-model.md) and [ADR 0010](adr/0010-amiga-35-linux-sdl3-product-scope.md).
+- Status: **Sole supported output target: Linux x86-64, GNU ABI, ELF 64-bit.** See [ADR 0003](adr/0003-target-model.md) and [ADR 0011](adr/0011-amiga-35-linux-sdl3-product-scope.md).
 
 The **host** is the environment that runs the compiler. The **target** is the environment for which the compiler generates an executable. The product target is fixed to Linux x86-64; cross-compilation is out of scope.
 
