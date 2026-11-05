@@ -878,7 +878,7 @@ mod tests {
     fn rejects_unverified_underscore_identifier_spellings() {
         use super::lex_lossless;
 
-        for source_text in ["_data=1\n", "_DATA2=1\n", "_10=1\n", "_foo=1\n"] {
+        for source_text in ["_data=1\n", "_DATA2=1\n", "_DATAx=1\n", "_DATA_=1\n", "_10=1\n", "_0x=1\n", "_1_=1\n", "_foo=1\n"] {
             let mut sources = SourceMap::new();
             let source_id = sources.add_source("unverified-name.bas", source_text);
             let errors = lex_lossless(source_id, source_text)
