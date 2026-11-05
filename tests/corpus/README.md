@@ -6,7 +6,7 @@ This directory contains small, independently authored GFA BASIC programs and met
 
 All fixtures must be independently authored. Do not copy historical program listings or require historical manuals, ROMs, disk images, or other third-party artifacts to be present in the repository or a release. Cite external evidence by bibliographic source and page/section; do not embed the source material itself.
 
-The repository contains a three-crate Rust workspace skeleton and baseline CI checks, but no compiler, runtime behavior, or conformance test runner. Do not report these fixtures as passing tests. Their source syntax and expected behavior require validation against the cited edition and, where marked, manual page-image review.
+The repository now contains an experimental, evidence-gated Amiga GFA BASIC 3.5 FACT/PRINT frontend and a temporary C/`cc` native bootstrap, but no general compiler or corpus test runner. Four independently authored Amiga 3.5 addendum fixtures are marked `verified` on page-image evidence (`MAT ONE`, `MAT CLR`, `MAT SET`, and `FACT(0)`). This verifies their documented syntax and expected behavior against the cited page images; it is not original-interpreter execution or proof of full dialect conformance. The Amiga 3.0 fixtures remain `candidate` and must not be promoted without applicable evidence. The metadata validator does not compile or execute fixtures.
 
 ## Layout
 
