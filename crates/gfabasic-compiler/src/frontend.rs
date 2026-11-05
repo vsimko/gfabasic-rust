@@ -823,7 +823,7 @@ mod tests {
     fn data_pointer_setter_keeps_identifier_and_equals_as_separate_tokens() {
         use super::{TokenKind, lex_lossless};
 
-        let source_text = "_DATA=42\\n";
+        let source_text = "_DATA=42\n";
         let mut sources = SourceMap::new();
         let source_id = sources.add_source("data-pointer-setter.bas", source_text);
         let lexed = lex_lossless(source_id, source_text).expect("documented 3.5 form should lex");
