@@ -708,5 +708,4 @@ mod tests {
             .collect::<String>();
         assert_eq!(reconstructed, source_text);
     }
-
 }
