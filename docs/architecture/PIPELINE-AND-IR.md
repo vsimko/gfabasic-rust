@@ -10,7 +10,7 @@ The compiler uses distinct stages. Each stage consumes an explicit input model, 
 | Stage | Input | Output | Responsibility and boundary |
 |---|---|---|---|
 | Source loading | Input paths, selected source configuration | Source files, stable file IDs, source map | Read bytes, identify files, preserve original locations, and report I/O/encoding errors. Source composition is enabled only for verified dialect rules. |
-| Lexing | Source files and explicit dialect/version | Tokens with source spans | Recognize only the selected dialect's lexical forms. Do not normalize invalid input into valid tokens. |
+| Lexing | Source files and explicit dialect/version | Lossless tokens and trivia with source spans | Retain original spelling, horizontal whitespace, and line-boundary spans for recognized forms. Recognize only verified lexical forms; do not normalize invalid input into valid tokens. |
 | Parsing | Tokens and dialect/version | AST with source spans | Build syntax structure and report malformed or unsupported forms. Do not resolve names or infer platform APIs. |
 | Name resolution | AST and declaration environment | Resolved AST/symbol references | Resolve declarations, scopes, labels, and references according to the selected dialect. |
 | Semantic analysis | Resolved AST, dialect/version, API profiles | Typed/validated AST or semantic model | Apply documented types, conversions, call signatures, control-flow rules, and profile resolution. LLVM is not involved. |
@@ -19,6 +19,8 @@ The compiler uses distinct stages. Each stage consumes an explicit input model, 
 | LLVM backend | Target-ready project IR | Verified LLVM module | Translate IR operations to LLVM IR. Verify the module before object emission. LLVM does not define BASIC semantics. |
 | Object generation and linking | Verified module, explicit target, runtime link plan | Native object and executable | Emit target objects and link only the runtime components required by the selected target/profile. The exact linker and deployment policy remain under release/runtime work. |
 | Artifact reporting | Diagnostics, target, link result | Build result and artifacts | Report diagnostics, exit status, output paths, target identity, and runtime requirements. |
+
+The frontend must retain a lossless representation alongside semantic syntax. Significant tokens and trivia refer to the original UTF-8 byte ranges; consumers reconstruct exact source text from the source plus these spans rather than from normalized token values. The current FACT/VARIAT/COMBIN/PRINT lexer exposes horizontal spaces and tabs as trivia and line boundaries as tokens. This is an initial representation contract, not complete Amiga 3.5 lexical coverage: comment forms, string/DATA payloads, identifier character rules, encodings, and additional operators remain evidence-gated under [issue #46](https://github.com/vsimko/gfabasic-rust/issues/46). Unsupported characters continue to produce diagnostics.
 
 ## Bootstrap prototype exception
 
