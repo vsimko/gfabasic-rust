@@ -30,10 +30,12 @@ AFL_NO_UI=1 AFL_SKIP_CPUFREQ=1 AFL_NO_AFFINITY=1 \
 Use `-V 600` for a 10-minute campaign. The pull-request workflow uses
 30 seconds; the weekly and manually dispatched workflow uses 10 minutes.
 The separate `fuzz/Cargo.lock` is committed and audited by the security
-workflow. The campaign artifact also includes that lockfile, preserving the
-exact dependency resolution used for each run. Update it only when deliberately
-changing fuzz dependencies, then review the new dependency licenses and
-advisories.
+workflow. It also records registry dependencies required by the path-dependent
+`gfabasic-compiler` crate. When that crate's manifest dependencies change,
+regenerate and commit the fuzz lockfile in the same change; CI builds this
+workspace with `--locked`. The campaign artifact also includes the lockfile,
+preserving the exact dependency resolution used for each run. Review any new
+dependency licenses and advisories.
 
 ## Target boundary
 
