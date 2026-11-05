@@ -8,12 +8,12 @@
 The dedicated [security audit workflow](../../.github/workflows/security-audit.yml) runs when Cargo manifests/lockfiles or the audit workflow change, weekly against the default branch, and by manual dispatch.
 
 - The workflow installs `cargo-audit 0.22.2` with `--locked` and audits the committed `Cargo.lock` against the current RustSec advisory database.
-- Any reported vulnerability advisory fails the job, regardless of CVSS score. This is deliberately stricter than a high-severity-only threshold because the project currently has no third-party Cargo dependencies and no accepted exception list.
+- Any reported vulnerability advisory fails the job, regardless of CVSS score. This is deliberately stricter than a high-severity-only threshold because no vulnerability-advisory exceptions are currently approved.
 - Cargo Audit warnings about unmaintained, unsound, or yanked crates remain visible but are not fatal under the default command. A future maintainer-approved policy may promote selected warning classes to failures.
 - The audit uses no write-capable token. Workflow permissions are limited to `contents: read`; the command's exit status and package/advisory details provide the actionable failure output.
 - The audit is an advisory-database check, not a complete security review. It does not replace code review, static analysis, secret scanning, binary analysis, or OS-level dependency checks.
 
-The root workspace lockfile contains only the three local workspace packages and no third-party crates. Separate fuzz and benchmark lockfiles are audited as well. The first successful audit on 2026-11-04 ([workflow run 41832754189](https://github.com/vsimko/gfabasic-rust/actions/runs/41832754189)) loaded the RustSec advisory database and passed against those three workspace package entries. This establishes the workflow baseline, not a claim that future dependencies are safe.
+The first successful audit on 2026-11-04 ([workflow run 41832754189](https://github.com/vsimko/gfabasic-rust/actions/runs/41832754189)) loaded the RustSec advisory database and passed against the then-current three local workspace package entries. The current root lockfile also contains the approved `unicode-width` 0.2.2 dependency; the workflow audits the complete lockfile, and subsequent dependency additions are subject to the same check. This establishes the workflow baseline, not a claim that future dependencies are safe.
 
 ## Exceptions
 
@@ -31,7 +31,7 @@ Only add the exact advisory ID to a checked-in `audit.toml` after the maintainer
 
 ## License policy and SBOM
 
-The default dependency-license allowlist and exception process are approved and documented in [the dependency-license policy](../contributor/dependency-license-policy.md). Copyleft licenses and identifiers outside the allowlist still require explicit maintainer approval. The root workspace currently has no third-party Cargo dependencies; separate fuzz and benchmark workspaces have tooling dependencies, and their lockfiles are included in the audit workflow.
+The default dependency-license allowlist and exception process are approved and documented in [the dependency-license policy](../contributor/dependency-license-policy.md). Copyleft licenses and identifiers outside the allowlist still require explicit maintainer approval. The root workspace has one direct third-party dependency, `unicode-width` 0.2.2, licensed MIT OR Apache-2.0 and used only for diagnostic terminal-cell measurement; it is within the approved allowlist. Separate fuzz and benchmark workspaces have tooling dependencies, and their lockfiles are included in the audit workflow.
 
 The approved release SBOM is one workspace-level SPDX 2.3 JSON document covering all three packages (`gfabasic-compiler`, `gfabasic-runtime`, and `gfabasic-platform-linux`). The pinned generator is `cargo-sbom` 0.10.0, invoked with `spdx_json_2_3`. The pull-request path generates the document and validates the SPDX version and workspace package coverage. The published-release path is configured to attach the JSON to the corresponding GitHub Release. No real published release has yet exercised that upload, so the final acceptance criterion in [issue #39](https://github.com/vsimko/gfabasic-rust/issues/39) remains open and is labelled `needs-human` pending a release.
 
