@@ -414,6 +414,7 @@ mod tests {
         let rendered = diagnostic.render(&sources);
         assert!(rendered.starts_with("bad\\nname.gfa:1:2: error[GFA-SRC-0002]: bad\\u{7}message"));
         assert!(rendered.contains("A\\u{7}B"));
+        assert!(rendered.ends_with("  1 |  ^^^^^"));
     }
 
     #[test]
