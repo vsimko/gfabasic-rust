@@ -3,7 +3,7 @@
 This roadmap is the project-level view of delivery order for `gfabasic-rust`. GitHub Issues remain the source of truth for task scope, acceptance criteria, blockers, and implementation discussion.
 
 **Snapshot:** 2026-11-05  
-**Current maturity:** architecture and research baseline; Rust workspace, source-map/loading, structured diagnostics, a narrow Amiga 3.5 FACT/PRINT frontend with the exact addendum special-name lexemes `_DATA` and `_0`…`_9` retained by the lossless lexer, and a temporary C/`cc` native bootstrap prototype. The general semantic model, typed IR, planned LLVM backend, project configuration, runtime behavior, and full GFA BASIC conformance remain unimplemented.
+**Current maturity:** architecture and research baseline; Rust workspace, source-map/loading, structured diagnostics, a narrow Amiga 3.5 FACT/PRINT frontend with the exact addendum special-name lexemes `_DATA` and `_0`…`_9` retained by the lossless lexer, an initial lexer evidence inventory separating verified 3.5 rules from inherited 3.0/V3.03 candidates, and a temporary C/`cc` native bootstrap prototype. The general semantic model, typed IR, planned LLVM backend, project configuration, runtime behavior, and full GFA BASIC conformance remain unimplemented.
 
 ## Status rules
 
@@ -68,7 +68,7 @@ Implement the smallest useful source-to-native-executable path for the accepted 
 - [ ] Dialect-aware source decoding and composition — [#120](https://github.com/vsimko/gfabasic-rust/issues/120)
 - [ ] Source-map integration with compiler diagnostics — [#121](https://github.com/vsimko/gfabasic-rust/issues/121)
 - [ ] Dialect-aware lexer — [#46](https://github.com/vsimko/gfabasic-rust/issues/46)
-  - Initial FACT/VARIAT/COMBIN/PRINT slice now exposes lossless horizontal-whitespace trivia and line-boundary token spans; full Amiga 3.5 lexical coverage, comments, literals, identifiers, and operators remain open and evidence-gated. A narrow additional 3.5 addendum increment recognizes `_DATA` and `_0`…`_9` from Chapter 14 p. 14-6; this does not define general underscore identifiers or parser semantics.
+  - Initial FACT/VARIAT/COMBIN/PRINT slice now exposes lossless horizontal-whitespace trivia and line-boundary token spans. [Lexer evidence inventory](docs/research/amiga-gfa-basic-35-lexer-evidence.md) records the two supplied books' relevant rules and version boundaries; only the Chapter 14 special names are explicitly verified as 3.5 lexical forms. Full Amiga 3.5 lexical coverage, comments, literals, general identifiers, and operators remain open and evidence-gated. A narrow additional 3.5 addendum increment recognizes `_DATA` and `_0`…`_9` from Chapter 14 p. 14-6; this does not define general underscore identifiers or parser semantics.
 - [ ] Parser and AST — [#47](https://github.com/vsimko/gfabasic-rust/issues/47)
   - Initial supported-subset parser now returns the AST together with its lossless token/trivia representation; general grammar, richer recovery, and semantic integration remain open.
 - [ ] Symbol resolution and semantic analysis — [#48](https://github.com/vsimko/gfabasic-rust/issues/48)
