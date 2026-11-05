@@ -49,11 +49,11 @@ No further base-manual grammar review is a prerequisite for this specific source
 
 ## Pipeline work required
 
-- Frontend: lexer, minimal parser, AST, and source-span diagnostics.
-- Semantics: variable binding, integer expression typing, and the 3.5 `FACT` intrinsic.
-- IR: a small typed representation for the value, intrinsic call, and output.
-- Backend/runtime: emit a standalone Linux x86-64 executable with deterministic output.
-- Tests: corpus metadata validation, frontend positive/negative tests, IR tests, and an end-to-end executable test.
+- [x] Frontend: narrow lexer/parser, AST, and source-span diagnostics for the demonstrated FACT/PRINT shape.
+- [ ] Semantics: explicit variable binding and FACT argument subset validation.
+- [ ] IR: a small typed representation for the value, intrinsic call, and output.
+- [x] Bootstrap backend: temporary C/`cc` bridge emits a native host executable; this is not the planned LLVM backend.
+- [x] Tests: frontend positive/negative tests and an end-to-end executable test; general IR/conformance tests remain pending.
 
 The frontend currently parses the narrow FACT/PRINT subset and emits source-located lexical/syntax/unsupported diagnostics. A temporary C/`cc` bridge produces a native host executable for the fixture. General semantic analysis, typed project IR, the LLVM backend, and runtime remain unimplemented. The bootstrap path is not a claim of original-interpreter conformance.
 
