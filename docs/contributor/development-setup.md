@@ -2,7 +2,7 @@
 
 ## Scope
 
-The current workspace includes a source map, strict UTF-8 file-loading primitive, structured source-map diagnostic model/renderer, and a minimal `gfabasic` CLI with help/version output. It does not yet implement GFA BASIC language parsing, semantic analysis, code generation, project configuration, runtime behavior, or source compilation. These instructions validate the Rust workspace only; they do not compile GFA BASIC programs.
+The current workspace includes a source map, strict UTF-8 file-loading primitive, structured diagnostics, and an experimental, narrowly scoped Amiga GFA BASIC 3.5 frontend for the addendum's FACT assignment/PRINT example. The `gfabasic build` command uses a temporary C/`cc` bootstrap to produce a native host executable for that subset only. It is not general GFA BASIC support or original-interpreter conformance. General lexical/grammar coverage, semantic analysis, typed IR, LLVM code generation, project configuration, runtime behavior, and platform integration remain unimplemented. These instructions validate the Rust workspace and prototype tests; they do not establish general language compatibility.
 
 The initial CI host is Linux x86-64 using the GitHub-hosted Ubuntu runner. Other development hosts may work with Rust, but are not yet part of the project's validated environment matrix.
 
@@ -11,11 +11,12 @@ The initial CI host is Linux x86-64 using the GitHub-hosted Ubuntu runner. Other
 - Rust 1.99.1, pinned by `rust-toolchain.toml`.
 - The `rustfmt` and `clippy` Rust components.
 - Git.
+- A host C compiler exposed as `cc` for the experimental `gfabasic build` command and its native executable test. It is not required for `cargo build`.
 - Node.js 22 and npm/npx for Markdown linting.
 - Python 3.12 and `jsonschema==4.25.1` for API registry validation.
 - lychee v0.24.2 for local Markdown link and anchor checks.
 
-The compiler crate has one third-party Cargo dependency, `unicode-width` 0.2.2, for terminal display-cell measurement; its MIT OR Apache-2.0 license is within the approved allowlist. No required native system libraries are needed. LLVM and SDL3 are deliberately deferred and are not required to build the current workspace. Do not install arbitrary LLVM or SDL3 versions for this stage.
+The compiler crate has one third-party Cargo dependency, `unicode-width` 0.2.2, for terminal display-cell measurement; its MIT OR Apache-2.0 license is within the approved allowlist. The temporary native bootstrap invokes the host `cc` compiler but requires no additional project runtime library. LLVM and SDL3 are deliberately deferred and are not required to build the Rust workspace. Do not install arbitrary LLVM or SDL3 versions for this stage.
 
 The project source code and original documentation are licensed under MIT. See the root [LICENSE](../../LICENSE) and [project README](../../README.md#license). This license does not grant redistribution rights to third-party manuals, ROMs, disk images, or sample programs.
 
@@ -43,7 +44,7 @@ cargo test --workspace --all-targets
 cargo build --workspace --all-targets
 ```
 
-The workspace contains no GFA BASIC conformance tests yet. Successful Cargo tests therefore validate the crate skeleton, not language compatibility.
+The Rust test suite includes focused tests for the narrow FACT/PRINT frontend and a native compile-and-run smoke test; the latter requires `cc`. There is no general corpus runner and no original-interpreter test suite. Successful Cargo tests validate only the implemented prototype subset and Rust tooling, not full language compatibility.
 
 For documentation changes, run the separate checks:
 
@@ -72,9 +73,9 @@ Run the failing command locally with the pinned toolchain. Do not add broad lint
 
 Check that commands run from the repository root and that all workspace members listed in the root `Cargo.toml` exist. Do not delete `Cargo.lock` to hide a dependency-resolution difference.
 
-### A GFA BASIC build command is unavailable
+### The GFA BASIC build command accepts only the prototype subset
 
-The minimal CLI supports help and version output. The `build` and `check` commands are present only as explicit unimplemented responses; they do not compile source. Do not document them as usable compilation commands.
+The experimental `gfabasic build <source.bas> -o <output>` command accepts only the demonstrated Amiga 3.5 FACT assignments to `x`, `y`, and `z`, followed by `PRINT x,y,z`, with FACT arguments limited to 0, 1, and 2. It requires a working host `cc` compiler. It does not compile general GFA BASIC or establish original-interpreter compatibility. The `check` command remains unavailable.
 
 ### LLVM or SDL3 is missing
 
@@ -82,13 +83,13 @@ These dependencies are not part of the current workspace skeleton. They must be 
 
 ## CI parity
 
-- [Rust checks](../../.github/workflows/rust.yml) run formatting, Clippy, tests, and workspace build on Rust 1.99.1.
+- [Rust checks](../../.github/workflows/rust.yml) run formatting, Clippy, tests, and workspace build on Rust 1.99.1. The supported Ubuntu runner provides `cc`, so the native prototype smoke test must execute rather than silently skip.
 - [Documentation checks](../../.github/workflows/docs.yml) run Markdown linting, API registry/corpus validation, validator tests, and local-link/anchor validation.
 - [Fuzzing](../../.github/workflows/fuzz.yml) runs bounded campaigns against the generic source-loader transport boundary only; it does not fuzz a GFA BASIC lexer or parser.
 - [Security audit](../../.github/workflows/security-audit.yml) checks the root, fuzz, and benchmark Cargo lockfiles against RustSec.
 - [Benchmarks](../../.github/workflows/benchmarks.yml) validate the benchmark harness on pull requests and measure synthetic source loading on main/scheduled/manual runs.
 - [Release SBOM](../../.github/workflows/release-sbom.yml) generates and validates the workspace SPDX 2.3 SBOM on pull requests and is configured to attach it to published GitHub Releases; an actual release upload has not yet been exercised.
 
-These workflows validate repository tooling and the current source-loading primitives. They do not establish GFA BASIC language conformance or compiler/runtime support.
+These workflows validate repository tooling, source-loading primitives, and the narrow FACT/PRINT prototype path. They do not establish full GFA BASIC language conformance or general compiler/runtime support.
 
 When adding a new check, update this guide and the corresponding workflow in the same change.

@@ -4,7 +4,7 @@
 
 ## Conformance corpus
 
-The initial source corpus is maintained in [tests/corpus/](../../tests/corpus/README.md). It currently contains research-only Amiga GFA BASIC 3.0 candidate fixtures. Candidate status means that page-image and/or interpreter validation is still required; these files are not compiler acceptance tests and cannot be treated as Amiga 3.5 conformance fixtures until their version applicability is confirmed. See [issue #42](https://github.com/vsimko/gfabasic-rust/issues/42).
+The source corpus is maintained in [tests/corpus/](../../tests/corpus/README.md). It includes four independently authored Amiga GFA BASIC 3.5 addendum fixtures (`MAT ONE`, `MAT CLR`, `MAT SET`, and `FACT(0)`) marked `verified` from visual review of the cited manual pages. This status supports their documented syntax and expected behavior; it does not mean they have been executed on the original interpreter. The Amiga 3.0 fixtures remain `candidate` and must not be promoted into the 3.5 contract without applicable evidence. The corpus validator checks metadata only. The narrow FACT/PRINT prototype has focused frontend/prototype tests and a native executable smoke test, but there is no general corpus runner or full dialect conformance suite. See [issue #42](https://github.com/vsimko/gfabasic-rust/issues/42).
 
 See the [current compatibility matrix](COMPATIBILITY-MATRIX.md) for the explicit statement of which dialects, profiles, and targets are not yet supported.
 
