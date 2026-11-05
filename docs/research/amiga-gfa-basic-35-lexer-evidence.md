@@ -17,15 +17,15 @@ The German 1990 book is not a substitute for the interpreter manual's 3.5 addend
 
 ## 2. Explicitly versioned 3.5 lexical evidence
 
-### 2.1 Special names from the Chapter 14 addendum
+### 2.1 Special names in the 3.5 addendum
 
-The interpreter manual's Chapter 14 opening list identifies the DATA-pointer operations and special variables as new version 3.5 features. The detailed descriptions and examples establish:
+The supplied 469-page `GFA_Basic_3.5_Interpreter.pdf` explicitly identifies Chapter 13 as its 3.5 addendum. Its printed pp. 13-34–13-35 document the DATA-pointer operations and special variables. A separately catalogued combined 3.0 + 3.5 update scan places corresponding material in Chapter 14, printed pp. 14-5–14-6; these are alternate pagination witnesses, not conflicting language rules. The detailed descriptions and examples establish:
 
 | Spelling | Lexical interpretation | Evidence |
 |---|---|---|
-| _DATA | Exact special identifier naming the current DATA pointer position | AM-INTERPRETER-35, printed addendum pp. 14-5–14-6 |
-| _DATA= | The _DATA identifier followed by assignment operator =; it sets the DATA pointer to a previously saved position | AM-INTERPRETER-35, printed addendum pp. 14-5–14-6 |
-| _0 … _9 | Ten exact special variable names; the manual describes them as longword variables | AM-INTERPRETER-35, printed addendum p. 14-6 |
+| _DATA | Exact special identifier naming the current DATA pointer position | AM-INTERPRETER-35, printed addendum p. 13-34 (combined update scan: pp. 14-5–14-6) |
+| _DATA= | The _DATA identifier followed by assignment operator =; it sets the DATA pointer to a previously saved position | AM-INTERPRETER-35, printed addendum p. 13-34 (combined update scan: pp. 14-5–14-6) |
+| _0 … _9 | Ten exact special variable names; the manual describes them as longword variables | AM-INTERPRETER-35, printed addendum p. 13-35 (combined update scan: p. 14-6) |
 
 The 3.5 evidence authorizes these exact spellings. It does **not** authorize a general rule that arbitrary identifiers may start with underscore. The lexer must continue to reject unverified forms such as _foo, _10, _DATA2, and case variants unless a 3.5 source or interpreter observation establishes them.
 
@@ -131,7 +131,7 @@ The German 1990 book also says command names are displayed in uppercase by the e
 
 | Area | Current evidence | Status for Amiga 3.5 |
 |---|---|---|
-| Exact _DATA, _DATA=, _0…_9 | Chapter 14 3.5 addendum, pp. 14-5–14-6 | **Verified 3.5** |
+| Exact _DATA, _DATA=, _0…_9 | Chapter 13 3.5 addendum, pp. 13-34–13-35 (combined update scan: Chapter 14, pp. 14-5–14-6) | **Verified 3.5** |
 | General identifier grammar and suffixes | Base manual pp. 2-1–2-3; German V3.03 pp. 56–57 | Inherited candidate |
 | Labels | Base manual p. 7-36; German V3.03 pp. 56–57 | Inherited candidate; wording discrepancy |
 | REM/apostrophe/! comments | Base manual p. 7-35; German V3.03 p. 166 | Inherited candidate |
@@ -163,7 +163,7 @@ The German 1990 book also says command names are displayed in uppercase by the e
 - [ ] Search the 3.5 addendum and all supplied 3.5-specific pages for any explicit confirmation or change to base lexical rules.
 - [ ] Obtain a lawful, reproducible Amiga GFA BASIC 3.5 interpreter probe environment or recorded observations for unresolved cases.
 - [ ] Determine source encoding and line-ending behavior independently of the Rust transport loader.
-- [ ] Build an evidence-linked lexical test matrix before expanding the production lexer beyond the exact Chapter 14 special names and existing FACT/PRINT vertical slice.
+- [ ] Build an evidence-linked lexical test matrix before expanding the production lexer beyond the exact 3.5 addendum special names and existing FACT/PRINT vertical slice.
 - [ ] Update issue #46 with the source-backed rule matrix and remaining acceptance gaps.
 
 ## Source rights

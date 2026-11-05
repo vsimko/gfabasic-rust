@@ -86,9 +86,11 @@ These rules are source-verified for the 3.5 addendum and should be preserved exp
 
 Page-image checks of printed pp. 13-27–13-33 establish matrix multiplication dimensions and the row/column normalization meanings above. Printed pp. 13-36–13-39 confirm the `MAT QDET` performance/accuracy warning, the `MAT RANG` square-submatrix selection rule, and the detailed `MAT INV b()=a()` example. **Important source inconsistency:** the command summary on printed p. 13-22 instead lists `MAT INV a()=b()`. Until this discrepancy is resolved by another authoritative edition or interpreter observation, record the inverse operand direction as disputed. The earlier OCR-only warning for the matrix multiplication examples is superseded by the page-image checks recorded above. Detailed numerical algorithm derivations and other unreviewed sections remain to be checked. Do not use OCR artifacts as normative syntax.
 
-## 4. Additional commands in version 3.5 — Chapter 14, printed pp. 14-1–14-7
+## 4. Additional commands in version 3.5 — combined-scan Chapter 14, printed pp. 14-1–14-7
 
-The manual explicitly says that, in addition to Chapter 13, version 3.5 implements further commands/features (Chapter 14). These are part of the same 3.5 interpreter source and must be included in the compatibility inventory.
+**Pagination crosswalk:** the supplied 469-page `GFA_Basic_3.5_Interpreter.pdf` presents the version 3.5 material as Chapter 13 only; its `_DATA`/`_DATA=` definitions are on printed p. 13-34 and `_0`…`_9` on printed p. 13-35. The separately catalogued 487-page `GFA-Basic 3.0 + 3.5 Upd (Amiga).pdf` binds further 3.5 commands as Chapter 14, printed pp. 14-1–14-7, with `_DATA`/`_DATA=` on p. 14-5 and `_0`…`_9` on p. 14-6. References in this section therefore use the combined scan's Chapter 14 pagination; references to the supplied interpreter PDF must use Chapter 13 pagination. These are two pagination witnesses for the same 3.5 feature material, not evidence for importing Atari or 3.0-only rules.
+
+The combined update scan explicitly says that, in addition to Chapter 13, version 3.5 implements further commands/features (Chapter 14). These are part of the same 3.5 interpreter source and must be included in the compatibility inventory.
 
 | Feature / syntax | Source-described behavior |
 |---|---|
@@ -105,7 +107,7 @@ The manual explicitly says that, in addition to Chapter 13, version 3.5 implemen
 
 Chapter 14's opening page enumerates these as the additional 3.5 features (printed p. 14-1). The examples and definitions are on pp. 14-1–14-6. The closing notes (p. 14-7) state that error messages #110–#118 correspond to normal GURUs $2–$A; in compiled 3.5 programs, `RESUME NEXT` and `RESUME LABEL` cannot be executed after an `ONERROR GOSUB` call caused by a GURU. The manual treats error #109 (GURU Meditation) as a serious system condition and warns that GURU checking only works if the system can continue execution.
 
-Page-image review of the second scan's printed p. 14-5 confirms the leading underscore in both DATA-pointer operations: `_DATA` and `_DATA=`. Ordinary `DATA` remains the data declaration statement. Printed p. 14-6 confirms `_0`…`_9` are longword special variables and distinguishes `GURU x` from the `GURU` function.
+Page-image review of the combined update scan's printed p. 14-5 confirms the leading underscore in both DATA-pointer operations: `_DATA` and `_DATA=`. Ordinary `DATA` remains the data declaration statement. Printed p. 14-6 confirms `_0`…`_9` are longword special variables and distinguishes `GURU x` from the `GURU` function.
 
 ## 5. Implementation and conformance work breakdown
 
