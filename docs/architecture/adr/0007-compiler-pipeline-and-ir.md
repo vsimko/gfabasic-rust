@@ -14,7 +14,7 @@ The dialect/version research is not complete. The compiler therefore needs an ar
 
 1. Use explicit compiler stages: source loading, lexing, parsing, name resolution, semantic analysis, typed project IR lowering, target/API lowering, backend code generation, object generation/linking, and artifact reporting.
 2. Keep source syntax and source spans in the AST, and retain a lossless token/trivia stream or CST alongside semantic syntax. Expose them together as one parsed-document result so consumers cannot accidentally pair an AST with a different source stream. Preserve original spelling and trivia through source spans; resolve dialect-specific meaning during semantic analysis. Do not delegate language semantics to LLVM.
-3. Make the project-owned IR typed, target-independent, and explicitly structured around basic blocks and terminators. Represent conversions, calls, memory operations, and source provenance explicitly.
+3. Resolve names into stable, document-local symbol identities with declaration/reference spans before semantic lowering. Keep unresolved or ambiguous names diagnostic; do not substitute textual matching. Make the project-owned IR typed, target-independent, and explicitly structured around basic blocks and terminators. Represent conversions, calls, memory operations, and source provenance explicitly.
 4. Require IR verification before backend code generation. Invalid semantic or IR states must produce diagnostics and must not produce an executable.
 5. Keep LLVM IR and LLVM-specific types inside the backend. The frontend and project IR must build and test without LLVM or SDL3.
 6. Preserve source provenance through lowering and optimization so backend and runtime diagnostics can be mapped to original source locations.
@@ -46,6 +46,7 @@ No verified LLVM version, native package source, or clean-build strategy has bee
 - The frontend and IR can be developed and tested without LLVM or SDL3.
 - Lossless token/trivia data remains available to formatting and editor tooling through the parsed-document result; the semantic AST is not required to carry formatting trivia itself.
 - The backend consumes a verified semantic model rather than defining language behavior.
+- The initial symbol index is explicitly prototype-scoped; it does not establish general Amiga GFA BASIC 3.5 declaration, case, scope, or type rules.
 - Additional backends can be added without redesigning source parsing and semantic analysis.
 - IR verification and source-provenance preservation become required compiler contracts.
 - The LLVM binding and exact release remain open until dependency and CI evaluation is complete.
