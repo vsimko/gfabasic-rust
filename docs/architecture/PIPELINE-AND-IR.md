@@ -20,6 +20,19 @@ The compiler uses distinct stages. Each stage consumes an explicit input model, 
 | Object generation and linking | Verified module, explicit target, runtime link plan | Native object and executable | Emit target objects and link only the runtime components required by the selected target/profile. The exact linker and deployment policy remain under release/runtime work. |
 | Artifact reporting | Diagnostics, target, link result | Build result and artifacts | Report diagnostics, exit status, output paths, target identity, and runtime requirements. |
 
+## Bootstrap prototype exception
+
+The experimental FACT/PRINT slice tracked by [issue #113](https://github.com/vsimko/gfabasic-rust/issues/113) currently uses a deliberately temporary C source emitter and the host `cc` command to prove that one source fixture can be transformed into and run as a native executable. This is a bootstrap experiment only:
+
+- It is not the project-owned typed IR or the planned LLVM backend.
+- It accepts only the exact FACT/PRINT fixture subset documented in the CLI help and README.
+- Its output formatting is a prototype convention, not verified original-interpreter formatting.
+- It does not establish the source encoding rules of Amiga GFA BASIC 3.5.
+- It must not be generalized by adding guessed syntax or semantics.
+- The LLVM binding/version decision remains open and the LLVM backend remains the intended production backend.
+
+The prototype should be replaced by the normal frontend → semantic model → typed IR → LLVM path as those stages become available. Keep the temporary bridge isolated from the general IR and runtime APIs.
+
 ## Stage and error rules
 
 - Every source location uses a stable source-file identifier and byte-based source span. Human-readable line/column positions are derived from the source map.
