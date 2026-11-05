@@ -73,6 +73,67 @@ path = "docs/reference.md"
 anchors = []
 '''
 
+    def test_source_register_heading_is_not_a_valid_source_id(self):
+        content = self.valid_declaration().replace(
+            'sources = ["TEST-SOURCE"]', 'sources = ["ID"]'
+        )
+        temp, root = self.make_root(content)
+        self.addCleanup(temp.cleanup)
+        errors = validate_registry(root)
+        self.assertTrue(any("unknown source ID 'ID'" in error for error in errors))
+
+    def test_invalid_utf8_source_register_reports_error(self):
+        temp, root = self.make_root(self.valid_declaration())
+        self.addCleanup(temp.cleanup)
+        (root / "docs/reference-sources.md").write_bytes(b"\xff")
+
+        errors = validate_registry(root)
+        self.assertTrue(any("reference-sources.md: invalid UTF-8" in error for error in errors))
+
+    def test_invalid_utf8_schema_reports_error(self):
+        temp, root = self.make_root(self.valid_declaration())
+        self.addCleanup(temp.cleanup)
+        (root / "api/schema/registry-v1.json").write_bytes(b"\xff")
+
+        errors = validate_registry(root)
+        self.assertTrue(any("registry-v1.json: invalid UTF-8" in error for error in errors))
+
+    def test_invalid_utf8_registry_file_reports_error(self):
+        temp, root = self.make_root(self.valid_declaration())
+        self.addCleanup(temp.cleanup)
+        (root / "api/registry/atari-st/time.toml").write_bytes(b"\xff")
+
+        errors = validate_registry(root)
+        self.assertTrue(any("time.toml: invalid UTF-8" in error for error in errors))
+
+    def test_invalid_utf8_documentation_file_reports_error(self):
+        temp, root = self.make_root(self.valid_declaration())
+        self.addCleanup(temp.cleanup)
+        (root / "docs/reference.md").write_bytes(b"\xff")
+
+        errors = validate_registry(root)
+        self.assertTrue(any("documentation file has invalid UTF-8" in error for error in errors))
+
+    def test_invalid_utf8_corpus_manifest_reports_error(self):
+        temp, root = self.make_root(self.valid_declaration())
+        self.addCleanup(temp.cleanup)
+        (root / "tests/corpus/manifest.toml").write_bytes(b"\xff")
+
+        errors = validate_registry(root)
+        self.assertTrue(any("manifest.toml: invalid UTF-8" in error for error in errors))
+
+    def test_invalid_utf8_corpus_sidecar_reports_error(self):
+        content = self.valid_declaration().replace(
+            "tests = []", 'tests = ["fixture-one-id"]'
+        )
+        temp, root = self.make_root(content)
+        self.addCleanup(temp.cleanup)
+        self.add_manifest_fixture(root, "fixture-one-id")
+        (root / "tests/corpus/amiga/3.0/control-flow/fixture-one.toml").write_bytes(b"\xff")
+
+        errors = validate_registry(root)
+        self.assertTrue(any("fixture-one.toml: invalid UTF-8" in error for error in errors))
+
     def test_research_entry_is_valid(self):
         temp, root = self.make_root(self.valid_declaration())
         self.addCleanup(temp.cleanup)
