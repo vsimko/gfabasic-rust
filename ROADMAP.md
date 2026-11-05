@@ -67,7 +67,7 @@ Implement the smallest useful source-to-native-executable path for the accepted 
 - [ ] Dialect-aware source decoding and composition — [#120](https://github.com/vsimko/gfabasic-rust/issues/120)
 - [ ] Source-map integration with compiler diagnostics — [#121](https://github.com/vsimko/gfabasic-rust/issues/121)
 - [ ] Dialect-aware lexer — [#46](https://github.com/vsimko/gfabasic-rust/issues/46)
-  - Initial FACT/VARIAT/COMBIN/PRINT slice now exposes lossless horizontal-whitespace trivia and line-boundary token spans; full Amiga 3.5 lexical coverage, comments, literals, identifiers, and operators remain open and evidence-gated. A narrow additional 3.5 addendum increment recognizes `_DATA` and `_0`…`_9` from Chapter 14 p. 14-6; this does not define general underscore identifiers or parser semantics.
+  - Initial FACT/VARIAT/COMBIN/PRINT slice now exposes lossless horizontal-whitespace trivia and line-boundary token spans; full Amiga 3.5 lexical coverage, comments, literals, identifiers, and operators remain open and evidence-gated. A narrow additional 3.5 addendum increment recognizes `_DATA` and `_0`…`_9` from Chapter 14 p. 14-6; this does not define general underscore identifiers or parser semantics. Regression coverage also checks EOF/delimiter boundaries and rejects longer underscore-prefixed lookalikes without accepting a valid prefix.
 - [ ] Parser and AST — [#47](https://github.com/vsimko/gfabasic-rust/issues/47)
   - Initial supported-subset parser now returns the AST together with its lossless token/trivia representation; general grammar, richer recovery, and semantic integration remain open.
 - [ ] Symbol resolution and semantic analysis — [#48](https://github.com/vsimko/gfabasic-rust/issues/48)
