@@ -31,6 +31,50 @@ The 3.5 evidence authorizes these exact spellings. It does **not** authorize a g
 
 The current narrow lexer recognizes these spellings, preserving their source text and spans. This is a small verified 3.5 increment, not general identifier coverage.
 
+### 2.2 Page-image verification log
+
+The following page images were inspected from the supplied PDFs, rather than relying only on OCR text:
+
+- **AM-INTERPRETER-35, printed p. 13-34:** the page visibly prints `_DATA` and `_DATA=` as separate operation forms. The prose says `_DATA` specifies the DATA-pointer position and `_DATA=` sets that pointer to a previously determined value. Lexically, `_DATA=` is therefore the `_DATA` identifier followed by the assignment token `=`; it is not one indivisible identifier token.
+- **AM-INTERPRETER-35, printed p. 13-35:** the heading visibly reads `_0..._9`; the prose describes ten special variables and says they are longwords like `%`, not floating-point numbers. This confirms the exact ten spellings and their special-variable status, but not a general underscore-initial identifier rule.
+- **AM-BOOK-DE-1990, printed p. 57:** the page gives labels `Data_label:`, `Xyz_label.1:` (with a following `!Kommentar`), and `1:`; it says a label stands alone, may have a comment, and ends in a colon. The same page says variable/function names may be arbitrarily long, use A–Z/a–z/0–9 plus underscore and dot, and must begin with a letter. It lists the type endings `%`, a byte marker printed as a vertical stroke-like glyph, `&`, `!`, and `# Amiga GFA BASIC 3.5 lexer evidence inventory
+
+Status: **research baseline; not a complete 3.5 lexical specification**  
+Tracking: [issue #46](https://github.com/vsimko/gfabasic-rust/issues/46)  
+Normative target: Commodore Amiga GFA BASIC interpreter **3.5 only** (ADR 0009).
+
+This document records original findings from the two supplied PDFs. It separates explicit 3.5 addendum evidence from syntax described only in the 3.0 base manual or the 1990 V3.03 book. A rule in the latter categories is not automatically accepted by the 3.5 lexer.
+
+## 1. Sources and version boundaries
+
+| Source ID | Source | Scope | Use for lexer |
+|---|---|---|---|
+| AM-INTERPRETER-35 | *GFA BASIC 3.5 Interpreter*, supplied PDF | Included software is 3.5; the base text was originally printed for 3.0, with explicit 3.5 addenda | Primary. Only explicitly marked 3.5 update material is immediately normative; base rules are inherited candidates pending confirmation |
+| AM-BOOK-DE-1990 | Bleek, Hecht, Litzkendorf, *Das große GFA-BASIC-Buch zum Amiga*, DATA BECKER, 1990, ISBN 3-89011-399-0 | Cover says “Bis Version 3.5”, but the foreword identifies the main interpreter reference as V3.03 and discusses compiler material separately | Supplementary Amiga evidence, not proof of 3.5 interpreter behavior |
+
+The German 1990 book is not a substitute for the interpreter manual's 3.5 addendum. It is useful for discovering constructs and cross-checking older Amiga syntax. Its OCR must be checked against page images before ambiguous glyphs become requirements. Neither PDF is copied into this repository.
+
+## 2. Explicitly versioned 3.5 lexical evidence
+
+### 2.1 Special names in the 3.5 addendum
+
+The supplied 469-page `GFA_Basic_3.5_Interpreter.pdf` explicitly identifies Chapter 13 as its 3.5 addendum. Its printed pp. 13-34–13-35 document the DATA-pointer operations and special variables. A separately catalogued combined 3.0 + 3.5 update scan places corresponding material in Chapter 14, printed pp. 14-5–14-6; these are alternate pagination witnesses, not conflicting language rules. The detailed descriptions and examples establish:
+
+| Spelling | Lexical interpretation | Evidence |
+|---|---|---|
+| _DATA | Exact special identifier naming the current DATA pointer position | AM-INTERPRETER-35, printed addendum p. 13-34 (combined update scan: pp. 14-5–14-6) |
+| _DATA= | The _DATA identifier followed by assignment operator =; it sets the DATA pointer to a previously saved position | AM-INTERPRETER-35, printed addendum p. 13-34 (combined update scan: pp. 14-5–14-6) |
+| _0 … _9 | Ten exact special variable names; the manual describes them as longword variables | AM-INTERPRETER-35, printed addendum p. 13-35 (combined update scan: p. 14-6) |
+
+The 3.5 evidence authorizes these exact spellings. It does **not** authorize a general rule that arbitrary identifiers may start with underscore. The lexer must continue to reject unverified forms such as _foo, _10, _DATA2, and case variants unless a 3.5 source or interpreter observation establishes them.
+
+The current narrow lexer recognizes these spellings, preserving their source text and spans. This is a small verified 3.5 increment, not general identifier coverage.
+, with `#` optional for real variables. These are V3.03 supplementary observations, not 3.5 acceptance rules.
+- **AM-BOOK-DE-1990, printed p. 168:** the DATA section describes comma-separated value/text entries; text DATA need not normally be quoted, while a comma inside text would otherwise be interpreted as the next-entry separator. It also says arbitrary text may occur in DATA lines if the program contains no READ statement, in which case the text is ignored like REM. This is a V3.03 description and does not establish 3.5 DATA lexing.
+- **AM-BOOK-DE-1990, printed p. 169:** the REM entry lists `REM`, the high comma/apostrophe shorthand, and `!`. It describes `!` as usable inside a command line and says that at the beginning of a line it is converted to a REM line. This is supplementary V3.03 evidence only; it does not resolve the 3.5 comment grammar.
+
+The image review corrects two OCR-derived ambiguities in the earlier inventory: the broad wording about “arbitrary characters” on p. 57 applies to variable/function names, not labels; and the comment reference is printed p. 169 in this supplied book scan (not p. 166). The byte suffix glyph on p. 57 remains visually ambiguous at this scan resolution and is not promoted to a token rule.
+
 ## 3. Inherited candidates from the 3.0 base manual
 
 The following rules are described in the base chapters of AM-INTERPRETER-35, but those pages are documented as GFA-BASIC 3.0. Treat each as **inherited candidate / confirmation needed for 3.5**, not as already verified 3.5 behavior.
@@ -50,20 +94,20 @@ The following rules are described in the base chapters of AM-INTERPRETER-35, but
 ### 3.2 Labels
 
 - Base manual: a label is made from letters, digits, underscores, and dots; unlike a variable name it may start with a digit; it ends in colon; the colon is omitted when the label is referenced by GOTO (printed p. 7-36).
-- German 1990 book: labels may begin with a digit and end in a colon; it also warns that labels which collide with command names can be reinterpreted by the interpreter/editor (printed pp. 56–57).
+- German 1990 book: printed p. 57 says labels stand alone, may have a following comment, and end in a colon; its examples include `Data_label:`, `Xyz_label.1:` and `1:`. It warns that labels which collide with command names can be reinterpreted by the interpreter/editor (printed pp. 56–57).
 
-**Unresolved / source discrepancy:** the German 1990 book uses broader wording (“arbitrary characters”) than the base manual's explicit character set. Neither establishes the exact 3.5 rule. Labels need a distinct lexical/parse context; a colon cannot simply be treated as a generic statement separator.
+**Unresolved:** the German 1990 book's p. 57 label examples establish a numeric-only label and labels containing underscore/dot, but do not define the complete character repertoire. Its sentence about arbitrarily long names and allowed characters explicitly concerns variable/function names, not labels. Neither source establishes the exact 3.5 rule. Labels need a distinct lexical/parse context; a colon cannot simply be treated as a generic statement separator.
 
 ### 3.3 Comments and remark syntax
 
 - Base manual documents a full-line REM comment and a remark character at the beginning of a line; it also documents an inline comment introduced by ! after a command (printed p. 7-35).
-- German 1990 book describes the apostrophe/high comma as a shorthand for REM and ! as an inline comment introducer (printed p. 166).
+- German 1990 book's REM entry lists REM, the high comma/apostrophe shorthand, and ! (printed p. 169).
 - Both sources state that inline ! is not available on DATA lines, where it would be treated as DATA text.
-- German 1990 book says the comment marker is ignored by BASIC and that ! comments may follow a command on the same line (printed p. 166).
+- The same p. 169 entry says ! may be used inside a command line and that, at the beginning of a line, it is converted to a REM line.
 
 **Implementation consequence:** comments must be retained as trivia with exact original bytes and spans. Comment recognition must be aware of string and DATA contexts; blindly truncating at the first ! is incorrect. The apostrophe is context-sensitive: it is used for remark syntax and is also a PRINT output separator in the base manual.
 
-**Unresolved:** exact apostrophe code point(s), alternate remark characters accepted by the editor, case/spacing variants of REM, and exact 3.5 behavior for inline comments.
+**Unresolved:** exact apostrophe code point(s), case/spacing variants of REM, and exact 3.5 behavior for each comment form. The book's page-image reading supersedes the earlier OCR-only p. 166 reference; it remains a V3.03 observation.
 
 ### 3.4 Physical lines and statement boundaries
 
@@ -78,9 +122,9 @@ These statements describe the historical editor. They do not yet establish the f
 
 - The base manual says string constants are enclosed in quotation marks (printed pp. 1-4 and 5-7).
 - The base manual's DATA section says DATA values may be numeric or string constants; a string containing a comma must be enclosed in quotation marks (printed p. 5-15).
-- German 1990 book says text DATA normally need not be quoted; commas delimit successive DATA items, so text containing commas must be quoted. It also says DATA rows may contain arbitrary text when no READ operation uses them (printed pp. 168–169).
+- German 1990 book says DATA accepts comma-separated value/text entries; text DATA need not normally be quoted, but commas delimit successive entries, so embedded commas require quote delimiters to remain within one text item. It also says arbitrary text may occur in DATA rows when no READ operation exists, in which case the text is ignored like REM (printed p. 168).
 
-**Unresolved:** string escape rules, doubled quotes, embedded quote handling, control characters, exact empty-string syntax, character encoding, and whether unquoted DATA text is consumed by the interpreter with precisely the 1990 book's described rules in 3.5.
+**Unresolved:** string escape rules, doubled quotes, embedded quote handling, control characters, exact empty-string syntax, character encoding, and whether the 3.5 interpreter follows the V3.03 book's DATA text rules.
 
 **Implementation consequence:** preserve raw literal payload and delimiters. DATA requires a context-sensitive mode; it cannot be lexed as an ordinary comma-separated expression list with comments stripped globally.
 
@@ -133,10 +177,10 @@ The German 1990 book also says command names are displayed in uppercase by the e
 |---|---|---|
 | Exact _DATA, _DATA=, _0…_9 | Chapter 13 3.5 addendum, pp. 13-34–13-35 (combined update scan: Chapter 14, pp. 14-5–14-6) | **Verified 3.5** |
 | General identifier grammar and suffixes | Base manual pp. 2-1–2-3; German V3.03 pp. 56–57 | Inherited candidate |
-| Labels | Base manual p. 7-36; German V3.03 pp. 56–57 | Inherited candidate; wording discrepancy |
-| REM/apostrophe/! comments | Base manual p. 7-35; German V3.03 p. 166 | Inherited candidate |
+| Labels | Base manual p. 7-36; German V3.03 pp. 56–57 (page image checked) | Inherited candidate; complete character repertoire unresolved |
+| REM/apostrophe/! comments | Base manual p. 7-35; German V3.03 p. 169 (page image checked) | Inherited candidate |
 | One command per physical line | Base editor p. 1-8 | Editor rule; source grammar confirmation needed |
-| String delimiters and escapes | Base manual pp. 1-4, 5-7; DATA p. 5-15; German V3.03 pp. 168–169 | Delimiter candidate; escaping unresolved |
+| String delimiters and escapes | Base manual pp. 1-4, 5-7; DATA p. 5-15; German V3.03 p. 168 (page image checked) | Delimiter candidate; escaping unresolved |
 | Radix-prefixed numeric constants | Base manual pp. 2-15, 5-15; German V3.03 pp. 34, 233 | Inherited candidate; complete grammar unresolved |
 | Operator inventory/precedence | Base manual pp. 3-2–3-16 | Inherited candidate; power glyph and 3.5 confirmation pending |
 | Command abbreviations | Base manual editor pp. 1-7–1-8 and appendix pp. 12-8 onward | Editor behavior; interpreter acceptance unresolved |
@@ -159,7 +203,8 @@ The German 1990 book also says command names are displayed in uppercase by the e
 
 ## 7. Next extraction and verification steps
 
-- [ ] Inspect page images for base manual pp. 2-1–2-3, 3-2–3-16, 5-15, 7-35–7-36 and German 1990 pp. 34, 56–58, 166–170; resolve OCR glyphs and capture exact evidence notes.
+- [x] Inspect page images for the primary 3.5 addendum pp. 13-34–13-35 and German 1990 pp. 57, 168–169; record the confirmed forms and keep all V3.03 observations provisional.
+- [ ] Inspect remaining page images for base manual pp. 2-1–2-3, 3-2–3-16, 5-15, 7-35–7-36 and German 1990 pp. 34, 56, 58, 166–167, 170; resolve remaining OCR glyphs.
 - [ ] Search the 3.5 addendum and all supplied 3.5-specific pages for any explicit confirmation or change to base lexical rules.
 - [ ] Obtain a lawful, reproducible Amiga GFA BASIC 3.5 interpreter probe environment or recorded observations for unresolved cases.
 - [ ] Determine source encoding and line-ending behavior independently of the Rust transport loader.
