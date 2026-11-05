@@ -22,7 +22,7 @@ The compiler uses distinct stages. Each stage consumes an explicit input model, 
 
 ## Bootstrap prototype exception
 
-The experimental FACT/PRINT vertical slice under [issue #113](https://github.com/vsimko/gfabasic-rust/issues/113) currently uses a temporary C source emitter and the host `cc` command to prove the native-executable path. This bootstrap bridge is not the project-owned typed IR or the planned LLVM backend. It accepts only the demonstrated FACT/PRINT subset; its output spacing and UTF-8 transport are prototype choices, not verified historical interpreter behavior. CR, CRLF, and LF line separators in the experimental frontend are transport-level handling only until the original interpreter behavior is observed under #66. Do not generalize this bridge or infer support for other syntax. Replace it with the normal semantic-model → typed-IR → LLVM path as those stages become available.
+The experimental combinatorics vertical slice under [issue #113](https://github.com/vsimko/gfabasic-rust/issues/113) parses the evidence-backed `FACT`, `VARIAT`, `COMBIN`, and `PRINT` subset, lowers the AST to the project-owned typed IR, verifies the IR, and only then emits temporary C for the host `cc` command. This is a bootstrap bridge, not the production LLVM backend. Its output spacing and UTF-8 transport are prototype choices, not verified historical interpreter behavior. CR, CRLF, and LF line separators in the experimental frontend are transport-level handling only until the original interpreter behavior is observed under #66. Do not generalize this bridge or infer support for other syntax.
 
 ## Stage and error rules
 
@@ -120,3 +120,9 @@ The project-owned IR is the stable conceptual boundary for future code-generatio
 - [Diagnostics](DIAGNOSTICS.md), [issue #26](https://github.com/vsimko/gfabasic-rust/issues/26).
 - [Workspace and dependency policy](WORKSPACE.md), [issue #11](https://github.com/vsimko/gfabasic-rust/issues/11).
 - [LLVM backend implementation](https://github.com/vsimko/gfabasic-rust/issues/50).
+
+## Current prototype IR implementation
+
+The compiler crate now contains an initial project-owned IR for the evidence-gated Amiga 3.5 combinatorics vertical slice. Its deliberately limited instruction set is `ConstI64` and ordered `Print`; values have stable per-module IDs and an explicit `I64` type. AST lowering resolves the current literal-only `FACT`, `VARIAT`, and `COMBIN` subset, binds only variables already assigned, rejects reassignment and out-of-range intrinsic arguments, and preserves source spans on emitted instructions. The verifier checks unique value definitions and rejects uses that do not follow a definition.
+
+The verified IR is now the active input to the temporary C bootstrap: the compiler follows AST → typed IR → IR verification → C emission → `cc` executable. The next backend step is to replace the C emitter with LLVM under issue #50. The current IR has no general expressions, runtime calls, control flow, memory model, or dialect-wide type system. Its `i64` type is a prototype implementation type only and must not be generalized to GFA BASIC variables without dialect evidence.
