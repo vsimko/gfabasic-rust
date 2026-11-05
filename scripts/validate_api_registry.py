@@ -10,6 +10,11 @@ import tomllib
 from collections import defaultdict
 from pathlib import Path
 
+if __package__:
+    from .corpus_paths import has_symlink_component
+else:
+    from corpus_paths import has_symlink_component
+
 from jsonschema import Draft202012Validator
 
 
@@ -63,6 +68,8 @@ def read_test_ids(root: Path) -> set[str]:
             continue
         metadata_path = corpus_root / relative.with_suffix(".toml")
         try:
+            if has_symlink_component(metadata_path, corpus_root):
+                continue
             metadata_path.resolve().relative_to(corpus_root.resolve())
             if not metadata_path.is_file():
                 continue
