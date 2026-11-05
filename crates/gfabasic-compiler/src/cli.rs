@@ -1,10 +1,7 @@
-//! Minimal command-line entry point.
-//!
-//! This first increment intentionally implements only help and version output.
-//! Compilation and project loading remain unavailable until their prerequisites
-//! are implemented; the CLI must not imply that source compilation works.
+//! Minimal command-line entry point plus the experimental FACT/PRINT build.
 
 use std::io::{self, Write};
+use std::path::Path;
 
 const HELP: &str = "gfabasic - GFA BASIC compiler
 
@@ -13,12 +10,20 @@ Usage:
   gfabasic [--version] [--verbose]
   gfabasic help
   gfabasic version [--verbose]
+  gfabasic build <source.bas> -o <output>
 
 Commands currently available:
   help       Show this help
   version    Show compiler version and optional build identity
+  build      Compile the narrow Amiga GFA BASIC 3.5 FACT/PRINT prototype subset
 
-The build and check commands are not implemented yet.
+The prototype accepts the FACT(integer-literal) assignments and PRINT variable
+lists demonstrated by the Amiga 3.5 addendum's example. Semantic support is
+restricted to FACT(0), FACT(1), and FACT(2), and variables x, y, and z.
+It uses UTF-8 transport and the host 'cc' toolchain as temporary bootstrap
+choices; neither is a claim about historical source encoding or interpreter
+output formatting. General GFA BASIC support and the LLVM backend are not
+implemented. The check command is unavailable.
 ";
 
 /// Run the implemented CLI subset and return its process exit code.
@@ -53,10 +58,33 @@ where
             let _ = writeln!(out, "build-id: {build_id}");
             0
         }
-        [command, ..] if command == "build" || command == "check" => {
+        [command, input, flag, output] if command == "build" && flag == "-o" => {
+            match crate::prototype::compile_file(Path::new(input), Path::new(output)) {
+                Ok(()) => {
+                    let _ = writeln!(
+                        out,
+                        "built {} (Amiga GFA BASIC 3.5 FACT/PRINT prototype)",
+                        output
+                    );
+                    0
+                }
+                Err(message) => {
+                    let _ = writeln!(err, "error: {message}");
+                    1
+                }
+            }
+        }
+        [command, ..] if command == "check" => {
             let _ = writeln!(
                 err,
-                "error: '{command}' is not implemented yet; no source compilation is available"
+                "error: 'check' is not implemented; the general compiler pipeline is unavailable"
+            );
+            2
+        }
+        [command, ..] if command == "build" => {
+            let _ = writeln!(
+                err,
+                "error: expected 'gfabasic build <source.bas> -o <output>'"
             );
             2
         }
@@ -71,6 +99,11 @@ where
 #[cfg(test)]
 mod tests {
     use super::run_with_io;
+    use std::fs;
+    use std::process::Command;
+    use std::sync::atomic::{AtomicUsize, Ordering};
+
+    static NEXT_TEST: AtomicUsize = AtomicUsize::new(0);
 
     fn invoke(args: &[&str]) -> (u8, String, String) {
         let mut out = Vec::new();
@@ -88,7 +121,7 @@ mod tests {
         let (code, out, err) = invoke(&[]);
         assert_eq!(code, 0);
         assert!(out.contains("Usage:"));
-        assert!(out.contains("not implemented yet"));
+        assert!(out.contains("FACT/PRINT prototype"));
         assert!(err.is_empty());
     }
 
@@ -118,13 +151,53 @@ mod tests {
     }
 
     #[test]
-    fn compilation_commands_fail_explicitly_until_implemented() {
-        for command in ["build", "check"] {
-            let (code, out, err) = invoke(&[command]);
-            assert_eq!(code, 2);
-            assert!(out.is_empty());
-            assert!(err.contains("is not implemented yet"));
+    fn build_requires_source_and_output_arguments() {
+        let (code, out, err) = invoke(&["build"]);
+        assert_eq!(code, 2);
+        assert!(out.is_empty());
+        assert!(err.contains("expected 'gfabasic build"));
+    }
+
+    #[test]
+    fn build_compiles_the_verified_fact_fixture_when_cc_is_available() {
+        if Command::new("cc").arg("--version").output().is_err() {
+            return;
         }
+
+        let sequence = NEXT_TEST.fetch_add(1, Ordering::Relaxed);
+        let directory = std::env::temp_dir().join(format!(
+            "gfabasic-cli-test-{}-{sequence}",
+            std::process::id()
+        ));
+        fs::create_dir_all(&directory).unwrap();
+        let input = directory.join("fact.bas");
+        let output = directory.join("fact");
+        fs::write(&input, "x=FACT(0)\ny=FACT(1)\nz=FACT(2)\nPRINT x,y,z\n").unwrap();
+
+        let input = input.to_str().unwrap();
+        let output_arg = output.to_str().unwrap();
+        let (code, out, err) = invoke(&["build", input, "-o", output_arg]);
+        assert_eq!(code, 0, "{err}");
+        assert!(out.contains("FACT/PRINT prototype"));
+        let run = Command::new(&output).output().unwrap();
+        assert!(run.status.success());
+        assert_eq!(
+            String::from_utf8(run.stdout)
+                .unwrap()
+                .split_whitespace()
+                .collect::<Vec<_>>(),
+            ["1", "1", "2"]
+        );
+
+        fs::remove_dir_all(directory).unwrap();
+    }
+
+    #[test]
+    fn check_is_not_advertised_as_available() {
+        let (code, out, err) = invoke(&["check"]);
+        assert_eq!(code, 2);
+        assert!(out.is_empty());
+        assert!(err.contains("general compiler pipeline is unavailable"));
     }
 
     #[test]
