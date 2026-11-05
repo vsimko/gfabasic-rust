@@ -22,7 +22,7 @@ A diagnostic category identifies the failing area. Planned categories include so
 
 When the compiler can map a problem to source text, the diagnostic should show the source file, line and column, a short excerpt, and a marker for the relevant range. For included or composed source, the location should refer back to the original source file.
 
-The exact column units and source mapping rules remain part of the source-manager design. Do not interpret a column as a byte offset unless the output explicitly says so.
+The current source map reports one-based Unicode-scalar columns, not byte offsets or terminal-cell positions. The renderer uses terminal-cell widths only to align the visible caret under the excerpt; tabs and other control characters are escaped before display. Mapping through composed sources remains future work.
 
 ## Feature support outcomes
 
