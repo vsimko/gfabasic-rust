@@ -9,6 +9,7 @@ pub mod backend;
 pub mod cli;
 pub mod diagnostics;
 pub mod frontend;
+pub mod formatter;
 pub mod ir;
 pub mod prototype;
 pub mod semantic;
