@@ -50,13 +50,7 @@ fn diagnostic(
     message: impl Into<String>,
     span: SourceSpan,
 ) -> Diagnostic {
-    Diagnostic::new(
-        code,
-        DiagnosticSeverity::Error,
-        category,
-        message,
-    )
-    .with_primary_span(span)
+    Diagnostic::new(code, DiagnosticSeverity::Error, category, message).with_primary_span(span)
 }
 
 fn lex(source_id: SourceId, source: &str) -> Result<Vec<Token>, Vec<Diagnostic>> {
@@ -137,10 +131,7 @@ fn lex(source_id: SourceId, source: &str) -> Result<Vec<Token>, Vec<Diagnostic>>
             byte if byte.is_ascii_digit() => {
                 let start = offset;
                 offset += 1;
-                while bytes
-                    .get(offset)
-                    .is_some_and(|next| next.is_ascii_digit())
-                {
+                while bytes.get(offset).is_some_and(|next| next.is_ascii_digit()) {
                     offset += 1;
                 }
                 let text = &source[start..offset];
@@ -159,7 +150,10 @@ fn lex(source_id: SourceId, source: &str) -> Result<Vec<Token>, Vec<Diagnostic>>
             }
             _ => {
                 let start = offset;
-                let character = source[offset..].chars().next().expect("valid UTF-8 boundary");
+                let character = source[offset..]
+                    .chars()
+                    .next()
+                    .expect("valid UTF-8 boundary");
                 offset += character.len_utf8();
                 diagnostics.push(diagnostic(
                     "GFA-LEX-0001",
@@ -245,18 +239,32 @@ impl Parser {
         }
     }
 
-    fn parse_assignment(&mut self, name: String, start: SourceSpan) -> Result<Statement, Diagnostic> {
+    fn parse_assignment(
+        &mut self,
+        name: String,
+        start: SourceSpan,
+    ) -> Result<Statement, Diagnostic> {
         self.expect(TokenKind::Equals, "'='")?;
         let function = self.advance();
         match function.kind {
             TokenKind::Identifier(name) if name == "FACT" => {}
-            _ => return Err(self.error("only the FACT intrinsic is supported in this MVP", function.span)),
+            _ => {
+                return Err(self.error(
+                    "only the FACT intrinsic is supported in this MVP",
+                    function.span,
+                ));
+            }
         }
         self.expect(TokenKind::LeftParen, "'(' after FACT")?;
         let argument = self.advance();
         let value = match argument.kind {
             TokenKind::Integer(value) => value,
-            _ => return Err(self.error("FACT argument must be an integer literal in this MVP", argument.span)),
+            _ => {
+                return Err(self.error(
+                    "FACT argument must be an integer literal in this MVP",
+                    argument.span,
+                ));
+            }
         };
         self.expect(TokenKind::RightParen, "')' after FACT argument")?;
         let end = self.tokens[self.cursor - 1].span;
@@ -366,7 +374,7 @@ pub fn parse(source_id: SourceId, source: &str) -> Result<Program, Vec<Diagnosti
 
 #[cfg(test)]
 mod tests {
-    use super::{parse, Statement};
+    use super::{Statement, parse};
     use crate::source::SourceMap;
 
     #[test]
