@@ -40,13 +40,21 @@ pub enum Statement {
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum TokenKind {
+    /// An identifier candidate with its exact source spelling.
     Identifier(String),
+    /// A decimal integer literal in the current supported subset.
     Integer(i64),
+    /// The assignment operator.
     Equals,
+    /// An opening parenthesis.
     LeftParen,
+    /// A closing parenthesis.
     RightParen,
+    /// An argument or print-list separator.
     Comma,
+    /// A source line boundary, preserving CR, LF, or CRLF in its span.
     Newline,
+    /// A zero-width end-of-input marker.
     End,
 }
 
@@ -598,7 +606,7 @@ mod tests {
 
         assert!(lexed.trivia.iter().all(|item| item.kind == TriviaKind::HorizontalWhitespace));
         let mut spans: Vec<_> = lexed.tokens.iter()
-            .filter(|token| !matches!(token.kind, super::TokenKind::End))
+            .filter(|token| !matches!(&token.kind, super::TokenKind::End))
             .map(|token| token.span)
             .chain(lexed.trivia.iter().map(|item| item.span))
             .collect();
