@@ -6,6 +6,8 @@
 
 use std::fmt;
 
+use unicode_width::UnicodeWidthStr;
+
 use crate::source::{SourceMap, SourceSpan};
 
 /// The impact a diagnostic has on the current operation.
@@ -260,17 +262,24 @@ fn render_snippet(sources: &SourceMap, span: SourceSpan) -> Option<String> {
 }
 
 fn display_width(text: &str) -> usize {
-    text.chars()
-        .map(|character| {
-            if character == '\t' {
+    let mut width = 0;
+    let mut visible = String::with_capacity(text.len());
+
+    for character in text.chars() {
+        if character == '\t' || character.is_control() {
+            width += UnicodeWidthStr::width(visible.as_str());
+            visible.clear();
+            width += if character == '\t' {
                 2
-            } else if character.is_control() {
-                character.escape_default().count()
             } else {
-                1
-            }
-        })
-        .sum()
+                character.escape_default().count()
+            };
+        } else {
+            visible.push(character);
+        }
+    }
+
+    width + UnicodeWidthStr::width(visible.as_str())
 }
 
 fn escape_controls(text: &str) -> String {
@@ -308,6 +317,44 @@ mod tests {
             diagnostic.render(&sources),
             "src/main.gfa:1:8: error[GFA-LEX-0001]: invalid token\n  1 | PRINT \"héllo\"\n    |        ^^^^^"
         );
+    }
+
+    #[test]
+    fn caret_width_matches_unicode_terminal_cells() {
+        let mut sources = SourceMap::new();
+
+        let wide_source = sources.add_source("wide.gfa", r#"PRINT "界""#);
+        let wide = Diagnostic::new(
+            "GFA-LEX-0002",
+            DiagnosticSeverity::Error,
+            DiagnosticCategory::Lexical,
+            "invalid token",
+        )
+        .with_primary_span(SourceSpan::new(wide_source, 7, 10));
+        let wide_rendered = wide.render(&sources);
+        assert!(wide_rendered.ends_with(&format!("  1 | {}^^", " ".repeat(7))));
+
+        let combining_source = sources.add_source("combining.gfa", "PRINT \"éx\"");
+        let combining = Diagnostic::new(
+            "GFA-LEX-0003",
+            DiagnosticSeverity::Error,
+            DiagnosticCategory::Lexical,
+            "invalid token",
+        )
+        .with_primary_span(SourceSpan::new(combining_source, 7, 10));
+        let combining_rendered = combining.render(&sources);
+        assert!(combining_rendered.ends_with(&format!("  1 | {}^", " ".repeat(7))));
+
+        let tab_source = sources.add_source("tab.gfa", "A\tB");
+        let tab = Diagnostic::new(
+            "GFA-LEX-0004",
+            DiagnosticSeverity::Error,
+            DiagnosticCategory::Lexical,
+            "invalid token",
+        )
+        .with_primary_span(SourceSpan::new(tab_source, 2, 3));
+        let tab_rendered = tab.render(&sources);
+        assert!(tab_rendered.ends_with("  1 |    ^"));
     }
 
     #[test]
