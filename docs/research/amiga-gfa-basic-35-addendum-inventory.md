@@ -15,7 +15,7 @@ Primary source: the supplied `GFA_Basic_3.5_Interpreter.pdf`; independently cros
 | Tab | Move cursor to next tabulator position |
 | Ctrl+Tab | Move cursor to previous tab position |
 | LeftShift+Tab | Insert spaces to next tab position |
-| RightShift+Tab | Delete all blank spaces in the current line up to and including the cursor position |
+| RightShift+Tab | Delete blank spaces in the current line “up to and from the cursor” (the manual does not define a more precise selection boundary) |
 
 ## 3. Linear operations on numeric fields
 
