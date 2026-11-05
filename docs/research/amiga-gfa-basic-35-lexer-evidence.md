@@ -37,6 +37,8 @@ The following page images were inspected from the supplied PDFs, rather than rel
 
 - **AM-INTERPRETER-35, printed p. 13-34:** the page visibly prints `_DATA` and `_DATA=` as separate operation forms. The prose says `_DATA` specifies the DATA-pointer position and `_DATA=` sets that pointer to a previously determined value. Lexically, `_DATA=` is therefore the `_DATA` identifier followed by the assignment token `=`; it is not one indivisible identifier token.
 - **AM-INTERPRETER-35, printed p. 13-35:** the heading visibly reads `_0..._9`; the prose describes ten special variables and says they are longwords like `%`, not floating-point numbers. This confirms the exact ten spellings and their special-variable status, but not a general underscore-initial identifier rule.
+- **AM-INTERPRETER-35, printed p. 13-33:** the 3.5 addendum shows the signatures `x=FACT(n)`, `y=VARIAT(n,k)`, and `z=COMBIN(n,k)` with sample variables `x`, `y`, and `z`. These examples demonstrate the three new intrinsic forms, but do not define general identifier syntax or case sensitivity.
+- **AM-INTERPRETER-35, printed p. 13-36:** the addendum distinguishes the `GURU x` command from the `GURU` function (used inside `HEX$(GURU)`). This is a context distinction in a 3.5 command/function example, not a general reserved-word list.
 - **AM-INTERPRETER-35, printed pp. 2-2–2-3:** the variable-name rule is explicitly labelled GFA-BASIC 3.0. The Byte postfix is visibly a vertical bar `|`, not capital `I`. The type table lists Float `#`, but the prose on p. 2-3 says Float has no postfix; this is an internal source contradiction and must remain unresolved. The prose confirms `$` for String.
 - **AM-INTERPRETER-35, printed p. 3-2:** the operator hierarchy image clearly shows `^` as the power sign. This resolves the OCR ambiguity in the glyph, but the hierarchy is still a 3.0 candidate, not a 3.5 conformance rule.
 - **AM-INTERPRETER-35, printed pp. 3-13–3-14 and 3-16:** page images confirm `==` as approximate numeric equality, `<=`/`>=` and their alternate spellings `=<`/`=>`, and `<>` as not-equal. These are inherited 3.0 operator spellings only.
@@ -49,6 +51,8 @@ The following page images were inspected from the supplied PDFs, rather than rel
 - **AM-BOOK-DE-1990, printed p. 169:** the REM entry lists `REM`, the high comma/apostrophe shorthand, and `!`. It describes `!` as usable inside a command line and says that at the beginning of a line it is converted to a REM line. This is supplementary V3.03 evidence only; it does not resolve the 3.5 comment grammar.
 
 The image review corrects two OCR-derived ambiguities in the earlier inventory: the broad wording about “arbitrary characters” on p. 57 applies to variable/function names, not labels; and the comment reference is printed p. 169 in this supplied book scan (not p. 166). The byte suffix glyph on p. 57 remains visually ambiguous at this scan resolution and is not promoted to a token rule.
+
+The two remaining page images in the supplied manual's printed 3.5 addendum sequence (pp. 13-33 and 13-36) were also checked. They add examples of version-specific command/function forms but no further general lexical contract. This does not amount to a full review of every page in the manual.
 
 Additional German-book page-image checks:
 
@@ -186,7 +190,7 @@ The German 1990 book says Amiga GFA-BASIC permits command names as variable name
 
 ## 7. Next extraction and verification steps
 
-- [x] Inspect page images for primary 3.5 addendum pp. 13-34–13-35; base manual pp. 2-2–2-3, 2-16, 3-2, 3-13–3-16, 5-15–5-16, 7-35–7-36; and German 1990 pp. 35, 56–58, 57, 167–170. Keep all 3.0/V3.03 observations provisional.
+- [x] Inspect page images for primary 3.5 addendum pp. 13-33–13-36; base manual pp. 2-2–2-3, 2-16, 3-2, 3-13–3-16, 5-15–5-16, 7-35–7-36; and German 1990 pp. 35, 56–58, 57, 167–170. Keep all 3.0/V3.03 observations provisional.
 - [ ] Inspect remaining page images for base manual operator details not covered by the selected hierarchy/comparison pages and German 1990 pp. 166; resolve remaining OCR glyphs.
 - [ ] Search the 3.5 addendum and all supplied 3.5-specific pages for any explicit confirmation or change to base lexical rules.
 - [ ] Obtain a lawful, reproducible Amiga GFA BASIC 3.5 interpreter probe environment or recorded observations for unresolved cases.
