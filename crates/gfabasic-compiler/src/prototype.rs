@@ -92,14 +92,14 @@ fn factorial_value(n: i64) -> Option<i64> {
 }
 
 fn variat_value(n: i64, k: i64) -> Option<i64> {
-    if n < 0 || n > 20 || k < 0 || k > n {
+    if !(0..=20).contains(&n) || !(0..=n).contains(&k) {
         return None;
     }
     ((n - k + 1)..=n).try_fold(1_i64, |value, factor| value.checked_mul(factor))
 }
 
 fn combin_value(n: i64, k: i64) -> Option<i64> {
-    if n < 0 || n > 20 || k < 0 || k > n {
+    if !(0..=20).contains(&n) || !(0..=n).contains(&k) {
         return None;
     }
     let k = k.min(n - k);
