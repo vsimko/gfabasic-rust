@@ -123,7 +123,10 @@ pub fn lex_lossless(source_id: SourceId, source: &str) -> Result<LexedSource, Ve
         match bytes[offset] {
             b' ' | b'\t' => {
                 let start = offset;
-                while bytes.get(offset).is_some_and(|byte| matches!(byte, b' ' | b'\t')) {
+                while bytes
+                    .get(offset)
+                    .is_some_and(|byte| matches!(byte, b' ' | b'\t'))
+                {
                     offset += 1;
                 }
                 trivia.push(Trivia {
@@ -608,6 +611,7 @@ mod tests {
         let program = parse(source_id, source_text).expect("CRLF line endings should parse");
         assert_eq!(program.statements.len(), 2);
     }
+
     #[test]
     fn lossless_lexer_preserves_whitespace_and_line_ending_spans() {
         use super::{lex_lossless, TriviaKind};
@@ -616,15 +620,23 @@ mod tests {
         let source_id = sources.add_source("lossless.bas", source_text);
         let lexed = lex_lossless(source_id, source_text).expect("supported tokens should lex");
 
-        assert!(lexed.trivia.iter().all(|item| item.kind == TriviaKind::HorizontalWhitespace));
-        let mut spans: Vec<_> = lexed.tokens.iter()
+        assert!(
+            lexed
+                .trivia
+                .iter()
+                .all(|item| item.kind == TriviaKind::HorizontalWhitespace)
+        );
+        let mut spans: Vec<_> = lexed
+            .tokens
+            .iter()
             .filter(|token| !matches!(&token.kind, super::TokenKind::End))
             .map(|token| token.span)
             .chain(lexed.trivia.iter().map(|item| item.span))
             .collect();
         spans.sort_by_key(|span| span.start);
 
-        let reconstructed = spans.into_iter()
+        let reconstructed = spans
+            .into_iter()
             .map(|span| &source_text[span.start..span.end])
             .collect::<String>();
         assert_eq!(reconstructed, source_text);
@@ -636,7 +648,8 @@ mod tests {
         let source_text = "print FACT(1)\n";
         let mut sources = SourceMap::new();
         let source_id = sources.add_source("spelling.bas", source_text);
-        let lexed = lex_lossless(source_id, source_text).expect("identifier candidates should lex");
+        let lexed = lex_lossless(source_id, source_text)
+            .expect("identifier candidates should lex");
 
         assert!(matches!(&lexed.tokens[0].kind, TokenKind::Identifier(name) if name == "print"));
         assert_eq!(
@@ -644,5 +657,4 @@ mod tests {
             "print"
         );
     }
-
 }
