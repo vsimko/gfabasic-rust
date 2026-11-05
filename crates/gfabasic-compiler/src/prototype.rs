@@ -1,10 +1,9 @@
 //! Experimental, deliberately narrow native-code prototype.
 //!
-//! This module consumes the evidence-gated FACT/PRINT AST. It is a bootstrap
-//! bridge for issue #113, not the production backend: it emits C and invokes
-//! the host `cc` command until the project-owned typed IR and LLVM backend
-//! exist. Output spacing and UTF-8 transport are prototype choices, not
-//! verified historical interpreter behavior.
+//! This module consumes verified project IR and emits temporary C for the
+//! host `cc` bootstrap. It is not the production LLVM backend. Output spacing
+//! and UTF-8 transport are prototype choices, not verified historical
+//! interpreter behavior.
 
 use std::collections::BTreeMap;
 use std::fs;
@@ -13,7 +12,8 @@ use std::process::Command;
 use std::sync::atomic::{AtomicUsize, Ordering};
 
 use crate::diagnostics::{Diagnostic, DiagnosticCategory, DiagnosticSeverity};
-use crate::frontend::{Program, Statement, parse};
+use crate::frontend::parse;
+use crate::ir::{Instruction, Module, ValueId};
 use crate::source::{SourceMap, SourceSpan};
 
 static NEXT_TEMP: AtomicUsize = AtomicUsize::new(0);
@@ -84,118 +84,54 @@ fn semantic_error(sources: &SourceMap, span: SourceSpan, message: impl Into<Stri
     .render(sources)
 }
 
-fn factorial_value(n: i64) -> Option<i64> {
-    if !(0..=20).contains(&n) {
-        return None;
-    }
-    (1..=n).try_fold(1_i64, |value, factor| value.checked_mul(factor))
-}
-
-fn variat_value(n: i64, k: i64) -> Option<i64> {
-    if !(0..=20).contains(&n) || !(0..=n).contains(&k) {
-        return None;
-    }
-    ((n - k + 1)..=n).try_fold(1_i64, |value, factor| value.checked_mul(factor))
-}
-
-fn combin_value(n: i64, k: i64) -> Option<i64> {
-    if !(0..=20).contains(&n) || !(0..=n).contains(&k) {
-        return None;
-    }
-    let k = k.min(n - k);
-    let mut value = 1_i64;
-    for index in 1..=k {
-        value = value.checked_mul(n - k + index)?;
-        value /= index;
-    }
-    Some(value)
-}
-
-fn emit_assignment(
-    variables: &mut BTreeMap<String, i64>,
-    statements: &mut Vec<String>,
-    name: &str,
-    value: i64,
-    span: SourceSpan,
+fn lower_program(
+    program: &crate::frontend::Program,
     sources: &SourceMap,
-) -> Result<(), String> {
-    if variables.contains_key(name) {
-        return Err(semantic_error(
-            sources,
-            span,
-            format!("reassignment of '{name}' is outside the current prototype subset"),
-        ));
-    }
-    variables.insert(name.to_owned(), value);
-    statements.push(format!("    long long {name} = {value};\n"));
-    Ok(())
+) -> Result<String, String> {
+    let module = crate::ir::lower(program).map_err(|errors| {
+        errors
+            .iter()
+            .map(|error| match error.span {
+                Some(span) => semantic_error(sources, span, error.message.clone()),
+                None => error.message.clone(),
+            })
+            .collect::<Vec<_>>()
+            .join("\n")
+    })?;
+    emit_c(&module)
 }
 
-fn lower_program(program: &Program, sources: &SourceMap) -> Result<String, String> {
-    let mut variables = BTreeMap::<String, i64>::new();
+fn emit_c(module: &Module) -> Result<String, String> {
+    let mut names = BTreeMap::<ValueId, String>::new();
     let mut statements = Vec::new();
-    let mut saw_print = false;
 
-    for statement in &program.statements {
-        match statement {
-            Statement::AssignFact {
-                name,
-                argument,
-                span,
-            } => {
-                let value = factorial_value(*argument).ok_or_else(|| {
-                    semantic_error(
-                        sources,
-                        *span,
-                        format!(
-                            "FACT({argument}) is outside the supported integer-literal range 0..=20"
-                        ),
-                    )
-                })?;
-                emit_assignment(&mut variables, &mut statements, name, value, *span, sources)?;
+    for instruction in &module.instructions {
+        match instruction {
+            Instruction::ConstI64 { result, value, .. } => {
+                let name = format!("v{}", result.0);
+                names.insert(*result, name.clone());
+                statements.push(format!("    long long {name} = {value};\n"));
             }
-            Statement::AssignVariat { name, n, k, span } => {
-                let value = variat_value(*n, *k).ok_or_else(|| {
-                    semantic_error(
-                        sources,
-                        *span,
-                        format!("VARIAT({n},{k}) requires 0 <= k <= n <= 20"),
-                    )
-                })?;
-                emit_assignment(&mut variables, &mut statements, name, value, *span, sources)?;
-            }
-            Statement::AssignCombin { name, n, k, span } => {
-                let value = combin_value(*n, *k).ok_or_else(|| {
-                    semantic_error(
-                        sources,
-                        *span,
-                        format!("COMBIN({n},{k}) requires 0 <= k <= n <= 20"),
-                    )
-                })?;
-                emit_assignment(&mut variables, &mut statements, name, value, *span, sources)?;
-            }
-            Statement::PrintVariables { names, span } => {
-                for name in names {
-                    if !variables.contains_key(name) {
-                        return Err(semantic_error(
-                            sources,
-                            *span,
-                            format!("variable '{name}' is not assigned before PRINT"),
-                        ));
-                    }
-                }
-                let placeholders = vec!["%lld"; names.len()].join(" ");
+            Instruction::Print { values, .. } => {
+                let arguments = values
+                    .iter()
+                    .map(|value| {
+                        names.get(value).cloned().ok_or_else(|| {
+                            format!("verified IR references missing value %{}", value.0)
+                        })
+                    })
+                    .collect::<Result<Vec<_>, _>>()?;
+                let placeholders = vec!["%lld"; arguments.len()].join(" ");
                 statements.push(format!(
-                    "    (void)printf(\"{placeholders}\\n\", {});\n",
-                    names.join(", ")
-                ));
-                saw_print = true;
+                    "    (void)printf!(\"{placeholders}\\n\", {});\n",
+                    arguments.join(", ")
+                ).replace("printf!", "printf"));
             }
         }
     }
 
-    if !saw_print {
-        return Err("prototype requires at least one PRINT statement".to_owned());
+    if !statements.iter().any(|statement| statement.contains("printf(")) {
+        return Err("verified IR contains no PRINT instruction".to_owned());
     }
 
     let mut c_source = String::from("#include <stdio.h>\nint main(void) {\n");
