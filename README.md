@@ -2,7 +2,7 @@
 
 A planned general-purpose GFA BASIC compiler and runtime implemented in Rust.
 
-> **Project status:** Architecture and workspace bootstrap, with a minimal CLI executable. `gfabasic --help` and `gfabasic --version` are implemented; source compilation, project configuration, and runtime behavior are not. No GFA BASIC dialect or platform API is currently claimed as implemented or conformant.
+> **Project status:** The workspace has a narrow experimental compiler prototype for one Amiga GFA BASIC 3.5 fixture shape: literal `FACT(0)`, `FACT(1)`, `FACT(2)` assignments followed by `PRINT` of previously assigned one-letter lowercase variables. It can produce and run a native host executable through a temporary `cc` bootstrap bridge. This is not general GFA BASIC support and does not claim conformance with the original interpreter. The general lexer/parser, semantic analysis, project IR, and planned LLVM backend remain unimplemented.
 
 ## Project direction
 
@@ -11,6 +11,23 @@ The current planning baseline is to compile GFA BASIC source to native executabl
 The language core, platform API profiles, and output target are separate concepts. Amiga and Atari ST API profiles are planned as independently selectable profiles. Their behavior must be verified against the applicable GFA BASIC manuals before it is specified as supported.
 
 Compilation must be deterministic and must not require an LLM. An LLM may assist external migration or analysis workflows, but it is not part of the compiler execution path.
+
+## Experimental prototype
+
+Build the current narrow fixture subset with:
+
+```sh
+cargo run -p gfabasic-compiler -- build tests/corpus/amiga/3.5/combinatorics/fact-zero.bas -o ./fact
+./fact
+```
+
+Expected prototype output:
+
+```text
+1 1 2
+```
+
+The prototype is intentionally restrictive. It accepts only the exact documented FACT/PRINT shape described in the 3.5 addendum and rejects all other constructs. It currently requires UTF-8 transport input and a host `cc` executable; this does not establish the historical source encoding or final compiler backend. The space-separated PRINT rendering is a prototype output convention, not a claim that the original interpreter formats output identically.
 
 ## Documentation
 
@@ -31,9 +48,9 @@ Key documents:
 
 ## Current scope and limitations
 
-The Rust workspace contains three architectural crates: compiler, generated-program runtime, and Linux platform adapter. The compiler crate includes tested source-map and strict UTF-8 file-loading primitives plus a minimal `gfabasic` CLI. The CLI currently supports help and version output only; `build` and `check` explicitly report that compilation is unavailable. The lexer, parser, semantic analysis, IR, backend, project configuration, runtime behavior, and Linux platform adapter remain unimplemented. The pinned Rust toolchain and fast workspace checks are defined in CI. No GFA BASIC dialect or API profile is implemented. Planned targets, API profiles, and language features are not implementation or compatibility claims.
+The Rust workspace contains three architectural crates: compiler, generated-program runtime, and Linux platform adapter. The compiler crate includes source-map and strict UTF-8 file-loading primitives, structured diagnostics, a help/version CLI, and the experimental FACT/PRINT bootstrap path described above. The prototype is not the general dialect-aware frontend and must not be used to infer support for other syntax. Project configuration, the general semantic model, typed IR, LLVM backend, core runtime behavior, and Linux platform adapter remain unimplemented. The pinned Rust toolchain and fast workspace checks are defined in CI. No complete GFA BASIC dialect or API profile is implemented or conformant. Planned targets, API profiles, and language features are not implementation or compatibility claims.
 
-See the roadmap and architecture documents for decisions, assumptions, dependencies, and unresolved questions.
+See the roadmap and architecture documents for decisions, assumptions, and unresolved questions.
 
 ## License
 
