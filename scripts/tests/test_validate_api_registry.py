@@ -165,6 +165,83 @@ anchors = []
         errors = validate_registry(root)
         self.assertTrue(any("unknown test ID 'unlisted-fixture-id'" in error for error in errors))
 
+    def test_absolute_documentation_path_is_rejected(self):
+        temp, root = self.make_root(self.valid_declaration())
+        self.addCleanup(temp.cleanup)
+        outside = root.parent / f"{root.name}-outside.md"
+        outside.write_text("# Timer\\n")
+        self.addCleanup(lambda: outside.unlink(missing_ok=True))
+        registry = root / "api/registry/atari-st/time.toml"
+        registry.write_text(
+            registry.read_text().replace('path = "docs/reference.md"', f'path = "{outside}"')
+        )
+
+        errors = validate_registry(root)
+        self.assertTrue(any("canonical repository-relative path" in error for error in errors))
+
+    def test_parent_traversal_documentation_path_is_rejected(self):
+        temp, root = self.make_root(self.valid_declaration())
+        self.addCleanup(temp.cleanup)
+        outside = root.parent / f"{root.name}-outside.md"
+        outside.write_text("# Timer\\n")
+        self.addCleanup(lambda: outside.unlink(missing_ok=True))
+        registry = root / "api/registry/atari-st/time.toml"
+        relative = f"../{outside.name}"
+        registry.write_text(
+            registry.read_text().replace('path = "docs/reference.md"', f'path = "{relative}"')
+        )
+
+        errors = validate_registry(root)
+        self.assertTrue(any("canonical repository-relative path" in error for error in errors))
+
+    def test_noncanonical_documentation_paths_are_rejected(self):
+        for invalid_path in (
+            "./docs/reference.md",
+            "docs//reference.md",
+            "docs/../reference.md",
+            r"docs\\reference.md",
+            "C:/outside.md",
+        ):
+            with self.subTest(path=invalid_path):
+                content = self.valid_declaration().replace(
+                    'path = "docs/reference.md"', f"path = {json.dumps(invalid_path)}"
+                )
+                temp, root = self.make_root(content)
+                self.addCleanup(temp.cleanup)
+                errors = validate_registry(root)
+                self.assertTrue(
+                    any("canonical repository-relative path" in error for error in errors)
+                )
+
+    def test_symlinked_documentation_file_is_rejected(self):
+        temp, root = self.make_root(self.valid_declaration())
+        self.addCleanup(temp.cleanup)
+        docs = root / "docs/reference.md"
+        target = root / "docs/alternate.md"
+        target.write_text("# Timer\\n")
+        docs.unlink()
+        try:
+            docs.symlink_to(target)
+        except (OSError, NotImplementedError) as exc:
+            self.skipTest(f"symbolic links are unavailable: {exc}")
+
+        errors = validate_registry(root)
+        self.assertTrue(any("documentation path must not traverse symlinks" in error for error in errors))
+
+    def test_symlinked_documentation_directory_is_rejected(self):
+        temp, root = self.make_root(self.valid_declaration())
+        self.addCleanup(temp.cleanup)
+        docs_dir = root / "docs"
+        target = root / "outside-docs"
+        docs_dir.rename(target)
+        try:
+            docs_dir.symlink_to(target, target_is_directory=True)
+        except (OSError, NotImplementedError) as exc:
+            self.skipTest(f"symbolic links are unavailable: {exc}")
+
+        errors = validate_registry(root)
+        self.assertTrue(any("documentation path must not traverse symlinks" in error for error in errors))
+
     def test_namespace_mismatch_fails(self):
         content = self.valid_declaration().replace("gfa.atari-st.system.timer", "gfa.amiga.system.timer")
         temp, root = self.make_root(content)
