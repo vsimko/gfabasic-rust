@@ -16,7 +16,6 @@ FIXTURE_STATUSES = {"candidate", "verified", "blocked", "retired"}
 FIXTURE_ID = re.compile(r"[a-z0-9]+(?:[.-][a-z0-9]+)*\Z")
 DIALECT_DIRECTORY_NAMES = {
     "amiga": "GFA BASIC Amiga",
-    "atari-st": "GFA BASIC Atari ST",
 }
 REQUIRED_FIELDS = {
     "id",
