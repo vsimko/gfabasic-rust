@@ -76,8 +76,35 @@ fn needs_space(previous: &TokenKind, current: &TokenKind) -> bool {
 #[cfg(test)]
 mod tests {
     use super::format_source;
-    use crate::frontend::parse_document;
+    use crate::frontend::{Program, Statement, parse_document};
     use crate::source::SourceMap;
+
+    #[derive(Debug, PartialEq)]
+    enum Meaning {
+        Fact(String, i64),
+        Variat(String, i64, i64),
+        Combin(String, i64, i64),
+        Print(Vec<String>),
+    }
+
+    fn meanings(program: &Program) -> Vec<Meaning> {
+        program
+            .statements
+            .iter()
+            .map(|statement| match statement {
+                Statement::AssignFact { name, argument, .. } => {
+                    Meaning::Fact(name.clone(), *argument)
+                }
+                Statement::AssignVariat { name, n, k, .. } => {
+                    Meaning::Variat(name.clone(), *n, *k)
+                }
+                Statement::AssignCombin { name, n, k, .. } => {
+                    Meaning::Combin(name.clone(), *n, *k)
+                }
+                Statement::PrintVariables { names, .. } => Meaning::Print(names.clone()),
+            })
+            .collect()
+    }
 
     fn format(source: &str) -> String {
         let mut sources = SourceMap::new();
@@ -117,7 +144,7 @@ mod tests {
         let after_id = after_sources.add_source("after.bas", formatted.as_str());
         let after = parse_document(after_id, &formatted).unwrap();
 
-        assert_eq!(before.program, after.program);
+        assert_eq!(meanings(&before.program), meanings(&after.program));
     }
 
     #[test]
