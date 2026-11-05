@@ -113,6 +113,18 @@ Keep the LLVM dependency optional and confined to the backend package. Do not ad
 
 The project-owned IR is the stable conceptual boundary for future code-generation backends. A new backend may consume verified IR without changing source loading, parsing, name resolution, or language semantics. Target-specific lowering may be extended for another operating system or CPU, but must not leak target assumptions back into the frontend.
 
+## Editor tooling consumers
+
+The compiler frontend and semantic model also serve editor tooling through the shared LSP adapter. This is a consumer of the same source-loading, lossless syntax, diagnostics, and symbol-resolution services; it is not an additional compiler stage and must not define separate language semantics.
+
+- Preserve a lossless CST or equivalent token/trivia representation alongside the semantic AST so the formatter and editor edits can retain comments, literal payloads, and original source spelling.
+- Expose stable symbol identities and declaration/reference relationships from name resolution for navigation and safe rename.
+- Convert byte-based compiler spans to LSP UTF-16 positions only at the protocol boundary.
+- Delegate formatting to the formatter library and build requests to the common compiler/build pipeline.
+- Do not advertise an editor capability until its shared compiler prerequisite and protocol tests are complete.
+
+See [language tooling architecture](LANGUAGE-TOOLING.md), [ADR 0012](adr/0012-language-server-and-editor-integration.md), and issues [#209](https://github.com/vsimko/gfabasic-rust/issues/209)–[#211](https://github.com/vsimko/gfabasic-rust/issues/211).
+
 ## Related work
 
 - [Dialect/version policy](DIALECTS.md), [issue #3](https://github.com/vsimko/gfabasic-rust/issues/3).
