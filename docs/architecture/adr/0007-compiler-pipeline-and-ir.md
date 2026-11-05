@@ -76,7 +76,7 @@ The lossless lexer recognizes the exact special names explicitly documented in t
 
 This is a deliberately closed lexical exception, not a general rule for underscore-prefixed identifiers and not a case-insensitivity decision. Other spellings such as `_foo`, `_10`, `_DATA2`, and lowercase `_data` remain lexical diagnostics until the Amiga 3.5 source evidence establishes broader rules. The parser and semantic model do not yet claim support for these special variables or DATA-pointer operations; this increment only makes their verified spellings available in the lossless token stream.
 
-Evidence inventory: [Amiga GFA BASIC 3.5 addendum, Chapter 14](../../research/amiga-gfa-basic-35-addendum-inventory.md). This increment does not close issue #46; comments, strings/DATA payloads, general identifiers, encoding, line endings, and the remaining operator grammar are still unresolved.
+Evidence inventory: [Amiga GFA BASIC 3.5 addendum, Chapter 14](../../research/amiga-gfa-basic-35-addendum-inventory.md). The regression suite checks that each exact documented spelling is recognized at end-of-input and remains delimited from existing punctuation; adjacent unverified suffixes are rejected as a whole rather than accepted as a partial special-name prefix. These are boundary tests, not claims about the broader identifier grammar. This increment does not close issue #46; comments, strings/DATA payloads, general identifiers, encoding, line endings, and the remaining operator grammar are still unresolved.
 
 ## Formatter implementation note (2026-11-05)
 
