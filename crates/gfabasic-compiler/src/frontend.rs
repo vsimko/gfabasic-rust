@@ -53,6 +53,9 @@ fn diagnostic(
     Diagnostic::new(code, DiagnosticSeverity::Error, category, message).with_primary_span(span)
 }
 
+// CR, CRLF, and LF are accepted here only as transport-level separators for
+// this prototype. This is not a claim about the original Amiga 3.5 source
+// encoding/line-ending contract; that remains subject to #66 observation.
 fn lex(source_id: SourceId, source: &str) -> Result<Vec<Token>, Vec<Diagnostic>> {
     let bytes = source.as_bytes();
     let mut tokens = Vec::new();
@@ -207,9 +210,18 @@ impl Parser {
         }
     }
 
-    fn error(&self, message: impl Into<String>, span: SourceSpan) -> Box<Diagnostic> {
+    fn syntax_error(&self, message: impl Into<String>, span: SourceSpan) -> Box<Diagnostic> {
         Box::new(diagnostic(
             "GFA-PARSE-0001",
+            DiagnosticCategory::Syntax,
+            message,
+            span,
+        ))
+    }
+
+    fn unsupported_error(&self, message: impl Into<String>, span: SourceSpan) -> Box<Diagnostic> {
+        Box::new(diagnostic(
+            "GFA-SUPPORT-0001",
             DiagnosticCategory::Unsupported,
             message,
             span,
@@ -222,11 +234,11 @@ impl Parser {
             TokenKind::Identifier(name) if matches!(name.as_str(), "x" | "y" | "z") => {
                 Ok((name, token.span))
             }
-            TokenKind::Identifier(name) => Err(self.error(
+            TokenKind::Identifier(name) => Err(self.unsupported_error(
                 format!("variable {name:?} is outside the current MVP subset (supported: x, y, z)"),
                 token.span,
             )),
-            _ => Err(self.error("expected one of the variables x, y, or z", token.span)),
+            _ => Err(self.syntax_error("expected one of the variables x, y, or z", token.span)),
         }
     }
 
@@ -235,7 +247,7 @@ impl Parser {
         if std::mem::discriminant(&token.kind) == std::mem::discriminant(&expected) {
             Ok(self.advance())
         } else {
-            Err(self.error(format!("expected {description}"), token.span))
+            Err(self.syntax_error(format!("expected {description}"), token.span))
         }
     }
 
@@ -248,11 +260,14 @@ impl Parser {
         let function = self.advance();
         match function.kind {
             TokenKind::Identifier(name) if name == "FACT" => {}
-            _ => {
-                return Err(self.error(
-                    "only the FACT intrinsic is supported in this MVP",
+            TokenKind::Identifier(name) => {
+                return Err(self.unsupported_error(
+                    format!("intrinsic {name:?} is outside the current MVP subset"),
                     function.span,
                 ));
+            }
+            _ => {
+                return Err(self.syntax_error("expected FACT after assignment", function.span));
             }
         }
         self.expect(TokenKind::LeftParen, "'(' after FACT")?;
@@ -260,7 +275,7 @@ impl Parser {
         let value = match argument.kind {
             TokenKind::Integer(value) => value,
             _ => {
-                return Err(self.error(
+                return Err(self.syntax_error(
                     "FACT argument must be an integer literal in this MVP",
                     argument.span,
                 ));
@@ -298,11 +313,11 @@ impl Parser {
             TokenKind::Identifier(name) if matches!(name.as_str(), "x" | "y" | "z") => {
                 self.parse_assignment(name, first.span)
             }
-            TokenKind::Identifier(name) => Err(self.error(
+            TokenKind::Identifier(name) => Err(self.unsupported_error(
                 format!("statement {name:?} is not supported by the current MVP frontend"),
                 first.span,
             )),
-            _ => Err(self.error("expected an assignment or PRINT statement", first.span)),
+            _ => Err(self.syntax_error("expected an assignment or PRINT statement", first.span)),
         }
     }
 
@@ -325,7 +340,7 @@ impl Parser {
                     statements.push(statement);
                     if !self.at_end() && !matches!(self.current().kind, TokenKind::Newline) {
                         let token = self.current().clone();
-                        self.diagnostics.push(*self.error(
+                        self.diagnostics.push(*self.syntax_error(
                             "unexpected token after statement; statements must be on separate lines in this MVP",
                             token.span,
                         ));
@@ -342,7 +357,7 @@ impl Parser {
         }
 
         if statements.is_empty() && self.diagnostics.is_empty() {
-            self.diagnostics.push(*self.error(
+            self.diagnostics.push(*self.syntax_error(
                 "source contains no supported statements",
                 SourceSpan::new(self.source_id, 0, self.source_len),
             ));
@@ -375,6 +390,7 @@ pub fn parse(source_id: SourceId, source: &str) -> Result<Program, Vec<Diagnosti
 #[cfg(test)]
 mod tests {
     use super::{Statement, parse};
+    use crate::diagnostics::DiagnosticCategory;
     use crate::source::SourceMap;
 
     #[test]
@@ -409,7 +425,8 @@ mod tests {
         let source_id = sources.add_source("unsupported.bas", "LET x=1\n");
 
         let errors = parse(source_id, "LET x=1\n").expect_err("LET is outside the MVP");
-        assert_eq!(errors[0].code, "GFA-PARSE-0001");
+        assert_eq!(errors[0].code, "GFA-SUPPORT-0001");
+        assert_eq!(errors[0].category, DiagnosticCategory::Unsupported);
         assert!(errors[0].message.contains("not supported"));
         assert_eq!(errors[0].primary_span.unwrap().start, 0);
     }
@@ -434,7 +451,7 @@ mod tests {
     }
 
     #[test]
-    fn accepts_crlf_source_lines_without_changing_statement_spans() {
+    fn accepts_crlf_as_transport_level_separators_without_claiming_dialect_conformance() {
         let source_text = "x=FACT(0)\r\ny=FACT(1)\r\n";
         let mut sources = SourceMap::new();
         let source_id = sources.add_source("crlf.bas", source_text);
