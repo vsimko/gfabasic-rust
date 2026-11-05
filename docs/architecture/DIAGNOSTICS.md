@@ -72,7 +72,7 @@ A source location should identify the original source unit and a primary range. 
 - a short excerpt from the original source;
 - a caret or range marker that identifies the relevant text.
 
-The source manager and source-map contract in [issue #45](https://github.com/vsimko/gfabasic-rust/issues/45) must define encoding, byte offsets, Unicode column units, newline handling, and how locations map through included or composed source. Until then, do not mix coordinate units or claim that a displayed column is a byte offset. User-facing examples in this document use one-based line/column notation only.
+The implemented `SourceMap` stores half-open UTF-8 byte spans and maps valid byte offsets to one-based line and Unicode-scalar columns. It strips a carriage return before a line ending for column calculations; mapping through included or composed sources remains future work. The diagnostic renderer aligns carets using Unicode terminal-cell width for visible text. Tabs and other control characters are escaped in excerpts, and caret width follows that escaped representation. Source decoding and composition semantics remain dialect-dependent and are tracked separately under [issue #120](https://github.com/vsimko/gfabasic-rust/issues/120); strict UTF-8 transport does not claim that every GFA BASIC dialect uses UTF-8.
 
 Excerpts are optional when source text is unavailable or when displaying it would expose unrelated data. Keep excerpts short, preserve the original text, and do not normalize a source fragment in a way that makes its position misleading. For generated or transformed code, prefer the original source location carried through the source map.
 
