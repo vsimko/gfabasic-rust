@@ -1,7 +1,10 @@
 //! Compiler implementation boundaries.
 //!
-//! These modules are architectural placeholders. They do not implement or
-//! claim support for any GFA BASIC dialect or language feature.
+//! The source map and strict UTF-8 transport loader, structured diagnostics,
+//! and minimal help/version CLI are implemented building blocks. The backend,
+//! frontend, IR, and semantic-analysis modules remain architectural
+//! placeholders. No module implements or claims support for any GFA BASIC
+//! dialect or language feature.
 
 pub mod backend;
 pub mod cli;
