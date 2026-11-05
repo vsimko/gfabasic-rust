@@ -38,22 +38,62 @@ pub enum Statement {
     },
 }
 
+/// A significant token kind recognized by the current evidence-gated lexer.
 #[derive(Clone, Debug, Eq, PartialEq)]
-enum TokenKind {
+pub enum TokenKind {
+    /// An identifier candidate with its exact source spelling.
     Identifier(String),
+    /// A decimal integer literal in the current supported subset.
     Integer(i64),
+    /// The assignment operator.
     Equals,
+    /// An opening parenthesis.
     LeftParen,
+    /// A closing parenthesis.
     RightParen,
+    /// An argument or print-list separator.
     Comma,
+    /// A source line boundary, preserving CR, LF, or CRLF in its span.
     Newline,
+    /// A zero-width end-of-input marker.
     End,
 }
 
+/// A significant token and its original source span.
 #[derive(Clone, Debug, Eq, PartialEq)]
-struct Token {
-    kind: TokenKind,
-    span: SourceSpan,
+pub struct Token {
+    /// The interpreted token kind; exact spelling remains in the source span.
+    pub kind: TokenKind,
+    /// Half-open UTF-8 byte range in the original source.
+    pub span: SourceSpan,
+}
+
+/// Non-semantic source text retained between significant tokens.
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum TriviaKind {
+    /// Horizontal ASCII spaces and tabs. Their spelling remains in the source span.
+    HorizontalWhitespace,
+}
+
+/// A lossless span of source trivia.
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct Trivia {
+    /// The recognized trivia category.
+    pub kind: TriviaKind,
+    /// Half-open UTF-8 byte range in the original source.
+    pub span: SourceSpan,
+}
+
+/// Token and trivia spans for the currently implemented lexical subset.
+///
+/// The original source remains authoritative; spans refer to its UTF-8 bytes.
+/// Unsupported syntax still produces diagnostics rather than being guessed.
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct LexedSource {
+    /// Significant tokens, including line boundaries and the end marker.
+    pub tokens: Vec<Token>,
+    /// Non-semantic source spans between significant tokens.
+    pub trivia: Vec<Trivia>,
 }
 
 fn diagnostic(
@@ -68,15 +108,29 @@ fn diagnostic(
 // CR, CRLF, and LF are accepted here only as transport-level separators for
 // this prototype. This is not a claim about the original Amiga 3.5 source
 // encoding/line-ending contract; that remains subject to #66 observation.
-fn lex(source_id: SourceId, source: &str) -> Result<Vec<Token>, Vec<Diagnostic>> {
+/// Lexes the currently supported source subset without discarding recognized trivia.
+///
+/// Token and trivia spans partition all successfully recognized source bytes.
+/// Unknown syntax is reported as a diagnostic instead of being normalized.
+pub fn lex_lossless(source_id: SourceId, source: &str) -> Result<LexedSource, Vec<Diagnostic>> {
     let bytes = source.as_bytes();
     let mut tokens = Vec::new();
+    let mut trivia = Vec::new();
     let mut diagnostics = Vec::new();
     let mut offset = 0;
 
     while offset < bytes.len() {
         match bytes[offset] {
-            b' ' | b'\t' => offset += 1,
+            b' ' | b'\t' => {
+                let start = offset;
+                while bytes.get(offset).is_some_and(|byte| matches!(byte, b' ' | b'\t')) {
+                    offset += 1;
+                }
+                trivia.push(Trivia {
+                    kind: TriviaKind::HorizontalWhitespace,
+                    span: SourceSpan::new(source_id, start, offset),
+                });
+            }
             b'\r' => {
                 let start = offset;
                 offset += 1;
@@ -185,7 +239,7 @@ fn lex(source_id: SourceId, source: &str) -> Result<Vec<Token>, Vec<Diagnostic>>
             kind: TokenKind::End,
             span: SourceSpan::new(source_id, source.len(), source.len()),
         });
-        Ok(tokens)
+        Ok(LexedSource { tokens, trivia })
     } else {
         Err(diagnostics)
     }
@@ -427,7 +481,7 @@ impl Parser {
 /// This parser intentionally rejects all syntax outside the demonstrated
 /// vertical-slice fixture. It does not claim general GFA BASIC compatibility.
 pub fn parse(source_id: SourceId, source: &str) -> Result<Program, Vec<Diagnostic>> {
-    let tokens = lex(source_id, source)?;
+    let tokens = lex_lossless(source_id, source)?.tokens;
     Parser {
         tokens,
         cursor: 0,
@@ -554,4 +608,41 @@ mod tests {
         let program = parse(source_id, source_text).expect("CRLF line endings should parse");
         assert_eq!(program.statements.len(), 2);
     }
+    #[test]
+    fn lossless_lexer_preserves_whitespace_and_line_ending_spans() {
+        use super::{lex_lossless, TriviaKind};
+        let source_text = "x = FACT(5)\r\nPRINT x, y\t\n";
+        let mut sources = SourceMap::new();
+        let source_id = sources.add_source("lossless.bas", source_text);
+        let lexed = lex_lossless(source_id, source_text).expect("supported tokens should lex");
+
+        assert!(lexed.trivia.iter().all(|item| item.kind == TriviaKind::HorizontalWhitespace));
+        let mut spans: Vec<_> = lexed.tokens.iter()
+            .filter(|token| !matches!(&token.kind, super::TokenKind::End))
+            .map(|token| token.span)
+            .chain(lexed.trivia.iter().map(|item| item.span))
+            .collect();
+        spans.sort_by_key(|span| span.start);
+
+        let reconstructed = spans.into_iter()
+            .map(|span| &source_text[span.start..span.end])
+            .collect::<String>();
+        assert_eq!(reconstructed, source_text);
+    }
+
+    #[test]
+    fn lossless_lexer_retains_original_identifier_spelling() {
+        use super::{lex_lossless, TokenKind};
+        let source_text = "print FACT(1)\n";
+        let mut sources = SourceMap::new();
+        let source_id = sources.add_source("spelling.bas", source_text);
+        let lexed = lex_lossless(source_id, source_text).expect("identifier candidates should lex");
+
+        assert!(matches!(&lexed.tokens[0].kind, TokenKind::Identifier(name) if name == "print"));
+        assert_eq!(
+            &source_text[lexed.tokens[0].span.start..lexed.tokens[0].span.end],
+            "print"
+        );
+    }
+
 }
