@@ -83,7 +83,6 @@ Only implement platform behavior backed by accepted references and tests.
 
 - [ ] Linux platform adapter and SDL3 integration — [#52](https://github.com/vsimko/gfabasic-rust/issues/52)
 - [ ] Amiga API compatibility runtime — [#53](https://github.com/vsimko/gfabasic-rust/issues/53)
-The Atari ST API runtime is out of scope under [ADR 0011](docs/architecture/adr/0011-amiga-35-linux-sdl3-product-scope.md).
 - [ ] Resolve API registry declarations to actual runtime handlers — [#115](https://github.com/vsimko/gfabasic-rust/issues/115)
 - [ ] Compatibility report and optional migration analysis — [#56](https://github.com/vsimko/gfabasic-rust/issues/56)
 - [x] Fuzzing strategy and source-loader smoke/scheduled campaigns — [#43](https://github.com/vsimko/gfabasic-rust/issues/43), [#118](https://github.com/vsimko/gfabasic-rust/issues/118); lexer/parser targets remain deferred until [#46](https://github.com/vsimko/gfabasic-rust/issues/46) and [#47](https://github.com/vsimko/gfabasic-rust/issues/47) expose stable entry points
