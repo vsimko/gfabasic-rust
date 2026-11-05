@@ -9,4 +9,5 @@ fixtures = [
   "amiga/3.5/matrix/mat-clear-zero",
   "amiga/3.5/matrix/mat-set-scalar",
   "amiga/3.5/combinatorics/fact-zero",
+  "amiga/3.5/combinatorics/three-intrinsics",
 ]
