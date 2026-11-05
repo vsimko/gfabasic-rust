@@ -38,6 +38,7 @@ pub enum Statement {
     },
 }
 
+/// A significant token kind recognized by the current evidence-gated lexer.
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum TokenKind {
     /// An identifier candidate with its exact source spelling.
@@ -58,9 +59,12 @@ pub enum TokenKind {
     End,
 }
 
+/// A significant token and its original source span.
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Token {
+    /// The interpreted token kind; exact spelling remains in the source span.
     pub kind: TokenKind,
+    /// Half-open UTF-8 byte range in the original source.
     pub span: SourceSpan,
 }
 
@@ -74,7 +78,9 @@ pub enum TriviaKind {
 /// A lossless span of source trivia.
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Trivia {
+    /// The recognized trivia category.
     pub kind: TriviaKind,
+    /// Half-open UTF-8 byte range in the original source.
     pub span: SourceSpan,
 }
 
@@ -84,7 +90,9 @@ pub struct Trivia {
 /// Unsupported syntax still produces diagnostics rather than being guessed.
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct LexedSource {
+    /// Significant tokens, including line boundaries and the end marker.
     pub tokens: Vec<Token>,
+    /// Non-semantic source spans between significant tokens.
     pub trivia: Vec<Trivia>,
 }
 
@@ -100,6 +108,10 @@ fn diagnostic(
 // CR, CRLF, and LF are accepted here only as transport-level separators for
 // this prototype. This is not a claim about the original Amiga 3.5 source
 // encoding/line-ending contract; that remains subject to #66 observation.
+/// Lexes the currently supported source subset without discarding recognized trivia.
+///
+/// Token and trivia spans partition all successfully recognized source bytes.
+/// Unknown syntax is reported as a diagnostic instead of being normalized.
 pub fn lex_lossless(source_id: SourceId, source: &str) -> Result<LexedSource, Vec<Diagnostic>> {
     let bytes = source.as_bytes();
     let mut tokens = Vec::new();
