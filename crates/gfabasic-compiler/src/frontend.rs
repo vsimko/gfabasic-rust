@@ -207,16 +207,16 @@ impl Parser {
         }
     }
 
-    fn error(&self, message: impl Into<String>, span: SourceSpan) -> Diagnostic {
-        diagnostic(
+    fn error(&self, message: impl Into<String>, span: SourceSpan) -> Box<Diagnostic> {
+        Box::new(diagnostic(
             "GFA-PARSE-0001",
             DiagnosticCategory::Unsupported,
             message,
             span,
-        )
+        ))
     }
 
-    fn parse_variable(&mut self) -> Result<(String, SourceSpan), Diagnostic> {
+    fn parse_variable(&mut self) -> Result<(String, SourceSpan), Box<Diagnostic>> {
         let token = self.advance();
         match token.kind {
             TokenKind::Identifier(name) if matches!(name.as_str(), "x" | "y" | "z") => {
@@ -230,7 +230,7 @@ impl Parser {
         }
     }
 
-    fn expect(&mut self, expected: TokenKind, description: &str) -> Result<Token, Diagnostic> {
+    fn expect(&mut self, expected: TokenKind, description: &str) -> Result<Token, Box<Diagnostic>> {
         let token = self.current().clone();
         if std::mem::discriminant(&token.kind) == std::mem::discriminant(&expected) {
             Ok(self.advance())
@@ -243,7 +243,7 @@ impl Parser {
         &mut self,
         name: String,
         start: SourceSpan,
-    ) -> Result<Statement, Diagnostic> {
+    ) -> Result<Statement, Box<Diagnostic>> {
         self.expect(TokenKind::Equals, "'='")?;
         let function = self.advance();
         match function.kind {
@@ -275,7 +275,7 @@ impl Parser {
         })
     }
 
-    fn parse_print(&mut self, start: SourceSpan) -> Result<Statement, Diagnostic> {
+    fn parse_print(&mut self, start: SourceSpan) -> Result<Statement, Box<Diagnostic>> {
         let mut names = Vec::new();
         let (first, _) = self.parse_variable()?;
         names.push(first);
@@ -291,7 +291,7 @@ impl Parser {
         })
     }
 
-    fn parse_statement(&mut self) -> Result<Statement, Diagnostic> {
+    fn parse_statement(&mut self) -> Result<Statement, Box<Diagnostic>> {
         let first = self.advance();
         match first.kind {
             TokenKind::Identifier(name) if name == "PRINT" => self.parse_print(first.span),
@@ -335,7 +335,7 @@ impl Parser {
                     }
                 }
                 Err(error) => {
-                    self.diagnostics.push(error);
+                    self.diagnostics.push(*error);
                     self.synchronize();
                 }
             }
