@@ -816,6 +816,7 @@ mod tests {
         assert_eq!(reconstructed, source_text);
     }
 
+    // Token-boundary coverage only; this does not claim expression grammar support.
     #[test]
     fn special_names_are_recognized_at_eof_and_before_existing_delimiters() {
         use super::{TokenKind, lex_lossless};
