@@ -451,6 +451,17 @@ mod tests {
     }
 
     #[test]
+    fn reports_malformed_fact_call_as_syntax_not_unsupported() {
+        let source_text = "x=FACT(0\n";
+        let mut sources = SourceMap::new();
+        let source_id = sources.add_source("malformed.bas", source_text);
+
+        let errors = parse(source_id, source_text).expect_err("missing ')' is malformed syntax");
+        assert_eq!(errors[0].category, DiagnosticCategory::Syntax);
+        assert_eq!(errors[0].code, "GFA-PARSE-0001");
+    }
+
+    #[test]
     fn accepts_crlf_as_transport_level_separators_without_claiming_dialect_conformance() {
         let source_text = "x=FACT(0)\r\ny=FACT(1)\r\n";
         let mut sources = SourceMap::new();
