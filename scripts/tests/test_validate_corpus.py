@@ -31,6 +31,12 @@ class CorpusValidationTests(unittest.TestCase):
         )
         return temp, root
 
+    def make_symlink(self, link, target, *, target_is_directory=False):
+        try:
+            link.symlink_to(target, target_is_directory=target_is_directory)
+        except (OSError, NotImplementedError) as exc:
+            self.skipTest(f"symbolic links are unavailable: {exc}")
+
     def test_valid_corpus_passes(self):
         temp, root = self.make_root()
         self.addCleanup(temp.cleanup)
@@ -56,6 +62,53 @@ class CorpusValidationTests(unittest.TestCase):
         self.addCleanup(temp.cleanup)
         (root / "tests/corpus/amiga/3.0/control-flow/fixture-one.bas").unlink()
         self.assertTrue(any("missing source file" in item for item in validate_corpus(root)))
+
+    def test_symlinked_source_is_rejected(self):
+        temp, root = self.make_root()
+        self.addCleanup(temp.cleanup)
+        source = root / "tests/corpus/amiga/3.0/control-flow/fixture-one.bas"
+        outside = root / "outside.bas"
+        outside.write_text("PRINT 99\\n")
+        source.unlink()
+        self.make_symlink(source, outside)
+
+        errors = validate_corpus(root)
+        self.assertTrue(any("source path must not traverse symlinks" in item for item in errors))
+
+    def test_symlinked_metadata_is_rejected_without_reading_target(self):
+        temp, root = self.make_root()
+        self.addCleanup(temp.cleanup)
+        metadata = root / "tests/corpus/amiga/3.0/control-flow/fixture-one.toml"
+        outside = root / "outside.toml"
+        outside.write_text("this is not valid TOML = [")
+        metadata.unlink()
+        self.make_symlink(metadata, outside)
+
+        errors = validate_corpus(root)
+        self.assertTrue(any("metadata path must not traverse symlinks" in item for item in errors))
+        self.assertFalse(any("invalid TOML" in item for item in errors))
+
+    def test_symlinked_parent_directory_is_rejected(self):
+        temp, root = self.make_root()
+        self.addCleanup(temp.cleanup)
+        corpus_dir = root / "tests/corpus/amiga/3.0/control-flow"
+        outside = root / "outside-corpus"
+        corpus_dir.rename(outside)
+        self.make_symlink(corpus_dir, outside, target_is_directory=True)
+
+        errors = validate_corpus(root)
+        self.assertTrue(any("source path must not traverse symlinks" in item for item in errors))
+        self.assertTrue(any("metadata path must not traverse symlinks" in item for item in errors))
+
+    def test_broken_source_symlink_is_rejected(self):
+        temp, root = self.make_root()
+        self.addCleanup(temp.cleanup)
+        source = root / "tests/corpus/amiga/3.0/control-flow/fixture-one.bas"
+        source.unlink()
+        self.make_symlink(source, root / "missing.bas")
+
+        errors = validate_corpus(root)
+        self.assertTrue(any("source path must not traverse symlinks" in item for item in errors))
 
     def test_duplicate_fixture_id_fails(self):
         temp, root = self.make_root()
