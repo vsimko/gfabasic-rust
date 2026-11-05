@@ -35,17 +35,17 @@ Fixture: `tests/corpus/amiga/3.5/combinatorics/fact-zero.bas`.
 
 No SDL3, graphics, Amiga API, file I/O, arrays, matrices, procedures, source composition, or other built-ins are required.
 
-## Required evidence gate before implementation
+## Evidence sufficiency and remaining uncertainty
 
-The 3.5 addendum verifies the `FACT` signature, the factorial definition (including `0! = 1`), and demonstrates assignment from `FACT` plus a comma-separated `PRINT` list. Before treating the entire program as normative 3.5 syntax, check the base-manual passages for:
+The selected program's required syntax is demonstrated directly in the 3.5 addendum, so this narrow slice does not need to promote unrelated 3.0-only grammar:
 
-- identifier spelling and case behavior;
-- assignment statement syntax;
-- integer literal syntax;
-- `PRINT` expression/list syntax and numeric output formatting;
-- statement and line-boundary rules.
+- Printed p. 14-1 gives the `FACT(n)` signature, specifies an integer-expression argument, defines the factorial result, and explicitly states `0! = 1`.
+- Printed p. 14-2 demonstrates assignments to `x`, `y`, and `z` from built-in functions, followed by the comma-separated `PRINT x,y,z` statement. Its example uses multiple numeric literals and one statement per source line.
+- The fixture changes the example values and uses only the documented `FACT` function; it is independently authored.
 
-The combined source scan identifies the base manual as Amiga GFA BASIC 3.0 plus explicit 3.5 updates. Do not silently promote unrelated 3.0-only rules to 3.5. Record each inherited rule as a candidate until its applicability is justified.
+The manual does not define an exact whitespace contract for the rendered numeric output in this example. The end-to-end test should assert the ordered numeric values while treating runs of output whitespace as separators; it must not invent a stricter formatting guarantee.
+
+No further base-manual grammar review is a prerequisite for this specific source slice. Interpreter execution would strengthen confidence but remains separately blocked by lawful access to the original 3.5 interpreter under #66.
 
 ## Pipeline work required
 
