@@ -115,7 +115,7 @@ No workflow should claim to validate a component that does not yet exist. A gree
 
 ## Cache policy and measured baseline
 
-Do not add a shared build-artifact cache until it is likely to reduce total workflow time. The current workspace has no third-party Cargo dependencies: the committed `Cargo.lock` contains only the three local workspace packages. There are therefore no meaningful registry/git dependency downloads to reuse, and the current build outputs are small.
+Do not add a shared build-artifact cache until it is likely to reduce total workflow time. The current workspace has one pinned third-party Cargo dependency (`unicode-width` 0.2.2), so there is a small registry download to reuse. Given the single small dependency and small build outputs, a shared cache is still unlikely to reduce total workflow time; keep clean builds until measurements justify a cache.
 
 A baseline review on 2026-11-04 measured two successful Rust workflow runs at approximately 20 seconds each (GitHub Actions runs [41831742392](https://github.com/vsimko/gfabasic-rust/actions/runs/41831742392) and [41831868187](https://github.com/vsimko/gfabasic-rust/actions/runs/41831868187)). This is shorter than a typical cache restore/save cycle can reliably improve, and does not justify mutable shared build artifacts at this stage.
 

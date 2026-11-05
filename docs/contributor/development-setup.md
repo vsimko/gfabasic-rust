@@ -15,7 +15,7 @@ The initial CI host is Linux x86-64 using the GitHub-hosted Ubuntu runner. Other
 - Python 3.12 and `jsonschema==4.25.1` for API registry validation.
 - lychee v0.24.2 for local Markdown link and anchor checks.
 
-The workspace currently has no third-party Cargo dependencies or required native system libraries. LLVM and SDL3 are deliberately deferred and are not required to build the skeleton. Do not install arbitrary LLVM or SDL3 versions for this stage.
+The compiler crate has one third-party Cargo dependency, `unicode-width` 0.2.2, for terminal display-cell measurement; its MIT OR Apache-2.0 license is within the approved allowlist. No required native system libraries are needed. LLVM and SDL3 are deliberately deferred and are not required to build the current workspace. Do not install arbitrary LLVM or SDL3 versions for this stage.
 
 The project source code and original documentation are licensed under MIT. See the root [LICENSE](../../LICENSE) and [project README](../../README.md#license). This license does not grant redistribution rights to third-party manuals, ROMs, disk images, or sample programs.
 
