@@ -84,6 +84,53 @@ fn semantic_error(sources: &SourceMap, span: SourceSpan, message: impl Into<Stri
     .render(sources)
 }
 
+fn factorial_value(n: i64) -> Option<i64> {
+    if !(0..=20).contains(&n) {
+        return None;
+    }
+    (1..=n).try_fold(1_i64, |value, factor| value.checked_mul(factor))
+}
+
+fn variat_value(n: i64, k: i64) -> Option<i64> {
+    if n < 0 || n > 20 || k < 0 || k > n {
+        return None;
+    }
+    ((n - k + 1)..=n).try_fold(1_i64, |value, factor| value.checked_mul(factor))
+}
+
+fn combin_value(n: i64, k: i64) -> Option<i64> {
+    if n < 0 || n > 20 || k < 0 || k > n {
+        return None;
+    }
+    let k = k.min(n - k);
+    let mut value = 1_i64;
+    for index in 1..=k {
+        value = value.checked_mul(n - k + index)?;
+        value /= index;
+    }
+    Some(value)
+}
+
+fn emit_assignment(
+    variables: &mut BTreeMap<String, u32>,
+    statements: &mut Vec<String>,
+    name: &str,
+    value: i64,
+    span: SourceSpan,
+    sources: &SourceMap,
+) -> Result<(), String> {
+    if variables.contains_key(name) {
+        return Err(semantic_error(
+            sources,
+            span,
+            format!("reassignment of '{name}' is outside the current prototype subset"),
+        ));
+    }
+    variables.insert(name.to_owned(), value as u32);
+    statements.push(format!("    long long {name} = {value};\\n"));
+    Ok(())
+}
+
 fn lower_program(program: &Program, sources: &SourceMap) -> Result<String, String> {
     let mut variables = BTreeMap::<String, u32>::new();
     let mut statements = Vec::new();
@@ -96,29 +143,31 @@ fn lower_program(program: &Program, sources: &SourceMap) -> Result<String, Strin
                 argument,
                 span,
             } => {
-                if variables.contains_key(name) {
-                    return Err(semantic_error(
+                let value = factorial_value(*argument)
+                    .ok_or_else(|| semantic_error(
                         sources,
                         *span,
-                        format!("reassignment of '{name}' is outside the current prototype subset"),
-                    ));
-                }
-                let value = match argument {
-                    0 => 1,
-                    1 => 1,
-                    2 => 2,
-                    _ => {
-                        return Err(semantic_error(
-                            sources,
-                            *span,
-                            format!(
-                                "FACT({argument}) is outside the current verified prototype subset"
-                            ),
-                        ));
-                    }
-                };
-                variables.insert(name.clone(), value);
-                statements.push(format!("    long long {name} = {value};\n"));
+                        format!("FACT({argument}) is outside the supported integer-literal range 0..=20"),
+                    ))?;
+                emit_assignment(&mut variables, &mut statements, name, value, *span, sources)?;
+            }
+            Statement::AssignVariat { name, n, k, span } => {
+                let value = variat_value(*n, *k)
+                    .ok_or_else(|| semantic_error(
+                        sources,
+                        *span,
+                        format!("VARIAT({n},{k}) requires 0 <= k <= n <= 20"),
+                    ))?;
+                emit_assignment(&mut variables, &mut statements, name, value, *span, sources)?;
+            }
+            Statement::AssignCombin { name, n, k, span } => {
+                let value = combin_value(*n, *k)
+                    .ok_or_else(|| semantic_error(
+                        sources,
+                        *span,
+                        format!("COMBIN({n},{k}) requires 0 <= k <= n <= 20"),
+                    ))?;
+                emit_assignment(&mut variables, &mut statements, name, value, *span, sources)?;
             }
             Statement::PrintVariables { names, span } => {
                 for name in names {
@@ -193,6 +242,20 @@ mod tests {
                 "accepted: {source}"
             );
         }
+    }
+
+    #[test]
+    fn evaluates_documented_amiga_35_combinatorics_intrinsics() {
+        let source_text = "x=FACT(5)\\ny=VARIAT(5,2)\\nz=COMBIN(5,2)\\nPRINT x,y,z\\n";
+        let mut sources = SourceMap::new();
+        let source_id = sources.add_source("combinatorics.bas", source_text);
+        let program = parse(source_id, source_text).unwrap();
+        let generated = lower_program(&program, &sources).unwrap();
+
+        assert!(generated.contains("long long x = 120;"));
+        assert!(generated.contains("long long y = 20;"));
+        assert!(generated.contains("long long z = 10;"));
+        assert!(generated.contains("printf(\\"%lld %lld %lld\\\\n\\", x, y, z)"));
     }
 
     #[test]
