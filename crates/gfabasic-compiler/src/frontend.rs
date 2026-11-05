@@ -20,6 +20,18 @@ pub enum Statement {
         argument: i64,
         span: SourceSpan,
     },
+    AssignVariat {
+        name: String,
+        n: i64,
+        k: i64,
+        span: SourceSpan,
+    },
+    AssignCombin {
+        name: String,
+        n: i64,
+        k: i64,
+        span: SourceSpan,
+    },
     PrintVariables {
         names: Vec<String>,
         span: SourceSpan,
@@ -258,36 +270,72 @@ impl Parser {
     ) -> Result<Statement, Box<Diagnostic>> {
         self.expect(TokenKind::Equals, "'='")?;
         let function = self.advance();
-        match function.kind {
-            TokenKind::Identifier(name) if name == "FACT" => {}
-            TokenKind::Identifier(name) => {
-                return Err(self.unsupported_error(
-                    format!("intrinsic {name:?} is outside the current MVP subset"),
-                    function.span,
-                ));
-            }
+        let function_name = match function.kind {
+            TokenKind::Identifier(name) => name,
             _ => {
-                return Err(self.syntax_error("expected FACT after assignment", function.span));
+                return Err(self.syntax_error("expected a supported intrinsic after assignment", function.span));
             }
+        };
+
+        if !matches!(function_name.as_str(), "FACT" | "VARIAT" | "COMBIN") {
+            return Err(self.unsupported_error(
+                format!("intrinsic {function_name:?} is outside the current MVP subset"),
+                function.span,
+            ));
         }
-        self.expect(TokenKind::LeftParen, "'(' after FACT")?;
-        let argument = self.advance();
-        let value = match argument.kind {
+
+        self.expect(TokenKind::LeftParen, &format!("'(' after {function_name}"))?;
+        let first = self.advance();
+        let first_value = match first.kind {
             TokenKind::Integer(value) => value,
             _ => {
                 return Err(self.syntax_error(
-                    "FACT argument must be an integer literal in this MVP",
-                    argument.span,
+                    "intrinsic arguments must be non-negative integer literals in this MVP",
+                    first.span,
                 ));
             }
         };
-        self.expect(TokenKind::RightParen, "')' after FACT argument")?;
+
+        if function_name == "FACT" {
+            self.expect(TokenKind::RightParen, "')' after FACT argument")?;
+            let end = self.tokens[self.cursor - 1].span;
+            return Ok(Statement::AssignFact {
+                name,
+                argument: first_value,
+                span: SourceSpan::new(self.source_id, start.start, end.end),
+            });
+        }
+
+        self.expect(TokenKind::Comma, "',' between intrinsic arguments")?;
+        let second = self.advance();
+        let second_value = match second.kind {
+            TokenKind::Integer(value) => value,
+            _ => {
+                return Err(self.syntax_error(
+                    "intrinsic arguments must be non-negative integer literals in this MVP",
+                    second.span,
+                ));
+            }
+        };
+        self.expect(TokenKind::RightParen, "')' after intrinsic arguments")?;
         let end = self.tokens[self.cursor - 1].span;
-        Ok(Statement::AssignFact {
-            name,
-            argument: value,
-            span: SourceSpan::new(self.source_id, start.start, end.end),
-        })
+        let span = SourceSpan::new(self.source_id, start.start, end.end);
+
+        match function_name.as_str() {
+            "VARIAT" => Ok(Statement::AssignVariat {
+                name,
+                n: first_value,
+                k: second_value,
+                span,
+            }),
+            "COMBIN" => Ok(Statement::AssignCombin {
+                name,
+                n: first_value,
+                k: second_value,
+                span,
+            }),
+            _ => unreachable!("FACT returned above"),
+        }
     }
 
     fn parse_print(&mut self, start: SourceSpan) -> Result<Statement, Box<Diagnostic>> {
@@ -417,6 +465,36 @@ mod tests {
             &program.statements[3],
             Statement::PrintVariables { names, .. } if names.iter().map(String::as_str).collect::<Vec<_>>() == ["x", "y", "z"]
         ));
+    }
+
+    #[test]
+    fn parses_the_three_documented_amiga_35_combinatorics_intrinsics() {
+        let source_text = "x=FACT(5)\\ny=VARIAT(5,2)\\nz=COMBIN(5,2)\\n";
+        let mut sources = SourceMap::new();
+        let source_id = sources.add_source("combinatorics.bas", source_text);
+
+        let program = parse(source_id, source_text).expect("documented intrinsics should parse");
+        assert!(matches!(
+            &program.statements[0],
+            Statement::AssignFact { name, argument: 5, .. } if name == "x"
+        ));
+        assert!(matches!(
+            &program.statements[1],
+            Statement::AssignVariat { name, n: 5, k: 2, .. } if name == "y"
+        ));
+        assert!(matches!(
+            &program.statements[2],
+            Statement::AssignCombin { name, n: 5, k: 2, .. } if name == "z"
+        ));
+    }
+
+    #[test]
+    fn rejects_malformed_combinatorics_argument_lists() {
+        for source_text in ["x=VARIAT(5)\\n", "x=COMBIN(5,2,1)\\n"] {
+            let mut sources = SourceMap::new();
+            let source_id = sources.add_source("malformed.bas", source_text);
+            assert!(parse(source_id, source_text).is_err(), "accepted: {source_text}");
+        }
     }
 
     #[test]
