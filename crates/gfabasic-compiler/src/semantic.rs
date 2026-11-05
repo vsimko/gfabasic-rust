@@ -182,7 +182,7 @@ mod tests {
 
     #[test]
     fn resolves_print_reference_to_the_exact_assignment_symbol() {
-        let source_text = "x=FACT(1)\\nPRINT x\\n";
+        let source_text = "x=FACT(1)\nPRINT x\n";
         let mut sources = SourceMap::new();
         let source_id = sources.add_source("symbols.bas", source_text);
         let document = parse_document(source_id, source_text).expect("prototype source parses");
@@ -200,7 +200,7 @@ mod tests {
 
     #[test]
     fn diagnoses_print_reference_without_a_prior_assignment() {
-        let source_text = "PRINT x\\n";
+        let source_text = "PRINT x\n";
         let mut sources = SourceMap::new();
         let source_id = sources.add_source("unresolved.bas", source_text);
         let document = parse_document(source_id, source_text).expect("syntax is valid");
@@ -212,7 +212,7 @@ mod tests {
 
     #[test]
     fn diagnoses_reassignment_without_creating_a_second_symbol() {
-        let source_text = "x=FACT(1)\\nx=FACT(2)\\nPRINT x\\n";
+        let source_text = "x=FACT(1)\nx=FACT(2)\nPRINT x\n";
         let mut sources = SourceMap::new();
         let source_id = sources.add_source("duplicate.bas", source_text);
         let document = parse_document(source_id, source_text).expect("syntax is valid");
