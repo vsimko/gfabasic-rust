@@ -50,11 +50,10 @@ impl SymbolTable {
     }
 
     /// Iterate over references bound to the selected symbol.
-    pub fn references_to(
-        &self,
-        id: SymbolId,
-    ) -> impl Iterator<Item = &ResolvedReference> {
-        self.references.iter().filter(move |reference| reference.symbol == id)
+    pub fn references_to(&self, id: SymbolId) -> impl Iterator<Item = &ResolvedReference> {
+        self.references
+            .iter()
+            .filter(move |reference| reference.symbol == id)
     }
 }
 
@@ -92,9 +91,7 @@ pub fn resolve_prototype_symbols(
                         return None;
                     }
                     match &token.kind {
-                        TokenKind::Identifier(token_name) if token_name == name => {
-                            Some(token.span)
-                        }
+                        TokenKind::Identifier(token_name) if token_name == name => Some(token.span),
                         _ => None,
                     }
                 });
@@ -112,7 +109,9 @@ pub fn resolve_prototype_symbols(
                 if by_name.contains_key(name) {
                     errors.push(SemanticError {
                         code: "GFA-SEM-0001".to_owned(),
-                        message: format!("reassignment of '{name}' is outside the current prototype subset"),
+                        message: format!(
+                            "reassignment of '{name}' is outside the current prototype subset"
+                        ),
                         span: declaration,
                     });
                     continue;
@@ -193,7 +192,10 @@ mod tests {
         assert_eq!(symbols.symbols[0].id, SymbolId(0));
         assert_eq!(symbols.symbols[0].name, "x");
         assert_eq!(
-            symbols.references_to(SymbolId(0)).map(|reference| reference.span).count(),
+            symbols
+                .references_to(SymbolId(0))
+                .map(|reference| reference.span)
+                .count(),
             1
         );
     }
