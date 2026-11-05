@@ -17,8 +17,8 @@ This matrix separates accepted normative source scope from research evidence, co
 
 ## Project-wide implementation status
 
-- Rust workspace: bootstrapped with compiler, runtime, and Linux platform crates; compiler source-map and strict UTF-8 file-loading primitives are implemented. The minimal CLI supports help/version output only; the language frontend, semantic analysis, IR, backend, project configuration, runtime behavior, and platform adapter are not implemented.
-- Compiler frontend, semantic analysis, IR, and LLVM backend: not implemented. The minimal CLI supports help/version only; build/check and project configuration are not implemented.
+- Rust workspace: bootstrapped with compiler, generated-program runtime, and Linux platform crates. Compiler source-map, strict UTF-8 transport loading, structured diagnostics, and the minimal CLI (`help`/`version`) are implemented building blocks. The GFA BASIC frontend, semantic analysis, IR, backend, project configuration, runtime behavior, and platform adapter are not implemented.
+- No GFA BASIC source compilation is available: the frontend, semantic analysis, IR, and LLVM backend are not implemented; `build` and `check` remain explicit usage errors.
 - GFA BASIC core runtime: not implemented.
 - Amiga and Atari ST compatibility runtimes: not implemented.
 - Linux platform layer and SDL3 integration: not implemented.
