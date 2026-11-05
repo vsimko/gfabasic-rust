@@ -133,9 +133,11 @@ def validate_fixture(
     elif len(profiles) != len(set(profiles)):
         error(errors, metadata_path, "api_profiles must not contain duplicates", corpus_root)
 
-    if metadata.get("kind") not in FIXTURE_KINDS:
+    kind = metadata.get("kind")
+    if not isinstance(kind, str) or kind not in FIXTURE_KINDS:
         error(errors, metadata_path, f"kind must be one of {sorted(FIXTURE_KINDS)}", corpus_root)
-    if metadata.get("status") not in FIXTURE_STATUSES:
+    status = metadata.get("status")
+    if not isinstance(status, str) or status not in FIXTURE_STATUSES:
         error(errors, metadata_path, f"status must be one of {sorted(FIXTURE_STATUSES)}", corpus_root)
 
     notes = metadata.get("notes")
