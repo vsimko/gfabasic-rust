@@ -41,7 +41,7 @@ class CorpusValidationTests(unittest.TestCase):
         temp, root = self.make_root()
         self.addCleanup(temp.cleanup)
         manifest = root / "tests/corpus/manifest.toml"
-        manifest.write_bytes(b"\\xff")
+        manifest.write_bytes(b"\xff")
 
         errors = validate_corpus(root)
         self.assertTrue(any("manifest.toml: invalid UTF-8" in item for item in errors))
@@ -50,7 +50,7 @@ class CorpusValidationTests(unittest.TestCase):
         temp, root = self.make_root()
         self.addCleanup(temp.cleanup)
         metadata = root / "tests/corpus/amiga/3.0/control-flow/fixture-one.toml"
-        metadata.write_bytes(b"\\xff")
+        metadata.write_bytes(b"\xff")
 
         errors = validate_corpus(root)
         self.assertTrue(any("fixture-one.toml: invalid UTF-8" in item for item in errors))
@@ -59,7 +59,7 @@ class CorpusValidationTests(unittest.TestCase):
         temp, root = self.make_root()
         self.addCleanup(temp.cleanup)
         source_register = root / "docs/reference-sources.md"
-        source_register.write_bytes(b"\\xff")
+        source_register.write_bytes(b"\xff")
 
         errors = validate_corpus(root)
         self.assertTrue(any("docs/reference-sources.md: invalid UTF-8" in item for item in errors))
