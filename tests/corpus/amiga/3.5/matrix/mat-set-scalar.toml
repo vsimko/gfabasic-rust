@@ -1,0 +1,15 @@
+id = "amiga-3.5-mat-set-scalar"
+dialect = "GFA BASIC Amiga"
+version = "3.5"
+api_profiles = []
+kind = "semantic"
+status = "verified"
+source_key = "AM-INTERPRETER-30-35-UPDATE-SCAN"
+source_pages = "printed p. 13-3"
+evidence_status = "page-image-verified"
+expectation = "MAT SET sets every element of the previously dimensioned numeric matrix or vector to the scalar value 7. MAT PRINT displays the field."
+notes = [
+  "Independently authored minimal fixture; not copied from the manual's example.",
+  "The manual defines MAT SET a()=x as setting every field element to x and equates it with ARRAYFILL a(),x.",
+  "Verified against the supplied 3.5 addendum page image; no original interpreter execution has been performed.",
+]
