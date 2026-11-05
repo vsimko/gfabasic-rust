@@ -1,6 +1,6 @@
 # Versioning and compatibility lifecycle
 
-- Status: **Policy accepted by [ADR 0002](adr/0002-versioning-and-compatibility-lifecycle.md); CLI/schema/ABI mechanisms are not implemented yet.**
+- Status: **Policy accepted by [ADR 0010](adr/0010-versioning-and-compatibility-lifecycle.md); CLI/schema/ABI mechanisms are not implemented yet.**
 - Tracking: [issue #58](https://github.com/vsimko/gfabasic-rust/issues/58).
 - Scope: compiler product releases, machine-readable schemas, language dialects, API profiles, runtime ABI, target support, and deprecation.
 
