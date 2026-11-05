@@ -2,20 +2,20 @@
 
 Primary source: the supplied `GFA_Basic_3.5_Interpreter.pdf`; independently cross-checked against `GFA-Basic 3.0 + 3.5 Upd (Amiga).pdf` (487 PDF pages). The second scan's PDF p. 3 identifies the base as `GFA BASIC 3.0 Interpreter`; p. 4 gives ©1988 GFA Systemtechnik GmbH, program author Frank Ostrowski, second edition December 1988; p. 7 explicitly instructs readers to add Chapter 13, Chapter 14, and the 3.5 editor changes to the 3.0 manual. The following references are printed addendum page numbers.
 
-## 1. Editor changes (printed addendum p. 13-1)
+## 1. Editor changes (printed base-manual p. 1-25; explicit 3.5 update)
 
-- Editor uses two more bytes per program row than versions 3.0–3.07; the source associates this with faster backward scrolling and folding functions.
-- Search can search header rows of closed procedures/functions.
-- Listing prints labels two characters to the left, as with CASE.
+- Editor uses two more bytes per program row than versions 3.0–3.041; the source says this makes backward scrolling faster and enables folding functions.
+- Search can also find closed procedure/function header rows.
+- During listing, labels are shifted two characters to the left, as with `CASE`.
 
-## 2. Tab-key operations (printed addendum p. 13-1)
+## 2. Tab-key operations (printed base-manual p. 1-25; explicit 3.5 update)
 
 | Key | Documented action |
 |---|---|
 | Tab | Move cursor to next tabulator position |
 | Ctrl+Tab | Move cursor to previous tab position |
 | LeftShift+Tab | Insert spaces to next tab position |
-| RightShift+Tab | Delete blank spaces in one row up to/from cursor |
+| RightShift+Tab | Delete all blank spaces in the current line up to and including the cursor position |
 
 ## 3. Linear operations on numeric fields
 
