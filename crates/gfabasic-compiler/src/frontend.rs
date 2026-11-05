@@ -401,6 +401,20 @@ mod tests {
     }
 
     #[test]
+    fn lexical_diagnostics_render_original_source_locations() {
+        let text = "PRINT \"é\"\\n@";
+        let mut sources = SourceMap::new();
+        let source = sources.add_source("examples/bad.gfa", text);
+        let output = lex(source, text, SourceDialect::AmigaGfaBasic30);
+        assert_eq!(output.diagnostics.len(), 1);
+        let diagnostic = &output.diagnostics[0];
+        assert_eq!(diagnostic.primary_span.unwrap().start, 11);
+        assert!(diagnostic.render(&sources).starts_with(
+            "examples/bad.gfa:2:1: error[GFA-LEX-0001]: invalid character"
+        ));
+    }
+
+    #[test]
     fn preserves_utf8_byte_offsets() {
         let output = lex_text("PRINT \"é\"");
         let string = output
