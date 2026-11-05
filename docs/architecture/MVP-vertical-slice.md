@@ -9,8 +9,10 @@
 The smallest useful end-to-end candidate currently in the corpus is:
 
 ```basic
-result=FACT(0)
-PRINT result
+x=FACT(0)
+y=FACT(1)
+z=FACT(2)
+PRINT x,y,z
 ```
 
 Fixture: `tests/corpus/amiga/3.5/combinatorics/fact-zero.bas`.
@@ -25,17 +27,17 @@ Fixture: `tests/corpus/amiga/3.5/combinatorics/fact-zero.bas`.
 ## Proposed implementation boundary
 
 1. One explicitly selected Amiga GFA BASIC 3.5 dialect configuration.
-2. One numeric variable assignment.
+2. One numeric variable assignments.
 3. Integer literal `0`.
 4. One call to the built-in `FACT` with an integer-expression argument.
-5. A `PRINT` statement for the assigned numeric value.
+5. A comma-separated `PRINT` list for the assigned numeric values.
 6. Deterministic output and process exit status on Linux x86-64.
 
 No SDL3, graphics, Amiga API, file I/O, arrays, matrices, procedures, source composition, or other built-ins are required.
 
 ## Required evidence gate before implementation
 
-The 3.5 addendum verifies the `FACT` signature and result, and demonstrates assignment and `PRINT` together. Before treating the entire program as normative 3.5 syntax, check the base-manual passages for:
+The 3.5 addendum verifies the `FACT` signature, the factorial definition (including `0! = 1`), and demonstrates assignment from `FACT` plus a comma-separated `PRINT` list. Before treating the entire program as normative 3.5 syntax, check the base-manual passages for:
 
 - identifier spelling and case behavior;
 - assignment statement syntax;
