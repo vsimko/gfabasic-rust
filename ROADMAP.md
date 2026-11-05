@@ -83,7 +83,7 @@ Only implement platform behavior backed by accepted references and tests.
 
 - [ ] Linux platform adapter and SDL3 integration — [#52](https://github.com/vsimko/gfabasic-rust/issues/52)
 - [ ] Amiga API compatibility runtime — [#53](https://github.com/vsimko/gfabasic-rust/issues/53)
-Atari ST API runtime is out of scope under [ADR 0010](docs/architecture/adr/0010-amiga-35-linux-sdl3-product-scope.md).
+The Atari ST API runtime is out of scope under [ADR 0010](docs/architecture/adr/0010-amiga-35-linux-sdl3-product-scope.md).
 - [ ] Resolve API registry declarations to actual runtime handlers — [#115](https://github.com/vsimko/gfabasic-rust/issues/115)
 - [ ] Compatibility report and optional migration analysis — [#56](https://github.com/vsimko/gfabasic-rust/issues/56)
 - [x] Fuzzing strategy and source-loader smoke/scheduled campaigns — [#43](https://github.com/vsimko/gfabasic-rust/issues/43), [#118](https://github.com/vsimko/gfabasic-rust/issues/118); lexer/parser targets remain deferred until [#46](https://github.com/vsimko/gfabasic-rust/issues/46) and [#47](https://github.com/vsimko/gfabasic-rust/issues/47) expose stable entry points
@@ -107,7 +107,7 @@ The first end-to-end MVP integration gate is tracked separately in [#113](https:
 1. The sole dialect/version is Amiga GFA BASIC interpreter 3.5; 3.0/3.03 rules remain inherited candidates until confirmed for 3.5, and feature-level source evidence still gates language semantics, parser acceptance criteria, and conformance claims.
 2. Source manager, lexer, parser, semantic analysis and typed IR are sequential dependencies for the first compiler path.
 3. LLVM backend and runtime integration depend on a stable typed IR and runtime ABI.
-4. Platform APIs depend on verified profile declarations; Amiga and Only Amiga 3.5 evidence is in scope; historical 3.0/3.03 rules require 3.5 confirmation.
+4. Platform APIs depend on verified Amiga 3.5 declarations; historical 3.0/3.03 rules require 3.5 confirmation.
 5. A user quick start and installation guide depend on a working, tested CLI and distributable build.
 6. The generic source-loader fuzz target is implemented; lexer/parser fuzz targets depend on stable frontend entry points and source contracts.
 7. Release packaging depends on successful end-to-end builds and explicit runtime dependency policy.
