@@ -820,5 +820,4 @@ mod tests {
             assert_eq!(errors[0].primary_span.unwrap().start, 0);
         }
     }
-
 }
