@@ -7,7 +7,7 @@ status = "verified"
 source_key = "AM-INTERPRETER-30-35-UPDATE-SCAN"
 source_pages = "printed pp. 14-1–14-2"
 evidence_status = "page-image-verified"
-expectation = "FACT(0) evaluates to 1; assigning it to RESULT and printing RESULT displays the value 1."
+expectation = "FACT(0), FACT(1), and FACT(2) evaluate to 1, 1, and 2 respectively; PRINT outputs those three values in order."
 notes = [
   "Independently authored minimal fixture; not copied from the manual's example.",
   "Printed p. 14-1 explicitly defines 0! = 1 and gives the FACT(n) signature with integer-expression argument.",
