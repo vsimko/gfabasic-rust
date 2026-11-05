@@ -332,7 +332,7 @@ mod tests {
         )
         .with_primary_span(SourceSpan::new(wide_source, 7, 10));
         let wide_rendered = wide.render(&sources);
-        assert!(wide_rendered.ends_with(&format!("  1 | {}^^", " ".repeat(7))));
+        assert!(wide_rendered.ends_with(&format!("    | {}^^", " ".repeat(7))));
 
         let combining_source = sources.add_source("combining.gfa", "PRINT \"éx\"");
         let combining = Diagnostic::new(
@@ -343,7 +343,7 @@ mod tests {
         )
         .with_primary_span(SourceSpan::new(combining_source, 7, 10));
         let combining_rendered = combining.render(&sources);
-        assert!(combining_rendered.ends_with(&format!("  1 | {}^", " ".repeat(7))));
+        assert!(combining_rendered.ends_with(&format!("    | {}^", " ".repeat(7))));
 
         let tab_source = sources.add_source("tab.gfa", "A\tB");
         let tab = Diagnostic::new(
@@ -354,7 +354,7 @@ mod tests {
         )
         .with_primary_span(SourceSpan::new(tab_source, 2, 3));
         let tab_rendered = tab.render(&sources);
-        assert!(tab_rendered.ends_with("  1 |    ^"));
+        assert!(tab_rendered.ends_with("    |    ^"));
     }
 
     #[test]
@@ -414,7 +414,7 @@ mod tests {
         let rendered = diagnostic.render(&sources);
         assert!(rendered.starts_with("bad\\nname.gfa:1:2: error[GFA-SRC-0002]: bad\\u{7}message"));
         assert!(rendered.contains("A\\u{7}B"));
-        assert!(rendered.ends_with("  1 |  ^^^^^"));
+        assert!(rendered.ends_with("    |  ^^^^^"));
     }
 
     #[test]
