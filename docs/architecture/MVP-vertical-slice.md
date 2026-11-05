@@ -1,6 +1,6 @@
 # First compiler vertical slice — proposed boundary
 
-**Status:** proposed; research-backed candidate, not an implemented compiler feature.
+**Status:** partially implemented as an experimental FACT/PRINT frontend and native bootstrap prototype; not a complete compiler feature or conformance claim.
 
 **Normative source dialect:** Commodore Amiga GFA BASIC interpreter 3.5 (ADR 0009).
 
@@ -43,7 +43,7 @@ The selected program's required syntax is demonstrated directly in the 3.5 adden
 - Printed p. 14-2 demonstrates assignments to `x`, `y`, and `z` from built-in functions, followed by the comma-separated `PRINT x,y,z` statement. Its example uses multiple numeric literals and one statement per source line.
 - The fixture changes the example values and uses only the documented `FACT` function; it is independently authored.
 
-The manual does not define an exact whitespace contract for the rendered numeric output in this example. The end-to-end test should assert the ordered numeric values while treating runs of output whitespace as separators; it must not invent a stricter formatting guarantee.
+The manual does not define an exact whitespace contract for the rendered numeric output in this example. The end-to-end test asserts the ordered numeric values while treating runs of output whitespace as separators; it does not assert a stricter formatting guarantee.
 
 No further base-manual grammar review is a prerequisite for this specific source slice. Interpreter execution would strengthen confidence but remains separately blocked by lawful access to the original 3.5 interpreter under #66.
 
@@ -55,7 +55,7 @@ No further base-manual grammar review is a prerequisite for this specific source
 - Backend/runtime: emit a standalone Linux x86-64 executable with deterministic output.
 - Tests: corpus metadata validation, frontend positive/negative tests, IR tests, and an end-to-end executable test.
 
-The current repository only has source-map/loading primitives, structured diagnostics, and help/version CLI support. Frontend, IR, backend, and runtime modules are placeholders. This document does not claim that compilation works.
+The frontend currently parses the narrow FACT/PRINT subset and emits source-located lexical/syntax/unsupported diagnostics. A temporary C/`cc` bridge produces a native host executable for the fixture. General semantic analysis, typed project IR, the LLVM backend, and runtime remain unimplemented. The bootstrap path is not a claim of original-interpreter conformance.
 
 ## Acceptance
 
