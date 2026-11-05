@@ -86,24 +86,24 @@ These rules are source-verified for the 3.5 addendum and should be preserved exp
 
 Page-image checks of printed pp. 13-27–13-33 establish matrix multiplication dimensions and the row/column normalization meanings above. Printed pp. 13-36–13-39 confirm the `MAT QDET` performance/accuracy warning, the `MAT RANG` square-submatrix selection rule, and the detailed `MAT INV b()=a()` example. **Important source inconsistency:** the command summary on printed p. 13-22 instead lists `MAT INV a()=b()`. Until this discrepancy is resolved by another authoritative edition or interpreter observation, record the inverse operand direction as disputed. The OCR text for matrix multiplication examples and detailed numerical algorithms still needs page-image review. Do not use OCR artifacts as normative syntax.
 
-## 4. Additional commands in version 3.5 — Chapter 14, printed pp. 13-32–13-36
+## 4. Additional commands in version 3.5 — Chapter 14, printed pp. 14-1–14-7
 
 The manual explicitly says that, in addition to Chapter 13, version 3.5 implements further commands/features (Chapter 14). These are part of the same 3.5 interpreter source and must be included in the compatibility inventory.
 
 | Feature / syntax | Source-described behavior |
 |---|---|
-| `x=FACT(n)` | Factorial `n!`; defines `0! = 1` |
-| `y=VARIAT(n,k)` | Number of k-permutations of n elements without repetition: `n!/(n-k)!` |
-| `z=COMBIN(n,k)` | Number of k-combinations without repetition: `n!/((n-k)!*k!)` |
-| `OPENW` with negative screen number | Opens window on current (top) screen |
-| `PCOLOR foreground[,background]` | Like COLOR, but applies to actual screen output by PRINT |
-| `_DATA` | Returns/indicates DATA pointer position; zero if next READ would cause “out of data” |
-| `_DATA=` | Sets DATA pointer to a previously determined value obtained from `_DATA` |
-| `_0` … `_9` | Ten special longword variables, like `%`, not floating-point; cleared only by NEW, not by CLEAR, LOAD, CHAIN, or RUN |
-| `GURU x` | Enables/disables GURU check: x=0 off, x<>0 on; on GURU Meditation it transfers to ONERROR GOSUB or generates error #109 |
-| `GURU` | Function returning the GURU number, per example and explanatory text |
+| `x=FACT(n)` | Factorial `n!`; `n` is an integer expression, result `x` is an arithmetic expression; defines `0! = 1` (printed pp. 14-1–14-2) |
+| `y=VARIAT(n,k)` | Number of k-permutations of n elements without repetition: `n!/(n-k)!`; `n,k` are integer expressions (printed pp. 14-1–14-2) |
+| `z=COMBIN(n,k)` | Number of k-combinations without repetition: `n!/((n-k)!*k!)`; `n,k` are integer expressions (printed p. 14-2) |
+| `OPENW` with negative screen number | Opens window on the current (top) screen (printed p. 14-3) |
+| `PCOLOR foreground[,background]` | Like `COLOR`, but applies to screen output produced by `PRINT`; background is optional in the examples (printed p. 14-4) |
+| `_DATA` | Returns/indicates DATA pointer position; zero if the next `READ` would cause “out of data” |
+| `_DATA=` | Sets the DATA pointer to a previously determined value obtained from `_DATA` |
+| `_0` … `_9` | Ten special longword variables, like `%`, not floating-point; cleared only by `NEW`, not by `CLEAR`, `LOAD`, `CHAIN`, or `RUN` (printed p. 14-6) |
+| `GURU x` | Enables/disables GURU checking: `x=0` disables it; `x<>0` enables it. On a GURU Meditation it transfers to `ONERROR GOSUB` or generates error #109 (printed pp. 14-6–14-7) |
+| `GURU` | Function returning the GURU number (printed pp. 14-6–14-7) |
 
-Chapter 14 further notes that GURU error messages #110–#118 correspond to normal GURUs $2–$A. In compiled 3.5 programs, RESUME NEXT and RESUME LABEL cannot be executed after an ONERROR GOSUB call caused by a GURU. The text warns that error #109 is a serious system condition and that GURU checking only works if the system can continue execution.
+Chapter 14's opening page enumerates these as the additional 3.5 features (printed p. 14-1). The examples and definitions are on pp. 14-1–14-6. The closing notes (p. 14-7) state that error messages #110–#118 correspond to normal GURUs $2–$A; in compiled 3.5 programs, `RESUME NEXT` and `RESUME LABEL` cannot be executed after an `ONERROR GOSUB` call caused by a GURU. The manual treats error #109 (GURU Meditation) as a serious system condition and warns that GURU checking only works if the system can continue execution.
 
 Page-image review of the second scan's printed p. 14-5 confirms the leading underscore in both DATA-pointer operations: `_DATA` and `_DATA=`. Ordinary `DATA` remains the data declaration statement. Printed p. 14-6 confirms `_0`…`_9` are longword special variables and distinguishes `GURU x` from the `GURU` function.
 
