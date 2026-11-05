@@ -69,6 +69,8 @@ Do not reduce syntax to a display string. The model must express statement/expre
 
 The type vocabulary must distinguish documented source-language types, arrays, pointers/addresses, procedures/functions, target-specific records, and unresolved/opaque values. Never substitute host Rust types for historical GFA BASIC storage semantics without evidence.
 
+Documentation references are repository-local. `docs.path` must be a canonical repository-relative POSIX path to a regular file under the repository root. Absolute paths, dot/dot-dot or empty components, backslashes, and symlink components are rejected; registry validation must never resolve documentation anchors from arbitrary host files.
+
 ## 5. Evidence, implementation, and support are separate
 
 Do not use one overloaded status field. Each record has independent dimensions.
