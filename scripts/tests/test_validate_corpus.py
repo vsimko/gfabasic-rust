@@ -83,7 +83,7 @@ class CorpusValidationTests(unittest.TestCase):
             "amiga//3.0/control-flow/fixture-one",
             "amiga/./3.0/control-flow/fixture-one",
             "amiga/3.0/control-flow/fixture-one/",
-            "amiga/3.0/control-flow/fixture\\one",
+            "amiga/3.0/control-flow/fixture\\\\one",
         ):
             with self.subTest(path=invalid_path):
                 manifest.write_text(original.replace(valid_path, invalid_path))
