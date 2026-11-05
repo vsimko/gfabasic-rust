@@ -648,8 +648,7 @@ mod tests {
         let source_text = "print FACT(1)\n";
         let mut sources = SourceMap::new();
         let source_id = sources.add_source("spelling.bas", source_text);
-        let lexed = lex_lossless(source_id, source_text)
-            .expect("identifier candidates should lex");
+        let lexed = lex_lossless(source_id, source_text).expect("identifier candidates should lex");
 
         assert!(matches!(&lexed.tokens[0].kind, TokenKind::Identifier(name) if name == "print"));
         assert_eq!(
