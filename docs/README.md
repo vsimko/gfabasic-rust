@@ -25,8 +25,8 @@ This index is the entry point for project documentation. It separates user guida
 | User entry point | [`user/README.md`](user/README.md) | Users; current support status and future user-guide structure |
 | Contributor entry point | [`contributor/README.md`](contributor/README.md) | Contributors; current contribution constraints and contribution workflow |
 | Architecture | [`architecture/README.md`](architecture/README.md) | Implementers; system boundaries and architecture document index |
-| Frontend fuzzing strategy | [`architecture/FUZZING.md`](architecture/FUZZING.md) | Frontend implementers; planned fuzz targets, corpus separation, resource budgets, and CI policy |
-| Architecture decisions | [`architecture/adr/TEMPLATE.md`](architecture/adr/TEMPLATE.md) | Maintainers; structure for numbered, reviewable decisions |
+| Language tooling and editor integration | [\`architecture/LANGUAGE-TOOLING.md\`](architecture/LANGUAGE-TOOLING.md) | Implementers; shared LSP server, editor boundaries, diagnostics, formatting, and safe refactoring |\n| Frontend fuzzing strategy | [`architecture/FUZZING.md`](architecture/FUZZING.md) | Frontend implementers; planned fuzz targets, corpus separation, resource budgets, and CI policy |
+| Language server decision | [\`architecture/adr/0012-language-server-and-editor-integration.md\`](architecture/adr/0012-language-server-and-editor-integration.md) | Maintainers; accepted LSP boundary and editor integration strategy |\n| Architecture decisions | [`architecture/adr/TEMPLATE.md`](architecture/adr/TEMPLATE.md) | Maintainers; structure for numbered, reviewable decisions |
 | Language and API research | [`reference/README.md`](reference/README.md) | Researchers; source-backed, dialect/version-specific notes |
 | Source provenance | [`reference-sources.md`](reference-sources.md) | Researchers and reviewers; source identity, access, licensing, and evidence |
 | Research procedures and corpora | [`research/README.md`](research/README.md) | Researchers; experiment procedures and analysis of historical material |
