@@ -17,11 +17,9 @@ A planned technology or target is not an implementation claim. A language featur
 
 ## Project baseline
 
-The project intends to provide a reusable GFA BASIC compiler and runtime in Rust. Native executable generation is the primary planned output. LLVM is the planned code-generation infrastructure. The first planned output target is Linux x86-64 with the GNU ABI and ELF executable format. SDL3 is a planned adapter for Linux graphics, window, and input integration.
+The sole product target is Amiga GFA BASIC interpreter 3.5 compiled to native Linux x86-64 (GNU ABI, ELF). LLVM is the planned native backend, and SDL3 is the selected Linux graphics/window/input adapter. This scope is recorded in [ADR 0010](adr/0010-amiga-35-linux-sdl3-product-scope.md). The existing FACT/PRINT compiler slice is experimental; the general compiler, LLVM backend, runtime, and SDL3 adapter are not yet implemented.
 
-These are planning assumptions, not evidence that these components are implemented or that a particular GFA BASIC dialect is fully supported.
-
-The first normative source-language target is Amiga GFA BASIC interpreter 3.5, accepted in [ADR 0009](adr/0009-initial-source-dialect-amiga-gfa-basic-3.5.md). [ADR 0008](adr/0008-initial-source-dialect-amiga-gfa-basic-3.0.md) preserves the superseded 3.0 decision. Atari ST GFA BASIC V2.xx/V3.0 remains research-only for the initial compiler target. The language core is separate from platform API profiles. Amiga and Atari ST profiles are planned as independent choices. The selected source dialect/version, API profile set, build host, and output target must be represented as separate configuration concepts.
+[ADR 0009](adr/0009-initial-source-dialect-amiga-gfa-basic-3.5.md) selects the normative source version. Amiga 3.0/V3.03 material is historical evidence that requires 3.5 confirmation. Atari ST and other dialect/version research may remain archived, but it is not part of the product or an implementation target. The language core, Amiga API compatibility layer, and Linux/SDL3 adapter remain distinct architectural responsibilities.
 
 ## Architecture documents
 
@@ -30,7 +28,7 @@ The first normative source-language target is Amiga GFA BASIC interpreter 3.5, a
 | Project goals and compatibility | Purpose, non-goals, compatibility dimensions | [GOALS.md](GOALS.md) | [#2](https://github.com/vsimko/gfabasic-rust/issues/2) |
 | Dialects and versions | Source dialect identity and version-specific rules | [DIALECTS.md](DIALECTS.md); [ADR 0009](adr/0009-initial-source-dialect-amiga-gfa-basic-3.5.md); [superseded ADR 0008](adr/0008-initial-source-dialect-amiga-gfa-basic-3.0.md); [Amiga GFA BASIC 3.0 historical research](../reference/amiga-gfa-basic-3.0.md); [Atari ST GFA BASIC V2.xx/V3.0 research draft](../reference/atari-gfa-basic-3.0.md) | [#3](https://github.com/vsimko/gfabasic-rust/issues/3) |
 | Target model | Host/target distinction and target capabilities | [TARGETS.md](TARGETS.md); [ADR 0003](adr/0003-target-model.md) | [#4](https://github.com/vsimko/gfabasic-rust/issues/4) |
-| API profiles | Language core and independently selectable Amiga/Atari ST API profiles | [API-PROFILES.md](API-PROFILES.md); [ADR 0004](adr/0004-api-profile-model.md); [Amiga API research draft](../reference/amiga-gfa-api.md); [Atari ST API research draft](../reference/atari-gfa-api.md) | [#5](https://github.com/vsimko/gfabasic-rust/issues/5), [#24](https://github.com/vsimko/gfabasic-rust/issues/24), [#25](https://github.com/vsimko/gfabasic-rust/issues/25) |
+| API profile | Amiga GFA BASIC 3.5 API compatibility only; Atari ST research is archival and unsupported | [API-PROFILES.md](API-PROFILES.md); [ADR 0004](adr/0004-api-profile-model.md); [Amiga API research draft](../reference/amiga-gfa-api.md) | [#5](https://github.com/vsimko/gfabasic-rust/issues/5), [#24](https://github.com/vsimko/gfabasic-rust/issues/24), [#53](https://github.com/vsimko/gfabasic-rust/issues/53) |
 | Compiler pipeline and IR | Frontend stages, semantic analysis, typed IR, LLVM boundary | [PIPELINE-AND-IR.md](PIPELINE-AND-IR.md); [ADR 0007](adr/0007-compiler-pipeline-and-ir.md) | [#6](https://github.com/vsimko/gfabasic-rust/issues/6) |
 | Diagnostics and compatibility reporting | Stable diagnostic codes, source locations, support outcomes, migration guidance | [DIAGNOSTICS.md](DIAGNOSTICS.md) | [#26](https://github.com/vsimko/gfabasic-rust/issues/26) |
 | Runtime | Runtime layers and SDL3 adapter boundary | [RUNTIME.md](RUNTIME.md) | [#7](https://github.com/vsimko/gfabasic-rust/issues/7) |
@@ -93,7 +91,7 @@ Use numbered Architecture Decision Records in [adr/](adr/). Each record states c
 ## Open questions
 
 - Which 3.0/3.03 language rules are inherited by Amiga GFA BASIC 3.5, and which require explicit 3.5 confirmation or page-image verification?
-- Which Amiga and Atari ST manual editions are authoritative for each profile?
+- Which Amiga GFA BASIC 3.5 API declarations have sufficient primary-source evidence and a testable Linux implementation contract?
 - What is the exact documentation format requirement referred to as “OKF” in issue #14?
 - Which LLVM version and Rust binding are suitable for the chosen Rust toolchain?
 - Which compiler components justify separate Cargo crates?
