@@ -53,7 +53,7 @@ def read_test_ids(root: Path) -> set[str]:
 
     fixture_ids: set[str] = set()
     for fixture in fixtures:
-        if not isinstance(fixture, str) or not fixture or "\\\\" in fixture:
+        if not isinstance(fixture, str) or not fixture or "\\" in fixture:
             continue
         parts = fixture.split("/")
         if len(parts) != 4 or any(part in {"", ".", ".."} for part in parts):
