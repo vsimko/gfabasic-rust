@@ -1,0 +1,16 @@
+id = "amiga-3.5-fact-zero"
+dialect = "GFA BASIC Amiga"
+version = "3.5"
+api_profiles = []
+kind = "semantic"
+status = "verified"
+source_key = "AM-INTERPRETER-30-35-UPDATE-SCAN"
+source_pages = "printed pp. 14-1–14-2"
+evidence_status = "page-image-verified"
+expectation = "FACT(0) evaluates to 1; assigning it to RESULT and printing RESULT displays the value 1."
+notes = [
+  "Independently authored minimal fixture; not copied from the manual's example.",
+  "Printed p. 14-1 explicitly defines 0! = 1 and gives the FACT(n) signature with integer-expression argument.",
+  "Printed p. 14-2 demonstrates assignment from FACT(n) and PRINT of assigned numeric variables.",
+  "Verified against the supplied 3.5 addendum page images; no original interpreter execution has been performed.",
+]
