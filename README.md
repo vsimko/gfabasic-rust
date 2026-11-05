@@ -2,7 +2,7 @@
 
 A planned general-purpose GFA BASIC compiler and runtime implemented in Rust.
 
-> **Project status:** Architecture and workspace bootstrap, with a minimal CLI executable. `gfabasic --help` and `gfabasic --version` are implemented; source compilation, project configuration, and runtime behavior are not. No GFA BASIC dialect or platform API is currently claimed as implemented or conformant.
+> **Project status:** The workspace now contains an experimental, evidence-gated Amiga GFA BASIC 3.5 frontend and a narrow native-executable prototype for the documented `FACT` / `PRINT` example. It accepts only assignments to `x`, `y`, and `z` using `FACT(integer-literal)`, followed by `PRINT x,y,z`; semantic evaluation is currently limited to `FACT(0)`, `FACT(1)`, and `FACT(2)`. A temporary C/`cc` bridge produces a native host executable. This is not general GFA BASIC support and does not claim conformance with the original interpreter. The general semantic model, project IR, and planned LLVM backend remain unimplemented.
 
 ## Project direction
 
@@ -11,6 +11,19 @@ The current planning baseline is to compile GFA BASIC source to native executabl
 The language core, platform API profiles, and output target are separate concepts. Amiga and Atari ST API profiles are planned as independently selectable profiles. Their behavior must be verified against the applicable GFA BASIC manuals before it is specified as supported.
 
 Compilation must be deterministic and must not require an LLM. An LLM may assist external migration or analysis workflows, but it is not part of the compiler execution path.
+
+## Experimental prototype
+
+Build the current narrow fixture subset with:
+
+```sh
+cargo run -p gfabasic-compiler -- build tests/corpus/amiga/3.5/combinatorics/fact-zero.bas -o ./fact
+./fact
+```
+
+The prototype prints the numeric values in order. Its current C bridge separates them with spaces, but that formatting is not asserted as historical interpreter behavior.
+
+The prototype rejects constructs outside its documented subset. It currently uses strict UTF-8 transport input and the host `cc` executable; neither establishes the historical source encoding nor selects the production compiler backend.
 
 ## Documentation
 
@@ -31,7 +44,7 @@ Key documents:
 
 ## Current scope and limitations
 
-The Rust workspace contains three architectural crates: compiler, generated-program runtime, and Linux platform adapter. The compiler crate includes tested source-map and strict UTF-8 file-loading primitives plus a minimal `gfabasic` CLI. The CLI currently supports help and version output only; `build` and `check` explicitly report that compilation is unavailable. The lexer, parser, semantic analysis, IR, backend, project configuration, runtime behavior, and Linux platform adapter remain unimplemented. The pinned Rust toolchain and fast workspace checks are defined in CI. No GFA BASIC dialect or API profile is implemented. Planned targets, API profiles, and language features are not implementation or compatibility claims.
+The Rust workspace contains three architectural crates: compiler, generated-program runtime, and Linux platform adapter. The compiler crate includes source-map and strict UTF-8 file-loading primitives, structured diagnostics, the evidence-gated FACT/PRINT frontend subset, and a temporary native-executable bootstrap path. The general lexer/parser grammar, semantic model, typed IR, LLVM backend, project configuration, core runtime, and Linux platform adapter remain unimplemented. The pinned Rust toolchain and fast workspace checks are defined in CI. No complete GFA BASIC dialect or API profile is implemented or conformant. Planned targets, API profiles, and language features are not implementation or compatibility claims.
 
 See the roadmap and architecture documents for decisions, assumptions, dependencies, and unresolved questions.
 
