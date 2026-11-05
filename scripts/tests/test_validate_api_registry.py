@@ -95,9 +95,9 @@ anchors = []
     def add_manifest_fixture(self, root, fixture_id):
         corpus = root / "tests/corpus/amiga/3.0/control-flow"
         corpus.mkdir(parents=True, exist_ok=True)
-        (corpus / "fixture-one.toml").write_text(f'id = "{fixture_id}"\\n')
+        (corpus / "fixture-one.toml").write_text(f'id = "{fixture_id}"\n')
         (root / "tests/corpus/manifest.toml").write_text(
-            'fixtures = ["amiga/3.0/control-flow/fixture-one"]\\n'
+            'fixtures = ["amiga/3.0/control-flow/fixture-one"]\n'
         )
 
     def test_registry_test_references_use_stable_fixture_ids(self):
@@ -127,9 +127,9 @@ anchors = []
         self.addCleanup(temp.cleanup)
         corpus = root / "tests/corpus/amiga/3.0/control-flow"
         corpus.mkdir(parents=True, exist_ok=True)
-        (corpus / "fixture\\one.toml").write_text('id = "fixture-one-id"\\n')
+        (corpus / "fixture\\one.toml").write_text('id = "fixture-one-id"\n')
         manifest = root / "tests/corpus/manifest.toml"
-        manifest.write_text('fixtures = ["amiga/3.0/control-flow/fixture\\one"]\\n')
+        manifest.write_text('fixtures = ["amiga/3.0/control-flow/fixture\\one"]\n')
         errors = validate_registry(root)
         self.assertTrue(any("unknown test ID 'fixture-one-id'" in error for error in errors))
 
@@ -141,7 +141,7 @@ anchors = []
         self.addCleanup(temp.cleanup)
         self.add_manifest_fixture(root, "listed-fixture-id")
         unlisted = root / "tests/corpus/amiga/3.0/control-flow/unlisted.toml"
-        unlisted.write_text('id = "unlisted-fixture-id"\\n')
+        unlisted.write_text('id = "unlisted-fixture-id"\n')
         errors = validate_registry(root)
         self.assertTrue(any("unknown test ID 'unlisted-fixture-id'" in error for error in errors))
 
