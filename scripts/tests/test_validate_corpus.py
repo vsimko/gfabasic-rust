@@ -100,6 +100,32 @@ class CorpusValidationTests(unittest.TestCase):
         self.assertTrue(any("source path must not traverse symlinks" in item for item in errors))
         self.assertTrue(any("metadata path must not traverse symlinks" in item for item in errors))
 
+    def test_symlinked_corpus_root_is_rejected_before_reading_manifest(self):
+        temp, root = self.make_root()
+        self.addCleanup(temp.cleanup)
+        corpus_root = root / "tests/corpus"
+        outside = root / "outside-corpus"
+        corpus_root.rename(outside)
+        self.make_symlink(corpus_root, outside, target_is_directory=True)
+
+        self.assertEqual(
+            validate_corpus(root),
+            ["tests/corpus/manifest.toml: path must not traverse symlinks"],
+        )
+
+    def test_symlinked_tests_parent_is_rejected_before_reading_manifest(self):
+        temp, root = self.make_root()
+        self.addCleanup(temp.cleanup)
+        tests_root = root / "tests"
+        outside = root / "outside-tests"
+        tests_root.rename(outside)
+        self.make_symlink(tests_root, outside, target_is_directory=True)
+
+        self.assertEqual(
+            validate_corpus(root),
+            ["tests/corpus/manifest.toml: path must not traverse symlinks"],
+        )
+
     def test_broken_source_symlink_is_rejected(self):
         temp, root = self.make_root()
         self.addCleanup(temp.cleanup)
