@@ -3,7 +3,7 @@
 - **Status:** Initial catalogue from the live directory listing; one package-page false positive has been classified. Most archive contents, package readmes, source languages, and redistribution terms remain uninspected.
 - **Tracking:** [issue #64](https://github.com/vsimko/gfabasic-rust/issues/64).
 - **Directory surveyed:** [Aminet `dev/basic`](https://ftp.fau.de/mirrors/aminet/dev/basic/), mirrored by [Aminet mirror index](https://aminet.net/dev/basic/).
-- **Survey date:** 2026-11-04.
+- **Survey date:** 2026-11-04; targeted GFABasicFIX readme re-check: 2026-11-05.
 
 ## Method
 
@@ -109,3 +109,8 @@ The remaining research step is to inspect the exact Aminet archive contents and 
 The paired [HB2Gads readme](https://ftpmirror2.infania.net/sites/aminet.net/dev/basic/HB2Gads.readme) identifies the package as “GadTools Gadgets in HBasic2”, with Benito Lombardi as author/uploader and m68k AmigaOS as its architecture. The archive is therefore an HBasic2/Blitz Basic II ecosystem library candidate, not a GFA BASIC language or API reference. The five-line readme does not state redistribution terms, so its license remains unknown. The archive itself was not downloaded or inspected.
 
 This is another example of why the Aminet directory category and BASIC-related filename are insufficient to establish GFA BASIC applicability.
+
+
+## Targeted GFABasicFIX readme re-check (2026-11-05)
+
+The live Aminet directory and paired readme were re-opened. The readme identifies the package as version 1.0 by Andre Pfeiffer, requires GFA BASIC + Compiler 3.5, targets AmigaOS 3.x and 68060 CPUs, and labels the distribution “Freely Distributable”. This is evidence of a compatibility fix for the 3.5 toolchain on newer AmigaOS/CPU combinations, not evidence about language syntax or interpreter semantics. The archive itself remains uninspected; no binary or source was downloaded or committed.
