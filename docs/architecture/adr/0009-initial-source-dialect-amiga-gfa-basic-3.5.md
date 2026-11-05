@@ -37,7 +37,7 @@ Historical Amiga 3.0 and 3.03 books remain useful, but they do not independently
 
 - Dialect-specific research, lexer/parser requirements, and the first conformance inventory must prioritize Amiga GFA BASIC interpreter 3.5.
 - The 1989 Amiga 3.0 book and 1990 Amiga 3.03 reference remain historical and supplementary sources. Each inherited rule needs explicit 3.5 confirmation.
-- The 3.5 interpreter manual and its addenda must be indexed with exact printed/PDF page references; OCR-sensitive syntax must be checked against page images.
+- The 3.5 interpreter manual and its addenda must be indexed with exact printed/PDF page references; OCR-sensitive syntax must be checked against page images. The initial lexer-specific evidence inventory is [Amiga GFA BASIC 3.5 lexer evidence](../../research/amiga-gfa-basic-35-lexer-evidence.md); it separates the verified Chapter 14 special names from inherited 3.0/V3.03 candidates and unresolved source-format rules.
 - Atari ST evidence remains non-normative for the initial compiler target.
 - API profile selection, runtime behavior, and output target remain independent decisions.
 - The compatibility matrix must distinguish the selected 3.5 target from historical 3.0/3.03 research, implementation status, and conformance status.
