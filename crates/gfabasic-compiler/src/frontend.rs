@@ -469,7 +469,7 @@ mod tests {
 
     #[test]
     fn parses_the_three_documented_amiga_35_combinatorics_intrinsics() {
-        let source_text = "x=FACT(5)\\ny=VARIAT(5,2)\\nz=COMBIN(5,2)\\n";
+        let source_text = "x=FACT(5)\ny=VARIAT(5,2)\nz=COMBIN(5,2)\n";
         let mut sources = SourceMap::new();
         let source_id = sources.add_source("combinatorics.bas", source_text);
 
@@ -490,7 +490,7 @@ mod tests {
 
     #[test]
     fn rejects_malformed_combinatorics_argument_lists() {
-        for source_text in ["x=VARIAT(5)\\n", "x=COMBIN(5,2,1)\\n"] {
+        for source_text in ["x=VARIAT(5)\n", "x=COMBIN(5,2,1)\n"] {
             let mut sources = SourceMap::new();
             let source_id = sources.add_source("malformed.bas", source_text);
             assert!(parse(source_id, source_text).is_err(), "accepted: {source_text}");
