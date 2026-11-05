@@ -759,10 +759,10 @@ mod tests {
     fn lexes_amiga_35_addendum_special_names_without_generalizing_identifiers() {
         use super::{TokenKind, lex_lossless};
 
-        let mut source_text = String::from("_DATA=1\\n");
+        let mut source_text = String::from("_DATA=1\n");
         let mut expected = vec!["_DATA".to_owned()];
         for digit in '0'..='9' {
-            source_text.push_str(&format!("_{digit}=1\\n"));
+            source_text.push_str(&format!("_{digit}=1\n"));
             expected.push(format!("_{digit}"));
         }
 
@@ -810,7 +810,7 @@ mod tests {
     fn rejects_unverified_underscore_identifier_spellings() {
         use super::lex_lossless;
 
-        for source_text in ["_data=1\\n", "_DATA2=1\\n", "_10=1\\n", "_foo=1\\n"] {
+        for source_text in ["_data=1\n", "_DATA2=1\n", "_10=1\n", "_foo=1\n"] {
             let mut sources = SourceMap::new();
             let source_id = sources.add_source("unverified-name.bas", source_text);
             let errors = lex_lossless(source_id, source_text)
