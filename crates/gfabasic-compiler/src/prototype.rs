@@ -60,8 +60,8 @@ pub fn compile_file(input: &Path, output: &Path) -> Result<(), String> {
 
     let _ = fs::remove_file(&temp_path);
 
-    let result = result
-        .map_err(|error| format!("could not start bootstrap C toolchain 'cc': {error}"))?;
+    let result =
+        result.map_err(|error| format!("could not start bootstrap C toolchain 'cc': {error}"))?;
     if !result.status.success() {
         let stderr = String::from_utf8_lossy(&result.stderr);
         return Err(format!(
@@ -73,11 +73,7 @@ pub fn compile_file(input: &Path, output: &Path) -> Result<(), String> {
     Ok(())
 }
 
-fn semantic_error(
-    sources: &SourceMap,
-    span: SourceSpan,
-    message: impl Into<String>,
-) -> String {
+fn semantic_error(sources: &SourceMap, span: SourceSpan, message: impl Into<String>) -> String {
     Diagnostic::new(
         "GFA-SEM-0001",
         DiagnosticSeverity::Error,
@@ -192,7 +188,10 @@ mod tests {
             let mut sources = SourceMap::new();
             let source_id = sources.add_source("unsupported.bas", source);
             let program = parse(source_id, source).unwrap();
-            assert!(lower_program(&program, &sources).is_err(), "accepted: {source}");
+            assert!(
+                lower_program(&program, &sources).is_err(),
+                "accepted: {source}"
+            );
         }
     }
 
@@ -216,7 +215,10 @@ mod tests {
         let run = Command::new(&output).output().unwrap();
         assert!(run.status.success());
         assert_eq!(
-            String::from_utf8(run.stdout).unwrap().split_whitespace().collect::<Vec<_>>(),
+            String::from_utf8(run.stdout)
+                .unwrap()
+                .split_whitespace()
+                .collect::<Vec<_>>(),
             ["1", "1", "2"]
         );
 
