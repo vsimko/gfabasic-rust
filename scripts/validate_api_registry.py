@@ -41,8 +41,14 @@ def read_test_ids(root: Path) -> set[str]:
     path = root / "tests" / "corpus" / "manifest.toml"
     if not path.exists():
         return set()
-    manifest = tomllib.loads(path.read_text(encoding="utf-8"))
-    return set(manifest.get("fixtures", []))
+    try:
+        manifest = tomllib.loads(path.read_text(encoding="utf-8"))
+    except (OSError, tomllib.TOMLDecodeError):
+        return set()
+    fixtures = manifest.get("fixtures", [])
+    if not isinstance(fixtures, list):
+        return set()
+    return {fixture for fixture in fixtures if isinstance(fixture, str)}
 
 
 def heading_anchors(path: Path) -> set[str]:
@@ -97,9 +103,15 @@ def validate_registry(root: Path = ROOT) -> list[str]:
             errors.append(f"{path}: invalid TOML: {exc}")
             continue
 
-        for error in sorted(validator.iter_errors(data), key=lambda item: list(item.path)):
-            location = ".".join(str(part) for part in error.absolute_path) or "<root>"
-            errors.append(f"{path}:{location}: {error.message}")
+        schema_errors = sorted(validator.iter_errors(data), key=lambda item: list(item.path))
+        for schema_error in schema_errors:
+            location = ".".join(str(part) for part in schema_error.absolute_path) or "<root>"
+            errors.append(f"{path}:{location}: {schema_error.message}")
+        if schema_errors:
+            # Semantic checks below rely on the schema's nested object/list
+            # shapes. Report all schema violations first, then skip this file
+            # rather than raising on malformed TOML values.
+            continue
 
         for declaration in data.get("declarations", []):
             declaration_id = declaration.get("id", "")

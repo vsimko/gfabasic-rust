@@ -78,6 +78,20 @@ anchors = []
         self.addCleanup(temp.cleanup)
         self.assertEqual(validate_registry(root), [])
 
+    def test_schema_invalid_declaration_shape_reports_error_without_crashing(self):
+        content = 'schema-version = 1\ndeclarations = ["not-a-table"]\n'
+        temp, root = self.make_root(content)
+        self.addCleanup(temp.cleanup)
+        errors = validate_registry(root)
+        self.assertTrue(any("not of type 'object'" in error for error in errors))
+
+    def test_malformed_corpus_fixture_entries_do_not_crash_registry_validation(self):
+        temp, root = self.make_root(self.valid_declaration())
+        self.addCleanup(temp.cleanup)
+        manifest = root / "tests/corpus/manifest.toml"
+        manifest.write_text('fixtures = [["nested"]]\n')
+        self.assertEqual(validate_registry(root), [])
+
     def test_namespace_mismatch_fails(self):
         content = self.valid_declaration().replace("gfa.atari-st.system.timer", "gfa.amiga.system.timer")
         temp, root = self.make_root(content)

@@ -36,6 +36,21 @@ class CorpusValidationTests(unittest.TestCase):
         self.addCleanup(temp.cleanup)
         self.assertEqual(validate_corpus(root), [])
 
+    def test_non_string_kind_and_status_report_errors_without_crashing(self):
+        temp, root = self.make_root()
+        self.addCleanup(temp.cleanup)
+        metadata = root / "tests/corpus/amiga/3.0/control-flow/fixture-one.toml"
+        original = metadata.read_text()
+        invalid_values = (
+            ('kind = "semantic"', "kind = []", "kind must be one of"),
+            ('status = "candidate"', 'status = { value = "candidate" }', "status must be one of"),
+        )
+        for valid_value, invalid_value, expected_error in invalid_values:
+            with self.subTest(value=invalid_value):
+                metadata.write_text(original.replace(valid_value, invalid_value))
+                errors = validate_corpus(root)
+                self.assertTrue(any(expected_error in item for item in errors))
+
     def test_missing_companion_file_fails(self):
         temp, root = self.make_root()
         self.addCleanup(temp.cleanup)
