@@ -1,67 +1,61 @@
 # API profiles
 
-- Status: **Accepted by [ADR 0004](adr/0004-api-profile-model.md).** Individual declarations and behavior remain unverified.
+- Status: **The sole product API profile is Amiga GFA BASIC interpreter 3.5.** Product scope is fixed by [ADR 0010](adr/0010-amiga-35-linux-sdl3-product-scope.md). Individual declarations and runtime behavior remain evidence-gated.
 
 ## Separation
 
-The **language core** contains constructs that do not depend on a platform API. It is part of the selected source dialect/version; it is not an API profile.
+The **language core** contains constructs that do not depend on a platform API. It belongs to Amiga GFA BASIC interpreter 3.5 and is not an API profile.
 
-Platform APIs are selectable profiles. The output target is independent of the selected source API profile.
+The product includes one platform API compatibility layer:
 
-The initial profile identifiers are:
+- `amiga` — Amiga GFA BASIC 3.5 API declarations and behavior, implemented by a compatibility runtime on Linux where evidence and feasibility permit.
 
-- \`amiga\` — Amiga-specific API declarations and behavior.
-- \`atari-st\` — Atari ST-specific API declarations and behavior.
+The Linux output target does not make the program an Amiga executable. It means the generated Linux program may reproduce verified Amiga API behavior through project-owned runtime interfaces.
 
-There is no separate \`core\` or \`common\` API profile in the initial model. A construct belongs to the language core only when evidence establishes that it is a language feature rather than a platform API.
+Atari ST API declarations may remain in archival research or registry material for provenance, but Atari ST is not a product profile, must not be selectable for product builds, and must not be marked supported. Other API profiles are out of scope.
 
-Profile identifiers are stable conceptual names. Applicable platform, GFA BASIC version, OS/library version, and declaration availability are metadata on each profile/declaration; they are not inferred from the profile name.
+## Selection and target
 
-## Selection and target independence
+- The source dialect is fixed to Amiga GFA BASIC interpreter 3.5.
+- The product API profile is fixed to Amiga.
+- The output target is fixed to Linux x86-64, GNU ABI, ELF 64-bit.
+- Configuration must reject unsupported dialects, versions, profiles, and target triples with actionable diagnostics.
+- Do not infer Amiga API semantics from Linux/SDL3 behavior; SDL3 is only the platform implementation mechanism.
 
-- The selected source dialect/version is explicit and separate from API profiles.
-- Users explicitly select zero or more API profiles.
-- The output target is selected independently. Selecting \`amiga\` does not request an Amiga executable; it requests Amiga API semantics, which may be implemented by a compatibility runtime on Linux.
-- No profile is enabled implicitly from the output target.
-- Explicit configuration takes precedence over any future advisory detection.
-- Automatic detection, if added, is advisory unless the user explicitly selects an inference mode.
+Illustrative configuration:
 
-Illustrative configuration fields (not a frozen CLI or file schema):
+```toml
+[source]
+dialect = "amiga-gfa-basic"
+version = "3.5"
 
-\`\`\`toml
-# Illustrative only; identifiers and schema are defined separately.
-dialect = "<explicit source dialect and version>"
-api_profiles = ["amiga"]
-target = "x86_64-unknown-linux-gnu"
-\`\`\`
+[api]
+profiles = ["amiga"]
 
-## Conflicts and dependencies
+[target]
+triple = "x86_64-unknown-linux-gnu"
+```
 
-- Profiles must be independently selectable.
-- Profile dependencies must be declared and evidence-backed.
-- Conflicting declarations across enabled profiles must produce deterministic diagnostics. Never choose silently by load order or precedence.
-- A profile must not silently change language-core semantics.
-- The initial model does not define an implicit fallback profile or automatic conflict resolution.
+The identifier spelling above is illustrative until the compiler configuration schema is implemented. It does not authorize alternate values.
 
 ## Declaration lifecycle
 
-An API declaration is not supported merely because it is present in a registry. Before exposure as a supported declaration, it must identify:
+An API declaration is not supported merely because it is present in a registry. Before exposure as supported, it must identify:
 
-- source dialect/version and platform;
-- applicable API profile and OS/library version where relevant;
-- primary reference, edition, page/section, and evidence status;
+- Amiga GFA BASIC interpreter 3.5 applicability;
+- source reference, edition, page/section, and evidence status;
 - syntax/signature and semantic contract;
-- runtime mapping and target support status;
+- Linux runtime mapping and capability status;
 - conformance/regression tests and documentation reference.
 
 Research-only, disputed, unknown, and unimplemented declarations must remain visibly classified and must not be accepted as supported behavior.
 
-## Future profiles
+## Runtime boundary
 
-A future platform or library profile may be added without changing the meaning of the language core, existing profile identifiers, or output target. It requires a source-backed profile definition, conflict/dependency rules, runtime capability classification, and tests before it can be marked supported.
+Amiga API semantics belong in project-owned runtime modules. Linux/SDL3 is an implementation adapter behind the runtime contract. The compiler frontend and target-independent IR must not depend on SDL3. Unsupported Amiga hardware/OS behavior must be classified and diagnosed rather than guessed.
 
 ## Deferred details
 
-The exact CLI/configuration serialization, version-range syntax, registry schema, duplicate-name diagnostics, runtime capability encoding, and individual Amiga/Atari declaration inventories are tracked under the CLI, registry, and language/API research issues. This ADR accepts the profile model only; it does not accept any specific API declaration as implemented or conformant.
+The exact CLI/configuration serialization, registry schema, runtime capability encoding, and individual Amiga declaration inventory remain tracked under the CLI, registry, and language/API research issues. This document does not accept any specific API declaration as implemented or conformant.
 
-Tracking: [issue #5](https://github.com/vsimko/gfabasic-rust/issues/5), [registry #12](https://github.com/vsimko/gfabasic-rust/issues/12), [CLI #9](https://github.com/vsimko/gfabasic-rust/issues/9).
+Tracking: [issue #5](https://github.com/vsimko/gfabasic-rust/issues/5), [registry #12](https://github.com/vsimko/gfabasic-rust/issues/12), [CLI #9](https://github.com/vsimko/gfabasic-rust/issues/9), and [Amiga runtime #53](https://github.com/vsimko/gfabasic-rust/issues/53).
