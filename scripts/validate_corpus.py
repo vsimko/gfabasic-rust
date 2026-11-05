@@ -8,6 +8,11 @@ import sys
 import tomllib
 from pathlib import Path
 
+if __package__:
+    from .corpus_paths import has_symlink_component
+else:
+    from corpus_paths import has_symlink_component
+
 
 ROOT = Path(__file__).resolve().parents[1]
 CORPUS_ROOT = ROOT / "tests" / "corpus"
@@ -201,8 +206,16 @@ def validate_corpus(root: Path = ROOT) -> list[str]:
 
         source_path = corpus_root / fixture_relative.with_suffix(".bas")
         metadata_path = corpus_root / fixture_relative.with_suffix(".toml")
-        if not source_path.is_file():
+        if has_symlink_component(source_path, corpus_root):
+            errors.append(
+                f"tests/corpus/manifest.toml: {stem}: source path must not traverse symlinks"
+            )
+        elif not source_path.is_file():
             errors.append(f"tests/corpus/manifest.toml: {stem}: missing source file")
+        if has_symlink_component(metadata_path, corpus_root):
+            error(errors, metadata_path, "metadata path must not traverse symlinks", corpus_root)
+            referenced_metadata.add(metadata_path)
+            continue
         if not metadata_path.is_file():
             errors.append(f"tests/corpus/manifest.toml: {stem}: missing metadata file")
             continue
