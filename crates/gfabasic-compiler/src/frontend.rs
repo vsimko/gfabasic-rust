@@ -273,7 +273,10 @@ impl Parser {
         let function_name = match function.kind {
             TokenKind::Identifier(name) => name,
             _ => {
-                return Err(self.syntax_error("expected a supported intrinsic after assignment", function.span));
+                return Err(self.syntax_error(
+                    "expected a supported intrinsic after assignment",
+                    function.span,
+                ));
             }
         };
 
@@ -493,7 +496,10 @@ mod tests {
         for source_text in ["x=VARIAT(5)\n", "x=COMBIN(5,2,1)\n"] {
             let mut sources = SourceMap::new();
             let source_id = sources.add_source("malformed.bas", source_text);
-            assert!(parse(source_id, source_text).is_err(), "accepted: {source_text}");
+            assert!(
+                parse(source_id, source_text).is_err(),
+                "accepted: {source_text}"
+            );
         }
     }
 
