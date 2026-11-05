@@ -120,3 +120,9 @@ The project-owned IR is the stable conceptual boundary for future code-generatio
 - [Diagnostics](DIAGNOSTICS.md), [issue #26](https://github.com/vsimko/gfabasic-rust/issues/26).
 - [Workspace and dependency policy](WORKSPACE.md), [issue #11](https://github.com/vsimko/gfabasic-rust/issues/11).
 - [LLVM backend implementation](https://github.com/vsimko/gfabasic-rust/issues/50).
+
+## Current prototype IR implementation
+
+The compiler crate now contains an initial project-owned IR for the evidence-gated Amiga 3.5 combinatorics vertical slice. Its deliberately limited instruction set is `ConstI64` and ordered `Print`; values have stable per-module IDs and an explicit `I64` type. AST lowering resolves the current literal-only `FACT`, `VARIAT`, and `COMBIN` subset, binds only variables already assigned, rejects reassignment and out-of-range intrinsic arguments, and preserves source spans on emitted instructions. The verifier checks unique value definitions and rejects uses that do not follow a definition.
+
+This is a first IR boundary, not yet the active code-generation path: the temporary C bootstrap still lowers directly from the AST. The next implementation step is to make that bootstrap consume verified IR, then replace it with LLVM under issue #50. The current IR has no general expressions, runtime calls, control flow, memory model, or dialect-wide type system. Its `i64` type is a prototype implementation type only and must not be generalized to GFA BASIC variables without dialect evidence.
