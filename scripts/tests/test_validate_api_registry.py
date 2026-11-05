@@ -119,6 +119,20 @@ anchors = []
         errors = validate_registry(root)
         self.assertTrue(any("unknown test ID 'amiga/3.0/control-flow/fixture-one'" in error for error in errors))
 
+    def test_manifest_paths_with_backslashes_are_not_registry_test_references(self):
+        content = self.valid_declaration().replace(
+            "tests = []", 'tests = ["fixture-one-id"]'
+        )
+        temp, root = self.make_root(content)
+        self.addCleanup(temp.cleanup)
+        corpus = root / "tests/corpus/amiga/3.0/control-flow"
+        corpus.mkdir(parents=True, exist_ok=True)
+        (corpus / "fixture\\\\one.toml").write_text('id = "fixture-one-id"\\n')
+        manifest = root / "tests/corpus/manifest.toml"
+        manifest.write_text('fixtures = ["amiga/3.0/control-flow/fixture\\\\one"]\\n')
+        errors = validate_registry(root)
+        self.assertTrue(any("unknown test ID 'fixture-one-id'" in error for error in errors))
+
     def test_unlisted_sidecar_ids_are_not_registry_test_references(self):
         content = self.valid_declaration().replace(
             "tests = []", 'tests = ["unlisted-fixture-id"]'
