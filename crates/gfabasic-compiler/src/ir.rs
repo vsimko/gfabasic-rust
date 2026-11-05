@@ -49,26 +49,38 @@ pub struct IrError {
 
 impl IrError {
     fn at(message: impl Into<String>, span: SourceSpan) -> Self {
-        Self { message: message.into(), span: Some(span) }
+        Self {
+            message: message.into(),
+            span: Some(span),
+        }
     }
 
     fn global(message: impl Into<String>) -> Self {
-        Self { message: message.into(), span: None }
+        Self {
+            message: message.into(),
+            span: None,
+        }
     }
 }
 
 fn factorial(n: i64) -> Option<i64> {
-    if !(0..=20).contains(&n) { return None; }
+    if !(0..=20).contains(&n) {
+        return None;
+    }
     (1..=n).try_fold(1_i64, |acc, x| acc.checked_mul(x))
 }
 
 fn variat(n: i64, k: i64) -> Option<i64> {
-    if !(0..=20).contains(&n) || !(0..=n).contains(&k) { return None; }
+    if !(0..=20).contains(&n) || !(0..=n).contains(&k) {
+        return None;
+    }
     ((n - k + 1)..=n).try_fold(1_i64, |acc, x| acc.checked_mul(x))
 }
 
 fn combin(n: i64, k: i64) -> Option<i64> {
-    if !(0..=20).contains(&n) || !(0..=n).contains(&k) { return None; }
+    if !(0..=20).contains(&n) || !(0..=n).contains(&k) {
+        return None;
+    }
     let k = k.min(n - k);
     let mut value = 1_i64;
     for i in 1..=k {
@@ -91,28 +103,61 @@ pub fn lower(program: &Program) -> Result<Module, Vec<IrError>> {
 
     for statement in &program.statements {
         match statement {
-            Statement::AssignFact { name, argument, span } => {
+            Statement::AssignFact {
+                name,
+                argument,
+                span,
+            } => {
                 let value = factorial(*argument);
-                lower_assignment(name, value, *span, &mut variables, &mut module, &mut next_value, &mut errors);
+                lower_assignment(
+                    name,
+                    value,
+                    *span,
+                    &mut variables,
+                    &mut module,
+                    &mut next_value,
+                    &mut errors,
+                );
             }
             Statement::AssignVariat { name, n, k, span } => {
                 let value = variat(*n, *k);
-                lower_assignment(name, value, *span, &mut variables, &mut module, &mut next_value, &mut errors);
+                lower_assignment(
+                    name,
+                    value,
+                    *span,
+                    &mut variables,
+                    &mut module,
+                    &mut next_value,
+                    &mut errors,
+                );
             }
             Statement::AssignCombin { name, n, k, span } => {
                 let value = combin(*n, *k);
-                lower_assignment(name, value, *span, &mut variables, &mut module, &mut next_value, &mut errors);
+                lower_assignment(
+                    name,
+                    value,
+                    *span,
+                    &mut variables,
+                    &mut module,
+                    &mut next_value,
+                    &mut errors,
+                );
             }
             Statement::PrintVariables { names, span } => {
                 let mut values = Vec::with_capacity(names.len());
                 for name in names {
                     match variables.get(name) {
                         Some(value) => values.push(*value),
-                        None => errors.push(IrError::at(format!("variable '{name}' is not assigned before PRINT"), *span)),
+                        None => errors.push(IrError::at(
+                            format!("variable '{name}' is not assigned before PRINT"),
+                            *span,
+                        )),
                     }
                 }
                 if values.len() == names.len() {
-                    module.instructions.push(Instruction::Print { values, span: *span });
+                    module
+                        .instructions
+                        .push(Instruction::Print { values, span: *span });
                     saw_print = true;
                 }
             }
@@ -120,7 +165,9 @@ pub fn lower(program: &Program) -> Result<Module, Vec<IrError>> {
     }
 
     if !saw_print {
-        errors.push(IrError::global("prototype requires at least one valid PRINT statement"));
+        errors.push(IrError::global(
+            "prototype requires at least one valid PRINT statement",
+        ));
     }
     if errors.is_empty() {
         verify(&module)?;
@@ -140,20 +187,30 @@ fn lower_assignment(
     errors: &mut Vec<IrError>,
 ) {
     if variables.contains_key(name) {
-        errors.push(IrError::at(format!("reassignment of '{name}' is outside the current prototype subset"), span));
+        errors.push(IrError::at(
+            format!("reassignment of '{name}' is outside the current prototype subset"),
+            span,
+        ));
         return;
     }
     let Some(value) = value else {
-        errors.push(IrError::at("intrinsic arguments are outside the supported prototype range (0 <= k <= n <= 20)", span));
+        errors.push(IrError::at(
+            "intrinsic arguments are outside the supported prototype range (0 <= k <= n <= 20)",
+            span,
+        ));
         return;
     };
     let id = ValueId(*next_value);
     *next_value += 1;
     variables.insert(name.to_owned(), id);
-    module.instructions.push(Instruction::ConstI64 { result: id, value, span });
+    module.instructions.push(Instruction::ConstI64 {
+        result: id,
+        value,
+        span,
+    });
 }
 
-/// Verify unique definitions, typed value existence, and source provenance.
+/// Verify unique definitions and reject uses that precede their definitions.
 pub fn verify(module: &Module) -> Result<(), Vec<IrError>> {
     let mut definitions = BTreeSet::new();
     let mut errors = Vec::new();
@@ -161,19 +218,29 @@ pub fn verify(module: &Module) -> Result<(), Vec<IrError>> {
         match instruction {
             Instruction::ConstI64 { result, span, .. } => {
                 if !definitions.insert(*result) {
-                    errors.push(IrError::at(format!("value %{} is defined more than once", result.0), *span));
+                    errors.push(IrError::at(
+                        format!("value %{} is defined more than once", result.0),
+                        *span,
+                    ));
                 }
             }
             Instruction::Print { values, span } => {
                 for value in values {
                     if !definitions.contains(value) {
-                        errors.push(IrError::at(format!("PRINT uses undefined i64 value %{}", value.0), *span));
+                        errors.push(IrError::at(
+                            format!("PRINT uses undefined i64 value %{}", value.0),
+                            *span,
+                        ));
                     }
                 }
             }
         }
     }
-    if errors.is_empty() { Ok(()) } else { Err(errors) }
+    if errors.is_empty() {
+        Ok(())
+    } else {
+        Err(errors)
+    }
 }
 
 /// Return the explicit type of a value defined in this module.
@@ -197,13 +264,64 @@ mod tests {
         let id = sources.add_source("combinatorics.bas", source);
         let ast = parse(id, source).unwrap();
         let ir = lower(&ast).unwrap();
+
         assert_eq!(ir.instructions.len(), 4);
-        assert!(matches!(ir.instructions[0], Instruction::ConstI64 { result: ValueId(0), value: 120, .. }));
-        assert!(matches!(ir.instructions[1], Instruction::ConstI64 { result: ValueId(1), value: 20, .. }));
-        assert!(matches!(ir.instructions[2], Instruction::ConstI64 { result: ValueId(2), value: 10, .. }));
-        assert!(matches!(&ir.instructions[3], Instruction::Print { values, .. } if values == &[ValueId(0), ValueId(1), ValueId(2)]));
+        assert!(matches!(
+            ir.instructions[0],
+            Instruction::ConstI64 {
+                result: ValueId(0),
+                value: 120,
+                ..
+            }
+        ));
+        assert!(matches!(
+            ir.instructions[1],
+            Instruction::ConstI64 {
+                result: ValueId(1),
+                value: 20,
+                ..
+            }
+        ));
+        assert!(matches!(
+            ir.instructions[2],
+            Instruction::ConstI64 {
+                result: ValueId(2),
+                value: 10,
+                ..
+            }
+        ));
+        assert!(matches!(
+            &ir.instructions[3],
+            Instruction::Print { values, .. }
+                if values == &[ValueId(0), ValueId(1), ValueId(2)]
+        ));
         assert_eq!(value_type(&ir, ValueId(0)), Some(ValueType::I64));
         verify(&ir).unwrap();
+    }
+
+    #[test]
+    fn handles_zero_and_boundary_combinatorics_values() {
+        let source = "x=FACT(0)\ny=VARIAT(20,0)\nz=COMBIN(20,10)\nPRINT x,y,z\n";
+        let mut sources = SourceMap::new();
+        let id = sources.add_source("boundary.bas", source);
+        let ast = parse(id, source).unwrap();
+        let ir = lower(&ast).unwrap();
+
+        assert!(matches!(
+            ir.instructions[0],
+            Instruction::ConstI64 { value: 1, .. }
+        ));
+        assert!(matches!(
+            ir.instructions[1],
+            Instruction::ConstI64 { value: 1, .. }
+        ));
+        assert!(matches!(
+            ir.instructions[2],
+            Instruction::ConstI64 {
+                value: 184756,
+                ..
+            }
+        ));
     }
 
     #[test]
@@ -217,12 +335,33 @@ mod tests {
     }
 
     #[test]
-    fn verifier_rejects_use_before_definition() {
+    fn verifier_rejects_use_before_definition_and_duplicate_ids() {
         let source = "PRINT x\n";
         let mut sources = SourceMap::new();
         let id = sources.add_source("ir-invalid.bas", source);
         let span = crate::source::SourceSpan::new(id, 0, source.len());
-        let module = super::Module { instructions: vec![Instruction::Print { values: vec![ValueId(9)], span }] };
-        assert!(verify(&module).is_err());
+        let undefined = super::Module {
+            instructions: vec![Instruction::Print {
+                values: vec![ValueId(9)],
+                span,
+            }],
+        };
+        assert!(verify(&undefined).is_err());
+
+        let duplicate = super::Module {
+            instructions: vec![
+                Instruction::ConstI64 {
+                    result: ValueId(1),
+                    value: 1,
+                    span,
+                },
+                Instruction::ConstI64 {
+                    result: ValueId(1),
+                    value: 2,
+                    span,
+                },
+            ],
+        };
+        assert!(verify(&duplicate).is_err());
     }
 }
