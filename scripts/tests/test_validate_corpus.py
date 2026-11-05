@@ -37,6 +37,33 @@ class CorpusValidationTests(unittest.TestCase):
         except (OSError, NotImplementedError) as exc:
             self.skipTest(f"symbolic links are unavailable: {exc}")
 
+    def test_invalid_utf8_manifest_reports_error_without_crashing(self):
+        temp, root = self.make_root()
+        self.addCleanup(temp.cleanup)
+        manifest = root / "tests/corpus/manifest.toml"
+        manifest.write_bytes(b"\\xff")
+
+        errors = validate_corpus(root)
+        self.assertTrue(any("manifest.toml: invalid UTF-8" in item for item in errors))
+
+    def test_invalid_utf8_fixture_metadata_reports_error_without_crashing(self):
+        temp, root = self.make_root()
+        self.addCleanup(temp.cleanup)
+        metadata = root / "tests/corpus/amiga/3.0/control-flow/fixture-one.toml"
+        metadata.write_bytes(b"\\xff")
+
+        errors = validate_corpus(root)
+        self.assertTrue(any("fixture-one.toml: invalid UTF-8" in item for item in errors))
+
+    def test_invalid_utf8_source_register_reports_error_without_crashing(self):
+        temp, root = self.make_root()
+        self.addCleanup(temp.cleanup)
+        source_register = root / "docs/reference-sources.md"
+        source_register.write_bytes(b"\\xff")
+
+        errors = validate_corpus(root)
+        self.assertTrue(any("docs/reference-sources.md: invalid UTF-8" in item for item in errors))
+
     def test_valid_corpus_passes(self):
         temp, root = self.make_root()
         self.addCleanup(temp.cleanup)
