@@ -13,21 +13,21 @@ class CorpusValidationTests(unittest.TestCase):
         corpus.mkdir(parents=True)
         (root / "docs").mkdir()
         (root / "docs/reference-sources.md").write_text(
-            "| ID | Title |\\n|---|---|\\n| TEST-SOURCE | Test source |\\n"
+            "| ID | Title |\n|---|---|\n| TEST-SOURCE | Test source |\n"
         )
         (root / "tests/corpus/manifest.toml").write_text(
-            'schema_version = 1\\ncorpus_status = "research_only"\\n'
-            'description = "Test corpus."\\n'
-            'fixtures = ["amiga/3.0/control-flow/fixture-one"]\\n'
+            'schema_version = 1\ncorpus_status = "research_only"\n'
+            'description = "Test corpus."\n'
+            'fixtures = ["amiga/3.0/control-flow/fixture-one"]\n'
         )
-        (corpus / "fixture-one.bas").write_text("PRINT 1\\n")
+        (corpus / "fixture-one.bas").write_text("PRINT 1\n")
         (corpus / "fixture-one.toml").write_text(
-            'id = "fixture-one"\\n'
-            'dialect = "GFA BASIC Amiga"\\nversion = "3.0"\\napi_profiles = []\\n'
-            'kind = "semantic"\\nstatus = "candidate"\\nsource_key = "TEST-SOURCE"\\n'
-            'source_pages = "printed p. 1"\\nevidence_status = "reviewed"\\n'
-            'expectation = "Prints one."\\nexpected_stdout = "1"\\nexpected_exit = "success"\\n'
-            'notes = ["Independently authored."]\\n'
+            'id = "fixture-one"\n'
+            'dialect = "GFA BASIC Amiga"\nversion = "3.0"\napi_profiles = []\n'
+            'kind = "semantic"\nstatus = "candidate"\nsource_key = "TEST-SOURCE"\n'
+            'source_pages = "printed p. 1"\nevidence_status = "reviewed"\n'
+            'expectation = "Prints one."\nexpected_stdout = "1"\nexpected_exit = "success"\n'
+            'notes = ["Independently authored."]\n'
         )
         return temp, root
 
@@ -53,7 +53,7 @@ class CorpusValidationTests(unittest.TestCase):
             )
         )
         fixture = root / "tests/corpus/amiga/3.0/control-flow"
-        (fixture / "fixture-two.bas").write_text("PRINT 2\\n")
+        (fixture / "fixture-two.bas").write_text("PRINT 2\n")
         (fixture / "fixture-two.toml").write_text((fixture / "fixture-one.toml").read_text())
         self.assertTrue(any("duplicate id" in item for item in validate_corpus(root)))
 
@@ -102,7 +102,7 @@ class CorpusValidationTests(unittest.TestCase):
         temp, root = self.make_root()
         self.addCleanup(temp.cleanup)
         fixture = root / "tests/corpus/amiga/3.0/control-flow"
-        (fixture / "unlisted.bas").write_text("PRINT 3\\n")
+        (fixture / "unlisted.bas").write_text("PRINT 3\n")
         self.assertTrue(any("not listed" in item for item in validate_corpus(root)))
 
 
