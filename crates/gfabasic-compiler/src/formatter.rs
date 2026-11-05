@@ -95,12 +95,8 @@ mod tests {
                 Statement::AssignFact { name, argument, .. } => {
                     Meaning::Fact(name.clone(), *argument)
                 }
-                Statement::AssignVariat { name, n, k, .. } => {
-                    Meaning::Variat(name.clone(), *n, *k)
-                }
-                Statement::AssignCombin { name, n, k, .. } => {
-                    Meaning::Combin(name.clone(), *n, *k)
-                }
+                Statement::AssignVariat { name, n, k, .. } => Meaning::Variat(name.clone(), *n, *k),
+                Statement::AssignCombin { name, n, k, .. } => Meaning::Combin(name.clone(), *n, *k),
                 Statement::PrintVariables { names, .. } => Meaning::Print(names.clone()),
             })
             .collect()
