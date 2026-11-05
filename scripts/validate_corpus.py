@@ -13,7 +13,7 @@ ROOT = Path(__file__).resolve().parents[1]
 CORPUS_ROOT = ROOT / "tests" / "corpus"
 FIXTURE_KINDS = {"positive", "negative", "semantic"}
 FIXTURE_STATUSES = {"candidate", "verified", "blocked", "retired"}
-FIXTURE_ID = re.compile(r"[a-z0-9]+(?:[.-][a-z0-9]+)*\Z")
+FIXTURE_ID = re.compile(r"[a-z0-9]+(?:[.-][a-z0-9]+)*\\Z")
 DIALECT_DIRECTORY_NAMES = {
     "amiga": "GFA BASIC Amiga",
 }
@@ -40,7 +40,7 @@ def source_ids(root: Path) -> set[str] | None:
     return {
         match.group(1)
         for line in source_register.read_text(encoding="utf-8").splitlines()
-        if (match := re.match(r"^\|\s*([A-Z][A-Z0-9-]+)\s*\|", line))
+        if (match := re.match(r"^\\|\\s*([A-Z][A-Z0-9-]+)\\s*\\|", line))
     }
 
 
@@ -59,7 +59,7 @@ def fixture_path(value: object) -> Path | None:
     if (
         path.is_absolute()
         or path.suffix
-        or len(path.parts) < 4
+        or len(path.parts) != 4
         or any(part in {"", ".", ".."} for part in path.parts)
     ):
         return None
@@ -103,7 +103,7 @@ def validate_fixture(
             error(errors, metadata_path, f"{field} must be a non-empty string", corpus_root)
 
     path_parts = Path(expected_stem).parts
-    if len(path_parts) >= 4:
+    if len(path_parts) == 4:
         dialect_directory, version_directory = path_parts[:2]
         expected_dialect = DIALECT_DIRECTORY_NAMES.get(dialect_directory)
         if expected_dialect is None:
