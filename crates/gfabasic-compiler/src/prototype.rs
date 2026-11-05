@@ -162,9 +162,9 @@ mod tests {
         let program = parse(source_id, FACT_FIXTURE).unwrap();
         let generated = lower_program(&program, &sources).unwrap();
 
-        assert!(generated.contains("long long x = 1;"));
-        assert!(generated.contains("long long y = 1;"));
-        assert!(generated.contains("long long z = 2;"));
+        assert!(generated.contains("long long v0 = 1;"));
+        assert!(generated.contains("long long v1 = 1;"));
+        assert!(generated.contains("long long v2 = 2;"));
         assert!(generated.contains("printf(\"%lld %lld %lld\\n\", x, y, z)"));
     }
 
@@ -195,9 +195,9 @@ mod tests {
         let program = parse(source_id, source_text).unwrap();
         let generated = lower_program(&program, &sources).unwrap();
 
-        assert!(generated.contains("long long x = 120;"));
-        assert!(generated.contains("long long y = 20;"));
-        assert!(generated.contains("long long z = 10;"));
+        assert!(generated.contains("long long v0 = 120;"));
+        assert!(generated.contains("long long v1 = 20;"));
+        assert!(generated.contains("long long v2 = 10;"));
         assert!(generated.contains("printf(\"%lld %lld %lld\\n\", x, y, z)"));
     }
 
