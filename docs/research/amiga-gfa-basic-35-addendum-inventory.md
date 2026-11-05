@@ -73,9 +73,9 @@ The addendum documents special forms of MAT CPY for whole matrices and offset co
 | `MAT DET x=a([i,j])[,n]` | Calculate determinant of a square matrix/selected square submatrix |
 | `MAT QDET x=a([i,j])[,n]` | Same purpose as MAT DET; source presents it as a quicker determinant calculation and compares deviation (pp. 13-25–13-28) |
 | `MAT RANG x=a([i,j])[,n]` | Calculate rank of a square matrix/selected square submatrix |
-| `MAT INV a()=b()` | Calculate inverse of square matrix `b` and write it to `a` (the prose example uses destination/source order; confirm exact operand orientation against the printed syntax before implementation) |
+| `MAT INV b()=a()` | Calculate the inverse of square matrix `a` and write it to destination matrix `b`; `b()` must have the same type/dimensions as `a()` (printed p. 13-39) |
 
-Note: The scanned OCR has obvious ambiguities in some matrix multiplication and inverse examples. Verify exact punctuation, argument orientation, and numerical algorithms against page images before implementing. Do not use OCR artifacts as normative syntax.
+Page-image checks of printed pp. 13-38–13-39 confirm the spelling `MAT QDET` and the operand direction `MAT INV b()=a()`: `a()` is the source matrix and `b()` receives its inverse. The OCR text for the matrix multiplication examples and the detailed numerical algorithms still needs page-image review. Do not use OCR artifacts as normative syntax.
 
 ## 4. Additional commands in version 3.5 — Chapter 14, printed pp. 13-32–13-36
 
