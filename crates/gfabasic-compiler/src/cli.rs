@@ -15,11 +15,11 @@ Usage:
 Commands currently available:
   help       Show this help
   version    Show compiler version and optional build identity
-  build      Compile the narrow Amiga GFA BASIC 3.5 FACT/PRINT prototype subset
+  build      Compile the narrow Amiga GFA BASIC 3.5 combinatorics/PRINT prototype subset
 
-The prototype accepts the FACT(integer-literal) assignments and PRINT variable
-lists demonstrated by the Amiga 3.5 addendum's example. Semantic support is
-restricted to FACT(0), FACT(1), and FACT(2), and variables x, y, and z.
+The prototype accepts FACT(n), VARIAT(n,k), and COMBIN(n,k) assignments
+with non-negative integer-literal arguments, followed by PRINT variable lists.
+The current evaluator restricts n to 0..=20 and variables to x, y, and z.
 It uses UTF-8 transport and the host 'cc' toolchain as temporary bootstrap
 choices; neither is a claim about historical source encoding or interpreter
 output formatting. General GFA BASIC support and the LLVM backend are not
