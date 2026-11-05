@@ -755,6 +755,8 @@ mod tests {
             .collect::<String>();
         assert_eq!(reconstructed, source_text);
     }
+    // Evidence: docs/research/amiga-gfa-basic-35-lexer-evidence.md §2.1–2.2;
+    // AM-INTERPRETER-35 printed pp. 13-34–13-35. `_DATA=` is `_DATA` + `=`.
     #[test]
     fn lexes_amiga_35_addendum_special_names_without_generalizing_identifiers() {
         use super::{TokenKind, lex_lossless};
@@ -818,6 +820,25 @@ mod tests {
 
     // Token-boundary coverage only; this does not claim expression grammar support.
     #[test]
+    fn data_pointer_setter_keeps_identifier_and_equals_as_separate_tokens() {
+        use super::{TokenKind, lex_lossless};
+
+        let source_text = "_DATA=42\\n";
+        let mut sources = SourceMap::new();
+        let source_id = sources.add_source("data-pointer-setter.bas", source_text);
+        let lexed = lex_lossless(source_id, source_text).expect("documented 3.5 form should lex");
+
+        assert!(matches!(&lexed.tokens[0].kind, TokenKind::Identifier(name) if name == "_DATA"));
+        assert_eq!(lexed.tokens[0].span.start, 0);
+        assert_eq!(lexed.tokens[0].span.end, 5);
+        assert!(matches!(lexed.tokens[1].kind, TokenKind::Equals));
+        assert_eq!(lexed.tokens[1].span.start, 5);
+        assert_eq!(lexed.tokens[1].span.end, 6);
+        assert!(matches!(lexed.tokens[2].kind, TokenKind::Integer(42)));
+        assert_eq!(lexed.tokens[2].span.start, 6);
+        assert_eq!(lexed.tokens[2].span.end, 8);
+    }
+    #[test]
     fn special_names_are_recognized_at_eof_and_before_existing_delimiters() {
         use super::{TokenKind, lex_lossless};
 
@@ -875,6 +896,8 @@ mod tests {
         assert_eq!(reconstructed, source_text);
     }
 
+    // Negative boundary cases: the 3.5 addendum lists only `_DATA` and `_0`…`_9`;
+    // it does not authorize a general underscore-initial identifier rule.
     #[test]
     fn rejects_unverified_underscore_identifier_spellings() {
         use super::lex_lossless;
