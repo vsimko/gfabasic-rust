@@ -2,7 +2,7 @@
 
 ## Scope
 
-The current workspace includes a source map, strict UTF-8 file-loading primitive, structured source-map diagnostic model/renderer, and a minimal `gfabasic` CLI with help/version output. It does not yet implement GFA BASIC language parsing, semantic analysis, code generation, project configuration, runtime behavior, or source compilation. These instructions validate the Rust workspace only; they do not compile GFA BASIC programs.
+The current workspace includes a source map, strict UTF-8 file-loading primitive, structured diagnostics, and an experimental, narrowly scoped Amiga GFA BASIC 3.5 frontend for the addendum's FACT assignment/PRINT example. The `gfabasic build` command uses a temporary C/`cc` bootstrap to produce a native host executable for that subset only. It is not general GFA BASIC support or original-interpreter conformance. General lexical/grammar coverage, semantic analysis, typed IR, LLVM code generation, project configuration, runtime behavior, and platform integration remain unimplemented. These instructions validate the Rust workspace and prototype tests; they do not establish general language compatibility.
 
 The initial CI host is Linux x86-64 using the GitHub-hosted Ubuntu runner. Other development hosts may work with Rust, but are not yet part of the project's validated environment matrix.
 
