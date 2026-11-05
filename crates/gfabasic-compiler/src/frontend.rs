@@ -611,7 +611,7 @@ mod tests {
     #[test]
     fn lossless_lexer_preserves_whitespace_and_line_ending_spans() {
         use super::{lex_lossless, TriviaKind};
-        let source_text = "x = FACT(5)\\r\\nPRINT x, y\\t\\n";
+        let source_text = "x = FACT(5)\r\nPRINT x, y\t\n";
         let mut sources = SourceMap::new();
         let source_id = sources.add_source("lossless.bas", source_text);
         let lexed = lex_lossless(source_id, source_text).expect("supported tokens should lex");
@@ -633,7 +633,7 @@ mod tests {
     #[test]
     fn lossless_lexer_retains_original_identifier_spelling() {
         use super::{lex_lossless, TokenKind};
-        let source_text = "print FACT(1)\\n";
+        let source_text = "print FACT(1)\n";
         let mut sources = SourceMap::new();
         let source_id = sources.add_source("spelling.bas", source_text);
         let lexed = lex_lossless(source_id, source_text).expect("identifier candidates should lex");
