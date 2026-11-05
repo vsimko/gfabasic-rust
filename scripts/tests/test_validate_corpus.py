@@ -23,7 +23,7 @@ class CorpusValidationTests(unittest.TestCase):
         (corpus / "fixture-one.bas").write_text("PRINT 1\n")
         (corpus / "fixture-one.toml").write_text(
             'id = "fixture-one"\n'
-            'dialect = "Test dialect"\nversion = "1.0"\napi_profiles = []\n'
+            'dialect = "GFA BASIC Amiga"\nversion = "3.0"\napi_profiles = []\n'
             'kind = "semantic"\nstatus = "candidate"\nsource_key = "TEST-SOURCE"\n'
             'source_pages = "printed p. 1"\nevidence_status = "reviewed"\n'
             'expectation = "Prints one."\nexpected_stdout = "1"\nexpected_exit = "success"\n'
@@ -56,6 +56,26 @@ class CorpusValidationTests(unittest.TestCase):
         (fixture / "fixture-two.bas").write_text("PRINT 2\n")
         (fixture / "fixture-two.toml").write_text((fixture / "fixture-one.toml").read_text())
         self.assertTrue(any("duplicate id" in item for item in validate_corpus(root)))
+
+    def test_dialect_directory_must_match_metadata(self):
+        temp, root = self.make_root()
+        self.addCleanup(temp.cleanup)
+        metadata = root / "tests/corpus/amiga/3.0/control-flow/fixture-one.toml"
+        metadata.write_text(metadata.read_text().replace("GFA BASIC Amiga", "GFA BASIC Atari ST"))
+        self.assertTrue(any("does not match directory 'amiga'" in item for item in validate_corpus(root)))
+
+    def test_version_directory_must_match_metadata(self):
+        temp, root = self.make_root()
+        self.addCleanup(temp.cleanup)
+        metadata = root / "tests/corpus/amiga/3.0/control-flow/fixture-one.toml"
+        metadata.write_text(metadata.read_text().replace('version = "3.0"', 'version = "3.5"'))
+        self.assertTrue(any("does not match directory '3.0'" in item for item in validate_corpus(root)))
+
+    def test_missing_source_register_fails(self):
+        temp, root = self.make_root()
+        self.addCleanup(temp.cleanup)
+        (root / "docs/reference-sources.md").unlink()
+        self.assertIn("missing docs/reference-sources.md", validate_corpus(root))
 
     def test_unknown_source_key_fails(self):
         temp, root = self.make_root()

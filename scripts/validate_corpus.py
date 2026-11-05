@@ -14,6 +14,9 @@ CORPUS_ROOT = ROOT / "tests" / "corpus"
 FIXTURE_KINDS = {"positive", "negative", "semantic"}
 FIXTURE_STATUSES = {"candidate", "verified", "blocked", "retired"}
 FIXTURE_ID = re.compile(r"[a-z0-9]+(?:[.-][a-z0-9]+)*\Z")
+DIALECT_DIRECTORY_NAMES = {
+    "amiga": "GFA BASIC Amiga",
+}
 REQUIRED_FIELDS = {
     "id",
     "dialect",
@@ -29,11 +32,11 @@ REQUIRED_FIELDS = {
 }
 
 
-def source_ids(root: Path) -> set[str]:
+def source_ids(root: Path) -> set[str] | None:
     """Return source-register IDs without importing the registry validator."""
     source_register = root / "docs" / "reference-sources.md"
     if not source_register.is_file():
-        return set()
+        return None
     return {
         match.group(1)
         for line in source_register.read_text(encoding="utf-8").splitlines()
@@ -53,7 +56,12 @@ def fixture_path(value: object) -> Path | None:
     if not isinstance(value, str) or not value:
         return None
     path = Path(value)
-    if path.is_absolute() or path.suffix or any(part in {"", ".", ".."} for part in path.parts):
+    if (
+        path.is_absolute()
+        or path.suffix
+        or len(path.parts) < 4
+        or any(part in {"", ".", ".."} for part in path.parts)
+    ):
         return None
     return path
 
@@ -61,7 +69,7 @@ def fixture_path(value: object) -> Path | None:
 def validate_fixture(
     metadata_path: Path,
     expected_stem: str,
-    source_register_ids: set[str],
+    source_register_ids: set[str] | None,
     errors: list[str],
     corpus_root: Path,
 ) -> str | None:
@@ -94,6 +102,27 @@ def validate_fixture(
         if field in metadata and not is_non_empty_string(metadata[field]):
             error(errors, metadata_path, f"{field} must be a non-empty string", corpus_root)
 
+    path_parts = Path(expected_stem).parts
+    if len(path_parts) >= 4:
+        dialect_directory, version_directory = path_parts[:2]
+        expected_dialect = DIALECT_DIRECTORY_NAMES.get(dialect_directory)
+        if expected_dialect is None:
+            error(errors, metadata_path, f"unknown dialect directory {dialect_directory!r}", corpus_root)
+        elif metadata.get("dialect") != expected_dialect:
+            error(
+                errors,
+                metadata_path,
+                f"dialect {metadata.get('dialect')!r} does not match directory {dialect_directory!r} (expected {expected_dialect!r})",
+                corpus_root,
+            )
+        if metadata.get("version") != version_directory:
+            error(
+                errors,
+                metadata_path,
+                f"version {metadata.get('version')!r} does not match directory {version_directory!r}",
+                corpus_root,
+            )
+
     profiles = metadata.get("api_profiles")
     if not isinstance(profiles, list) or any(not is_non_empty_string(item) for item in profiles):
         error(errors, metadata_path, "api_profiles must be an array of non-empty strings", corpus_root)
@@ -114,7 +143,7 @@ def validate_fixture(
             error(errors, metadata_path, f"{field} must be a non-empty string when present", corpus_root)
 
     source_key = metadata.get("source_key")
-    if isinstance(source_key, str) and source_register_ids and source_key not in source_register_ids:
+    if isinstance(source_key, str) and source_register_ids is not None and source_key not in source_register_ids:
         error(errors, metadata_path, f"unknown source_key {source_key!r}", corpus_root)
 
     if metadata_path.with_suffix("").relative_to(corpus_root).as_posix() != expected_stem:
@@ -150,6 +179,9 @@ def validate_corpus(root: Path = ROOT) -> list[str]:
     seen_ids: dict[str, str] = {}
     referenced_metadata: set[Path] = set()
     register_ids = source_ids(root)
+    if register_ids is None:
+        errors.append("missing docs/reference-sources.md")
+
     for fixture in fixtures:
         fixture_relative = fixture_path(fixture)
         if fixture_relative is None:
