@@ -43,3 +43,15 @@ These areas remain open under [issue #20](https://github.com/vsimko/gfabasic-rus
 ## Next work
 
 Extract Chapter 13 into a structured command/editor feature inventory with exact printed/PDF page references. Then map the German Amiga book's command reference and compiler chapter to the interpreter manual, marking source scope and any unresolved differences. Build conformance tests from exact source examples and separately record actual interpreter observations.
+
+
+### Independently supplied 3.0 manual with bound 3.5 update (page-image checked)
+
+A second scan, supplied as `GFA-Basic 3.0 + 3.5 Upd (Amiga).pdf` (487 PDF pages), independently confirms the structure and version boundary of the 3.5 material:
+
+- PDF p. 3 title page: `GFA BASIC 3.0 Interpreter`, platform Amiga.
+- PDF p. 4 imprint: ©1988 GFA Systemtechnik GmbH; program author Frank Ostrowski; second edition, December 1988. The same page restricts copying of the 3.0 interpreter except for the purchaser's personal use and permits redistribution of the Run-Only interpreter; this is not blanket permission to redistribute the manual.
+- PDF p. 7, headed `Erweiterte Version GFA-BASIC 3.5 Amiga`: explicitly says to add Chapter 13 (linear vector/matrix operations, printed pp. 13-1–13-41), Chapter 14 (further commands in version 3.5, printed pp. 14-1–14-8), and the editor changes on printed p. 1-25 to the GFA-BASIC 3.0 Interpreter manual.
+- PDF pp. 479–485 contain the printed Chapter 14 pages 14-1–14-7; the end of Chapter 13 is on PDF pp. 450–477. These page mappings are scan-specific; cite printed addendum page numbers in specifications.
+
+This scan is a separately supplied, page-image-checked witness for the same 3.0-base-plus-3.5-addendum structure. It does **not** change the version boundary: the base manual is explicitly 3.0, and only the identified addendum/editor changes are explicitly marked 3.5. Its page 3 title and page 4 imprint were visually inspected; Chapter 14 was OCR-extracted, with mathematical/symbol-sensitive passages still requiring page-image review. Treat the 1990 DATA BECKER book as a separate supplementary source, not as this manual.
