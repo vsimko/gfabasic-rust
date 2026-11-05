@@ -2,7 +2,7 @@
 
 A planned general-purpose GFA BASIC compiler and runtime implemented in Rust.
 
-> **Project status:** The workspace now contains an experimental, evidence-gated Amiga GFA BASIC 3.5 frontend and a narrow native-executable prototype for the documented `FACT` / `PRINT` example. It accepts only assignments to `x`, `y`, and `z` using `FACT(integer-literal)`, followed by `PRINT x,y,z`; semantic evaluation is currently limited to `FACT(0)`, `FACT(1)`, and `FACT(2)`. A temporary C/`cc` bridge produces a native host executable. This is not general GFA BASIC support and does not claim conformance with the original interpreter. The general semantic model, project IR, and planned LLVM backend remain unimplemented.
+> **Project status:** The workspace contains an experimental, evidence-gated Amiga GFA BASIC 3.5 frontend for literal `FACT`, `VARIAT`, and `COMBIN` assignments followed by `PRINT`. The current prototype bounds intrinsic arguments to `0 <= k <= n <= 20` (or `FACT(n)` with `0 <= n <= 20`) and restricts variables to `x`, `y`, and `z`. Compilation now follows AST → typed project IR → IR verification → temporary C/`cc` bootstrap. This is not general GFA BASIC support and does not claim conformance with the original interpreter. General language semantics and the planned LLVM backend remain unimplemented.
 
 ## Project direction
 
@@ -44,7 +44,7 @@ Key documents:
 
 ## Current scope and limitations
 
-The Rust workspace contains three architectural crates: compiler, generated-program runtime, and Linux platform adapter. The compiler crate includes source-map and strict UTF-8 file-loading primitives, structured diagnostics, the evidence-gated FACT/PRINT frontend subset, and a temporary native-executable bootstrap path. The general lexer/parser grammar, semantic model, typed IR, LLVM backend, project configuration, core runtime, and Linux platform adapter remain unimplemented. The pinned Rust toolchain and fast workspace checks are defined in CI. No complete GFA BASIC dialect or API profile is implemented or conformant. Planned targets, API profiles, and language features are not implementation or compatibility claims.
+The Rust workspace contains three architectural crates: compiler, generated-program runtime, and Linux platform adapter. The compiler crate includes source-map and strict UTF-8 file-loading primitives, structured diagnostics, the evidence-gated FACT/PRINT frontend subset, and a temporary native-executable bootstrap path. The general lexer/parser grammar, complete semantic model and general-purpose IR, LLVM backend, project configuration, core runtime, and Linux platform adapter remain unimplemented. The pinned Rust toolchain and fast workspace checks are defined in CI. No complete GFA BASIC dialect or API profile is implemented or conformant. Planned targets, API profiles, and language features are not implementation or compatibility claims.
 
 See the roadmap and architecture documents for decisions, assumptions, dependencies, and unresolved questions.
 
