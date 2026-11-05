@@ -40,9 +40,9 @@ The addendum explicitly limits all operations in Chapter 13 to one- and/or two-d
 
 | Command | Source-described effect |
 |---|---|
-| `MAT READ a()` | Read a previously dimensioned vector/matrix from DATA rows |
-| `MAT PRINT [#i,]a()[,g,n]` | Print vector/matrix; vectors on one row with comma-separated elements, matrix rows followed by rowfeed; optional output channel and numeric formatting like `STR$(x,g,n)` |
-| `MAT INPUT #i,a()` | Read vector/matrix from ASCII file; source says format is reverse of MAT PRINT and commas/rowfeeds may vary as with INPUT # |
+| `MAT READ a()` | Read a previously dimensioned vector/matrix from DATA rows (printed p. 13-5) |
+| `MAT PRINT [#i,]a()[g,n]` | Print vector/matrix; vectors on one row with comma-separated elements, matrix rows followed by rowfeed; optional output channel and numeric formatting like `STR$(x,g,n)` (printed pp. 13-5–13-6) |
+| `MAT INPUT #i,a()` | Read vector/matrix from an ASCII file; the format is the reverse of MAT PRINT, and commas/linefeeds may vary as with `INPUT #` (printed p. 13-6) |
 
 ### Copy and transpose — printed pp. 13-4–13-15
 
