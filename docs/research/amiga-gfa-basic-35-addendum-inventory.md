@@ -64,18 +64,18 @@ The addendum documents special forms of MAT CPY for whole matrices and offset co
 | `MAT SUB a()=b()-c()` | Element-wise difference into `a`; operands must have same order |
 | `MAT SUB a(),b()` | Subtract `b` element-wise from `a` in place; same order |
 | `MAT SUB a(),x` | Subtract scalar `x` from every element of `a` in place |
-| `MAT MUL a()=b()*c()` | Matrix multiplication into `a`, for appropriately dimensioned matrices |
-| `MAT MUL x=a()*b()` | Scalar result for compatible vectors with equal element count, as described in the text |
-| `MAT MUL x=a()*b()*c()` | Scalar product form for qualified vectors `a` and `c` with matrix `b` between them |
+| `MAT MUL a()=b()*c()` | If `b` and `c` are matrices, multiply rows of `b` by columns of `c`; `b`'s column count must equal `c`'s row count, and result `a` has `b`'s row count and `c`'s column count (printed p. 13-27). If `b` and `c` are vectors, this form produces their dyadic/outer product (printed p. 13-28). |
+| `MAT MUL x=a()*b()` | For vectors with equal element counts, calculate scalar/dot (inner) product: sum of pairwise element products (printed p. 13-29). |
+| `MAT MUL x=a()*b()*c()` | Scalar result for a row vector `a`, compatible matrix `b`, and column vector `c`; `a` has as many elements as `b` has rows, and `c` as many elements as `b` has columns (printed p. 13-30). |
 | `MAT MUL a(),x` | Multiply every element of `a` by scalar `x` in place |
-| `MAT NORM a(),0` | Normalize a matrix using the maximum norm (the source's example transforms rows/columns as described on pp. 13-22–13-24) |
-| `MAT NORM a(),1` | Normalize a matrix using the Euclidean norm (see source examples pp. 13-22–13-24) |
+| `MAT NORM a(),0` | Normalize row-wise: each row is scaled so the sum of squares of its elements is 1 (printed pp. 13-31–13-32). |
+| `MAT NORM a(),1` | Normalize column-wise: each column is scaled so the sum of squares of its elements is 1 (printed pp. 13-31–13-33). |
 | `MAT DET x=a([i,j])[,n]` | Calculate determinant of a square matrix/selected square submatrix |
 | `MAT QDET x=a([i,j])[,n]` | Same determinant purpose and submatrix selection as `MAT DET`; optimized for speed, not accuracy. The manual recommends `MAT DET` for critical matrices whose determinant is near zero (printed pp. 13-36–13-37) |
 | `MAT RANG x=a([i,j])[,n]` | Calculate rank of a square matrix; like `MAT DET`/`MAT QDET`, accepts row and column offsets, with `n` selecting an n×n submatrix from that position (printed p. 13-38) |
 | `MAT INV b()=a()` | Calculate the inverse of square matrix `a` and write it to destination matrix `b`; `b()` must have the same type/dimensions as `a()` (printed p. 13-39) |
 
-Page-image checks of printed pp. 13-36–13-39 confirm the `MAT QDET` performance/accuracy warning, the `MAT RANG` square-submatrix selection rule, and the detailed `MAT INV b()=a()` example. **Important source inconsistency:** the command summary on printed p. 13-22 instead lists `MAT INV a()=b()`. Until this discrepancy is resolved by another authoritative edition or interpreter observation, record the inverse operand direction as disputed. The OCR text for matrix multiplication examples and detailed numerical algorithms still needs page-image review. Do not use OCR artifacts as normative syntax.
+Page-image checks of printed pp. 13-27–13-33 establish matrix multiplication dimensions and the row/column normalization meanings above. Printed pp. 13-36–13-39 confirm the `MAT QDET` performance/accuracy warning, the `MAT RANG` square-submatrix selection rule, and the detailed `MAT INV b()=a()` example. **Important source inconsistency:** the command summary on printed p. 13-22 instead lists `MAT INV a()=b()`. Until this discrepancy is resolved by another authoritative edition or interpreter observation, record the inverse operand direction as disputed. The OCR text for matrix multiplication examples and detailed numerical algorithms still needs page-image review. Do not use OCR artifacts as normative syntax.
 
 ## 4. Additional commands in version 3.5 — Chapter 14, printed pp. 13-32–13-36
 
