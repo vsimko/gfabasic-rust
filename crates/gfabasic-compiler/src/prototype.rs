@@ -130,7 +130,10 @@ fn emit_c(module: &Module) -> Result<String, String> {
         }
     }
 
-    if !statements.iter().any(|statement| statement.contains("printf(")) {
+    if !statements
+        .iter()
+        .any(|statement| statement.contains("printf("))
+    {
         return Err("verified IR contains no PRINT instruction".to_owned());
     }
 
