@@ -20,6 +20,7 @@ The dialect/version research is not complete. The compiler therefore needs an ar
 6. Preserve source provenance through lowering and optimization so backend and runtime diagnostics can be mapped to original source locations.
 7. Keep backend selection and target-specific lowering separate from source dialect and API-profile selection.
 8. Do not select an LLVM version or Rust binding yet. Before adding one, evaluate LLVM/Rust compatibility, maintenance cadence, unsafe FFI surface, native build reproducibility, platform support, license, and security-update policy. Record the selected versions and binding in a follow-up ADR after a clean CI build and a verified IR-to-object prototype.
+9. Implement formatting as a consumer of the shared lossless parsed document. Copy significant token text verbatim, change only whitespace/line endings, and reject unsupported syntax rather than discarding it.
 
 The exact GFA BASIC type inventory, source control-flow mapping, pointer semantics, and runtime-call ABI remain governed by the dialect, memory, and runtime decisions. This ADR defines the compiler boundary; it does not guess those semantics.
 
@@ -47,6 +48,7 @@ No verified LLVM version, native package source, or clean-build strategy has bee
 - Lossless token/trivia data remains available to formatting and editor tooling through the parsed-document result; the semantic AST is not required to carry formatting trivia itself.
 - The backend consumes a verified semantic model rather than defining language behavior.
 - The initial symbol index is explicitly prototype-scoped; it does not establish general Amiga GFA BASIC 3.5 declaration, case, scope, or type rules.
+- Formatting remains a source-preserving frontend consumer and cannot claim coverage beyond the lexer's verified token set.
 - Additional backends can be added without redesigning source parsing and semantic analysis.
 - IR verification and source-provenance preservation become required compiler contracts.
 - The LLVM binding and exact release remain open until dependency and CI evaluation is complete.
