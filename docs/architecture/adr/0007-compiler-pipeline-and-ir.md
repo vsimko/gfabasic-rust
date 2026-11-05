@@ -62,3 +62,7 @@ No verified LLVM version, native package source, or clean-build strategy has bee
 ## Supersedes / superseded by
 
 None.
+
+## Prototype implementation note (2026-11-05)
+
+The first narrow implementation now exercises the intended boundary end to end for the evidence-backed Amiga 3.5 combinatorics subset: frontend AST → project-owned `ConstI64`/`Print` IR → verifier → temporary C emitter → host `cc` executable. The verifier enforces unique definitions and definition-before-use. This small prototype does not satisfy the complete general IR shape described above: it has no basic blocks, terminators, general expressions, calls, memory operations, or dialect-wide type system. Its `i64` representation and intrinsic bounds are implementation limits only. LLVM remains deferred pending the evaluation specified in this ADR.
