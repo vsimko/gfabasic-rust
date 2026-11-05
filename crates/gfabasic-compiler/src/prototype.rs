@@ -197,9 +197,14 @@ mod tests {
 
     #[test]
     fn compiles_and_runs_a_native_executable_when_cc_is_available() {
-        if Command::new("cc").arg("--version").output().is_err() {
-            return;
-        }
+        let cc_version = Command::new("cc")
+            .arg("--version")
+            .output()
+            .expect("native bootstrap end-to-end test requires a host C compiler (`cc`)");
+        assert!(
+            cc_version.status.success(),
+            "native bootstrap end-to-end test requires a working host C compiler (`cc`)"
+        );
 
         let sequence = NEXT_TEST.fetch_add(1, Ordering::Relaxed);
         let directory = std::env::temp_dir().join(format!(
