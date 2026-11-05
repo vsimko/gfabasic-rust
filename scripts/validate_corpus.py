@@ -59,13 +59,13 @@ def is_non_empty_string(value: object) -> bool:
 def fixture_path(value: object) -> Path | None:
     if not isinstance(value, str) or not value:
         return None
-    path = Path(value)
-    if (
-        path.is_absolute()
-        or path.suffix
-        or len(path.parts) != 4
-        or any(part in {"", ".", ".."} for part in path.parts)
-    ):
+    if "\\" in value:
+        return None
+    parts = value.split("/")
+    if len(parts) != 4 or any(part in {"", ".", ".."} for part in parts):
+        return None
+    path = Path(*parts)
+    if path.is_absolute() or path.suffix:
         return None
     return path
 
