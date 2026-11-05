@@ -61,7 +61,11 @@ where
         [command, input, flag, output] if command == "build" && flag == "-o" => {
             match crate::prototype::compile_file(Path::new(input), Path::new(output)) {
                 Ok(()) => {
-                    let _ = writeln!(out, "built {} (Amiga GFA BASIC 3.5 FACT/PRINT prototype)", output);
+                    let _ = writeln!(
+                        out,
+                        "built {} (Amiga GFA BASIC 3.5 FACT/PRINT prototype)",
+                        output
+                    );
                     0
                 }
                 Err(message) => {
@@ -78,7 +82,10 @@ where
             2
         }
         [command, ..] if command == "build" => {
-            let _ = writeln!(err, "error: expected 'gfabasic build <source.bas> -o <output>'");
+            let _ = writeln!(
+                err,
+                "error: expected 'gfabasic build <source.bas> -o <output>'"
+            );
             2
         }
         _ => {
@@ -175,7 +182,10 @@ mod tests {
         let run = Command::new(&output).output().unwrap();
         assert!(run.status.success());
         assert_eq!(
-            String::from_utf8(run.stdout).unwrap().split_whitespace().collect::<Vec<_>>(),
+            String::from_utf8(run.stdout)
+                .unwrap()
+                .split_whitespace()
+                .collect::<Vec<_>>(),
             ["1", "1", "2"]
         );
 
