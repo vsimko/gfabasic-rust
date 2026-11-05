@@ -50,7 +50,7 @@ No further base-manual grammar review is a prerequisite for this specific source
 ## Pipeline work required
 
 - [x] Frontend: narrow lexer/parser, AST, and source-span diagnostics for the demonstrated FACT/PRINT shape.
-- [ ] Semantics: explicit variable binding and FACT argument subset validation.
+- [x] Prototype-level checks: variable binding, use-before-assignment, reassignment rejection, and FACT argument subset validation. General semantic analysis remains unimplemented.
 - [ ] IR: a small typed representation for the value, intrinsic call, and output.
 - [x] Bootstrap backend: temporary C/`cc` bridge emits a native host executable; this is not the planned LLVM backend.
 - [x] Tests: frontend positive/negative tests and an end-to-end executable test; general IR/conformance tests remain pending.
