@@ -779,9 +779,19 @@ mod tests {
             .collect();
 
         assert_eq!(names, expected);
+        let assignment_count = lexed
+            .tokens
+            .iter()
+            .filter(|token| matches!(token.kind, TokenKind::Equals))
+            .count();
+        assert_eq!(assignment_count, expected.len());
+
         for token in lexed.tokens.iter().filter(
             |token| matches!(&token.kind, TokenKind::Identifier(name) if name.starts_with('_')),
         ) {
+            assert!(lexed.tokens.iter().any(|next| {
+                matches!(next.kind, TokenKind::Equals) && next.span.start == token.span.end
+            }));
             assert_eq!(
                 &source_text[token.span.start..token.span.end],
                 match &token.kind {
