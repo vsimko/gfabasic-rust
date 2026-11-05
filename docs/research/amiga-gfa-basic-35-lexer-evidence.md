@@ -37,6 +37,8 @@ The following page images were inspected from the supplied PDFs, rather than rel
 
 - **AM-INTERPRETER-35, printed p. 13-34:** the page visibly prints `_DATA` and `_DATA=` as separate operation forms. The prose says `_DATA` specifies the DATA-pointer position and `_DATA=` sets that pointer to a previously determined value. Lexically, `_DATA=` is therefore the `_DATA` identifier followed by the assignment token `=`; it is not one indivisible identifier token.
 - **AM-INTERPRETER-35, printed p. 13-35:** the heading visibly reads `_0..._9`; the prose describes ten special variables and says they are longwords like `%`, not floating-point numbers. This confirms the exact ten spellings and their special-variable status, but not a general underscore-initial identifier rule.
+- **AM-INTERPRETER-35, printed p. 13-33:** the 3.5 addendum shows the signatures `x=FACT(n)`, `y=VARIAT(n,k)`, and `z=COMBIN(n,k)` with sample variables `x`, `y`, and `z`. These examples demonstrate the three new intrinsic forms, but do not define general identifier syntax or case sensitivity. The page's running header reads `GFA-BASIC 3.5 Addendum`, its heading is numbered `14. Further new commands in Version 3.5`, and its footer remains `13-33`; this explains why the separately catalogued combined scan uses a distinct `14-x` pagination sequence for this material.
+- **AM-INTERPRETER-35, printed p. 13-36:** the addendum distinguishes the `GURU x` command from the `GURU` function (used inside `HEX$(GURU)`). This is a context distinction in a 3.5 command/function example, not a general reserved-word list.
 - **AM-INTERPRETER-35, printed pp. 2-2–2-3:** the variable-name rule is explicitly labelled GFA-BASIC 3.0. The Byte postfix is visibly a vertical bar `|`, not capital `I`. The type table lists Float `#`, but the prose on p. 2-3 says Float has no postfix; this is an internal source contradiction and must remain unresolved. The prose confirms `$` for String.
 - **AM-INTERPRETER-35, printed p. 3-2:** the operator hierarchy image clearly shows `^` as the power sign. This resolves the OCR ambiguity in the glyph, but the hierarchy is still a 3.0 candidate, not a 3.5 conformance rule.
 - **AM-INTERPRETER-35, printed pp. 3-13–3-14 and 3-16:** page images confirm `==` as approximate numeric equality, `<=`/`>=` and their alternate spellings `=<`/`=>`, and `<>` as not-equal. These are inherited 3.0 operator spellings only.
@@ -49,6 +51,16 @@ The following page images were inspected from the supplied PDFs, rather than rel
 - **AM-BOOK-DE-1990, printed p. 169:** the REM entry lists `REM`, the high comma/apostrophe shorthand, and `!`. It describes `!` as usable inside a command line and says that at the beginning of a line it is converted to a REM line. This is supplementary V3.03 evidence only; it does not resolve the 3.5 comment grammar.
 
 The image review corrects two OCR-derived ambiguities in the earlier inventory: the broad wording about “arbitrary characters” on p. 57 applies to variable/function names, not labels; and the comment reference is printed p. 169 in this supplied book scan (not p. 166). The byte suffix glyph on p. 57 remains visually ambiguous at this scan resolution and is not promoted to a token rule.
+
+The two remaining page images in the supplied manual's printed 3.5 addendum sequence (pp. 13-33 and 13-36) were also checked. They add examples of version-specific command/function forms but no further general lexical contract. This does not amount to a full review of every page in the manual.
+
+Additional German-book page-image checks:
+
+- **AM-BOOK-DE-1990, printed p. 35:** the page says general hexadecimal notation uses a leading `$` (example `$1AF7`), while GFA-BASIC also accepts `&H` (example `&H1AF7`) and converts the dollar spelling to its own syntax. This is a V3.03 book statement, not direct evidence for the 3.5 source lexer.
+- **AM-BOOK-DE-1990, printed p. 56:** the book says Amiga GFA-BASIC allows command names as variable names and has no reserved terms apart from reserved variables such as `TIMER` and `DATE$`. This is useful evidence against globally reserving every command word in a future contextual parser, but remains V3.03-only.
+- **AM-BOOK-DE-1990, printed p. 58:** the book says a name after `@` at the beginning of a line is a procedure call, while `@` before a name following an equality sign is a function call. It also confirms the editor displays command names in uppercase. The `@` interpretation is context-sensitive and must not be flattened into a universal prefix classification.
+- **AM-BOOK-DE-1990, printed p. 167:** the page gives `Befehlszeile ! Kommentartext`, says `!` has the same commenting role as REM, and explicitly says it cannot be used this way on DATA lines because it would be treated as text DATA. At the beginning of a line, `!` is converted to the apostrophe REM abbreviation. This corroborates the separate REM entry on p. 169.
+- **AM-BOOK-DE-1990, printed p. 170:** the RESTORE entry uses `RESTORE [Labelname]` and describes resetting the DATA pointer to the first DATA item following that label. This confirms the use of a label reference without the trailing colon in this V3.03 example; it does not add a new label-character rule.
 
 ## 3. Inherited candidates from the 3.0 base manual
 
@@ -107,7 +119,7 @@ These statements describe the historical editor. They do not yet establish the f
 
 - Base manual's DATA section explicitly permits numeric DATA constants in hexadecimal, octal, and binary forms (printed p. 5-15).
 - Base manual's `VAL(a$)` description says strings beginning with `&H`, `&X`, or `&O` are interpreted as hexadecimal, binary, or octal (printed p. 2-16). This is evidence about VAL string conversion, not sufficient proof of direct numeric-literal syntax.
-- The German 1990 book describes &H hexadecimal notation and says a leading dollar form such as $1AF7 is also accepted/converted by GFA-BASIC (printed p. 34); it also uses &X and &H in examples (printed p. 233).
+- The German 1990 book describes a leading dollar form such as `$1AF7` and the GFA-BASIC `&H` form (printed p. 35); it also uses `&X` and `&H` in examples (printed p. 233). This is V3.03 supplementary evidence only.
 
 **Unresolved:** the complete 3.5 numeric-literal grammar, leading/trailing decimal point rules, exponent syntax and sign rules, digit separators, suffix interaction, overflow behavior, and exact direct-source radix prefixes. The 3.0 DATA example on p. 5-16 shows `&A`, `&HA`, `&012`, `&X1010`, and `%1010`, while its prose mentions `$` for HEX and `%` for BIN; the VAL page separately documents `&H`, `&X`, and `&O` inside strings. Do not collapse these distinct contexts into one lexer rule.
 
@@ -142,7 +154,7 @@ These are lexical candidates, not a complete token contract for Amiga 3.5.
 
 The base interpreter manual's appendix contains a command/abbreviation table. It gives examples such as P for PRINT, G for GOSUB, GO for GOTO, and multi-character abbreviations such as LI INPUT for LINE INPUT. The editor section says abbreviations are expanded to full command names when a line is accepted (printed pp. 1-7–1-8; appendix pp. 12-8 onward).
 
-The German 1990 book also says command names are displayed in uppercase by the editor and that the reader should distinguish fixed command names from programmer-defined names (printed pp. 56–58).
+The German 1990 book says Amiga GFA-BASIC permits command names as variable names and has no reserved terms apart from reserved variables such as `TIMER` and `DATE$` (printed p. 56). It says the editor displays command names in uppercase (p. 58). It also describes contextual `@` procedure/function calls (p. 58). These are V3.03 observations, not 3.5 keyword rules.
 
 **Unresolved:** whether all abbreviation forms are accepted by the 3.5 interpreter when reading source files, exact abbreviation disambiguation, keyword boundary rules, case sensitivity outside the editor, and the complete 3.5 reserved-word/special-variable inventory. A lexer should initially emit identifier/name candidates and let a dialect-specific classification/parser layer resolve keywords by context; do not make all dictionary words globally reserved based only on the editor.
 
@@ -156,9 +168,9 @@ The German 1990 book also says command names are displayed in uppercase by the e
 | REM/apostrophe/! comments | Base manual p. 7-35; German V3.03 p. 169 (page image checked) | Inherited candidate; DATA exclusion explicit in base manual |
 | One command per physical line | Base editor p. 1-8 | Editor rule; source grammar confirmation needed |
 | String delimiters and escapes | Base manual pp. 1-4, 5-7; DATA p. 5-15; German V3.03 p. 168 (page image checked) | Delimiter candidate; escaping unresolved |
-| Radix-prefixed numeric constants | Base manual pp. 2-16, 5-15–5-16 (page images checked); German V3.03 pp. 34, 233 | Inherited candidate; direct-source prefixes ambiguous |
+| Radix-prefixed numeric constants | Base manual pp. 2-16, 5-15–5-16 (page images checked); German V3.03 pp. 35, 233 (p. 35 page image checked) | Inherited candidate; direct-source prefixes ambiguous |
 | Operator inventory/precedence | Base manual pp. 3-2, 3-13–3-16 (selected page images checked) | Inherited candidate; glyphs confirmed, 3.5 status pending |
-| Command abbreviations | Base manual editor pp. 1-7–1-8 and appendix pp. 12-8 onward | Editor behavior; interpreter acceptance unresolved |
+| Command abbreviations / keyword reservation | Base manual editor pp. 1-7–1-8 and appendix pp. 12-8 onward; German V3.03 p. 56 (page image checked) | Editor expansion; Amiga V3.03 book says command words can be variables; 3.5 status unresolved |
 | Encoding/BOM/non-ASCII | No adequate 3.5 evidence extracted | Unknown |
 | Line endings and continuation | No adequate 3.5 source-file evidence extracted | Unknown |
 | Complete 3.5 reserved words | Addendum inventory only, not full language catalogue | Unknown |
@@ -178,8 +190,8 @@ The German 1990 book also says command names are displayed in uppercase by the e
 
 ## 7. Next extraction and verification steps
 
-- [x] Inspect page images for primary 3.5 addendum pp. 13-34–13-35; base manual pp. 2-2–2-3, 2-16, 3-2, 3-13–3-16, 5-15–5-16, 7-35–7-36; and German 1990 pp. 57, 168–169. Keep all 3.0/V3.03 observations provisional.
-- [ ] Inspect remaining page images for base manual operator details not covered by the selected hierarchy/comparison pages and German 1990 pp. 34, 56, 58, 166–167, 170; resolve remaining OCR glyphs.
+- [x] Inspect page images for primary 3.5 addendum pp. 13-33–13-36; base manual pp. 2-2–2-3, 2-16, 3-2, 3-13–3-16, 5-15–5-16, 7-35–7-36; and German 1990 pp. 35, 56–58, 57, 167–170. Keep all 3.0/V3.03 observations provisional.
+- [ ] Inspect remaining page images for base manual operator details not covered by the selected hierarchy/comparison pages and German 1990 pp. 166; resolve remaining OCR glyphs.
 - [ ] Search the 3.5 addendum and all supplied 3.5-specific pages for any explicit confirmation or change to base lexical rules.
 - [ ] Obtain a lawful, reproducible Amiga GFA BASIC 3.5 interpreter probe environment or recorded observations for unresolved cases.
 - [ ] Determine source encoding and line-ending behavior independently of the Rust transport loader.
