@@ -33,10 +33,7 @@ fn formatting_error(span: SourceSpan, message: impl Into<String>) -> Diagnostic 
 /// identifier spelling and numeric literal spelling are not normalized.
 /// Assignments have no surrounding operator/parenthesis/comma spaces; PRINT
 /// uses one space after its keyword. Line endings are emitted as LF.
-pub fn format_document(
-    document: &ParsedDocument,
-    source: &str,
-) -> Result<String, Diagnostic> {
+pub fn format_document(document: &ParsedDocument, source: &str) -> Result<String, Diagnostic> {
     let mut output = String::new();
     let has_final_line_ending = source.ends_with('\n') || source.ends_with('\r');
 
@@ -62,15 +59,25 @@ pub fn format_document(
 
         match statement {
             Statement::PrintVariables { .. } => {
-                let keyword = source.get(tokens[0].span.start..tokens[0].span.end).ok_or_else(
-                    || formatting_error(tokens[0].span, "token span is outside the supplied source"),
-                )?;
+                let keyword = source
+                    .get(tokens[0].span.start..tokens[0].span.end)
+                    .ok_or_else(|| {
+                        formatting_error(
+                            tokens[0].span,
+                            "token span is outside the supplied source",
+                        )
+                    })?;
                 output.push_str(keyword);
                 output.push(' ');
                 for token in tokens.iter().skip(1) {
-                    let text = source.get(token.span.start..token.span.end).ok_or_else(|| {
-                        formatting_error(token.span, "token span is outside the supplied source")
-                    })?;
+                    let text = source
+                        .get(token.span.start..token.span.end)
+                        .ok_or_else(|| {
+                            formatting_error(
+                                token.span,
+                                "token span is outside the supplied source",
+                            )
+                        })?;
                     output.push_str(text);
                 }
             }
@@ -98,10 +105,7 @@ pub fn format_document(
 ///
 /// Lexical or syntax errors are returned unchanged. Unknown source constructs
 /// are never silently discarded by formatting.
-pub fn format_source(
-    source_id: SourceId,
-    source: &str,
-) -> Result<String, Vec<Diagnostic>> {
+pub fn format_source(source_id: SourceId, source: &str) -> Result<String, Vec<Diagnostic>> {
     let document = parse_document(source_id, source)?;
     format_document(&document, source).map_err(|error| vec![error])
 }
