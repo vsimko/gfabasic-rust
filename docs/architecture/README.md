@@ -17,7 +17,7 @@ A planned technology or target is not an implementation claim. A language featur
 
 ## Project baseline
 
-The sole product target is Amiga GFA BASIC interpreter 3.5 compiled to native Linux x86-64 (GNU ABI, ELF). LLVM is the planned native backend, and SDL3 is the selected Linux graphics/window/input adapter. This scope is recorded in [ADR 0010](adr/0010-amiga-35-linux-sdl3-product-scope.md). The existing FACT/PRINT compiler slice is experimental; the general compiler, LLVM backend, runtime, and SDL3 adapter are not yet implemented.
+The sole product target is Amiga GFA BASIC interpreter 3.5 compiled to native Linux x86-64 (GNU ABI, ELF). LLVM is the planned native backend, and SDL3 is the selected Linux graphics/window/input adapter. This scope is recorded in [ADR 0011](adr/0011-amiga-35-linux-sdl3-product-scope.md). The existing FACT/PRINT compiler slice is experimental; the general compiler, LLVM backend, runtime, and SDL3 adapter are not yet implemented.
 
 [ADR 0009](adr/0009-initial-source-dialect-amiga-gfa-basic-3.5.md) selects the normative source version. Amiga 3.0/V3.03 material is historical evidence that requires 3.5 confirmation. Atari ST and other dialect/version research may remain archived, but it is not part of the product or an implementation target. The language core, Amiga API compatibility layer, and Linux/SDL3 adapter remain distinct architectural responsibilities.
 
@@ -39,7 +39,7 @@ The sole product target is Amiga GFA BASIC interpreter 3.5 compiled to native Li
 | Frontend fuzzing | Fuzz targets, corpus separation, resource budgets, and CI policy | [FUZZING.md](FUZZING.md) | strategy [#43](https://github.com/vsimko/gfabasic-rust/issues/43), implementation [#118](https://github.com/vsimko/gfabasic-rust/issues/118) |
 | Rust workspace | Crate/module boundaries and dependency policy | [WORKSPACE.md](WORKSPACE.md) | [#11](https://github.com/vsimko/gfabasic-rust/issues/11) |
 | API registry | Canonical TOML declarations, evidence/support states, schema validation | [API-REGISTRY.md](API-REGISTRY.md); [ADR 0006](adr/0006-api-registry.md) | [#12](https://github.com/vsimko/gfabasic-rust/issues/12), metadata validation [#55](https://github.com/vsimko/gfabasic-rust/issues/55) (complete), runtime handler resolution [#115](https://github.com/vsimko/gfabasic-rust/issues/115) |
-| Versioning and compatibility lifecycle | Compiler releases, schema versions, runtime ABI, deprecation | [VERSIONING.md](VERSIONING.md); [ADR 0010](adr/0010-versioning-and-compatibility-lifecycle.md) | [#58](https://github.com/vsimko/gfabasic-rust/issues/58) |
+| Versioning and compatibility lifecycle | Compiler releases, schema versions, runtime ABI, deprecation | [VERSIONING.md](VERSIONING.md); [ADR 0011](adr/0010-versioning-and-compatibility-lifecycle.md) | [#58](https://github.com/vsimko/gfabasic-rust/issues/58) |
 | Performance benchmarks | Compiler, generated-program, runtime, and build measurements | [BENCHMARKING.md](BENCHMARKING.md) | [#60](https://github.com/vsimko/gfabasic-rust/issues/60) |
 | Release and artifacts | Tag triggers, validation gates, artifact metadata, checksums, provenance, reproducibility | [RELEASES.md](RELEASES.md) | [#40](https://github.com/vsimko/gfabasic-rust/issues/40) |
 
@@ -73,6 +73,8 @@ The frontend and project-owned IR must remain independent of SDL3 and of the ini
 
 ## Decision records
 
+- [ADR 0011: Product scope — Amiga GFA BASIC 3.5 to Linux x86-64 with SDL3](adr/0011-amiga-35-linux-sdl3-product-scope.md)
+
 Use numbered Architecture Decision Records in [adr/](adr/). Each record states context, decision, status, alternatives, consequences, and evidence. An accepted ADR can be superseded by a later ADR; do not silently rewrite the historical rationale. The [ADR template](adr/TEMPLATE.md) defines the required structure.
 
 ## Glossary
@@ -98,6 +100,3 @@ Use numbered Architecture Decision Records in [adr/](adr/). Each record states c
 - Which runtime operations require software emulation rather than direct platform adapters?
 
 Record evidence and decisions in the relevant issue and ADR before claiming closure.
-
-
-- [ADR 0010: Product scope — Amiga GFA BASIC 3.5 to Linux x86-64 with SDL3](adr/0010-amiga-35-linux-sdl3-product-scope.md)
