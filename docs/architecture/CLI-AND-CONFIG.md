@@ -137,4 +137,4 @@ The same exit code must not be used for success and failure. Human-readable diag
 
 ## Deferred implementation
 
-The current CLI executable implements only help and version output. The TOML parser/schema validator, project discovery, source composition, diagnostic renderer, compatibility report, native output, and artifact manifest are not implemented. This specification accepts the interface model; it does not claim any command is currently usable.
+The current CLI executable implements only help and version output. The TOML parser/schema validator, project discovery, source composition, CLI diagnostic integration, compatibility report, native output, and artifact manifest are not implemented. The `build` and `check` commands explicitly fail with an unimplemented message; only help and version commands are currently usable. This specification accepts the interface model, not project loading or compilation.
