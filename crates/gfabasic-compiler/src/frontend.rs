@@ -491,10 +491,6 @@ impl Parser {
     }
 }
 
-/// Parse the evidence-backed Amiga GFA BASIC 3.5 FACT/PRINT MVP subset.
-///
-/// This parser intentionally rejects all syntax outside the demonstrated
-/// vertical-slice fixture. It does not claim general GFA BASIC compatibility.
 /// Parses the supported Amiga GFA BASIC 3.5 subset and retains its lossless syntax.
 ///
 /// The returned token/trivia stream and semantic AST refer to the same original
@@ -685,10 +681,11 @@ mod tests {
             "print"
         );
     }
+
     #[test]
     fn parse_document_keeps_lossless_syntax_alongside_the_ast() {
         use super::TokenKind;
-        let source_text = "x = FACT(5)\\r\\nPRINT x,y\\n";
+        let source_text = "x = FACT(5)\r\nPRINT x,y\n";
         let mut sources = SourceMap::new();
         let source_id = sources.add_source("parsed-document.bas", source_text);
         let document =
