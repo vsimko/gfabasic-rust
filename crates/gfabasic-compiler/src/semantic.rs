@@ -192,10 +192,7 @@ mod tests {
         assert_eq!(symbols.symbols[0].id, SymbolId(0));
         assert_eq!(symbols.symbols[0].name, "x");
         assert_eq!(
-            symbols
-                .references_to(SymbolId(0))
-                .map(|reference| reference.span)
-                .count(),
+            symbols.references_to(SymbolId(0)).count(),
             1
         );
     }
