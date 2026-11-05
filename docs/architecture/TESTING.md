@@ -1,6 +1,6 @@
 # Compatibility testing and release criteria
 
-- Status: Proposed; test conventions are defined, but executable release gates remain open under issue #10.
+- Status: Accepted testing strategy; executable compiler conformance and release-test gates remain open under [issue #116](https://github.com/vsimko/gfabasic-rust/issues/116). The conventions and policy baseline are complete under [issue #10](https://github.com/vsimko/gfabasic-rust/issues/10).
 
 ## Conformance corpus
 
