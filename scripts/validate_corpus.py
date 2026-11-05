@@ -37,11 +37,15 @@ def source_ids(root: Path) -> set[str] | None:
     source_register = root / "docs" / "reference-sources.md"
     if not source_register.is_file():
         return None
-    return {
-        match.group(1)
-        for line in source_register.read_text(encoding="utf-8").splitlines()
-        if (match := re.match(r"^\|\s*([A-Z][A-Z0-9-]+)\s*\|", line))
-    }
+    source_ids: set[str] = set()
+    for line in source_register.read_text(encoding="utf-8").splitlines():
+        match = re.match(r"^\|\s*([A-Z][A-Z0-9-]+)\s*\|", line)
+        if match is None:
+            continue
+        source_id = match.group(1)
+        if source_id != "ID":
+            source_ids.add(source_id)
+    return source_ids
 
 
 def error(errors: list[str], path: Path, message: str, corpus_root: Path) -> None:
