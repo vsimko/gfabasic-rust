@@ -8,6 +8,7 @@
 pub mod backend;
 pub mod cli;
 pub mod diagnostics;
+pub mod formatter;
 pub mod frontend;
 pub mod ir;
 pub mod prototype;

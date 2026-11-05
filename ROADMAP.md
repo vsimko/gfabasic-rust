@@ -18,6 +18,7 @@ This roadmap is the project-level view of delivery order for `gfabasic-rust`. Gi
 | Area | Current state | Evidence / tracking |
 |---|---|---|
 | Rust workspace | Three crates exist: compiler, generated-program runtime, Linux platform adapter; compiler includes source-map/loading, diagnostics, a narrow FACT/PRINT frontend and temporary native bootstrap; general semantics/IR/LLVM/configuration/runtime/platform behavior remains unimplemented | [Cargo workspace](Cargo.toml), [workspace design](docs/architecture/WORKSPACE.md) |
+| Formatter and source tooling | Initial library formatter for the supported FACT/VARIAT/COMBIN/PRINT subset; preserves token spelling and rejects unsupported syntax. CLI modes, comments/literals, broader grammar, LSP integration, and fixture-wide checks remain open | [#208](https://github.com/vsimko/gfabasic-rust/issues/208), [#209](https://github.com/vsimko/gfabasic-rust/issues/209) |
 | Compiler frontend, semantic analysis, IR | Narrow FACT/PRINT parser subset; lossless lexer additionally recognizes the explicitly documented Amiga 3.5 addendum names `_DATA` and `_0`…`_9` without claiming general identifier support; general grammar, semantic analysis, and typed IR are not implemented | [#46–#49](https://github.com/vsimko/gfabasic-rust/issues?q=is%3Aissue+is%3Aopen+label%3Acompiler), [#120](https://github.com/vsimko/gfabasic-rust/issues/120), [#121](https://github.com/vsimko/gfabasic-rust/issues/121) |
 | LLVM backend and native executable | Temporary C/`cc` bridge emits one narrow native host executable; planned LLVM backend remains unimplemented | [#50](https://github.com/vsimko/gfabasic-rust/issues/50) |
 | CLI and configuration | `gfabasic` supports help/version and a restricted `build` command for the FACT/PRINT prototype; general configuration and compilation integration remain open | [#9](https://github.com/vsimko/gfabasic-rust/issues/9), [#111](https://github.com/vsimko/gfabasic-rust/issues/111) |
@@ -72,6 +73,8 @@ Implement the smallest useful source-to-native-executable path for the accepted 
   - Initial supported-subset parser now returns the AST together with its lossless token/trivia representation; general grammar, richer recovery, and semantic integration remain open.
 - [ ] Symbol resolution and semantic analysis — [#48](https://github.com/vsimko/gfabasic-rust/issues/48)
   - Prototype-only symbol identities and PRINT references are implemented; full declaration, scope, type, suffix, procedure, and API-profile rules remain evidence-gated.
+- [ ] Formatter library and CLI — [#208](https://github.com/vsimko/gfabasic-rust/issues/208)
+  - Initial library formatter is implemented for the current lossless frontend subset; CLI, comment/literal preservation, broader grammar, and LSP integration remain open.
 - [ ] Typed, target-independent IR — [#49](https://github.com/vsimko/gfabasic-rust/issues/49)
 - [ ] LLVM backend and Linux x86-64 output — [#50](https://github.com/vsimko/gfabasic-rust/issues/50)
 - [ ] Implement a usable CLI and project configuration — [#111](https://github.com/vsimko/gfabasic-rust/issues/111)
