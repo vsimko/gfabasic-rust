@@ -125,7 +125,7 @@ fn emit_c(module: &Module) -> Result<String, String> {
                 statements.push(format!(
                     "    (void)printf!(\"{placeholders}\\n\", {});\n",
                     arguments.join(", ")
-                ).replace("printf!", "printf"));
+                ));
             }
         }
     }
