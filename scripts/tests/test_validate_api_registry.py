@@ -133,6 +133,26 @@ anchors = []
         errors = validate_registry(root)
         self.assertTrue(any("unknown test ID 'fixture-one-id'" in error for error in errors))
 
+    def test_symlinked_sidecar_is_not_a_registry_test_reference(self):
+        content = self.valid_declaration().replace(
+            "tests = []", 'tests = ["fixture-one-id"]'
+        )
+        temp, root = self.make_root(content)
+        self.addCleanup(temp.cleanup)
+        self.add_manifest_fixture(root, "fixture-one-id")
+        corpus = root / "tests/corpus/amiga/3.0/control-flow"
+        metadata = corpus / "fixture-one.toml"
+        target = corpus / "alternate-sidecar.toml"
+        target.write_text(metadata.read_text())
+        metadata.unlink()
+        try:
+            metadata.symlink_to(target)
+        except (OSError, NotImplementedError) as exc:
+            self.skipTest(f"symbolic links are unavailable: {exc}")
+
+        errors = validate_registry(root)
+        self.assertTrue(any("unknown test ID 'fixture-one-id'" in error for error in errors))
+
     def test_unlisted_sidecar_ids_are_not_registry_test_references(self):
         content = self.valid_declaration().replace(
             "tests = []", 'tests = ["unlisted-fixture-id"]'

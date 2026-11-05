@@ -28,7 +28,7 @@ Each sidecar TOML file must define:
 - `source_key`, `source_pages`, and `evidence_status`: source identity, printed page/section, and evidence quality.
 - `expectation`: expected parse/compile/runtime outcome. State `expected_stdout`, `expected_stderr`, and `expected_exit` when applicable.
 
-The manifest stores fixture paths relative to the corpus root, without the `.bas` or `.toml` suffix. The corresponding source and metadata files use the same path stem.
+The manifest stores fixture paths relative to the corpus root, without the `.bas` or `.toml` suffix. The corresponding source and metadata files use the same path stem. Fixture files and every directory component below the corpus root must be regular, non-symlink paths; symlinks are rejected to prevent external targets and alternate fixture identities.
 - `notes`: unresolved syntax, OCR, edition, or runtime questions.
 
 Validate the manifest, companion paths, stable IDs, evidence-source keys, and required metadata without compiling or executing any fixture:
