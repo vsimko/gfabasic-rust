@@ -43,20 +43,25 @@ PRIMARY_EVIDENCE = {
 
 def read_source_ids(root: Path) -> set[str]:
     text = (root / "docs" / "reference-sources.md").read_text(encoding="utf-8")
-    return {
-        match.group(1)
-        for line in text.splitlines()
-        if (match := re.match(r"^\|\s*([A-Z][A-Z0-9-]+)\s*\|", line))
-    }
+    source_ids = set()
+    for line in text.splitlines():
+        match = re.match(r"^\|\s*([A-Z][A-Z0-9-]+)\s*\|", line)
+        if match is not None and match.group(1) != "ID":
+            source_ids.add(match.group(1))
+    return source_ids
 
 
-def read_test_ids(root: Path) -> set[str]:
+def read_test_ids(root: Path, errors: list[str] | None = None) -> set[str]:
     corpus_root = root / "tests" / "corpus"
     manifest_path = corpus_root / "manifest.toml"
     if not manifest_path.exists():
         return set()
     try:
         manifest = tomllib.loads(manifest_path.read_text(encoding="utf-8"))
+    except UnicodeDecodeError as exc:
+        if errors is not None:
+            errors.append(f"{manifest_path}: invalid UTF-8: {exc}")
+        return set()
     except (OSError, tomllib.TOMLDecodeError):
         return set()
 
@@ -82,6 +87,10 @@ def read_test_ids(root: Path) -> set[str]:
             if not metadata_path.is_file():
                 continue
             metadata = tomllib.loads(metadata_path.read_text(encoding="utf-8"))
+        except UnicodeDecodeError as exc:
+            if errors is not None:
+                errors.append(f"{metadata_path}: invalid UTF-8: {exc}")
+            continue
         except (OSError, RuntimeError, ValueError, tomllib.TOMLDecodeError):
             continue
         fixture_id = metadata.get("id") if isinstance(metadata, dict) else None
@@ -115,7 +124,12 @@ def validate_registry(root: Path = ROOT) -> list[str]:
     if not schema_path.exists():
         return ["missing api/schema/registry-v1.json"]
 
-    schema = json.loads(schema_path.read_text(encoding="utf-8"))
+    try:
+        schema = json.loads(schema_path.read_text(encoding="utf-8"))
+    except UnicodeDecodeError as exc:
+        return [f"{schema_path}: invalid UTF-8: {exc}"]
+    except (OSError, json.JSONDecodeError) as exc:
+        return [f"{schema_path}: invalid JSON: {exc}"]
     Draft202012Validator.check_schema(schema)
     validator = Draft202012Validator(schema)
 
@@ -124,7 +138,10 @@ def validate_registry(root: Path = ROOT) -> list[str]:
     except FileNotFoundError:
         source_ids = set()
         errors.append("missing docs/reference-sources.md")
-    test_ids = read_test_ids(root)
+    except UnicodeDecodeError as exc:
+        source_ids = set()
+        errors.append(f"docs/reference-sources.md: invalid UTF-8: {exc}")
+    test_ids = read_test_ids(root, errors)
 
     files = sorted(registry_root.rglob("*.toml")) if registry_root.exists() else []
     seen_ids: dict[str, str] = {}
@@ -138,6 +155,9 @@ def validate_registry(root: Path = ROOT) -> list[str]:
             continue
         try:
             data = tomllib.loads(path.read_text(encoding="utf-8"))
+        except UnicodeDecodeError as exc:
+            errors.append(f"{path}: invalid UTF-8: {exc}")
+            continue
         except (OSError, tomllib.TOMLDecodeError) as exc:
             errors.append(f"{path}: invalid TOML: {exc}")
             continue
@@ -207,7 +227,11 @@ def validate_registry(root: Path = ROOT) -> list[str]:
                     errors.append(f"{path}: {declaration_id}: missing documentation path {docs_path_value!r}")
                     anchors = set()
                 else:
-                    anchors = heading_anchors(docs_path)
+                    try:
+                        anchors = heading_anchors(docs_path)
+                    except UnicodeDecodeError as exc:
+                        errors.append(f"{path}: {declaration_id}: documentation file has invalid UTF-8: {exc}")
+                        anchors = set()
                     for anchor in docs.get("anchors", []):
                         if anchor not in anchors:
                             errors.append(f"{path}: {declaration_id}: missing documentation anchor {anchor!r}")
