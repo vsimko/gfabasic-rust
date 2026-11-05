@@ -13,7 +13,7 @@ ROOT = Path(__file__).resolve().parents[1]
 CORPUS_ROOT = ROOT / "tests" / "corpus"
 FIXTURE_KINDS = {"positive", "negative", "semantic"}
 FIXTURE_STATUSES = {"candidate", "verified", "blocked", "retired"}
-FIXTURE_ID = re.compile(r"[a-z0-9]+(?:[.-][a-z0-9]+)*\\Z")
+FIXTURE_ID = re.compile(r"[a-z0-9]+(?:[.-][a-z0-9]+)*\Z")
 DIALECT_DIRECTORY_NAMES = {
     "amiga": "GFA BASIC Amiga",
 }
@@ -40,7 +40,7 @@ def source_ids(root: Path) -> set[str] | None:
     return {
         match.group(1)
         for line in source_register.read_text(encoding="utf-8").splitlines()
-        if (match := re.match(r"^\\|\\s*([A-Z][A-Z0-9-]+)\\s*\\|", line))
+        if (match := re.match(r"^\|\s*([A-Z][A-Z0-9-]+)\s*\|", line))
     }
 
 
