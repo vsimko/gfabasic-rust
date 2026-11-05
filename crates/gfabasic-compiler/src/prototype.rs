@@ -112,7 +112,7 @@ fn combin_value(n: i64, k: i64) -> Option<i64> {
 }
 
 fn emit_assignment(
-    variables: &mut BTreeMap<String, u32>,
+    variables: &mut BTreeMap<String, i64>,
     statements: &mut Vec<String>,
     name: &str,
     value: i64,
@@ -126,13 +126,13 @@ fn emit_assignment(
             format!("reassignment of '{name}' is outside the current prototype subset"),
         ));
     }
-    variables.insert(name.to_owned(), value as u32);
+    variables.insert(name.to_owned(), value);
     statements.push(format!("    long long {name} = {value};\n"));
     Ok(())
 }
 
 fn lower_program(program: &Program, sources: &SourceMap) -> Result<String, String> {
-    let mut variables = BTreeMap::<String, u32>::new();
+    let mut variables = BTreeMap::<String, i64>::new();
     let mut statements = Vec::new();
     let mut saw_print = false;
 
