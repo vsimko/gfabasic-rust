@@ -58,7 +58,7 @@ Initial fields:
 - \`build.artifact-name\`: optional output basename; default is derived from the entry-point filename.
 - \`build.emit\`: requested artifact kinds; default \`["executable"]\`.
 
-The example is a policy-level schema, not an implemented parser or frozen serialization library contract. The exact TOML field types and schema validator belong to the implementation work under #12 and #55.
+The example is a policy-level schema, not an implemented parser or frozen serialization library contract. The exact TOML field types and schema validator belong to the implementation work under #12 and #55. The schema must validate the fixed Amiga 3.5 / Amiga API / Linux x86-64 product combination rather than expose alternate product targets.
 
 ## Project discovery and paths
 
@@ -97,7 +97,7 @@ Precedence is:
 2. Project-file value.
 3. Documented default, only where a default is safe.
 
-The dialect identifier and version are mandatory. The compiler must not infer them from file extensions, source contents, API profile, or output target. API profiles default to none. The target defaults to the accepted initial target unless explicitly overridden.
+The product dialect and version are fixed to Amiga GFA BASIC interpreter 3.5. The product API profile is fixed to Amiga, and the output target is fixed to x86_64-unknown-linux-gnu. The compiler must not infer these values from file extensions or source contents. Configuration may repeat these fixed values for clarity, but must reject unsupported alternatives; there is no user-selectable dialect/profile/target matrix.
 
 A repeated \`--api-profile\` adds profiles to the selected set; \`--no-api-profiles\` clears the project-file set. Duplicate identifiers are normalized to one entry. Conflicting declarations across selected profiles are semantic diagnostics, not load-order overrides.
 
