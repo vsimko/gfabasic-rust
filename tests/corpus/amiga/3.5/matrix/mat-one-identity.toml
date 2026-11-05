@@ -7,9 +7,9 @@ status = "verified"
 source_key = "AM-INTERPRETER-30-35-UPDATE-SCAN"
 source_pages = "printed p. 13-3"
 evidence_status = "page-image-verified"
-expectation = "MAT ONE initializes the previously dimensioned square matrix as an identity matrix. MAT PRINT displays 1 on each diagonal position and 0 in every other position."
+expectation = "MAT ONE initializes the previously dimensioned square matrix as an identity matrix: diagonal elements are 1 and all other elements are 0. MAT PRINT displays the matrix."
 notes = [
   "Independently authored minimal fixture; not copied from the manual's example.",
-  "The manual's printed p. 13-3 defines MAT ONE and shows a 3x3 identity matrix.",
+  "The manual's printed p. 13-3 defines MAT ONE as producing a square identity matrix; it does not state the element count for `DIM a(3,3)` in this example.",
   "Verified against the supplied 3.5 addendum page image; no original interpreter execution has been performed.",
 ]
