@@ -127,7 +127,7 @@ fn emit_assignment(
         ));
     }
     variables.insert(name.to_owned(), value as u32);
-    statements.push(format!("    long long {name} = {value};\\n"));
+    statements.push(format!("    long long {name} = {value};\n"));
     Ok(())
 }
 
@@ -230,7 +230,9 @@ mod tests {
     #[test]
     fn rejects_semantics_outside_the_verified_subset() {
         for source in [
-            "x=FACT(3)\nPRINT x\n",
+            "x=FACT(21)\nPRINT x\n",
+            "x=VARIAT(3,4)\nPRINT x\n",
+            "x=COMBIN(3,4)\nPRINT x\n",
             "PRINT x\n",
             "x=FACT(1)\nx=FACT(2)\nPRINT x\n",
         ] {
@@ -246,7 +248,7 @@ mod tests {
 
     #[test]
     fn evaluates_documented_amiga_35_combinatorics_intrinsics() {
-        let source_text = "x=FACT(5)\\ny=VARIAT(5,2)\\nz=COMBIN(5,2)\\nPRINT x,y,z\\n";
+        let source_text = "x=FACT(5)\ny=VARIAT(5,2)\nz=COMBIN(5,2)\nPRINT x,y,z\n";
         let mut sources = SourceMap::new();
         let source_id = sources.add_source("combinatorics.bas", source_text);
         let program = parse(source_id, source_text).unwrap();
@@ -255,7 +257,7 @@ mod tests {
         assert!(generated.contains("long long x = 120;"));
         assert!(generated.contains("long long y = 20;"));
         assert!(generated.contains("long long z = 10;"));
-        assert!(generated.contains("printf(\\"%lld %lld %lld\\\\n\\", x, y, z)"));
+        assert!(generated.contains("printf(\"%lld %lld %lld\\n\", x, y, z)"));
     }
 
     #[test]
