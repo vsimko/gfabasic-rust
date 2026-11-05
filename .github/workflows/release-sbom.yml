@@ -11,18 +11,59 @@ on:
     types:
       - published
 
+# PR validation is read-only. Only the release publication job overrides this
+# permission to upload the validated SBOM to the corresponding GitHub Release.
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
-  group: release-sbom-${{ github.event.release.tag_name }}
+  group: release-sbom-${{ github.event.release.tag_name || github.event.pull_request.number || github.ref }}
   cancel-in-progress: false
 
 jobs:
-  sbom:
-    name: Generate and publish workspace SBOM
+  validate:
+    if: github.event_name == 'pull_request'
+    name: Validate workspace SBOM
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - name: Check out pull request
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+
+      - name: Install pinned Rust toolchain
+        run: |
+          rustup toolchain install 1.99.1 --profile minimal
+          rustup default 1.99.1
+
+      - name: Install pinned cargo-sbom
+        run: cargo install --locked cargo-sbom --version 0.10.0
+
+      - name: Verify locked workspace metadata
+        run: cargo metadata --locked --format-version 1 > cargo-metadata.json
+
+      - name: Generate SPDX 2.3 SBOM for the complete workspace
+        run: cargo sbom --output-format spdx_json_2_3 > workspace.spdx.json
+
+      - name: Validate SPDX version and workspace package coverage
+        shell: bash
+        run: |
+          set -euo pipefail
+          jq -e '
+            .spdxVersion == "SPDX-2.3"
+            and ([.packages[].name] as $names
+              | ["gfabasic-compiler", "gfabasic-runtime", "gfabasic-platform-linux"]
+              | all(. as $required | $names | index($required) != null))
+          ' workspace.spdx.json > /dev/null
+
+  publish:
+    if: github.event_name == 'release'
+    name: Publish workspace SBOM
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
     steps:
       - name: Check out release tag
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
@@ -55,7 +96,6 @@ jobs:
           ' workspace.spdx.json > /dev/null
 
       - name: Attach SBOM to the GitHub Release
-        if: github.event_name == 'release'
         env:
           GH_TOKEN: ${{ github.token }}
           RELEASE_TAG: ${{ github.event.release.tag_name }}
