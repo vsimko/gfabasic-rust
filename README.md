@@ -34,6 +34,7 @@ Key documents:
 - [Project roadmap](ROADMAP.md)
 - [Architecture overview](docs/architecture/README.md)
 - [Project goals and compatibility](docs/architecture/GOALS.md)
+- [Product scope decision (ADR 0010)](docs/architecture/adr/0010-amiga-35-linux-sdl3-product-scope.md)
 - [Dialect and version policy](docs/architecture/DIALECTS.md)
 - [Documentation policy](docs/DOCUMENTATION.md)
 - [GFA BASIC reference sources](docs/reference-sources.md)
