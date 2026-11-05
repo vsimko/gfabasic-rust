@@ -196,7 +196,7 @@ mod tests {
     }
 
     #[test]
-    fn compiles_and_runs_a_native_executable_when_cc_is_available() {
+    fn compiles_and_runs_a_native_executable() {
         let cc_version = Command::new("cc")
             .arg("--version")
             .output()
