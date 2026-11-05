@@ -116,6 +116,9 @@ fn compile_source(source: &str) -> Result<String, String> {
                 "line {line_number}: prototype supports one-letter lowercase variables only"
             ));
         }
+        if variables.contains_key(&name) {
+            return Err(format!("line {line_number}: reassignment is outside the current prototype subset"));
+        }
         let rhs = rhs.trim();
         let Some(argument) = rhs.strip_prefix("FACT(").and_then(|value| value.strip_suffix(')')) else {
             return Err(format!(
