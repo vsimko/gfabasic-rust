@@ -143,30 +143,35 @@ fn lower_program(program: &Program, sources: &SourceMap) -> Result<String, Strin
                 argument,
                 span,
             } => {
-                let value = factorial_value(*argument)
-                    .ok_or_else(|| semantic_error(
+                let value = factorial_value(*argument).ok_or_else(|| {
+                    semantic_error(
                         sources,
                         *span,
-                        format!("FACT({argument}) is outside the supported integer-literal range 0..=20"),
-                    ))?;
+                        format!(
+                            "FACT({argument}) is outside the supported integer-literal range 0..=20"
+                        ),
+                    )
+                })?;
                 emit_assignment(&mut variables, &mut statements, name, value, *span, sources)?;
             }
             Statement::AssignVariat { name, n, k, span } => {
-                let value = variat_value(*n, *k)
-                    .ok_or_else(|| semantic_error(
+                let value = variat_value(*n, *k).ok_or_else(|| {
+                    semantic_error(
                         sources,
                         *span,
                         format!("VARIAT({n},{k}) requires 0 <= k <= n <= 20"),
-                    ))?;
+                    )
+                })?;
                 emit_assignment(&mut variables, &mut statements, name, value, *span, sources)?;
             }
             Statement::AssignCombin { name, n, k, span } => {
-                let value = combin_value(*n, *k)
-                    .ok_or_else(|| semantic_error(
+                let value = combin_value(*n, *k).ok_or_else(|| {
+                    semantic_error(
                         sources,
                         *span,
                         format!("COMBIN({n},{k}) requires 0 <= k <= n <= 20"),
-                    ))?;
+                    )
+                })?;
                 emit_assignment(&mut variables, &mut statements, name, value, *span, sources)?;
             }
             Statement::PrintVariables { names, span } => {
