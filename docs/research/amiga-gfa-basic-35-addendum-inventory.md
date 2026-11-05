@@ -1,6 +1,6 @@
 # Amiga GFA-BASIC 3.5 interpreter addendum — extracted feature inventory
 
-Primary source: `GFA_Basic_3.5_Interpreter.pdf`, supplied in the project workspace. The introduction states that the included software is GFA BASIC 3.5 and that Chapter 13 is an addendum to a manual originally printed for 3.0. Chapter 13 is titled “New features in GFA Basic 3.5”. The following page references are the manual's printed addendum pages.
+Primary source: the supplied `GFA_Basic_3.5_Interpreter.pdf`; independently cross-checked against `GFA-Basic 3.0 + 3.5 Upd (Amiga).pdf` (487 PDF pages). The second scan's PDF p. 3 identifies the base as `GFA BASIC 3.0 Interpreter`; p. 4 gives ©1988 GFA Systemtechnik GmbH, program author Frank Ostrowski, second edition December 1988; p. 7 explicitly instructs readers to add Chapter 13, Chapter 14, and the 3.5 editor changes to the 3.0 manual. The following references are printed addendum page numbers.
 
 ## 1. Editor changes (printed addendum p. 13-1)
 
@@ -88,13 +88,15 @@ The manual explicitly says that, in addition to Chapter 13, version 3.5 implemen
 | `z=COMBIN(n,k)` | Number of k-combinations without repetition: `n!/((n-k)!*k!)` |
 | `OPENW` with negative screen number | Opens window on current (top) screen |
 | `PCOLOR foreground[,background]` | Like COLOR, but applies to actual screen output by PRINT |
-| `DATA` | Returns/indicates DATA pointer position; zero if next READ would cause “out of data” |
-| `_DATA=` | Sets DATA pointer to a previously determined value |
+| `_DATA` | Returns/indicates DATA pointer position; zero if next READ would cause “out of data” |
+| `_DATA=` | Sets DATA pointer to a previously determined value obtained from `_DATA` |
 | `_0` … `_9` | Ten special longword variables, like `%`, not floating-point; cleared only by NEW, not by CLEAR, LOAD, CHAIN, or RUN |
 | `GURU x` | Enables/disables GURU check: x=0 off, x<>0 on; on GURU Meditation it transfers to ONERROR GOSUB or generates error #109 |
 | `GURU` | Function returning the GURU number, per example and explanatory text |
 
 Chapter 14 further notes that GURU error messages #110–#118 correspond to normal GURUs $2–$A. In compiled 3.5 programs, RESUME NEXT and RESUME LABEL cannot be executed after an ONERROR GOSUB call caused by a GURU. The text warns that error #109 is a serious system condition and that GURU checking only works if the system can continue execution.
+
+Page-image review of the second scan's printed p. 14-5 confirms the leading underscore in both DATA-pointer operations: `_DATA` and `_DATA=`. Ordinary `DATA` remains the data declaration statement. Printed p. 14-6 confirms `_0`…`_9` are longword special variables and distinguishes `GURU x` from the `GURU` function.
 
 ## 5. Implementation and conformance work breakdown
 
