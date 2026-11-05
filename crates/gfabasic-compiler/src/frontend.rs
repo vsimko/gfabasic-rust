@@ -391,7 +391,7 @@ mod tests {
         ));
         assert!(matches!(
             &program.statements[3],
-            Statement::PrintVariables { names, .. } if names == &["x", "y", "z"]
+            Statement::PrintVariables { names, .. } if names.iter().map(String::as_str).collect::<Vec<_>>() == ["x", "y", "z"]
         ));
     }
 
