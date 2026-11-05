@@ -159,10 +159,15 @@ mod tests {
     }
 
     #[test]
-    fn build_compiles_the_verified_fact_fixture_when_cc_is_available() {
-        if Command::new("cc").arg("--version").output().is_err() {
-            return;
-        }
+    fn build_compiles_the_verified_fact_fixture() {
+        let cc_version = Command::new("cc")
+            .arg("--version")
+            .output()
+            .expect("CLI native build test requires a host C compiler (`cc`)");
+        assert!(
+            cc_version.status.success(),
+            "CLI native build test requires a working host C compiler (`cc`)"
+        );
 
         let sequence = NEXT_TEST.fetch_add(1, Ordering::Relaxed);
         let directory = std::env::temp_dir().join(format!(
