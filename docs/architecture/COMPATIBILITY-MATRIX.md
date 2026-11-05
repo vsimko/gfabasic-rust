@@ -1,7 +1,7 @@
 # Current compatibility matrix
 
 - Status: **Amiga GFA BASIC interpreter 3.5 is the accepted initial normative source dialect; no GFA BASIC dialect is implemented or conformant.**
-- Updated: 2026-11-04.
+- Updated: 2026-11-05.
 - Tracking: [dialect policy #3](https://github.com/vsimko/gfabasic-rust/issues/3), [compatibility testing #10](https://github.com/vsimko/gfabasic-rust/issues/10), [versioning policy #58](https://github.com/vsimko/gfabasic-rust/issues/58).
 
 This matrix separates accepted normative source scope from research evidence, compiler implementation, API profile implementation, output target, and conformance status. Selecting a source dialect does not mean that it is implemented or supported.
@@ -17,8 +17,8 @@ This matrix separates accepted normative source scope from research evidence, co
 
 ## Project-wide implementation status
 
-- Rust workspace: bootstrapped with compiler, runtime, and Linux platform crates; compiler source-map and strict UTF-8 file-loading primitives are implemented, while the language frontend, semantic analysis, IR, backend, CLI, runtime behavior, and platform adapter are not implemented.
-- Compiler frontend, semantic analysis, IR, and LLVM backend: not implemented. The minimal CLI supports help/version only; build/check and project configuration are not implemented.
+- Rust workspace: bootstrapped with compiler, generated-program runtime, and Linux platform crates. Compiler source-map, strict UTF-8 transport loading, structured diagnostics, and the minimal CLI (`help`/`version`) are implemented building blocks. The GFA BASIC frontend, semantic analysis, IR, backend, project configuration, runtime behavior, and platform adapter are not implemented.
+- No GFA BASIC source compilation is available: the frontend, semantic analysis, IR, and LLVM backend are not implemented; `build` and `check` remain explicit usage errors.
 - GFA BASIC core runtime: not implemented.
 - Amiga and Atari ST compatibility runtimes: not implemented.
 - Linux platform layer and SDL3 integration: not implemented.
