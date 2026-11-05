@@ -1,0 +1,15 @@
+id = "amiga-3.5-mat-one-identity"
+dialect = "GFA BASIC Amiga"
+version = "3.5"
+api_profiles = []
+kind = "semantic"
+status = "verified"
+source_key = "AM-INTERPRETER-30-35-UPDATE-SCAN"
+source_pages = "printed p. 13-3"
+evidence_status = "page-image-verified"
+expectation = "MAT ONE initializes the previously dimensioned square matrix as an identity matrix. MAT PRINT displays 1 on each diagonal position and 0 in every other position."
+notes = [
+  "Independently authored minimal fixture; not copied from the manual's example.",
+  "The manual's printed p. 13-3 defines MAT ONE and shows a 3x3 identity matrix.",
+  "Verified against the supplied 3.5 addendum page image; no original interpreter execution has been performed.",
+]
