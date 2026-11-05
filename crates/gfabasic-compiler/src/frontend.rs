@@ -13,6 +13,18 @@ pub struct Program {
     pub statements: Vec<Statement>,
 }
 
+/// A successful parse together with the lossless syntax representation.
+///
+/// The syntax stream retains original source spans for recognized tokens and
+/// trivia; the AST contains the semantic structure used by later compiler stages.
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct ParsedDocument {
+    /// Parsed statements for the currently supported language subset.
+    pub program: Program,
+    /// Lossless token/trivia representation of the same source document.
+    pub syntax: LexedSource,
+}
+
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum Statement {
     AssignFact {
@@ -479,25 +491,38 @@ impl Parser {
     }
 }
 
-/// Parse the evidence-backed Amiga GFA BASIC 3.5 FACT/PRINT MVP subset.
+/// Parses the supported Amiga GFA BASIC 3.5 subset and retains its lossless syntax.
 ///
-/// This parser intentionally rejects all syntax outside the demonstrated
-/// vertical-slice fixture. It does not claim general GFA BASIC compatibility.
-pub fn parse(source_id: SourceId, source: &str) -> Result<Program, Vec<Diagnostic>> {
-    let tokens = lex_lossless(source_id, source)?.tokens;
-    Parser {
-        tokens,
+/// The returned token/trivia stream and semantic AST refer to the same original
+/// source. Unsupported syntax remains diagnostic and is not silently accepted.
+pub fn parse_document(
+    source_id: SourceId,
+    source: &str,
+) -> Result<ParsedDocument, Vec<Diagnostic>> {
+    let syntax = lex_lossless(source_id, source)?;
+    let program = Parser {
+        tokens: syntax.tokens.clone(),
         cursor: 0,
         diagnostics: Vec::new(),
         source_id,
         source_len: source.len(),
     }
-    .parse_program()
+    .parse_program()?;
+
+    Ok(ParsedDocument { program, syntax })
+}
+
+/// Parses the supported subset and returns only its semantic AST.
+///
+/// This compatibility wrapper preserves the original API; callers that need
+/// formatting or editor source fidelity should call parse_document.
+pub fn parse(source_id: SourceId, source: &str) -> Result<Program, Vec<Diagnostic>> {
+    parse_document(source_id, source).map(|document| document.program)
 }
 
 #[cfg(test)]
 mod tests {
-    use super::{Statement, parse};
+    use super::{Statement, parse, parse_document};
     use crate::diagnostics::DiagnosticCategory;
     use crate::source::SourceMap;
 
@@ -655,5 +680,32 @@ mod tests {
             &source_text[lexed.tokens[0].span.start..lexed.tokens[0].span.end],
             "print"
         );
+    }
+
+    #[test]
+    fn parse_document_keeps_lossless_syntax_alongside_the_ast() {
+        use super::TokenKind;
+        let source_text = "x = FACT(5)\r\nPRINT x,y\n";
+        let mut sources = SourceMap::new();
+        let source_id = sources.add_source("parsed-document.bas", source_text);
+        let document =
+            parse_document(source_id, source_text).expect("supported source should parse");
+
+        assert_eq!(document.program.statements.len(), 2);
+        let mut spans: Vec<_> = document
+            .syntax
+            .tokens
+            .iter()
+            .filter(|token| !matches!(&token.kind, TokenKind::End))
+            .map(|token| token.span)
+            .chain(document.syntax.trivia.iter().map(|item| item.span))
+            .collect();
+        spans.sort_by_key(|span| span.start);
+
+        let reconstructed = spans
+            .into_iter()
+            .map(|span| &source_text[span.start..span.end])
+            .collect::<String>();
+        assert_eq!(reconstructed, source_text);
     }
 }
