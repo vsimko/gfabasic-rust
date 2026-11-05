@@ -817,6 +817,64 @@ mod tests {
     }
 
     #[test]
+    fn special_names_are_recognized_at_eof_and_before_existing_delimiters() {
+        use super::{TokenKind, lex_lossless};
+
+        let mut spellings = vec!["_DATA".to_owned()];
+        spellings.extend(('0'..='9').map(|digit| format!("_{digit}")));
+
+        for spelling in spellings {
+            let mut sources = SourceMap::new();
+            let source_id = sources.add_source("special-name-eof.bas", &spelling);
+            let lexed = lex_lossless(source_id, &spelling)
+                .expect("documented Amiga 3.5 special name should lex at EOF");
+
+            assert!(matches!(
+                &lexed.tokens[0].kind,
+                TokenKind::Identifier(name) if name == &spelling
+            ));
+            assert_eq!(lexed.tokens[0].span.start, 0);
+            assert_eq!(lexed.tokens[0].span.end, spelling.len());
+            assert!(matches!(lexed.tokens[1].kind, TokenKind::End));
+            assert_eq!(lexed.tokens[1].span.start, spelling.len());
+        }
+
+        let source_text = "(_DATA,_0,_9)";
+        let mut sources = SourceMap::new();
+        let source_id = sources.add_source("special-name-delimiters.bas", source_text);
+        let lexed = lex_lossless(source_id, source_text)
+            .expect("documented names should remain separate from existing punctuation");
+
+        let names: Vec<_> = lexed
+            .tokens
+            .iter()
+            .filter_map(|token| match &token.kind {
+                TokenKind::Identifier(name) => Some(name.as_str()),
+                _ => None,
+            })
+            .collect();
+        assert_eq!(names, ["_DATA", "_0", "_9"]);
+        assert!(matches!(lexed.tokens[0].kind, TokenKind::LeftParen));
+        assert!(matches!(lexed.tokens[2].kind, TokenKind::Comma));
+        assert!(matches!(lexed.tokens[4].kind, TokenKind::Comma));
+        assert!(matches!(lexed.tokens[6].kind, TokenKind::RightParen));
+
+        let mut spans: Vec<_> = lexed
+            .tokens
+            .iter()
+            .filter(|token| !matches!(&token.kind, TokenKind::End))
+            .map(|token| token.span)
+            .chain(lexed.trivia.iter().map(|item| item.span))
+            .collect();
+        spans.sort_by_key(|span| span.start);
+        let reconstructed = spans
+            .into_iter()
+            .map(|span| &source_text[span.start..span.end])
+            .collect::<String>();
+        assert_eq!(reconstructed, source_text);
+    }
+
+    #[test]
     fn rejects_unverified_underscore_identifier_spellings() {
         use super::lex_lossless;
 
