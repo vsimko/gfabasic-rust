@@ -1,6 +1,6 @@
 # Dependency and supply-chain security
 
-- Status: **RustSec advisory auditing is implemented.** License allowlist, exception approvals, and release SBOM format remain pending maintainer approval.
+- Status: **RustSec advisory auditing and the approved dependency-license policy are implemented.** Pull-request CI generates and validates the workspace SPDX 2.3 SBOM; the published-release attachment workflow is configured but has not yet been exercised against a real release.
 - Tracking: [issue #39](https://github.com/vsimko/gfabasic-rust/issues/39).
 
 ## Dependency advisory policy
@@ -13,7 +13,7 @@ The dedicated [security audit workflow](../../.github/workflows/security-audit.y
 - The audit uses no write-capable token. Workflow permissions are limited to `contents: read`; the command's exit status and package/advisory details provide the actionable failure output.
 - The audit is an advisory-database check, not a complete security review. It does not replace code review, static analysis, secret scanning, binary analysis, or OS-level dependency checks.
 
-The current lockfile contains only the three local workspace packages and no third-party crates. The first successful audit on 2026-11-04 ([workflow run 41832754189](https://github.com/vsimko/gfabasic-rust/actions/runs/41832754189)) loaded the RustSec advisory database and passed against those three workspace package entries. This establishes the workflow baseline, not a claim that future dependencies are safe.
+The root workspace lockfile contains only the three local workspace packages and no third-party crates. Separate fuzz and benchmark lockfiles are audited as well. The first successful audit on 2026-11-04 ([workflow run 41832754189](https://github.com/vsimko/gfabasic-rust/actions/runs/41832754189)) loaded the RustSec advisory database and passed against those three workspace package entries. This establishes the workflow baseline, not a claim that future dependencies are safe.
 
 ## Exceptions
 
@@ -31,9 +31,9 @@ Only add the exact advisory ID to a checked-in `audit.toml` after the maintainer
 
 ## License policy and SBOM
 
-The repository itself is MIT-licensed, but that does not automatically approve every third-party dependency license. No dependency-license allowlist or exception policy is accepted yet. The maintainer must approve the allowed SPDX identifiers and how dual-licensed crates are handled before a license gate is enabled.
+The default dependency-license allowlist and exception process are approved and documented in [the dependency-license policy](../contributor/dependency-license-policy.md). Copyleft licenses and identifiers outside the allowlist still require explicit maintainer approval. The root workspace currently has no third-party Cargo dependencies; separate fuzz and benchmark workspaces have tooling dependencies, and their lockfiles are included in the audit workflow.
 
-No release SBOM is generated yet. Before packaging/release work, the maintainer should select SPDX or CycloneDX and the required version/output format. The generation command and tool version must then be pinned and the output made reproducible from the release lockfile.
+The approved release SBOM is one workspace-level SPDX 2.3 JSON document covering all three packages (`gfabasic-compiler`, `gfabasic-runtime`, and `gfabasic-platform-linux`). The pinned generator is `cargo-sbom` 0.10.0, invoked with `spdx_json_2_3`. The pull-request path generates the document and validates the SPDX version and workspace package coverage. The published-release path is configured to attach the JSON to the corresponding GitHub Release. No real published release has yet exercised that upload, so the final acceptance criterion in [issue #39](https://github.com/vsimko/gfabasic-rust/issues/39) remains open and is labelled `needs-human` pending a release.
 
 ## Workflow supply-chain controls
 
@@ -41,6 +41,6 @@ No release SBOM is generated yet. Before packaging/release work, the maintainer 
 - The workflow grants only read access to repository contents.
 - Rust and Cargo Audit versions are pinned.
 - Cargo Audit's transitive tool dependencies are installed with the published lockfile via `--locked`.
-- The workflow runs on dependency changes and a weekly schedule; manual dispatch is available for incident response.
+- The audit covers the root workspace, separate fuzz workspace, and benchmark workspace lockfiles. It runs on relevant dependency changes, weekly, and by manual dispatch.
 
 These controls reduce workflow drift but do not establish provenance or signatures for every future dependency. Review action SHAs, tool versions, and workflow permissions when updating CI.
