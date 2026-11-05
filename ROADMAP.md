@@ -21,7 +21,7 @@ This roadmap is the project-level view of delivery order for `gfabasic-rust`. Gi
 | Compiler frontend, semantic analysis, IR | Narrow FACT/PRINT frontend subset only; general grammar, semantic analysis, and typed IR are not implemented | [#46–#49](https://github.com/vsimko/gfabasic-rust/issues?q=is%3Aissue+is%3Aopen+label%3Acompiler), [#120](https://github.com/vsimko/gfabasic-rust/issues/120), [#121](https://github.com/vsimko/gfabasic-rust/issues/121) |
 | LLVM backend and native executable | Temporary C/`cc` bridge emits one narrow native host executable; planned LLVM backend remains unimplemented | [#50](https://github.com/vsimko/gfabasic-rust/issues/50) |
 | CLI and configuration | `gfabasic` supports help/version and a restricted `build` command for the FACT/PRINT prototype; general configuration and compilation integration remain open | [#9](https://github.com/vsimko/gfabasic-rust/issues/9), [#111](https://github.com/vsimko/gfabasic-rust/issues/111) |
-| Runtime and platform integration | Not implemented; SDL3, Amiga and Atari ST runtime layers remain planned | [#51–#54](https://github.com/vsimko/gfabasic-rust/issues?q=is%3Aissue+is%3Aopen) |
+| Language tooling and editor integration | Planned; one shared Rust LSP server over the compiler frontend, with thin VS Code and IntelliJ clients. No language server or editor extension is implemented | [ADR 0012](docs/architecture/adr/0012-language-server-and-editor-integration.md), [#209](https://github.com/vsimko/gfabasic-rust/issues/209), [#210](https://github.com/vsimko/gfabasic-rust/issues/210), [#211](https://github.com/vsimko/gfabasic-rust/issues/211) |\n| Runtime and platform integration | Not implemented; SDL3, Amiga and Atari ST runtime layers remain planned | [#51–#54](https://github.com/vsimko/gfabasic-rust/issues?q=is%3Aissue+is%3Aopen) |
 | API registry | Schema and metadata validation are complete; runtime handler resolution remains unimplemented | [#115](https://github.com/vsimko/gfabasic-rust/issues/115) |
 | Dialect and API research | Amiga GFA BASIC interpreter 3.5 is the accepted normative source dialect; 3.0/3.03 material is historical research requiring 3.5 confirmation, and Atari ST V2.xx/V3.0 remains research-only. No dialect is implemented or conformant | [ADR 0009](docs/architecture/adr/0009-initial-source-dialect-amiga-gfa-basic-3.5.md), [#3](https://github.com/vsimko/gfabasic-rust/issues/3), [#63–#66](https://github.com/vsimko/gfabasic-rust/issues?q=is%3Aissue+is%3Aopen) |
 | Tests | Existing source-loader and registry checks remain; the FACT/PRINT frontend and native-executable path have focused positive/negative and end-to-end tests. General conformance runner and fuzz targets remain unimplemented | [#42](https://github.com/vsimko/gfabasic-rust/issues/42), [#43](https://github.com/vsimko/gfabasic-rust/issues/43), [#116](https://github.com/vsimko/gfabasic-rust/issues/116), [#118](https://github.com/vsimko/gfabasic-rust/issues/118) |
@@ -85,7 +85,7 @@ Only implement platform behavior backed by accepted references and tests.
 - [ ] Resolve API registry declarations to actual runtime handlers — [#115](https://github.com/vsimko/gfabasic-rust/issues/115)
 - [ ] Compatibility report and optional migration analysis — [#56](https://github.com/vsimko/gfabasic-rust/issues/56)
 - [x] Fuzzing strategy and source-loader smoke/scheduled campaigns — [#43](https://github.com/vsimko/gfabasic-rust/issues/43), [#118](https://github.com/vsimko/gfabasic-rust/issues/118); lexer/parser targets remain deferred until [#46](https://github.com/vsimko/gfabasic-rust/issues/46) and [#47](https://github.com/vsimko/gfabasic-rust/issues/47) expose stable entry points
-- [ ] Benchmark strategy and measurements — [#60](https://github.com/vsimko/gfabasic-rust/issues/60)
+- [ ] Benchmark strategy and measurements — [#60](https://github.com/vsimko/gfabasic-rust/issues/60)\n- [ ] Shared LSP server with diagnostics, formatting, navigation, completion, and safe rename — [#209](https://github.com/vsimko/gfabasic-rust/issues/209); depends on the lossless frontend, semantic symbol index, formatter, and compiler build contract\n- [ ] VS Code extension using the shared LSP server and compiler CLI — [#210](https://github.com/vsimko/gfabasic-rust/issues/210)\n- [ ] IntelliJ IDEA integration using the shared LSP server — [#211](https://github.com/vsimko/gfabasic-rust/issues/211)
 
 ### Phase 4 — Release readiness
 
@@ -108,7 +108,7 @@ The first end-to-end MVP integration gate is tracked separately in [#113](https:
 4. Platform APIs depend on verified profile declarations; Amiga and Atari ST evidence must not be conflated.
 5. A user quick start and installation guide depend on a working, tested CLI and distributable build.
 6. The generic source-loader fuzz target is implemented; lexer/parser fuzz targets depend on stable frontend entry points and source contracts.
-7. Release packaging depends on successful end-to-end builds and explicit runtime dependency policy.
+7. Release packaging depends on successful end-to-end builds and explicit runtime dependency policy.\n8. Editor diagnostics, formatting, navigation, and refactoring depend on the same lossless frontend and semantic model as compilation; LSP and editor clients must not introduce a parallel language implementation.
 
 ## Roadmap maintenance
 
