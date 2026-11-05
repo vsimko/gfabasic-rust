@@ -121,7 +121,7 @@ mod tests {
         let (code, out, err) = invoke(&[]);
         assert_eq!(code, 0);
         assert!(out.contains("Usage:"));
-        assert!(out.contains("FACT/PRINT prototype"));
+        assert!(out.contains("combinatorics/PRINT prototype"));
         assert!(err.is_empty());
     }
 
