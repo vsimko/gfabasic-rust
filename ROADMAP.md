@@ -67,6 +67,7 @@ Implement the smallest useful source-to-native-executable path for the accepted 
 - [ ] Dialect-aware source decoding and composition — [#120](https://github.com/vsimko/gfabasic-rust/issues/120)
 - [ ] Source-map integration with compiler diagnostics — [#121](https://github.com/vsimko/gfabasic-rust/issues/121)
 - [ ] Dialect-aware lexer — [#46](https://github.com/vsimko/gfabasic-rust/issues/46)
+  - Initial FACT/VARIAT/COMBIN/PRINT slice now exposes lossless horizontal-whitespace trivia and line-boundary token spans; full Amiga 3.5 lexical coverage, comments, literals, identifiers, and operators remain open and evidence-gated.
 - [ ] Parser and AST — [#47](https://github.com/vsimko/gfabasic-rust/issues/47)
 - [ ] Symbol resolution and semantic analysis — [#48](https://github.com/vsimko/gfabasic-rust/issues/48)
 - [ ] Typed, target-independent IR — [#49](https://github.com/vsimko/gfabasic-rust/issues/49)
