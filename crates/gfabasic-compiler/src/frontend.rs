@@ -779,9 +779,9 @@ mod tests {
             .collect();
 
         assert_eq!(names, expected);
-        for token in lexed.tokens.iter().filter(|token| {
-            matches!(&token.kind, TokenKind::Identifier(name) if name.starts_with('_'))
-        }) {
+        for token in lexed.tokens.iter().filter(
+            |token| matches!(&token.kind, TokenKind::Identifier(name) if name.starts_with('_')),
+        ) {
             assert_eq!(
                 &source_text[token.span.start..token.span.end],
                 match &token.kind {
