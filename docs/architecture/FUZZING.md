@@ -132,7 +132,7 @@ suite before treating it as fixed.
 
 ## Remaining implementation decisions
 
-- Add a lexer target after the Amiga 3.0 lexical rules and token entry point are sufficiently specified in #46.
+- Add a lexer target after the selected Amiga GFA BASIC interpreter 3.5 lexical rules and token entry point are sufficiently specified in #46. Treat 3.0/3.03 rules only as inherited candidates until confirmed against 3.5.
 - Add a parser target after the parser/AST entry point exists in #47.
 - Add source-composition fuzzing only after #120 defines deterministic resolution and filesystem sandbox rules.
 - Establish useful coverage baselines before adding coverage-percentage gates.
