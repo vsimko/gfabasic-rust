@@ -140,6 +140,9 @@ mod tests {
 
         let errors = format_source(source_id, source_text).expect_err("comments are not supported");
         assert_eq!(errors[0].category.as_str(), "lexical");
-        assert_eq!(source_text.len(), errors[0].primary_span.unwrap().end);
+        assert_eq!(
+            errors[0].primary_span.unwrap().start,
+            source_text.find('\'').unwrap()
+        );
     }
 }
