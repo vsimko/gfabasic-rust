@@ -1,6 +1,6 @@
 # ADR 0004: API profile model
 
-- Status: Accepted
+- Status: Accepted historically; active product scope narrowed by [ADR 0010](0010-amiga-35-linux-sdl3-product-scope.md)
 - Date: 2026-11-04
 
 ## Context
@@ -34,7 +34,7 @@ The detailed policy is maintained in [API-PROFILES.md](../API-PROFILES.md). CLI/
 - The language core remains independent of platform API declarations.
 - Amiga and Atari ST profiles can evolve independently and can be selected together only when conflicts are resolved explicitly.
 - CLI and registry work must preserve explicit dialect/profile/target separation.
-- The accepted model does not claim that any Amiga or Atari API declaration is complete, implemented, or conformant.
+- The accepted model does not claim that any Amiga or Atari API declaration is complete, implemented, or conformant. ADR 0010 narrows the active product to the Amiga GFA BASIC 3.5 API profile only; Atari ST profile support is out of scope. The earlier multi-profile decision remains historical architecture context, not a current product commitment.
 - Additional profiles require evidence, dependency/conflict rules, runtime capability status, and tests.
 
 ## References
