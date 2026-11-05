@@ -2,7 +2,7 @@
 
 This index is the entry point for project documentation. It separates user guidance, contributor guidance, architecture decisions, language/API references, and research material.
 
-> **Project status:** The repository has an accepted architecture and a bootstrapped three-crate Rust workspace. Compiler, runtime, and CLI behavior are not implemented. Documentation checks and fast Rust workspace checks are available; platform integration, conformance, fuzz, security, and release workflows are not. A module placeholder does not mean that the corresponding feature is available.
+> **Project status:** The repository has an accepted architecture and a bootstrapped three-crate Rust workspace. The minimal `gfabasic` CLI implements help and version output; `build` and `check` do not compile source. Documentation checks and fast Rust workspace checks are available, alongside source-loader fuzzing, RustSec dependency auditing, source-loading benchmark validation and measurement, and SPDX 2.3 workspace SBOM generation and validation. These workflows do not establish compiler/runtime conformance: the lexer, parser, semantic analysis, IR, backend, runtime behavior, and platform integration remain unimplemented. The release-SBOM workflow is configured to attach an SBOM to a published GitHub Release, but that release event has not yet been exercised. No compiler build, packaging, installation, or full release workflow exists. A module placeholder does not mean that the corresponding feature is available.
 
 ## Start here
 
