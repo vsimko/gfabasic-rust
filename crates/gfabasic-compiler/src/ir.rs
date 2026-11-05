@@ -155,9 +155,10 @@ pub fn lower(program: &Program) -> Result<Module, Vec<IrError>> {
                     }
                 }
                 if values.len() == names.len() {
-                    module
-                        .instructions
-                        .push(Instruction::Print { values, span: *span });
+                    module.instructions.push(Instruction::Print {
+                        values,
+                        span: *span,
+                    });
                     saw_print = true;
                 }
             }
@@ -245,10 +246,13 @@ pub fn verify(module: &Module) -> Result<(), Vec<IrError>> {
 
 /// Return the explicit type of a value defined in this module.
 pub fn value_type(module: &Module, id: ValueId) -> Option<ValueType> {
-    module.instructions.iter().find_map(|instruction| match instruction {
-        Instruction::ConstI64 { result, .. } if *result == id => Some(ValueType::I64),
-        _ => None,
-    })
+    module
+        .instructions
+        .iter()
+        .find_map(|instruction| match instruction {
+            Instruction::ConstI64 { result, .. } if *result == id => Some(ValueType::I64),
+            _ => None,
+        })
 }
 
 #[cfg(test)]
@@ -317,10 +321,7 @@ mod tests {
         ));
         assert!(matches!(
             ir.instructions[2],
-            Instruction::ConstI64 {
-                value: 184756,
-                ..
-            }
+            Instruction::ConstI64 { value: 184756, .. }
         ));
     }
 
