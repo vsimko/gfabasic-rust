@@ -84,6 +84,9 @@ def validate_fixture(
 ) -> str | None:
     try:
         metadata = tomllib.loads(metadata_path.read_text(encoding="utf-8"))
+    except UnicodeDecodeError as exc:
+        error(errors, metadata_path, f"invalid UTF-8: {exc}", corpus_root)
+        return None
     except (OSError, tomllib.TOMLDecodeError) as exc:
         error(errors, metadata_path, f"invalid TOML: {exc}", corpus_root)
         return None
@@ -174,6 +177,8 @@ def validate_corpus(root: Path = ROOT) -> list[str]:
 
     try:
         manifest = tomllib.loads(manifest_path.read_text(encoding="utf-8"))
+    except UnicodeDecodeError as exc:
+        return [f"tests/corpus/manifest.toml: invalid UTF-8: {exc}"]
     except (OSError, tomllib.TOMLDecodeError) as exc:
         return [f"tests/corpus/manifest.toml: invalid TOML: {exc}"]
 
@@ -191,8 +196,15 @@ def validate_corpus(root: Path = ROOT) -> list[str]:
     seen_stems: set[str] = set()
     seen_ids: dict[str, str] = {}
     referenced_metadata: set[Path] = set()
-    register_ids = source_ids(root)
-    if register_ids is None:
+    try:
+        register_ids = source_ids(root)
+    except UnicodeDecodeError as exc:
+        errors.append(f"docs/reference-sources.md: invalid UTF-8: {exc}")
+        register_ids = None
+        register_read_error = True
+    else:
+        register_read_error = False
+    if register_ids is None and not register_read_error:
         errors.append("missing docs/reference-sources.md")
 
     for fixture in fixtures:
