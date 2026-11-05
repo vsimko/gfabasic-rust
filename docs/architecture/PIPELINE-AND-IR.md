@@ -11,7 +11,7 @@ The compiler uses distinct stages. Each stage consumes an explicit input model, 
 |---|---|---|---|
 | Source loading | Input paths, selected source configuration | Source files, stable file IDs, source map | Read bytes, identify files, preserve original locations, and report I/O/encoding errors. Source composition is enabled only for verified dialect rules. |
 | Lexing | Source files and explicit dialect/version | Lossless tokens and trivia with source spans | Retain original spelling, horizontal whitespace, and line-boundary spans for recognized forms. Recognize only verified lexical forms; do not normalize invalid input into valid tokens. |
-| Parsing | Tokens and dialect/version | AST with source spans | Build syntax structure and report malformed or unsupported forms. Do not resolve names or infer platform APIs. |
+| Parsing | Lossless tokens/trivia and dialect/version | Parsed document: lossless syntax plus AST with source spans | Build syntax structure while retaining the exact token/trivia stream for formatting and editor consumers. Report malformed or unsupported forms; do not resolve names or infer platform APIs. |
 | Name resolution | AST and declaration environment | Resolved AST/symbol references | Resolve declarations, scopes, labels, and references according to the selected dialect. |
 | Semantic analysis | Resolved AST, dialect/version, API profiles | Typed/validated AST or semantic model | Apply documented types, conversions, call signatures, control-flow rules, and profile resolution. LLVM is not involved. |
 | IR lowering | Valid semantic model | Project-owned typed IR | Make implicit language decisions explicit. Preserve source provenance and reject unsupported semantics. |
