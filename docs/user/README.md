@@ -2,15 +2,15 @@
 
 **Audience:** People evaluating or using the planned GFA BASIC compiler.
 
-**Status:** User documentation is limited because the compiler and runtime are not implemented.
+**Status:** User documentation is limited because source compilation and runtime behavior are not implemented. The minimal CLI supports help and version output only; `build` and `check` do not compile source.
 
 ## Current status
 
-The project is in the planning and architecture stage. There is no compiler executable, installation package, CLI, or supported GFA BASIC dialect/API profile. Do not attempt to follow build or invocation commands copied from another GFA BASIC implementation.
+The repository includes a minimal `gfabasic` executable, but it supports only help and version output. The `build` and `check` commands explicitly report that source compilation is unavailable. There is no installation package or supported GFA BASIC dialect/API profile. Do not attempt to follow build commands copied from another GFA BASIC implementation.
 
 Start with the [project README](../../README.md) for the current project direction and limitations. Use the [compatibility matrix](../architecture/COMPATIBILITY-MATRIX.md) for the current support status.
 
-See [Understanding compiler diagnostics](diagnostics.md) for the proposed diagnostic and feature-support vocabulary. The diagnostic renderer is not implemented.
+The compiler library includes a source-map diagnostic model and human-readable renderer, but no GFA BASIC frontend or CLI command currently emits compiler diagnostics. See [Understanding compiler diagnostics](diagnostics.md) for the proposed user-facing vocabulary.
 
 ## Research is not a support claim
 
