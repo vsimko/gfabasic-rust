@@ -27,9 +27,9 @@ Fixture: `tests/corpus/amiga/3.5/combinatorics/fact-zero.bas`.
 ## Proposed implementation boundary
 
 1. One explicitly selected Amiga GFA BASIC 3.5 dialect configuration.
-2. One numeric variable assignments.
-3. Integer literal `0`.
-4. One call to the built-in `FACT` with an integer-expression argument.
+2. Three numeric variable assignments (`x`, `y`, and `z`).
+3. Integer literals `0`, `1`, and `2`.
+4. Calls to the built-in `FACT` with integer-expression arguments.
 5. A comma-separated `PRINT` list for the assigned numeric values.
 6. Deterministic output and process exit status on Linux x86-64.
 
