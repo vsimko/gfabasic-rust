@@ -69,6 +69,15 @@ None.
 
 The first narrow implementation now exercises the intended boundary end to end for the evidence-backed Amiga 3.5 combinatorics subset: frontend AST → project-owned `ConstI64`/`Print` IR → verifier → temporary C emitter → host `cc` executable. The verifier enforces unique definitions and definition-before-use. This small prototype does not satisfy the complete general IR shape described above: it has no basic blocks, terminators, general expressions, calls, memory operations, or dialect-wide type system. Its `i64` representation and intrinsic bounds are implementation limits only. LLVM remains deferred pending the evaluation specified in this ADR.
 
+
+## Amiga 3.5 addendum special lexemes (2026-11-05)
+
+The lossless lexer recognizes the exact special names explicitly documented in the selected Amiga GFA BASIC 3.5 interpreter addendum: `_DATA`, `_DATA=`, and the special variables `_0` through `_9` (Chapter 14, printed p. 14-6). The lexer represents `_DATA` and each numbered name as an identifier candidate, with the assignment character tokenized separately and all original source spelling retained by byte spans.
+
+This is a deliberately closed lexical exception, not a general rule for underscore-prefixed identifiers and not a case-insensitivity decision. Other spellings such as `_foo`, `_10`, `_DATA2`, and lowercase `_data` remain lexical diagnostics until the Amiga 3.5 source evidence establishes broader rules. The parser and semantic model do not yet claim support for these special variables or DATA-pointer operations; this increment only makes their verified spellings available in the lossless token stream.
+
+Evidence inventory: [Amiga GFA BASIC 3.5 addendum, Chapter 14](../../research/amiga-gfa-basic-35-addendum-inventory.md). This increment does not close issue #46; comments, strings/DATA payloads, general identifiers, encoding, line endings, and the remaining operator grammar are still unresolved.
+
 ## Formatter implementation note (2026-11-05)
 
 The first formatter library increment is exposed independently as `gfabasic_compiler::formatter::format_source`. It validates the entire source with `parse_document` before returning output, then copies token spelling from original source spans while canonicalizing only whitespace and line boundaries for the currently supported FACT/VARIAT/COMBIN/PRINT subset. It preserves identifier and literal spelling exactly, uses LF and one final newline, and returns diagnostics for unsupported syntax. Comments, string/DATA payloads, broader identifiers, and richer grammar remain unsupported until lossless lexical and grammar evidence is available. The formatter has no file-writing, CLI, LLVM, runtime, or SDL dependency; CLI atomic-write behavior and LSP integration are follow-up increments under #208 and #209.
