@@ -767,7 +767,7 @@ mod tests {
         }
 
         let mut sources = SourceMap::new();
-        let source_id = sources.add_source("amiga-35-special-names.bas", &source_text);
+        let source_id = sources.add_source("amiga-35-special-names.bas", source_text.as_str());
         let lexed = lex_lossless(source_id, &source_text).expect("3.5 addendum names should lex");
         let names: Vec<_> = lexed
             .tokens
