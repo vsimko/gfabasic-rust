@@ -52,7 +52,16 @@ The addendum explicitly limits all operations in Chapter 13 to one- and/or two-d
 | `MAT XCPY a([i,j])=b([k,l])[,h,w]` | Copy while transposing source rows/columns; source matrix remains unchanged |
 | `MAT TRANS a()[=b()]` | Copy transposed matrix `b` to `a`; for square matrix, `MAT TRANS a()` transposes in place |
 
-The addendum documents special forms of MAT CPY for whole matrices and offset copies. It says only elements with matching indices are copied. For vectors, it distinguishes row vectors (`DIM a(n)`) and column vectors (`DIM a(n,1)`); `MAT CPY` treats both vectors syntactically as column vectors. `MAT XCPY` requires one row vector and one column vector because it transposes the second vector before copying. Optional `h,w` behavior for vectors has additional restrictions (printed pp. 13-12–13-14); preserve these for detailed implementation rather than reducing them to a generic slice copy.
+The page-image review establishes the following exact rules (printed pp. 13-8–13-19):
+
+- `MAT CPY a([i,j])=b([k,l])[,h,w]` copies a rectangle beginning at destination offset `(i,j)` from source offset `(k,l)`; `h,w` specify the copied height and width. The shorthand `MAT CPY a()=b()` copies the complete overlapping index region when the matrices have different orders: only elements whose row and column indices exist in both source and destination are copied (pp. 13-8–13-10, 13-14–13-15).
+- `MAT XCPY a([i,j])=b([k,l])[,h,w]` follows the same offset/extent model, but transposes `b` while copying it into `a`; `b` remains unchanged. As with `MAT CPY`, only elements with matching source/destination indices are copied (p. 13-15).
+- Vector representation is significant. `DIM a(n)` creates a row vector; `DIM a(n,1)` creates a column vector. `MAT CPY` treats both row and column vectors syntactically as column vectors, so its vector copy form is `MAT CPY a(n,1)=b(m,1)` regardless of the actual vector orientation (p. 13-17).
+- `MAT XCPY` requires one operand explicitly dimensioned as a row vector and the other as a column vector; it transposes the second vector before copying. The documented supported cases are `DIM a(1,n),b(m,1)` (row-vector `a`, column-vector `b`) and `DIM a(n,1),b(1,m)` (column-vector `a`, row-vector `b`). For a correct `MAT XCPY` form, the manual says to write the destination/source dimensions as column vectors syntactically (pp. 13-17–13-18).
+- Optional vector extents have special zero rules (p. 13-19): for `MAT CPY`, when `w>=1`, only `h` is considered; `w=0` performs no copy. For `MAT XCPY`, when transposing a column vector `b` into a row vector, `w>=1` makes only `h` relevant and `w=0` performs no copy. When transposing a row vector `b` into a column vector, `h>=1` makes only `w` relevant and `h=0` performs no copy.
+- `MAT TRANS a()=b()` copies the transpose of `b` into `a`; the matrices must have compatible reversed dimensions (if `b` is `n×m`, `a` must be `m×n`). The example uses `DIM a(3,4),b(4,3)`. For a square matrix, `MAT TRANS a()` transposes in place (pp. 13-19–13-20).
+
+These rules are source-verified for the 3.5 addendum and should be preserved explicitly in parser/semantic tests; do not reduce them to a generic slice-copy abstraction.
 
 ### Arithmetic and matrix analysis — printed pp. 13-15–13-31
 
