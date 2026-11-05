@@ -1,6 +1,6 @@
 # GitHub Actions workflow architecture
 
-- Status: Proposed full CI architecture. The documentation workflow, fast Rust workspace-check workflow, and RustSec advisory-audit workflow are implemented. Selective test matrices, compiler/runtime integration, fuzzing, license/SBOM policy, release, and branch-protection configuration remain open.
+- Status: Proposed full CI architecture. Implemented workflows cover documentation checks, fast Rust workspace checks, source-loader fuzzing, RustSec audits, source-loading benchmark validation/measurement, and SPDX 2.3 workspace SBOM generation/validation with a configured GitHub Release attachment. Lexer/parser fuzzing, compiler/runtime/conformance integration, a stable final PR gate, branch protection, and compiler build/package/release workflows remain unimplemented. The SBOM attachment has not yet been exercised on a published release.
 - Tracking: [issue #27](https://github.com/vsimko/gfabasic-rust/issues/27).
 
 ## Goals
@@ -14,20 +14,26 @@ The workflow design must preserve the repository's current architecture:
 - Documentation and research-only corpus changes must not imply language conformance.
 - Long fuzzing, compatibility experiments, and benchmarks must not slow every pull request.
 
-This document defines the proposed full CI structure. The documentation workflow in [`.github/workflows/docs.yml`](../../.github/workflows/docs.yml) runs Markdown linting, API registry validation, and offline local-link/anchor checks. The fast Rust workflow in [`.github/workflows/rust.yml`](../../.github/workflows/rust.yml) runs formatting, Clippy, workspace tests, and a workspace build on the pinned Rust toolchain. These checks validate the current skeleton only; no compiler/runtime behavior or conformance is tested, and no branch-protection requirement is claimed.
+This document defines the proposed full CI structure. The implemented [documentation workflow](../../.github/workflows/docs.yml) runs Markdown linting, API registry and corpus-metadata validation, validator tests, and offline local-link/anchor checks. The [Rust workflow](../../.github/workflows/rust.yml) runs formatting, Clippy, workspace tests, and a workspace build on the pinned toolchain. The [fuzz workflow](../../.github/workflows/fuzz.yml) runs bounded AFL++ campaigns against the generic source-loader transport boundary only (30 seconds on relevant pull requests; 10 minutes on weekly/manual runs), not a GFA BASIC lexer or parser. The [security audit workflow](../../.github/workflows/security-audit.yml) checks the root, fuzz, and benchmark Cargo lockfiles against RustSec. The [benchmark workflow](../../.github/workflows/benchmarks.yml) compiles the benchmark harness on pull requests and runs synthetic source-loading measurements on main/scheduled/manual runs. The [release-SBOM workflow](../../.github/workflows/release-sbom.yml) generates and validates SPDX 2.3 JSON for the complete three-package workspace on pull requests and is configured to attach it to a published GitHub Release. These workflows validate the current infrastructure only; they do not test GFA BASIC compilation, runtime/platform behavior, or language conformance. No stable final PR gate or branch-protection requirement is claimed.
 
-Release and artifact requirements are specified in [RELEASES.md](RELEASES.md). That policy remains proposed until the workspace, compiler/runtime, and packaging commands exist.
+The broader compiler release and artifact policy in [RELEASES.md](RELEASES.md) remains proposed because no compiler build, package, or installation artifact exists. The narrow release-SBOM workflow is implemented; its published-release event still needs an actual release to verify the upload.
 
-## Proposed workflow set
+## Implemented workflow set
 
-| Workflow | Events | Purpose | Required on pull requests |
-|---|---|---|---|
-| `docs.yml` | `pull_request`, `push` to `main` (documentation paths) | Markdown structural lint and offline local links/anchors | Runs for matching documentation changes; branch protection is not configured |
-| `pull-request.yml` | `pull_request` | Change detection, fast relevant checks, and one stable gate result | Proposed; not implemented |
-| `main.yml` | `push` to `main` | Broader integration checks after merge | No separate PR requirement |
-| `fuzz.yml` | `schedule`, `workflow_dispatch` | Longer frontend fuzz campaigns after harnesses exist | No |
-| `release.yml` | `release` and controlled `workflow_dispatch` | Reproducible release validation and artifact publication after packaging exists | Release-specific |
-| `security-audit.yml` | `pull_request`, `push` to `main` (Cargo/toolchain paths), weekly `schedule`, `workflow_dispatch` | RustSec advisory audit of the committed `Cargo.lock` | Runs for matching dependency changes; branch protection is not configured. License and SBOM checks remain open under #39 |
+| Workflow | Events | Purpose and actual coverage |
+|---|---|---|
+| `docs.yml` | `pull_request`; `push` to `main` for documentation/registry paths | Markdown lint, API registry and corpus-metadata validation/tests, offline local links and anchors |
+| `rust.yml` | `pull_request`; `push` to `main` for Cargo/toolchain/crate paths | Formatting, Clippy, workspace tests, and workspace build |
+| `fuzz.yml` | Relevant `pull_request`; weekly `schedule`; `workflow_dispatch` | AFL++ source-loader transport-boundary campaign only; lexer/parser targets do not exist yet |
+| `security-audit.yml` | Relevant dependency `pull_request`/main `push`; weekly `schedule`; `workflow_dispatch` | RustSec audit of the root, fuzz, and benchmark Cargo lockfiles |
+| `benchmarks.yml` | Relevant `pull_request`/main `push`; weekly `schedule`; `workflow_dispatch` | Pull requests format/check the benchmark harness; main/scheduled/manual runs measure synthetic source loading |
+| `release-sbom.yml` | Relevant Cargo/crate `pull_request`; published `release` | Pull requests generate and validate the workspace SPDX 2.3 JSON SBOM; published releases are configured to receive the SBOM asset. A real release upload has not yet been exercised. |
+
+These workflows do not constitute a compiler build, compiler/runtime conformance suite, or full release pipeline. No stable final PR gate or branch-protection requirement is currently claimed.
+
+## Planned workflow components
+
+A stable pull-request gate, component-specific compiler/runtime/platform jobs, and a compiler build/package/publish workflow remain future work. Add them only when their checks have executable commands and clean-environment validation paths.
 
 Do not add empty placeholder workflows. Introduce each workflow when its checks have an executable command and a clean-environment validation path.
 
@@ -36,8 +42,8 @@ Do not add empty placeholder workflows. Introduce each workflow when its checks 
 - Use `pull_request` for validation of proposed changes. Cover opened, synchronize, reopened, and ready-for-review transitions as needed.
 - Use `push` only for the default branch and release tags. Do not add a general feature-branch `push` workflow that duplicates the pull-request run.
 - Use `workflow_dispatch` for reproducible manual investigations and longer jobs.
-- Use `schedule` only for work that benefits from periodic execution, such as longer fuzzing or dependency review. Scheduled jobs should operate on the default branch.
-- Use release events only after the release artifact and signing/provenance policy is defined.
+- Use `schedule` only for work that benefits from periodic execution, such as longer fuzzing, dependency auditing, or repeatable benchmark measurement. Scheduled jobs should operate on the default branch.
+- Use release events only for a specific approved publication artifact after its policy is defined. The current release event is limited to the workspace SBOM; it does not build or publish compiler artifacts.
 - Do not use `pull_request_target` to check out or execute untrusted pull-request code.
 - Apply workflow-appropriate concurrency groups. For pull requests, group by PR number and cancel superseded runs. Do not let a new PR run cancel a release or scheduled campaign.
 - Keep deterministic test retries disabled by default. If a retry is permitted for a known infrastructure failure, preserve the original failure and report the retry explicitly.
@@ -85,7 +91,8 @@ A branch-protection rule or repository ruleset must require the final gate after
 - Pin third-party actions to immutable commit SHAs where practical, and include a human-readable version comment. Review action updates like dependency changes.
 - Prefer maintained actions and avoid downloading unpinned executables in build scripts.
 - Keep release publishing in a separate workflow with explicit environment approval and narrowly scoped write permissions.
-- Record native toolchain and system-library versions used by CI so failures can be reproduced locally.\n- The [security audit workflow](../../.github/workflows/security-audit.yml) uses a read-only token, immutable checkout SHA, Rust 1.99.1, and pinned `cargo-audit` 0.22.2. It audits all Cargo dependencies against the current RustSec database and fails on vulnerability advisories. License allowlists and SBOM output are intentionally not guessed; see [SECURITY.md](SECURITY.md).
+- Record native toolchain and system-library versions used by CI so failures can be reproduced locally.
+- The [security audit workflow](../../.github/workflows/security-audit.yml) uses a read-only token, immutable checkout SHA, Rust 1.99.1, and pinned `cargo-audit` 0.22.2 to audit the root, fuzz, and benchmark Cargo lockfiles against RustSec. The approved dependency-license policy and SPDX 2.3 SBOM process are documented in [SECURITY.md](SECURITY.md); PR SBOM generation/validation is handled by [release-sbom.yml](../../.github/workflows/release-sbom.yml).
 
 ## Timeouts, artifacts, and diagnostics
 
@@ -97,12 +104,12 @@ A branch-protection rule or repository ruleset must require the final gate after
 
 ## Initial rollout
 
-1. Implement the documentation checks under #33 once the documentation checker and its limitations are agreed.
-2. Add the minimal pull-request workflow and stable gate when the first executable workspace checks exist.
-3. Test path selection and gate behavior with representative synthetic changes before making the gate required.
-4. Add compiler, runtime, and platform jobs as those components become buildable.
-5. Add fuzz, license/SBOM, benchmark, and release workflows only when their respective tools and policies are ready. The RustSec advisory workflow is already implemented separately.
-6. Configure and verify branch protection/rulesets after the required gate has run successfully on a real pull request.
+1. Documentation checks and fast Rust workspace checks are implemented for the current repository surface.
+2. Source-loader fuzzing, RustSec audits, source-loading benchmark validation/measurement, and workspace SBOM generation/validation are implemented with bounded triggers and scoped permissions.
+3. Extend fuzzing only when lexer/parser entry points and their source contracts are stable.
+4. Add compiler, runtime, and platform jobs as those components and deterministic tests become available.
+5. Add and test a stable final pull-request gate before configuring branch protection or rulesets.
+6. Exercise the release-SBOM upload on an actual published GitHub Release. Add compiler build/package/publish automation only after those artifacts and their validation commands exist.
 
 No workflow should claim to validate a component that does not yet exist. A green documentation-only gate is not evidence that the compiler, runtime, or GFA BASIC conformance is correct.
 
@@ -125,7 +132,7 @@ When a cache is introduced, keys must include OS/architecture, the exact Rust to
 
 ## Selective job execution: deferred until component suites exist
 
-The current executable CI surface has one Rust workspace-check job, one documentation-check workflow, and one RustSec audit workflow. Workflow-level path filters already keep documentation-only changes out of Rust builds and keep Rust checks scoped to Cargo/toolchain/crate changes. There are not yet separate frontend, semantic/IR, LLVM, runtime, Amiga, Atari, or SDL3 integration test suites to select between.
+The current executable CI surface includes documentation checks, Rust workspace checks, source-loader fuzzing, RustSec audits, source-loading benchmark validation/measurement, and release-SBOM generation/validation with a configured release-asset upload. Workflow-level path filters keep documentation-only changes out of Rust builds and scope Rust checks to Cargo/toolchain/crate changes. There are not yet separate frontend, semantic/IR, LLVM, runtime, Amiga, Atari, or SDL3 integration test suites to select between.
 
 **Do not add a job-level change detector or empty matrix now.** It would add a second source of path truth without reducing any existing test work, and there are no component jobs against which to validate dependency fan-out. The path-to-test matrix above remains the design reference, not a claim that selective component execution exists.
 
