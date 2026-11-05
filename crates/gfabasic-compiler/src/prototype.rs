@@ -123,7 +123,7 @@ fn emit_c(module: &Module) -> Result<String, String> {
                     .collect::<Result<Vec<_>, _>>()?;
                 let placeholders = vec!["%lld"; arguments.len()].join(" ");
                 statements.push(format!(
-                    "    (void)printf!(\"{placeholders}\\n\", {});\n",
+                    "    (void)printf(\"{placeholders}\\n\", {});\n",
                     arguments.join(", ")
                 ));
             }
@@ -165,7 +165,7 @@ mod tests {
         assert!(generated.contains("long long v0 = 1;"));
         assert!(generated.contains("long long v1 = 1;"));
         assert!(generated.contains("long long v2 = 2;"));
-        assert!(generated.contains("printf(\"%lld %lld %lld\\n\", x, y, z)"));
+        assert!(generated.contains("printf(\"%lld %lld %lld\\n\", v0, v1, v2)"));
     }
 
     #[test]
@@ -198,7 +198,7 @@ mod tests {
         assert!(generated.contains("long long v0 = 120;"));
         assert!(generated.contains("long long v1 = 20;"));
         assert!(generated.contains("long long v2 = 10;"));
-        assert!(generated.contains("printf(\"%lld %lld %lld\\n\", x, y, z)"));
+        assert!(generated.contains("printf(\"%lld %lld %lld\\n\", v0, v1, v2)"));
     }
 
     #[test]
