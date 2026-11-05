@@ -402,7 +402,7 @@ mod tests {
 
     #[test]
     fn lexical_diagnostics_render_original_source_locations() {
-        let text = "PRINT \"é\"\\n@";
+        let text = "PRINT \"é\"" + "\n@";
         let mut sources = SourceMap::new();
         let source = sources.add_source("examples/bad.gfa", text);
         let output = lex(source, text, SourceDialect::AmigaGfaBasic30);
