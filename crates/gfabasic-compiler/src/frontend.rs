@@ -325,7 +325,7 @@ impl Parser {
                     statements.push(statement);
                     if !self.at_end() && !matches!(self.current().kind, TokenKind::Newline) {
                         let token = self.current().clone();
-                        self.diagnostics.push(self.error(
+                        self.diagnostics.push(*self.error(
                             "unexpected token after statement; statements must be on separate lines in this MVP",
                             token.span,
                         ));
@@ -342,7 +342,7 @@ impl Parser {
         }
 
         if statements.is_empty() && self.diagnostics.is_empty() {
-            self.diagnostics.push(self.error(
+            self.diagnostics.push(*self.error(
                 "source contains no supported statements",
                 SourceSpan::new(self.source_id, 0, self.source_len),
             ));
