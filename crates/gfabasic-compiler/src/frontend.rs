@@ -117,6 +117,29 @@ fn diagnostic(
     Diagnostic::new(code, DiagnosticSeverity::Error, category, message).with_primary_span(span)
 }
 
+fn is_identifier_continuation(byte: u8) -> bool {
+    byte.is_ascii_alphanumeric() || byte == b'_'
+}
+
+/// Recognizes only the underscore-prefixed names explicitly listed by the
+/// Amiga GFA BASIC 3.5 addendum: _DATA and _0 through _9. This deliberately
+/// does not define a general underscore-identifier grammar.
+fn amiga_35_special_identifier_end(bytes: &[u8], start: usize) -> Option<usize> {
+    let end = if bytes.get(start..)?.starts_with(b"_DATA") {
+        start + 5
+    } else if bytes.get(start + 1).is_some_and(u8::is_ascii_digit) {
+        start + 2
+    } else {
+        return None;
+    };
+
+    match bytes.get(end) {
+        None => Some(end),
+        Some(next) if !is_identifier_continuation(*next) => Some(end),
+        Some(_) => None,
+    }
+}
+
 // CR, CRLF, and LF are accepted here only as transport-level separators for
 // this prototype. This is not a claim about the original Amiga 3.5 source
 // encoding/line-ending contract; that remains subject to #66 observation.
@@ -196,6 +219,30 @@ pub fn lex_lossless(source_id: SourceId, source: &str) -> Result<LexedSource, Ve
                     kind: TokenKind::Comma,
                     span: SourceSpan::new(source_id, start, offset),
                 });
+            }
+            b'_' => {
+                let start = offset;
+                if let Some(end) = amiga_35_special_identifier_end(bytes, start) {
+                    offset = end;
+                    tokens.push(Token {
+                        kind: TokenKind::Identifier(source[start..end].to_owned()),
+                        span: SourceSpan::new(source_id, start, end),
+                    });
+                } else {
+                    offset += 1;
+                    while bytes
+                        .get(offset)
+                        .is_some_and(|next| is_identifier_continuation(*next))
+                    {
+                        offset += 1;
+                    }
+                    diagnostics.push(diagnostic(
+                        "GFA-LEX-0001",
+                        DiagnosticCategory::Lexical,
+                        "underscore-prefixed name is not one of the explicitly documented Amiga GFA BASIC 3.5 forms (_DATA or _0 through _9)",
+                        SourceSpan::new(source_id, start, offset),
+                    ));
+                }
             }
             byte if byte.is_ascii_alphabetic() => {
                 let start = offset;
@@ -707,5 +754,80 @@ mod tests {
             .map(|span| &source_text[span.start..span.end])
             .collect::<String>();
         assert_eq!(reconstructed, source_text);
+    }
+    #[test]
+    fn lexes_amiga_35_addendum_special_names_without_generalizing_identifiers() {
+        use super::{TokenKind, lex_lossless};
+
+        let mut source_text = String::from("_DATA=1\n");
+        let mut expected = vec!["_DATA".to_owned()];
+        for digit in '0'..='9' {
+            source_text.push_str(&format!("_{digit}=1\n"));
+            expected.push(format!("_{digit}"));
+        }
+
+        let mut sources = SourceMap::new();
+        let source_id = sources.add_source("amiga-35-special-names.bas", source_text.as_str());
+        let lexed = lex_lossless(source_id, &source_text).expect("3.5 addendum names should lex");
+        let names: Vec<_> = lexed
+            .tokens
+            .iter()
+            .filter_map(|token| match &token.kind {
+                TokenKind::Identifier(name) => Some(name.clone()),
+                _ => None,
+            })
+            .collect();
+
+        assert_eq!(names, expected);
+        let assignment_count = lexed
+            .tokens
+            .iter()
+            .filter(|token| matches!(token.kind, TokenKind::Equals))
+            .count();
+        assert_eq!(assignment_count, expected.len());
+
+        for token in lexed.tokens.iter().filter(
+            |token| matches!(&token.kind, TokenKind::Identifier(name) if name.starts_with('_')),
+        ) {
+            assert!(lexed.tokens.iter().any(|next| {
+                matches!(next.kind, TokenKind::Equals) && next.span.start == token.span.end
+            }));
+            assert_eq!(
+                &source_text[token.span.start..token.span.end],
+                match &token.kind {
+                    TokenKind::Identifier(name) => name.as_str(),
+                    _ => unreachable!(),
+                }
+            );
+        }
+
+        let mut spans: Vec<_> = lexed
+            .tokens
+            .iter()
+            .filter(|token| !matches!(&token.kind, TokenKind::End))
+            .map(|token| token.span)
+            .chain(lexed.trivia.iter().map(|item| item.span))
+            .collect();
+        spans.sort_by_key(|span| span.start);
+        let reconstructed = spans
+            .into_iter()
+            .map(|span| &source_text[span.start..span.end])
+            .collect::<String>();
+        assert_eq!(reconstructed, source_text);
+    }
+
+    #[test]
+    fn rejects_unverified_underscore_identifier_spellings() {
+        use super::lex_lossless;
+
+        for source_text in ["_data=1\n", "_DATA2=1\n", "_10=1\n", "_foo=1\n"] {
+            let mut sources = SourceMap::new();
+            let source_id = sources.add_source("unverified-name.bas", source_text);
+            let errors = lex_lossless(source_id, source_text)
+                .expect_err("only exact 3.5 addendum spellings are accepted");
+            assert_eq!(errors[0].code, "GFA-LEX-0001");
+            assert!(errors[0].message.contains("underscore-prefixed name"));
+            assert_eq!(errors[0].primary_span.unwrap().start, 0);
+        }
     }
 }
