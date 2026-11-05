@@ -85,9 +85,14 @@ pub fn format_document(document: &ParsedDocument, source: &str) -> Result<String
             | Statement::AssignVariat { .. }
             | Statement::AssignCombin { .. } => {
                 for token in &tokens {
-                    let text = source.get(token.span.start..token.span.end).ok_or_else(|| {
-                        formatting_error(token.span, "token span is outside the supplied source")
-                    })?;
+                    let text = source
+                        .get(token.span.start..token.span.end)
+                        .ok_or_else(|| {
+                            formatting_error(
+                                token.span,
+                                "token span is outside the supplied source",
+                            )
+                        })?;
                     output.push_str(text);
                 }
             }
