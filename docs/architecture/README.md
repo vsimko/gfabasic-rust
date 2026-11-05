@@ -100,3 +100,6 @@ Use numbered Architecture Decision Records in [adr/](adr/). Each record states c
 - Which runtime operations require software emulation rather than direct platform adapters?
 
 Record evidence and decisions in the relevant issue and ADR before claiming closure.
+
+
+- [ADR 0010: Product scope — Amiga GFA BASIC 3.5 to Linux x86-64 with SDL3](adr/0010-amiga-35-linux-sdl3-product-scope.md)
