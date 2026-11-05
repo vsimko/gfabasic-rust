@@ -1,10 +1,10 @@
 # Diagnostics and compatibility reporting
 
-- Status: **Proposed; no compiler diagnostic implementation or stable diagnostic schema exists.**
+- Status: **The source-map diagnostic model and deterministic human renderer are implemented and unit-tested.** Frontend emission, stable diagnostic-code allocation, machine-readable schema/CLI output, and runtime reporting remain unimplemented; this document's broader contract is proposed.
 - Tracking: [issue #26](https://github.com/vsimko/gfabasic-rust/issues/26).
 - Related design: [dialect policy](DIALECTS.md), [API profiles](API-PROFILES.md), [API registry](API-REGISTRY.md), [CLI/configuration](CLI-AND-CONFIG.md), [versioning policy](VERSIONING.md), and [source manager](https://github.com/vsimko/gfabasic-rust/issues/45).
 
-This document defines a proposed user-facing contract. It does not claim that any diagnostic code, CLI option, output format, or runtime reporting mechanism is implemented.
+This document defines the proposed user-facing contract. The compiler library now has a base `Diagnostic` model and deterministic source-map renderer, but no lexer/parser/semantic stage emits diagnostics, no stable code registry or machine-readable schema exists, and the CLI does not display compiler diagnostics.
 
 ## 1. Design requirements
 
@@ -78,7 +78,7 @@ Excerpts are optional when source text is unavailable or when displaying it woul
 
 ## 5. Structured diagnostic content
 
-The proposed common diagnostic record contains:
+The implemented Rust `Diagnostic` record contains caller-supplied code, severity, category, message, an optional primary source span, related spans, notes, optional help, and references. Its renderer resolves source locations and excerpts through `SourceMap`. The code is caller-supplied; the project has not yet established a stable diagnostic-code registry. The table below describes the intended user-facing record, not a serialized schema:
 
 | Field | Purpose |
 |---|---|
@@ -202,6 +202,6 @@ When the implementation exists, tests should cover at least:
 - support-outcome reporting for exact dialect/version/profile/target combinations;
 - migration hints that do not promise unverified equivalence.
 
-The CLI must document exit-status behavior separately; this document does not assign numeric exit codes. No compiler, diagnostic renderer, machine-readable schema, or diagnostic test runner exists yet.
+The CLI must document exit-status behavior separately; this document does not assign numeric exit codes. The source-map diagnostic model, human renderer, and unit tests exist. Frontend stages do not yet emit diagnostics; there is no stable code registry, machine-readable schema, CLI integration, or executable conformance/diagnostic test runner.
 
 Tracking: [issue #26](https://github.com/vsimko/gfabasic-rust/issues/26).

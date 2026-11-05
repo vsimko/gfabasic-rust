@@ -2,7 +2,7 @@
 
 **Audience:** People who want to review, research, or contribute to this repository.
 
-**Status:** The Rust 1.99.1 workspace skeleton and fast Rust CI checks are implemented. The compiler, runtime behavior, and CLI are not implemented.
+**Status:** The Rust 1.99.1 workspace and fast Rust CI checks are implemented. The compiler library includes source-map/file-loading primitives and a structured diagnostic renderer; the minimal CLI supports help/version only. GFA BASIC frontend, project configuration, compilation, runtime behavior, and platform integration are not implemented.
 
 ## Before making a change
 
@@ -18,7 +18,7 @@ Follow the [development setup guide](development-setup.md) for the pinned Rust t
 
 ## Current development constraints
 
-The default branch contains a Cargo workspace with compiler, runtime, and Linux platform crates. The compiler crate implements source-map and strict UTF-8 file-loading primitives; the frontend, semantic analysis, IR, backend, CLI, runtime behavior, and Linux platform adapter remain placeholders. The pinned toolchain is Rust 1.99.1; LLVM and SDL3 are not required for the current skeleton and remain deferred. The project source code and original project documentation are licensed under MIT; see the root [LICENSE](../../LICENSE) file and the [license section in the README](../../README.md#license).
+The default branch contains a Cargo workspace with compiler, runtime, and Linux platform crates. The compiler crate implements source-map and strict UTF-8 file-loading primitives plus a structured diagnostic model and human renderer. Its minimal CLI supports help/version; `build` and `check` do not compile. The lexer, parser, semantic analysis, IR, backend, project configuration, runtime behavior, and Linux platform adapter remain unimplemented. The pinned toolchain is Rust 1.99.1; LLVM and SDL3 are not required for the current workspace and remain deferred. The project source code and original project documentation are licensed under MIT; see the root [LICENSE](../../LICENSE) file and the [license section in the README](../../README.md#license).
 
 The MIT license does not grant redistribution rights to third-party manuals, ROMs, disk images, sample programs, or other externally sourced materials. Check their individual rights and the documentation policy before adding or redistributing them.
 
@@ -42,7 +42,7 @@ cargo test --workspace --all-targets
 cargo build --workspace --all-targets
 ```
 
-The same Rust checks run in [rust.yml](../../.github/workflows/rust.yml). The documentation-only workflow in [docs.yml](../../.github/workflows/docs.yml) runs Markdown linting, API registry validation, and offline local-link/anchor validation. Passing these checks validates the Rust workspace and source-map/file-loading primitives only; it does not validate a GFA BASIC compiler or runtime implementation. Platform integration, conformance, fuzz, security, and release workflows remain unimplemented.
+The same Rust checks run in [rust.yml](../../.github/workflows/rust.yml). The documentation workflow in [docs.yml](../../.github/workflows/docs.yml) runs Markdown linting, API registry/corpus validation, validator tests, and offline local-link/anchor validation. Separate workflows provide source-loader fuzzing, RustSec audits, source-loading benchmark checks/measurements, and workspace SBOM generation/validation. These checks validate repository tooling and the current source-loading primitives only; they do not validate a GFA BASIC compiler or runtime implementation. Lexer/parser fuzz targets, compiler/runtime conformance, a stable final PR gate, branch protection, and compiler build/package/release workflows remain unimplemented. The release-SBOM upload has not yet been exercised against a real published release.
 
 ## Human blockers and AI agent workflow
 

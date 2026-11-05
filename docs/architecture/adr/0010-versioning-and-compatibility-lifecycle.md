@@ -1,4 +1,4 @@
-# ADR 0002: Versioning and compatibility lifecycle
+# ADR 0010: Versioning and compatibility lifecycle
 
 - Status: Accepted
 - Date: 2026-11-04

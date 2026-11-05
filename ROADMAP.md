@@ -2,7 +2,7 @@
 
 This roadmap is the project-level view of delivery order for `gfabasic-rust`. GitHub Issues remain the source of truth for task scope, acceptance criteria, blockers, and implementation discussion.
 
-**Snapshot:** 2026-11-04  
+**Snapshot:** 2026-11-05  
 **Current maturity:** architecture and research baseline; Rust workspace bootstrap, source-map and strict UTF-8 transport primitives, and a minimal help/version CLI. Amiga GFA BASIC interpreter 3.5 is the accepted normative source dialect; 3.0/3.03 sources are historical candidates requiring 3.5 confirmation, and Atari ST V2.xx/V3.0 remains research-only. The language frontend, backend, project configuration, runtime behavior, and GFA BASIC conformance are not implemented.
 
 ## Status rules
@@ -24,10 +24,10 @@ This roadmap is the project-level view of delivery order for `gfabasic-rust`. Gi
 | Runtime and platform integration | Not implemented; SDL3, Amiga and Atari ST runtime layers remain planned | [#51–#54](https://github.com/vsimko/gfabasic-rust/issues?q=is%3Aissue+is%3Aopen) |
 | API registry | Schema and metadata validation are complete; runtime handler resolution remains unimplemented | [#115](https://github.com/vsimko/gfabasic-rust/issues/115) |
 | Dialect and API research | Amiga GFA BASIC interpreter 3.5 is the accepted normative source dialect; 3.0/3.03 material is historical research requiring 3.5 confirmation, and Atari ST V2.xx/V3.0 remains research-only. No dialect is implemented or conformant | [ADR 0009](docs/architecture/adr/0009-initial-source-dialect-amiga-gfa-basic-3.5.md), [#3](https://github.com/vsimko/gfabasic-rust/issues/3), [#63–#66](https://github.com/vsimko/gfabasic-rust/issues?q=is%3Aissue+is%3Aopen) |
-| Tests | Test strategy and registry metadata checks exist; no compiler conformance runner, fuzz harness, or executable end-to-end tests | [#42](https://github.com/vsimko/gfabasic-rust/issues/42), [#43](https://github.com/vsimko/gfabasic-rust/issues/43), [#116](https://github.com/vsimko/gfabasic-rust/issues/116), [#118](https://github.com/vsimko/gfabasic-rust/issues/118) |
-| Documentation | README, documentation index, architecture, source register, research notes, compatibility matrix, and policies exist; user quick start is correctly withheld until a working CLI exists | [#16](https://github.com/vsimko/gfabasic-rust/issues/16) |
-| CI and supply chain | Documentation and fast workspace checks are documented; dependency/license policy and reproducible SBOM remain open | [#39](https://github.com/vsimko/gfabasic-rust/issues/39) |
-| Releases | Release policy work is tracked, but no compiler artifacts can currently be produced | [#40](https://github.com/vsimko/gfabasic-rust/issues/40), [#62](https://github.com/vsimko/gfabasic-rust/issues/62) |
+| Tests | Test strategy and registry metadata checks exist. The generic source-loader fuzz target runs bounded pull-request smoke and weekly/manual campaigns; lexer/parser fuzz targets, a compiler conformance runner, and executable end-to-end tests do not exist yet | [#42](https://github.com/vsimko/gfabasic-rust/issues/42), [#43](https://github.com/vsimko/gfabasic-rust/issues/43), [#116](https://github.com/vsimko/gfabasic-rust/issues/116), [#118](https://github.com/vsimko/gfabasic-rust/issues/118) |
+| Documentation | README, documentation index, architecture, source register, research notes, compatibility matrix, and policies exist; user quick start is correctly withheld until a usable source-compilation command and distributable build are available and tested | [#16](https://github.com/vsimko/gfabasic-rust/issues/16) |
+| CI and supply chain | Documentation and Rust workspace checks, RustSec audits, source-loader fuzzing, and source-loading benchmark workflows are implemented. The dependency-license policy is approved; pull-request CI generates and validates an SPDX 2.3 SBOM for the full workspace. Upload to an actual published GitHub Release remains unverified under [#39](https://github.com/vsimko/gfabasic-rust/issues/39) | [#27](https://github.com/vsimko/gfabasic-rust/issues/27), [#39](https://github.com/vsimko/gfabasic-rust/issues/39), [#118](https://github.com/vsimko/gfabasic-rust/issues/118) |
+| Releases | A narrow workflow generates and validates the workspace SBOM on pull requests and is configured to attach it to a published release. No compiler build, package, installation, or full release workflow/artifact exists; the release-event upload remains untested | [#39](https://github.com/vsimko/gfabasic-rust/issues/39), [#40](https://github.com/vsimko/gfabasic-rust/issues/40), [#62](https://github.com/vsimko/gfabasic-rust/issues/62) |
 
 ## Delivery phases
 
@@ -84,14 +84,15 @@ Only implement platform behavior backed by accepted references and tests.
 - [ ] Atari ST API compatibility runtime — [#54](https://github.com/vsimko/gfabasic-rust/issues/54)
 - [ ] Resolve API registry declarations to actual runtime handlers — [#115](https://github.com/vsimko/gfabasic-rust/issues/115)
 - [ ] Compatibility report and optional migration analysis — [#56](https://github.com/vsimko/gfabasic-rust/issues/56)
-- [ ] Fuzzing strategy and robustness checks — [#43](https://github.com/vsimko/gfabasic-rust/issues/43), [#118](https://github.com/vsimko/gfabasic-rust/issues/118) (blocked on dependency-license approval in #39)
+- [x] Fuzzing strategy and source-loader smoke/scheduled campaigns — [#43](https://github.com/vsimko/gfabasic-rust/issues/43), [#118](https://github.com/vsimko/gfabasic-rust/issues/118); lexer/parser targets remain deferred until [#46](https://github.com/vsimko/gfabasic-rust/issues/46) and [#47](https://github.com/vsimko/gfabasic-rust/issues/47) expose stable entry points
 - [ ] Benchmark strategy and measurements — [#60](https://github.com/vsimko/gfabasic-rust/issues/60)
 
 ### Phase 4 — Release readiness
 
 A release must publish an explicit support matrix and known deviations. Do not publish binaries or compatibility claims before the build and test gates exist.
 
-- [ ] Complete dependency/license/security and SBOM policy — [#39](https://github.com/vsimko/gfabasic-rust/issues/39)
+- [x] Approve dependency-license/security/SBOM policy and implement RustSec auditing plus pull-request SBOM generation/validation — [#39](https://github.com/vsimko/gfabasic-rust/issues/39)
+- [ ] Verify SPDX 2.3 SBOM attachment on a published GitHub Release — [#39](https://github.com/vsimko/gfabasic-rust/issues/39); the release-event action remains unverified until an actual release is published
 - [x] Define release workflow and artifact policy baseline — [#40](https://github.com/vsimko/gfabasic-rust/issues/40)
 - [ ] Package compiler, runtime and installation artifacts — [#62](https://github.com/vsimko/gfabasic-rust/issues/62)
 - [ ] Implement executable conformance and release test gates — [#116](https://github.com/vsimko/gfabasic-rust/issues/116)
@@ -106,7 +107,7 @@ The first end-to-end MVP integration gate is tracked separately in [#113](https:
 3. LLVM backend and runtime integration depend on a stable typed IR and runtime ABI.
 4. Platform APIs depend on verified profile declarations; Amiga and Atari ST evidence must not be conflated.
 5. A user quick start and installation guide depend on a working, tested CLI and distributable build.
-6. Fuzzing can prepare strategy now, but meaningful lexer/parser fuzz targets depend on frontend implementation.
+6. The generic source-loader fuzz target is implemented; lexer/parser fuzz targets depend on stable frontend entry points and source contracts.
 7. Release packaging depends on successful end-to-end builds and explicit runtime dependency policy.
 
 ## Roadmap maintenance

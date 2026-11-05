@@ -2,7 +2,7 @@
 
 ## Scope
 
-The current workspace includes a compiler source-map and strict UTF-8 file-loading primitive. It does not yet implement GFA BASIC language parsing, semantic analysis, code generation, runtime behavior, or a command-line interface. These instructions validate the Rust workspace only; they do not compile GFA BASIC programs.
+The current workspace includes a source map, strict UTF-8 file-loading primitive, structured source-map diagnostic model/renderer, and a minimal `gfabasic` CLI with help/version output. It does not yet implement GFA BASIC language parsing, semantic analysis, code generation, project configuration, runtime behavior, or source compilation. These instructions validate the Rust workspace only; they do not compile GFA BASIC programs.
 
 The initial CI host is Linux x86-64 using the GitHub-hosted Ubuntu runner. Other development hosts may work with Rust, but are not yet part of the project's validated environment matrix.
 
@@ -74,7 +74,7 @@ Check that commands run from the repository root and that all workspace members 
 
 ### A GFA BASIC build command is unavailable
 
-There is no implemented compiler or CLI yet. Do not invent or document a `gfabasic build` command until the CLI issue is implemented and tested.
+The minimal CLI supports help and version output. The `build` and `check` commands are present only as explicit unimplemented responses; they do not compile source. Do not document them as usable compilation commands.
 
 ### LLVM or SDL3 is missing
 
@@ -83,6 +83,12 @@ These dependencies are not part of the current workspace skeleton. They must be 
 ## CI parity
 
 - [Rust checks](../../.github/workflows/rust.yml) run formatting, Clippy, tests, and workspace build on Rust 1.99.1.
-- [Documentation checks](../../.github/workflows/docs.yml) run Markdown linting, API registry validation, and local-link/anchor validation.
+- [Documentation checks](../../.github/workflows/docs.yml) run Markdown linting, API registry/corpus validation, validator tests, and local-link/anchor validation.
+- [Fuzzing](../../.github/workflows/fuzz.yml) runs bounded campaigns against the generic source-loader transport boundary only; it does not fuzz a GFA BASIC lexer or parser.
+- [Security audit](../../.github/workflows/security-audit.yml) checks the root, fuzz, and benchmark Cargo lockfiles against RustSec.
+- [Benchmarks](../../.github/workflows/benchmarks.yml) validate the benchmark harness on pull requests and measure synthetic source loading on main/scheduled/manual runs.
+- [Release SBOM](../../.github/workflows/release-sbom.yml) generates and validates the workspace SPDX 2.3 SBOM on pull requests and is configured to attach it to published GitHub Releases; an actual release upload has not yet been exercised.
+
+These workflows validate repository tooling and the current source-loading primitives. They do not establish GFA BASIC language conformance or compiler/runtime support.
 
 When adding a new check, update this guide and the corresponding workflow in the same change.

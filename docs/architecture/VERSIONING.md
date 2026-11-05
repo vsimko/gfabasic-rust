@@ -1,6 +1,6 @@
 # Versioning and compatibility lifecycle
 
-- Status: **Policy accepted by [ADR 0002](adr/0002-versioning-and-compatibility-lifecycle.md); CLI/schema/ABI mechanisms are not implemented yet.**
+- Status: **Policy accepted by [ADR 0010](adr/0010-versioning-and-compatibility-lifecycle.md). The CLI exposes minimal package-version/build-ID output; project/schema/runtime-ABI mechanisms remain unimplemented.**
 - Tracking: [issue #58](https://github.com/vsimko/gfabasic-rust/issues/58).
 - Scope: compiler product releases, machine-readable schemas, language dialects, API profiles, runtime ABI, target support, and deprecation.
 
@@ -121,8 +121,8 @@ Do not deprecate a GFA BASIC language construct merely because it is old or inco
 
 Each public release should include a changelog entry covering user-visible changes, compatibility effects, new/removed support, known deviations, and required migration steps.
 
-When the CLI exists, its version report should identify at least the compiler version and build revision. A diagnostic/support report should also expose the selected dialect/version, API profiles, output target, and relevant runtime/schema versions. Avoid machine-local paths and timestamps in reproducibility metadata unless explicitly requested.
+The current CLI `version`/`--version` output reports the compiler package version; `--verbose` also reports `GFA_BASIC_BUILD_ID` or `unknown`. It does not yet report the selected source dialect/version, API profiles, output target, schema versions, or runtime identity. A future compatibility/support report should expose those values, as well as the build revision, without machine-local paths or nondeterministic timestamps by default.
 
 Reference: [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.html).
 
-No release command, version-reporting CLI, schema migration, or runtime ABI mechanism exists yet. This document defines a proposed policy, not implemented behavior.
+No release command, schema migration, or runtime ABI mechanism exists yet. The minimal CLI version output is implemented but does not provide the full compatibility metadata described above. This document defines a policy, not complete release behavior.

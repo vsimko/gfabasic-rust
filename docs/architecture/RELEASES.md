@@ -1,6 +1,6 @@
 # Release, artifact, and reproducible-build policy
 
-- Status: **Proposed; no release workflow, compiler artifact, or runtime package exists.**
+- Status: **The compiler release policy remains proposed; no compiler build, package, installation artifact, or full release workflow exists. A narrow release-SBOM workflow is implemented for pull-request validation and is configured to attach the approved workspace SBOM to published GitHub Releases; a real release upload has not yet been exercised.**
 - Tracking: [issue #40](https://github.com/vsimko/gfabasic-rust/issues/40).
 - Related work: [versioning #58](https://github.com/vsimko/gfabasic-rust/issues/58), [packaging #62](https://github.com/vsimko/gfabasic-rust/issues/62), [security and supply chain #39](https://github.com/vsimko/gfabasic-rust/issues/39).
 
@@ -26,7 +26,9 @@ Proposed triggers:
 | Published GitHub release for a `v*` tag | Build, validate, package, attest, and publish release artifacts | Write permission only in the final publishing job |
 | Manual dispatch | Reproduce a release build or run a dry-run against an explicit tag | Read-only by default; publishing requires an explicit protected environment |
 
-Do not publish artifacts from a pull-request workflow. Do not use `pull_request_target` to execute untrusted code. Keep build and test jobs separate from the job that creates or uploads a GitHub release.
+Do not publish release artifacts from a pull-request workflow. Do not use `pull_request_target` to execute untrusted code. Keep build and test jobs separate from the job that creates or uploads a GitHub release.
+
+The current implementation is limited to [`.github/workflows/release-sbom.yml`](../../.github/workflows/release-sbom.yml): pull requests generate and validate the approved workspace SPDX 2.3 JSON document, while a `release.published` event checks out the release tag and attaches that SBOM to the corresponding GitHub Release. This workflow does not build or publish compiler/runtime artifacts. The release-event upload has not yet been exercised against a real published release.
 
 The publishing job should depend on successful completion of all required build and validation jobs. Use a protected GitHub Environment with reviewer approval for public releases. Grant `contents: write` only to the publishing job; all other jobs use `contents: read`. Do not expose release credentials to fork pull requests or build scripts.
 
@@ -105,12 +107,12 @@ Do not include user-specific paths, secrets, or environment values. A build time
 
 - Generate a SHA-256 checksum for each final artifact after packaging.
 - Publish checksums alongside artifacts and verify them in a clean download test.
-- Generate an SBOM from the resolved dependency graph and native dependency inventory when tooling is selected.
+- Generate the approved workspace-level SPDX 2.3 JSON SBOM from the complete Cargo workspace using the pinned `cargo-sbom` 0.10.0 tool.
 - Record provenance linking the artifact to the source commit, workflow run, build environment, and toolchain.
 - Prefer a GitHub-supported artifact attestation mechanism with narrowly scoped permissions once the repository security policy is accepted.
 - Do not claim signed provenance or reproducible builds until the corresponding verification is automated and reviewed.
 
-The exact SBOM format, signing key model, attestation tool, and retention period remain open under issue #39.
+SPDX 2.3 JSON, `cargo-sbom` 0.10.0, complete-workspace scope, and GitHub Release asset publication are approved under [issue #39](https://github.com/vsimko/gfabasic-rust/issues/39). Pull-request CI validates generation and package coverage, but the published-release upload remains unverified until an actual release event runs. Signing/provenance attestation tooling remains separate release work.
 
 ## 8. Reproducible-build policy
 
@@ -154,7 +156,7 @@ If a published artifact is defective, withdraw or mark the release as superseded
 
 1. Establish the Rust workspace and verified build commands.
 2. Implement compiler/runtime packaging and installation layout under #62.
-3. Establish dependency and provenance policy under #39.
+3. Apply the approved dependency/license/SBOM policy under #39; exercise the configured SBOM asset upload on a published release.
 4. Add release validation to CI only after each check has an executable command.
 5. Test artifact naming, metadata, checksums, and clean-install behavior on a release candidate.
 6. Configure protected publishing permissions and environment approval.

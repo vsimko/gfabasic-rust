@@ -1,10 +1,10 @@
 # Understanding compiler diagnostics
 
 - **Audience:** Users of the planned GFA BASIC compiler.
-- **Status:** Proposed guidance; the compiler and diagnostic renderer are not implemented.
+- **Status:** Proposed user guidance; the source-map diagnostic API and human renderer are implemented in the compiler library, but no GFA BASIC frontend or CLI command currently emits them. Stable diagnostic-code allocation, machine-readable output, and runtime reporting remain unimplemented.
 - **Design reference:** [Diagnostics and compatibility reporting](../architecture/DIAGNOSTICS.md).
 
-This page explains the diagnostic contract planned for the compiler. It does not describe output that can be produced by a current executable.
+This page explains the planned user-facing diagnostic contract and records the implemented low-level renderer. The current executable does not emit compiler diagnostics because the GFA BASIC frontend and CLI diagnostic integration do not exist yet.
 
 ## What a diagnostic tells you
 
@@ -60,4 +60,4 @@ Automatic source rewriting is not part of the current project baseline.
 
 ## Current project status
 
-The compiler, CLI, diagnostic renderer, stable diagnostic-code allocation, machine-readable output, and runtime error reporting are not implemented. The architecture reference defines the proposed contract; it must not be read as a claim that these features are available.
+The source-map diagnostic model and deterministic human renderer are implemented and unit-tested in the compiler library. Lexer/parser/semantic stages do not yet emit diagnostics; stable diagnostic-code allocation, machine-readable schema/CLI output, and runtime error reporting remain unimplemented. The architecture reference defines the broader proposed contract, not a claim that frontend diagnostics are available.
