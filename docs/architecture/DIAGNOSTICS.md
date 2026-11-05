@@ -1,10 +1,10 @@
 # Diagnostics and compatibility reporting
 
-- Status: **The source-map diagnostic model and deterministic human renderer are implemented and unit-tested.** Frontend emission, stable diagnostic-code allocation, machine-readable schema/CLI output, and runtime reporting remain unimplemented; this document's broader contract is proposed.
+- Status: **The source-map diagnostic model and deterministic human renderer are implemented and unit-tested.** The narrow FACT/PRINT frontend emits lexical, syntax, and unsupported-feature diagnostics with source spans; the prototype CLI renders these errors. Stable diagnostic-code allocation, machine-readable schema, general semantic diagnostics, and runtime reporting remain unimplemented.
 - Tracking: [issue #26](https://github.com/vsimko/gfabasic-rust/issues/26).
 - Related design: [dialect policy](DIALECTS.md), [API profiles](API-PROFILES.md), [API registry](API-REGISTRY.md), [CLI/configuration](CLI-AND-CONFIG.md), [versioning policy](VERSIONING.md), and [source manager](https://github.com/vsimko/gfabasic-rust/issues/45).
 
-This document defines the proposed user-facing contract. The compiler library now has a base `Diagnostic` model and deterministic source-map renderer, but no lexer/parser/semantic stage emits diagnostics, no stable code registry or machine-readable schema exists, and the CLI does not display compiler diagnostics.
+This document defines the proposed user-facing contract. The compiler library has a base `Diagnostic` model and deterministic source-map renderer. The narrow FACT/PRINT frontend emits lexical, syntax, and unsupported-feature diagnostics; the prototype build path renders them through the source map. There is no stable code registry or machine-readable schema, and general semantic/runtime stages do not yet emit diagnostics.
 
 ## 1. Design requirements
 
