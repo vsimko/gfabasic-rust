@@ -35,6 +35,10 @@ The experimental combinatorics vertical slice under [issue #113](https://github.
 - Diagnostics and source provenance must survive AST transformations, semantic lowering, IR optimization, and backend lowering. A backend diagnostic must be traceable to the originating source span where one exists.
 - The compiler must not emit an executable when required semantic or IR verification invariants fail.
 
+## Formatter contract
+
+The formatter consumes the shared parsed-document result; it does not implement a second lexer or parser. It copies significant token text from the original source spans and changes only inter-token whitespace and line endings. The initial prototype style uses compact assignments and intrinsic calls, one space after PRINT, comma-separated values without extra spaces, LF output, and preserves whether the input had a final line ending. Identifier and numeric literal spelling are copied verbatim. Until the lexer recognizes comments, strings, DATA payloads, and the remaining dialect forms, formatting such input must return diagnostics rather than dropping or rewriting it.
+
 ## AST-to-IR boundary
 
 The AST preserves source-level structure and dialect-specific distinctions. The semantic model resolves those distinctions using verified rules. The IR represents the result of those decisions; it is not a second parser and must not contain unresolved source-language ambiguity.

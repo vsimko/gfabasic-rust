@@ -71,7 +71,9 @@ Implement the smallest useful source-to-native-executable path for the accepted 
 - [ ] Parser and AST — [#47](https://github.com/vsimko/gfabasic-rust/issues/47)
   - Initial supported-subset parser now returns the AST together with its lossless token/trivia representation; general grammar, richer recovery, and semantic integration remain open.
 - [ ] Symbol resolution and semantic analysis — [#48](https://github.com/vsimko/gfabasic-rust/issues/48)
-  - Prototype-only symbol identities and PRINT references are implemented; full declaration, scope, type, suffix, procedure, and API-profile rules remain evidence-gated.
+  - Prototype-only symbol identities and PRINT references are being introduced; full declaration, scope, type, suffix, procedure, and API-profile rules remain evidence-gated.
+- [ ] Source formatter — [#208](https://github.com/vsimko/gfabasic-rust/issues/208)
+  - Initial FACT/VARIAT/COMBIN/PRINT formatting is available as a source-preserving prototype; comments, strings, DATA payloads, and general syntax remain unsupported until lexer coverage expands.
 - [ ] Typed, target-independent IR — [#49](https://github.com/vsimko/gfabasic-rust/issues/49)
 - [ ] LLVM backend and Linux x86-64 output — [#50](https://github.com/vsimko/gfabasic-rust/issues/50)
 - [ ] Implement a usable CLI and project configuration — [#111](https://github.com/vsimko/gfabasic-rust/issues/111)
