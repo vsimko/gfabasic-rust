@@ -33,7 +33,7 @@ crates/
 
 The compiler crate owns compiler stages and the CLI. The runtime crate owns generated-program core behavior, profile runtime support, and the platform-service contract. The Linux platform crate owns Linux-specific implementations of that contract, including SDL3 integration when selected.
 
-Do not create separate crates for the lexer, parser, semantic analyzer, IR, LLVM backend, CLI, Amiga profile, or Atari ST research profile at bootstrap. Keep those as modules until independent ownership or dependency isolation is demonstrated.
+Do not create separate crates for the lexer, parser, semantic analyzer, IR, LLVM backend, CLI, or Amiga profile at bootstrap. Keep those as modules until independent ownership or dependency isolation is demonstrated. Atari ST material is archival research only and has no implementation crate or runtime profile in the product.
 
 ## Dependency direction
 
