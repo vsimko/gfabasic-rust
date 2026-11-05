@@ -1,6 +1,6 @@
 # Project goals and compatibility objectives
 
-- Status: **Accepted product scope**; see [ADR 0010](adr/0010-amiga-35-linux-sdl3-product-scope.md).
+- Status: **Accepted product scope**; see [ADR 0011](adr/0011-amiga-35-linux-sdl3-product-scope.md).
 
 ## Purpose
 
@@ -45,4 +45,4 @@ Historical manuals and Atari research may remain in the repository as archival c
 - Select and link only runtime components required by a generated program.
 - Keep LLVM behind the backend boundary.
 
-Tracking: [issue #2](https://github.com/vsimko/gfabasic-rust/issues/2), [issue #3](https://github.com/vsimko/gfabasic-rust/issues/3), and [ADR 0010](adr/0010-amiga-35-linux-sdl3-product-scope.md).
+Tracking: [issue #2](https://github.com/vsimko/gfabasic-rust/issues/2), [issue #3](https://github.com/vsimko/gfabasic-rust/issues/3), and [ADR 0011](adr/0011-amiga-35-linux-sdl3-product-scope.md).
