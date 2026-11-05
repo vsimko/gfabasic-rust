@@ -417,9 +417,9 @@ mod tests {
     #[test]
     fn rejects_variables_outside_the_demonstrated_mvp_names() {
         let mut sources = SourceMap::new();
-        let source_id = sources.add_source("unknown-variable.bas", "count=FACT(1)\n");
+        let source_id = sources.add_source("unknown-variable.bas", "PRINT count\n");
 
-        let errors = parse(source_id, "count=FACT(1)\n").expect_err("name is outside MVP");
+        let errors = parse(source_id, "PRINT count\n").expect_err("name is outside MVP");
         assert!(errors[0].message.contains("supported: x, y, z"));
     }
 
