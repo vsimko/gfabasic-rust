@@ -12,8 +12,16 @@ from pathlib import Path
 
 if __package__:
     from .corpus_paths import has_symlink_component
+    from .repository_paths import (
+        has_symlink_component as has_repository_symlink_component,
+        repository_relative_path,
+    )
 else:
     from corpus_paths import has_symlink_component
+    from repository_paths import (
+        has_symlink_component as has_repository_symlink_component,
+        repository_relative_path,
+    )
 
 from jsonschema import Draft202012Validator
 
@@ -181,15 +189,28 @@ def validate_registry(root: Path = ROOT) -> list[str]:
                     errors.append(f"{path}: {declaration_id}: unknown source ID {source_id!r}")
 
             docs = declaration.get("docs", {})
-            docs_path = root / docs.get("path", "")
-            if not docs_path.is_file():
-                errors.append(f"{path}: {declaration_id}: missing documentation path {docs.get('path')!r}")
+            docs_path_value = docs.get("path", "")
+            relative_docs_path = repository_relative_path(docs_path_value)
+            if relative_docs_path is None:
+                errors.append(
+                    f"{path}: {declaration_id}: documentation path must be a canonical repository-relative path: {docs_path_value!r}"
+                )
                 anchors: set[str] = set()
             else:
-                anchors = heading_anchors(docs_path)
-                for anchor in docs.get("anchors", []):
-                    if anchor not in anchors:
-                        errors.append(f"{path}: {declaration_id}: missing documentation anchor {anchor!r}")
+                docs_path = root.joinpath(*relative_docs_path.parts)
+                if has_repository_symlink_component(docs_path, root):
+                    errors.append(
+                        f"{path}: {declaration_id}: documentation path must not traverse symlinks"
+                    )
+                    anchors = set()
+                elif not docs_path.is_file():
+                    errors.append(f"{path}: {declaration_id}: missing documentation path {docs_path_value!r}")
+                    anchors = set()
+                else:
+                    anchors = heading_anchors(docs_path)
+                    for anchor in docs.get("anchors", []):
+                        if anchor not in anchors:
+                            errors.append(f"{path}: {declaration_id}: missing documentation anchor {anchor!r}")
 
             implementation = declaration.get("implementation", {})
             if implementation.get("status") in {"implemented", "partial"} and not implementation.get("handler"):
