@@ -71,11 +71,11 @@ The addendum documents special forms of MAT CPY for whole matrices and offset co
 | `MAT NORM a(),0` | Normalize a matrix using the maximum norm (the source's example transforms rows/columns as described on pp. 13-22–13-24) |
 | `MAT NORM a(),1` | Normalize a matrix using the Euclidean norm (see source examples pp. 13-22–13-24) |
 | `MAT DET x=a([i,j])[,n]` | Calculate determinant of a square matrix/selected square submatrix |
-| `MAT QDET x=a([i,j])[,n]` | Same purpose as MAT DET; source presents it as a quicker determinant calculation and compares deviation (pp. 13-25–13-28) |
-| `MAT RANG x=a([i,j])[,n]` | Calculate rank of a square matrix/selected square submatrix |
+| `MAT QDET x=a([i,j])[,n]` | Same determinant purpose and submatrix selection as `MAT DET`; optimized for speed, not accuracy. The manual recommends `MAT DET` for critical matrices whose determinant is near zero (printed pp. 13-36–13-37) |
+| `MAT RANG x=a([i,j])[,n]` | Calculate rank of a square matrix; like `MAT DET`/`MAT QDET`, accepts row and column offsets, with `n` selecting an n×n submatrix from that position (printed p. 13-38) |
 | `MAT INV b()=a()` | Calculate the inverse of square matrix `a` and write it to destination matrix `b`; `b()` must have the same type/dimensions as `a()` (printed p. 13-39) |
 
-Page-image checks of printed pp. 13-38–13-39 confirm the spelling `MAT QDET` and the operand direction `MAT INV b()=a()`: `a()` is the source matrix and `b()` receives its inverse. The OCR text for the matrix multiplication examples and the detailed numerical algorithms still needs page-image review. Do not use OCR artifacts as normative syntax.
+Page-image checks of printed pp. 13-36–13-39 confirm the `MAT QDET` performance/accuracy warning, the `MAT RANG` square-submatrix selection rule, and the detailed `MAT INV b()=a()` example. **Important source inconsistency:** the command summary on printed p. 13-22 instead lists `MAT INV a()=b()`. Until this discrepancy is resolved by another authoritative edition or interpreter observation, record the inverse operand direction as disputed. The OCR text for matrix multiplication examples and detailed numerical algorithms still needs page-image review. Do not use OCR artifacts as normative syntax.
 
 ## 4. Additional commands in version 3.5 — Chapter 14, printed pp. 13-32–13-36
 
