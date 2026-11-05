@@ -826,7 +826,7 @@ mod tests {
 
         for spelling in spellings {
             let mut sources = SourceMap::new();
-            let source_id = sources.add_source("special-name-eof.bas", &spelling);
+            let source_id = sources.add_source("special-name-eof.bas", spelling.as_str());
             let lexed = lex_lossless(source_id, &spelling)
                 .expect("documented Amiga 3.5 special name should lex at EOF");
 
