@@ -409,9 +409,11 @@ mod tests {
         assert_eq!(output.diagnostics.len(), 1);
         let diagnostic = &output.diagnostics[0];
         assert_eq!(diagnostic.primary_span.unwrap().start, 11);
-        assert!(diagnostic.render(&sources).starts_with(
-            "examples/bad.gfa:2:1: error[GFA-LEX-0001]: invalid character"
-        ));
+        assert!(
+            diagnostic
+                .render(&sources)
+                .starts_with("examples/bad.gfa:2:1: error[GFA-LEX-0001]: invalid character")
+        );
     }
 
     #[test]
