@@ -98,6 +98,13 @@ class CorpusValidationTests(unittest.TestCase):
         metadata.write_text(metadata.read_text().replace("TEST-SOURCE", "MISSING-SOURCE"))
         self.assertTrue(any("unknown source_key" in item for item in validate_corpus(root)))
 
+    def test_source_register_heading_is_not_a_valid_source_key(self):
+        temp, root = self.make_root()
+        self.addCleanup(temp.cleanup)
+        metadata = root / "tests/corpus/amiga/3.0/control-flow/fixture-one.toml"
+        metadata.write_text(metadata.read_text().replace('source_key = "TEST-SOURCE"', 'source_key = "ID"'))
+        self.assertTrue(any("unknown source_key 'ID'" in item for item in validate_corpus(root)))
+
     def test_unlisted_fixture_fails(self):
         temp, root = self.make_root()
         self.addCleanup(temp.cleanup)
