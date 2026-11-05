@@ -153,7 +153,7 @@ The implemented validator in `scripts/validate_api_registry.py` and its unit tes
 4. Conflicting declaration names for the same dialect/version unless declarations share an explicit overload group.
 5. Source IDs against the source register.
 6. Documentation paths and heading anchors.
-7. Test IDs against the conformance-corpus manifest.
+7. Test stable fixture IDs against the sidecar metadata of manifest-listed conformance-corpus entries.
 8. The presence of a handler ID on implemented or partial declarations.
 9. Primary/observed evidence, an implementation, passing conformance tests, and documentation anchors before a declaration can claim supported/partial/adapter-backed/emulated support.
 10. A handler ID for partial, adapter-backed, or emulated support.
