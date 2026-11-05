@@ -38,17 +38,41 @@ def read_source_ids(root: Path) -> set[str]:
 
 
 def read_test_ids(root: Path) -> set[str]:
-    path = root / "tests" / "corpus" / "manifest.toml"
-    if not path.exists():
+    corpus_root = root / "tests" / "corpus"
+    manifest_path = corpus_root / "manifest.toml"
+    if not manifest_path.exists():
         return set()
     try:
-        manifest = tomllib.loads(path.read_text(encoding="utf-8"))
+        manifest = tomllib.loads(manifest_path.read_text(encoding="utf-8"))
     except (OSError, tomllib.TOMLDecodeError):
         return set()
+
     fixtures = manifest.get("fixtures", [])
     if not isinstance(fixtures, list):
         return set()
-    return {fixture for fixture in fixtures if isinstance(fixture, str)}
+
+    fixture_ids: set[str] = set()
+    for fixture in fixtures:
+        if not isinstance(fixture, str) or not fixture or "\\\\" in fixture:
+            continue
+        parts = fixture.split("/")
+        if len(parts) != 4 or any(part in {"", ".", ".."} for part in parts):
+            continue
+        relative = Path(*parts)
+        if relative.is_absolute() or relative.suffix:
+            continue
+        metadata_path = corpus_root / relative.with_suffix(".toml")
+        try:
+            metadata_path.resolve().relative_to(corpus_root.resolve())
+            if not metadata_path.is_file():
+                continue
+            metadata = tomllib.loads(metadata_path.read_text(encoding="utf-8"))
+        except (OSError, RuntimeError, ValueError, tomllib.TOMLDecodeError):
+            continue
+        fixture_id = metadata.get("id") if isinstance(metadata, dict) else None
+        if isinstance(fixture_id, str) and fixture_id:
+            fixture_ids.add(fixture_id)
+    return fixture_ids
 
 
 def heading_anchors(path: Path) -> set[str]:
