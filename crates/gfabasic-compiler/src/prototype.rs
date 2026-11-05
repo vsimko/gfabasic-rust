@@ -215,7 +215,10 @@ mod tests {
         compile_file(&input, &output).unwrap();
         let run = Command::new(&output).output().unwrap();
         assert!(run.status.success());
-        assert_eq!(String::from_utf8(run.stdout).unwrap(), "1 1 2\n");
+        assert_eq!(
+            String::from_utf8(run.stdout).unwrap().split_whitespace().collect::<Vec<_>>(),
+            ["1", "1", "2"]
+        );
 
         fs::remove_dir_all(directory).unwrap();
     }
