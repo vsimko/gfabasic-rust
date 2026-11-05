@@ -167,6 +167,8 @@ def validate_corpus(root: Path = ROOT) -> list[str]:
     corpus_root = root / "tests" / "corpus"
     manifest_path = corpus_root / "manifest.toml"
     errors: list[str] = []
+    if has_symlink_component(manifest_path, corpus_root):
+        return ["tests/corpus/manifest.toml: path must not traverse symlinks"]
     if not manifest_path.is_file():
         return ["missing tests/corpus/manifest.toml"]
 
