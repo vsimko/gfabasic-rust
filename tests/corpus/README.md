@@ -2,11 +2,13 @@
 
 ## Purpose
 
-This directory contains small, independently authored GFA BASIC programs and metadata for future compiler/runtime conformance tests. It is a source corpus, not an executable test suite yet.
+This directory contains small, independently authored GFA BASIC programs and metadata for future compiler/runtime conformance tests. It is a source corpus, not a general executable conformance suite yet.
 
 All fixtures must be independently authored. Do not copy historical program listings or require historical manuals, ROMs, disk images, or other third-party artifacts to be present in the repository or a release. Cite external evidence by bibliographic source and page/section; do not embed the source material itself.
 
-The repository now contains an experimental, evidence-gated Amiga GFA BASIC 3.5 frontend for the documented `FACT`, `VARIAT`, `COMBIN`, and `PRINT` subset, plus a temporary C/`cc` native bootstrap, but no general compiler or corpus test runner. Four independently authored Amiga 3.5 addendum fixtures are marked `verified` on page-image evidence (`MAT ONE`, `MAT CLR`, `MAT SET`, and `FACT(0)`). This verifies their documented syntax and expected behavior against the cited page images; it is not original-interpreter execution or proof of full dialect conformance. The Amiga 3.0 fixtures remain `candidate` and must not be promoted without applicable evidence. The metadata validator does not compile or execute fixtures.
+The repository contains an experimental, evidence-gated Amiga GFA BASIC 3.5 frontend for the documented `FACT`, `VARIAT`, `COMBIN`, and `PRINT` subset, plus a temporary C/`cc` native bootstrap, but no general compiler or corpus test runner. Four independently authored Amiga 3.5 addendum fixtures are marked `verified` on page-image evidence (`MAT ONE`, `MAT CLR`, `MAT SET`, and `FACT(0)`). This verifies their documented syntax and expected behavior against the cited page images; it is not original-interpreter execution or proof of full dialect conformance. The Amiga 3.0 fixtures remain `candidate` and must not be promoted without applicable evidence. The metadata validator does not compile or execute fixtures.
+
+The two verified combinatorics fixtures currently accepted by the frontend are canonicalized and checked by Rust CI with `gfabasic fmt --check`. This is a formatter-style gate for the implemented subset only, not a corpus runner or conformance claim for the remaining fixtures.
 
 ## Layout
 
