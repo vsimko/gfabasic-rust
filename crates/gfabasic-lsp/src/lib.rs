@@ -430,7 +430,9 @@ fn parse_json(input: &[u8]) -> Result<Json, JsonParseError> {
     let mut parser = JsonParser { input, offset: 0 };
     let value = parser.value()?;
     parser.whitespace();
-    (parser.offset == input.len()).then_some(value).ok_or(JsonParseError)
+    (parser.offset == input.len())
+        .then_some(value)
+        .ok_or(JsonParseError)
 }
 
 struct JsonParser<'a> {
@@ -451,7 +453,7 @@ impl JsonParser<'_> {
 
     fn value(&mut self) -> Result<Json, JsonParseError> {
         self.whitespace();
-        match self.input.get(self.offset).copied().ok_or(())? {
+        match self.input.get(self.offset).copied().ok_or(JsonParseError)? {
             b'n' => {
                 self.literal(b"null")?;
                 Ok(Json::Null)
@@ -477,7 +479,7 @@ impl JsonParser<'_> {
             self.offset += literal.len();
             Ok(())
         } else {
-            Err(())
+            Err(JsonParseError)
         }
     }
 
@@ -485,7 +487,7 @@ impl JsonParser<'_> {
         self.offset += 1;
         let mut result = String::new();
         loop {
-            let byte = *self.input.get(self.offset).ok_or(())?;
+            let byte = *self.input.get(self.offset).ok_or(JsonParseError)?;
             match byte {
                 b'"' => {
                     self.offset += 1;
@@ -493,7 +495,7 @@ impl JsonParser<'_> {
                 }
                 b'\\' => {
                     self.offset += 1;
-                    let escaped = *self.input.get(self.offset).ok_or(())?;
+                    let escaped = *self.input.get(self.offset).ok_or(JsonParseError)?;
                     self.offset += 1;
                     match escaped {
                         b'"' => result.push('"'),
@@ -508,30 +510,31 @@ impl JsonParser<'_> {
                             let first = self.hex_quad()?;
                             let scalar = if (0xd800..=0xdbff).contains(&first) {
                                 if self.input.get(self.offset..self.offset + 2) != Some(b"\\u") {
-                                    return Err(());
+                                    return Err(JsonParseError);
                                 }
                                 self.offset += 2;
                                 let second = self.hex_quad()?;
                                 if !(0xdc00..=0xdfff).contains(&second) {
-                                    return Err(());
+                                    return Err(JsonParseError);
                                 }
                                 0x10000
                                     + (((first - 0xd800) as u32) << 10)
                                     + (second - 0xdc00) as u32
                             } else if (0xdc00..=0xdfff).contains(&first) {
-                                return Err(());
+                                return Err(JsonParseError);
                             } else {
                                 first as u32
                             };
-                            result.push(char::from_u32(scalar).ok_or(())?);
+                            result.push(char::from_u32(scalar).ok_or(JsonParseError)?);
                         }
-                        _ => return Err(()),
+                        _ => return Err(JsonParseError),
                     }
                 }
-                0x00..=0x1f => return Err(()),
+                0x00..=0x1f => return Err(JsonParseError),
                 _ => {
-                    let tail = std::str::from_utf8(&self.input[self.offset..]).map_err(|_| JsonParseError)?;
-                    let character = tail.chars().next().ok_or(())?;
+                    let tail = std::str::from_utf8(&self.input[self.offset..])
+                        .map_err(|_| JsonParseError)?;
+                    let character = tail.chars().next().ok_or(JsonParseError)?;
                     result.push(character);
                     self.offset += character.len_utf8();
                 }
@@ -540,22 +543,22 @@ impl JsonParser<'_> {
     }
 
     fn hex_quad(&mut self) -> Result<u16, JsonParseError> {
-        let bytes = self.input.get(self.offset..self.offset + 4).ok_or(())?;
+        let bytes = self.input.get(self.offset..self.offset + 4).ok_or(JsonParseError)?;
         let mut value = 0u16;
         for &byte in bytes {
-            value = value.checked_mul(16).ok_or(())?
+            value = value.checked_mul(16).ok_or(JsonParseError)?
                 + match byte {
                     b'0'..=b'9' => (byte - b'0') as u16,
                     b'a'..=b'f' => (byte - b'a' + 10) as u16,
                     b'A'..=b'F' => (byte - b'A' + 10) as u16,
-                    _ => return Err(()),
+                    _ => return Err(JsonParseError),
                 };
         }
         self.offset += 4;
         Ok(value)
     }
 
-    fn array(&mut self) -> Result<Json, ()> {
+    fn array(&mut self) -> Result<Json, JsonParseError> {
         self.offset += 1;
         let mut values = Vec::new();
         self.whitespace();
@@ -572,12 +575,12 @@ impl JsonParser<'_> {
                     self.offset += 1;
                     return Ok(Json::Array(values));
                 }
-                _ => return Err(()),
+                _ => return Err(JsonParseError),
             }
         }
     }
 
-    fn object(&mut self) -> Result<Json, ()> {
+    fn object(&mut self) -> Result<Json, JsonParseError> {
         self.offset += 1;
         let mut values = HashMap::new();
         self.whitespace();
@@ -588,12 +591,12 @@ impl JsonParser<'_> {
         loop {
             self.whitespace();
             if self.input.get(self.offset) != Some(&b'"') {
-                return Err(());
+                return Err(JsonParseError);
             }
             let key = self.string()?;
             self.whitespace();
             if self.input.get(self.offset) != Some(&b':') {
-                return Err(());
+                return Err(JsonParseError);
             }
             self.offset += 1;
             let value = self.value()?;
@@ -605,12 +608,12 @@ impl JsonParser<'_> {
                     self.offset += 1;
                     return Ok(Json::Object(values));
                 }
-                _ => return Err(()),
+                _ => return Err(JsonParseError),
             }
         }
     }
 
-    fn number(&mut self) -> Result<Json, ()> {
+    fn number(&mut self) -> Result<Json, JsonParseError> {
         let start = self.offset;
         if self.input.get(self.offset) == Some(&b'-') {
             self.offset += 1;
@@ -623,7 +626,7 @@ impl JsonParser<'_> {
                     self.offset += 1;
                 }
             }
-            _ => return Err(()),
+            _ => return Err(JsonParseError),
         }
         if self.input.get(self.offset) == Some(&b'.') {
             self.offset += 1;
@@ -632,7 +635,7 @@ impl JsonParser<'_> {
                 self.offset += 1;
             }
             if self.offset == start_fraction {
-                return Err(());
+                return Err(JsonParseError);
             }
         }
         if self
@@ -653,7 +656,7 @@ impl JsonParser<'_> {
                 self.offset += 1;
             }
             if self.offset == start_exponent {
-                return Err(());
+                return Err(JsonParseError);
             }
         }
         let number = std::str::from_utf8(&self.input[start..self.offset]).map_err(|_| {})?;
