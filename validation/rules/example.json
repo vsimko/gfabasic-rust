@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "rules": [
+    {
+      "id": "docs.architecture-index",
+      "description": "Architecture index exists",
+      "enabled": true,
+      "severity": "error",
+      "type": "file_exists",
+      "path": "docs/architecture/README.md",
+      "evidence": "Canonical architecture document index"
+    }
+  ]
+}
