@@ -60,7 +60,10 @@ jobs:
             git checkout --orphan gh-pages
             git rm -rf . >/dev/null 2>&1 || true
           fi
-          rsync -a --delete --exclude='pr-preview/' site/ ./
+          staging_dir="$(mktemp -d)"
+          cp -a site/. "$staging_dir/"
+          rsync -a --delete --exclude='pr-preview/' "$staging_dir/" ./
+          rm -rf "$staging_dir"
           git add -A
           if git diff --cached --quiet; then
             echo "Production site is already up to date."
