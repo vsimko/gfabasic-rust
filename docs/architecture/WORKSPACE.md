@@ -31,8 +31,8 @@ crates/
       sdl3/
   gfabasic-lsp/
     src/
-      protocol/
-      documents/
+      lib.rs
+      main.rs
 ```
 
 The compiler crate owns compiler stages and the CLI. The runtime crate owns generated-program core behavior, profile runtime support, and the platform-service contract. The Linux platform crate owns Linux-specific implementations of that contract, including SDL3 integration when selected.
@@ -44,7 +44,7 @@ Do not create separate crates for the lexer, parser, semantic analyzer, IR, LLVM
 - Compiler modules may depend on other compiler modules along the documented pipeline; the frontend and project-owned IR must not depend on LLVM or SDL3.
 - The compiler must not call SDL3 directly. The backend may emit references to the documented runtime ABI; it does not need a Rust dependency on the runtime implementation merely to describe those references.
 - The runtime crate must not depend on the compiler, LLVM, or SDL3.
-- The Linux platform crate may depend on the runtime's platform-service contract. The runtime must not depend on the Linux platform crate.
+- The Linux platform crate may depend on the runtime's platform-service contract. The runtime must not depend on the Linux platform crate.\n- The LSP crate may depend on the compiler's public frontend/source/diagnostic/formatter APIs, but must not be a dependency of the compiler, runtime, or platform crates. Keep protocol/JSON-RPC code and dependencies isolated in the LSP crate.
 - Platform-specific runtime code must not leak into parsing or language-core semantics.
 - API profiles are selected by compiler/project configuration for each compilation. Cargo features are build-time capability switches only; they must not select the source dialect or API profile.
 - Keep the default compiler/frontend and runtime builds free of LLVM and SDL3 system dependencies. Add those dependencies only to the backend or platform boundary that needs them.
