@@ -399,7 +399,7 @@ fn read_message<R: BufRead>(reader: &mut R) -> io::Result<Option<Vec<u8>>> {
                     "LSP headers too large",
                 ));
             }
-            terminated = available.get(count - 1) == Some(&b'\n');
+            let terminated = available.get(count - 1) == Some(&b'\n');
             line.extend_from_slice(&available[..count]);
             reader.consume(count);
             if terminated {
@@ -543,8 +543,8 @@ fn quote(value: &str) -> String {
         match character {
             '"' => output.push_str("\\\""),
             '\\' => output.push_str("\\\\"),
-            '\n' => output.push_str("\\n"),
-            '\r' => output.push_str("\\r"),
+            '\n' => output.push_str("\n"),
+            '\r' => output.push_str("\r"),
             '\t' => output.push_str("\\t"),
             '\u{0008}' => output.push_str("\\b"),
             '\u{000c}' => output.push_str("\\f"),
@@ -959,7 +959,7 @@ mod tests {
 
     #[test]
     fn framing_rejects_oversized_headers() {
-        let input = format!("X-Padding: {}\\r\\n\\r\\n", "x".repeat(MAX_HEADER_BYTES));
+        let input = format!("X-Padding: {}\r\n\r\n", "x".repeat(MAX_HEADER_BYTES));
         let mut reader = io::Cursor::new(input.into_bytes());
         assert_eq!(
             read_message(&mut reader).unwrap_err().kind(),
@@ -969,7 +969,7 @@ mod tests {
 
     #[test]
     fn framing_rejects_duplicate_content_length_headers() {
-        let input = b"Content-Length: 1\\r\\ncontent-length: 1\\r\\n\\r\\n{}";
+        let input = b"Content-Length: 1\r\ncontent-length: 1\r\n\r\n{}";
         let mut reader = io::Cursor::new(input.as_slice());
         assert_eq!(
             read_message(&mut reader).unwrap_err().kind(),
