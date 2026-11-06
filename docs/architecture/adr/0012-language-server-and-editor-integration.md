@@ -59,7 +59,7 @@ Rejected because identical spellings can refer to different declarations, and un
 
 ## Initial implementation status (2026-11-06)
 
-The first dependency-free `gfabasic-lsp` crate now provides JSON-RPC framing over stdio, initialize/shutdown/exit, full-document open/change/close notifications, per-document version checks, and tested UTF-16/UTF-8 position conversion. It advertises only full-document synchronization. Ranged changes are rejected rather than partially applied. Diagnostics, formatting, navigation, completion, and rename are not implemented or advertised. The protocol JSON parser is intentionally internal to this bootstrap and must receive adversarial/fuzz coverage before the server is treated as production-ready. This implementation note does not change the proposed status of the ADR.
+The `gfabasic-lsp` crate provides JSON-RPC framing over stdio, initialize/shutdown/exit, full-document open/change/close notifications, per-document version checks, and tested UTF-16/UTF-8 position conversion. It advertises only full-document synchronization; ranged changes are rejected rather than partially applied. Push diagnostics are now produced by the compiler's shared `parse_document` frontend and are tagged with the document version. Closing a document clears its diagnostics. Formatting, navigation, completion, and rename are not implemented or advertised. The protocol JSON parser is intentionally internal to this bootstrap and must receive adversarial/fuzz coverage before the server is treated as production-ready. This implementation note does not change the proposed status of the ADR.
 
 ## Evidence and references
 

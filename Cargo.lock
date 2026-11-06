@@ -12,6 +12,9 @@ dependencies = [
 [[package]]
 name = "gfabasic-lsp"
 version = "0.1.0"
+dependencies = [
+ "gfabasic-compiler",
+]
 
 [[package]]
 name = "gfabasic-platform-linux"

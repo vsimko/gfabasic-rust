@@ -6,6 +6,7 @@ publish.workspace = true
 license.workspace = true
 
 [dependencies]
+gfabasic-compiler = { path = "../gfabasic-compiler" }
 
 [lints]
 workspace = true
