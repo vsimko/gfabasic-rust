@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "project": {
+    "name": "gfabasic-rust",
+    "language": "Rust",
+    "source_dialect": "Amiga GFA BASIC interpreter 3.5",
+    "target": "Linux x86-64",
+    "maturity": "experimental",
+    "maturity_evidence": [
+      "README.md#current-scope-and-limitations",
+      "ROADMAP.md#current-project-state"
+    ]
+  },
+  "prototype": {
+    "status": "implemented_subset",
+    "description": "A narrow FACT, VARIAT and COMBIN assignment subset followed by PRINT, with typed IR verification and a temporary C/cc bootstrap.",
+    "evidence": [
+      "README.md#experimental-prototype",
+      "ROADMAP.md#current-project-state"
+    ]
+  },
+  "planned_components": [
+    {
+      "name": "LLVM backend",
+      "status": "planned",
+      "evidence": [
+        "docs/architecture/README.md"
+      ]
+    },
+    {
+      "name": "General language semantics and typed IR",
+      "status": "not_implemented",
+      "evidence": [
+        "README.md#current-scope-and-limitations"
+      ]
+    },
+    {
+      "name": "Runtime and Linux platform behavior",
+      "status": "not_implemented",
+      "evidence": [
+        "README.md#current-scope-and-limitations"
+      ]
+    }
+  ],
+  "workspace_packages": [
+    {
+      "name": "gfabasic-compiler",
+      "path": "crates/gfabasic-compiler"
+    },
+    {
+      "name": "gfabasic-runtime",
+      "path": "crates/gfabasic-runtime"
+    },
+    {
+      "name": "gfabasic-platform-linux",
+      "path": "crates/gfabasic-platform-linux"
+    },
+    {
+      "name": "gfabasic-lsp",
+      "path": "crates/gfabasic-lsp"
+    }
+  ]
+}
