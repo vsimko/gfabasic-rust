@@ -175,13 +175,29 @@ pub fn lex_lossless(source_id: SourceId, source: &str) -> Result<LexedSource, Ve
             }
             b'\'' if !line_has_code => {
                 let start = offset;
-                while bytes.get(offset).is_some_and(|byte| !matches!(byte, b'\r' | b'\n')) { offset += 1; }
-                trivia.push(Trivia { kind: TriviaKind::Comment, span: SourceSpan::new(source_id, start, offset) });
+                while bytes
+                    .get(offset)
+                    .is_some_and(|byte| !matches!(byte, b'\r' | b'\n'))
+                {
+                    offset += 1;
+                }
+                trivia.push(Trivia {
+                    kind: TriviaKind::Comment,
+                    span: SourceSpan::new(source_id, start, offset),
+                });
             }
             b'!' if !line_is_data => {
                 let start = offset;
-                while bytes.get(offset).is_some_and(|byte| !matches!(byte, b'\r' | b'\n')) { offset += 1; }
-                trivia.push(Trivia { kind: TriviaKind::Comment, span: SourceSpan::new(source_id, start, offset) });
+                while bytes
+                    .get(offset)
+                    .is_some_and(|byte| !matches!(byte, b'\r' | b'\n'))
+                {
+                    offset += 1;
+                }
+                trivia.push(Trivia {
+                    kind: TriviaKind::Comment,
+                    span: SourceSpan::new(source_id, start, offset),
+                });
             }
             b'\r' => {
                 let start = offset;
@@ -262,10 +278,24 @@ pub fn lex_lossless(source_id: SourceId, source: &str) -> Result<LexedSource, Ve
                     ));
                 }
             }
-            b'R' if !line_has_code && bytes.get(offset..).is_some_and(|rest| rest.starts_with(b"REM") && rest.get(3).is_none_or(|b| matches!(b, b' ' | b'\t' | b'\r' | b'\n'))) => {
+            b'R' if !line_has_code
+                && bytes.get(offset..).is_some_and(|rest| {
+                    rest.starts_with(b"REM")
+                        && rest
+                            .get(3)
+                            .is_none_or(|b| matches!(b, b' ' | b'\t' | b'\r' | b'\n'))
+                }) => {
                 let start = offset;
-                while bytes.get(offset).is_some_and(|byte| !matches!(byte, b'\r' | b'\n')) { offset += 1; }
-                trivia.push(Trivia { kind: TriviaKind::Comment, span: SourceSpan::new(source_id, start, offset) });
+                while bytes
+                    .get(offset)
+                    .is_some_and(|byte| !matches!(byte, b'\r' | b'\n'))
+                {
+                    offset += 1;
+                }
+                trivia.push(Trivia {
+                    kind: TriviaKind::Comment,
+                    span: SourceSpan::new(source_id, start, offset),
+                });
             }
             byte if byte.is_ascii_alphabetic() => {
                 let start = offset;
@@ -277,7 +307,9 @@ pub fn lex_lossless(source_id: SourceId, source: &str) -> Result<LexedSource, Ve
                     offset += 1;
                 }
                 let text = &source[start..offset];
-                if !line_has_code && text == "DATA" { line_is_data = true; }
+                if !line_has_code && text == "DATA" {
+                    line_is_data = true;
+                }
                 line_has_code = true;
                 tokens.push(Token {
                     kind: TokenKind::Identifier(text.to_owned()),
@@ -298,7 +330,7 @@ pub fn lex_lossless(source_id: SourceId, source: &str) -> Result<LexedSource, Ve
                             kind: TokenKind::Integer(value),
                             span: SourceSpan::new(source_id, start, offset),
                         });
-                    },
+                    }
                     Err(_) => diagnostics.push(diagnostic(
                         "GFA-LEX-0002",
                         DiagnosticCategory::Lexical,
