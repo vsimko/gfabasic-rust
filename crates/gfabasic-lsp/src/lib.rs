@@ -542,7 +542,7 @@ impl JsonParser<'_> {
     fn hex_quad(&mut self) -> Result<u16, JsonParseError> {
         let bytes = self.input.get(self.offset..self.offset + 4).ok_or(())?;
         let mut value = 0u16;
-        for byte in bytes {
+        for &byte in bytes {
             value = value.checked_mul(16).ok_or(())?
                 + match byte {
                     b'0'..=b'9' => (byte - b'0') as u16,
