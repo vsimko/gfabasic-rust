@@ -23,3 +23,17 @@ A rule must identify its authoritative source. Do not infer implementation statu
 Keep checks deterministic and offline. Use warnings for exploratory checks and errors only for reliable invariants. Disable a rule explicitly and document why rather than deleting it to hide a discrepancy. Add fixtures and tests for every new check type.
 
 The validator implementation is tracked in [#249](https://github.com/vsimko/gfabasic-rust/issues/249). The website data generator is tracked in [#250](https://github.com/vsimko/gfabasic-rust/issues/250).
+
+## Generated website data
+
+`validation/project.json` is the explicit, versioned project-status model. Each status claim names repository evidence; the generator checks that evidence files exist and reads workspace package names from `Cargo.toml`. It writes deterministic output to `site/data/project.json`.
+
+Run the complete local workflow from the repository root:
+
+```sh
+python3 scripts/generate_project_data.py
+python3 scripts/validate_repository.py
+python3 -m unittest discover -s tests/tooling
+```
+
+The Pages workflow runs these steps before uploading the site artifact. Edit the model when a project status changes, update its evidence references, and regenerate the site data. Do not hand-edit generated JSON or infer statuses from unstructured issue/commit text.
