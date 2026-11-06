@@ -7,6 +7,7 @@ on:
       - "Cargo.lock"
       - "rust-toolchain.toml"
       - "crates/**"
+      - "tests/corpus/amiga/3.5/combinatorics/**"
       - ".github/workflows/rust.yml"
   push:
     branches:
@@ -16,6 +17,7 @@ on:
       - "Cargo.lock"
       - "rust-toolchain.toml"
       - "crates/**"
+      - "tests/corpus/amiga/3.5/combinatorics/**"
       - ".github/workflows/rust.yml"
 
 permissions:
@@ -47,6 +49,12 @@ jobs:
 
       - name: Run tests
         run: cargo test --workspace --all-targets
+
+      - name: Check verified Amiga 3.5 formatter fixtures
+        run: |
+          for source in tests/corpus/amiga/3.5/combinatorics/*.bas; do
+            cargo run --quiet -p gfabasic-compiler -- fmt --check "$source"
+          done
 
       - name: Build workspace
         run: cargo build --workspace --all-targets
