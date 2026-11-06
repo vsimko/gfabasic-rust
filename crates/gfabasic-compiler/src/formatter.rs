@@ -182,12 +182,22 @@ mod tests {
 
     #[test]
     fn unsupported_syntax_is_rejected_without_output() {
-        let source = "PRINT \"not supported yet\"\n";
-        let mut sources = SourceMap::new();
-        let source_id = sources.add_source("unsupported.bas", source);
-        let errors = format_source(source_id, source).expect_err("strings are not lexed yet");
+        let cases = [
+            "PRINT \"not supported yet\"\n",
+            "REM comment\n",
+            "' apostrophe comment\n",
+            "x=FACT(1) ! trailing comment\n",
+            "DATA 1,2,3\n",
+        ];
 
-        assert!(!errors.is_empty());
+        for source in cases {
+            let mut sources = SourceMap::new();
+            let source_id = sources.add_source("unsupported.bas", source);
+            let errors = format_source(source_id, source)
+                .expect_err("syntax outside the verified formatter subset must be rejected");
+
+            assert!(!errors.is_empty(), "source unexpectedly accepted: {source:?}");
+        }
     }
 
     #[test]
