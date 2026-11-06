@@ -29,6 +29,10 @@ crates/
   gfabasic-platform-linux/
     src/
       sdl3/
+  gfabasic-lsp/
+    src/
+      protocol/
+      documents/
 ```
 
 The compiler crate owns compiler stages and the CLI. The runtime crate owns generated-program core behavior, profile runtime support, and the platform-service contract. The Linux platform crate owns Linux-specific implementations of that contract, including SDL3 integration when selected.
