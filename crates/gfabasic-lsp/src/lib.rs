@@ -316,10 +316,7 @@ fn diagnostic_notification(uri: &str, version: Option<i64>, text: &str) -> Json 
                 object_json([
                     (
                         "range",
-                        object_json([
-                            ("start", position_json(start)),
-                            ("end", position_json(end)),
-                        ]),
+                        object_json([("start", position_json(start)), ("end", position_json(end))]),
                     ),
                     ("severity", Json::Number(severity.to_string())),
                     ("code", Json::String(diagnostic.code)),
@@ -338,7 +335,10 @@ fn diagnostic_notification(uri: &str, version: Option<i64>, text: &str) -> Json 
     params.insert("diagnostics".into(), Json::Array(diagnostics));
     object_json([
         ("jsonrpc", Json::String("2.0".into())),
-        ("method", Json::String("textDocument/publishDiagnostics".into())),
+        (
+            "method",
+            Json::String("textDocument/publishDiagnostics".into()),
+        ),
         ("params", Json::Object(params)),
     ])
 }
