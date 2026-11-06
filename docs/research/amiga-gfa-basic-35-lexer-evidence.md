@@ -201,3 +201,25 @@ The German 1990 book says Amiga GFA-BASIC permits command names as variable name
 ## Source rights
 
 This document contains concise original summaries and bibliographic/page references only. Do not commit, redistribute, or reproduce either supplied PDF, substantial source passages, page images, or historical program listings.
+
+
+## 8. Focused source audit (2026-11-06)
+
+A second retrieval pass over the supplied GFA BASIC 3.5 Interpreter PDF checked the version labels and the passages most likely to be mistaken for 3.5 lexical guarantees. The title page identifies the bundled software as 3.5, but explicitly says the handbook was originally printed for 3.0 and that Chapter 13 is the 3.5 addendum. The following candidate rules remain **unpromoted**:
+
+| Candidate | Passage rechecked | Audit result | 3.5 implementation consequence |
+|---|---|---|---|
+| Editor case handling and command abbreviation | Base manual printed pp. 1-7–1-8; section repeatedly labels editor as GFA-BASIC 3.0 | Editor expands abbreviations and sets command/variable display case when leaving a line; this describes editor behavior in the 3.0 base text, not a 3.5 file-lexer case rule | Do not case-fold identifiers, rewrite keyword case, or accept abbreviations in source files on this evidence |
+| One command per line and comment placement | Base manual printed p. 1-8 and pp. 7-34–7-35 | One command per editor line; REM/remark-line forms and inline ! comments are described in the base text; inline ! is excluded after DATA instructions | Keep physical-line, remark, and inline-comment grammar provisional pending explicit 3.5 confirmation |
+| Variable-name repertoire and suffixes | Base manual printed pp. 2-2–2-3 | The variable-type discussion is explicitly a 3.0 rule; the Float # table/prose contradiction remains | No general identifier/suffix acceptance expansion; retain the existing narrow 3.5 special-name exception only |
+| String delimiters and payload handling | Base manual printed pp. 1-4 and 5-7; DATA p. 5-15 | Quoted strings and comma-separated output/data examples are base-manual syntax; no 3.5 addendum statement resolving escapes was found in this pass | Do not infer quote escaping, comment stripping inside strings, or DATA payload tokenization |
+| Numeric prefixes | Base manual printed pp. 2-16 and 5-15–5-16 | OCR/page-image notes already record conflicting $, %, &H, &X, &O, and &A descriptions/examples; no 3.5 addendum correction found | Do not promote a complete direct numeric-literal prefix grammar |
+| Comment forms | Base manual printed pp. 7-34–7-35 | REM, remark-line shorthand, and inline ! are base-manual descriptions; ! has a DATA restriction | Do not implement ! as an unconditional lexer comment delimiter |
+
+The 3.5 addendum review continues to support only the exact special spellings _DATA, _0…_9 as version-marked lexical forms (printed pp. 13-34–13-35). _DATA= is _DATA followed by =, not a combined identifier. The addendum examples for FACT/VARIAT/COMBIN and GURU do not establish general identifier, keyword-reservation, case, comment, or literal rules.
+
+### Regression gate after this audit
+
+The narrow special-name tests remain the only positive underscore-prefix contract: accept exact _DATA and each _0…_9 spelling, preserve original bytes/spans, and tokenize _DATA= as identifier plus assignment. Negative boundary cases must reject _foo, _10, _DATA2, and _data as a whole (never accept a valid prefix and leave a suffix). These are exact-name boundary tests only. Do not add broad positive tests for identifiers, comments, strings, numeric prefixes, or operators until a 3.5 source passage or a reproducible 3.5 interpreter observation supports each case. Existing FACT/PRINT prototype tests remain scoped to their cited addendum examples and are not a general grammar conformance suite.
+
+This audit adds no newly verified general lexical rule and therefore intentionally makes no production lexer behavior change.

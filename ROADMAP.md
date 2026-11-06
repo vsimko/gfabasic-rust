@@ -119,3 +119,8 @@ The first end-to-end MVP integration gate is tracked separately in [#113](https:
 ## Roadmap maintenance
 
 Update this file when phase order, dependency relationships, or project maturity changes. Update the corresponding GitHub Issue when task scope or acceptance criteria change. Never use this roadmap as a substitute for issue-level technical decisions, and never mark a phase complete solely because its planning document exists.
+
+
+### Lexer evidence audit — 2026-11-06
+
+The supplied 3.5 Interpreter manual was re-audited for editor case/abbreviation handling, physical-line structure, identifiers/suffixes, strings, numeric prefixes, and comments. These passages are in the manual's 3.0 base text; the 3.5 addendum does not confirm them as general 3.5 lexical rules. The only version-marked general lexer exceptions remain exact _DATA and _0…_9 spellings, with _DATA= split before assignment. No lexer behavior was broadened. Existing exact-name positive/negative boundary tests remain the regression gate; broader lexical tests await 3.5 source evidence or reproducible interpreter observations. See the lexer evidence inventory and ADR 0007. Issues #46 and #208 remain open.
