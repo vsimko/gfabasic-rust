@@ -81,7 +81,16 @@
       <div class="section-wrap scope-note"><span class="note-icon">!</span><p><strong>Important scope boundary</strong> — this is not general GFA BASIC support and does not claim compatibility with the original interpreter. Variables are limited to <code>x</code>, <code>y</code> and <code>z</code>, with no reassignment. Arguments must be integer literals: <code>FACT(n)</code> accepts 0–20, while <code>VARIAT(n,k)</code> and <code>COMBIN(n,k)</code> accept 0 ≤ k ≤ n ≤ 20. These are prototype limits, not limits of the GFA BASIC language. General language semantics, the production IR, LLVM backend and runtime remain unimplemented.</p></div>
     </section>
 
-    <section id="tools" class="content-section section-wrap">\n      <div class="section-heading"><div class="eyebrow">03 / DEVELOPER TOOLS</div><h2>Early tools.<br>Explicit boundaries.</h2></div>\n      <div class="resource-grid">\n        <article class="resource-card"><span>IMPLEMENTED SUBSET</span><h3>Source formatter</h3><p>The <code>gfabasic fmt</code> library and CLI format only the currently supported FACT, VARIAT, COMBIN and PRINT syntax. Unsupported syntax is rejected; this is not yet a general GFA BASIC formatter.</p><b>↗</b></article>\n        <article class="resource-card"><span>INITIAL LSP</span><h3>Language server</h3><p>The standalone LSP adapter supports document open/change/close and parser diagnostics. Formatting integration, navigation, completion and rename are not implemented.</p><b>↗</b></article>\n        <article class="resource-card"><span>PROJECT STATUS</span><h3>Research before claims</h3><p>Language rules remain evidence-gated against the Amiga 3.5 references. The implemented editor tools do not imply full language parsing or conformance.</p><b>↗</b></article>\n      </div>\n    </section>\n\n    <section id="architecture" class="content-section section-wrap">
+    <section id="tools" class="content-section section-wrap">
+      <div class="section-heading"><div class="eyebrow">03 / DEVELOPER TOOLS</div><h2>Early tools.<br>Explicit boundaries.</h2></div>
+      <div class="resource-grid">
+        <article class="resource-card"><span>IMPLEMENTED SUBSET</span><h3>Source formatter</h3><p>The <code>gfabasic fmt</code> library and CLI format only the currently supported FACT, VARIAT, COMBIN and PRINT syntax. Unsupported syntax is rejected; this is not yet a general GFA BASIC formatter.</p><b>↗</b></article>
+        <article class="resource-card"><span>INITIAL LSP</span><h3>Language server</h3><p>The standalone LSP adapter supports document open/change/close and parser diagnostics. Formatting integration, navigation, completion and rename are not implemented.</p><b>↗</b></article>
+        <article class="resource-card"><span>PROJECT STATUS</span><h3>Research before claims</h3><p>Language rules remain evidence-gated against the Amiga 3.5 references. The implemented editor tools do not imply full language parsing or conformance.</p><b>↗</b></article>
+      </div>
+    </section>
+
+    <section id="architecture" class="content-section section-wrap">
       <div class="section-heading"><div class="eyebrow">04 / ARCHITECTURE</div><h2>Clear boundaries.<br>Independent layers.</h2></div>
       <p class="section-intro architecture-intro">The planned system separates language semantics from code generation and platform integration. Each layer can evolve without quietly changing the compatibility contract.</p>
       <div class="architecture-flow">
