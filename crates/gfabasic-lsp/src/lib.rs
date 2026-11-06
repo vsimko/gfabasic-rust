@@ -899,4 +899,60 @@ mod tests {
         let output = String::from_utf8(output).unwrap();
         assert!(output.contains("\"textDocumentSync\":1"));
     }
+
+    #[test]
+    fn stdio_recovers_after_malformed_json_and_processes_next_request() {
+        fn frame(body: &str) -> String {
+            format!("Content-Length: {}\\r\\n\\r\\n{}", body.len(), body)
+        }
+        let malformed = "{";
+        let initialize = r#"{"jsonrpc":"2.0","id":7,"method":"initialize","params":{}}"#;
+        let exit = r#"{"jsonrpc":"2.0","method":"exit"}"#;
+        let input = format!("{}{}{}", frame(malformed), frame(initialize), frame(exit));
+        let mut reader = io::Cursor::new(input.into_bytes());
+        let mut output = Vec::new();
+
+        run_stdio(&mut reader, &mut output).unwrap();
+
+        let output = String::from_utf8(output).unwrap();
+        assert!(output.contains("\\"id\\":null"));
+        assert!(output.contains("\\"code\\":-32700"));
+        assert!(output.contains("\\"id\\":7"));
+        assert!(output.contains("\\"textDocumentSync\\":1"));
+    }
+
+    #[test]
+    fn diagnostics_for_multiple_documents_keep_their_uris_and_versions() {
+        let mut documents = DocumentStore::default();
+        let mut outbound = Vec::new();
+        for (uri, version) in [("file:///one.gfa", 3), ("file:///two.gfa", 8)] {
+            let message = object_json([
+                ("jsonrpc", Json::String("2.0".into())),
+                ("method", Json::String("textDocument/didOpen".into())),
+                (
+                    "params",
+                    object_json([(
+                        "textDocument",
+                        object_json([
+                            ("uri", Json::String(uri.into())),
+                            ("languageId", Json::String("gfabasic".into())),
+                            ("version", Json::Number(version.to_string())),
+                            ("text", Json::String("PRINT \\"bad\\"".into())),
+                        ]),
+                    )]),
+                ),
+            ]);
+            assert!(dispatch_with_notifications(message, &mut documents, &mut outbound).is_none());
+        }
+
+        assert_eq!(outbound.len(), 2);
+        let first = outbound[0].get("params").unwrap();
+        let second = outbound[1].get("params").unwrap();
+        assert_eq!(first.string("uri"), Some("file:///one.gfa"));
+        assert_eq!(first.integer("version"), Some(3));
+        assert_eq!(second.string("uri"), Some("file:///two.gfa"));
+        assert_eq!(second.integer("version"), Some(8));
+        assert_eq!(documents.len(), 2);
+    }
+
 }
