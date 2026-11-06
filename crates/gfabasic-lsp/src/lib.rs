@@ -954,5 +954,4 @@ mod tests {
         assert_eq!(second.integer("version"), Some(8));
         assert_eq!(documents.len(), 2);
     }
-
 }
