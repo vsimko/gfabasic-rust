@@ -864,6 +864,14 @@ mod tests {
     }
 
     #[test]
+    fn json_string_serialization_escapes_control_characters() {
+        let value = Json::String("line\nreturn\rtab\t".into());
+        let encoded = stringify(&value);
+        assert_eq!(encoded, r#""line\nreturn\rtab\t""#);
+        assert_eq!(parse_json(encoded.as_bytes()).unwrap(), value);
+    }
+
+    #[test]
     fn dispatch_tracks_full_document_open_change_and_close() {
         let mut store = DocumentStore::default();
         let opened = parse_json(br#"{"jsonrpc":"2.0","method":"textDocument/didOpen","params":{"textDocument":{"uri":"file:///x.gfa","languageId":"gfabasic","version":1,"text":"PRINT 1"}}}"#).unwrap();
