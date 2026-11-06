@@ -346,7 +346,10 @@ fn diagnostic_notification(uri: &str, version: Option<i64>, text: &str) -> Json 
 fn empty_diagnostics_notification(uri: &str) -> Json {
     object_json([
         ("jsonrpc", Json::String("2.0".into())),
-        ("method", Json::String("textDocument/publishDiagnostics".into())),
+        (
+            "method",
+            Json::String("textDocument/publishDiagnostics".into()),
+        ),
         (
             "params",
             object_json([
