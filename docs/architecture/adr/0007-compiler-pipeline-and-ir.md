@@ -86,3 +86,10 @@ The first formatter library increment is exposed independently as `gfabasic_comp
 ## Formatter CLI implementation note (2026-11-06)
 
 The formatter library remains the single formatting implementation. The `gfabasic fmt` CLI writes to stdout by default, supports check-only mode, an explicit output path, and explicitly requested in-place formatting. File destinations are replaced through a sibling temporary file and rename; formatting or source diagnostics return before any write. These CLI capabilities do not expand the supported grammar: comments, string/DATA payloads, broader identifiers, and nested constructs remain rejected until the Amiga 3.5 lexer/parser represent them losslessly. The formatter preserves all accepted token spelling, including mixed-language and Slovak identifiers; it does not case-fold, transliterate, or Unicode-normalize names.
+
+
+## Lexer evidence audit (2026-11-06)
+
+A focused re-audit of the supplied 3.5 Interpreter manual confirms the strict source boundary: the book identifies the bundled software as 3.5 but states that its base text was originally printed for 3.0 and that Chapter 13 is the 3.5 addendum. Editor case/abbreviation handling (printed pp. 1-7–1-8), one-command-per-line and remark behavior (p. 1-8), variable-name/suffix rules (pp. 2-2–2-3), quoted-string examples (pp. 1-4 and 5-7), numeric-prefix descriptions (pp. 2-16 and 5-15–5-16), and REM/inline-! comments (pp. 7-34–7-35) remain inherited 3.0 candidates. None is promoted to a general Amiga 3.5 lexer rule by the 3.5 addendum examples.
+
+The lexer implementation gate therefore remains unchanged: accept only the existing narrow prototype syntax plus the exact addendum spellings _DATA and _0…_9; split _DATA= into _DATA and =; preserve source bytes/spans/trivia; reject unverified underscore lookalikes as whole tokens; and do not infer case folding, general identifiers, string escaping, comment syntax, numeric prefixes, or operator coverage. The evidence inventory records the audit and the corresponding positive/negative regression gate. No implementation behavior is broadened by this audit; issue #46 remains open.
