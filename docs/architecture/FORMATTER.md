@@ -27,7 +27,7 @@ These are project formatting choices, not claims about how the historical interp
 
 Formatting is all-or-nothing: parsing/lexing must succeed before output is returned. The library API performs no file writes, so a failed format cannot modify the input. The same accepted source always produces byte-identical output. Callers that write files must use an atomic replacement strategy and must not write when formatting returns diagnostics.
 
-The formatter currently normalizes line endings to LF. Preserving original line endings and adding explicit output policy options are deferred until the CLI contract is implemented.
+The formatter currently normalizes line endings to LF. Preserving original line endings and adding explicit output policy options are deferred.
 
 ## API
 
@@ -46,8 +46,12 @@ let formatted = format_source(source_id, source)?;
 
 The `gfabasic fmt` command uses this library directly. It writes formatted text to stdout by default; `--check` returns 1 when formatting would change the file and never writes; `-o <path>` writes to a separate destination; and `--in-place` explicitly replaces the source. The two write modes create a sibling temporary file, flush it, and rename it over the destination. Formatting diagnostics and read failures return before any write. `--check` cannot be combined with either write option, and `-o` cannot be combined with `--in-place`.
 
+## CI fixture gate
+
+Rust CI runs `gfabasic fmt --check` over the verified Amiga 3.5 combinatorics fixtures under `tests/corpus/amiga/3.5/combinatorics/`. Those files are kept in canonical prototype style. This gate covers only the currently accepted FACT/VARIAT/COMBIN/PRINT subset; it is not a corpus-wide conformance runner and does not imply support for other verified corpus constructs such as matrix statements.
+
 ## Next increments
 
 1. Extend lossless lexing and formatting only alongside verified comment, string/DATA, identifier, and grammar support.
-2. Add corpus-wide formatting checks only after the supported fixture policy and canonical style are established.
+2. Add further fixture paths to the formatter check only when the parser can validate them without dropping source content.
 3. Share the same formatter implementation with LSP document/range formatting; editor edits must be version-bound as specified by issue #208 and ADR 0012.
