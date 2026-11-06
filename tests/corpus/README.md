@@ -41,6 +41,10 @@ This validation only checks corpus metadata. It does not make a candidate fixtur
 
 A fixture may use `verified` only after its syntax and expected behavior are checked against the cited page image or a named trusted interpreter. OCR text alone is not sufficient for OCR-sensitive punctuation or signatures. A candidate fixture must not be used as a compiler acceptance rule.
 
+## Formatter corpus policy
+
+Formatter fixtures must be independently authored and retain comment payloads exactly. The first comment cases cover full-line `REM`, full-line apostrophe comments, and trailing `!` comments. DATA-line comment behavior is intentionally excluded because the handbook states that `!` is not a comment delimiter in DATA instructions. String/DATA payload fixtures remain candidates until their lexical delimiters and payload rules are verified from Amiga 3.5 evidence. Identifier tests must compare original UTF-8 byte sequences and must never normalize Unicode.
+
 ## Evidence policy
 
 - Keep Amiga and Atari ST fixtures in separate trees.
