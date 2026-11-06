@@ -70,6 +70,14 @@ The generated program links the runtime components required by its selected targ
 - Review dependency maintenance, platform support, license, security advisories, native build requirements, and reproducibility before adding a dependency. Avoid wildcard versions and build scripts that download unpinned binaries.
 - Keep unsafe FFI in the narrowest possible adapter modules. Document each unsafe boundary and its invariants; do not spread platform FFI into compiler/frontend crates.
 
+## Language server boundary
+
+The language server is an editor-facing protocol adapter over compiler-owned services. A separate `gfabasic-lsp` crate/binary is justified by its JSON-RPC transport, process lifecycle, and protocol dependencies; it must depend on shared compiler interfaces rather than reimplementing them. Keep lexer, parser, semantic analysis, symbol indexing, and formatter as compiler-owned modules or libraries.
+
+The LSP crate must not introduce dependencies on VS Code, IntelliJ, LLVM, SDL3, or generated-program runtime implementations. Editor extensions are separate projects under `editors/` and communicate with the server through LSP. The server delegates builds to the common compiler/build pipeline.
+
+See [language tooling architecture](LANGUAGE-TOOLING.md), [ADR 0012](adr/0012-language-server-and-editor-integration.md), and issues [#209](https://github.com/vsimko/gfabasic-rust/issues/209)–[#211](https://github.com/vsimko/gfabasic-rust/issues/211).
+
 ## Stable and internal interfaces
 
 The crate split is an implementation boundary, not a promise that every Rust item is a stable public API. Keep internal modules private by default. Expose only the interfaces required between compiler/runtime/platform crates. Version the generated-program runtime ABI independently from the compiler product, as described in [VERSIONING.md](VERSIONING.md).
