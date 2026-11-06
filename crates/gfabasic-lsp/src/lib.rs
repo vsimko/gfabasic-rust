@@ -221,37 +221,32 @@ fn dispatch(message: Json, documents: &mut DocumentStore) -> Option<Json> {
             None
         }
         "textDocument/didOpen" => {
-            if let Some(document) = params.get_path(&["textDocument"]) {
-                if let (Some(uri), Some(language_id), Some(version), Some(text)) = (
+            if let Some(document) = params.get_path(&["textDocument"])
+                && let (Some(uri), Some(language_id), Some(version), Some(text)) = (
                     document.string("uri"),
                     document.string("languageId"),
                     document.integer("version"),
                     document.string("text"),
-                ) {
-                    documents.open(uri.into(), language_id.into(), version, text.into());
-                }
+                )
+            {
+                documents.open(uri.into(), language_id.into(), version, text.into());
             }
             None
         }
         "textDocument/didChange" => {
-            if let Some(document) = params.get_path(&["textDocument"]) {
-                if let (Some(uri), Some(version)) =
+            // Full synchronization is advertised. Reject ranged changes rather
+            // than applying them with incomplete edit semantics.
+            if let Some(document) = params.get_path(&["textDocument"])
+                && let (Some(uri), Some(version)) =
                     (document.string("uri"), document.integer("version"))
-                {
-                    // Full synchronization is advertised. Reject ranged changes
-                    // rather than applying them with incomplete edit semantics.
-                    if let Some(Json::Array(changes)) = params.get("contentChanges") {
-                        if changes.len() == 1
-                            && changes[0]
-                                .get("range")
-                                .is_none_or(|range| matches!(range, Json::Null))
-                        {
-                            if let Some(text) = changes[0].string("text") {
-                                documents.change(uri, version, text.into());
-                            }
-                        }
-                    }
-                }
+                && let Some(Json::Array(changes)) = params.get("contentChanges")
+                && changes.len() == 1
+                && changes[0]
+                    .get("range")
+                    .is_none_or(|range| matches!(range, Json::Null))
+                && let Some(text) = changes[0].string("text")
+            {
+                documents.change(uri, version, text.into());
             }
             None
         }
@@ -287,12 +282,12 @@ fn read_message<R: BufRead>(reader: &mut R) -> io::Result<Option<Vec<u8>>> {
         if line == "\r\n" || line == "\n" {
             break;
         }
-        if let Some((name, value)) = line.trim_end_matches(['\r', '\n']).split_once(':') {
-            if name.eq_ignore_ascii_case("Content-Length") {
-                content_length = Some(value.trim().parse::<usize>().map_err(|_| {
-                    io::Error::new(io::ErrorKind::InvalidData, "invalid Content-Length")
-                })?);
-            }
+        if let Some((name, value)) = line.trim_end_matches(['\r', '\n']).split_once(':')
+            && name.eq_ignore_ascii_case("Content-Length")
+        {
+            content_length = Some(value.trim().parse::<usize>().map_err(|_| {
+                io::Error::new(io::ErrorKind::InvalidData, "invalid Content-Length")
+            })?);
         }
     }
     let length = content_length
