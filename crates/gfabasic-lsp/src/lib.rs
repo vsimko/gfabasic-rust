@@ -423,11 +423,14 @@ fn quote(value: &str) -> String {
     output
 }
 
-fn parse_json(input: &[u8]) -> Result<Json, ()> {
+#[derive(Clone, Copy, Debug)]
+struct JsonParseError;
+
+fn parse_json(input: &[u8]) -> Result<Json, JsonParseError> {
     let mut parser = JsonParser { input, offset: 0 };
     let value = parser.value()?;
     parser.whitespace();
-    (parser.offset == input.len()).then_some(value).ok_or(())
+    (parser.offset == input.len()).then_some(value).ok_or(JsonParseError)
 }
 
 struct JsonParser<'a> {
@@ -446,7 +449,7 @@ impl JsonParser<'_> {
         }
     }
 
-    fn value(&mut self) -> Result<Json, ()> {
+    fn value(&mut self) -> Result<Json, JsonParseError> {
         self.whitespace();
         match self.input.get(self.offset).copied().ok_or(())? {
             b'n' => {
@@ -465,11 +468,11 @@ impl JsonParser<'_> {
             b'[' => self.array(),
             b'{' => self.object(),
             b'-' | b'0'..=b'9' => self.number(),
-            _ => Err(()),
+            _ => Err(JsonParseError),
         }
     }
 
-    fn literal(&mut self, literal: &[u8]) -> Result<(), ()> {
+    fn literal(&mut self, literal: &[u8]) -> Result<(), JsonParseError> {
         if self.input.get(self.offset..self.offset + literal.len()) == Some(literal) {
             self.offset += literal.len();
             Ok(())
@@ -478,7 +481,7 @@ impl JsonParser<'_> {
         }
     }
 
-    fn string(&mut self) -> Result<String, ()> {
+    fn string(&mut self) -> Result<String, JsonParseError> {
         self.offset += 1;
         let mut result = String::new();
         loop {
@@ -527,7 +530,7 @@ impl JsonParser<'_> {
                 }
                 0x00..=0x1f => return Err(()),
                 _ => {
-                    let tail = std::str::from_utf8(&self.input[self.offset..]).map_err(|_| ())?;
+                    let tail = std::str::from_utf8(&self.input[self.offset..]).map_err(|_| JsonParseError)?;
                     let character = tail.chars().next().ok_or(())?;
                     result.push(character);
                     self.offset += character.len_utf8();
@@ -536,7 +539,7 @@ impl JsonParser<'_> {
         }
     }
 
-    fn hex_quad(&mut self) -> Result<u16, ()> {
+    fn hex_quad(&mut self) -> Result<u16, JsonParseError> {
         let bytes = self.input.get(self.offset..self.offset + 4).ok_or(())?;
         let mut value = 0u16;
         for byte in bytes {
