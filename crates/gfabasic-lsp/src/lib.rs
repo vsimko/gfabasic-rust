@@ -24,19 +24,22 @@ pub struct DocumentStore {
 }
 
 impl DocumentStore {
-    pub fn open(
-        &mut self,
-        uri: String,
-        language_id: String,
-        version: i64,
-        text: String,
-    ) -> bool {
-        if self.documents.get(&uri).is_some_and(|old| version <= old.version) {
+    pub fn open(&mut self, uri: String, language_id: String, version: i64, text: String) -> bool {
+        if self
+            .documents
+            .get(&uri)
+            .is_some_and(|old| version <= old.version)
+        {
             return false;
         }
         self.documents.insert(
             uri.clone(),
-            TextDocument { uri, language_id, version, text },
+            TextDocument {
+                uri,
+                language_id,
+                version,
+                text,
+            },
         );
         true
     }
@@ -193,15 +196,24 @@ fn dispatch(message: Json, documents: &mut DocumentStore) -> Option<Json> {
     let params = object.get("params").cloned().unwrap_or(Json::Null);
 
     match method {
-        "initialize" => id.map(|id| success_response(id, object_json([
-            ("capabilities", object_json([
-                ("textDocumentSync", Json::Number("1".into())),
-            ])),
-            ("serverInfo", object_json([
-                ("name", Json::String("gfabasic-lsp".into())),
-                ("version", Json::String(env!("CARGO_PKG_VERSION").into())),
-            ])),
-        ]))),
+        "initialize" => id.map(|id| {
+            success_response(
+                id,
+                object_json([
+                    (
+                        "capabilities",
+                        object_json([("textDocumentSync", Json::Number("1".into()))]),
+                    ),
+                    (
+                        "serverInfo",
+                        object_json([
+                            ("name", Json::String("gfabasic-lsp".into())),
+                            ("version", Json::String(env!("CARGO_PKG_VERSION").into())),
+                        ]),
+                    ),
+                ]),
+            )
+        }),
         "initialized" => None,
         "shutdown" => id.map(|id| success_response(id, Json::Null)),
         "exit" => {
@@ -230,7 +242,9 @@ fn dispatch(message: Json, documents: &mut DocumentStore) -> Option<Json> {
                     // rather than applying them with incomplete edit semantics.
                     if let Some(Json::Array(changes)) = params.get("contentChanges") {
                         if changes.len() == 1
-                            && changes[0].get("range").is_none_or(|range| matches!(range, Json::Null))
+                            && changes[0]
+                                .get("range")
+                                .is_none_or(|range| matches!(range, Json::Null))
                         {
                             if let Some(text) = changes[0].string("text") {
                                 documents.change(uri, version, text.into());
@@ -261,7 +275,10 @@ fn read_message<R: BufRead>(reader: &mut R) -> io::Result<Option<Vec<u8>>> {
         let mut line = String::new();
         if reader.read_line(&mut line)? == 0 {
             return if saw_header {
-                Err(io::Error::new(io::ErrorKind::UnexpectedEof, "incomplete LSP headers"))
+                Err(io::Error::new(
+                    io::ErrorKind::UnexpectedEof,
+                    "incomplete LSP headers",
+                ))
             } else {
                 Ok(None)
             };
@@ -278,11 +295,13 @@ fn read_message<R: BufRead>(reader: &mut R) -> io::Result<Option<Vec<u8>>> {
             }
         }
     }
-    let length = content_length.ok_or_else(|| {
-        io::Error::new(io::ErrorKind::InvalidData, "missing Content-Length")
-    })?;
+    let length = content_length
+        .ok_or_else(|| io::Error::new(io::ErrorKind::InvalidData, "missing Content-Length"))?;
     if length > MAX_MESSAGE_BYTES {
-        return Err(io::Error::new(io::ErrorKind::InvalidData, "LSP message too large"));
+        return Err(io::Error::new(
+            io::ErrorKind::InvalidData,
+            "LSP message too large",
+        ));
     }
     let mut body = vec![0; length];
     reader.read_exact(&mut body)?;
@@ -307,35 +326,56 @@ enum Json {
 
 impl Json {
     fn get(&self, key: &str) -> Option<&Json> {
-        match self { Self::Object(map) => map.get(key), _ => None }
+        match self {
+            Self::Object(map) => map.get(key),
+            _ => None,
+        }
     }
     fn get_path(&self, path: &[&str]) -> Option<&Json> {
         path.iter().try_fold(self, |value, key| value.get(key))
     }
     fn string(&self, key: &str) -> Option<&str> {
-        match self.get(key)? { Self::String(value) => Some(value), _ => None }
+        match self.get(key)? {
+            Self::String(value) => Some(value),
+            _ => None,
+        }
     }
     fn integer(&self, key: &str) -> Option<i64> {
-        match self.get(key)? { Self::Number(value) => value.parse().ok(), _ => None }
+        match self.get(key)? {
+            Self::Number(value) => value.parse().ok(),
+            _ => None,
+        }
     }
 }
 
 fn object_json<const N: usize>(fields: [(&str, Json); N]) -> Json {
-    Json::Object(fields.into_iter().map(|(key, value)| (key.into(), value)).collect())
+    Json::Object(
+        fields
+            .into_iter()
+            .map(|(key, value)| (key.into(), value))
+            .collect(),
+    )
 }
 
 fn success_response(id: Json, result: Json) -> Json {
-    object_json([("jsonrpc", Json::String("2.0".into())), ("id", id), ("result", result)])
+    object_json([
+        ("jsonrpc", Json::String("2.0".into())),
+        ("id", id),
+        ("result", result),
+    ])
 }
 
 fn error_response(id: Json, code: i64, message: &str) -> Json {
     object_json([
         ("jsonrpc", Json::String("2.0".into())),
         ("id", id),
-        ("error", object_json([
-            ("code", Json::Number(code.to_string())),
-            ("message", Json::String(message.into())),
-        ])),
+        (
+            "error",
+            object_json([
+                ("code", Json::Number(code.to_string())),
+                ("message", Json::String(message.into())),
+            ]),
+        ),
     ])
 }
 
@@ -345,11 +385,21 @@ fn stringify(value: &Json) -> String {
         Json::Bool(value) => value.to_string(),
         Json::Number(value) => value.clone(),
         Json::String(value) => quote(value),
-        Json::Array(values) => format!("[{}]", values.iter().map(stringify).collect::<Vec<_>>().join(",")),
+        Json::Array(values) => format!(
+            "[{}]",
+            values.iter().map(stringify).collect::<Vec<_>>().join(",")
+        ),
         Json::Object(values) => {
             let mut entries: Vec<_> = values.iter().collect();
             entries.sort_by_key(|(key, _)| *key);
-            format!("{{{}}}", entries.into_iter().map(|(key, value)| format!("{}:{}", quote(key), stringify(value))).collect::<Vec<_>>().join(","))
+            format!(
+                "{{{}}}",
+                entries
+                    .into_iter()
+                    .map(|(key, value)| format!("{}:{}", quote(key), stringify(value)))
+                    .collect::<Vec<_>>()
+                    .join(",")
+            )
         }
     }
 }
@@ -387,7 +437,11 @@ struct JsonParser<'a> {
 
 impl JsonParser<'_> {
     fn whitespace(&mut self) {
-        while self.input.get(self.offset).is_some_and(u8::is_ascii_whitespace) {
+        while self
+            .input
+            .get(self.offset)
+            .is_some_and(u8::is_ascii_whitespace)
+        {
             self.offset += 1;
         }
     }
@@ -395,9 +449,18 @@ impl JsonParser<'_> {
     fn value(&mut self) -> Result<Json, ()> {
         self.whitespace();
         match self.input.get(self.offset).copied().ok_or(())? {
-            b'n' => { self.literal(b"null")?; Ok(Json::Null) }
-            b't' => { self.literal(b"true")?; Ok(Json::Bool(true)) }
-            b'f' => { self.literal(b"false")?; Ok(Json::Bool(false)) }
+            b'n' => {
+                self.literal(b"null")?;
+                Ok(Json::Null)
+            }
+            b't' => {
+                self.literal(b"true")?;
+                Ok(Json::Bool(true))
+            }
+            b'f' => {
+                self.literal(b"false")?;
+                Ok(Json::Bool(false))
+            }
             b'"' => self.string().map(Json::String),
             b'[' => self.array(),
             b'{' => self.object(),
@@ -410,7 +473,9 @@ impl JsonParser<'_> {
         if self.input.get(self.offset..self.offset + literal.len()) == Some(literal) {
             self.offset += literal.len();
             Ok(())
-        } else { Err(()) }
+        } else {
+            Err(())
+        }
     }
 
     fn string(&mut self) -> Result<String, ()> {
@@ -419,25 +484,42 @@ impl JsonParser<'_> {
         loop {
             let byte = *self.input.get(self.offset).ok_or(())?;
             match byte {
-                b'"' => { self.offset += 1; return Ok(result); }
+                b'"' => {
+                    self.offset += 1;
+                    return Ok(result);
+                }
                 b'\\' => {
                     self.offset += 1;
                     let escaped = *self.input.get(self.offset).ok_or(())?;
                     self.offset += 1;
                     match escaped {
-                        b'"' => result.push('"'), b'\\' => result.push('\\'), b'/' => result.push('/'),
-                        b'b' => result.push('\u{0008}'), b'f' => result.push('\u{000c}'),
-                        b'n' => result.push('\n'), b'r' => result.push('\r'), b't' => result.push('\t'),
+                        b'"' => result.push('"'),
+                        b'\\' => result.push('\\'),
+                        b'/' => result.push('/'),
+                        b'b' => result.push('\u{0008}'),
+                        b'f' => result.push('\u{000c}'),
+                        b'n' => result.push('\n'),
+                        b'r' => result.push('\r'),
+                        b't' => result.push('\t'),
                         b'u' => {
                             let first = self.hex_quad()?;
                             let scalar = if (0xd800..=0xdbff).contains(&first) {
-                                if self.input.get(self.offset..self.offset + 2) != Some(b"\\u") { return Err(()); }
+                                if self.input.get(self.offset..self.offset + 2) != Some(b"\\u") {
+                                    return Err(());
+                                }
                                 self.offset += 2;
                                 let second = self.hex_quad()?;
-                                if !(0xdc00..=0xdfff).contains(&second) { return Err(()); }
-                                0x10000 + (((first - 0xd800) as u32) << 10) + (second - 0xdc00) as u32
-                            } else if (0xdc00..=0xdfff).contains(&first) { return Err(()); }
-                            else { first as u32 };
+                                if !(0xdc00..=0xdfff).contains(&second) {
+                                    return Err(());
+                                }
+                                0x10000
+                                    + (((first - 0xd800) as u32) << 10)
+                                    + (second - 0xdc00) as u32
+                            } else if (0xdc00..=0xdfff).contains(&first) {
+                                return Err(());
+                            } else {
+                                first as u32
+                            };
                             result.push(char::from_u32(scalar).ok_or(())?);
                         }
                         _ => return Err(()),
@@ -459,7 +541,12 @@ impl JsonParser<'_> {
         let mut value = 0u16;
         for byte in bytes {
             value = value.checked_mul(16).ok_or(())?
-                + match byte { b'0'..=b'9' => (byte - b'0') as u16, b'a'..=b'f' => (byte - b'a' + 10) as u16, b'A'..=b'F' => (byte - b'A' + 10) as u16, _ => return Err(()) };
+                + match byte {
+                    b'0'..=b'9' => (byte - b'0') as u16,
+                    b'a'..=b'f' => (byte - b'a' + 10) as u16,
+                    b'A'..=b'F' => (byte - b'A' + 10) as u16,
+                    _ => return Err(()),
+                };
         }
         self.offset += 4;
         Ok(value)
@@ -469,13 +556,19 @@ impl JsonParser<'_> {
         self.offset += 1;
         let mut values = Vec::new();
         self.whitespace();
-        if self.input.get(self.offset) == Some(&b']') { self.offset += 1; return Ok(Json::Array(values)); }
+        if self.input.get(self.offset) == Some(&b']') {
+            self.offset += 1;
+            return Ok(Json::Array(values));
+        }
         loop {
             values.push(self.value()?);
             self.whitespace();
             match self.input.get(self.offset) {
                 Some(b',') => self.offset += 1,
-                Some(b']') => { self.offset += 1; return Ok(Json::Array(values)); }
+                Some(b']') => {
+                    self.offset += 1;
+                    return Ok(Json::Array(values));
+                }
                 _ => return Err(()),
             }
         }
@@ -485,20 +578,30 @@ impl JsonParser<'_> {
         self.offset += 1;
         let mut values = HashMap::new();
         self.whitespace();
-        if self.input.get(self.offset) == Some(&b'}') { self.offset += 1; return Ok(Json::Object(values)); }
+        if self.input.get(self.offset) == Some(&b'}') {
+            self.offset += 1;
+            return Ok(Json::Object(values));
+        }
         loop {
             self.whitespace();
-            if self.input.get(self.offset) != Some(&b'"') { return Err(()); }
+            if self.input.get(self.offset) != Some(&b'"') {
+                return Err(());
+            }
             let key = self.string()?;
             self.whitespace();
-            if self.input.get(self.offset) != Some(&b':') { return Err(()); }
+            if self.input.get(self.offset) != Some(&b':') {
+                return Err(());
+            }
             self.offset += 1;
             let value = self.value()?;
             values.insert(key, value);
             self.whitespace();
             match self.input.get(self.offset) {
                 Some(b',') => self.offset += 1,
-                Some(b'}') => { self.offset += 1; return Ok(Json::Object(values)); }
+                Some(b'}') => {
+                    self.offset += 1;
+                    return Ok(Json::Object(values));
+                }
                 _ => return Err(()),
             }
         }
@@ -506,27 +609,49 @@ impl JsonParser<'_> {
 
     fn number(&mut self) -> Result<Json, ()> {
         let start = self.offset;
-        if self.input.get(self.offset) == Some(&b'-') { self.offset += 1; }
+        if self.input.get(self.offset) == Some(&b'-') {
+            self.offset += 1;
+        }
         match self.input.get(self.offset) {
             Some(b'0') => self.offset += 1,
             Some(b'1'..=b'9') => {
                 self.offset += 1;
-                while self.input.get(self.offset).is_some_and(u8::is_ascii_digit) { self.offset += 1; }
+                while self.input.get(self.offset).is_some_and(u8::is_ascii_digit) {
+                    self.offset += 1;
+                }
             }
             _ => return Err(()),
         }
         if self.input.get(self.offset) == Some(&b'.') {
             self.offset += 1;
             let start_fraction = self.offset;
-            while self.input.get(self.offset).is_some_and(u8::is_ascii_digit) { self.offset += 1; }
-            if self.offset == start_fraction { return Err(()); }
+            while self.input.get(self.offset).is_some_and(u8::is_ascii_digit) {
+                self.offset += 1;
+            }
+            if self.offset == start_fraction {
+                return Err(());
+            }
         }
-        if self.input.get(self.offset).is_some_and(|b| matches!(b, b'e' | b'E')) {
+        if self
+            .input
+            .get(self.offset)
+            .is_some_and(|b| matches!(b, b'e' | b'E'))
+        {
             self.offset += 1;
-            if self.input.get(self.offset).is_some_and(|b| matches!(b, b'+' | b'-')) { self.offset += 1; }
+            if self
+                .input
+                .get(self.offset)
+                .is_some_and(|b| matches!(b, b'+' | b'-'))
+            {
+                self.offset += 1;
+            }
             let start_exponent = self.offset;
-            while self.input.get(self.offset).is_some_and(u8::is_ascii_digit) { self.offset += 1; }
-            if self.offset == start_exponent { return Err(()); }
+            while self.input.get(self.offset).is_some_and(u8::is_ascii_digit) {
+                self.offset += 1;
+            }
+            if self.offset == start_exponent {
+                return Err(());
+            }
         }
         let number = std::str::from_utf8(&self.input[start..self.offset]).map_err(|_| {})?;
         Ok(Json::Number(number.into()))
@@ -540,7 +665,12 @@ mod tests {
     #[test]
     fn document_lifecycle_and_stale_versions() {
         let mut store = DocumentStore::default();
-        assert!(store.open("file:///a.gfa".into(), "gfabasic".into(), 1, "PRINT 1".into()));
+        assert!(store.open(
+            "file:///a.gfa".into(),
+            "gfabasic".into(),
+            1,
+            "PRINT 1".into()
+        ));
         assert!(!store.change("file:///a.gfa", 1, "PRINT 2".into()));
         assert!(!store.change("file:///a.gfa", 0, "PRINT 2".into()));
         assert!(store.change("file:///a.gfa", 2, "PRINT 2".into()));
@@ -595,7 +725,12 @@ mod tests {
     #[test]
     fn rejects_ranged_changes_when_full_sync_is_negotiated() {
         let mut store = DocumentStore::default();
-        store.open("file:///x.gfa".into(), "gfabasic".into(), 1, "PRINT 1".into());
+        store.open(
+            "file:///x.gfa".into(),
+            "gfabasic".into(),
+            1,
+            "PRINT 1".into(),
+        );
         let changed = parse_json(br#"{"jsonrpc":"2.0","method":"textDocument/didChange","params":{"textDocument":{"uri":"file:///x.gfa","version":2},"contentChanges":[{"range":{"start":{"line":0,"character":6},"end":{"line":0,"character":7}},"text":"2"}]}}"#).unwrap();
         dispatch(changed, &mut store);
         assert_eq!(store.get("file:///x.gfa").unwrap().version, 1);
