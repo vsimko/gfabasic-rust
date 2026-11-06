@@ -13,6 +13,7 @@ use gfabasic_compiler::frontend::parse_document;
 use gfabasic_compiler::source::SourceMap;
 
 const MAX_MESSAGE_BYTES: usize = 16 * 1024 * 1024;
+const MAX_HEADER_BYTES: usize = 8 * 1024;
 const MAX_JSON_DEPTH: usize = 128;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -373,26 +374,59 @@ fn position_json((line, character): (u32, u32)) -> Json {
 
 fn read_message<R: BufRead>(reader: &mut R) -> io::Result<Option<Vec<u8>>> {
     let mut content_length = None;
-    let mut saw_header = false;
+    let mut header_bytes = 0usize;
     loop {
-        let mut line = String::new();
-        if reader.read_line(&mut line)? == 0 {
-            return if saw_header {
-                Err(io::Error::new(
-                    io::ErrorKind::UnexpectedEof,
-                    "incomplete LSP headers",
-                ))
-            } else {
-                Ok(None)
-            };
+        let mut line = Vec::new();
+        loop {
+            let available = reader.fill_buf()?;
+            if available.is_empty() {
+                return if header_bytes == 0 && line.is_empty() {
+                    Ok(None)
+                } else {
+                    Err(io::Error::new(
+                        io::ErrorKind::UnexpectedEof,
+                        "incomplete LSP headers",
+                    ))
+                };
+            }
+            let count = available
+                .iter()
+                .position(|byte| *byte == b'\n')
+                .map_or(available.len(), |index| index + 1);
+            if header_bytes
+                .saturating_add(line.len())
+                .saturating_add(count)
+                > MAX_HEADER_BYTES
+            {
+                return Err(io::Error::new(
+                    io::ErrorKind::InvalidData,
+                    "LSP headers too large",
+                ));
+            }
+            let terminated = available.get(count - 1) == Some(&b'\n');
+            line.extend_from_slice(&available[..count]);
+            reader.consume(count);
+            if terminated {
+                break;
+            }
         }
-        saw_header = true;
+        header_bytes += line.len();
+        let line = std::str::from_utf8(&line)
+            .map_err(|_| io::Error::new(io::ErrorKind::InvalidData, "LSP headers must be UTF-8"))?;
         if line == "\r\n" || line == "\n" {
             break;
         }
-        if let Some((name, value)) = line.trim_end_matches(['\r', '\n']).split_once(':')
-            && name.eq_ignore_ascii_case("Content-Length")
-        {
+        let (name, value) = line
+            .trim_end_matches(['\r', '\n'])
+            .split_once(':')
+            .ok_or_else(|| io::Error::new(io::ErrorKind::InvalidData, "invalid LSP header"))?;
+        if name.eq_ignore_ascii_case("Content-Length") {
+            if content_length.is_some() {
+                return Err(io::Error::new(
+                    io::ErrorKind::InvalidData,
+                    "duplicate Content-Length",
+                ));
+            }
             content_length = Some(value.trim().parse::<usize>().map_err(|_| {
                 io::Error::new(io::ErrorKind::InvalidData, "invalid Content-Length")
             })?);
@@ -921,6 +955,26 @@ mod tests {
     fn framing_rejects_messages_over_the_resource_limit() {
         let input = format!("Content-Length: {}\r\n\r\n", MAX_MESSAGE_BYTES + 1);
         let mut reader = io::Cursor::new(input.into_bytes());
+        assert_eq!(
+            read_message(&mut reader).unwrap_err().kind(),
+            io::ErrorKind::InvalidData
+        );
+    }
+
+    #[test]
+    fn framing_rejects_oversized_headers() {
+        let input = format!("X-Padding: {}\r\n\r\n", "x".repeat(MAX_HEADER_BYTES));
+        let mut reader = io::Cursor::new(input.into_bytes());
+        assert_eq!(
+            read_message(&mut reader).unwrap_err().kind(),
+            io::ErrorKind::InvalidData
+        );
+    }
+
+    #[test]
+    fn framing_rejects_duplicate_content_length_headers() {
+        let input = b"Content-Length: 1\r\ncontent-length: 1\r\n\r\n{}";
+        let mut reader = io::Cursor::new(input.as_slice());
         assert_eq!(
             read_message(&mut reader).unwrap_err().kind(),
             io::ErrorKind::InvalidData
