@@ -42,9 +42,12 @@ let formatted = format_source(source_id, source)?;
 # Ok::<(), Vec<gfabasic_compiler::diagnostics::Diagnostic>>(())
 ```
 
+## CLI
+
+The `gfabasic fmt` command uses this library directly. It writes formatted text to stdout by default; `--check` returns 1 when formatting would change the file and never writes; `-o <path>` writes to a separate destination; and `--in-place` explicitly replaces the source. The two write modes create a sibling temporary file, flush it, and rename it over the destination. Formatting diagnostics and read failures return before any write. `--check` cannot be combined with either write option, and `-o` cannot be combined with `--in-place`.
+
 ## Next increments
 
-1. Add the CLI `fmt`, `fmt --check`, explicit output, and explicit in-place modes with atomic writes.
-2. Extend lossless lexing and formatting only alongside verified comment, string/DATA, identifier, and grammar support.
-3. Add corpus-wide formatting checks only after the supported fixture policy and canonical style are established.
-4. Share the same formatter implementation with LSP document/range formatting; editor edits must be version-bound as specified by issue #208 and ADR 0012.
+1. Extend lossless lexing and formatting only alongside verified comment, string/DATA, identifier, and grammar support.
+2. Add corpus-wide formatting checks only after the supported fixture policy and canonical style are established.
+3. Share the same formatter implementation with LSP document/range formatting; editor edits must be version-bound as specified by issue #208 and ADR 0012.

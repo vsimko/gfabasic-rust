@@ -26,7 +26,7 @@ The frontend must retain a lossless representation alongside semantic syntax. Si
 
 Formatting is a frontend consumer, not a compiler/backend stage. The formatter library consumes source text and the same lossless parsed-document contract as semantic analysis; it must not reconstruct source from the semantic AST. It validates the full document before producing output, copies original token spelling from source spans, and currently canonicalizes whitespace only for the supported FACT/VARIAT/COMBIN/PRINT subset. Unsupported syntax returns diagnostics. Comments, literal payloads, broader identifiers, and richer grammar must be added to the lossless lexer/parser before the formatter can claim support. See [formatter style and current support](FORMATTER.md) and [issue #208](https://github.com/vsimko/gfabasic-rust/issues/208).
 
-The formatter library is independent of CLI file I/O, LLVM, runtime, and platform adapters. CLI writes must be atomic and must not occur after diagnostics. LSP formatting must call the same library and bind edits to the document version used to compute them; it must not implement a separate formatter.
+The formatter library is independent of CLI file I/O, LLVM, runtime, and platform adapters. The gfabasic fmt CLI consumes this same library, writes to stdout by default, supports --check, explicit -o, and opt-in --in-place, and uses sibling temporary files plus atomic rename for file replacement. It must not write after diagnostics. LSP formatting must call the same library and bind edits to the document version used to compute them; it must not implement a separate formatter.
 
 ## Bootstrap prototype exception
 
