@@ -6,7 +6,7 @@
 //! features that are not yet backed by the compiler frontend.
 
 use std::collections::HashMap;
-use std::io::{self, BufRead, Read, Write};
+use std::io::{self, BufRead, Write};
 
 const MAX_MESSAGE_BYTES: usize = 16 * 1024 * 1024;
 
@@ -662,7 +662,7 @@ impl JsonParser<'_> {
                 return Err(JsonParseError);
             }
         }
-        let number = std::str::from_utf8(&self.input[start..self.offset]).map_err(|_| {})?;
+        let number = std::str::from_utf8(&self.input[start..self.offset]).map_err(|_| JsonParseError)?;
         Ok(Json::Number(number.into()))
     }
 }
