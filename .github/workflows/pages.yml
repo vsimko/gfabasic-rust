@@ -51,6 +51,8 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          staging_dir="$(mktemp -d)"
+          cp -a site/. "$staging_dir/"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git fetch origin gh-pages || true
@@ -60,8 +62,6 @@ jobs:
             git checkout --orphan gh-pages
             git rm -rf . >/dev/null 2>&1 || true
           fi
-          staging_dir="$(mktemp -d)"
-          cp -a site/. "$staging_dir/"
           rsync -a --delete --exclude='.git/' --exclude='pr-preview/' "$staging_dir/" ./
           rm -rf "$staging_dir"
           git add -f -A
