@@ -284,7 +284,7 @@ fn dispatch_with_notifications(
                 .and_then(|document| document.string("uri"))
                 && documents.close(uri)
             {
-                outbound.push(diagnostic_notification(uri, None, ""));
+                outbound.push(empty_diagnostics_notification(uri));
             }
             None
         }
@@ -341,6 +341,20 @@ fn diagnostic_notification(uri: &str, version: Option<i64>, text: &str) -> Json 
         ("jsonrpc", Json::String("2.0".into())),
         ("method", Json::String("textDocument/publishDiagnostics".into())),
         ("params", Json::Object(params)),
+    ])
+}
+
+fn empty_diagnostics_notification(uri: &str) -> Json {
+    object_json([
+        ("jsonrpc", Json::String("2.0".into())),
+        ("method", Json::String("textDocument/publishDiagnostics".into())),
+        (
+            "params",
+            object_json([
+                ("uri", Json::String(uri.into())),
+                ("diagnostics", Json::Array(Vec::new())),
+            ]),
+        ),
     ])
 }
 
@@ -828,6 +842,47 @@ mod tests {
         dispatch(changed, &mut store);
         assert_eq!(store.get("file:///x.gfa").unwrap().version, 1);
         assert_eq!(store.get("file:///x.gfa").unwrap().text, "PRINT 1");
+    }
+
+    #[test]
+    fn publishes_compiler_diagnostics_and_clears_them_on_close() {
+        let mut store = DocumentStore::default();
+        let mut outbound = Vec::new();
+        let opened = parse_json(br#"{"jsonrpc":"2.0","method":"textDocument/didOpen","params":{"textDocument":{"uri":"file:///bad.gfa","languageId":"gfabasic","version":1,"text":"PRINT \\"bad\\""}}}"#).unwrap();
+        dispatch_with_notifications(opened, &mut store, &mut outbound);
+        assert_eq!(outbound.len(), 1);
+        assert_eq!(
+            outbound[0].string("method"),
+            Some("textDocument/publishDiagnostics")
+        );
+        let diagnostics = outbound[0]
+            .get("params")
+            .and_then(|params| params.get("diagnostics"))
+            .and_then(|value| match value {
+                Json::Array(items) => Some(items),
+                _ => None,
+            })
+            .unwrap();
+        assert!(!diagnostics.is_empty());
+        assert_eq!(
+            outbound[0]
+                .get("params")
+                .and_then(|params| params.integer("version")),
+            Some(1)
+        );
+
+        outbound.clear();
+        let closed = parse_json(br#"{"jsonrpc":"2.0","method":"textDocument/didClose","params":{"textDocument":{"uri":"file:///bad.gfa"}}}"#).unwrap();
+        dispatch_with_notifications(closed, &mut store, &mut outbound);
+        let cleared = outbound[0]
+            .get("params")
+            .and_then(|params| params.get("diagnostics"))
+            .and_then(|value| match value {
+                Json::Array(items) => Some(items),
+                _ => None,
+            })
+            .unwrap();
+        assert!(cleared.is_empty());
     }
 
     #[test]
