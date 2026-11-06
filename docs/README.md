@@ -27,7 +27,6 @@ This index is the entry point for project documentation. It separates user guida
 | Architecture | [`architecture/README.md`](architecture/README.md) | Implementers; system boundaries and architecture document index |
 | Language tooling and editor integration | [`architecture/LANGUAGE-TOOLING.md`](architecture/LANGUAGE-TOOLING.md) | Implementers; shared LSP server, editor boundaries, diagnostics, formatting, and safe refactoring |
 | Frontend fuzzing strategy | [`architecture/FUZZING.md`](architecture/FUZZING.md) | Frontend implementers; planned fuzz targets, corpus separation, resource budgets, and CI policy |
-| Language server decision | [`architecture/adr/0012-language-server-and-editor-integration.md`](architecture/adr/0012-language-server-and-editor-integration.md) | Maintainers; accepted LSP boundary and editor integration strategy |
 | Architecture decisions | [`architecture/adr/TEMPLATE.md`](architecture/adr/TEMPLATE.md) | Maintainers; structure for numbered, reviewable decisions |
 | Language and API research | [`reference/README.md`](reference/README.md) | Researchers; source-backed, dialect/version-specific notes |
 | Source provenance | [`reference-sources.md`](reference-sources.md) | Researchers and reviewers; source identity, access, licensing, and evidence |
