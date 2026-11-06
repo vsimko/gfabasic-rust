@@ -1,38 +1,19 @@
-# Architecture
-
-This directory contains the normative architecture baseline for `gfabasic-rust`.
-
-## Status vocabulary
-
-- **Accepted**: a project decision. Implementation must follow it unless a later decision supersedes it.
-- **Proposed**: a candidate direction that still requires review or evidence.
-- **Open**: unresolved. Do not implement behavior by guessing.
-- **Deferred**: intentionally outside the current implementation scope.
-- **Verified**: supported by an identified primary reference or reproducible compatibility evidence.
-- **Inferred**: a reasoned interpretation that is not directly established by a source.
-- **Disputed**: reliable sources or observed implementations disagree.
-- **Unknown**: evidence is not currently available.
-
-A planned technology or target is not an implementation claim. A language feature is not supported merely because it appears in a source inventory.
-
-## Project baseline
-
-The project intends to provide a reusable GFA BASIC compiler and runtime in Rust. Native executable generation is the primary planned output. LLVM is the planned code-generation infrastructure. The first planned output target is Linux x86-64 with the GNU ABI and ELF executable format. SDL3 is a planned adapter for Linux graphics, window, and input integration.
-
-These are planning assumptions, not evidence that these components are implemented or that a particular GFA BASIC dialect is fully supported.
-
-The first normative source-language target is Amiga GFA BASIC interpreter 3.5, accepted in [ADR 0009](adr/0009-initial-source-dialect-amiga-gfa-basic-3.5.md). [ADR 0008](adr/0008-initial-source-dialect-amiga-gfa-basic-3.0.md) preserves the superseded 3.0 decision. Atari ST GFA BASIC V2.xx/V3.0 remains research-only for the initial compiler target. The language core is separate from platform API profiles. Amiga and Atari ST profiles are planned as independent choices. The selected source dialect/version, API profile set, build host, and output target must be represented as separate configuration concepts.
-
 ## Architecture documents
 
 | Topic | Scope | Document | Tracking |
 |---|---|---|---|
+| Repository consistency validation | Deterministic Python/JSON checks for drift between repository sources | [VALIDATION.md](VALIDATION.md); [ADR 0013](adr/0013-repository-consistency-validation.md) | architecture [#248](https://github.com/vsimko/gfabasic-rust/issues/248), validator [#249](https://github.com/vsimko/gfabasic-rust/issues/249), website generator [#250](https://github.com/vsimko/gfabasic-rust/issues/250) |
+| Website previews | Per-PR preview URLs and automatic cleanup after PR closure | [WEBSITE_PREVIEWS.md](WEBSITE_PREVIEWS.md) |
+| Topic | Scope | Document | Tracking |
+|---|---|---|---|
 | Project goals and compatibility | Purpose, non-goals, compatibility dimensions | [GOALS.md](GOALS.md) | [#2](https://github.com/vsimko/gfabasic-rust/issues/2) |
-| Dialects and versions | Source dialect identity and version-specific rules | [DIALECTS.md](DIALECTS.md); [ADR 0009](adr/0009-initial-source-dialect-amiga-gfa-basic-3.5.md); [superseded ADR 0008](adr/0008-initial-source-dialect-amiga-gfa-basic-3.0.md); [Amiga GFA BASIC 3.0 historical research](../reference/amiga-gfa-basic-3.0.md); [Atari ST GFA BASIC V2.xx/V3.0 research draft](../reference/atari-gfa-basic-3.0.md) | [#3](https://github.com/vsimko/gfabasic-rust/issues/3) |
+| Dialects and versions | Source dialect identity and version-specific rules | [DIALECTS.md](DIALECTS.md); [Amiga 3.5 lexer evidence inventory](../research/amiga-gfa-basic-35-lexer-evidence.md); [ADR 0009](adr/0009-initial-source-dialect-amiga-gfa-basic-3.5.md); [superseded ADR 0008](adr/0008-initial-source-dialect-amiga-gfa-basic-3.0.md); [Amiga GFA BASIC 3.0 historical research](../reference/amiga-gfa-basic-3.0.md); [Atari ST GFA BASIC V2.xx/V3.0 research draft](../reference/atari-gfa-basic-3.0.md) | [#3](https://github.com/vsimko/gfabasic-rust/issues/3) |
 | Target model | Host/target distinction and target capabilities | [TARGETS.md](TARGETS.md); [ADR 0003](adr/0003-target-model.md) | [#4](https://github.com/vsimko/gfabasic-rust/issues/4) |
 | API profiles | Language core and independently selectable Amiga/Atari ST API profiles | [API-PROFILES.md](API-PROFILES.md); [ADR 0004](adr/0004-api-profile-model.md); [Amiga API research draft](../reference/amiga-gfa-api.md); [Atari ST API research draft](../reference/atari-gfa-api.md) | [#5](https://github.com/vsimko/gfabasic-rust/issues/5), [#24](https://github.com/vsimko/gfabasic-rust/issues/24), [#25](https://github.com/vsimko/gfabasic-rust/issues/25) |
+| Language tooling and editor integration | [LANGUAGE-TOOLING.md](LANGUAGE-TOOLING.md); [ADR 0012](adr/0012-language-server-and-editor-integration.md) | Shared compiler frontend, LSP server, editor client boundaries, and refactoring safety | [#209](https://github.com/vsimko/gfabasic-rust/issues/209), [#210](https://github.com/vsimko/gfabasic-rust/issues/210), [#211](https://github.com/vsimko/gfabasic-rust/issues/211) |
 | Compiler pipeline and IR | Frontend stages, semantic analysis, typed IR, LLVM boundary | [PIPELINE-AND-IR.md](PIPELINE-AND-IR.md); [ADR 0007](adr/0007-compiler-pipeline-and-ir.md) | [#6](https://github.com/vsimko/gfabasic-rust/issues/6) |
-| Language tooling and editor integration | Shared compiler frontend, LSP server, editor client boundaries, refactoring safety | [LANGUAGE-TOOLING.md](LANGUAGE-TOOLING.md); [ADR 0012](adr/0012-language-server-and-editor-integration.md) | [#209](https://github.com/vsimko/gfabasic-rust/issues/209), [#210](https://github.com/vsimko/gfabasic-rust/issues/210), [#211](https://github.com/vsimko/gfabasic-rust/issues/211) |
+| Source formatting | Lossless, evidence-gated formatter library and canonical style for the implemented subset | [FORMATTER.md](FORMATTER.md) | [#208](https://github.com/vsimko/gfabasic-rust/issues/208) |
+| Language server and editor integration | Shared compiler frontend, LSP lifecycle, UTF-16 positions, versioned edits, capability gates | [ADR 0012](adr/0012-language-server-and-editor-integration.md) (proposed) | [#209](https://github.com/vsimko/gfabasic-rust/issues/209) |
 | Diagnostics and compatibility reporting | Stable diagnostic codes, source locations, support outcomes, migration guidance | [DIAGNOSTICS.md](DIAGNOSTICS.md) | [#26](https://github.com/vsimko/gfabasic-rust/issues/26) |
 | Runtime | Runtime layers and SDL3 adapter boundary | [RUNTIME.md](RUNTIME.md) | [#7](https://github.com/vsimko/gfabasic-rust/issues/7) |
 | Memory model | Storage, pointers, hardware access, safety policy | [MEMORY.md](MEMORY.md) | [#8](https://github.com/vsimko/gfabasic-rust/issues/8) |
