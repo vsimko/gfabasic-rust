@@ -32,7 +32,7 @@ pub fn format_source(source_id: SourceId, source: &str) -> Result<String, Vec<Di
             TokenKind::End => break,
             TokenKind::Newline => {
                 if line_has_tokens {
-                    output.push('\\n');
+                    output.push('\n');
                     line_has_tokens = false;
                 }
                 previous = None;
@@ -54,7 +54,7 @@ pub fn format_source(source_id: SourceId, source: &str) -> Result<String, Vec<Di
     }
 
     if line_has_tokens {
-        output.push('\\n');
+        output.push('\n');
     }
 
     Ok(output)
@@ -110,26 +110,26 @@ mod tests {
 
     #[test]
     fn canonicalizes_supported_whitespace_and_line_endings() {
-        let source = "  x=FACT(0001)\\r\\ny = VARIAT(5,2)\\nPRINT   x,y,z";
+        let source = "  x=FACT(0001)\\r\ny = VARIAT(5,2)\nPRINT   x,y,z";
         assert_eq!(
             format(source),
-            "x = FACT(0001)\\ny = VARIAT(5, 2)\\nPRINT x, y, z\\n"
+            "x = FACT(0001)\ny = VARIAT(5, 2)\nPRINT x, y, z\n"
         );
     }
 
     #[test]
     fn preserves_identifier_and_intrinsic_spelling_exactly() {
-        let source = "x=FACT(1)\\nPRINT x\\n";
-        assert_eq!(format(source), "x = FACT(1)\\nPRINT x\\n");
+        let source = "x=FACT(1)\nPRINT x\n";
+        assert_eq!(format(source), "x = FACT(1)\nPRINT x\n");
     }
 
     #[test]
     fn golden_cases_cover_each_supported_statement() {
         let cases = [
-            ("x=FACT(0001)", "x = FACT(0001)\\n"),
-            ("y=VARIAT(5,2)", "y = VARIAT(5, 2)\\n"),
-            ("z=COMBIN(5,2)", "z = COMBIN(5, 2)\\n"),
-            ("PRINT   x,y,z", "PRINT x, y, z\\n"),
+            ("x=FACT(0001)", "x = FACT(0001)\n"),
+            ("y=VARIAT(5,2)", "y = VARIAT(5, 2)\n"),
+            ("z=COMBIN(5,2)", "z = COMBIN(5, 2)\n"),
+            ("PRINT   x,y,z", "PRINT x, y, z\n"),
         ];
 
         for (source, expected) in cases {
@@ -140,11 +140,11 @@ mod tests {
     #[test]
     fn formatting_is_idempotent_across_supported_corpus() {
         let cases = [
-            "x=FACT(1)\\r\\nPRINT   x\\r\\n",
-            "y = VARIAT(5, 2)\\n",
+            "x=FACT(1)\\r\nPRINT   x\\r\n",
+            "y = VARIAT(5, 2)\n",
             "z=COMBIN(0005,02)",
-            "\\n\\nx=FACT(3)\\n\\nPRINT x,y,z\\n",
-            "x=FACT(1)\\ny=VARIAT(5,2)\\nz=COMBIN(5,2)\\nPRINT x,y,z\\n",
+            "\n\nx=FACT(3)\n\nPRINT x,y,z\n",
+            "x=FACT(1)\ny=VARIAT(5,2)\nz=COMBIN(5,2)\nPRINT x,y,z\n",
         ];
 
         for source in cases {
@@ -156,11 +156,11 @@ mod tests {
     #[test]
     fn formatting_preserves_parsed_program_meaning() {
         let cases = [
-            "x=FACT(2)\\n",
-            "y=VARIAT(5,2)\\n",
-            "z=COMBIN(5,2)\\n",
-            "PRINT x,y,z\\n",
-            "x=FACT(2)\\ny=VARIAT(5,2)\\nz=COMBIN(5,2)\\nPRINT x,y,z\\n",
+            "x=FACT(2)\n",
+            "y=VARIAT(5,2)\n",
+            "z=COMBIN(5,2)\n",
+            "PRINT x,y,z\n",
+            "x=FACT(2)\ny=VARIAT(5,2)\nz=COMBIN(5,2)\nPRINT x,y,z\n",
         ];
 
         for source in cases {
@@ -183,11 +183,11 @@ mod tests {
     #[test]
     fn unsupported_syntax_is_rejected_without_output() {
         let cases = [
-            "PRINT \\"not supported yet\\"\\n",
-            "REM comment\\n",
-            "' apostrophe comment\\n",
-            "x=FACT(1) ! trailing comment\\n",
-            "DATA 1,2,3\\n",
+            "PRINT \"not supported yet\"\n",
+            "REM comment\n",
+            "' apostrophe comment\n",
+            "x=FACT(1) ! trailing comment\n",
+            "DATA 1,2,3\n",
         ];
 
         for source in cases {
@@ -205,6 +205,6 @@ mod tests {
 
     #[test]
     fn empty_lines_collapse_and_output_has_one_final_newline() {
-        assert_eq!(format("\\n\\nx=FACT(1)\\n\\n\\n"), "x = FACT(1)\\n");
+        assert_eq!(format("\n\nx=FACT(1)\n\n\n"), "x = FACT(1)\n");
     }
 }
