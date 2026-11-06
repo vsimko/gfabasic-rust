@@ -2,8 +2,8 @@
 
 This roadmap is the project-level view of delivery order for `gfabasic-rust`. GitHub Issues remain the source of truth for task scope, acceptance criteria, blockers, and implementation discussion.
 
-**Snapshot:** 2026-11-05  
-**Current maturity:** architecture and research baseline; Rust workspace, source-map/loading, structured diagnostics, a narrow Amiga 3.5 FACT/PRINT frontend with the exact addendum special-name lexemes `_DATA` and `_0`…`_9` retained by the lossless lexer, an initial lexer evidence inventory separating verified 3.5 rules from inherited 3.0/V3.03 candidates, and a temporary C/`cc` native bootstrap prototype. The general semantic model, typed IR, planned LLVM backend, project configuration, runtime behavior, and full GFA BASIC conformance remain unimplemented.
+**Snapshot:** 2026-11-06  
+**Current maturity:** architecture and research baseline; Rust workspace, source-map/loading, structured diagnostics, a narrow Amiga 3.5 FACT/PRINT frontend with the exact addendum special-name lexemes `_DATA` and `_0`…`_9` retained by the lossless lexer, an initial lexer evidence inventory separating verified 3.5 rules from inherited 3.0/V3.03 candidates, and a temporary C/`cc` native bootstrap prototype, plus the initial source-preserving formatter library and CLI for the supported subset. The general semantic model, typed IR, planned LLVM backend, project configuration, runtime behavior, and full GFA BASIC conformance remain unimplemented.
 
 ## Status rules
 
