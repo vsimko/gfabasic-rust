@@ -192,6 +192,7 @@ thread_local! {
     static SERVER_EXITED: std::cell::Cell<bool> = const { std::cell::Cell::new(false) };
 }
 
+#[cfg(test)]
 fn dispatch(message: Json, documents: &mut DocumentStore) -> Option<Json> {
     dispatch_with_notifications(message, documents, &mut Vec::new())
 }
@@ -300,15 +301,13 @@ fn diagnostic_notification(uri: &str, version: Option<i64>, text: &str) -> Json 
         Err(diagnostics) => diagnostics
             .into_iter()
             .map(|diagnostic| {
-                let (start, end) = diagnostic
-                    .primary_span
-                    .and_then(|span| {
-                        Some((
-                            byte_offset_to_position(text, span.start)?,
-                            byte_offset_to_position(text, span.end)?,
-                        ))
-                    })
-                    .unwrap_or(((0, 0), (0, 0)));
+                let (start, end) = match diagnostic.primary_span {
+                    Some(span) => (
+                        byte_offset_to_position(text, span.start).unwrap_or((0, 0)),
+                        byte_offset_to_position(text, span.end).unwrap_or((0, 0)),
+                    ),
+                    None => ((0, 0), (0, 0)),
+                };
                 let severity = match diagnostic.severity {
                     DiagnosticSeverity::Error => 1,
                     DiagnosticSeverity::Warning => 2,
