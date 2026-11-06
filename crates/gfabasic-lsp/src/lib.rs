@@ -95,13 +95,31 @@ pub fn byte_offset_to_position(text: &str, offset: usize) -> Option<(u32, u32)> 
     if offset > text.len() || !text.is_char_boundary(offset) {
         return None;
     }
-    let prefix = &text[..offset];
-    let line_start = prefix
-        .rfind('\n')
-        .map_or_else(|| prefix.rfind('\r').map_or(0, |i| i + 1), |i| i + 1);
-    let line = text[..line_start].bytes().filter(|b| *b == b'\n' || *b == b'\r').count();
-    let current = &text[line_start..offset];
-    Some((line as u32, current.encode_utf16().count() as u32))
+    let mut line = 0u32;
+    let mut start = 0usize;
+    loop {
+        let (_, end) = line_bounds(text, line)?;
+        if offset >= start && offset <= end {
+            return Some((line, text[start..offset].encode_utf16().count() as u32));
+        }
+        let bytes = text.as_bytes();
+        let mut next = end;
+        if bytes.get(next) == Some(&b'\r') {
+            next += 1;
+            if bytes.get(next) == Some(&b'\n') {
+                next += 1;
+            }
+        } else if bytes.get(next) == Some(&b'\n') {
+            next += 1;
+        } else {
+            return None;
+        }
+        if offset < next {
+            return None;
+        }
+        start = next;
+        line += 1;
+    }
 }
 
 fn line_bounds(text: &str, requested_line: u32) -> Option<(usize, usize)> {
@@ -556,7 +574,7 @@ mod tests {
     #[test]
     fn handles_initialize_and_full_document_notifications() {
         let input = concat!(
-            "Content-Length: 67\r\n\r\n",
+            "Content-Length: 58\r\n\r\n",
             "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"initialize\",\"params\":{}}",
         );
         let mut reader = io::Cursor::new(input.as_bytes());
