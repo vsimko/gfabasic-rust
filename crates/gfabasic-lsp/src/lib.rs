@@ -547,9 +547,9 @@ fn quote(value: &str) -> String {
         match character {
             '"' => output.push_str("\\\""),
             '\\' => output.push_str("\\\\"),
-            '\n' => output.push_str("\n"),
-            '\r' => output.push_str("\r"),
-            '\t' => output.push_str("\t"),
+            '\n' => output.push('\n'),
+            '\r' => output.push('\r'),
+            '\t' => output.push('\t'),
             '\u{0008}' => output.push_str("\\b"),
             '\u{000c}' => output.push_str("\\f"),
             c if c <= '\u{001f}' => output.push_str(&format!("\\u{:04x}", c as u32)),
