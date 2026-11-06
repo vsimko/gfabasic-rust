@@ -2,11 +2,15 @@
 //!
 //! This first increment implements JSON-RPC over stdio, full-document
 //! synchronization, versioned document state, and UTF-16/UTF-8 position
-//! conversion. It deliberately does not advertise diagnostics or editor
-//! features that are not yet backed by the compiler frontend.
+//! conversion. Diagnostics are produced by the compiler's shared supported-subset
+//! parser; no separate language semantics are implemented here.
 
 use std::collections::HashMap;
 use std::io::{self, BufRead, Write};
+
+use gfabasic_compiler::diagnostics::DiagnosticSeverity;
+use gfabasic_compiler::frontend::parse_document;
+use gfabasic_compiler::source::SourceMap;
 
 const MAX_MESSAGE_BYTES: usize = 16 * 1024 * 1024;
 
@@ -167,12 +171,16 @@ pub fn run_stdio<R: BufRead, W: Write>(reader: &mut R, writer: &mut W) -> io::Re
         let Some(body) = read_message(reader)? else {
             return Ok(());
         };
+        let mut outbound = Vec::new();
         let response = match parse_json(&body) {
-            Ok(value) => dispatch(value, &mut documents),
+            Ok(value) => dispatch_with_notifications(value, &mut documents, &mut outbound),
             Err(_) => Some(error_response(Json::Null, -32700, "Parse error")),
         };
         if let Some(response) = response {
             write_message(writer, &stringify(&response))?;
+        }
+        for notification in outbound {
+            write_message(writer, &stringify(&notification))?;
         }
         if SERVER_EXITED.with(|flag| flag.replace(false)) {
             return Ok(());
@@ -185,6 +193,14 @@ thread_local! {
 }
 
 fn dispatch(message: Json, documents: &mut DocumentStore) -> Option<Json> {
+    dispatch_with_notifications(message, documents, &mut Vec::new())
+}
+
+fn dispatch_with_notifications(
+    message: Json,
+    documents: &mut DocumentStore,
+    outbound: &mut Vec<Json>,
+) -> Option<Json> {
     let Json::Object(object) = message else {
         return Some(error_response(Json::Null, -32600, "Invalid Request"));
     };
@@ -228,8 +244,14 @@ fn dispatch(message: Json, documents: &mut DocumentStore) -> Option<Json> {
                     document.integer("version"),
                     document.string("text"),
                 )
+                && documents.open(uri.into(), language_id.into(), version, text.into())
+                && let Some(document) = documents.get(uri)
             {
-                documents.open(uri.into(), language_id.into(), version, text.into());
+                outbound.push(diagnostic_notification(
+                    &document.uri,
+                    Some(document.version),
+                    &document.text,
+                ));
             }
             None
         }
@@ -245,8 +267,14 @@ fn dispatch(message: Json, documents: &mut DocumentStore) -> Option<Json> {
                     .get("range")
                     .is_none_or(|range| matches!(range, Json::Null))
                 && let Some(text) = changes[0].string("text")
+                && documents.change(uri, version, text.into())
+                && let Some(document) = documents.get(uri)
             {
-                documents.change(uri, version, text.into());
+                outbound.push(diagnostic_notification(
+                    &document.uri,
+                    Some(document.version),
+                    &document.text,
+                ));
             }
             None
         }
@@ -254,13 +282,73 @@ fn dispatch(message: Json, documents: &mut DocumentStore) -> Option<Json> {
             if let Some(uri) = params
                 .get_path(&["textDocument"])
                 .and_then(|document| document.string("uri"))
+                && documents.close(uri)
             {
-                documents.close(uri);
+                outbound.push(diagnostic_notification(uri, None, ""));
             }
             None
         }
         _ => id.map(|id| error_response(id, -32601, "Method not found")),
     }
+}
+
+fn diagnostic_notification(uri: &str, version: Option<i64>, text: &str) -> Json {
+    let mut sources = SourceMap::new();
+    let source_id = sources.add_source(uri.to_owned(), text.to_owned());
+    let diagnostics = match parse_document(source_id, text) {
+        Ok(_) => Vec::new(),
+        Err(diagnostics) => diagnostics
+            .into_iter()
+            .map(|diagnostic| {
+                let (start, end) = diagnostic
+                    .primary_span
+                    .and_then(|span| {
+                        Some((
+                            byte_offset_to_position(text, span.start)?,
+                            byte_offset_to_position(text, span.end)?,
+                        ))
+                    })
+                    .unwrap_or(((0, 0), (0, 0)));
+                let severity = match diagnostic.severity {
+                    DiagnosticSeverity::Error => 1,
+                    DiagnosticSeverity::Warning => 2,
+                    DiagnosticSeverity::Note => 3,
+                };
+                object_json([
+                    (
+                        "range",
+                        object_json([
+                            ("start", position_json(start)),
+                            ("end", position_json(end)),
+                        ]),
+                    ),
+                    ("severity", Json::Number(severity.to_string())),
+                    ("code", Json::String(diagnostic.code)),
+                    ("source", Json::String("gfabasic".into())),
+                    ("message", Json::String(diagnostic.message)),
+                ])
+            })
+            .collect(),
+    };
+
+    let mut params = HashMap::new();
+    params.insert("uri".into(), Json::String(uri.into()));
+    if let Some(version) = version {
+        params.insert("version".into(), Json::Number(version.to_string()));
+    }
+    params.insert("diagnostics".into(), Json::Array(diagnostics));
+    object_json([
+        ("jsonrpc", Json::String("2.0".into())),
+        ("method", Json::String("textDocument/publishDiagnostics".into())),
+        ("params", Json::Object(params)),
+    ])
+}
+
+fn position_json((line, character): (u32, u32)) -> Json {
+    object_json([
+        ("line", Json::Number(line.to_string())),
+        ("character", Json::Number(character.to_string())),
+    ])
 }
 
 fn read_message<R: BufRead>(reader: &mut R) -> io::Result<Option<Vec<u8>>> {
