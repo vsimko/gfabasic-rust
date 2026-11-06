@@ -26,8 +26,15 @@ pub fn format_source(source_id: SourceId, source: &str) -> Result<String, Vec<Di
     let mut output = String::with_capacity(source.len() + 1);
     let mut previous: Option<&TokenKind> = None;
     let mut line_has_tokens = false;
+    let mut comments = document.syntax.trivia.iter().filter(|item| matches!(item.kind, crate::frontend::TriviaKind::Comment)).peekable();
 
     for token in &document.syntax.tokens {
+        while comments.peek().is_some_and(|comment| comment.span.start < token.span.start) {
+            let comment = comments.next().expect("peeked comment exists");
+            if line_has_tokens && !output.ends_with(' ') { output.push(' '); }
+            output.push_str(source.get(comment.span.start..comment.span.end).expect("comment spans are valid UTF-8 ranges"));
+            line_has_tokens = true;
+        }
         match &token.kind {
             TokenKind::End => break,
             TokenKind::Newline => {
@@ -121,6 +128,12 @@ mod tests {
     fn preserves_identifier_and_intrinsic_spelling_exactly() {
         let source = "x=FACT(1)\nPRINT x\n";
         assert_eq!(format(source), "x = FACT(1)\nPRINT x\n");
+    }
+
+    #[test]
+    fn preserves_full_line_and_trailing_comments() {
+        let source = "REM keep this\nx=FACT(1) ! keep spacing and spelling\n' another comment\nPRINT x\n";
+        assert_eq!(format(source), "REM keep this\nx = FACT(1) ! keep spacing and spelling\n' another comment\nPRINT x\n");
     }
 
     #[test]
