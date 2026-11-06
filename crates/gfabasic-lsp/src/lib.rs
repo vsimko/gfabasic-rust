@@ -587,7 +587,7 @@ impl JsonParser<'_> {
         while self
             .input
             .get(self.offset)
-            .is_some_and(u8::is_ascii_whitespace)
+            .is_some_and(|byte| matches!(byte, b' ' | b'\\t' | b'\\n' | b'\\r'))
         {
             self.offset += 1;
         }
@@ -938,6 +938,13 @@ mod tests {
             })
             .unwrap();
         assert!(cleared.is_empty());
+    }
+
+    #[test]
+    fn json_parser_accepts_only_json_whitespace() {
+        assert_eq!(parse_json(b" \\t\\r\\nnull ").unwrap(), Json::Null);
+        assert!(parse_json(b"\\x0bnull").is_err());
+        assert!(parse_json(b"\\x0cnull").is_err());
     }
 
     #[test]
