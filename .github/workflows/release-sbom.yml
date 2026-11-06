@@ -90,13 +90,33 @@ jobs:
         with:
           ref: ${{ github.event.release.tag_name }}
 
+      - name: Cache Rust toolchain
+        uses: actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809
+        with:
+          path: |
+            ~/.rustup/toolchains/1.99.1-x86_64-unknown-linux-gnu
+            ~/.rustup/update-hashes
+          key: ${{ runner.os }}-rustup-1.99.1-minimal
+
+      - name: Cache cargo-sbom and Cargo registry
+        uses: actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809
+        with:
+          path: |
+            ~/.cargo/bin/cargo-sbom
+            ~/.cargo/registry
+            ~/.cargo/git
+          key: ${{ runner.os }}-cargo-sbom-0.10.0-rust-1.99.1
+
       - name: Install pinned Rust toolchain
         run: |
           rustup toolchain install 1.99.1 --profile minimal
           rustup default 1.99.1
 
       - name: Install pinned cargo-sbom
-        run: cargo install --locked cargo-sbom --version 0.10.0
+        run: |
+          if ! command -v cargo-sbom >/dev/null 2>&1; then
+            cargo install --locked cargo-sbom --version 0.10.0
+          fi
 
       - name: Verify locked workspace metadata
         run: cargo metadata --locked --format-version 1 > cargo-metadata.json
