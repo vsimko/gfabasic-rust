@@ -848,7 +848,7 @@ mod tests {
     fn publishes_compiler_diagnostics_and_clears_them_on_close() {
         let mut store = DocumentStore::default();
         let mut outbound = Vec::new();
-        let opened = parse_json(br#"{"jsonrpc":"2.0","method":"textDocument/didOpen","params":{"textDocument":{"uri":"file:///bad.gfa","languageId":"gfabasic","version":1,"text":"PRINT \\"bad\\""}}}"#).unwrap();
+        let opened = parse_json(br#"{"jsonrpc":"2.0","method":"textDocument/didOpen","params":{"textDocument":{"uri":"file:///bad.gfa","languageId":"gfabasic","version":1,"text":"PRINT \"bad\""}}}"#).unwrap();
         dispatch_with_notifications(opened, &mut store, &mut outbound);
         assert_eq!(outbound.len(), 1);
         assert_eq!(
