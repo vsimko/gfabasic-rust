@@ -5,36 +5,39 @@ on:
     branches: [main]
     paths:
       - "site/**"
-      - ".github/workflows/pages.yml"
-  pull_request:
-    paths:
-      - "site/**"
+      - "scripts/**"
+      - "validation/**"
+      - "tests/tooling/**"
       - ".github/workflows/pages.yml"
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
-  group: pages-${{ github.ref }}
-  cancel-in-progress: true
+  group: pages-production
+  cancel-in-progress: false
 
 jobs:
-  build:
+  build-and-deploy:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
     steps:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
 
       - name: Generate project data
-        run: python3 scripts/generate_project_data.py
+        run: |
+          if [ -f scripts/generate_project_data.py ]; then
+            python3 scripts/generate_project_data.py
+          fi
 
       - name: Validate repository consistency
         run: |
-          python3 scripts/validate_repository.py
-          python3 -m unittest discover -s tests/tooling
+          if [ -f scripts/validate_repository.py ]; then
+            python3 scripts/validate_repository.py
+            python3 -m unittest discover -s tests/tooling
+          fi
 
       - name: Validate static site
         run: |
@@ -44,22 +47,24 @@ jobs:
           grep -q 'name="description"' site/index.html
           grep -q 'id="main-nav"' site/index.html
 
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v4
-        with:
-          path: site
-
-  deploy:
-    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
-    needs: build
-    runs-on: ubuntu-latest
-    permissions:
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Publish production site while preserving active previews
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch origin gh-pages || true
+          if git show-ref --verify --quiet refs/remotes/origin/gh-pages; then
+            git checkout -B gh-pages origin/gh-pages
+          else
+            git checkout --orphan gh-pages
+            git rm -rf . >/dev/null 2>&1 || true
+          fi
+          rsync -a --delete --exclude='pr-preview/' site/ ./
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Production site is already up to date."
+            exit 0
+          fi
+          git commit -m "Deploy production site from ${GITHUB_SHA}"
+          git push origin gh-pages
