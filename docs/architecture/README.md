@@ -1,30 +1,8 @@
-# Architecture
-
-This directory contains the normative architecture baseline for `gfabasic-rust`.
-
-## Status vocabulary
-
-- **Accepted**: a project decision. Implementation must follow it unless a later decision supersedes it.
-- **Proposed**: a candidate direction that still requires review or evidence.
-- **Open**: unresolved. Do not implement behavior by guessing.
-- **Deferred**: intentionally outside the current implementation scope.
-- **Verified**: supported by an identified primary reference or reproducible compatibility evidence.
-- **Inferred**: a reasoned interpretation that is not directly established by a source.
-- **Disputed**: reliable sources or observed implementations disagree.
-- **Unknown**: evidence is not currently available.
-
-A planned technology or target is not an implementation claim. A language feature is not supported merely because it appears in a source inventory.
-
-## Project baseline
-
-The project intends to provide a reusable GFA BASIC compiler and runtime in Rust. Native executable generation is the primary planned output. LLVM is the planned code-generation infrastructure. The first planned output target is Linux x86-64 with the GNU ABI and ELF executable format. SDL3 is a planned adapter for Linux graphics, window, and input integration.
-
-These are planning assumptions, not evidence that these components are implemented or that a particular GFA BASIC dialect is fully supported.
-
-The first normative source-language target is Amiga GFA BASIC interpreter 3.5, accepted in [ADR 0009](adr/0009-initial-source-dialect-amiga-gfa-basic-3.5.md). [ADR 0008](adr/0008-initial-source-dialect-amiga-gfa-basic-3.0.md) preserves the superseded 3.0 decision. Atari ST GFA BASIC V2.xx/V3.0 remains research-only for the initial compiler target. The language core is separate from platform API profiles. Amiga and Atari ST profiles are planned as independent choices. The selected source dialect/version, API profile set, build host, and output target must be represented as separate configuration concepts.
-
 ## Architecture documents
 
+| Topic | Scope | Document | Tracking |
+|---|---|---|---|
+| Repository consistency validation | Deterministic Python/JSON checks for drift between repository sources | [VALIDATION.md](VALIDATION.md); [ADR 0013](adr/0013-repository-consistency-validation.md) | architecture [#248](https://github.com/vsimko/gfabasic-rust/issues/248), validator [#249](https://github.com/vsimko/gfabasic-rust/issues/249), website generator [#250](https://github.com/vsimko/gfabasic-rust/issues/250) |
 | Topic | Scope | Document | Tracking |
 |---|---|---|---|
 | Project goals and compatibility | Purpose, non-goals, compatibility dimensions | [GOALS.md](GOALS.md) | [#2](https://github.com/vsimko/gfabasic-rust/issues/2) |
