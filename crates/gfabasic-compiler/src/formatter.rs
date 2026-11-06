@@ -26,13 +26,27 @@ pub fn format_source(source_id: SourceId, source: &str) -> Result<String, Vec<Di
     let mut output = String::with_capacity(source.len() + 1);
     let mut previous: Option<&TokenKind> = None;
     let mut line_has_tokens = false;
-    let mut comments = document.syntax.trivia.iter().filter(|item| matches!(item.kind, crate::frontend::TriviaKind::Comment)).peekable();
+    let mut comments = document
+        .syntax
+        .trivia
+        .iter()
+        .filter(|item| matches!(item.kind, crate::frontend::TriviaKind::Comment))
+        .peekable();
 
     for token in &document.syntax.tokens {
-        while comments.peek().is_some_and(|comment| comment.span.start < token.span.start) {
+        while comments
+            .peek()
+            .is_some_and(|comment| comment.span.start < token.span.start)
+        {
             let comment = comments.next().expect("peeked comment exists");
-            if line_has_tokens && !output.ends_with(' ') { output.push(' '); }
-            output.push_str(source.get(comment.span.start..comment.span.end).expect("comment spans are valid UTF-8 ranges"));
+            if line_has_tokens && !output.ends_with(' ') {
+                output.push(' ');
+            }
+            output.push_str(
+                source
+                    .get(comment.span.start..comment.span.end)
+                    .expect("comment spans are valid UTF-8 ranges"),
+            );
             line_has_tokens = true;
         }
         match &token.kind {
