@@ -393,7 +393,11 @@ fn read_message<R: BufRead>(reader: &mut R) -> io::Result<Option<Vec<u8>>> {
                 .iter()
                 .position(|byte| *byte == b'\n')
                 .map_or(available.len(), |index| index + 1);
-            if header_bytes.saturating_add(line.len()).saturating_add(count) > MAX_HEADER_BYTES {
+            if header_bytes
+                .saturating_add(line.len())
+                .saturating_add(count)
+                > MAX_HEADER_BYTES
+            {
                 return Err(io::Error::new(
                     io::ErrorKind::InvalidData,
                     "LSP headers too large",
