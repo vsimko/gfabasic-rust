@@ -54,6 +54,7 @@ The dependency direction is:
 ```text
 gfabasic-compiler  -- emits runtime ABI references --> generated program
 gfabasic-platform-linux  ------>  gfabasic-runtime
+gfabasic-lsp  ------------->  gfabasic-compiler (public APIs)
 gfabasic-runtime  ------>  Rust standard library
 ```
 
