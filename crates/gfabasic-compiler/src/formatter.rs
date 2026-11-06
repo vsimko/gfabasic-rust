@@ -110,7 +110,7 @@ mod tests {
 
     #[test]
     fn canonicalizes_supported_whitespace_and_line_endings() {
-        let source = "  x=FACT(0001)\\r\ny = VARIAT(5,2)\nPRINT   x,y,z";
+        let source = "  x=FACT(0001)\r\ny = VARIAT(5,2)\nPRINT   x,y,z";
         assert_eq!(
             format(source),
             "x = FACT(0001)\ny = VARIAT(5, 2)\nPRINT x, y, z\n"
@@ -140,7 +140,7 @@ mod tests {
     #[test]
     fn formatting_is_idempotent_across_supported_corpus() {
         let cases = [
-            "x=FACT(1)\\r\nPRINT   x\\r\n",
+            "x=FACT(1)\r\nPRINT   x\r\n",
             "y = VARIAT(5, 2)\n",
             "z=COMBIN(0005,02)",
             "\n\nx=FACT(3)\n\nPRINT x,y,z\n",
