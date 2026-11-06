@@ -2,6 +2,8 @@
 
 A planned general-purpose GFA BASIC compiler and runtime implemented in Rust.
 
+**[Project website](https://vsimko.github.io/gfabasic-rust/)** · [Documentation](docs/README.md) · [Roadmap](ROADMAP.md)
+
 > **Project status:** The workspace contains an experimental, evidence-gated Amiga GFA BASIC 3.5 frontend for literal `FACT`, `VARIAT`, and `COMBIN` assignments followed by `PRINT`. The current prototype bounds intrinsic arguments to `0 <= k <= n <= 20` (or `FACT(n)` with `0 <= n <= 20`) and restricts variables to `x`, `y`, and `z`. Compilation now follows AST → typed project IR → IR verification → temporary C/`cc` bootstrap. This is not general GFA BASIC support and does not claim conformance with the original interpreter. General language semantics and the planned LLVM backend remain unimplemented.
 
 ## Project direction
