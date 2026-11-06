@@ -132,8 +132,12 @@ mod tests {
 
     #[test]
     fn preserves_full_line_and_trailing_comments() {
-        let source = "REM keep this\nx=FACT(1) ! keep spacing and spelling\n' another comment\nPRINT x\n";
-        assert_eq!(format(source), "REM keep this\nx = FACT(1) ! keep spacing and spelling\n' another comment\nPRINT x\n");
+        let source =
+            "REM keep this\nx=FACT(1) ! keep spacing and spelling\n' another comment\nPRINT x\n";
+        assert_eq!(
+            format(source),
+            "REM keep this\nx = FACT(1) ! keep spacing and spelling\n' another comment\nPRINT x\n"
+        );
     }
 
     #[test]
