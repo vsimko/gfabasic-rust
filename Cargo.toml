@@ -3,6 +3,7 @@ members = [
     "crates/gfabasic-compiler",
     "crates/gfabasic-runtime",
     "crates/gfabasic-platform-linux",
+    "crates/gfabasic-lsp",
 ]
 resolver = "3"
 

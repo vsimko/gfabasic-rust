@@ -57,6 +57,10 @@ Rejected because identical spellings can refer to different declarations, and un
 - Formatting, navigation, completion, and rename remain unavailable until their compiler prerequisites exist and are tested.
 - The exact LSP/JSON-RPC Rust dependency and version are not selected by this ADR; dependency review and lockfile/CI validation are required before implementation.
 
+## Initial implementation status (2026-11-06)
+
+The first dependency-free `gfabasic-lsp` crate now provides JSON-RPC framing over stdio, initialize/shutdown/exit, full-document open/change/close notifications, per-document version checks, and tested UTF-16/UTF-8 position conversion. It advertises only full-document synchronization. Ranged changes are rejected rather than partially applied. Diagnostics, formatting, navigation, completion, and rename are not implemented or advertised. The protocol JSON parser is intentionally internal to this bootstrap and must receive adversarial/fuzz coverage before the server is treated as production-ready. This implementation note does not change the proposed status of the ADR.
+
 ## Evidence and references
 
 - [Issue #209: GFA BASIC language server](https://github.com/vsimko/gfabasic-rust/issues/209).
