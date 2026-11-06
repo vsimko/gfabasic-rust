@@ -13,6 +13,7 @@ use gfabasic_compiler::frontend::parse_document;
 use gfabasic_compiler::source::SourceMap;
 
 const MAX_MESSAGE_BYTES: usize = 16 * 1024 * 1024;
+const MAX_JSON_DEPTH: usize = 128;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct TextDocument {
@@ -232,6 +233,9 @@ fn dispatch_with_notifications(
             )
         }),
         "initialized" => None,
+        // There are no asynchronous requests yet, so cancellation has no
+        // outstanding work to stop. Keep the standard notification harmless.
+        "$/cancelRequest" => None,
         "shutdown" => id.map(|id| success_response(id, Json::Null)),
         "exit" => {
             SERVER_EXITED.with(|flag| flag.set(true));
@@ -526,7 +530,11 @@ fn quote(value: &str) -> String {
 struct JsonParseError;
 
 fn parse_json(input: &[u8]) -> Result<Json, JsonParseError> {
-    let mut parser = JsonParser { input, offset: 0 };
+    let mut parser = JsonParser {
+        input,
+        offset: 0,
+        depth: 0,
+    };
     let value = parser.value()?;
     parser.whitespace();
     (parser.offset == input.len())
@@ -537,6 +545,7 @@ fn parse_json(input: &[u8]) -> Result<Json, JsonParseError> {
 struct JsonParser<'a> {
     input: &'a [u8],
     offset: usize,
+    depth: usize,
 }
 
 impl JsonParser<'_> {
@@ -551,6 +560,16 @@ impl JsonParser<'_> {
     }
 
     fn value(&mut self) -> Result<Json, JsonParseError> {
+        if self.depth >= MAX_JSON_DEPTH {
+            return Err(JsonParseError);
+        }
+        self.depth += 1;
+        let result = self.value_inner();
+        self.depth -= 1;
+        result
+    }
+
+    fn value_inner(&mut self) -> Result<Json, JsonParseError> {
         self.whitespace();
         match self.input.get(self.offset).copied().ok_or(JsonParseError)? {
             b'n' => {
@@ -885,6 +904,53 @@ mod tests {
             })
             .unwrap();
         assert!(cleared.is_empty());
+    }
+
+    #[test]
+    fn json_parser_rejects_malformed_and_excessively_nested_messages() {
+        assert!(parse_json(b"{").is_err());
+        let nested = format!("{}null{}", "[".repeat(MAX_JSON_DEPTH + 1), "]".repeat(MAX_JSON_DEPTH + 1));
+        assert!(parse_json(nested.as_bytes()).is_err());
+    }
+
+    #[test]
+    fn framing_rejects_messages_over_the_resource_limit() {
+        let input = format!("Content-Length: {}\r\n\r\n", MAX_MESSAGE_BYTES + 1);
+        let mut reader = io::Cursor::new(input.into_bytes());
+        assert_eq!(
+            read_message(&mut reader).unwrap_err().kind(),
+            io::ErrorKind::InvalidData
+        );
+    }
+
+    #[test]
+    fn store_isolates_multiple_documents() {
+        let mut store = DocumentStore::default();
+        store.open("file:///one.gfa".into(), "gfabasic".into(), 1, "PRINT 1".into());
+        store.open("file:///two.gfa".into(), "gfabasic".into(), 1, "PRINT 2".into());
+        assert!(store.change("file:///one.gfa", 2, "PRINT 3".into()));
+        assert_eq!(store.get("file:///one.gfa").unwrap().text, "PRINT 3");
+        assert_eq!(store.get("file:///two.gfa").unwrap().text, "PRINT 2");
+    }
+
+    #[test]
+    fn malformed_jsonrpc_message_returns_parse_error_and_keeps_server_alive() {
+        let input = "Content-Length: 1\r\n\r\n{";
+        let mut reader = io::Cursor::new(input.as_bytes());
+        let mut output = Vec::new();
+        run_stdio(&mut reader, &mut output).unwrap();
+        let output = String::from_utf8(output).unwrap();
+        assert!(output.contains("\"code\":-32700"));
+    }
+
+    #[test]
+    fn cancellation_notification_is_safe_without_async_requests() {
+        let mut store = DocumentStore::default();
+        let cancellation = parse_json(
+            br#"{"jsonrpc":"2.0","method":"$/cancelRequest","params":{"id":99}}"#,
+        )
+        .unwrap();
+        assert!(dispatch(cancellation, &mut store).is_none());
     }
 
     #[test]
