@@ -284,7 +284,8 @@ pub fn lex_lossless(source_id: SourceId, source: &str) -> Result<LexedSource, Ve
                         && rest
                             .get(3)
                             .is_none_or(|b| matches!(b, b' ' | b'\t' | b'\r' | b'\n'))
-                }) => {
+                }) =>
+            {
                 let start = offset;
                 while bytes
                     .get(offset)
