@@ -62,7 +62,7 @@ jobs:
           fi
           staging_dir="$(mktemp -d)"
           cp -a site/. "$staging_dir/"
-          rsync -a --delete --exclude='pr-preview/' "$staging_dir/" ./
+          rsync -a --delete --exclude='.git/' --exclude='pr-preview/' "$staging_dir/" ./
           rm -rf "$staging_dir"
           git add -A
           if git diff --cached --quiet; then
