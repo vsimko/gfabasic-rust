@@ -1,69 +1,64 @@
-# ADR 0012: Language server and editor integration
+# ADR 0012: Shared language tooling through Language Server Protocol
 
-- Status: Proposed
-- Date: 2026-11-06
-- Decision makers: Project maintainers
+- Status: Accepted
+- Date: 2026-11-05
+- Decision makers: Project maintainer
+- Tracking: [LSP server #209](https://github.com/vsimko/gfabasic-rust/issues/209), [VS Code integration #210](https://github.com/vsimko/gfabasic-rust/issues/210), [IntelliJ integration #211](https://github.com/vsimko/gfabasic-rust/issues/211)
 
 ## Context
 
-The project needs editor tooling for the selected source dialect, Commodore Amiga GFA BASIC interpreter 3.5. Diagnostics, formatting, navigation, completion, and rename must use the same dialect-aware frontend and semantic model as compilation. A second lexer/parser or text-based rename implementation would drift from compiler behavior and could corrupt source spelling.
+The project is intended to provide more than a command-line compiler. Users should be able to inspect, format, refactor, validate, and build Amiga GFA BASIC 3.5 programs from common editors, initially Visual Studio Code and IntelliJ IDEA.
 
-The compiler currently supports only a narrow evidence-gated syntax subset. Most general identifier, comment, string, DATA, and statement rules remain unresolved. An editor server must not turn unknown syntax into accepted language behavior or advertise features that cannot be implemented correctly.
+Implementing editor features independently in each editor would duplicate parsing, dialect rules, symbol resolution, diagnostics, and formatting. A text-only implementation would also make rename and navigation unsafe, especially for legacy programs whose identifiers may be Slovak, English, or mixed-language.
+
+The compiler frontend is not yet general: it currently supports only a narrow evidence-backed prototype. Editor integration must therefore be designed around the future shared frontend and must not imply that unsupported language constructs are understood.
 
 ## Decision
 
-1. Implement the Language Server Protocol adapter in a separate `gfabasic-lsp` workspace crate. The crate boundary is justified by its editor-protocol and JSON-RPC dependencies; those dependencies must not enter the compiler, runtime, or platform crates.
-2. Use standard JSON-RPC over stdio for editor-launched sessions. Keep protocol handling independent of VS Code, IntelliJ, and other editor-specific APIs.
-3. Reuse compiler-owned source loading, lossless syntax, parser, symbol index, semantic analysis, diagnostics, and formatter. The LSP crate must not implement a second lexer, parser, formatter, or language-semantic model.
-4. Start with full-document synchronization. Incremental synchronization may be advertised only after document updates can be applied safely and tested against the compiler's source model.
-5. Track each open document's URI, text, and monotonically increasing client version. Diagnostics and workspace edits must be associated with the version from which they were computed; never apply an edit to a newer document version.
-6. Use UTF-16 code units for LSP line/character positions at the protocol boundary. Convert to and from the compiler's UTF-8 byte spans with tested handling of supplementary-plane characters, CRLF, line boundaries, and invalid/out-of-range positions.
-7. Implement capabilities in dependency order:
-   - initialize/shutdown/exit and document open/change/close;
-   - diagnostics from the shared frontend;
-   - document and range formatting through the formatter library;
-   - definition and references through resolved symbol identity;
-   - completion from visible symbols and verified built-ins;
-   - rename through resolved references and versioned workspace edits;
-   - code actions and build requests only after the relevant compiler/CLI contracts exist.
-8. Advertise only implemented and tested capabilities. Return explicit unsupported or unknown results when compiler evidence or semantic information is insufficient.
-9. Never implement rename as textual replacement. Edit only references proven to resolve to the selected symbol; preserve the exact original identifier bytes and do not transliterate, case-fold, or Unicode-normalize names.
-10. Keep the server independent of LLVM, SDL3, target runtime implementations, and platform API behavior. Build requests delegate to the existing compiler/CLI pipeline rather than duplicating compilation.
+1. Use the **Language Server Protocol (LSP)** as the common editor integration boundary for diagnostics, completion, navigation, references, rename, and formatting.
+2. Implement one Rust language server, logically isolated from editor clients and backed by the same compiler frontend, semantic model, symbol index, diagnostics, and formatter used by the CLI.
+3. Treat the server as an adapter, not a second language implementation. It must not contain an independent lexer, parser, type system, or compiler.
+4. Preserve a lossless source representation (CST or equivalent token/trivia stream) alongside the semantic AST. Formatting and editor edits must retain comments, literal payloads, source spans, and original identifier spelling.
+5. Implement rename using resolved symbol identity and semantic references, never global text replacement. Preserve identifier spelling unless the user explicitly requests a rename.
+6. Keep compiler source spans byte-based and convert positions at the protocol boundary. LSP positions use UTF-16 code units; conversions must be tested for non-ASCII source text and line endings.
+7. Start with stdio transport and full-document synchronization. Incremental synchronization may be advertised only after versioned edits and reparsing are reliable.
+8. The server may expose build as an LSP execute-command or equivalent editor action, but compilation must delegate to the shared compiler/build pipeline. The server must not duplicate code generation or runtime behavior.
+9. Keep editor-specific packaging and UI outside the server. VS Code and IntelliJ clients are thin integrations that expose only capabilities actually advertised by the server.
+10. Keep LLVM, SDL3, generated-program runtime, and platform API implementations out of the language server dependency boundary.
+11. Defer debugging and Debug Adapter Protocol (DAP) integration until a separate decision defines debugger semantics and runtime instrumentation.
+12. The normative language target remains Amiga GFA BASIC interpreter 3.5. No LSP capability may accept or claim semantics for unverified syntax or another dialect/version.
 
 ## Alternatives considered
 
-### Implement LSP inside the compiler crate
-
-Rejected because protocol dependencies and editor-facing lifecycle code would become compiler dependencies, weakening the compiler's reuse and build boundary.
-
-### Implement a separate frontend in the LSP server
-
-Rejected because syntax acceptance, diagnostics, formatting, and symbol binding would diverge from the compiler and could silently apply different dialect assumptions.
-
-### Use incremental synchronization immediately
-
-Deferred because the current frontend does not yet define a safe incremental reparse/update contract. Full-document synchronization is simpler and keeps source versions coherent.
-
-### Implement rename with text search
-
-Rejected because identical spellings can refer to different declarations, and unresolved or ambiguous references cannot be safely rewritten.
+- **Separate parser and language logic in each editor:** rejected because it duplicates semantics and causes inconsistent diagnostics, formatting, and refactoring.
+- **TextMate/regex-only editor support:** useful for basic syntax highlighting, but insufficient for semantic diagnostics, symbol navigation, or safe rename. It may be used as a lightweight highlighting layer only.
+- **Compiler CLI invoked for every editor feature:** rejected as the primary design because document synchronization, interactive navigation, completion, and versioned workspace edits require a long-lived protocol service. The CLI remains the build and batch interface.
+- **Native IntelliJ implementation as the primary language engine:** rejected because it would create a second frontend. A thin LSP client integration is preferred; native IDE APIs may be added only as adapters where LSP is insufficient.
+- **Implement DAP at the same time:** deferred because debugging needs a working execution/runtime model and a separate protocol contract.
 
 ## Consequences
 
-- The LSP server can be built and tested without LLVM, SDL3, or editor-specific SDKs.
-- The compiler remains the single source of language semantics and source spans.
-- UTF-8/UTF-16 conversion and document-version checks become protocol correctness requirements.
-- Early server milestones can provide lifecycle and diagnostics for the existing supported subset without claiming general Amiga 3.5 support.
-- Formatting, navigation, completion, and rename remain unavailable until their compiler prerequisites exist and are tested.
-- The exact LSP/JSON-RPC Rust dependency and version are not selected by this ADR; dependency review and lockfile/CI validation are required before implementation.
-
-## Initial implementation status (2026-11-06)
-
-The `gfabasic-lsp` crate provides JSON-RPC framing over stdio, initialize/shutdown/exit, full-document open/change/close notifications, per-document version checks, and tested UTF-16/UTF-8 position conversion. It advertises only full-document synchronization; ranged changes are rejected rather than partially applied. Push diagnostics are now produced by the compiler's shared `parse_document` frontend and are tagged with the document version. Closing a document clears its diagnostics. The internal JSON parser rejects nesting deeper than 128 levels, and the frame reader rejects payloads larger than 16 MiB. Tests cover malformed JSON-RPC input, oversized frames, multiple-document isolation, and harmless cancellation notifications (there are no asynchronous requests to cancel yet). These are initial hardening measures, not a substitute for fuzzing or a standards-complete JSON-RPC library. Formatting, navigation, completion, and rename are not implemented or advertised. The [LSP capability guide](../../../crates/gfabasic-lsp/README.md) documents invocation, implemented behavior, and explicit limitations. The protocol JSON parser is intentionally internal to this bootstrap and must receive adversarial/fuzz coverage before the server is treated as production-ready. This implementation note does not change the proposed status of the ADR.
+- The frontend must expose lossless syntax, stable source maps, semantic symbol identities, and reusable diagnostics before the corresponding LSP capabilities are enabled.
+- The formatter remains a library independent of the CLI and LSP process; both interfaces call the same implementation.
+- Rename, definition, references, and completion depend on the symbol-resolution work, not on syntax highlighting.
+- The language server can be tested with protocol-level integration tests without launching either editor.
+- VS Code and IntelliJ release cycles can proceed independently of the compiler, provided their LSP contract remains stable.
+- LSP support is a planned capability, not an implementation claim. Capability negotiation must accurately reflect implemented and tested behavior.
+- The first useful editor milestone is diagnostics plus formatting for the subset supported by the shared frontend; richer refactoring follows semantic coverage.
+- DAP, debugger UI, and runtime instrumentation remain separate future work.
 
 ## Evidence and references
 
-- [Issue #209: GFA BASIC language server](https://github.com/vsimko/gfabasic-rust/issues/209).
-- [Issue #208: Amiga GFA BASIC 3.5 formatter](https://github.com/vsimko/gfabasic-rust/issues/208).
-- [ADR 0007: compiler pipeline and typed IR boundaries](0007-compiler-pipeline-and-ir.md).
-- [Rust workspace and dependency policy](../WORKSPACE.md).
+- [LSP server implementation #209](https://github.com/vsimko/gfabasic-rust/issues/209)
+- [VS Code integration #210](https://github.com/vsimko/gfabasic-rust/issues/210)
+- [IntelliJ integration #211](https://github.com/vsimko/gfabasic-rust/issues/211)
+- [Lossless lexer requirements #46](https://github.com/vsimko/gfabasic-rust/issues/46)
+- [Lossless parser/CST requirements #47](https://github.com/vsimko/gfabasic-rust/issues/47)
+- [Semantic analysis and symbol resolution #48](https://github.com/vsimko/gfabasic-rust/issues/48)
+- [Formatter #208](https://github.com/vsimko/gfabasic-rust/issues/208)
+- [Compiler pipeline and IR](../PIPELINE-AND-IR.md)
+- [Selected source dialect ADR 0009](0009-initial-source-dialect-amiga-gfa-basic-3.5.md)
+
+## Supersedes / superseded by
+
+None.
