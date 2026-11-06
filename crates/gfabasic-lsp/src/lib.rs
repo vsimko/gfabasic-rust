@@ -6,7 +6,7 @@
 //! parser; no separate language semantics are implemented here.
 
 use std::collections::HashMap;
-use std::io::{self, BufRead, Read, Write};
+use std::io::{self, BufRead, Write};
 
 use gfabasic_compiler::diagnostics::DiagnosticSeverity;
 use gfabasic_compiler::frontend::parse_document;
