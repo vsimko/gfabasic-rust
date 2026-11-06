@@ -377,7 +377,6 @@ fn read_message<R: BufRead>(reader: &mut R) -> io::Result<Option<Vec<u8>>> {
     let mut header_bytes = 0usize;
     loop {
         let mut line = Vec::new();
-        let mut terminated = false;
         loop {
             let available = reader.fill_buf()?;
             if available.is_empty() {
