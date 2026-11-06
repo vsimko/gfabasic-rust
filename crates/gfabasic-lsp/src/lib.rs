@@ -903,7 +903,7 @@ mod tests {
     #[test]
     fn stdio_recovers_after_malformed_json_and_processes_next_request() {
         fn frame(body: &str) -> String {
-            format!("Content-Length: {}\\r\\n\\r\\n{}", body.len(), body)
+            format!("Content-Length: {}\r\n\r\n{}", body.len(), body)
         }
         let malformed = "{";
         let initialize = r#"{"jsonrpc":"2.0","id":7,"method":"initialize","params":{}}"#;
@@ -915,10 +915,10 @@ mod tests {
         run_stdio(&mut reader, &mut output).unwrap();
 
         let output = String::from_utf8(output).unwrap();
-        assert!(output.contains("\\"id\\":null"));
-        assert!(output.contains("\\"code\\":-32700"));
-        assert!(output.contains("\\"id\\":7"));
-        assert!(output.contains("\\"textDocumentSync\\":1"));
+        assert!(output.contains("\"id\":null"));
+        assert!(output.contains("\"code\":-32700"));
+        assert!(output.contains("\"id\":7"));
+        assert!(output.contains("\"textDocumentSync\":1"));
     }
 
     #[test]
@@ -937,7 +937,7 @@ mod tests {
                             ("uri", Json::String(uri.into())),
                             ("languageId", Json::String("gfabasic".into())),
                             ("version", Json::Number(version.to_string())),
-                            ("text", Json::String("PRINT \\"bad\\"".into())),
+                            ("text", Json::String("PRINT \"bad\"".into())),
                         ]),
                     )]),
                 ),
