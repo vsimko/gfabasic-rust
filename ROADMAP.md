@@ -2,8 +2,8 @@
 
 This roadmap is the project-level view of delivery order for `gfabasic-rust`. GitHub Issues remain the source of truth for task scope, acceptance criteria, blockers, and implementation discussion.
 
-**Snapshot:** 2026-11-05  
-**Current maturity:** architecture and research baseline; Rust workspace, source-map/loading, structured diagnostics, a narrow Amiga 3.5 FACT/PRINT frontend, and a temporary C/`cc` native bootstrap prototype. The general semantic model, typed IR, planned LLVM backend, project configuration, runtime behavior, and full GFA BASIC conformance remain unimplemented.
+**Snapshot:** 2026-11-06  
+**Current maturity:** architecture and research baseline; Rust workspace (including the initial standalone LSP transport crate), source-map/loading, structured diagnostics, a narrow Amiga 3.5 FACT/PRINT frontend with the exact addendum special-name lexemes `_DATA` and `_0`…`_9` retained by the lossless lexer, an initial lexer evidence inventory separating verified 3.5 rules from inherited 3.0/V3.03 candidates, and a temporary C/`cc` native bootstrap prototype, plus the initial source-preserving formatter library and CLI for the supported subset. The general semantic model, typed IR, planned LLVM backend, project configuration, runtime behavior, and full GFA BASIC conformance remain unimplemented.
 
 ## Status rules
 
@@ -17,11 +17,11 @@ This roadmap is the project-level view of delivery order for `gfabasic-rust`. Gi
 
 | Area | Current state | Evidence / tracking |
 |---|---|---|
-| Rust workspace | Three crates exist: compiler, generated-program runtime, Linux platform adapter; compiler includes source-map/loading, diagnostics, a narrow FACT/PRINT frontend and temporary native bootstrap; general semantics/IR/LLVM/configuration/runtime/platform behavior remains unimplemented | [Cargo workspace](Cargo.toml), [workspace design](docs/architecture/WORKSPACE.md) |
-| Compiler frontend, semantic analysis, IR | Narrow FACT/PRINT frontend subset only; general grammar, semantic analysis, and typed IR are not implemented | [#46–#49](https://github.com/vsimko/gfabasic-rust/issues?q=is%3Aissue+is%3Aopen+label%3Acompiler), [#120](https://github.com/vsimko/gfabasic-rust/issues/120), [#121](https://github.com/vsimko/gfabasic-rust/issues/121) |
+| Rust workspace | Four crates exist: compiler, generated-program runtime, Linux platform adapter, and a dependency-free LSP adapter with stdio JSON-RPC/full-document synchronization; compiler includes source-map/loading, diagnostics, a narrow FACT/PRINT frontend and temporary native bootstrap; general semantics/IR/LLVM/configuration/runtime/platform behavior remains unimplemented | [Cargo workspace](Cargo.toml), [workspace design](docs/architecture/WORKSPACE.md) |
+| Formatter and source tooling | Initial library formatter and gfabasic fmt CLI for the supported FACT/VARIAT/COMBIN/PRINT subset; preserves token spelling, rejects unsupported syntax, supports stdout/check/output/in-place modes with atomic file replacement. Comment evidence and literal/DATA grammar remain open; LSP transport and versioned diagnostics from the shared compiler parser exist; formatter integration, navigation, completion, rename, and fixture-wide checks remain open | [#208](https://github.com/vsimko/gfabasic-rust/issues/208), [#209](https://github.com/vsimko/gfabasic-rust/issues/209) |
+| Compiler frontend, semantic analysis, IR | Narrow FACT/PRINT parser subset; lossless lexer additionally recognizes the explicitly documented Amiga 3.5 addendum names `_DATA` and `_0`…`_9` without claiming general identifier support; general grammar, semantic analysis, and typed IR are not implemented | [#46–#49](https://github.com/vsimko/gfabasic-rust/issues?q=is%3Aissue+is%3Aopen+label%3Acompiler), [#120](https://github.com/vsimko/gfabasic-rust/issues/120), [#121](https://github.com/vsimko/gfabasic-rust/issues/121) |
 | LLVM backend and native executable | Temporary C/`cc` bridge emits one narrow native host executable; planned LLVM backend remains unimplemented | [#50](https://github.com/vsimko/gfabasic-rust/issues/50) |
 | CLI and configuration | `gfabasic` supports help/version and a restricted `build` command for the FACT/PRINT prototype; general configuration and compilation integration remain open | [#9](https://github.com/vsimko/gfabasic-rust/issues/9), [#111](https://github.com/vsimko/gfabasic-rust/issues/111) |
-| Language tooling and editor integration | Planned; one shared Rust LSP server over the compiler frontend, with thin VS Code and IntelliJ clients. No language server or editor extension is implemented | [ADR 0012](docs/architecture/adr/0012-language-server-and-editor-integration.md), [#209](https://github.com/vsimko/gfabasic-rust/issues/209), [#210](https://github.com/vsimko/gfabasic-rust/issues/210), [#211](https://github.com/vsimko/gfabasic-rust/issues/211) |
 | Runtime and platform integration | Not implemented; SDL3, Amiga and Atari ST runtime layers remain planned | [#51–#54](https://github.com/vsimko/gfabasic-rust/issues?q=is%3Aissue+is%3Aopen) |
 | API registry | Schema and metadata validation are complete; runtime handler resolution remains unimplemented | [#115](https://github.com/vsimko/gfabasic-rust/issues/115) |
 | Dialect and API research | Amiga GFA BASIC interpreter 3.5 is the accepted normative source dialect; 3.0/3.03 material is historical research requiring 3.5 confirmation, and Atari ST V2.xx/V3.0 remains research-only. No dialect is implemented or conformant | [ADR 0009](docs/architecture/adr/0009-initial-source-dialect-amiga-gfa-basic-3.5.md), [#3](https://github.com/vsimko/gfabasic-rust/issues/3), [#63–#66](https://github.com/vsimko/gfabasic-rust/issues?q=is%3Aissue+is%3Aopen) |
@@ -68,9 +68,15 @@ Implement the smallest useful source-to-native-executable path for the accepted 
 - [ ] Dialect-aware source decoding and composition — [#120](https://github.com/vsimko/gfabasic-rust/issues/120)
 - [ ] Source-map integration with compiler diagnostics — [#121](https://github.com/vsimko/gfabasic-rust/issues/121)
 - [ ] Dialect-aware lexer — [#46](https://github.com/vsimko/gfabasic-rust/issues/46)
+  - Initial FACT/VARIAT/COMBIN/PRINT slice now exposes lossless horizontal-whitespace trivia and line-boundary token spans. [Lexer evidence inventory](docs/research/amiga-gfa-basic-35-lexer-evidence.md) records the two supplied books' relevant rules and version boundaries; only the Chapter 14 special names are explicitly verified as 3.5 lexical forms. Full Amiga 3.5 lexical coverage, comments, literals, general identifiers, and operators remain open and evidence-gated. A narrow additional 3.5 addendum increment recognizes `_DATA` and `_0`…`_9` from Chapter 14 p. 14-6; this does not define general underscore identifiers or parser semantics. Regression coverage also checks EOF/delimiter boundaries and rejects longer underscore-prefixed lookalikes without accepting a valid prefix.
 - [ ] Parser and AST — [#47](https://github.com/vsimko/gfabasic-rust/issues/47)
+  - Initial supported-subset parser now returns the AST together with its lossless token/trivia representation; general grammar, richer recovery, and semantic integration remain open.
 - [ ] Symbol resolution and semantic analysis — [#48](https://github.com/vsimko/gfabasic-rust/issues/48)
-- [ ] Typed, target-independent IR — [#49](https://github.com/vsimko/gfabasic-rust/issues/49)
+  - Prototype-only symbol identities and PRINT references are implemented; full declaration, scope, type, suffix, procedure, and API-profile rules remain evidence-gated.
+- [ ] Formatter library and CLI — [#208](https://github.com/vsimko/gfabasic-rust/issues/208)
+  - Initial library formatter and CLI are implemented for the current lossless frontend subset; comment/literal preservation, broader grammar, corpus-wide checks, and LSP integration remain open.
+- [ ] Language server and editor integration — [#209](https://github.com/vsimko/gfabasic-rust/issues/209)
+  - Initial stdio server supports initialize/shutdown/exit, versioned full-document open/change/close, UTF-16/UTF-8 position conversion, and push diagnostics from the shared compiler parser. Stale-version/full-sync, malformed-message, size/depth-limit, cancellation-notification, and multi-document isolation tests exist. Formatter integration, navigation, completion, rename, and fuzzing remain open; see [ADR 0012](docs/architecture/adr/0012-language-server-and-editor-integration.md) and the [LSP capability guide](crates/gfabasic-lsp/README.md).
 - [ ] LLVM backend and Linux x86-64 output — [#50](https://github.com/vsimko/gfabasic-rust/issues/50)
 - [ ] Implement a usable CLI and project configuration — [#111](https://github.com/vsimko/gfabasic-rust/issues/111)
 - [ ] Implement the GFA BASIC core runtime as required by the accepted subset — [#51](https://github.com/vsimko/gfabasic-rust/issues/51)
@@ -87,9 +93,6 @@ Only implement platform behavior backed by accepted references and tests.
 - [ ] Compatibility report and optional migration analysis — [#56](https://github.com/vsimko/gfabasic-rust/issues/56)
 - [x] Fuzzing strategy and source-loader smoke/scheduled campaigns — [#43](https://github.com/vsimko/gfabasic-rust/issues/43), [#118](https://github.com/vsimko/gfabasic-rust/issues/118); lexer/parser targets remain deferred until [#46](https://github.com/vsimko/gfabasic-rust/issues/46) and [#47](https://github.com/vsimko/gfabasic-rust/issues/47) expose stable entry points
 - [ ] Benchmark strategy and measurements — [#60](https://github.com/vsimko/gfabasic-rust/issues/60)
-- [ ] Shared LSP server with diagnostics, formatting, navigation, completion, and safe rename — [#209](https://github.com/vsimko/gfabasic-rust/issues/209); depends on the lossless frontend, semantic symbol index, formatter, and compiler build contract
-- [ ] VS Code extension using the shared LSP server and compiler CLI — [#210](https://github.com/vsimko/gfabasic-rust/issues/210)
-- [ ] IntelliJ IDEA integration using the shared LSP server — [#211](https://github.com/vsimko/gfabasic-rust/issues/211)
 
 ### Phase 4 — Release readiness
 
@@ -113,8 +116,12 @@ The first end-to-end MVP integration gate is tracked separately in [#113](https:
 5. A user quick start and installation guide depend on a working, tested CLI and distributable build.
 6. The generic source-loader fuzz target is implemented; lexer/parser fuzz targets depend on stable frontend entry points and source contracts.
 7. Release packaging depends on successful end-to-end builds and explicit runtime dependency policy.
-8. Editor diagnostics, formatting, navigation, and refactoring depend on the same lossless frontend and semantic model as compilation; LSP and editor clients must not introduce a parallel language implementation.
 
 ## Roadmap maintenance
 
 Update this file when phase order, dependency relationships, or project maturity changes. Update the corresponding GitHub Issue when task scope or acceptance criteria change. Never use this roadmap as a substitute for issue-level technical decisions, and never mark a phase complete solely because its planning document exists.
+
+
+### Lexer evidence audit — 2026-11-06
+
+The supplied 3.5 Interpreter manual was re-audited for editor case/abbreviation handling, physical-line structure, identifiers/suffixes, strings, numeric prefixes, and comments. These passages are in the manual's 3.0 base text; the 3.5 addendum does not confirm them as general 3.5 lexical rules. The only version-marked general lexer exceptions remain exact _DATA and _0…_9 spellings, with _DATA= split before assignment. No lexer behavior was broadened. Existing exact-name positive/negative boundary tests remain the regression gate; broader lexical tests await 3.5 source evidence or reproducible interpreter observations. See the lexer evidence inventory and ADR 0007. Issues #46 and #208 remain open.
