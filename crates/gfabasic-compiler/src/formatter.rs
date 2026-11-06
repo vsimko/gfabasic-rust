@@ -124,33 +124,83 @@ mod tests {
     }
 
     #[test]
-    fn formatting_is_idempotent() {
-        let once = format("x=FACT(1)\r\nPRINT   x\r\n");
-        assert_eq!(format(&once), once);
+    fn golden_cases_cover_each_supported_statement() {
+        let cases = [
+            ("x=FACT(0001)", "x = FACT(0001)\n"),
+            ("y=VARIAT(5,2)", "y = VARIAT(5, 2)\n"),
+            ("z=COMBIN(5,2)", "z = COMBIN(5, 2)\n"),
+            ("PRINT   x,y,z", "PRINT x, y, z\n"),
+        ];
+
+        for (source, expected) in cases {
+            assert_eq!(format(source), expected, "source: {source:?}");
+        }
+    }
+
+    #[test]
+    fn formatting_is_idempotent_across_supported_corpus() {
+        let cases = [
+            "x=FACT(1)\r\nPRINT   x\r\n",
+            "y = VARIAT(5, 2)\n",
+            "z=COMBIN(0005,02)",
+            "\n\nx=FACT(3)\n\nPRINT x,y,z\n",
+            "x=FACT(1)\ny=VARIAT(5,2)\nz=COMBIN(5,2)\nPRINT x,y,z\n",
+        ];
+
+        for source in cases {
+            let once = format(source);
+            assert_eq!(format(&once), once, "source: {source:?}");
+        }
     }
 
     #[test]
     fn formatting_preserves_parsed_program_meaning() {
-        let source = "x=FACT(2)\ny=VARIAT(5,2)\nz=COMBIN(5,2)\nPRINT x,y,z\n";
-        let formatted = format(source);
-        let mut before_sources = SourceMap::new();
-        let before_id = before_sources.add_source("before.bas", source);
-        let before = parse_document(before_id, source).unwrap();
-        let mut after_sources = SourceMap::new();
-        let after_id = after_sources.add_source("after.bas", formatted.as_str());
-        let after = parse_document(after_id, &formatted).unwrap();
+        let cases = [
+            "x=FACT(2)\n",
+            "y=VARIAT(5,2)\n",
+            "z=COMBIN(5,2)\n",
+            "PRINT x,y,z\n",
+            "x=FACT(2)\ny=VARIAT(5,2)\nz=COMBIN(5,2)\nPRINT x,y,z\n",
+        ];
 
-        assert_eq!(meanings(&before.program), meanings(&after.program));
+        for source in cases {
+            let formatted = format(source);
+            let mut before_sources = SourceMap::new();
+            let before_id = before_sources.add_source("before.bas", source);
+            let before = parse_document(before_id, source).unwrap();
+            let mut after_sources = SourceMap::new();
+            let after_id = after_sources.add_source("after.bas", formatted.as_str());
+            let after = parse_document(after_id, &formatted).unwrap();
+
+            assert_eq!(
+                meanings(&before.program),
+                meanings(&after.program),
+                "source: {source:?}"
+            );
+        }
     }
 
     #[test]
     fn unsupported_syntax_is_rejected_without_output() {
-        let source = "PRINT \"not supported yet\"\n";
-        let mut sources = SourceMap::new();
-        let source_id = sources.add_source("unsupported.bas", source);
-        let errors = format_source(source_id, source).expect_err("strings are not lexed yet");
+        let cases = [
+            "PRINT \"not supported yet\"\n",
+            "REM comment\n",
+            "' apostrophe comment\n",
+            "x=FACT(1) ! trailing comment\n",
+            "DATA 1,2,3\n",
+        ];
 
-        assert!(!errors.is_empty());
+        for source in cases {
+            let mut sources = SourceMap::new();
+            let source_id = sources.add_source("unsupported.bas", source);
+            let errors = format_source(source_id, source)
+                .expect_err("syntax outside the verified formatter subset must be rejected");
+
+            assert!(
+                !errors.is_empty(),
+                "source unexpectedly accepted: {source:?}"
+            );
+        }
     }
 
     #[test]
