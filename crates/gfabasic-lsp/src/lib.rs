@@ -572,6 +572,37 @@ mod tests {
     }
 
     #[test]
+    fn dispatch_tracks_full_document_open_change_and_close() {
+        let mut store = DocumentStore::default();
+        let opened = parse_json(br#"{"jsonrpc":"2.0","method":"textDocument/didOpen","params":{"textDocument":{"uri":"file:///x.gfa","languageId":"gfabasic","version":1,"text":"PRINT 1"}}}"#).unwrap();
+        assert!(dispatch(opened, &mut store).is_none());
+        assert_eq!(store.get("file:///x.gfa").unwrap().version, 1);
+
+        let changed = parse_json(br#"{"jsonrpc":"2.0","method":"textDocument/didChange","params":{"textDocument":{"uri":"file:///x.gfa","version":2},"contentChanges":[{"text":"PRINT 2"}]}}"#).unwrap();
+        assert!(dispatch(changed, &mut store).is_none());
+        assert_eq!(store.get("file:///x.gfa").unwrap().text, "PRINT 2");
+        assert_eq!(store.get("file:///x.gfa").unwrap().version, 2);
+
+        let stale = parse_json(br#"{"jsonrpc":"2.0","method":"textDocument/didChange","params":{"textDocument":{"uri":"file:///x.gfa","version":1},"contentChanges":[{"text":"PRINT 0"}]}}"#).unwrap();
+        dispatch(stale, &mut store);
+        assert_eq!(store.get("file:///x.gfa").unwrap().text, "PRINT 2");
+
+        let closed = parse_json(br#"{"jsonrpc":"2.0","method":"textDocument/didClose","params":{"textDocument":{"uri":"file:///x.gfa"}}}"#).unwrap();
+        dispatch(closed, &mut store);
+        assert!(store.is_empty());
+    }
+
+    #[test]
+    fn rejects_ranged_changes_when_full_sync_is_negotiated() {
+        let mut store = DocumentStore::default();
+        store.open("file:///x.gfa".into(), "gfabasic".into(), 1, "PRINT 1".into());
+        let changed = parse_json(br#"{"jsonrpc":"2.0","method":"textDocument/didChange","params":{"textDocument":{"uri":"file:///x.gfa","version":2},"contentChanges":[{"range":{"start":{"line":0,"character":6},"end":{"line":0,"character":7}},"text":"2"}]}}"#).unwrap();
+        dispatch(changed, &mut store);
+        assert_eq!(store.get("file:///x.gfa").unwrap().version, 1);
+        assert_eq!(store.get("file:///x.gfa").unwrap().text, "PRINT 1");
+    }
+
+    #[test]
     fn handles_initialize_and_full_document_notifications() {
         let input = concat!(
             "Content-Length: 58\r\n\r\n",
