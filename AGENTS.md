@@ -27,3 +27,7 @@ Any action that requires a human decision, approval, credential, permission, ext
 `needs-human` means that an explicit human action is required before the issue (or its dependent work) can progress. It is distinct from ordinary technical complexity, agent work in progress, and external tasks that can be completed autonomously.
 
 The issue tracker is the source of truth for blockers; do not keep human-blocking requirements only in chat, comments, or private agent notes.
+
+## Repository consistency validation
+
+Read `docs/architecture/VALIDATION.md` before changing rules or website status claims. Keep checks declarative and evidence-based. Do not infer implementation support from prose, issue titles, or commit messages. Avoid new dependencies without a demonstrated need. Update fixtures, tests, and documentation when validation behavior changes.
