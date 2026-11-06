@@ -53,7 +53,7 @@ jobs:
           jq -e '
             .spdxVersion == "SPDX-2.3"
             and ([.packages[].name] as $names
-              | ["gfabasic-compiler", "gfabasic-runtime", "gfabasic-platform-linux"]
+              | ["gfabasic-compiler", "gfabasic-runtime", "gfabasic-platform-linux", "gfabasic-lsp"]
               | all(. as $required | $names | index($required) != null))
           ' workspace.spdx.json > /dev/null
 
@@ -91,7 +91,7 @@ jobs:
           jq -e '
             .spdxVersion == "SPDX-2.3"
             and ([.packages[].name] as $names
-              | ["gfabasic-compiler", "gfabasic-runtime", "gfabasic-platform-linux"]
+              | ["gfabasic-compiler", "gfabasic-runtime", "gfabasic-platform-linux", "gfabasic-lsp"]
               | all(. as $required | $names | index($required) != null))
           ' workspace.spdx.json > /dev/null
 
