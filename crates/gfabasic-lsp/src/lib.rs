@@ -909,7 +909,11 @@ mod tests {
     #[test]
     fn json_parser_rejects_malformed_and_excessively_nested_messages() {
         assert!(parse_json(b"{").is_err());
-        let nested = format!("{}null{}", "[".repeat(MAX_JSON_DEPTH + 1), "]".repeat(MAX_JSON_DEPTH + 1));
+        let nested = format!(
+            "{}null{}",
+            "[".repeat(MAX_JSON_DEPTH + 1),
+            "]".repeat(MAX_JSON_DEPTH + 1)
+        );
         assert!(parse_json(nested.as_bytes()).is_err());
     }
 
@@ -926,8 +930,18 @@ mod tests {
     #[test]
     fn store_isolates_multiple_documents() {
         let mut store = DocumentStore::default();
-        store.open("file:///one.gfa".into(), "gfabasic".into(), 1, "PRINT 1".into());
-        store.open("file:///two.gfa".into(), "gfabasic".into(), 1, "PRINT 2".into());
+        store.open(
+            "file:///one.gfa".into(),
+            "gfabasic".into(),
+            1,
+            "PRINT 1".into(),
+        );
+        store.open(
+            "file:///two.gfa".into(),
+            "gfabasic".into(),
+            1,
+            "PRINT 2".into(),
+        );
         assert!(store.change("file:///one.gfa", 2, "PRINT 3".into()));
         assert_eq!(store.get("file:///one.gfa").unwrap().text, "PRINT 3");
         assert_eq!(store.get("file:///two.gfa").unwrap().text, "PRINT 2");
@@ -946,10 +960,9 @@ mod tests {
     #[test]
     fn cancellation_notification_is_safe_without_async_requests() {
         let mut store = DocumentStore::default();
-        let cancellation = parse_json(
-            br#"{"jsonrpc":"2.0","method":"$/cancelRequest","params":{"id":99}}"#,
-        )
-        .unwrap();
+        let cancellation =
+            parse_json(br#"{"jsonrpc":"2.0","method":"$/cancelRequest","params":{"id":99}}"#)
+                .unwrap();
         assert!(dispatch(cancellation, &mut store).is_none());
     }
 
