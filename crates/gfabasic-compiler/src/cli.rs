@@ -156,7 +156,10 @@ fn run_fmt<W: Write, E: Write>(args: &[String], out: &mut W, err: &mut E) -> u8 
     };
 
     if check && (in_place || output_path.is_some()) {
-        let _ = writeln!(err, "error: --check cannot be combined with -o or --in-place");
+        let _ = writeln!(
+            err,
+            "error: --check cannot be combined with -o or --in-place"
+        );
         return 2;
     }
     if in_place && output_path.is_some() {
@@ -177,8 +180,7 @@ fn run_fmt<W: Write, E: Write>(args: &[String], out: &mut W, err: &mut E) -> u8 
     };
 
     let mut sources = crate::source::SourceMap::new();
-    let source_id =
-        sources.add_source(source_path.to_string_lossy().into_owned(), source.as_str());
+    let source_id = sources.add_source(source_path.to_string_lossy().into_owned(), source.as_str());
     let formatted = match crate::formatter::format_source(source_id, &source) {
         Ok(formatted) => formatted,
         Err(diagnostics) => {
