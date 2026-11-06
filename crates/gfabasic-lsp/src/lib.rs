@@ -662,7 +662,8 @@ impl JsonParser<'_> {
                 return Err(JsonParseError);
             }
         }
-        let number = std::str::from_utf8(&self.input[start..self.offset]).map_err(|_| JsonParseError)?;
+        let number =
+            std::str::from_utf8(&self.input[start..self.offset]).map_err(|_| JsonParseError)?;
         Ok(Json::Number(number.into()))
     }
 }
