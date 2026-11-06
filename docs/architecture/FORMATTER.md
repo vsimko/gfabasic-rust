@@ -8,7 +8,7 @@
 
 The formatter is a library feature in `gfabasic-compiler::formatter`. It consumes source text and a source ID, validates the whole document through the lossless parser, and returns formatted text or the parser's diagnostics. It does not depend on the CLI, LLVM, generated-program runtime, or SDL3.
 
-At this stage, the parser accepts only the evidence-backed assignment forms `FACT`, `VARIAT`, `COMBIN`, and `PRINT` with the current prototype variable subset. The formatter rejects every construct the parser cannot validate. In particular, comments, string and DATA payloads, broader identifier forms, and nested blocks are not formatted until their Amiga GFA BASIC 3.5 lexical/grammar rules are verified and represented losslessly.
+At this stage, the parser accepts only the evidence-backed assignment forms `FACT`, `VARIAT`, `COMBIN`, and `PRINT` with the current prototype variable subset. The parser still rejects string expressions, DATA statements, broader identifier forms, and nested blocks until their Amiga GFA BASIC 3.5 lexical/grammar rules are verified. Comment trivia is retained losslessly: full-line apostrophe/REM comments and trailing `!` comments are copied byte-for-byte. `!` is not treated as a comment introducer on a line beginning with `DATA`, matching the documented exception.
 
 ## Canonical prototype layout
 
@@ -19,7 +19,7 @@ For the supported subset only:
 - No space before a comma and one space after a comma.
 - One statement per line; empty lines are collapsed.
 - LF line endings and exactly one final newline.
-- Preserve the exact source spelling of every token, including identifiers, intrinsic names, and numeric literal text. No case conversion, transliteration, Unicode normalization, or identifier rewriting is performed.
+- Preserve the exact source spelling of every token and comment, including identifiers, intrinsic names, numeric literal text, and comment payload. No case conversion, transliteration, Unicode normalization, or identifier rewriting is performed.
 
 These are project formatting choices, not claims about how the historical interpreter displayed or stored source. The formatter does not infer canonical keyword or builtin casing.
 
@@ -48,6 +48,6 @@ The `gfabasic fmt` command uses this library directly. It writes formatted text 
 
 ## Next increments
 
-1. Extend lossless lexing and formatting only alongside verified comment, string/DATA, identifier, and grammar support.
+1. Extend string literal and DATA payload support with delimiter-aware, lossless tokens and grammar tests; keep the DATA `!` exception explicit.
 2. Add corpus-wide formatting checks only after the supported fixture policy and canonical style are established.
 3. Share the same formatter implementation with LSP document/range formatting; editor edits must be version-bound as specified by issue #208 and ADR 0012.
