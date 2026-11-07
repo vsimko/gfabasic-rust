@@ -4,6 +4,8 @@ This directory contains original research notes and technical summaries. These d
 
 | Document | Platform and version | Status |
 |---|---|---|
+| [Amiga GFA BASIC 3.5 formatter](amiga-gfa-basic-35-formatter.md) | Amiga, interpreter 3.5 | Prototype scope, canonical style, CLI behavior, and evidence-gated limitations |
+|---|---|---|
 | [Atari ST GFA BASIC V2.xx / V3.0](atari-gfa-basic-3.0.md) | Atari ST, V2.xx/V3.0 | Preliminary research draft; not an accepted compiler dialect |
 | [Atari ST API reference](atari-gfa-api.md) | Atari ST, V2.xx/V3.0 | Initial API inventory; signatures and runtime behavior require validation |
 | [Systematic Atari book review](../research/atari-gfa-book-systematic-review.md) | Atari ST, V2.xx/V3.0 | First pass complete for all 24 chapters; validation and page-image checks pending |
