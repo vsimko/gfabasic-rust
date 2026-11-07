@@ -11,8 +11,8 @@ use crate::source::SourceId;
 /// Format the currently supported Amiga GFA BASIC 3.5 source subset.
 ///
 /// The formatter validates the complete input with the lossless parser before
-/// producing output. Unsupported syntax (including standalone comments and string/DATA
-/// payloads until their lexical rules are verified) returns diagnostics and
+/// producing output. Unsupported syntax (including standalone comments and
+/// string/DATA payloads until their lexical rules are verified) returns diagnostics and
 /// never yields partially formatted text.
 ///
 /// The canonical prototype layout uses one space around assignment, one space
@@ -195,7 +195,10 @@ mod tests {
     fn preserves_trailing_comment_text_and_normalizes_only_the_separator() {
         let cases = [
             ("x=FACT(1)'keep  spacing\n", "x = FACT(1) 'keep  spacing\n"),
-            ("PRINT   x,y,z   !  exact comment text  \r\n", "PRINT x, y, z !  exact comment text  \n"),
+            (
+                "PRINT   x,y,z   !  exact comment text  \r\n",
+                "PRINT x, y, z !  exact comment text  \n",
+            ),
         ];
 
         for (source, expected) in cases {
