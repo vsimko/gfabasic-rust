@@ -138,3 +138,31 @@ The supplied manual's contents also identify the following base-manual 3.0 featu
 - **Chapter 12, Appendices:** keyboard scan codes, ASCII table, special ASCII codes, fill-in patterns, Amiga-DOS error messages, table of commands and table of operating-system functions (printed pp. 12-2–12-19).
 
 This is the source table-of-contents extraction only. It does not assert that every listed 3.0 item exists unchanged in 3.5. In particular, Chapter 11 must be split into language-level wrappers versus Amiga OS library calls when the detailed inventory is created.
+
+### Further Chapter 4 behavior extracted from the base-manual pages
+
+These are concise source notes for the 3.0 baseline only; exact 3.5 compatibility remains unresolved.
+
+- **ROUND (printed p. 4-14):** ROUND(x) rounds to a whole number; ROUND(x,n) rounds to n decimal places. A negative n rounds before the decimal point (the manual's example ROUND(155,-1) gives 160).
+- **ODD/EVEN (p. 4-15):** return -1 for true and 0 for false; zero is even.
+- **MIN/MAX (p. 4-16):** accept a list of numeric or string expressions and return the smallest/largest item.
+- **RND/RANDOM/RAND/RANDOMIZE (pp. 4-17–4-18):** RND returns a real value in [0,1); RANDOM(x) returns an integer in [0,x); RAND(y) returns a 16-bit integer in [0,y); RANDOMIZE seeds the generator and repeating a seed reproduces the sequence. The manual says RANDOMIZE without an argument or with zero initializes the generator.
+- **BCLR/BSET/BCHG/BTST (pp. 4-19–4-20):** bit indices are zero-based and masked to 0–31; operations clear, set, toggle, or test a bit in a 32-bit integer expression. BTST returns 1/0 in this section (note that the separate logical-operator section describes TRUE as -1; retain the page-local behavior and test it before normalizing).
+- **SHL/SHR (pp. 4-21–4-22):** shift a numeric expression by a count; default form uses a longword, suffix & selects word length, suffix | selects byte length. The manual documents sign-extension/bit clearing differences for word and byte forms.
+- **ROL/ROR (p. 4-22):** rotate bits within the selected longword/word/byte width; unlike shifts, the bit shifted out re-enters at the opposite end.
+- **AND/OR/XOR functions (p. 4-23):** bitwise combination of integer expressions; AND keeps bits set in both, OR keeps bits set in either, XOR keeps bits set in exactly one.
+- **IMP/EQV functions (p. 4-24):** IMP clears a bit set in x but not y; EQV sets bits whose corresponding input bits match.
+- **SWAP function (p. 4-25):** exchanges the upper and lower 16-bit words of a 32-bit expression. The manual explicitly distinguishes this function from the SWAP command described in Chapter 2.
+- **BYTE/CARD/WORD (p. 4-26):** BYTE returns the low 8 bits; CARD returns the low 16 bits; WORD extends a 16-bit word to a longword by copying bit 15 into bits 16–31.
+- **LEFT$/RIGHT$ (p. 4-27):** return the requested number of characters from the left/right; if the count is omitted, return one character.
+- **MID$ function (p. 4-28):** returns a substring from a 1-based position; omitted length returns the remainder; a start beyond the string length returns an empty string.
+- **MID$ command (p. 4-29):** overwrites characters in an existing string variable from the requested position; it does not change the target string's length and stops if the target is too short.
+- **INSTR (p. 4-30):** searches for a substring, optionally starting at a specified position; returns zero when absent. The manual describes the result as the position after which the substring is contained, so confirm indexing carefully before implementation.
+- **RINSTR (p. 4-31):** searches from the rightmost character or from the supplied position.
+- **STRING$/SPACE$/SPC (p. 4-32):** STRING$ repeats a string or character code; SPACE$ creates a string of spaces; SPC emits spacing in PRINT rather than creating a string.
+- **PRED/SUCC string forms (p. 4-33):** return the previous/next character by ASCII value, using the first character of the input string.
+- **LEN/TRIM$ (p. 4-34):** LEN returns string length; TRIM$ removes spaces at both ends.
+- **UPPER$ (p. 4-35):** converts lowercase characters to uppercase.
+- **LSET/RSET (p. 4-36):** the contents page identifies left/right string assignment; exact padding/truncation semantics still need extraction and page-image review.
+
+The base-manual contents index and page-level descriptions together now provide a candidate inventory for the numeric, bitwise and string families. This is still not a 3.5 claim and should not be imported into the canonical 3.5 API registry without compatibility evidence.
