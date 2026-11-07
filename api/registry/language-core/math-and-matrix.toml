@@ -5,14 +5,13 @@ schema-version = 1
 # intentionally excluded until their 3.5 applicability is reviewed.
 
 [[declarations]]
-id = "gfa.amiga.math.fact"
+id = "gfa.language.math.fact"
 name = "FACT"
 kind = "function"
 
 [[declarations.availability]]
 dialect = "amiga-gfa-basic-interpreter"
 versions = ["3.5"]
-profile = "amiga"
 
 [[declarations.syntax]]
 form = "FACT(integer-expression)"
@@ -49,14 +48,13 @@ path = "docs/research/amiga-gfa-basic-35-addendum-inventory.md"
 anchors = ["4-additional-commands-in-version-35-combined-scan-chapter-14-printed-pp-14-1-14-7"]
 
 [[declarations]]
-id = "gfa.amiga.math.variat"
+id = "gfa.language.math.variat"
 name = "VARIAT"
 kind = "function"
 
 [[declarations.availability]]
 dialect = "amiga-gfa-basic-interpreter"
 versions = ["3.5"]
-profile = "amiga"
 
 [[declarations.syntax]]
 form = "VARIAT(integer-expression, integer-expression)"
@@ -96,14 +94,13 @@ path = "docs/research/amiga-gfa-basic-35-addendum-inventory.md"
 anchors = ["4-additional-commands-in-version-35-combined-scan-chapter-14-printed-pp-14-1-14-7"]
 
 [[declarations]]
-id = "gfa.amiga.math.combin"
+id = "gfa.language.math.combin"
 name = "COMBIN"
 kind = "function"
 
 [[declarations.availability]]
 dialect = "amiga-gfa-basic-interpreter"
 versions = ["3.5"]
-profile = "amiga"
 
 [[declarations.syntax]]
 form = "COMBIN(integer-expression, integer-expression)"
@@ -143,7 +140,7 @@ path = "docs/research/amiga-gfa-basic-35-addendum-inventory.md"
 anchors = ["4-additional-commands-in-version-35-combined-scan-chapter-14-printed-pp-14-1-14-7"]
 
 [[declarations]]
-id = "gfa.amiga.matrix.mat-base"
+id = "gfa.language.matrix.mat-base"
 name = "MAT BASE"
 kind = "statement"
 
@@ -153,7 +150,6 @@ type = "no return value"
 [[declarations.availability]]
 dialect = "amiga-gfa-basic-interpreter"
 versions = ["3.5"]
-profile = "amiga"
 
 [[declarations.syntax]]
 form = "MAT BASE 0 | MAT BASE 1"
@@ -186,7 +182,7 @@ path = "docs/research/amiga-gfa-basic-35-addendum-inventory.md"
 anchors = ["3-linear-operations-on-numeric-fields"]
 
 [[declarations]]
-id = "gfa.amiga.matrix.mat-clr"
+id = "gfa.language.matrix.mat-clr"
 name = "MAT CLR"
 kind = "statement"
 
@@ -196,7 +192,6 @@ type = "no return value"
 [[declarations.availability]]
 dialect = "amiga-gfa-basic-interpreter"
 versions = ["3.5"]
-profile = "amiga"
 
 [[declarations.syntax]]
 form = "MAT CLR array()"
@@ -230,7 +225,7 @@ path = "docs/research/amiga-gfa-basic-35-addendum-inventory.md"
 anchors = ["3-linear-operations-on-numeric-fields"]
 
 [[declarations]]
-id = "gfa.amiga.matrix.mat-set"
+id = "gfa.language.matrix.mat-set"
 name = "MAT SET"
 kind = "statement"
 
@@ -240,7 +235,6 @@ type = "no return value"
 [[declarations.availability]]
 dialect = "amiga-gfa-basic-interpreter"
 versions = ["3.5"]
-profile = "amiga"
 
 [[declarations.syntax]]
 form = "MAT SET array()=scalar"
@@ -276,7 +270,7 @@ path = "docs/research/amiga-gfa-basic-35-addendum-inventory.md"
 anchors = ["3-linear-operations-on-numeric-fields"]
 
 [[declarations]]
-id = "gfa.amiga.matrix.mat-one"
+id = "gfa.language.matrix.mat-one"
 name = "MAT ONE"
 kind = "statement"
 
@@ -286,7 +280,6 @@ type = "no return value"
 [[declarations.availability]]
 dialect = "amiga-gfa-basic-interpreter"
 versions = ["3.5"]
-profile = "amiga"
 
 [[declarations.syntax]]
 form = "MAT ONE array()"
@@ -319,7 +312,7 @@ path = "docs/research/amiga-gfa-basic-35-addendum-inventory.md"
 anchors = ["3-linear-operations-on-numeric-fields"]
 
 [[declarations]]
-id = "gfa.amiga.matrix.mat-trans"
+id = "gfa.language.matrix.mat-trans"
 name = "MAT TRANS"
 kind = "statement"
 
@@ -329,7 +322,6 @@ type = "no return value"
 [[declarations.availability]]
 dialect = "amiga-gfa-basic-interpreter"
 versions = ["3.5"]
-profile = "amiga"
 
 [[declarations.syntax]]
 form = "MAT TRANS destination() [= source()]"
@@ -365,7 +357,7 @@ path = "docs/research/amiga-gfa-basic-35-addendum-inventory.md"
 anchors = ["3-linear-operations-on-numeric-fields"]
 
 [[declarations]]
-id = "gfa.amiga.matrix.mat-norm"
+id = "gfa.language.matrix.mat-norm"
 name = "MAT NORM"
 kind = "statement"
 
@@ -375,7 +367,6 @@ type = "no return value"
 [[declarations.availability]]
 dialect = "amiga-gfa-basic-interpreter"
 versions = ["3.5"]
-profile = "amiga"
 
 [[declarations.syntax]]
 form = "MAT NORM array(), 0 | 1"

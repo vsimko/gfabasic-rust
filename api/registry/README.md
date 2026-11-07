@@ -5,12 +5,13 @@ Canonical declarations use TOML. The planned registry namespaces are `language-c
 ## Current inventory
 
 - `atari-st/time.toml`: one research-status Atari ST `TIMER` declaration for version 3.0.
-- `amiga/math-and-matrix.toml`: `FACT`, `VARIAT`, `COMBIN`, `MAT BASE`, `MAT CLR`, `MAT SET`, `MAT ONE`, `MAT TRANS`, and `MAT NORM`.
-- `amiga/special-and-platform-commands.toml`: `_DATA`, `_DATA=`, `_0`…`_9`, `PCOLOR`, the negative-screen-number `OPENW` variant, and the `GURU` command/function forms.
-- `amiga/matrix-operations.toml`: matrix/vector DATA and file I/O, copy/transpose, arithmetic, determinant, rank, and inverse operations.
+- `language-core/math-and-matrix.toml`: `FACT`, `VARIAT`, `COMBIN`, and the initial matrix base/generation operations.
+- `language-core/matrix-operations.toml`: matrix/vector DATA and file I/O, copy/transpose, arithmetic, determinant, rank, and inverse operations.
+- `language-core/special-variables-and-data-pointers.toml`: `_DATA`, `_DATA=`, and `_0`…`_9`.
+- `amiga/special-and-platform-commands.toml`: `PCOLOR`, the negative-screen-number `OPENW` variant, and the `GURU` command/function forms.
 - `language-core/`: no declarations yet.
 
-The Amiga catalogue currently contains 28 declarations, deliberately limited to features explicitly identified in the supplied 3.5 interpreter addendum. It does not claim completeness. The addendum's Chapter 13/14 page references and known source limitations are documented in [the extracted feature inventory](../../docs/research/amiga-gfa-basic-35-addendum-inventory.md).
+The language-core catalogue currently contains 28 declarations, and the Amiga platform profile contains three declarations. All are limited to features explicitly identified in the supplied 3.5 interpreter addendum. Neither catalogue claims completeness. The addendum's Chapter 13/14 page references and known source limitations are documented in [the extracted feature inventory](../../docs/research/amiga-gfa-basic-35-addendum-inventory.md).
 
 ## Evidence and implementation boundaries
 

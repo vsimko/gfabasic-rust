@@ -5,14 +5,13 @@ schema-version = 1
 # implementation or executable conformance.
 
 [[declarations]]
-id = "gfa.amiga.matrix.mat-read"
+id = "gfa.language.matrix.mat-read"
 name = "MAT READ"
 kind = "statement"
 
 [[declarations.availability]]
 dialect = "amiga-gfa-basic-interpreter"
 versions = ["3.5"]
-profile = "amiga"
 
 [[declarations.syntax]]
 form = "MAT READ array()"
@@ -48,14 +47,13 @@ path = "docs/research/amiga-gfa-basic-35-addendum-inventory.md"
 anchors = ["3-linear-operations-on-numeric-fields"]
 
 [[declarations]]
-id = "gfa.amiga.matrix.mat-print"
+id = "gfa.language.matrix.mat-print"
 name = "MAT PRINT"
 kind = "statement"
 
 [[declarations.availability]]
 dialect = "amiga-gfa-basic-interpreter"
 versions = ["3.5"]
-profile = "amiga"
 
 [[declarations.syntax]]
 form = "MAT PRINT [#channel,] array()[, g, n]"
@@ -96,14 +94,13 @@ path = "docs/research/amiga-gfa-basic-35-addendum-inventory.md"
 anchors = ["3-linear-operations-on-numeric-fields"]
 
 [[declarations]]
-id = "gfa.amiga.matrix.mat-input"
+id = "gfa.language.matrix.mat-input"
 name = "MAT INPUT"
 kind = "statement"
 
 [[declarations.availability]]
 dialect = "amiga-gfa-basic-interpreter"
 versions = ["3.5"]
-profile = "amiga"
 
 [[declarations.syntax]]
 form = "MAT INPUT #channel, array()"
@@ -142,14 +139,13 @@ path = "docs/research/amiga-gfa-basic-35-addendum-inventory.md"
 anchors = ["3-linear-operations-on-numeric-fields"]
 
 [[declarations]]
-id = "gfa.amiga.matrix.mat-cpy"
+id = "gfa.language.matrix.mat-cpy"
 name = "MAT CPY"
 kind = "statement"
 
 [[declarations.availability]]
 dialect = "amiga-gfa-basic-interpreter"
 versions = ["3.5"]
-profile = "amiga"
 
 [[declarations.syntax]]
 form = "MAT CPY destination([i,j])=source([k,l])[,h,w]"
@@ -222,14 +218,13 @@ path = "docs/research/amiga-gfa-basic-35-addendum-inventory.md"
 anchors = ["3-linear-operations-on-numeric-fields"]
 
 [[declarations]]
-id = "gfa.amiga.matrix.mat-xcpy"
+id = "gfa.language.matrix.mat-xcpy"
 name = "MAT XCPY"
 kind = "statement"
 
 [[declarations.availability]]
 dialect = "amiga-gfa-basic-interpreter"
 versions = ["3.5"]
-profile = "amiga"
 
 [[declarations.syntax]]
 form = "MAT XCPY destination([i,j])=source([k,l])[,h,w]"
@@ -274,14 +269,13 @@ path = "docs/research/amiga-gfa-basic-35-addendum-inventory.md"
 anchors = ["3-linear-operations-on-numeric-fields"]
 
 [[declarations]]
-id = "gfa.amiga.matrix.mat-add"
+id = "gfa.language.matrix.mat-add"
 name = "MAT ADD"
 kind = "statement"
 
 [[declarations.availability]]
 dialect = "amiga-gfa-basic-interpreter"
 versions = ["3.5"]
-profile = "amiga"
 
 [[declarations.syntax]]
 form = "MAT ADD destination()=left()+right()"
@@ -336,14 +330,13 @@ path = "docs/research/amiga-gfa-basic-35-addendum-inventory.md"
 anchors = ["3-linear-operations-on-numeric-fields"]
 
 [[declarations]]
-id = "gfa.amiga.matrix.mat-sub"
+id = "gfa.language.matrix.mat-sub"
 name = "MAT SUB"
 kind = "statement"
 
 [[declarations.availability]]
 dialect = "amiga-gfa-basic-interpreter"
 versions = ["3.5"]
-profile = "amiga"
 
 [[declarations.syntax]]
 form = "MAT SUB destination()=left()-right()"
@@ -399,14 +392,13 @@ path = "docs/research/amiga-gfa-basic-35-addendum-inventory.md"
 anchors = ["3-linear-operations-on-numeric-fields"]
 
 [[declarations]]
-id = "gfa.amiga.matrix.mat-mul"
+id = "gfa.language.matrix.mat-mul"
 name = "MAT MUL"
 kind = "statement"
 
 [[declarations.availability]]
 dialect = "amiga-gfa-basic-interpreter"
 versions = ["3.5"]
-profile = "amiga"
 
 [[declarations.syntax]]
 form = "MAT MUL destination()=left()*right()"
@@ -473,14 +465,13 @@ path = "docs/research/amiga-gfa-basic-35-addendum-inventory.md"
 anchors = ["3-linear-operations-on-numeric-fields"]
 
 [[declarations]]
-id = "gfa.amiga.matrix.mat-det"
+id = "gfa.language.matrix.mat-det"
 name = "MAT DET"
 kind = "statement"
 
 [[declarations.availability]]
 dialect = "amiga-gfa-basic-interpreter"
 versions = ["3.5"]
-profile = "amiga"
 
 [[declarations.syntax]]
 form = "MAT DET scalar-result=array([row,column])[,size]"
@@ -522,14 +513,13 @@ path = "docs/research/amiga-gfa-basic-35-addendum-inventory.md"
 anchors = ["3-linear-operations-on-numeric-fields"]
 
 [[declarations]]
-id = "gfa.amiga.matrix.mat-qdet"
+id = "gfa.language.matrix.mat-qdet"
 name = "MAT QDET"
 kind = "statement"
 
 [[declarations.availability]]
 dialect = "amiga-gfa-basic-interpreter"
 versions = ["3.5"]
-profile = "amiga"
 
 [[declarations.syntax]]
 form = "MAT QDET scalar-result=array([row,column])[,size]"
@@ -571,14 +561,13 @@ path = "docs/research/amiga-gfa-basic-35-addendum-inventory.md"
 anchors = ["3-linear-operations-on-numeric-fields"]
 
 [[declarations]]
-id = "gfa.amiga.matrix.mat-rang"
+id = "gfa.language.matrix.mat-rang"
 name = "MAT RANG"
 kind = "statement"
 
 [[declarations.availability]]
 dialect = "amiga-gfa-basic-interpreter"
 versions = ["3.5"]
-profile = "amiga"
 
 [[declarations.syntax]]
 form = "MAT RANG scalar-result=array([row,column])[,size]"
@@ -620,14 +609,13 @@ path = "docs/research/amiga-gfa-basic-35-addendum-inventory.md"
 anchors = ["3-linear-operations-on-numeric-fields"]
 
 [[declarations]]
-id = "gfa.amiga.matrix.mat-inv"
+id = "gfa.language.matrix.mat-inv"
 name = "MAT INV"
 kind = "statement"
 
 [[declarations.availability]]
 dialect = "amiga-gfa-basic-interpreter"
 versions = ["3.5"]
-profile = "amiga"
 
 [[declarations.syntax]]
 form = "MAT INV destination()=source()"
