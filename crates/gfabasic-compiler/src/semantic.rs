@@ -204,6 +204,18 @@ mod tests {
     }
 
     #[test]
+    fn reports_matrix_semantics_as_not_implemented() {
+        let source = include_str!("../../../tests/corpus/amiga/3.5/matrix/mat-one-identity.bas");
+        let mut sources = SourceMap::new();
+        let source_id = sources.add_source("matrix.bas", source);
+        let document = parse_document(source_id, source).expect("matrix fixture syntax parses");
+
+        let errors = resolve_prototype_symbols(&document)
+            .expect_err("matrix semantics are outside the current semantic model");
+        assert!(errors.iter().any(|error| error.code == "GFA-SEM-0003"));
+    }
+
+    #[test]
     fn diagnoses_print_reference_without_a_prior_assignment() {
         let source_text = "PRINT x\n";
         let mut sources = SourceMap::new();
