@@ -80,6 +80,11 @@ pub enum Statement {
         source: Option<String>,
         span: SourceSpan,
     },
+    MatNorm {
+        name: String,
+        mode: i64,
+        span: SourceSpan,
+    },
 }
 
 /// A significant token kind recognized by the current evidence-gated lexer.
@@ -580,6 +585,23 @@ impl Parser {
                     span: SourceSpan::new(self.source_id, start.start, end.end),
                 })
             }
+            "NORM" => {
+                let (name, matrix_span) = self.parse_matrix_reference()?;
+                self.expect(TokenKind::Comma, "',' before MAT NORM mode")?;
+                let mode = self.parse_nonnegative_matrix_integer()?;
+                if !matches!(mode, 0 | 1) {
+                    return Err(self.unsupported_error(
+                        "MAT NORM supports only the documented row mode 0 and column mode 1",
+                        self.tokens[self.cursor - 1].span,
+                    ));
+                }
+                let end = self.tokens[self.cursor - 1].span;
+                Ok(Statement::MatNorm {
+                    name,
+                    mode,
+                    span: SourceSpan::new(self.source_id, start.start, end.end.max(matrix_span.end)),
+                })
+            }
             "TRANS" => {
                 let (destination, destination_span) = self.parse_matrix_reference()?;
                 let source = if matches!(self.current().kind, TokenKind::Equals) {
@@ -843,6 +865,27 @@ mod tests {
             Statement::MatTrans { destination, source: Some(source), .. }
                 if destination == "a" && source == "b"
         )));
+    }
+
+    #[test]
+    fn parses_verified_mat_norm_row_fixture_and_column_mode() {
+        let source = include_str!("../../../tests/corpus/amiga/3.5/matrix/mat-norm-row.bas");
+        let mut sources = SourceMap::new();
+        let source_id = sources.add_source("mat-norm-row.bas", source);
+        let program = parse(source_id, source).unwrap();
+        assert!(matches!(
+            &program.statements[1],
+            Statement::MatNorm { name, mode: 0, .. } if name == "a"
+        ));
+
+        let column_source = "MAT NORM a(),1\n";
+        let mut column_sources = SourceMap::new();
+        let column_id = column_sources.add_source("mat-norm-column.bas", column_source);
+        let column_program = parse(column_id, column_source).unwrap();
+        assert!(matches!(
+            &column_program.statements[0],
+            Statement::MatNorm { name, mode: 1, .. } if name == "a"
+        ));
     }
 
     #[test]

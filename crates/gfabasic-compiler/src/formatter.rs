@@ -93,6 +93,7 @@ mod tests {
         MatPrint(String),
         MatBase(i64),
         MatTrans(String, Option<String>),
+        MatNorm(String, i64),
     }
 
     fn meanings(program: &Program) -> Vec<Meaning> {
@@ -122,6 +123,7 @@ mod tests {
                     source,
                     ..
                 } => Meaning::MatTrans(destination.clone(), source.clone()),
+                Statement::MatNorm { name, mode, .. } => Meaning::MatNorm(name.clone(), *mode),
             })
             .collect()
     }
@@ -285,12 +287,40 @@ mod tests {
     }
 
     #[test]
+    fn golden_cases_cover_verified_mat_norm_modes() {
+        let cases = [
+            ("MAT NORM a(),0", "MAT NORM a(), 0\n"),
+            ("MAT NORM a(),1", "MAT NORM a(), 1\n"),
+        ];
+
+        for (source, expected) in cases {
+            assert_eq!(format(source), expected, "source: {source:?}");
+        }
+    }
+
+    #[test]
+    fn mat_norm_formatting_is_idempotent_and_semantics_preserving() {
+        let source = "MAT NORM a(),0\nMAT NORM a(),1\n";
+        let formatted = format(source);
+        assert_eq!(format(&formatted), formatted);
+
+        let mut before_sources = SourceMap::new();
+        let before_id = before_sources.add_source("before.bas", source);
+        let before = parse_document(before_id, source).unwrap();
+        let mut after_sources = SourceMap::new();
+        let after_id = after_sources.add_source("after.bas", formatted.as_str());
+        let after = parse_document(after_id, &formatted).unwrap();
+        assert_eq!(meanings(&before.program), meanings(&after.program));
+    }
+
+    #[test]
     fn verified_amiga_35_matrix_fixtures_are_idempotent_and_semantics_preserving() {
         let fixtures = [
             include_str!("../../../tests/corpus/amiga/3.5/matrix/mat-one-identity.bas"),
             include_str!("../../../tests/corpus/amiga/3.5/matrix/mat-clear-zero.bas"),
             include_str!("../../../tests/corpus/amiga/3.5/matrix/mat-set-scalar.bas"),
             include_str!("../../../tests/corpus/amiga/3.5/matrix/mat-base-transpose.bas"),
+            include_str!("../../../tests/corpus/amiga/3.5/matrix/mat-norm-row.bas"),
         ];
 
         for source in fixtures {
