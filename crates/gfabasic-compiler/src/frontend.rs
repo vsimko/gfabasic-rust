@@ -1219,6 +1219,73 @@ mod tests {
     }
 
     #[test]
+    fn parses_verified_mat_cpy_and_xcpy_forms() {
+        use super::MatCopyOperation;
+
+        let source = "MAT CPY a()=b()\nMAT CPY a(1,2)=b(3,4),5,6\nMAT XCPY a()=b()\nMAT XCPY b(2,1)=a(0,3),4,5\n";
+        let mut sources = SourceMap::new();
+        let source_id = sources.add_source("mat-copy.bas", source);
+        let program = parse(source_id, source).unwrap();
+
+        assert!(matches!(
+            &program.statements[0],
+            Statement::MatCopy {
+                operation: MatCopyOperation::Copy,
+                destination,
+                destination_offset: None,
+                source,
+                source_offset: None,
+                extent: None,
+                ..
+            } if destination == "a" && source == "b"
+        ));
+        assert!(matches!(
+            &program.statements[1],
+            Statement::MatCopy {
+                operation: MatCopyOperation::Copy,
+                destination_offset: Some((1, 2)),
+                source_offset: Some((3, 4)),
+                extent: Some((5, 6)),
+                ..
+            }
+        ));
+        assert!(matches!(
+            &program.statements[2],
+            Statement::MatCopy {
+                operation: MatCopyOperation::TransposedCopy,
+                destination,
+                source,
+                ..
+            } if destination == "a" && source == "b"
+        ));
+        assert!(matches!(
+            &program.statements[3],
+            Statement::MatCopy {
+                operation: MatCopyOperation::TransposedCopy,
+                destination,
+                destination_offset: Some((2, 1)),
+                source,
+                source_offset: Some((0, 3)),
+                extent: Some((4, 5)),
+                ..
+            } if destination == "b" && source == "a"
+        ));
+    }
+
+    #[test]
+    fn rejects_malformed_mat_copy_selections() {
+        for source in [
+            "MAT CPY a(1)=b()\n",
+            "MAT XCPY a()=b(1,2,3)\n",
+            "MAT CPY a()=b(),4\n",
+        ] {
+            let mut sources = SourceMap::new();
+            let source_id = sources.add_source("invalid-mat-copy.bas", source);
+            assert!(parse(source_id, source).is_err(), "accepted: {source:?}");
+        }
+    }
+
+    #[test]
     fn parses_verified_mat_det_qdet_and_rang_forms() {
         use super::MatAnalysisOperation;
 
