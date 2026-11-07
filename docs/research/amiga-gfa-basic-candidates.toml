@@ -1,0 +1,173 @@
+schema-version = 1
+
+# Status describes evidence for Amiga GFA BASIC 3.5, not parser or runtime support.
+# Base-manual groups remain unresolved until individually reconciled with 3.5 evidence.
+[[candidates]]
+id = "amiga.base.variables-memory"
+name = "Variables, arrays and memory"
+kind = "topic-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["2-2–2-44"]
+status = "unresolved"
+notes = "Chapter 2 contains multiple declarations; this family row is a tracking boundary, not a claim that every listed feature is absent from 3.5."
+
+[[candidates]]
+id = "amiga.base.operators"
+name = "Operators and precedence"
+kind = "topic-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["3-2–3-16"]
+status = "unresolved"
+notes = "OCR-sensitive operator glyphs and precedence spellings require page-image and 3.5 reconciliation."
+
+[[candidates]]
+id = "amiga.base.numeric-string"
+name = "Numeric and string functions"
+kind = "topic-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-2–4-36"]
+status = "unresolved"
+notes = "The base inventory extracts selected semantics only; the full Chapter 4 family is not individually verified for 3.5."
+
+[[candidates]]
+id = "amiga.base.input-output"
+name = "Input and output"
+kind = "topic-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["5-2–5-22"]
+status = "unresolved"
+notes = "Selected command forms have page-backed notes; complete declaration-by-declaration 3.5 reconciliation remains outstanding."
+
+[[candidates]]
+id = "amiga.base.files"
+name = "Disk handling and file organization"
+kind = "topic-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["6-2–6-21"]
+status = "unresolved"
+notes = "File-channel I/O is partially extracted; other disk and random-access operations need separate 3.5 checks."
+
+[[candidates]]
+id = "amiga.base.program-control"
+name = "Program handling and control flow"
+kind = "topic-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["7-2–7-55"]
+status = "unresolved"
+notes = "Selected conditionals, loops and branching forms are extracted; procedures, events, errors and editor commands remain to be reconciled."
+
+[[candidates]]
+id = "amiga.base.graphics"
+name = "Graphics language commands"
+kind = "topic-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["8-2–8-24"]
+status = "unresolved"
+notes = "Selected drawing and fill operations have page-backed notes; full graphics surface is not individually reconciled."
+
+[[candidates]]
+id = "amiga.base.events-windows"
+name = "Events, menus, screens and windows"
+kind = "topic-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["9-2–9-37"]
+status = "unresolved"
+notes = "FILESELECT and selected screen/window topics are inventoried; event/menu/window behavior needs systematic 3.5 verification."
+
+[[candidates]]
+id = "amiga.base.advanced"
+name = "Advanced programming and hardware features"
+kind = "topic-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["10-2–10-14"]
+status = "unresolved"
+notes = "SPRITE, STICK and STRIG have selected notes; CLI, EXEC, SAY, FD-files and object commands need reconciliation."
+
+[[candidates]]
+id = "amiga.base.os-libraries"
+name = "Amiga OS library calls"
+kind = "topic-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["11-2–11-92"]
+status = "unresolved"
+notes = "Seven library families and many routines are inventoried; exact wrapper contracts, OCR details and 3.5 availability remain unverified."
+
+[[candidates]]
+id = "amiga.base.appendices"
+name = "Appendix tables and command index"
+kind = "reference-material"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["12-2–12-19"]
+status = "unresolved"
+notes = "Reference material is not a declaration candidate by itself; index entries must be checked against their cited chapter pages."
+
+[[candidates]]
+id = "amiga.35.mat-base"
+name = "MAT BASE"
+kind = "declaration"
+source = "AM-INTERPRETER-35"
+source-version = "3.5 addendum"
+printed-pages = ["13-1–13-2"]
+status = "confirmed-in-3.5"
+notes = "Explicitly documented in the version-specific Chapter 13 addendum; applicability is limited to the documented matrix operations."
+
+[[candidates]]
+id = "amiga.35.mat-generation"
+name = "MAT CLR, MAT SET, MAT ONE"
+kind = "declaration-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.5 addendum"
+printed-pages = ["13-2–13-3"]
+status = "confirmed-in-3.5"
+notes = "Generation forms and floating-point field constraints are documented in Chapter 13."
+
+[[candidates]]
+id = "amiga.35.mat-io"
+name = "MAT READ, MAT PRINT, MAT INPUT"
+kind = "declaration-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.5 addendum"
+printed-pages = ["13-3–13-6"]
+status = "confirmed-in-3.5"
+notes = "Chapter 13 explicitly documents vector/matrix data I/O forms."
+
+[[candidates]]
+id = "amiga.35.mat-copy"
+name = "MAT CPY, MAT XCPY, MAT TRANS"
+kind = "declaration-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.5 addendum"
+printed-pages = ["13-8–13-20"]
+status = "confirmed-in-3.5"
+notes = "Detailed source-checked shape, offset, extent, transpose and vector-orientation rules are recorded in the addendum inventory."
+
+[[candidates]]
+id = "amiga.35.mat-arithmetic"
+name = "MAT ADD, MAT SUB, MAT MUL"
+kind = "declaration-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.5 addendum"
+printed-pages = ["13-22–13-30"]
+status = "confirmed-in-3.5"
+notes = "Element-wise, scalar, matrix-product and vector-product forms are documented; MAT MUL a(),x semantics remain uncertain in the research notes."
+
+[[candidates]]
+id = "amiga.35.mat-analysis"
+name = "MAT NORM, MAT DET, MAT QDET, MAT RANG, MAT INV"
+kind = "declaration-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.5 addendum"
+printed-pages = ["13-31–13-39"]
+status = "confirmed-in-3.5"
+notes = "The family is documented in Chapter 13; MAT INV operand direction is explicitly disputed between summary and detailed example."
