@@ -92,6 +92,22 @@ pub enum Statement {
         right: MatArithmeticOperand,
         span: SourceSpan,
     },
+    MatMulMatrix {
+        destination: String,
+        left: String,
+        right: String,
+        span: SourceSpan,
+    },
+    MatMulScalar {
+        destination: String,
+        operands: Vec<String>,
+        span: SourceSpan,
+    },
+    MatMulScale {
+        destination: String,
+        scalar: String,
+        span: SourceSpan,
+    },
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -125,6 +141,8 @@ pub enum TokenKind {
     Plus,
     /// Matrix subtraction operator.
     Minus,
+    /// Matrix multiplication operator.
+    Star,
     /// A source line boundary, preserving CR, LF, or CRLF in its span.
     Newline,
     /// A zero-width end-of-input marker.
@@ -261,6 +279,14 @@ pub fn lex_lossless(source_id: SourceId, source: &str) -> Result<LexedSource, Ve
                 offset += 1;
                 tokens.push(Token {
                     kind: TokenKind::Minus,
+                    span: SourceSpan::new(source_id, start, offset),
+                });
+            }
+            b'*' => {
+                let start = offset;
+                offset += 1;
+                tokens.push(Token {
+                    kind: TokenKind::Star,
                     span: SourceSpan::new(source_id, start, offset),
                 });
             }
@@ -659,6 +685,75 @@ impl Parser {
         })
     }
 
+    fn parse_mat_mul(&mut self, start: SourceSpan) -> Result<Statement, Box<Diagnostic>> {
+        let token = self.current().clone();
+        let matrix_destination = matches!(
+            &token.kind,
+            TokenKind::Identifier(name) if matches!(name.as_str(), "a" | "b")
+        ) && self
+            .tokens
+            .get(self.cursor + 1)
+            .is_some_and(|next| matches!(&next.kind, TokenKind::LeftParen));
+
+        if matrix_destination {
+            let (destination, _) = self.parse_matrix_reference()?;
+            if matches!(self.current().kind, TokenKind::Equals) {
+                self.advance();
+                let (left, _) = self.parse_matrix_reference()?;
+                self.expect(TokenKind::Star, "'*' between MAT MUL matrix operands")?;
+                let (right, _) = self.parse_matrix_reference()?;
+                let end = self.tokens[self.cursor - 1].span;
+                Ok(Statement::MatMulMatrix {
+                    destination,
+                    left,
+                    right,
+                    span: SourceSpan::new(self.source_id, start.start, end.end),
+                })
+            } else {
+                self.expect(TokenKind::Comma, "',' in in-place MAT MUL")?;
+                let scalar_token = self.advance();
+                let scalar = match scalar_token.kind {
+                    TokenKind::Identifier(name) => name,
+                    _ => return Err(self.syntax_error(
+                        "expected a scalar variable after MAT MUL destination comma",
+                        scalar_token.span,
+                    )),
+                };
+                let end = self.tokens[self.cursor - 1].span;
+                Ok(Statement::MatMulScale {
+                    destination,
+                    scalar,
+                    span: SourceSpan::new(self.source_id, start.start, end.end),
+                })
+            }
+        } else {
+            let destination_token = self.advance();
+            let destination = match destination_token.kind {
+                TokenKind::Identifier(name) => name,
+                _ => return Err(self.syntax_error(
+                    "expected a scalar destination or matrix destination in MAT MUL",
+                    destination_token.span,
+                )),
+            };
+            self.expect(TokenKind::Equals, "'=' in scalar-result MAT MUL")?;
+            let (first, _) = self.parse_matrix_reference()?;
+            self.expect(TokenKind::Star, "'*' between MAT MUL operands")?;
+            let (second, _) = self.parse_matrix_reference()?;
+            let mut operands = vec![first, second];
+            if matches!(self.current().kind, TokenKind::Star) {
+                self.advance();
+                let (third, _) = self.parse_matrix_reference()?;
+                operands.push(third);
+            }
+            let end = self.tokens[self.cursor - 1].span;
+            Ok(Statement::MatMulScalar {
+                destination,
+                operands,
+                span: SourceSpan::new(self.source_id, start.start, end.end),
+            })
+        }
+    }
+
     fn parse_mat_statement(&mut self, start: SourceSpan) -> Result<Statement, Box<Diagnostic>> {
         let operation = self.advance();
         let operation_name = match operation.kind {
@@ -685,6 +780,7 @@ impl Parser {
                     span: SourceSpan::new(self.source_id, start.start, end.end),
                 })
             }
+            "MUL" => self.parse_mat_mul(start),
             "ADD" => self.parse_mat_arithmetic(start, MatArithmeticOperation::Add),
             "SUB" => self.parse_mat_arithmetic(start, MatArithmeticOperation::Sub),
             "NORM" => {
