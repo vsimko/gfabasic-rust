@@ -604,46 +604,51 @@ impl Parser {
         operation: MatArithmeticOperation,
     ) -> Result<Statement, Box<Diagnostic>> {
         let (destination, _) = self.parse_matrix_reference()?;
-        let (left, right) = if matches!(self.current().kind, TokenKind::Equals) {
-            self.advance();
-            let (left, _) = self.parse_matrix_reference()?;
-            let operator = self.advance();
-            let expected = match operation {
-                MatArithmeticOperation::Add => TokenKind::Plus,
-                MatArithmeticOperation::Sub => TokenKind::Minus,
+        let (left, right) =
+            if matches!(self.current().kind, TokenKind::Equals) {
+                self.advance();
+                let (left, _) = self.parse_matrix_reference()?;
+                let operator = self.advance();
+                let expected = match operation {
+                    MatArithmeticOperation::Add => TokenKind::Plus,
+                    MatArithmeticOperation::Sub => TokenKind::Minus,
+                };
+                if std::mem::discriminant(&operator.kind) != std::mem::discriminant(&expected) {
+                    return Err(self.syntax_error(
+                        match operation {
+                            MatArithmeticOperation::Add => "expected '+' in MAT ADD expression",
+                            MatArithmeticOperation::Sub => "expected '-' in MAT SUB expression",
+                        },
+                        operator.span,
+                    ));
+                }
+                let (right, _) = self.parse_matrix_reference()?;
+                (Some(left), MatArithmeticOperand::Matrix(right))
+            } else {
+                self.expect(TokenKind::Comma, "',' in in-place MAT arithmetic")?;
+                let token = self.current().clone();
+                match &token.kind {
+                    TokenKind::Identifier(name)
+                        if matches!(name.as_str(), "a" | "b")
+                            && self
+                                .tokens
+                                .get(self.cursor + 1)
+                                .is_some_and(|next| matches!(&next.kind, TokenKind::LeftParen)) =>
+                    {
+                        let (matrix, _) = self.parse_matrix_reference()?;
+                        (None, MatArithmeticOperand::Matrix(matrix))
+                    }
+                    TokenKind::Identifier(name) => {
+                        let scalar = name.clone();
+                        self.advance();
+                        (None, MatArithmeticOperand::Scalar(scalar))
+                    }
+                    _ => return Err(self.syntax_error(
+                        "expected a matrix reference or scalar variable after MAT arithmetic comma",
+                        token.span,
+                    )),
+                }
             };
-            if std::mem::discriminant(&operator.kind) != std::mem::discriminant(&expected) {
-                return Err(self.syntax_error(
-                    match operation {
-                        MatArithmeticOperation::Add => "expected '+' in MAT ADD expression",
-                        MatArithmeticOperation::Sub => "expected '-' in MAT SUB expression",
-                    },
-                    operator.span,
-                ));
-            }
-            let (right, _) = self.parse_matrix_reference()?;
-            (Some(left), MatArithmeticOperand::Matrix(right))
-        } else {
-            self.expect(TokenKind::Comma, "',' in in-place MAT arithmetic")?;
-            let token = self.current().clone();
-            match &token.kind {
-                TokenKind::Identifier(name) if matches!(name.as_str(), "a" | "b")
-                    && self.tokens.get(self.cursor + 1).is_some_and(|next| matches!(&next.kind, TokenKind::LeftParen)) =>
-                {
-                    let (matrix, _) = self.parse_matrix_reference()?;
-                    (None, MatArithmeticOperand::Matrix(matrix))
-                }
-                TokenKind::Identifier(name) => {
-                    let scalar = name.clone();
-                    self.advance();
-                    (None, MatArithmeticOperand::Scalar(scalar))
-                }
-                _ => return Err(self.syntax_error(
-                    "expected a matrix reference or scalar variable after MAT arithmetic comma",
-                    token.span,
-                )),
-            }
-        };
         let end = self.tokens[self.cursor - 1].span;
         Ok(Statement::MatArithmetic {
             operation,
