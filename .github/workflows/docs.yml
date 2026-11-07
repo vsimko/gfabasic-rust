@@ -9,6 +9,7 @@ on:
       - ".github/workflows/docs.yml"
       - "api/**"
       - "scripts/**"
+      - "site/**"
       - "tests/corpus/**"
   push:
     branches:
@@ -20,6 +21,7 @@ on:
       - ".github/workflows/docs.yml"
       - "api/**"
       - "scripts/**"
+      - "site/**"
       - "tests/corpus/**"
 
 permissions:
@@ -42,6 +44,9 @@ jobs:
         uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
         with:
           node-version: "22"
+
+      - name: Check site JavaScript syntax
+        run: node --check site/script.js
 
       - name: Lint Markdown
         run: npx --yes markdownlint-cli2@0.24.0 "**/*.md" "#node_modules"
