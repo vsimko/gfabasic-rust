@@ -219,7 +219,7 @@ def main() -> int:
     root = args.root.resolve()
     try:
         package = build_package(root, args.declaration)
-        output = json.dumps(package, indent=2, ensure_ascii=False) + "\\n"
+        output = json.dumps(package, indent=2, ensure_ascii=False) + "\n"
         if args.output:
             target = args.output if args.output.is_absolute() else root / args.output
             target.parent.mkdir(parents=True, exist_ok=True)
