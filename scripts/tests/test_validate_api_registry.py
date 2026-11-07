@@ -373,7 +373,7 @@ anchors = []
         temp, root = self.make_root(self.valid_declaration())
         self.addCleanup(temp.cleanup)
         docs = root / "docs/reference.md"
-        docs.write_text("# Printed pp. 13-1–13-2\\n")
+        docs.write_text("# Printed pp. 13-1–13-2\n")
         registry = root / "api/registry/atari-st/time.toml"
         registry.write_text(
             registry.read_text().replace(
