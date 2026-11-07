@@ -1,9 +1,9 @@
 //! Evidence-gated frontend for the first Amiga GFA BASIC 3.5 vertical slice.
 //!
 //! This is deliberately not a general GFA BASIC lexer/parser. It recognizes
-//! only the source forms demonstrated by the 3.5 addendum's FACT example:
-//! assignments to x/y/z using FACT(integer-literal), followed by PRINT x,y,z.
-//! Other syntax is rejected rather than guessed.
+//! only the source forms demonstrated by the 3.5 addendum: FACT/VARIAT/COMBIN
+//! assignments and PRINT, plus the verified MAT ONE/SET/CLR/PRINT matrix
+//! examples. Other syntax is rejected rather than guessed.
 
 use crate::diagnostics::{Diagnostic, DiagnosticCategory, DiagnosticSeverity};
 use crate::source::{SourceId, SourceSpan};
@@ -582,7 +582,10 @@ impl Parser {
                 format!("statement {name:?} is not supported by the current MVP frontend"),
                 first.span,
             )),
-            _ => Err(self.syntax_error("expected an assignment or PRINT statement", first.span)),
+            _ => Err(self.syntax_error(
+                "expected an assignment, PRINT, DIM, or MAT statement",
+                first.span,
+            )),
         }
     }
 
