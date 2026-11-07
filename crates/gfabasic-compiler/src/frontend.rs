@@ -989,7 +989,7 @@ mod tests {
     fn parses_verified_mat_add_and_sub_forms() {
         use super::{MatArithmeticOperand, MatArithmeticOperation};
 
-        let source = "MAT ADD a()=b()+a()\\nMAT ADD a(),b()\\nMAT ADD a(),x\\nMAT SUB b()=a()-b()\\nMAT SUB b(),a()\\nMAT SUB b(),y\\n";
+        let source = "MAT ADD a()=b()+a()\nMAT ADD a(),b()\nMAT ADD a(),x\nMAT SUB b()=a()-b()\nMAT SUB b(),a()\nMAT SUB b(),y\n";
         let mut sources = SourceMap::new();
         let source_id = sources.add_source("mat-arithmetic.bas", source);
         let program = parse(source_id, source).unwrap();
@@ -1059,9 +1059,9 @@ mod tests {
     #[test]
     fn rejects_unsupported_mat_arithmetic_operators() {
         for source in [
-            "MAT ADD a()=b()-a()\\n",
-            "MAT SUB a()=b()+a()\\n",
-            "MAT ADD a(),7\\n",
+            "MAT ADD a()=b()-a()\n",
+            "MAT SUB a()=b()+a()\n",
+            "MAT ADD a(),7\n",
         ] {
             let mut sources = SourceMap::new();
             let source_id = sources.add_source("invalid-mat-arithmetic.bas", source);
