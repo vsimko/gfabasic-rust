@@ -37,6 +37,8 @@ jobs:
           test -s site/styles.css
           test -s site/script.js
           test -s site/data/api-catalogue.json
+          test -d site/data/api-catalogue-details
+          python3 scripts/generate_api_catalogue.py --check
           node --check site/script.js
           grep -q 'id="api-catalogue"' site/index.html
 

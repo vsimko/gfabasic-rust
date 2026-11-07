@@ -207,6 +207,7 @@ if (apiCatalogueResults) {
   const evidenceFilter = document.querySelector("#api-evidence-filter");
   const implementationFilter = document.querySelector("#api-implementation-filter");
   const supportFilter = document.querySelector("#api-support-filter");
+  const summary = document.querySelector("#api-catalogue-summary");
   let catalogueEntries = [];
 
   const makeText = (tag, className, value) => {
@@ -217,7 +218,6 @@ if (apiCatalogueResults) {
   };
 
   const renderSummary = (data) => {
-    const summary = document.querySelector("#api-catalogue-summary");
     const linux = "x86_64-unknown-linux-gnu";
     const dimensions = [
       { title: "Declarations", counts: { total: data.counts.total } },
@@ -226,15 +226,71 @@ if (apiCatalogueResults) {
       { title: "Linux support", counts: data.counts.by_target_support[linux] || {} },
       { title: "Conformance", counts: data.counts.by_target_conformance[linux] || {} },
     ];
-    const cards = dimensions.map((dimension) => {
+    summary.replaceChildren(...dimensions.map((dimension) => {
       const card = document.createElement("article");
       card.className = "api-summary-card";
       card.append(makeText("h3", "", dimension.title));
       const lines = Object.entries(dimension.counts).map(([status, count]) => `${status}: ${count}`);
       card.append(makeText("p", "", lines.join(" · ") || "0"));
       return card;
-    });
-    summary.replaceChildren(...cards);
+    }));
+  };
+
+  const renderDetail = (container, detail) => {
+    const content = document.createElement("div");
+    content.className = "api-entry-detail";
+    content.append(makeText("code", "api-entry-id", detail.id));
+    if (detail.syntax?.length) {
+      content.append(makeText("h4", "", "Syntax"));
+      content.append(makeText("pre", "api-syntax", detail.syntax.map((item) => item.form).join("\n")));
+    }
+    if (detail.semantics?.summary) content.append(makeText("p", "api-summary-text", detail.semantics.summary));
+    if (detail.signature && Object.keys(detail.signature).length) {
+      content.append(makeText("h4", "", "Signature"));
+      content.append(makeText("pre", "api-detail-code", JSON.stringify(detail.signature, null, 2)));
+    }
+    const statuses = document.createElement("div");
+    statuses.className = "api-status-row";
+    statuses.append(makeText("span", "api-status", `Evidence: ${detail.evidence?.status || "unknown"}`));
+    statuses.append(makeText("span", "api-status", `Implementation: ${detail.implementation?.status || "unknown"}`));
+    for (const item of detail.support || []) {
+      statuses.append(makeText("span", "api-status", `${item.target}: ${item.classification} · ${item.conformance}`));
+      if (item["pending-reason"]) content.append(makeText("p", "api-pending", item["pending-reason"]));
+    }
+    content.append(statuses);
+    const evidenceParts = [
+      ...(detail.evidence?.sources || []),
+      ...(detail.evidence?.["printed-pages"] || []),
+    ];
+    if (evidenceParts.length) content.append(makeText("p", "api-evidence", evidenceParts.join(" · ")));
+    const anchor = detail.docs?.anchors?.[0] || "";
+    if (detail.docs?.path) {
+      const link = document.createElement("a");
+      link.className = "api-doc-link";
+      link.href = `https://github.com/vsimko/gfabasic-rust/blob/main/${detail.docs.path}${anchor ? `#${anchor}` : ""}`;
+      link.target = "_blank";
+      link.rel = "noreferrer";
+      link.textContent = "Source notes ↗";
+      content.append(link);
+    }
+    container.replaceChildren(content);
+  };
+
+  const loadDetail = async (entry, panel) => {
+    if (panel.dataset.loaded === "true" || panel.dataset.loading === "true") return;
+    panel.dataset.loading = "true";
+    const status = makeText("p", "api-detail-loading", "Loading static declaration detail…");
+    panel.replaceChildren(status);
+    try {
+      const response = await fetch(`data/${entry.detail}`);
+      if (!response.ok) throw new Error("Static declaration detail is unavailable");
+      renderDetail(panel, await response.json());
+      panel.dataset.loaded = "true";
+    } catch {
+      panel.replaceChildren(makeText("p", "api-empty", "Declaration detail is unavailable."));
+    } finally {
+      delete panel.dataset.loading;
+    }
   };
 
   const renderEntries = () => {
@@ -244,17 +300,12 @@ if (apiCatalogueResults) {
     const implementation = implementationFilter?.value || "";
     const support = supportFilter?.value || "";
     const filtered = catalogueEntries.filter((entry) => {
-      const searchText = [
-        entry.id,
-        entry.name,
-        entry.kind,
-        entry.semantics?.summary || "",
-        ...(entry.syntax || []).map((item) => item.form),
-      ].join(" ").toLowerCase();
+      const searchText = [entry.id, entry.name, entry.kind, entry.summary, ...(entry.syntax || [])]
+        .join(" ").toLowerCase();
       return (!query || searchText.includes(query))
         && (!domain || entry.namespace === domain)
-        && (!evidence || entry.evidence?.status === evidence)
-        && (!implementation || entry.implementation?.status === implementation)
+        && (!evidence || entry.evidence_status === evidence)
+        && (!implementation || entry.implementation_status === implementation)
         && (!support || (entry.support || []).some((item) => item.classification === support));
     });
 
@@ -263,51 +314,55 @@ if (apiCatalogueResults) {
       return;
     }
 
-    const cards = filtered.map((entry) => {
-      const card = document.createElement("article");
-      card.className = "api-entry-card";
-      const top = document.createElement("div");
-      top.className = "api-entry-top";
-      const heading = makeText("h3", "", entry.name);
-      top.append(heading, makeText("span", "api-kind", entry.kind));
-      card.append(top);
-      card.append(makeText("code", "api-entry-id", entry.id));
+    const groups = new Map();
+    for (const entry of filtered) {
+      const key = `${entry.namespace}/${entry.category}`;
+      if (!groups.has(key)) groups.set(key, []);
+      groups.get(key).push(entry);
+    }
 
-      const syntax = (entry.syntax || []).map((item) => item.form);
-      if (syntax.length) card.append(makeText("p", "api-syntax", syntax.join("  ·  ")));
-      if (entry.semantics?.summary) card.append(makeText("p", "api-summary-text", entry.semantics.summary));
+    const categoryNodes = [];
+    for (const [key, entries] of groups) {
+      const category = document.createElement("details");
+      category.className = "api-category";
+      category.dataset.category = key;
+      const heading = document.createElement("summary");
+      heading.append(makeText("span", "api-category-name", key.replace("/", " / ")));
+      heading.append(makeText("span", "api-category-count", String(entries.length)));
+      category.append(heading);
 
-      const statuses = document.createElement("div");
-      statuses.className = "api-status-row";
-      statuses.append(makeText("span", "api-status", `Evidence: ${entry.evidence?.status || "unknown"}`));
-      statuses.append(makeText("span", "api-status", `Implementation: ${entry.implementation?.status || "unknown"}`));
-      for (const item of entry.support || []) {
-        statuses.append(makeText("span", "api-status", `${item.target}: ${item.classification} · ${item.conformance}`));
+      const populateNames = () => {
+        if (category.dataset.namesLoaded === "true") return;
+        const names = document.createElement("div");
+        names.className = "api-function-list";
+        for (const entry of entries) {
+          const item = document.createElement("details");
+          item.className = "api-function";
+          item.id = `api-entry-${entry.id}`;
+          const name = document.createElement("summary");
+          name.textContent = entry.name;
+          const panel = document.createElement("div");
+          panel.className = "api-function-panel";
+          item.append(name, panel);
+          item.addEventListener("toggle", () => {
+            if (item.open) loadDetail(entry, panel);
+          });
+          names.append(item);
+        }
+        category.append(names);
+        category.dataset.namesLoaded = "true";
+      };
+      category.addEventListener("toggle", () => {
+        if (category.open) populateNames();
+      });
+      const shouldExpand = Boolean(query || domain || evidence || implementation || support);
+      if (shouldExpand) {
+        category.open = true;
+        populateNames();
       }
-      card.append(statuses);
-
-      const evidenceParts = [
-        ...(entry.evidence?.sources || []),
-        ...(entry.evidence?.["printed-pages"] || []),
-      ];
-      if (evidenceParts.length) card.append(makeText("p", "api-evidence", evidenceParts.join(" · ")));
-
-      const pending = (entry.support || []).map((item) => item["pending-reason"]).filter(Boolean);
-      if (pending.length) card.append(makeText("p", "api-pending", pending.join(" ")));
-
-      const anchor = entry.docs?.anchors?.[0] || "";
-      if (entry.docs?.path) {
-        const link = document.createElement("a");
-        link.className = "api-doc-link";
-        link.href = `https://github.com/vsimko/gfabasic-rust/blob/main/${entry.docs.path}${anchor ? `#${anchor}` : ""}`;
-        link.target = "_blank";
-        link.rel = "noreferrer";
-        link.textContent = "Source notes ↗";
-        card.append(link);
-      }
-      return card;
-    });
-    apiCatalogueResults.replaceChildren(...cards);
+      categoryNodes.push(category);
+    }
+    apiCatalogueResults.replaceChildren(...categoryNodes);
   };
 
   fetch("data/api-catalogue.json")
@@ -319,6 +374,23 @@ if (apiCatalogueResults) {
       catalogueEntries = data.entries || [];
       renderSummary(data);
       renderEntries();
+      if (window.location.hash.startsWith("#api-entry-")) {
+        const id = decodeURIComponent(window.location.hash.slice("#api-entry-".length));
+        const entry = catalogueEntries.find((item) => item.id === id);
+        if (entry) {
+          const category = [...apiCatalogueResults.querySelectorAll(".api-category")]
+            .find((item) => item.dataset.category === `${entry.namespace}/${entry.category}`);
+          if (category) {
+            category.open = true;
+            category.dispatchEvent(new Event("toggle"));
+            const target = document.getElementById(`api-entry-${id}`);
+            if (target) {
+              target.open = true;
+              target.scrollIntoView();
+            }
+          }
+        }
+      }
     })
     .catch(() => {
       apiCatalogueResults.textContent = "Generated API catalogue data is unavailable. See api/registry in the repository.";
