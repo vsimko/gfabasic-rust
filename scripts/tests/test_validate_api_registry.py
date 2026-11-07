@@ -316,7 +316,7 @@ anchors = []
         temp, root = self.make_root(content)
         self.addCleanup(temp.cleanup)
         errors = validate_registry(root)
-        self.assertTrue(any("documented/observed evidence needs printed-page locators" in error for error in errors))
+        self.assertTrue(any("book/primary-reference evidence needs printed-page locators" in error for error in errors))
 
     def test_disputed_evidence_cannot_claim_implementation_support_or_conformance(self):
         content = self.valid_declaration().replace(
