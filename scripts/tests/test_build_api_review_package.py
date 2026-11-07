@@ -79,6 +79,18 @@ class ReviewPackageTests(unittest.TestCase):
         self.assertEqual(first["inputs"]["registry_path"], "api/registry/amiga/example.toml")
         self.assertTrue(first["review_result_template"]["human_review_required"])
 
+    def test_real_fact_and_disputed_inverse_packages_build(self):
+        from scripts.build_api_review_package import ROOT
+
+        fact = build_package(ROOT, "gfa.language.math.fact")
+        self.assertEqual(fact["declaration"]["evidence"]["sources"], ["AM-INTERPRETER-35"])
+        self.assertTrue(fact["documentation_sections"][0]["content"])
+
+        inverse = build_package(ROOT, "gfa.language.matrix.mat-inv")
+        self.assertEqual(inverse["declaration"]["evidence"]["status"], "disputed")
+        self.assertEqual(len(inverse["declaration"]["syntax"]), 2)
+        self.assertTrue(inverse["review_result_template"]["human_review_required"])
+
     def test_unknown_declaration_is_rejected(self):
         temp, root = self.make_root()
         self.addCleanup(temp.cleanup)
