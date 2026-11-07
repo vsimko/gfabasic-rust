@@ -1087,6 +1087,49 @@ mod tests {
     }
 
     #[test]
+    fn parses_verified_mat_mul_forms() {
+        let source = "MAT MUL a()=b()*a()\nMAT MUL x=a()*b()\nMAT MUL y=a()*b()*a()\nMAT MUL a(),x\n";
+        let mut sources = SourceMap::new();
+        let source_id = sources.add_source("mat-mul.bas", source);
+        let program = parse(source_id, source).unwrap();
+
+        assert!(matches!(
+            &program.statements[0],
+            Statement::MatMulMatrix { destination, left, right, .. }
+                if destination == "a" && left == "b" && right == "a"
+        ));
+        assert!(matches!(
+            &program.statements[1],
+            Statement::MatMulScalar { destination, operands, .. }
+                if destination == "x" && operands == &["a", "b"]
+        ));
+        assert!(matches!(
+            &program.statements[2],
+            Statement::MatMulScalar { destination, operands, .. }
+                if destination == "y" && operands == &["a", "b", "a"]
+        ));
+        assert!(matches!(
+            &program.statements[3],
+            Statement::MatMulScale { destination, scalar, .. }
+                if destination == "a" && scalar == "x"
+        ));
+    }
+
+    #[test]
+    fn rejects_unsupported_mat_mul_shapes() {
+        for source in [
+            "MAT MUL a()=b()+a()\n",
+            "MAT MUL x=a()\n",
+            "MAT MUL a(),7\n",
+            "MAT MUL x=a()*b()*a()*b()\n",
+        ] {
+            let mut sources = SourceMap::new();
+            let source_id = sources.add_source("invalid-mat-mul.bas", source);
+            assert!(parse(source_id, source).is_err(), "accepted: {source:?}");
+        }
+    }
+
+    #[test]
     fn parses_verified_mat_add_and_sub_forms() {
         use super::{MatArithmeticOperand, MatArithmeticOperation};
 
