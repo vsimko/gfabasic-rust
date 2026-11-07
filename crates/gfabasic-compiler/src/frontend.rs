@@ -1297,6 +1297,64 @@ mod tests {
     }
 
     #[test]
+    fn parses_verified_mat_print_channel_and_format_options() {
+        let source = "MAT PRINT a()\nMAT PRINT #1,a()\nMAT PRINT a(),7,3\nMAT PRINT #2,b(),8,4\n";
+        let mut sources = SourceMap::new();
+        let source_id = sources.add_source("mat-print-options.bas", source);
+        let program = parse(source_id, source).unwrap();
+
+        assert!(matches!(
+            &program.statements[0],
+            Statement::MatPrint {
+                name,
+                channel: None,
+                format: None,
+                ..
+            } if name == "a"
+        ));
+        assert!(matches!(
+            &program.statements[1],
+            Statement::MatPrint {
+                name,
+                channel: Some(1),
+                format: None,
+                ..
+            } if name == "a"
+        ));
+        assert!(matches!(
+            &program.statements[2],
+            Statement::MatPrint {
+                name,
+                channel: None,
+                format: Some((7, 3)),
+                ..
+            } if name == "a"
+        ));
+        assert!(matches!(
+            &program.statements[3],
+            Statement::MatPrint {
+                name,
+                channel: Some(2),
+                format: Some((8, 4)),
+                ..
+            } if name == "b"
+        ));
+    }
+
+    #[test]
+    fn rejects_malformed_mat_print_options() {
+        for source in [
+            "MAT PRINT #1 a()\n",
+            "MAT PRINT a(),7\n",
+            "MAT PRINT a(),7,3,2\n",
+        ] {
+            let mut sources = SourceMap::new();
+            let source_id = sources.add_source("invalid-mat-print.bas", source);
+            assert!(parse(source_id, source).is_err(), "accepted: {source:?}");
+        }
+    }
+
+    #[test]
     fn parses_verified_mat_read_and_input_forms() {
         let source = "MAT READ a()\nMAT INPUT #1,b()\n";
         let mut sources = SourceMap::new();
