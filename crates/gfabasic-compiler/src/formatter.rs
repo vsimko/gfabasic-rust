@@ -62,9 +62,12 @@ pub fn format_source(source_id: SourceId, source: &str) -> Result<String, Vec<Di
 
 fn needs_space(previous: &TokenKind, current: &TokenKind) -> bool {
     match (previous, current) {
-        (_, TokenKind::Equals) | (TokenKind::Equals, _)
-        | (_, TokenKind::Plus) | (TokenKind::Plus, _)
-        | (_, TokenKind::Minus) | (TokenKind::Minus, _) => true,
+        (_, TokenKind::Equals)
+        | (TokenKind::Equals, _)
+        | (_, TokenKind::Plus)
+        | (TokenKind::Plus, _)
+        | (_, TokenKind::Minus)
+        | (TokenKind::Minus, _) => true,
         (TokenKind::Comma, _) => true,
         (_, TokenKind::Comma)
         | (_, TokenKind::LeftParen)
@@ -127,10 +130,20 @@ mod tests {
                     ..
                 } => Meaning::MatTrans(destination.clone(), source.clone()),
                 Statement::MatNorm { name, mode, .. } => Meaning::MatNorm(name.clone(), *mode),
-                Statement::MatArithmetic { operation, destination, left, right, .. } => {
+                Statement::MatArithmetic {
+                    operation,
+                    destination,
+                    left,
+                    right,
+                    ..
+                } => {
                     let (operand, operand_kind) = match right {
-                        crate::frontend::MatArithmeticOperand::Matrix(name) => (name.clone(), "matrix"),
-                        crate::frontend::MatArithmeticOperand::Scalar(name) => (name.clone(), "scalar"),
+                        crate::frontend::MatArithmeticOperand::Matrix(name) => {
+                            (name.clone(), "matrix")
+                        }
+                        crate::frontend::MatArithmeticOperand::Scalar(name) => {
+                            (name.clone(), "scalar")
+                        }
                     };
                     let operation = match operation {
                         crate::frontend::MatArithmeticOperation::Add => "add",
@@ -142,7 +155,7 @@ mod tests {
                         operand,
                         format!("{operation}:{operand_kind}"),
                     )
-                },
+                }
             })
             .collect()
     }
