@@ -31,7 +31,7 @@ errors = []
 status = "book-documented"
 sources = ["AM-INTERPRETER-35"]
 printed-pages = ["Chapter 13, printed pp. 13-3–13-4"]
-notes = ["The addendum specifies a previously dimensioned field and DATA-row input.", "The exact page passage has not yet received a separate page-image review; preserve as book-documented rather than cross-checked."]
+notes = ["The addendum specifies a previously dimensioned field and DATA-row input.", "The printed page images were visually checked; this declaration is still marked book-documented because its behavior has not been independently cross-checked against a second primary witness or observed runtime."]
 
 [declarations.implementation]
 status = "not-implemented"
@@ -79,7 +79,7 @@ errors = []
 status = "book-documented"
 sources = ["AM-INTERPRETER-35"]
 printed-pages = ["Chapter 13, printed pp. 13-3–13-4"]
-notes = ["The optional channel and formatting arguments are documented in the addendum.", "The exact page passage has not yet received a separate page-image review; preserve as book-documented rather than cross-checked."]
+notes = ["The optional channel and formatting arguments are documented in the addendum.", "The printed page images were visually checked; this declaration is still marked book-documented because its behavior has not been independently cross-checked against a second primary witness or observed runtime."]
 
 [declarations.implementation]
 status = "not-implemented"
@@ -125,7 +125,7 @@ errors = []
 status = "book-documented"
 sources = ["AM-INTERPRETER-35"]
 printed-pages = ["Chapter 13, printed p. 13-4"]
-notes = ["The addendum explicitly describes ASCII input and flexible commas/rowfeeds.", "The exact page passage has not yet received a separate page-image review; preserve as book-documented rather than cross-checked."]
+notes = ["The addendum explicitly describes ASCII input and flexible commas/rowfeeds.", "The printed page images were visually checked; this declaration is still marked book-documented because its behavior has not been independently cross-checked against a second primary witness or observed runtime."]
 
 [declarations.implementation]
 status = "not-implemented"
