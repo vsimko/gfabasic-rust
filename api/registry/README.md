@@ -11,7 +11,7 @@ Canonical declarations use TOML. The planned registry namespaces are `language-c
 - `amiga/special-and-platform-commands.toml`: `PCOLOR`, the negative-screen-number `OPENW` variant, and the `GURU` command/function forms.
 - `language-core/`: no declarations yet.
 
-The language-core catalogue currently contains 28 declarations, and the Amiga platform profile contains three declarations. All are limited to features explicitly identified in the supplied 3.5 interpreter addendum. Neither catalogue claims completeness. The addendum's Chapter 13/14 page references and known source limitations are documented in [the extracted feature inventory](../../docs/research/amiga-gfa-basic-35-addendum-inventory.md).
+The language-core catalogue currently contains 24 declarations, and the Amiga platform profile contains four declarations. All are limited to features explicitly identified in the supplied 3.5 interpreter addendum. Neither catalogue claims completeness. The addendum's Chapter 13/14 page references and known source limitations are documented in [the extracted feature inventory](../../docs/research/amiga-gfa-basic-35-addendum-inventory.md).
 
 ## Evidence and implementation boundaries
 
