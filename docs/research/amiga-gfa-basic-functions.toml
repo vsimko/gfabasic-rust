@@ -1,0 +1,841 @@
+schema-version = 1
+source = "AM-INTERPRETER-35"
+scope = "Built-in function identifiers in the supplied Amiga GFA BASIC 3.5 interpreter manual: its 3.0 base text plus the explicit 3.5 addendum."
+counting-rule = "Count each distinct built-in function identifier once. Group alternate syntactic forms under one name, including BYTE/CARD/INT/WORD typed conversions. Include function-like type conversions. Exclude constants, variables, statements, editor features and Amiga OS library calls. Retain compiler-only functions separately and exclude them from the interpreter count."
+
+[expected-counts]
+all-identifiers = 116
+interpreter-identifiers-including-disputed-slot = 114
+unambiguous-interpreter-identifiers = 113
+compiler-only-identifiers = 2
+base-manual-identifiers = 112
+"explicit-3.5-addendum-identifiers" = 4
+disputed-name-slots = 1
+
+[[functions]]
+name = "ABS"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["4-12"]
+
+[[functions]]
+name = "ACOS"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["4-5"]
+
+[[functions]]
+name = "ADD"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["4-3"]
+
+[[functions]]
+name = "AND"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["4-23"]
+
+[[functions]]
+name = "ARRPTR"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["2-33"]
+
+[[functions]]
+name = "ASC"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["2-13"]
+
+[[functions]]
+name = "ASIN"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["4-5"]
+
+[[functions]]
+name = "ATN"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["4-5"]
+
+[[functions]]
+name = "BCHG"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["4-19"]
+
+[[functions]]
+name = "BCLR"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["4-19"]
+
+[[functions]]
+name = "BIN$"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["2-14"]
+
+[[functions]]
+name = "BSET"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["4-19"]
+
+[[functions]]
+name = "BTST"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["4-19"]
+
+[[functions]]
+name = "BYTE"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["2-37", "4-26"]
+forms = ["BYTE(...)", "BYTE{...}"]
+
+[[functions]]
+name = "CARD"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["2-37", "4-26"]
+forms = ["CARD(...)", "CARD{...}"]
+
+[[functions]]
+name = "CFLOAT"
+origin = "base-manual-3.0"
+applicability = "compiler-only"
+evidence-status = "base-manual-entry"
+printed-pages = ["2-17"]
+notes = "The manual explicitly says this conversion is only meaningful to the compiler; excluded from the interpreter-specific count."
+
+[[functions]]
+name = "CHAR"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["2-37"]
+forms = ["CHAR{...}"]
+
+[[functions]]
+name = "CHR$"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["2-13"]
+
+[[functions]]
+name = "CINT"
+origin = "base-manual-3.0"
+applicability = "compiler-only"
+evidence-status = "base-manual-entry"
+printed-pages = ["2-17"]
+notes = "The manual explicitly says this conversion is only meaningful to the compiler; excluded from the interpreter-specific count."
+
+[[functions]]
+name = "COMBIN"
+origin = "3.5-addendum"
+applicability = "interpreter"
+evidence-status = "explicit-3.5-addendum"
+printed-pages = ["13-33–13-34"]
+notes = "Combination function."
+
+[[functions]]
+name = "COS"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["4-5"]
+
+[[functions]]
+name = "COSQ"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["4-6"]
+
+[[functions]]
+name = "CVD"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "disputed-name"
+printed-pages = ["2-18"]
+notes = "The appendix table lists CVD(); the Chapter 2-18 prose says CVF and its signature list omits CVD/CVF. Counted as one unresolved CVx function slot, not as two confirmed names."
+
+[[functions]]
+name = "CVI"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["2-18"]
+
+[[functions]]
+name = "CVL"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["2-18"]
+
+[[functions]]
+name = "CVS"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["2-18"]
+
+[[functions]]
+name = "DEG"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["4-7"]
+
+[[functions]]
+name = "DFREE"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["6-4"]
+
+[[functions]]
+name = "DIM?"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["2-9"]
+
+[[functions]]
+name = "DIR$"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["6-4"]
+
+[[functions]]
+name = "DIV"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["4-3"]
+
+[[functions]]
+name = "DOUBLE"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["2-37"]
+forms = ["DOUBLE{...}"]
+
+[[functions]]
+name = "DPEEK"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["2-36"]
+
+[[functions]]
+name = "EOF"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["6-9"]
+
+[[functions]]
+name = "EQV"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["4-24"]
+
+[[functions]]
+name = "EVEN"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["4-15"]
+
+[[functions]]
+name = "EXIST"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["6-7"]
+
+[[functions]]
+name = "EXP"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["4-9"]
+
+[[functions]]
+name = "FACT"
+origin = "3.5-addendum"
+applicability = "interpreter"
+evidence-status = "explicit-3.5-addendum"
+printed-pages = ["13-33–13-34"]
+notes = "Factorial function; 0! is explicitly defined as 1."
+
+[[functions]]
+name = "FIX"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["4-13"]
+
+[[functions]]
+name = "FLOAT"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["2-37"]
+forms = ["FLOAT{...}"]
+
+[[functions]]
+name = "FRAC"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["4-13"]
+
+[[functions]]
+name = "FRE"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["2-29"]
+
+[[functions]]
+name = "GURU"
+origin = "3.5-addendum"
+applicability = "interpreter"
+evidence-status = "explicit-3.5-addendum"
+printed-pages = ["13-35–13-36"]
+notes = "GURU-number function; distinct from the GURU enable/disable statement."
+
+[[functions]]
+name = "HEX$"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["2-14"]
+
+[[functions]]
+name = "IMP"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["4-24"]
+
+[[functions]]
+name = "INKEY$"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["5-2"]
+
+[[functions]]
+name = "INP"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["6-13"]
+
+[[functions]]
+name = "INPUT$"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["6-14"]
+
+[[functions]]
+name = "INSTR"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["4-30"]
+
+[[functions]]
+name = "INT"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["2-37", "4-13"]
+forms = ["INT(...)", "INT{...}"]
+
+[[functions]]
+name = "LEFT$"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["4-27"]
+
+[[functions]]
+name = "LEN"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["4-34"]
+
+[[functions]]
+name = "LOC"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["6-9"]
+
+[[functions]]
+name = "LOF"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["6-9"]
+
+[[functions]]
+name = "LOG"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["4-9"]
+
+[[functions]]
+name = "LOG10"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["4-9"]
+
+[[functions]]
+name = "LONG"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["2-37"]
+forms = ["LONG{...}"]
+
+[[functions]]
+name = "LPEEK"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["2-36"]
+
+[[functions]]
+name = "LPOS"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["5-19"]
+
+[[functions]]
+name = "MALLOC"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["2-41"]
+
+[[functions]]
+name = "MAX"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["4-16"]
+
+[[functions]]
+name = "MFREE"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["2-41"]
+
+[[functions]]
+name = "MID$"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["4-28"]
+
+[[functions]]
+name = "MIN"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["4-16"]
+
+[[functions]]
+name = "MKD$"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["2-18"]
+
+[[functions]]
+name = "MKI$"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["2-18"]
+
+[[functions]]
+name = "MKL$"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["2-18"]
+
+[[functions]]
+name = "MKS$"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["2-18"]
+
+[[functions]]
+name = "MOD"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["4-3"]
+
+[[functions]]
+name = "MUL"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["4-3"]
+
+[[functions]]
+name = "OCT$"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["2-14"]
+
+[[functions]]
+name = "ODD"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["4-15"]
+
+[[functions]]
+name = "OR"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["4-23"]
+
+[[functions]]
+name = "PEEK"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["2-36"]
+
+[[functions]]
+name = "POINT"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["8-18"]
+
+[[functions]]
+name = "POS"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["5-13"]
+
+[[functions]]
+name = "PRED"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["4-11"]
+
+[[functions]]
+name = "RAD"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["4-7"]
+
+[[functions]]
+name = "RAND"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["4-17"]
+
+[[functions]]
+name = "RANDOM"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["4-17"]
+
+[[functions]]
+name = "RIGHT$"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["4-27"]
+
+[[functions]]
+name = "RINSTR"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["4-31"]
+
+[[functions]]
+name = "RND"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["4-17"]
+
+[[functions]]
+name = "ROL"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["4-22"]
+
+[[functions]]
+name = "ROR"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["4-22"]
+
+[[functions]]
+name = "ROUND"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["4-14"]
+
+[[functions]]
+name = "SCREEN"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["9-24"]
+
+[[functions]]
+name = "SGN"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["4-12"]
+
+[[functions]]
+name = "SHL"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["4-21"]
+
+[[functions]]
+name = "SHR"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["4-21"]
+
+[[functions]]
+name = "SIN"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["4-5"]
+
+[[functions]]
+name = "SINGLE"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["2-37"]
+forms = ["SINGLE{...}"]
+
+[[functions]]
+name = "SINQ"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["4-6"]
+
+[[functions]]
+name = "SPACE$"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["4-32"]
+
+[[functions]]
+name = "SPC"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["4-32"]
+
+[[functions]]
+name = "SQR"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["4-8"]
+
+[[functions]]
+name = "STR$"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["2-15"]
+
+[[functions]]
+name = "STRING$"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["4-32"]
+
+[[functions]]
+name = "SUB"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["4-3"]
+
+[[functions]]
+name = "SUCC"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["4-11"]
+
+[[functions]]
+name = "SWAP"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["4-25"]
+
+[[functions]]
+name = "TAB"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["5-13"]
+
+[[functions]]
+name = "TAN"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["4-5"]
+
+[[functions]]
+name = "TRANSLATE$"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["10-9"]
+
+[[functions]]
+name = "TRIM$"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["4-34"]
+
+[[functions]]
+name = "TRUNC"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["4-13"]
+
+[[functions]]
+name = "TYPE"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["2-30"]
+
+[[functions]]
+name = "UPPER$"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["4-35"]
+
+[[functions]]
+name = "VAL"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["2-16"]
+
+[[functions]]
+name = "VAL?"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["2-16"]
+
+[[functions]]
+name = "VARIAT"
+origin = "3.5-addendum"
+applicability = "interpreter"
+evidence-status = "explicit-3.5-addendum"
+printed-pages = ["13-33–13-34"]
+notes = "Permutation function."
+
+[[functions]]
+name = "VARPTR"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["2-33"]
+
+[[functions]]
+name = "WINDOW"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["9-35"]
+
+[[functions]]
+name = "WORD"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["2-37", "4-26"]
+forms = ["WORD(...)", "WORD{...}"]
+
+[[functions]]
+name = "XOR"
+origin = "base-manual-3.0"
+applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["4-23"]

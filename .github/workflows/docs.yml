@@ -76,6 +76,9 @@ jobs:
       - name: Validate corpus metadata
         run: python scripts/validate_corpus.py
 
+      - name: Validate Amiga function inventory
+        run: python scripts/validate_amiga_function_inventory.py
+
       - name: Run registry validator tests
         run: python -m unittest discover -s scripts/tests -p "test_*.py"
 
