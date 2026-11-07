@@ -51,7 +51,7 @@ pub enum Statement {
     DimMatrix {
         name: String,
         rows: i64,
-        columns: i64,
+        columns: Option<i64>,
         span: SourceSpan,
     },
     MatOne {
@@ -664,8 +664,12 @@ impl Parser {
         let (name, _) = self.parse_matrix_name()?;
         self.expect(TokenKind::LeftParen, "'(' after matrix name")?;
         let rows = self.parse_nonnegative_matrix_integer()?;
-        self.expect(TokenKind::Comma, "',' between matrix dimensions")?;
-        let columns = self.parse_nonnegative_matrix_integer()?;
+        let columns = if matches!(self.current().kind, TokenKind::Comma) {
+            self.advance();
+            Some(self.parse_nonnegative_matrix_integer()?)
+        } else {
+            None
+        };
         let end = self
             .expect(TokenKind::RightParen, "')' after matrix dimensions")?
             .span;
