@@ -511,7 +511,9 @@ impl Parser {
     fn parse_matrix_reference(&mut self) -> Result<(String, SourceSpan), Box<Diagnostic>> {
         let (name, start) = self.parse_matrix_name()?;
         self.expect(TokenKind::LeftParen, "'(' after matrix name")?;
-        let end = self.expect(TokenKind::RightParen, "')' after matrix name")?.span;
+        let end = self
+            .expect(TokenKind::RightParen, "')' after matrix name")?
+            .span;
         Ok((name, SourceSpan::new(self.source_id, start.start, end.end)))
     }
 
@@ -519,7 +521,10 @@ impl Parser {
         let token = self.advance();
         match token.kind {
             TokenKind::Integer(value) => Ok(value),
-            _ => Err(self.syntax_error("matrix dimensions must be non-negative integer literals in this MVP", token.span)),
+            _ => Err(self.syntax_error(
+                "matrix dimensions must be non-negative integer literals in this MVP",
+                token.span,
+            )),
         }
     }
 
@@ -529,7 +534,9 @@ impl Parser {
         let rows = self.parse_matrix_dimension()?;
         self.expect(TokenKind::Comma, "',' between matrix dimensions")?;
         let columns = self.parse_matrix_dimension()?;
-        let end = self.expect(TokenKind::RightParen, "')' after matrix dimensions")?.span;
+        let end = self
+            .expect(TokenKind::RightParen, "')' after matrix dimensions")?
+            .span;
         Ok(Statement::DimMatrix {
             name,
             rows,
@@ -542,7 +549,12 @@ impl Parser {
         let operation = self.advance();
         let operation_name = match operation.kind {
             TokenKind::Identifier(name) => name,
-            _ => return Err(self.syntax_error("expected MAT ONE, MAT SET, MAT CLR, or MAT PRINT", operation.span)),
+            _ => {
+                return Err(self.syntax_error(
+                    "expected MAT ONE, MAT SET, MAT CLR, or MAT PRINT",
+                    operation.span,
+                ));
+            }
         };
         match operation_name.as_str() {
             "ONE" | "CLR" | "PRINT" => {
@@ -753,7 +765,9 @@ mod tests {
         let program = parse(source_id, source_text).unwrap();
 
         assert!(matches!(&program.statements[1], Statement::MatOne { name, .. } if name == "a"));
-        assert!(matches!(&program.statements[2], Statement::MatSet { name, value: 7, .. } if name == "a"));
+        assert!(
+            matches!(&program.statements[2], Statement::MatSet { name, value: 7, .. } if name == "a")
+        );
         assert!(matches!(&program.statements[3], Statement::MatClr { name, .. } if name == "a"));
     }
 
