@@ -26,7 +26,10 @@ The language-core catalogue currently contains 28 declarations, and the Amiga pl
 
 - Registry `support.tests` references use each manifest-listed fixture sidecar's stable `id`; manifest path stems are storage locations, not test IDs.
 - Do not mark a declaration supported without primary evidence, a real implementation, and passing conformance tests.
-- Unknown support classifications require an explicit pending reason.
+- Book-documented and primary-reference-cross-checked claims require printed-page locators.
+- Unknown/unsupported target support and non-passing conformance require explicit pending reasons.
+- Disputed evidence must describe the conflict and cannot claim implemented, supported, or passing behavior.
+- Unknown/inferred evidence cannot claim supported target behavior.
 - Do not create placeholder entries or infer implementation support from names, prose, issue titles, or the existence of a research fixture.
 
 ## AI-assisted evidence review
