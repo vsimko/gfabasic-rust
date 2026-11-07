@@ -21,6 +21,11 @@ This policy applies to human-readable project documentation. Machine-readable AP
 - Keep generated documentation out of the canonical source unless a later decision defines a reproducible generation process.
 - Keep source files readable in a plain-text editor.
 
+
+## Generated website data
+
+The website may consume generated JSON summaries for its static dashboard. Generated data is not a canonical source of project status. Every generated value must be traceable to its canonical source, and the generation process must be deterministic and validated. Keep generated output separate from editable source data. Do not hand-edit generated files, scrape explanatory Markdown as a data source, or add credentials to browser code. Missing or stale values must remain explicit; never replace unknown values with zero or a guessed status. See [the implementation dashboard guide](architecture/IMPLEMENTATION-DASHBOARD.md) and [ADR 0014](architecture/adr/0014-implementation-dashboard.md).
+
 ## Writing rules
 
 Write technical documentation in clear, direct English. Use ASD-STE100 Simplified Technical English principles as a style guide where applicable:
