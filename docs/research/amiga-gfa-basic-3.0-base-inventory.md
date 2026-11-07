@@ -660,3 +660,23 @@ The following entries extend the routine-level inventory using the English manua
 ### Platform and evidence boundary
 
 These calls manipulate Workbench-owned objects, font lists, mutable Layer/RastPort structures, AmigaDOS locks and file handles, or hardware/display state. A safe Rust interface needs typed structure definitions, explicit allocation provenance, ownership and lock lifetimes, and error handling beyond the manual's generic BASIC-side `iexp` annotation. In particular, do not infer that a successful raw address remains valid after its matching Free*/Close*/UnLock* operation. All entries above remain candidates sourced from the English manual's 3.0 system-routine chapter; they are not evidence of 3.5 interpreter availability.
+
+
+## Chapter 12 — appendices and command index (printed pp. 12-5–12-8)
+
+The appendix pages provide reference material for interpreting programs and navigating the manual. They are not an independent 3.5 compatibility source.
+
+### Appendix reference material
+
+- **Appendix opening (p. 12-5):** the appendix section begins after the Chapter 11 DOS-Library material. The scan's page transition places the appendix at printed page 12-5.
+- **Fill patterns (p. 12-6):** the page illustrates the numbered fill-pattern set used by `DEFFILL`. Its caption says the first number selects the style and the second selects the pattern. The raster illustrations are visual source material; OCR text cannot reliably reconstruct their pixel patterns.
+- **AmigaDOS error messages (p. 12-7):** the table lists system error numbers and descriptions: 103 insufficient free store; 104 task table full; 120 argument line invalid or too long; 121 file is not object module; 122 invalid resident library during load; 202 object in use; 203 object already exists; 204 directory not found; 205 object not found; 206 invalid window; 209 packet request type unknown; 210 invalid file name; 211 invalid object lock; 212 object type mismatch; 213 disk not validated; 214 disk write protected; 215 cannot rename; 216 directory not empty; 218 device not mounted; 219 seek error; 220 comment too big; 221 disk full; 222 file protected from deletion; 223 file protected from writing; 224 file protected from reading; 225 not a DOS disk; 226 no disk in drive; 232 no more directory entries.
+- **Table of commands (begins p. 12-7; continues on p. 12-8 and following index pages):** alphabetical command/function lookup with abbreviations and printed page references. The visible entries include punctuation/operators, system-base variables, numeric/string functions, array and conversion functions, graphics, file, control-flow and platform commands. It is an index, not a semantic specification; page references point back to the relevant chapter text.
+
+### Index extraction limits
+
+The scan's OCR corrupts spacing, punctuation, some command names, abbreviations and page digits in the command table. Accordingly, this inventory records the index's existence and purpose rather than treating an OCR dump as a canonical declaration list. Use the referenced chapter pages and page images to verify each spelling and signature before creating a registry candidate. The fill-pattern illustrations likewise require visual inspection before their bitmap values can be transcribed.
+
+### Version boundary
+
+The appendix pages belong to the same 3.0 base-manual section as Chapters 2–11. Error numbers and fill-pattern references are therefore 3.0-source facts. The command index can help locate declarations, but its presence in a manual whose addendum documents 3.5 does not establish that every indexed entry is available in 3.5.
