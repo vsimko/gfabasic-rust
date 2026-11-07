@@ -26,8 +26,11 @@ Formatter options:
   -o <path>     Write formatted output to a separate path (atomically)
   --in-place    Replace the source file atomically; never implied
 
-The formatter currently accepts FACT, VARIAT, COMBIN, and PRINT prototype
-syntax only. Unsupported syntax is diagnosed and never written. Identifier
+The formatter currently accepts the verified FACT/VARIAT/COMBIN assignment
+and PRINT forms plus the documented DIM and selected MAT matrix forms
+(ONE, SET, CLR, PRINT, BASE, TRANS, and NORM). This is a parsing/formatting
+subset, not general matrix evaluation or language support. Comments, strings,
+DATA, and other unsupported syntax are diagnosed and never written. Identifier
 spelling is preserved exactly. The formatter uses UTF-8 transport and LF
 output; this is not a claim about historical Amiga source encoding.
 
