@@ -11,12 +11,13 @@ It currently formats only the evidence-gated prototype grammar:
 - `PRINT` statements containing the supported variables;
 - the independently verified matrix fixture forms: `DIM a(rows,columns)`,
   `MAT ONE a()`, `MAT SET a()=value`, `MAT CLR a()`, `MAT PRINT a()`,
-  `MAT BASE 0|1`, and `MAT TRANS a()[=b()]`.
+  `MAT BASE 0|1`, `MAT TRANS a()[=b()]`, and `MAT NORM a(),0|1`.
 
 The matrix parser slice intentionally supports only matrix names `a` and `b`,
 two integer dimensions, and a non-negative integer scalar for `MAT SET`.
 `MAT BASE` accepts only the documented offsets 0 and 1. `MAT TRANS` supports
-the documented in-place and destination/source forms. It does not implement
+the documented in-place and destination/source forms. `MAT NORM` accepts only
+row mode 0 and column mode 1. It does not implement
 matrix evaluation or general array semantics. The executable
 compiler and semantic-analysis stages explicitly reject these matrix AST nodes;
 this increment is for parsing and formatting only.
