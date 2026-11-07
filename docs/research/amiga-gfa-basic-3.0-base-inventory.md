@@ -255,3 +255,58 @@ These are 3.0 base-manual descriptions, not confirmed 3.5 grammar.
 ## Chapter 11 — system routines: classification note
 
 Chapter 11 is a catalogue of direct Amiga operating-system library calls, not a portable BASIC language-core feature list. Its introduction (printed pp. 11-1–11-2) says the interpreter assists with syntax/indentation for system calls, but invalid calls are left to operating-system error handling (the manual names the GURU error). The chapter is organized by Exec, Graphics, Workbench, Intuition, DiskFont, Layers and DOS libraries (contents pp. 11-2–11-85). Individual routines should be modelled under an Amiga platform API profile, with library, call signature, pointer/structure requirements and OS-version constraints. The contents list alone is not enough to claim a stable or safe Rust wrapper.
+
+
+## Chapter 11 — Amiga OS system-call catalogue
+
+The table of contents and library sections establish the following API families (printed pages):
+
+| Library family | Manual pages | Classification |
+|---|---:|---|
+| Exec | 11-3–11-23 | Tasking, memory, signals, devices, lists and low-level system services |
+| Graphics | 11-24–11-53 | RastPorts, bitmaps, drawing, sprites, copper and display structures |
+| Workbench | 11-54–11-57 | Workbench objects, icons, tool types and startup integration |
+| Intuition | 11-58–11-75 | Screens, windows, gadgets, menus, input and requesters |
+| DiskFont | 11-76–11-77 | Font discovery and loading |
+| Layers | 11-78–11-84 | Layer creation, locking, refresh and ordering |
+| DOS | 11-85–11-92 | Files, directories, locks, process/CLI and I/O |
+
+The appendix's Table of Libraries (printed pp. 12-19–12-28) is an alphabetical cross-reference of these calls and their Chapter 11 page locations. It is not a separate API specification.
+
+### Consequences for a Rust-facing catalogue
+
+- Preserve the library identity with each call; do not flatten same-named calls into one global function namespace.
+- Record the exact AmigaOS library, routine name, parameter order, return convention and source page.
+- Treat addresses as typed pointers to specific OS structures where the source identifies them; the manual's BASIC-side transport type is not a safe Rust type.
+- Mark ownership/lifetime and allocation/free pairs explicitly. The manual's brief descriptions do not always provide enough information to infer them.
+- Separate calls that manipulate global OS state, tasks, interrupts, hardware registers or supervisor mode from ordinary memory-safe wrappers. A direct call can crash the system or corrupt another task.
+- The current source is a 3.0-era OS-call reference. Exact OS release/ROM compatibility and 3.5 interpreter exposure still require independent verification.
+
+The following library-specific material was found in the supplied scan: Exec pages include task, signal, memory and device operations; Graphics pages include drawing/bitmap and display structures; Workbench pages include object/icon operations; Intuition pages include window/screen/input management; DiskFont covers font operations; Layers covers layer lifecycle and locking; DOS covers file and CLI operations. This is a family-level inventory only; routine-by-routine extraction remains open.
+
+## Chapter 12 — appendices: reference material, not new language features
+
+Chapter 12 contains support tables and indexes rather than a new command family:
+
+- Keyboard scan codes (printed p. 12-2).
+- ASCII table and special ASCII codes (pp. 12-3–12-5).
+- Fill patterns (p. 12-6).
+- AmigaDOS error messages (p. 12-7).
+- Alphabetical command/function table (pp. 12-8–12-18).
+- Alphabetical operating-system function table (pp. 12-19–12-28).
+
+The two alphabetical tables are navigation aids into Chapters 2–11; they must not be counted as independent declarations. The character, scan-code and fill-pattern tables are supporting constants/data and should be transcribed only where a concrete implementation or conformance test needs them. The DOS error list can seed an error-code mapping, but code names and numeric values require page-level extraction and OS-version qualification.
+
+## Chapter 13 — verified 3.5 addendum index and reconciliation candidates
+
+Unlike Chapters 2–12, Chapter 13 explicitly identifies itself as the GFA BASIC 3.5 addendum. The table of contents lists the following 3.5-specific topics:
+
+- Editor enhancements: backward scrolling, search in folded procedure/function headers, listing labels, and tab-key functions (printed p. 13-1).
+- Floating-point vector/matrix operations: MAT BASE, MAT CLR, MAT SET, MAT ONE, MAT READ, MAT PRINT, MAT INPUT, MAT CPY, MAT XCPY, MAT TRANS and MAT COPY (pp. 13-1–13-6).
+- Matrix operations: MAT ADD, MAT SUB, MAT MUL, MAT NORM, MAT DET, MAT QDET, MAT RANG and MAT INV (from p. 13-16).
+- FACT, VARIAT and COMBIN (p. 13-33).
+- OPENW negative-screen-number variant, PCOLOUR, DATA pointer inspection/assignment via DATA and _DATA=, special variables _0…_9, and GURU handling (pp. 13-34–13-36).
+
+The first matrix pages state that the addendum's matrix/vector functions operate only on one- and two-dimensional fields with floating-point variables. MAT BASE changes the row/column indexing offset for specified matrix commands; the documented default is 1, and MAT BASE 0/1 is intended in conjunction with OPTION BASE 0. MAT CLR and MAT SET fill all elements; MAT ONE creates a square identity matrix. MAT READ consumes DATA rows and MAT PRINT formats vectors/matrices. These are directly supported by the 3.5 addendum and can be reconciled into 3.5 declarations after exact syntax and remaining operation semantics are extracted.
+
+Important boundary: the addendum's presence of an item is positive evidence for that 3.5 feature; absence from Chapter 13 is not proof that a 3.0 feature was removed. The older chapters still require runtime or 3.5-specific confirmation before claiming compatibility.
