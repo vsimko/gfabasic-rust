@@ -206,7 +206,7 @@ errors = []
 [declarations.evidence]
 status = "book-documented"
 sources = ["AM-INTERPRETER-35"]
-printed-pages = ["Chapter 13, printed p. 13-3"]
+printed-pages = ["Chapter 13, printed pp. 13-2–13-3"]
 notes = ["Chapter 13 restricts these operations to one- and/or two-dimensional fields with floating-point variables.", "The addendum equates MAT CLR with ARRAYFILL array(),0."]
 
 [declarations.implementation]
@@ -252,7 +252,7 @@ errors = []
 [declarations.evidence]
 status = "book-documented"
 sources = ["AM-INTERPRETER-35"]
-printed-pages = ["Chapter 13, printed p. 13-3"]
+printed-pages = ["Chapter 13, printed pp. 13-2–13-3"]
 notes = ["Chapter 13 restricts these operations to one- and/or two-dimensional fields with floating-point variables.", "The addendum equates MAT SET with ARRAYFILL array(),scalar."]
 
 [declarations.implementation]

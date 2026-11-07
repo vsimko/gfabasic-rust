@@ -240,14 +240,32 @@ def validate_registry(root: Path = ROOT) -> list[str]:
             implementation = declaration.get("implementation", {})
             if implementation.get("status") in {"implemented", "partial"} and not implementation.get("handler"):
                 errors.append(f"{path}: {declaration_id}: implemented entry has no handler ID")
+            if evidence.get("status") in {"book-documented", "primary-reference-cross-checked"} and not evidence.get("printed-pages"):
+                errors.append(f"{path}: {declaration_id}: book/primary-reference evidence needs printed-page locators")
+            if evidence.get("status") == "disputed":
+                if not evidence.get("notes"):
+                    errors.append(f"{path}: {declaration_id}: disputed evidence needs notes describing the conflict")
+                if implementation.get("status") in {"implemented", "partial"}:
+                    errors.append(f"{path}: {declaration_id}: disputed evidence cannot claim an implemented behavior")
 
             for support in declaration.get("support", []):
                 classification = support.get("classification")
                 tests = support.get("tests", [])
-                if classification == "unknown" and not support.get("pending-reason"):
+                pending_reason = support.get("pending-reason")
+                if classification in {"unknown", "unsupported"} and not pending_reason:
                     errors.append(
-                        f"{path}: {declaration_id}: unknown support classification needs a pending reason"
+                        f"{path}: {declaration_id}: unknown/unsupported classification needs a pending reason"
                     )
+                if support.get("conformance") in {"not-tested", "not-applicable"} and not pending_reason:
+                    errors.append(
+                        f"{path}: {declaration_id}: non-passing conformance needs a pending reason"
+                    )
+                if evidence.get("status") in {"unknown", "inferred", "disputed"} and classification in SUPPORTED:
+                    errors.append(
+                        f"{path}: {declaration_id}: uncertain/disputed evidence cannot claim supported target behavior"
+                    )
+                if evidence.get("status") == "disputed" and support.get("conformance") == "passing":
+                    errors.append(f"{path}: {declaration_id}: disputed evidence cannot have passing conformance")
                 for test_id in tests:
                     if test_id not in test_ids:
                         errors.append(f"{path}: {declaration_id}: unknown test ID {test_id!r}")
