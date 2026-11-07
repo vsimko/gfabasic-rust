@@ -1701,6 +1701,8 @@ mod tests {
             "MAT SET a()\n",
             "MAT SET a()=7,8\n",
             "MAT INV a()\n",
+            "MAT INV b()=a()\n",
+            "MAT INV a()=b()\n",
         ] {
             let mut sources = SourceMap::new();
             let source_id = sources.add_source("malformed-matrix.bas", source_text);
