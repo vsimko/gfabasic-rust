@@ -1,0 +1,306 @@
+schema-version = 1
+
+# Additional commands and special variables explicitly documented by the
+# Amiga GFA BASIC 3.5 interpreter addendum. The base 3.0 manual is not used
+# to fill in syntax that the 3.5 addendum does not state.
+
+[[declarations]]
+id = "gfa.amiga.data.data-pointer"
+name = "_DATA"
+kind = "variable"
+
+[[declarations.availability]]
+dialect = "amiga-gfa-basic-interpreter"
+versions = ["3.5"]
+profile = "amiga"
+
+[[declarations.syntax]]
+form = "_DATA"
+contexts = ["expression", "lvalue"]
+
+[declarations.signature]
+type = "integer DATA-pointer position"
+
+[declarations.semantics]
+summary = "Returns the current DATA-pointer position; returns 0 when the next READ would cause an out-of-data condition."
+side-effects = []
+
+[declarations.evidence]
+status = "book-documented"
+sources = ["AM-INTERPRETER-35"]
+printed-pages = ["Chapter 13, printed p. 13-34 (same feature: combined update scan p. 14-5)"]
+notes = ["The leading underscore in _DATA was checked against the addendum page image; ordinary DATA is a separate statement.", "The exact pointer numbering and behavior after every READ form are not fully specified by this short addendum passage."]
+
+[declarations.implementation]
+status = "not-implemented"
+
+[[declarations.support]]
+target = "x86_64-unknown-linux-gnu"
+classification = "unknown"
+conformance = "not-tested"
+tests = []
+pending-reason = "No DATA-pointer implementation or executable reference-interpreter conformance tests are registered."
+
+[declarations.docs]
+path = "docs/research/amiga-gfa-basic-35-addendum-inventory.md"
+anchors = ["4-additional-commands-in-version-35-combined-scan-chapter-14-printed-pp-14-1-14-7"]
+
+[[declarations]]
+id = "gfa.amiga.data.set-data-pointer"
+name = "_DATA="
+kind = "statement"
+
+[[declarations.availability]]
+dialect = "amiga-gfa-basic-interpreter"
+versions = ["3.5"]
+profile = "amiga"
+
+[[declarations.syntax]]
+form = "_DATA= integer-expression"
+contexts = ["statement"]
+arguments = [{ name = "position", type = "integer expression previously obtained from _DATA", required = true }]
+
+[declarations.signature]
+type = "no return value"
+
+[declarations.semantics]
+summary = "Sets the DATA pointer to a value previously obtained with _DATA."
+side-effects = ["Changes the current DATA-pointer position."]
+errors = []
+
+[declarations.evidence]
+status = "book-documented"
+sources = ["AM-INTERPRETER-35"]
+printed-pages = ["Chapter 13, printed p. 13-34 (same feature: combined update scan p. 14-5)"]
+notes = ["The leading underscore and equals sign in _DATA= were checked against the addendum page image.", "The source describes restoring a pointer value previously obtained from _DATA; it does not specify arbitrary pointer values."]
+
+[declarations.implementation]
+status = "not-implemented"
+
+[[declarations.support]]
+target = "x86_64-unknown-linux-gnu"
+classification = "unknown"
+conformance = "not-tested"
+tests = []
+pending-reason = "No DATA-pointer implementation or executable reference-interpreter conformance tests are registered."
+
+[declarations.docs]
+path = "docs/research/amiga-gfa-basic-35-addendum-inventory.md"
+anchors = ["4-additional-commands-in-version-35-combined-scan-chapter-14-printed-pp-14-1-14-7"]
+
+[[declarations]]
+id = "gfa.amiga.memory.special-longword-variables"
+name = "_0.._9"
+kind = "variable"
+
+[[declarations.availability]]
+dialect = "amiga-gfa-basic-interpreter"
+versions = ["3.5"]
+profile = "amiga"
+
+[[declarations.syntax]]
+form = "_0 through _9"
+contexts = ["expression", "lvalue"]
+
+[declarations.signature]
+type = "longword"
+
+[declarations.semantics]
+summary = "Provides ten special longword variables, not floating-point variables. They are erased by NEW but not by CLEAR, LOAD, CHAIN, or RUN."
+side-effects = ["Values persist across CLEAR, LOAD, CHAIN, and RUN; NEW clears them."]
+errors = []
+
+[declarations.evidence]
+status = "book-documented"
+sources = ["AM-INTERPRETER-35"]
+printed-pages = ["Chapter 13, printed p. 13-35 (same feature: combined update scan p. 14-6)"]
+notes = ["The range _0 through _9, longword storage, and command-specific clearing behavior are documented in the 3.5 addendum.", "The manual gives AllocMem addresses and LibraryBase values as example uses; no host pointer equivalence is implied."]
+
+[declarations.implementation]
+status = "not-implemented"
+
+[[declarations.support]]
+target = "x86_64-unknown-linux-gnu"
+classification = "unknown"
+conformance = "not-tested"
+tests = []
+pending-reason = "No special-variable storage or lifecycle implementation is registered."
+
+[declarations.docs]
+path = "docs/research/amiga-gfa-basic-35-addendum-inventory.md"
+anchors = ["4-additional-commands-in-version-35-combined-scan-chapter-14-printed-pp-14-1-14-7"]
+
+[[declarations]]
+id = "gfa.amiga.graphics.pcolor"
+name = "PCOLOR"
+kind = "statement"
+
+[[declarations.availability]]
+dialect = "amiga-gfa-basic-interpreter"
+versions = ["3.5"]
+profile = "amiga"
+
+[[declarations.syntax]]
+form = "PCOLOR foreground[, background]"
+contexts = ["statement"]
+arguments = [
+  { name = "foreground", type = "COLOR-compatible foreground colour value", required = true },
+  { name = "background", type = "optional COLOR-compatible background colour value", required = false },
+]
+
+[declarations.signature]
+type = "no return value"
+
+[declarations.semantics]
+summary = "Sets the foreground and optional background colours for screen output subsequently produced by PRINT; the command is described as otherwise behaving like COLOR."
+side-effects = ["Changes colour state used by PRINT screen output."]
+errors = []
+
+[declarations.evidence]
+status = "book-documented"
+sources = ["AM-INTERPRETER-35"]
+printed-pages = ["Chapter 13, printed p. 13-34 (same feature: combined update scan p. 14-4)"]
+notes = ["The source documents PCOLOR foreground,background and examples with the background omitted.", "The colour value range and exact interaction with all screen/window modes are not specified in this addendum passage."]
+
+[declarations.implementation]
+status = "not-implemented"
+
+[[declarations.support]]
+target = "x86_64-unknown-linux-gnu"
+classification = "unknown"
+conformance = "not-tested"
+tests = []
+pending-reason = "No PRINT colour-state implementation or executable reference-interpreter conformance tests are registered."
+
+[declarations.docs]
+path = "docs/research/amiga-gfa-basic-35-addendum-inventory.md"
+anchors = ["4-additional-commands-in-version-35-combined-scan-chapter-14-printed-pp-14-1-14-7"]
+
+[[declarations]]
+id = "gfa.amiga.windows.openw-negative-screen"
+name = "OPENW"
+kind = "statement"
+
+[[declarations.availability]]
+dialect = "amiga-gfa-basic-interpreter"
+versions = ["3.5"]
+profile = "amiga"
+
+[[declarations.syntax]]
+form = "OPENW with a negative screen number"
+contexts = ["statement"]
+arguments = [{ name = "screen-number", type = "negative screen number", required = true }]
+
+[declarations.signature]
+type = "no return value"
+
+[declarations.semantics]
+summary = "When the screen number is negative, opens the window on the current (top) screen."
+side-effects = ["Creates a window on the current top screen."]
+errors = []
+
+[declarations.evidence]
+status = "book-documented"
+sources = ["AM-INTERPRETER-35"]
+printed-pages = ["Chapter 13, printed p. 13-34 (same feature: combined update scan p. 14-3)"]
+notes = ["Only the negative-screen-number variant is declared here; this record does not claim to specify the complete OPENW signature or lifecycle."]
+
+[declarations.implementation]
+status = "not-implemented"
+
+[[declarations.support]]
+target = "x86_64-unknown-linux-gnu"
+classification = "unknown"
+conformance = "not-tested"
+tests = []
+pending-reason = "No Amiga screen/window implementation or executable reference-interpreter conformance tests are registered."
+
+[declarations.docs]
+path = "docs/research/amiga-gfa-basic-35-addendum-inventory.md"
+anchors = ["4-additional-commands-in-version-35-combined-scan-chapter-14-printed-pp-14-1-14-7"]
+
+[[declarations]]
+id = "gfa.amiga.system.guru-check"
+name = "GURU"
+kind = "statement"
+overload-group = "gfa.amiga.system.guru"
+
+[[declarations.availability]]
+dialect = "amiga-gfa-basic-interpreter"
+versions = ["3.5"]
+profile = "amiga"
+
+[[declarations.syntax]]
+form = "GURU numeric-expression"
+contexts = ["statement"]
+arguments = [{ name = "enable", type = "numeric expression", required = true }]
+
+[declarations.signature]
+type = "no return value"
+
+[declarations.semantics]
+summary = "Disables GURU checking when the argument is 0 and enables it when the argument is nonzero. On a GURU Meditation, control transfers to ONERROR GOSUB or error #109 is generated."
+side-effects = ["Changes GURU-checking state.", "May transfer control to ONERROR GOSUB or raise error #109 on a GURU Meditation."]
+errors = ["Error #109: GURU Meditation"]
+
+[declarations.evidence]
+status = "book-documented"
+sources = ["AM-INTERPRETER-35"]
+printed-pages = ["Chapter 13, printed p. 13-36 (same feature: combined update scan pp. 14-6–14-7)"]
+notes = ["The 3.5 addendum distinguishes the GURU command from the GURU function.", "In compiled 3.5 programs, RESUME NEXT and RESUME LABEL cannot be executed after an ONERROR GOSUB call caused by a GURU; this restriction is recorded in the source inventory."]
+
+[declarations.implementation]
+status = "not-implemented"
+
+[[declarations.support]]
+target = "x86_64-unknown-linux-gnu"
+classification = "unknown"
+conformance = "not-tested"
+tests = []
+pending-reason = "No Amiga GURU/error handling implementation or executable reference-interpreter conformance tests are registered."
+
+[declarations.docs]
+path = "docs/research/amiga-gfa-basic-35-addendum-inventory.md"
+anchors = ["4-additional-commands-in-version-35-combined-scan-chapter-14-printed-pp-14-1-14-7"]
+
+[[declarations]]
+id = "gfa.amiga.system.guru-number"
+name = "GURU"
+kind = "function"
+overload-group = "gfa.amiga.system.guru"
+
+[[declarations.availability]]
+dialect = "amiga-gfa-basic-interpreter"
+versions = ["3.5"]
+profile = "amiga"
+
+[[declarations.syntax]]
+form = "GURU"
+contexts = ["expression"]
+
+[declarations.signature]
+type = "integer GURU number"
+
+[declarations.semantics]
+summary = "Returns the GURU number associated with the current GURU condition."
+side-effects = []
+
+[declarations.evidence]
+status = "book-documented"
+sources = ["AM-INTERPRETER-35"]
+printed-pages = ["Chapter 13, printed p. 13-36 (same feature: combined update scan pp. 14-6–14-7)"]
+notes = ["The 3.5 addendum identifies GURU as a function used to inspect the GURU number, distinct from the GURU enable/disable command."]
+
+[declarations.implementation]
+status = "not-implemented"
+
+[[declarations.support]]
+target = "x86_64-unknown-linux-gnu"
+classification = "unknown"
+conformance = "not-tested"
+tests = []
+pending-reason = "No GURU-number runtime implementation or executable reference-interpreter conformance tests are registered."
+
+[declarations.docs]
+path = "docs/research/amiga-gfa-basic-35-addendum-inventory.md"
+anchors = ["4-additional-commands-in-version-35-combined-scan-chapter-14-printed-pp-14-1-14-7"]
