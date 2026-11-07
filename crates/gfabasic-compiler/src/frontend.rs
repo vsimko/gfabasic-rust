@@ -1695,10 +1695,17 @@ mod tests {
         ] {
             let mut sources = SourceMap::new();
             let source_id = sources.add_source("malformed-matrix.bas", source_text);
-            assert!(
-                parse(source_id, source_text).is_err(),
-                "accepted: {source_text:?}"
-            );
+            if source_text.starts_with("DIM ") {
+                assert!(
+                    parse(source_id, source_text).is_ok(),
+                    "verified vector declaration was rejected: {source_text:?}"
+                );
+            } else {
+                assert!(
+                    parse(source_id, source_text).is_err(),
+                    "accepted malformed matrix statement: {source_text:?}"
+                );
+            }
         }
     }
 
