@@ -2,6 +2,7 @@
 """Generate deterministic, evidence-checked website data from repository sources."""
 
 import argparse
+import html
 import json
 import re
 import subprocess
@@ -138,6 +139,100 @@ def source_revision(root: Path) -> str:
     return result.stdout.strip() if result.returncode == 0 else "unknown"
 
 
+
+def render_project_dashboard(data: dict) -> tuple[str, str]:
+    """Render repository status and roadmap as crawlable, build-time HTML."""
+    esc = html.escape
+    project = data["project"]
+    stats = [
+        ("Project maturity", project.get("maturity", "Unknown"), "Experimental project"),
+        ("Product target", project.get("target", "Unknown"), project.get("source_dialect", "Dialect unknown")),
+        ("Workspace", str(len(data["workspace_packages"])), "Rust crates in Cargo workspace"),
+    ]
+    overview = '<div class="dashboard-overview">' + "".join(
+        f'<article class="dashboard-stat"><span class="dashboard-stat-label">{esc(label)}</span>'
+        f'<strong>{esc(value)}</strong><small>{esc(note)}</small></article>'
+        for label, value, note in stats
+    ) + '</div>'
+    progress = ['<h3 class="dashboard-subheading">Roadmap progress</h3><div class="dashboard-roadmap-progress">']
+    for phase in data["roadmap_progress"]:
+        percent = max(0, min(100, int(phase["percent"])))
+        progress.append(
+            '<div class="dashboard-phase-progress"><div class="dashboard-progress-top">'
+            f'<span class="dashboard-progress-name">Phase {phase["number"]} · {esc(phase["name"])}</span>'
+            f'<span class="dashboard-progress-value">{phase["completed"]}/{phase["total"]} · {percent}%</span>'
+            '</div>'
+            f'<div class="dashboard-progress-track" role="progressbar" aria-label="{esc(f"Phase {phase[chr(110)+chr(117)+chr(109)+chr(98)+chr(101)+chr(114)]}: {phase[chr(110)+chr(97)+chr(109)+chr(101)]}")}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{percent}">'
+            f'<span class="dashboard-progress-fill" style="width:{percent}%"></span></div></div>'
+        )
+    progress.append('</div>')
+    components = ['<h3 class="dashboard-subheading">Implementation states</h3><div class="dashboard-components">']
+    for item in data["components"]:
+        evidence = "".join(
+            f'<a href="https://github.com/vsimko/gfabasic-rust/blob/main/{esc(ref.split("#", 1)[0])}'
+            f'{("#" + esc(ref.split("#", 1)[1])) if "#" in ref else ""}" target="_blank" rel="noreferrer">{esc(ref)} ↗</a>'
+            for ref in item["evidence"]
+        )
+        components.append(
+            f'<article class="dashboard-component"><div class="dashboard-component-top"><h4>{esc(item["name"])}</h4>'
+            f'<span class="dashboard-status">{esc(item["status"].replace("-", " ").title())}</span></div>'
+            f'<p>{esc(item["rationale"])}</p><div class="dashboard-evidence">{evidence}</div></article>'
+        )
+    components.append('</div>')
+    footer = (
+        f'<div class="dashboard-footer"><span>Source revision: {esc(data["source_revision"][:7])}</span>'
+        '<a href="https://github.com/vsimko/gfabasic-rust/issues">Open implementation issues ↗</a></div>'
+    )
+    dashboard = overview + "".join(progress) + "".join(components) + footer
+
+    roadmap = []
+    for phase in data["roadmap_progress"]:
+        percent = max(0, min(100, int(phase["percent"])))
+        state = "COMPLETE" if phase["status"] == "complete" else "IN PROGRESS" if phase["status"] == "in-progress" else "PLANNED"
+        links = "".join(
+            f'<a href="{esc(link["url"])}" target="_blank" rel="noreferrer">{esc(link["label"])} ↗</a>'
+            for link in phase["issue_links"]
+        )
+        roadmap.append(
+            f'<article class="roadmap-phase"><span class="roadmap-state {esc(phase["status"])}">{state}</span>'
+            f'<div class="roadmap-phase-body"><h3>Phase {phase["number"]} · {esc(phase["name"])}</h3>'
+            f'<p>{esc(phase["description"])}</p><div class="roadmap-phase-progress">'
+            f'<div class="dashboard-progress-track" role="progressbar" aria-label="{esc("Phase " + str(phase["number"]) + ": " + phase["name"])}" '
+            f'aria-valuemin="0" aria-valuemax="100" aria-valuenow="{percent}"><span class="dashboard-progress-fill" style="width:{percent}%"></span></div>'
+            f'<span class="roadmap-phase-count">{phase["completed"]}/{phase["total"]} tasks · {percent}%</span></div>'
+            f'<div class="roadmap-phase-issues">{links}</div></div></article>'
+        )
+    if data["roadmap_blockers"]:
+        roadmap.append('<h3 class="roadmap-blockers-heading">Dependencies &amp; sequencing rules</h3><div class="roadmap-blockers">')
+        for blocker in data["roadmap_blockers"]:
+            links = "".join(
+                f'<a href="{esc(link["url"])}" target="_blank" rel="noreferrer">{esc(link["label"])} ↗</a>'
+                for link in blocker["issue_links"]
+            )
+            roadmap.append(f'<article class="roadmap-blocker"><p>{esc(blocker["summary"])}</p><div class="roadmap-phase-issues">{links}</div></article>')
+        roadmap.append('</div>')
+    return dashboard, "".join(roadmap)
+
+
+def render_static_site(root: Path, data: dict) -> None:
+    """Insert generated content into the HTML so it is present without JavaScript."""
+    path = root / "site/index.html"
+    document = path.read_text(encoding="utf-8")
+    dashboard, roadmap = render_project_dashboard(data)
+    replacements = {
+        "DASHBOARD": dashboard,
+        "ROADMAP": roadmap,
+    }
+    for name, content in replacements.items():
+        start = f"<!-- GENERATED {name} START -->"
+        end = f"<!-- GENERATED {name} END -->"
+        if start not in document or end not in document:
+            raise ValueError(f"site/index.html is missing {name} generation markers")
+        before, remainder = document.split(start, 1)
+        _, after = remainder.split(end, 1)
+        document = before + start + "\n" + content + "\n" + end + after
+    path.write_text(document, encoding="utf-8")
+
 def generate(root: Path, model_path: Path, output: Path) -> dict:
     model = load_model(model_path, root)
     manifest = tomllib.loads((root / "Cargo.toml").read_text(encoding="utf-8"))
@@ -159,6 +254,7 @@ def generate(root: Path, model_path: Path, output: Path) -> dict:
     }
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(result, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    render_static_site(root, result)
     return result
 
 
