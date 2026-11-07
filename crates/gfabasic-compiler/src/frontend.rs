@@ -65,6 +65,8 @@ pub enum TokenKind {
     RightParen,
     /// An argument or print-list separator.
     Comma,
+    /// A trailing apostrophe or exclamation comment, including its original text.
+    Comment,
     /// A source line boundary, preserving CR, LF, or CRLF in its span.
     Newline,
     /// A zero-width end-of-input marker.
@@ -185,6 +187,16 @@ pub fn lex_lossless(source_id: SourceId, source: &str) -> Result<LexedSource, Ve
                 offset += 1;
                 tokens.push(Token {
                     kind: TokenKind::Newline,
+                    span: SourceSpan::new(source_id, start, offset),
+                });
+            }
+            b'\'' | b'!' => {
+                let start = offset;
+                while bytes.get(offset).is_some_and(|byte| !matches!(byte, b'\r' | b'\n')) {
+                    offset += 1;
+                }
+                tokens.push(Token {
+                    kind: TokenKind::Comment,
                     span: SourceSpan::new(source_id, start, offset),
                 });
             }
@@ -505,6 +517,9 @@ impl Parser {
             match self.parse_statement() {
                 Ok(statement) => {
                     statements.push(statement);
+                    if matches!(self.current().kind, TokenKind::Comment) {
+                        self.advance();
+                    }
                     if !self.at_end() && !matches!(self.current().kind, TokenKind::Newline) {
                         let token = self.current().clone();
                         self.diagnostics.push(*self.syntax_error(
@@ -651,6 +666,26 @@ mod tests {
 
         let errors = parse(source_id, "PRINT count\n").expect_err("name is outside MVP");
         assert!(errors[0].message.contains("supported: x, y, z"));
+    }
+
+    #[test]
+    fn accepts_trailing_apostrophe_and_exclamation_comments() {
+        for source_text in [
+            "x=FACT(2) ' keep this comment exactly\n",
+            "PRINT x,y,z ! keep spacing  and text\r\n",
+        ] {
+            let mut sources = SourceMap::new();
+            let source_id = sources.add_source("trailing-comment.bas", source_text);
+            let document = parse_document(source_id, source_text)
+                .expect("documented trailing comments should not invalidate a statement");
+            assert_eq!(document.program.statements.len(), 1);
+
+            let comment = document.syntax.tokens.iter()
+                .find(|token| matches!(token.kind, super::TokenKind::Comment))
+                .expect("comment token should be retained");
+            assert_eq!(&source_text[comment.span.start..comment.span.end],
+                if source_text.contains('!') { "! keep spacing  and text" } else { "' keep this comment exactly" });
+        }
     }
 
     #[test]
