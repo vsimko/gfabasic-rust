@@ -1,0 +1,185 @@
+{
+  "schema_version": 2,
+  "source_revision": "508cbd45c74dc6619580dce86bab7992d155d199",
+  "project": {
+    "name": "gfabasic-rust",
+    "language": "Rust",
+    "source_dialect": "Amiga GFA BASIC interpreter 3.5",
+    "target": "Linux x86-64",
+    "maturity": "experimental",
+    "maturity_evidence": [
+      "README.md#current-scope-and-limitations",
+      "ROADMAP.md#current-project-state"
+    ]
+  },
+  "components": [
+    {
+      "id": "compiler-frontend-prototype",
+      "name": "Compiler frontend prototype",
+      "status": "prototype",
+      "rationale": "The frontend accepts only the documented FACT, VARIAT and COMBIN assignments followed by PRINT; it is not a general GFA BASIC parser.",
+      "evidence": [
+        "README.md#experimental-prototype",
+        "crates/gfabasic-compiler/src/frontend.rs",
+        "crates/gfabasic-compiler/src/prototype.rs"
+      ],
+      "related_issues": [
+        46
+      ]
+    },
+    {
+      "id": "typed-ir-prototype",
+      "name": "Typed project IR",
+      "status": "prototype",
+      "rationale": "Typed IR construction and verification exist for the narrow prototype; the general semantic and lowering contract is not implemented.",
+      "evidence": [
+        "docs/architecture/PIPELINE-AND-IR.md",
+        "crates/gfabasic-compiler/src/ir.rs"
+      ],
+      "related_issues": [
+        3
+      ]
+    },
+    {
+      "id": "general-language-semantics",
+      "name": "General language semantics",
+      "status": "research",
+      "rationale": "Version-specific language rules remain evidence-gated; research and candidate corpus entries are not implementation.",
+      "evidence": [
+        "docs/architecture/PIPELINE-AND-IR.md",
+        "docs/architecture/TESTING.md",
+        "tests/corpus/README.md"
+      ],
+      "related_issues": [
+        3,
+        46
+      ]
+    },
+    {
+      "id": "cli",
+      "name": "Compiler CLI",
+      "status": "partial",
+      "rationale": "Help, version, the subset formatter and the narrow prototype build command exist; project loading, general checking and production compilation do not.",
+      "evidence": [
+        "docs/architecture/CLI-AND-CONFIG.md",
+        "crates/gfabasic-compiler/src/cli.rs"
+      ],
+      "related_issues": [
+        9,
+        12
+      ]
+    },
+    {
+      "id": "formatter",
+      "name": "Source formatter",
+      "status": "partial",
+      "rationale": "Formatting is implemented only for syntax accepted by the current frontend; unsupported constructs are rejected.",
+      "evidence": [
+        "docs/architecture/FORMATTER.md",
+        "crates/gfabasic-compiler/src/formatter.rs"
+      ],
+      "related_issues": [
+        208
+      ]
+    },
+    {
+      "id": "language-server",
+      "name": "Language server",
+      "status": "partial",
+      "rationale": "The dependency-free LSP adapter supports document lifecycle and shared-frontend diagnostics; formatting, navigation, completion and rename are not implemented.",
+      "evidence": [
+        "crates/gfabasic-lsp/README.md",
+        "crates/gfabasic-lsp/src/lib.rs",
+        "docs/architecture/adr/0012-language-server-and-editor-integration.md"
+      ],
+      "related_issues": [
+        209,
+        210,
+        211
+      ]
+    },
+    {
+      "id": "llvm-backend",
+      "name": "LLVM backend",
+      "status": "planned",
+      "rationale": "LLVM is the intended production backend; no LLVM backend implementation or binding is selected.",
+      "evidence": [
+        "docs/architecture/adr/0007-compiler-pipeline-and-ir.md",
+        "ROADMAP.md"
+      ],
+      "related_issues": []
+    },
+    {
+      "id": "generated-runtime",
+      "name": "Generated-program runtime",
+      "status": "planned",
+      "rationale": "The runtime crate establishes an architectural placeholder; generated-program runtime behavior and a stable runtime ABI are not implemented.",
+      "evidence": [
+        "docs/architecture/RUNTIME.md",
+        "crates/gfabasic-runtime/src/lib.rs"
+      ],
+      "related_issues": [
+        8
+      ]
+    },
+    {
+      "id": "linux-platform",
+      "name": "Linux platform adapter",
+      "status": "planned",
+      "rationale": "The platform crate defines the intended adapter boundary; Linux services and SDL3 integration are not implemented.",
+      "evidence": [
+        "docs/architecture/RUNTIME.md",
+        "crates/gfabasic-platform-linux/src/lib.rs"
+      ],
+      "related_issues": []
+    },
+    {
+      "id": "testing-conformance",
+      "name": "Testing and dialect conformance",
+      "status": "partial",
+      "rationale": "Unit and prototype smoke tests plus a metadata-validated evidence corpus exist; no general corpus runner or full dialect conformance suite exists.",
+      "evidence": [
+        "docs/architecture/TESTING.md",
+        "tests/corpus/README.md",
+        ".github/workflows/rust.yml",
+        ".github/workflows/fuzz.yml"
+      ],
+      "related_issues": [
+        42,
+        116
+      ]
+    },
+    {
+      "id": "release-tooling",
+      "name": "Release and supply-chain tooling",
+      "status": "partial",
+      "rationale": "PR SBOM validation and a release-event SBOM attachment workflow exist; compiler packaging and a complete release workflow do not.",
+      "evidence": [
+        "docs/architecture/RELEASES.md",
+        ".github/workflows/release-sbom.yml"
+      ],
+      "related_issues": [
+        40,
+        39
+      ]
+    }
+  ],
+  "workspace_packages": [
+    {
+      "name": "gfabasic-compiler",
+      "path": "crates/gfabasic-compiler"
+    },
+    {
+      "name": "gfabasic-runtime",
+      "path": "crates/gfabasic-runtime"
+    },
+    {
+      "name": "gfabasic-platform-linux",
+      "path": "crates/gfabasic-platform-linux"
+    },
+    {
+      "name": "gfabasic-lsp",
+      "path": "crates/gfabasic-lsp"
+    }
+  ]
+}
