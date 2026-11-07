@@ -20,10 +20,10 @@ def sha256(path: Path) -> str:
 
 def slugify_heading(value: str) -> str:
     heading = value.strip().lower()
-    heading = re.sub(r"\\s*[-–—−]\\s*", "-", heading)
+    heading = re.sub(r"\s*[-–—−]\s*", "-", heading)
     heading = re.sub(r"<[^>]+>", "", heading)
-    heading = re.sub(r"[^\\w\\- ]", "", heading)
-    return re.sub(r"\\s+", "-", heading).strip("-")
+    heading = re.sub(r"[^\w\- ]", "", heading)
+    return re.sub(r"\s+", "-", heading).strip("-")
 
 
 def extract_section(path: Path, anchor: str) -> str:
