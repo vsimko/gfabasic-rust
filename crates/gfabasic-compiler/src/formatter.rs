@@ -90,6 +90,8 @@ mod tests {
         MatSet(String, i64),
         MatClr(String),
         MatPrint(String),
+        MatBase(i64),
+        MatTrans(String, Option<String>),
     }
 
     fn meanings(program: &Program) -> Vec<Meaning> {
@@ -113,6 +115,10 @@ mod tests {
                 Statement::MatSet { name, value, .. } => Meaning::MatSet(name.clone(), *value),
                 Statement::MatClr { name, .. } => Meaning::MatClr(name.clone()),
                 Statement::MatPrint { name, .. } => Meaning::MatPrint(name.clone()),
+                Statement::MatBase { index, .. } => Meaning::MatBase(*index),
+                Statement::MatTrans { destination, source, .. } => {
+                    Meaning::MatTrans(destination.clone(), source.clone())
+                }
             })
             .collect()
     }
@@ -237,6 +243,41 @@ mod tests {
 
         for (source, expected) in cases {
             assert_eq!(format(source), expected, "source: {source:?}");
+        }
+    }
+
+    #[test]
+    fn golden_cases_cover_verified_mat_base_and_transpose_forms() {
+        let cases = [
+            ("MAT BASE 0", "MAT BASE 0\n"),
+            ("MAT BASE 1", "MAT BASE 1\n"),
+            ("MAT TRANS a()", "MAT TRANS a()\n"),
+            ("MAT TRANS a()=b()", "MAT TRANS a() = b()\n"),
+        ];
+
+        for (source, expected) in cases {
+            assert_eq!(format(source), expected, "source: {source:?}");
+        }
+    }
+
+    #[test]
+    fn mat_base_and_transpose_formatting_is_idempotent_and_semantics_preserving() {
+        let cases = [
+            "MAT BASE 0\nMAT TRANS a()\n",
+            "MAT BASE 1\nMAT TRANS a()=b()\n",
+        ];
+
+        for source in cases {
+            let formatted = format(source);
+            assert_eq!(format(&formatted), formatted);
+
+            let mut before_sources = SourceMap::new();
+            let before_id = before_sources.add_source("before.bas", source);
+            let before = parse_document(before_id, source).unwrap();
+            let mut after_sources = SourceMap::new();
+            let after_id = after_sources.add_source("after.bas", formatted.as_str());
+            let after = parse_document(after_id, &formatted).unwrap();
+            assert_eq!(meanings(&before.program), meanings(&after.program));
         }
     }
 
