@@ -242,3 +242,305 @@ source-version = "3.5 addendum"
 printed-pages = ["13-35–13-36 (469-page scan)", "14-6–14-7 (combined update scan)"]
 status = "confirmed-in-3.5"
 notes = "GURU checking control and GURU-number function are explicitly documented; crash-recovery tests require isolation."
+
+# Declaration-level candidates from page-reviewed Chapters 5–10.
+# These remain 3.0 evidence; no 3.5 availability is inferred.
+[[candidates]]
+id = "amiga.base5.inkey"
+name = "INKEY$"
+kind = "function"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["5-2"]
+status = "unresolved"
+notes = "Reads keyboard input; special keys use a CSI sequence. 3.0 source fact only; 3.5 availability is unresolved."
+
+[[candidates]]
+id = "amiga.base5.input"
+name = "INPUT"
+kind = "statement"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["5-3–5-4"]
+status = "unresolved"
+notes = "Reads numeric/string variables with optional prompt; window behavior and numeric re-entry are described. 3.5 availability is unresolved."
+
+[[candidates]]
+id = "amiga.base5.line-input"
+name = "LINE INPUT"
+kind = "statement"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["5-5"]
+status = "unresolved"
+notes = "Reads string input while allowing commas in the entered text. 3.5 availability is unresolved."
+
+[[candidates]]
+id = "amiga.base5.form-input"
+name = "FORM INPUT / FORM INPUT AS"
+kind = "statement-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["5-6"]
+status = "unresolved"
+notes = "Edits a string field of width 1–255; FORM INPUT AS starts from the current value. 3.5 availability is unresolved."
+
+[[candidates]]
+id = "amiga.base5.print-write"
+name = "PRINT, PRINT AT, WRITE, LOCATE"
+kind = "statement-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["5-7–5-8"]
+status = "unresolved"
+notes = "Screen output, cursor positioning and comma-separated WRITE format are distinguished. 3.5 availability is unresolved."
+
+[[candidates]]
+id = "amiga.base5.print-using"
+name = "PRINT USING"
+kind = "statement"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["5-9"]
+status = "unresolved"
+notes = "Formatted screen output; exact placeholder grammar remains unreviewed. 3.5 availability is unresolved."
+
+[[candidates]]
+id = "amiga.base6.inp-out"
+name = "INP / OUT"
+kind = "function-statement"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["6-13"]
+status = "unresolved"
+notes = "INP reads one byte and OUT writes byte values through an opened channel; documented channel range is 0–99. 3.5 availability is unresolved."
+
+[[candidates]]
+id = "amiga.base6.input-string"
+name = "INPUT$"
+kind = "function"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["6-14"]
+status = "unresolved"
+notes = "Reads a specified character count from keyboard or an optional file channel. 3.5 availability is unresolved."
+
+[[candidates]]
+id = "amiga.base6.file-input"
+name = "INPUT # / LINE INPUT #"
+kind = "statement-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["6-15"]
+status = "unresolved"
+notes = "Reads channel data as values or lines; keep channel forms distinct from screen input. 3.5 availability is unresolved."
+
+[[candidates]]
+id = "amiga.base6.file-output"
+name = "PRINT # / WRITE #"
+kind = "statement-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["6-16"]
+status = "unresolved"
+notes = "Writes expressions through a data channel; PRINT # supports USING but not PRINT AT. 3.5 availability is unresolved."
+
+[[candidates]]
+id = "amiga.base7.if"
+name = "IF / ELSE / ENDIF"
+kind = "statement-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["7-4–7-5"]
+status = "unresolved"
+notes = "Conditional execution; THEN is optional and any nonzero numeric expression is logically true. 3.5 availability is unresolved."
+
+[[candidates]]
+id = "amiga.base7.elseif"
+name = "ELSE IF / ELSEIF"
+kind = "statement-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["7-6–7-7"]
+status = "unresolved"
+notes = "Chained conditional branches; editor spelling varies and needs lexer/editor confirmation. 3.5 availability is unresolved."
+
+[[candidates]]
+id = "amiga.base7.ongosub"
+name = "ON GOSUB"
+kind = "statement"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["7-8"]
+status = "unresolved"
+notes = "Selects a procedure by numeric index; out-of-range selection calls none. 3.5 availability is unresolved."
+
+[[candidates]]
+id = "amiga.base7.select-case"
+name = "SELECT / CASE / DEFAULT / ENDSELECT"
+kind = "statement-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["7-9–7-10"]
+status = "unresolved"
+notes = "Numeric or short-string selector; CASE supports values, ranges and lists. 3.5 availability is unresolved."
+
+[[candidates]]
+id = "amiga.base7.for-next"
+name = "FOR / NEXT"
+kind = "statement-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["7-13–7-14"]
+status = "unresolved"
+notes = "Loop forms include DOWNTO and editor replacement ENDFOR; OCR-sensitive termination details remain open. 3.5 availability is unresolved."
+
+[[candidates]]
+id = "amiga.base7.repeat-until"
+name = "REPEAT / UNTIL"
+kind = "statement-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["7-15"]
+status = "unresolved"
+notes = "Post-tested loop; body executes at least once. 3.5 availability is unresolved."
+
+[[candidates]]
+id = "amiga.base7.while-wend"
+name = "WHILE / WEND"
+kind = "statement-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["7-16"]
+status = "unresolved"
+notes = "Pre-tested loop; condition is checked before each body execution. 3.5 availability is unresolved."
+
+[[candidates]]
+id = "amiga.base7.do-loop"
+name = "DO / LOOP variants"
+kind = "statement-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["7-17–7-19"]
+status = "unresolved"
+notes = "Beginning- and end-tested WHILE/UNTIL forms are described; exact grammar remains page-sensitive. 3.5 availability is unresolved."
+
+[[candidates]]
+id = "amiga.base7.exit-if"
+name = "EXIT IF"
+kind = "statement"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["7-20"]
+status = "unresolved"
+notes = "Exits the active loop when its Boolean condition is satisfied; allowed within IF and SELECT structures per the source. 3.5 availability is unresolved."
+
+[[candidates]]
+id = "amiga.base8.setcolor"
+name = "SETCOLOR / COLOR"
+kind = "statement-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["8-2"]
+status = "unresolved"
+notes = "Sets palette RGB components and selects foreground/background/fill-outline colors. 3.5 availability is unresolved."
+
+[[candidates]]
+id = "amiga.base8.deffill"
+name = "DEFFILL"
+kind = "statement"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["8-3–8-4"]
+status = "unresolved"
+notes = "Configures fill color/style/pattern for filled graphics operations; pattern-string limits are described. 3.5 availability is unresolved."
+
+[[candidates]]
+id = "amiga.base8.clip"
+name = "CLIP"
+kind = "statement"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["8-9"]
+status = "unresolved"
+notes = "Restricts graphics output to a rectangle; source explicitly excludes GET and PUT. 3.5 availability is unresolved."
+
+[[candidates]]
+id = "amiga.base8.plot-line-draw"
+name = "PLOT / LINE / DRAW"
+kind = "statement-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["8-10–8-14"]
+status = "unresolved"
+notes = "Point, line and path drawing; DRAW inquiry forms and OCR-sensitive command strings need exact grammar review. 3.5 availability is unresolved."
+
+[[candidates]]
+id = "amiga.base8.box"
+name = "BOX / PBOX"
+kind = "statement-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["8-15"]
+status = "unresolved"
+notes = "Draws outlined or filled rectangles. 3.5 availability is unresolved."
+
+[[candidates]]
+id = "amiga.base8.circle-ellipse"
+name = "CIRCLE / PCIRCLE / ELLIPSE / PELLIPSE"
+kind = "statement-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["8-16"]
+status = "unresolved"
+notes = "Draws outlined or filled circles and ellipses. 3.5 availability is unresolved."
+
+[[candidates]]
+id = "amiga.base8.poly"
+name = "POLYLINE / POLYFILL"
+kind = "statement-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["8-17"]
+status = "unresolved"
+notes = "Uses coordinate arrays; polygon endpoints are connected automatically. 3.5 availability is unresolved."
+
+[[candidates]]
+id = "amiga.base8.point"
+name = "POINT"
+kind = "function"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["8-18"]
+status = "unresolved"
+notes = "Returns the color value at a screen coordinate. 3.5 availability is unresolved."
+
+[[candidates]]
+id = "amiga.base9.fileselect"
+name = "FILESELECT"
+kind = "function-procedure"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["9-37–9-38"]
+status = "unresolved"
+notes = "Displays a file selector and returns the selected name or an empty string on Cancel. 3.5 availability is unresolved."
+
+[[candidates]]
+id = "amiga.base10.sprite"
+name = "SPRITE"
+kind = "statement-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["10-5–10-6"]
+status = "unresolved"
+notes = "Defines, frees, moves, enables and disables Amiga hardware sprites; source describes eight sprite numbers and shared registers. 3.5 availability is unresolved."
+
+[[candidates]]
+id = "amiga.base10.stick-strig"
+name = "STICK / STRIG"
+kind = "function-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["10-7"]
+status = "unresolved"
+notes = "Queries joystick position and fire-button state; port 0 interaction with mouse/Intuition is noted. 3.5 availability is unresolved."
