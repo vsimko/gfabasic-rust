@@ -116,9 +116,11 @@ mod tests {
                 Statement::MatClr { name, .. } => Meaning::MatClr(name.clone()),
                 Statement::MatPrint { name, .. } => Meaning::MatPrint(name.clone()),
                 Statement::MatBase { index, .. } => Meaning::MatBase(*index),
-                Statement::MatTrans { destination, source, .. } => {
-                    Meaning::MatTrans(destination.clone(), source.clone())
-                }
+                Statement::MatTrans {
+                    destination,
+                    source,
+                    ..
+                } => Meaning::MatTrans(destination.clone(), source.clone()),
             })
             .collect()
     }
