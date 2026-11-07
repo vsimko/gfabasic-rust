@@ -60,3 +60,27 @@
 .dashboard-footer{display:flex;flex-wrap:wrap;gap:18px;margin-top:22px;padding-top:18px;border-top:1px solid var(--line)}
 .dashboard-provenance{margin:13px 0 0;color:#829184;font-size:10px;line-height:1.7}
 @media(max-width:700px){.dashboard-section{padding-block:65px}.dashboard-content{padding:16px}.dashboard-overview,.dashboard-components{grid-template-columns:1fr}.dashboard-component-top{flex-direction:column;gap:7px}.dashboard-footer{flex-direction:column;gap:10px}}
+
+
+/* Compact, genuinely lazy API catalogue. */
+.api-catalogue-results{display:block;margin-top:22px;border-top:1px solid var(--line)}
+.api-category{border-bottom:1px solid var(--line)}
+.api-category>summary{display:flex;align-items:center;gap:14px;min-height:58px;padding:12px 16px;cursor:pointer;list-style:none;color:var(--ink);font-size:14px;font-weight:600}
+.api-category>summary::-webkit-details-marker,.api-function>summary::-webkit-details-marker{display:none}
+.api-category>summary::before{content:"+";width:18px;color:var(--green);font:18px var(--mono)}
+.api-category[open]>summary::before{content:"−"}
+.api-category-name{flex:1}
+.api-category-count{color:var(--muted);font:10px var(--mono)}
+.api-function-list{padding:0 16px 12px 48px}
+.api-function{border-top:1px solid var(--line)}
+.api-function>summary{padding:10px 12px;cursor:pointer;list-style:none;color:#c6d2c2;font:12px var(--mono)}
+.api-function>summary:hover,.api-function>summary:focus-visible{color:var(--green);background:#1c2921;outline-offset:2px}
+.api-function>summary::before{content:"›";display:inline-block;width:19px;color:var(--orange);font:16px var(--mono)}
+.api-function[open]>summary::before{content:"⌄"}
+.api-function-panel{padding:0 12px 18px 31px}
+.api-entry-detail{max-width:850px}
+.api-entry-detail h4{margin:14px 0 6px;color:#9eac9e;font:10px var(--mono);text-transform:uppercase;letter-spacing:.08em}
+.api-detail-code{overflow:auto;padding:12px;background:#101713;border:1px solid var(--line);color:#c4e79e;font:10px/1.6 var(--mono)}
+.api-detail-loading{color:var(--muted);font-size:11px}
+.api-entry-detail .api-syntax{white-space:pre-wrap}
+@media(max-width:700px){.api-function-list{padding-left:18px}.api-category>summary{padding-inline:10px}}
