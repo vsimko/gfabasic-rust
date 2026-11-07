@@ -441,3 +441,26 @@ Further page-level extraction from the 3.5 addendum resolves most of the previou
 - **MAT INV b()=a():** computes the inverse of square matrix a into b; b must be the same matrix type/dimensions as a. The addendum demonstrates checking the result by multiplying b×a to obtain the unity matrix.
 
 This resolves the previously open MAT SUB and the documented matrix/vector product forms. It does not resolve the separate MAT MUL a(),x syntax.
+
+
+## Chapter 11 — Exec device I/O and message lifecycle (printed pp. 11-7–11-18)
+
+The scan search now resolves several earlier gaps in the Exec subset:
+
+- **FreeMem(adr, count) (p. 11-11):** frees a block back to the system free-memory list and returns the size of the memory block in bytes. Parameters are the block address and its byte size. This settles the previously unresolved return value.
+- **OpenDevice(devname, number, IORequest, flags) (p. 11-14):** opens a named device and initializes the supplied I/O request structure. Device number is documented as 0–4. Returns 0 on success, otherwise an error number.
+- **CloseDevice(IORequest) (p. 11-7):** closes the device association represented by the initialized I/O request.
+- **CreateExtIO(replyport, size) (p. 11-8):** allocates and initializes an extended I/O request; returns its address. The replyport must be an allocated and initialized MsgPort. The size argument is described as the amount of memory to reserve for the MsgPort structure.
+- **CreateStdIO(replyport) (p. 11-8):** allocates and initializes an IOStdReq; returns its address. The replyport must be an initialized message port.
+- **DoIO(IORequest) (p. 11-9):** asks the device driver to perform the command described by the initialized I/O request. Returns 0 on success, otherwise an error number.
+- **SendIO(IORequest) (p. 11-18):** asks the device driver to start the command described by an initialized I/O request. No return value is documented in the entry.
+- **AbortIO(IORequest) (p. 11-2):** attempts to abort the last I/O request; no return value is documented.
+- **GetMsg(MsgPort) (p. 11-11):** obtains the next message from a message port. The received message should subsequently be returned with ReplyMsg.
+- **ReplyMsg(message) (p. 11-18):** sends a processed message back; no return value.
+- **PutMsg(msgport, message) (p. 11-15):** appends a message to the specified message-port queue; no return value.
+
+### I/O and message safety notes
+
+The manual describes the request structures and lifecycle but does not specify Rust ownership, cancellation races, asynchronous completion guarantees, or buffer lifetime rules. A safe wrapper must not allow an I/O request, its message port, or any associated data buffer to be freed while the device can still access it. This is an implementation constraint inferred from the documented allocate/open/start/abort/close lifecycle, not a Rust API contract stated by the manual.
+
+The earlier FreeMem note is superseded: the English Chapter 11 scan does document FreeMem(adr,count) and its byte-count return value on p. 11-11.
