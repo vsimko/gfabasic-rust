@@ -143,6 +143,16 @@ pub fn lower(program: &Program) -> Result<Module, Vec<IrError>> {
                     &mut errors,
                 );
             }
+            Statement::DimMatrix { span, .. }
+            | Statement::MatOne { span, .. }
+            | Statement::MatSet { span, .. }
+            | Statement::MatClr { span, .. }
+            | Statement::MatPrint { span, .. } => {
+                errors.push(IrError::at(
+                    "matrix statements are supported by the parser and formatter but not by the executable compiler prototype",
+                    *span,
+                ));
+            }
             Statement::PrintVariables { names, span } => {
                 let mut values = Vec::with_capacity(names.len());
                 for name in names {
