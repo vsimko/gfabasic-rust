@@ -3,7 +3,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from scripts.generate_project_data import generate, load_model
+from scripts.generate_project_data import generate, load_model, parse_roadmap_progress
 
 ROOT = Path(__file__).resolve().parents[2]
 MODEL = ROOT / "validation/project.json"
@@ -18,6 +18,13 @@ class ProjectDataGeneratorTests(unittest.TestCase):
             second = generate(ROOT, MODEL, output)
             self.assertEqual(first, second)
             self.assertEqual(first_bytes, output.read_bytes())
+
+    def test_roadmap_progress_counts_only_tasks_in_each_phase(self):
+        roadmap = """### Phase 0 — Baseline\n- [x] First\n- [ ] Second\n### Phase 1 — Evidence\n- [x] Third\n"""
+        self.assertEqual(parse_roadmap_progress(roadmap), [
+            {"number": 0, "name": "Baseline", "completed": 1, "total": 2, "percent": 50},
+            {"number": 1, "name": "Evidence", "completed": 1, "total": 1, "percent": 100},
+        ])
 
     def test_workspace_packages_come_from_cargo_manifest(self):
         with tempfile.TemporaryDirectory() as tmp:

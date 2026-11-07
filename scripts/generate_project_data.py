@@ -3,11 +3,36 @@
 
 import argparse
 import json
+import re
 import subprocess
 import tomllib
 from pathlib import Path
 
 COMPONENT_STATUSES = {"implemented", "partial", "prototype", "research", "planned", "blocked"}
+PHASE_HEADING = re.compile(r"^### Phase (\d+) — (.+)$", re.MULTILINE)
+TASK_CHECKBOX = re.compile(r"^\s*-\s+\[([ xX])\]", re.MULTILINE)
+
+
+def parse_roadmap_progress(markdown: str) -> list[dict]:
+    """Count checked roadmap tasks within each canonical delivery phase."""
+    headings = list(PHASE_HEADING.finditer(markdown))
+    phases = []
+    for index, heading in enumerate(headings):
+        end = headings[index + 1].start() if index + 1 < len(headings) else len(markdown)
+        next_section = re.search(r"^### ", markdown[heading.end():end], re.MULTILINE)
+        if next_section:
+            end = heading.end() + next_section.start()
+        tasks = TASK_CHECKBOX.findall(markdown[heading.end():end])
+        completed = sum(mark.lower() == "x" for mark in tasks)
+        total = len(tasks)
+        phases.append({
+            "number": int(heading.group(1)),
+            "name": heading.group(2).strip(),
+            "completed": completed,
+            "total": total,
+            "percent": round(completed * 100 / total) if total else 0,
+        })
+    return phases
 
 
 def validate_component(component: dict, identifiers: set[str]) -> list[str]:
@@ -93,6 +118,7 @@ def generate(root: Path, model_path: Path, output: Path) -> dict:
         "source_revision": source_revision(root),
         "project": model["project"],
         "components": model["components"],
+        "roadmap_progress": parse_roadmap_progress((root / "ROADMAP.md").read_text(encoding="utf-8")),
         "workspace_packages": packages,
     }
     output.parent.mkdir(parents=True, exist_ok=True)
