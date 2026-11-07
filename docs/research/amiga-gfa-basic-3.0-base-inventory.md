@@ -563,3 +563,100 @@ Additional Graphics-Library entries extracted from the English GFA-BASIC 3.0 bas
 - Most calls take addresses of mutable OS structures and/or caller-owned buffers. The manual does not define aliasing, allocation provenance, or lifetimes; a Rust interface must not infer these from BASIC's `iexp` type.
 - Copper, blitter, sprite, and display-view operations interact with shared hardware/display state. Keep them behind an explicit Amiga platform boundary rather than treating them as portable drawing functions.
 - The source uses inconsistent or OCR-sensitive names (for example AOlPen, CWait, FreeCprList); preserve source spellings in evidence notes and normalize only after checking page images.
+
+
+## Chapter 11 — Workbench, DiskFont, Layers and remaining DOS routines
+
+The following entries extend the routine-level inventory using the English manual's Chapter 11 pages. They remain 3.0 base-manual candidates; the BASIC parameter annotation `iexp` is not a Rust pointer or ownership contract.
+
+### Workbench-Library (printed pp. 11-53–11-55)
+
+- **BumpRevision(newBuf, oldName) (p. 11-53):** generates a different name for a copied file; returns the resulting name size. Both buffers are zero-terminated and limited to 32 bytes.
+- **CloseWorkBench() (p. 11-53):** closes the Workbench screen; returns TRUE/FALSE.
+- **FindToolTypes(tools, typename) (p. 11-53):** searches a ToolType array and returns the address of the first matching tool name.
+- **FreeDiskObject(object) (p. 11-54):** frees memory used by an Info-file DiskObject; no return value.
+- **FreeWBObject(wbobject) (p. 11-54):** frees memory allocated for a Workbench object and its WBObject structure; no return value.
+- **GetDiskObject(name) (p. 11-54):** loads a disk object's information file and returns the DiskObject address.
+- **GetIcon(name, diskobject, freelist) (p. 11-54):** loads an icon while allowing the caller to supply the DiskObject and FreeList storage; returns TRUE/FALSE. The OCR spelling of the routine is uncertain (shown as “GetIcon” in the prose context); verify the printed heading before using it as a canonical identifier.
+- **GetWBObject(name) (p. 11-54):** reads Workbench object information and returns a WBObject address.
+
+### DiskFont-Library (printed pp. 11-75–11-77)
+
+- **AvailFonts(buffer, number_bytes, types) (p. 11-75):** writes available-font information into an AvailFontsHeader area, with one AvailFont structure per character set. Returns 0 on error; IoErr() supplies the error. Types are AFF_MEMORY (1) and AFF_DISK (2).
+- **CloseFont(textFont) (p. 11-75):** closes a font opened by OpenFont or OpenDiskFont.
+- **OpenDiskFont(textattr) (p. 11-76):** loads the disk font described by a TextAttr and returns a TextFont address.
+- **OpenFont(textattr) (p. 11-76):** opens a memory-resident/ROM font described by TextAttr and returns a TextFont address.
+- **RemFont(textfont) (p. 11-77):** removes a font from the system font list; returns 0 when no error occurred.
+
+### Layers-Library (printed pp. 11-77–11-84)
+
+- **AttemptLockLayerRom(layer) (p. 11-77):** attempts to lock a Layer against other tasks; returns TRUE/FALSE.
+- **BeginUpdate(layer) (p. 11-77):** prepares a Layer for updating.
+- **BehindLayer(layerInfo, layer) (p. 11-77):** sends a Layer behind the other Layers; returns TRUE/FALSE.
+- **CreateBehindLayer(layerInfo, bitmap, x0, y0, x1, y1, flags[, bitmap2]) (p. 11-78):** creates a Layer behind the others and returns its Layer address. The optional bitmap2 is a Superbitmap.
+- **CreateUpfrontLayer(layerInfo, bitmap, x0, y0, x1, y1, flags[, bitmap2]) (p. 11-78):** creates a Layer in front of the others and returns its Layer address.
+- **DeleteLayer(layerInfo, layer) (p. 11-79):** removes a Layer from its Layer list.
+- **DisposeLayerInfo(layerInfo) (p. 11-79):** releases LayerInfo memory.
+- **EndUpdate(layer, flags) (p. 11-79):** ends a Simple-Refresh update; the manual says this is also called by EndRefresh().
+- **FattenLayerInfo(info) / ThinLayerInfo(info) (pp. 11-80, 11-82):** allocate or release additional LayerInfo memory used with the legacy InitLayers() path.
+- **InitLayers(layerInfo) (p. 11-80):** initializes a caller-allocated LayerInfo structure; identified as an old OS V1.0 routine.
+- **LockLayer(info, layer), LockLayerInfo(info), LockLayerRom(layer), LockLayers(info) (pp. 11-80–11-81):** prevent other tasks from accessing one Layer, a LayerInfo structure, a Layer in ROM-compatible locking, or all Layers in a LayerInfo, respectively.
+- **MoveLayer(info, layer, dx, dy) (p. 11-81):** moves a normal Layer by relative coordinates.
+- **MoveLayerInFrontOf(layer1, layer2) (p. 11-81):** inserts layer1 in front of layer2 on the same level; returns TRUE/FALSE.
+- **NewLayerInfo(info) (p. 11-81):** allocates and initializes a LayerInfo structure; returns its address.
+- **ScrollLayer(info, layer, dx, dy) (p. 11-82):** moves the contents of a Superbitmap Layer.
+- **SizeLayer(info, layer, dx, dy) (p. 11-82):** changes a Layer's size by relative dimensions.
+- **SyncSBitMap(layer) (p. 11-82):** copies the contents of a Superbitmap Layer to its Superbitmap.
+- **UnlockLayer(layer), UnlockLayerInfo(info), UnlockLayerRom(layer), UnlockLayers(info) (pp. 11-82–11-83):** release the corresponding Layer/LayerInfo locks.
+- **UpfrontLayer(info, layer) (p. 11-83):** moves a Layer in front of the others.
+- **WhichLayer(info, x, y) (p. 11-83):** returns the Layer address at the given coordinates, or 0.
+
+### DOS-Library additions (printed pp. 11-84–11-92)
+
+- **Close(fileHandle) (p. 11-84):** closes an input or output file.
+- **CreateDir(name) (p. 11-84):** creates a directory and, on success, creates a shared read lock. The entry is internally inconsistent: it describes a zero return on failure and a lock on success, but labels the return as “No return value”. Keep the return contract unresolved pending runtime/OS reference verification.
+- **CurrentDir(lock) (p. 11-84):** changes the current directory and returns the previous directory's Lock address.
+- **DateStamp(address) (p. 11-84):** writes three longwords in AmigaDOS date/time format: day count, elapsed seconds and elapsed milliseconds.
+- **Delay(time) (p. 11-85):** suspends the current process for a duration measured in 1/50-second units.
+- **DeleteFile(name) (p. 11-85):** deletes a file or empty directory; returns TRUE/FALSE, with IoErr() available for error detail.
+- **DupLock(lock) (p. 11-85):** duplicates a shared Lock and returns the new Lock address.
+- **Examine(lock, fib) (p. 11-86):** copies file/directory metadata (name, size, creation date and type) into a FileInfoBlock. Returns -1 on success; otherwise inspect IoErr().
+- **Execute(instruction, in, out) (p. 11-86):** executes a CLI command using supplied input/output file handles.
+- **Exit(ret) (p. 11-87):** terminates the process and returns the supplied value to CLI; when started from Workbench it ends the process and releases its memory/stack.
+- **ExNext(lock, fib) (p. 11-87):** retrieves subsequent directory entries after Examine(); returns -1 on success. Call once per entry.
+- **Info(lock, info) (p. 11-88):** writes disk size, free/allocated blocks and soft-error count into a caller buffer; returns TRUE/FALSE. The buffer must be longword-aligned.
+- **Input() / Output() (pp. 11-88–11-89):** return the FileHandle address for the current input/output level.
+- **IoErr() (p. 11-88):** returns the last I/O error number.
+- **IsInteractive(handle) (p. 11-88):** tests whether a handle refers to an interactive device; returns TRUE/FALSE.
+- **LoadSeg(name) (p. 11-88):** loads a program into memory segments and returns the segment-list address.
+- **Lock(name, mode) (p. 11-89):** obtains a shared read lock with ACCESS_READ (-2), or an exclusive write lock with ACCESS_WRITE (-1); returns the Lock address.
+- **Open(name, mode) (p. 11-89):** opens an existing file with MODE_OLDFILE (1005), or creates/overwrites a file with MODE_NEWFILE (1006); returns a FileHandle address.
+- **ParentDir(lock) (p. 11-89):** returns the parent directory's Lock address.
+- **Read(fileHandle, address, count) (p. 11-89):** reads up to count bytes into a caller buffer and returns the number of bytes read.
+- **Rename(old, new) (p. 11-90):** renames a file or directory; returns TRUE/FALSE.
+- **Seek(fileHandle, pos, mode) (pp. 11-90):** changes the file position and returns the old position. Modes are OFFSET_BEGINNING (1), OFFSET_END (-1) and OFFSET_CURRENT (0).
+- **SetComment(name, comment) (p. 11-90):** sets a disk-directory comment of up to 80 characters; returns TRUE/FALSE.
+- **SetProtection(name, mode) (p. 11-90):** sets file protection bits; low bits 3..0 represent read, write, execute and delete protection. Returns TRUE/FALSE.
+- **UnLoadSeg(segment) (p. 11-91):** unloads a segment list previously returned by LoadSeg().
+- **UnLock(lock) (p. 11-91):** releases a file/directory Lock.
+- **WaitForChar(fileHandle, time) (p. 11-91):** waits up to the supplied duration for a character; returns TRUE/FALSE.
+- **Write(fileHandle, data, length) (p. 11-92):** writes a memory buffer to an opened file and returns the number of bytes written.
+
+### Remaining Graphics-Library entries (printed pp. 11-50–11-53)
+
+- **Text(rastport, text, length) (p. 11-50):** writes a string at the current RastPort cursor position; returns 0 on success.
+- **TextLength(rastport, text, length) (p. 11-50):** measures text in pixels using the RastPort's TextFont.
+- **Translate(text, length, phoneme, outLength) (p. 11-50):** converts text to phonetic output in a caller-provided buffer.
+- **UCopperListInit(clist, instructionCount) (p. 11-51):** initializes a UCopList for the requested maximum instruction count.
+- **VBeamPos() (p. 11-51):** returns the current vertical beam position.
+- **ViewAddress() (p. 11-51):** returns the current View address.
+- **ViewPortAddress(window) (p. 11-52):** returns the ViewPort address associated with a window.
+- **WaitBlit() (p. 11-52):** waits until the Blitter is available.
+- **WaitBOVP(viewport) (p. 11-52):** waits for the start of vertical retrace on a ViewPort.
+- **WritePixel(rastport, x, y) (p. 11-52):** writes one pixel using the current APen.
+- **XorRectRegion(region, rect) (p. 11-52):** XORs a clipping rectangle with a Region and stores the result in the Region.
+- **XorRegionRegion(region1, region2) (p. 11-53):** XORs two Regions and stores the result in region2.
+
+### Platform and evidence boundary
+
+These calls manipulate Workbench-owned objects, font lists, mutable Layer/RastPort structures, AmigaDOS locks and file handles, or hardware/display state. A safe Rust interface needs typed structure definitions, explicit allocation provenance, ownership and lock lifetimes, and error handling beyond the manual's generic BASIC-side `iexp` annotation. In particular, do not infer that a successful raw address remains valid after its matching Free*/Close*/UnLock* operation. All entries above remain candidates sourced from the English manual's 3.0 system-routine chapter; they are not evidence of 3.5 interpreter availability.
