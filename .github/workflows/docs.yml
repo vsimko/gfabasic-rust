@@ -76,6 +76,9 @@ jobs:
       - name: Validate corpus metadata
         run: python scripts/validate_corpus.py
 
+      - name: Validate Amiga function inventory
+        run: python scripts/validate_amiga_function_inventory.py
+
       - name: Generate and verify static API catalogue
         run: |
           python scripts/generate_api_catalogue.py
