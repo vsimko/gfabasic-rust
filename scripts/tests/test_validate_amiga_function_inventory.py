@@ -2,7 +2,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from validate_amiga_function_inventory import validate
+from scripts.validate_amiga_function_inventory import validate
 
 
 class FunctionInventoryTests(unittest.TestCase):

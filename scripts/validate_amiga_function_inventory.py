@@ -63,8 +63,9 @@ def validate(path: Path) -> dict[str, int]:
     }
     if result != EXPECTED:
         raise ValueError(f"inventory counts differ from expected values: {result}")
-    if data.get("expected-counts") != EXPECTED:
-        raise ValueError("manifest expected-counts do not match the validated inventory")
+    stored_counts = data.get("expected-counts", {})
+    if not isinstance(stored_counts, dict) or any(stored_counts.get(key) != value for key, value in EXPECTED.items()):
+        raise ValueError(f"manifest expected-counts do not match the validated inventory: {stored_counts!r}")
     return result
 
 
