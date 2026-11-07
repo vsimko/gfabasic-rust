@@ -26,7 +26,7 @@ subset. It is not a claim about the historical GFA editor's appearance.
 | Comma-separated items | One space after each comma; none before |
 | Statements | One statement per physical output line |
 | Blank lines | Collapsed; empty lines are not retained |
-| Line endings | LF (`\\n`) |
+| Line endings | LF (`\n`) |
 | Final line | Exactly one final newline for non-empty output |
 | Identifiers and built-ins | Preserve original spelling exactly |
 | Integer literals | Preserve original spelling, including leading zeroes |
