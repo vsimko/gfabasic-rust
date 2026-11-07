@@ -147,6 +147,9 @@ id = "gfa.amiga.matrix.mat-base"
 name = "MAT BASE"
 kind = "statement"
 
+[declarations.signature]
+type = "no return value"
+
 [[declarations.availability]]
 dialect = "amiga-gfa-basic-interpreter"
 versions = ["3.5"]
@@ -186,6 +189,9 @@ anchors = ["3-linear-operations-on-numeric-fields"]
 id = "gfa.amiga.matrix.mat-clr"
 name = "MAT CLR"
 kind = "statement"
+
+[declarations.signature]
+type = "no return value"
 
 [[declarations.availability]]
 dialect = "amiga-gfa-basic-interpreter"
@@ -227,6 +233,9 @@ anchors = ["3-linear-operations-on-numeric-fields"]
 id = "gfa.amiga.matrix.mat-set"
 name = "MAT SET"
 kind = "statement"
+
+[declarations.signature]
+type = "no return value"
 
 [[declarations.availability]]
 dialect = "amiga-gfa-basic-interpreter"
@@ -271,6 +280,9 @@ id = "gfa.amiga.matrix.mat-one"
 name = "MAT ONE"
 kind = "statement"
 
+[declarations.signature]
+type = "no return value"
+
 [[declarations.availability]]
 dialect = "amiga-gfa-basic-interpreter"
 versions = ["3.5"]
@@ -310,6 +322,9 @@ anchors = ["3-linear-operations-on-numeric-fields"]
 id = "gfa.amiga.matrix.mat-trans"
 name = "MAT TRANS"
 kind = "statement"
+
+[declarations.signature]
+type = "no return value"
 
 [[declarations.availability]]
 dialect = "amiga-gfa-basic-interpreter"
@@ -353,6 +368,9 @@ anchors = ["3-linear-operations-on-numeric-fields"]
 id = "gfa.amiga.matrix.mat-norm"
 name = "MAT NORM"
 kind = "statement"
+
+[declarations.signature]
+type = "no return value"
 
 [[declarations.availability]]
 dialect = "amiga-gfa-basic-interpreter"
