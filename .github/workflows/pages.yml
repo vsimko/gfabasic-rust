@@ -48,6 +48,7 @@ jobs:
           test -s site/data/api-catalogue.json
           grep -q 'name="description"' site/index.html
           grep -q 'id="main-nav"' site/index.html
+          grep -q 'id="api-catalogue"' site/index.html
 
       - name: Publish production site while preserving active previews
         env:
