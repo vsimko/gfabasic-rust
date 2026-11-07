@@ -117,6 +117,7 @@ mod tests {
         ),
         MatRead(String),
         MatInput(i64, String),
+        MatPrint(String, Option<i64>, Option<(i64, i64)>),
     }
 
     fn meanings(program: &Program) -> Vec<Meaning> {
@@ -164,6 +165,12 @@ mod tests {
                     ..
                 } => Meaning::MatMulScale(destination.clone(), scalar.clone()),
                 Statement::MatRead { matrix, .. } => Meaning::MatRead(matrix.clone()),
+                Statement::MatPrint {
+                    name,
+                    channel,
+                    format,
+                    ..
+                } => Meaning::MatPrint(name.clone(), *channel, *format),
                 Statement::MatInput {
                     channel, matrix, ..
                 } => Meaning::MatInput(*channel, matrix.clone()),
@@ -422,11 +429,29 @@ mod tests {
             ),
             ("MAT READ a()", "MAT READ a()\n"),
             ("MAT INPUT #1,a()", "MAT INPUT #1, a()\n"),
+            ("MAT PRINT a()", "MAT PRINT a()\n"),
+            ("MAT PRINT #1,a()", "MAT PRINT #1, a()\n"),
+            ("MAT PRINT a(),7,3", "MAT PRINT a(), 7, 3\n"),
+            ("MAT PRINT #2,b(),8,4", "MAT PRINT #2, b(), 8, 4\n"),
         ];
 
         for (source, expected) in cases {
             assert_eq!(format(source), expected, "source: {source:?}");
         }
+    }
+
+    #[test]
+    fn mat_print_options_formatting_is_idempotent_and_semantics_preserving() {
+        let source = "MAT PRINT a()\nMAT PRINT #1,a()\nMAT PRINT a(),7,3\nMAT PRINT #2,b(),8,4\n";
+        let formatted = format(source);
+        assert_eq!(format(&formatted), formatted);
+        let mut before_sources = SourceMap::new();
+        let before_id = before_sources.add_source("before.bas", source);
+        let before = parse_document(before_id, source).unwrap();
+        let mut after_sources = SourceMap::new();
+        let after_id = after_sources.add_source("after.bas", formatted.as_str());
+        let after = parse_document(after_id, &formatted).unwrap();
+        assert_eq!(meanings(&before.program), meanings(&after.program));
     }
 
     #[test]
