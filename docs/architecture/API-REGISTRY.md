@@ -197,3 +197,6 @@ Tracking: [issue #12](https://github.com/vsimko/gfabasic-rust/issues/12), [metad
 ## Evidence and status invariants
 
 The validator requires printed-page locators for book-documented and primary-reference-cross-checked declarations, explicit reasons for unknown/unsupported target support and non-passing conformance, and conflict notes for disputed evidence. Disputed evidence cannot claim an implemented behavior, supported target behavior, or passing conformance. Inferred/unknown evidence cannot claim supported target behavior. These checks enforce consistency of recorded claims; they do not prove that a cited page was interpreted correctly.
+
+
+The public API progress view is generated from the canonical registry by `scripts/generate_api_catalogue.py`. Its JSON is generated during production and PR-preview builds, not maintained by hand. The view exposes independent evidence, implementation, target-support, and conformance counts and filters declarations by domain/status; it deliberately avoids a misleading aggregate implementation percentage.
