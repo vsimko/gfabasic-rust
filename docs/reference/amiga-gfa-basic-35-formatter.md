@@ -17,7 +17,11 @@ The matrix parser slice intentionally supports only matrix names `a` and `b`,
 two integer dimensions, and a non-negative integer scalar for `MAT SET`.
 `MAT BASE` accepts only the documented offsets 0 and 1. `MAT TRANS` supports
 the documented in-place and destination/source forms. `MAT NORM` accepts only
-row mode 0 and column mode 1. It does not implement
+row mode 0 and column mode 1. `MAT ADD` and `MAT SUB` accept the documented
+result expressions and in-place matrix/scalar forms. Their operators are
+spaced on both sides by the formatter. The parser still limits matrix names
+to `a` and `b`; scalar operands retain their source identifier spelling.
+It does not implement
 matrix evaluation or general array semantics. The executable
 compiler and semantic-analysis stages explicitly reject these matrix AST nodes;
 this increment is for parsing and formatting only.
