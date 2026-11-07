@@ -1206,6 +1206,33 @@ mod tests {
     }
 
     #[test]
+    fn parses_one_and_two_dimensional_matrix_declarations() {
+        let source = "DIM a(5)\nDIM b(1,5)\n";
+        let mut sources = SourceMap::new();
+        let source_id = sources.add_source("dim-vectors.bas", source);
+        let program = parse(source_id, source).unwrap();
+
+        assert!(matches!(
+            &program.statements[0],
+            Statement::DimMatrix {
+                name,
+                rows: 5,
+                columns: None,
+                ..
+            } if name == "a"
+        ));
+        assert!(matches!(
+            &program.statements[1],
+            Statement::DimMatrix {
+                name,
+                rows: 1,
+                columns: Some(5),
+                ..
+            } if name == "b"
+        ));
+    }
+
+    #[test]
     fn parses_verified_amiga_35_matrix_fixtures() {
         let fixtures = [
             include_str!("../../../tests/corpus/amiga/3.5/matrix/mat-one-identity.bas"),
@@ -1220,7 +1247,7 @@ mod tests {
                 .expect("verified Amiga 3.5 matrix fixture should parse");
             assert!(matches!(
                 program.statements.first(),
-                Some(Statement::DimMatrix { name, rows: 3, columns: 3, .. }) if name == "a"
+                Some(Statement::DimMatrix { name, rows: 3, columns: Some(3), .. }) if name == "a"
             ));
             assert!(matches!(
                 program.statements.last(),
