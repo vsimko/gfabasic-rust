@@ -31,7 +31,7 @@ def extract_section(path: Path, anchor: str) -> str:
     headings: list[tuple[int, int, str]] = []
     counts: dict[str, int] = {}
     for index, line in enumerate(lines):
-        match = re.match(r"^\\s{0,3}(#{1,6})\\s+(.+?)\\s*#*\\s*$", line)
+        match = re.match(r"^\s{0,3}(#{1,6})\s+(.+?)\s*#*\s*$", line)
         if not match:
             continue
         level = len(match.group(1))
@@ -49,7 +49,7 @@ def extract_section(path: Path, anchor: str) -> str:
             if next_level <= level:
                 end = next_start
                 break
-        return "\\n".join(lines[start:end]).strip()
+        return "\n".join(lines[start:end]).strip()
     raise ValueError(f"{path}: missing documentation anchor {anchor!r}")
 
 
