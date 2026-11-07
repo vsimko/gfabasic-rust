@@ -810,6 +810,35 @@ mod tests {
     }
 
     #[test]
+    fn parses_verified_mat_base_and_transpose_forms() {
+        let source = "MAT BASE 0\nMAT BASE 1\nMAT TRANS a()\nMAT TRANS a()=b()\n";
+        let mut sources = SourceMap::new();
+        let source_id = sources.add_source("mat-transpose.bas", source);
+        let program = parse(source_id, source).unwrap();
+
+        assert!(matches!(&program.statements[0], Statement::MatBase { index: 0, .. }));
+        assert!(matches!(&program.statements[1], Statement::MatBase { index: 1, .. }));
+        assert!(matches!(
+            &program.statements[2],
+            Statement::MatTrans { destination, source: None, .. } if destination == "a"
+        ));
+        assert!(matches!(
+            &program.statements[3],
+            Statement::MatTrans { destination, source: Some(source), .. }
+                if destination == "a" && source == "b"
+        ));
+    }
+
+    #[test]
+    fn rejects_unsupported_mat_base_offsets_and_transpose_shapes() {
+        for source in ["MAT BASE 2\n", "MAT BASE\n", "MAT TRANS a()=b(),c()\n"] {
+            let mut sources = SourceMap::new();
+            let source_id = sources.add_source("invalid-mat.bas", source);
+            assert!(parse(source_id, source).is_err(), "accepted: {source:?}");
+        }
+    }
+
+    #[test]
     fn rejects_malformed_matrix_statement_shapes() {
         for source_text in [
             "DIM a(3)\n",
