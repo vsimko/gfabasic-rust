@@ -133,6 +133,8 @@ pub enum MatCopyOperation {
     TransposedCopy,
 }
 
+type ParsedMatrixSelection = (String, Option<(i64, i64)>, SourceSpan);
+
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum MatAnalysisOperation {
     Det,
@@ -837,7 +839,7 @@ impl Parser {
 
     fn parse_matrix_selection(
         &mut self,
-    ) -> Result<(String, Option<(i64, i64)>, SourceSpan), Box<Diagnostic>> {
+    ) -> Result<ParsedMatrixSelection, Box<Diagnostic>> {
         let (name, name_span) = self.parse_matrix_name()?;
         self.expect(TokenKind::LeftParen, "'(' after matrix name")?;
         let offset = if matches!(self.current().kind, TokenKind::RightParen) {
