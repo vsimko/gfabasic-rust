@@ -837,9 +837,7 @@ impl Parser {
         })
     }
 
-    fn parse_matrix_selection(
-        &mut self,
-    ) -> Result<ParsedMatrixSelection, Box<Diagnostic>> {
+    fn parse_matrix_selection(&mut self) -> Result<ParsedMatrixSelection, Box<Diagnostic>> {
         let (name, name_span) = self.parse_matrix_name()?;
         self.expect(TokenKind::LeftParen, "'(' after matrix name")?;
         let offset = if matches!(self.current().kind, TokenKind::RightParen) {
