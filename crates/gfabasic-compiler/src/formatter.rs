@@ -106,7 +106,14 @@ mod tests {
         MatMulScalar(String, Vec<String>),
         MatMulScale(String, String),
         MatAnalysis(String, String, Option<(i64, i64)>, Option<i64>, String),
-        MatCopy(String, Option<(i64, i64)>, String, Option<(i64, i64)>, Option<(i64, i64)>, String),
+        MatCopy(
+            String,
+            Option<(i64, i64)>,
+            String,
+            Option<(i64, i64)>,
+            Option<(i64, i64)>,
+            String,
+        ),
     }
 
     fn meanings(program: &Program) -> Vec<Meaning> {
@@ -402,7 +409,10 @@ mod tests {
             ("MAT QDET x=b(0,0)", "MAT QDET x = b(0, 0)\n"),
             ("MAT RANG y=a(2,1),4", "MAT RANG y = a(2, 1), 4\n"),
             ("MAT CPY a()=b()", "MAT CPY a() = b()\n"),
-            ("MAT XCPY a(1,2)=b(3,4),5,6", "MAT XCPY a(1, 2) = b(3, 4), 5, 6\n"),
+            (
+                "MAT XCPY a(1,2)=b(3,4),5,6",
+                "MAT XCPY a(1, 2) = b(3, 4), 5, 6\n",
+            ),
         ];
 
         for (source, expected) in cases {
