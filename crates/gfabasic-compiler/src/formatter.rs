@@ -98,7 +98,6 @@ mod tests {
         MatOne(String),
         MatSet(String, i64),
         MatClr(String),
-        MatPrint(String),
         MatBase(i64),
         MatTrans(String, Option<String>),
         MatNorm(String, i64),
