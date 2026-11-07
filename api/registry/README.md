@@ -27,3 +27,7 @@ The Amiga catalogue currently contains 28 declarations, deliberately limited to 
 - Do not mark a declaration supported without primary evidence, a real implementation, and passing conformance tests.
 - Unknown support classifications require an explicit pending reason.
 - Do not create placeholder entries or infer implementation support from names, prose, issue titles, or the existence of a research fixture.
+
+## AI-assisted evidence review
+
+Generate a bounded review package for a declaration with `scripts/build_api_review_package.py`. Store completed advisory results under `api/reviews/`; CI validates their schema, source references, and input hashes with `scripts/validate_api_reviews.py`. See [AI-assisted API verification](../../docs/architecture/AI-VERIFICATION.md). Agent verdicts never promote implementation or conformance status.

@@ -65,6 +65,9 @@ jobs:
       - name: Validate registry
         run: python scripts/validate_api_registry.py
 
+      - name: Validate stored AI review results
+        run: python scripts/validate_api_reviews.py
+
       - name: Validate corpus metadata
         run: python scripts/validate_corpus.py
 
