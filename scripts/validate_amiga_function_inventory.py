@@ -14,11 +14,11 @@ DEFAULT_MANIFEST = Path("docs/research/amiga-gfa-basic-functions.toml")
 EXPECTED = {
     "all-identifiers": 116,
     "interpreter-identifiers-including-disputed-slot": 114,
-    "unambiguous-interpreter-identifiers": 113,
+    "unambiguous-interpreter-identifiers": 112,
     "compiler-only-identifiers": 2,
     "base-manual-identifiers": 112,
     "explicit-3.5-addendum-identifiers": 4,
-    "disputed-name-slots": 1,
+    "disputed-name-slots": 2,
 }
 
 
