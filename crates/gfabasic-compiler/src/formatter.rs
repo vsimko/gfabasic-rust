@@ -67,7 +67,9 @@ fn needs_space(previous: &TokenKind, current: &TokenKind) -> bool {
         | (_, TokenKind::Plus)
         | (TokenKind::Plus, _)
         | (_, TokenKind::Minus)
-        | (TokenKind::Minus, _) => true,
+        | (TokenKind::Minus, _)
+        | (_, TokenKind::Star)
+        | (TokenKind::Star, _) => true,
         (TokenKind::Comma, _) => true,
         (_, TokenKind::Comma)
         | (_, TokenKind::LeftParen)
@@ -100,6 +102,9 @@ mod tests {
         MatTrans(String, Option<String>),
         MatNorm(String, i64),
         MatArithmetic(String, Option<String>, String, String),
+        MatMulMatrix(String, String, String),
+        MatMulScalar(String, Vec<String>),
+        MatMulScale(String, String),
     }
 
     fn meanings(program: &Program) -> Vec<Meaning> {
@@ -130,6 +135,15 @@ mod tests {
                     ..
                 } => Meaning::MatTrans(destination.clone(), source.clone()),
                 Statement::MatNorm { name, mode, .. } => Meaning::MatNorm(name.clone(), *mode),
+                Statement::MatMulMatrix { destination, left, right, .. } => {
+                    Meaning::MatMulMatrix(destination.clone(), left.clone(), right.clone())
+                }
+                Statement::MatMulScalar { destination, operands, .. } => {
+                    Meaning::MatMulScalar(destination.clone(), operands.clone())
+                }
+                Statement::MatMulScale { destination, scalar, .. } => {
+                    Meaning::MatMulScale(destination.clone(), scalar.clone())
+                }
                 Statement::MatArithmetic {
                     operation,
                     destination,
@@ -327,11 +341,29 @@ mod tests {
             ("MAT SUB a()=b()-a()", "MAT SUB a() = b() - a()\n"),
             ("MAT ADD a(),b()", "MAT ADD a(), b()\n"),
             ("MAT SUB a(),x", "MAT SUB a(), x\n"),
+            ("MAT MUL a()=b()*a()", "MAT MUL a() = b() * a()\n"),
+            ("MAT MUL x=a()*b()", "MAT MUL x = a() * b()\n"),
+            ("MAT MUL y=a()*b()*a()", "MAT MUL y = a() * b() * a()\n"),
+            ("MAT MUL a(),x", "MAT MUL a(), x\n"),
         ];
 
         for (source, expected) in cases {
             assert_eq!(format(source), expected, "source: {source:?}");
         }
+    }
+
+    #[test]
+    fn mat_mul_formatting_is_idempotent_and_semantics_preserving() {
+        let source = "MAT MUL a()=b()*a()\nMAT MUL x=a()*b()\nMAT MUL y=a()*b()*a()\nMAT MUL a(),x\n";
+        let formatted = format(source);
+        assert_eq!(format(&formatted), formatted);
+        let mut before_sources = SourceMap::new();
+        let before_id = before_sources.add_source("before.bas", source);
+        let before = parse_document(before_id, source).unwrap();
+        let mut after_sources = SourceMap::new();
+        let after_id = after_sources.add_source("after.bas", formatted.as_str());
+        let after = parse_document(after_id, &formatted).unwrap();
+        assert_eq!(meanings(&before.program), meanings(&after.program));
     }
 
     #[test]
