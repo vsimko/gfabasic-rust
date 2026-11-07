@@ -464,3 +464,32 @@ The scan search now resolves several earlier gaps in the Exec subset:
 The manual describes the request structures and lifecycle but does not specify Rust ownership, cancellation races, asynchronous completion guarantees, or buffer lifetime rules. A safe wrapper must not allow an I/O request, its message port, or any associated data buffer to be freed while the device can still access it. This is an implementation constraint inferred from the documented allocate/open/start/abort/close lifecycle, not a Rust API contract stated by the manual.
 
 The earlier FreeMem note is superseded: the English Chapter 11 scan does document FreeMem(adr,count) and its byte-count return value on p. 11-11.
+
+
+## Chapter 11 — Exec task, signal, and system-list routines (printed pp. 11-10–11-22)
+
+Further extraction from the English GFA-BASIC 3.0 base manual documents these Exec-Library calls. These are 3.0 reference findings, not evidence that the current Rust interpreter implements them.
+
+### Lookup and task control
+
+- **FindName(start, name) (p. 11-10):** searches a system node list for a node with the given name; returns the node address or 0. `start` is a node/list address; `name` points to a zero-terminated string.
+- **FindPort(name) (p. 11-10):** searches the system message-port list; returns the MsgPort address or 0. The name is a pointer to a zero-terminated string.
+- **FindResident(name) (p. 11-10):** attempts to locate a resident structure; returns its address or 0. The name is a pointer to a zero-terminated string.
+- **FindTask(name) (p. 11-10):** searches task lists and returns the TaskControlBlock address. An empty name string requests the current task's control block.
+- **SetTaskPri(task, pri) (p. 11-20):** changes a task's priority and returns its previous priority. The documented range is -128 through 127.
+- **Wait(signal) (p. 11-22):** suspends the current task until one or more signals arrive. The parameter is a signal bit/mask as described by the manual.
+- **Signal(task, signal) (p. 11-21):** sends the specified signal bit(s) to a task; no return value is documented.
+- **SetSignal(newsig, sigmask) (p. 11-20):** sets the task's received-signal state and returns the old signal bit/state. Both arguments are integer expressions; the mask is 32-bit.
+- **SetExcept(new, mask) (p. 11-19):** selects which of the 32 signal bits cause exceptions and returns the old signal bit/state. The manual labels both arguments as integer expressions.
+- **SetIntVector(number, interrupt) (p. 11-20):** installs code/data pointers for an interrupt and returns the address of the previous Interrupt structure. The interrupt number is a PAULA bit number from 0 to 14; the second argument is the new Interrupt structure address.
+
+### I/O completion and message-port waiting
+
+- **WaitIO(IORequest) (p. 11-22):** waits for the specified I/O request to finish; returns 0 or an error number. The argument is an IORequest structure address.
+- **WaitPort(msgport) (p. 11-23):** waits for an event from the specified message port. The entry describes the argument as a message-structure address despite naming it `msgport`; preserve this source wording as an ambiguity rather than silently correcting its type.
+
+### Source and implementation boundaries
+
+- The English manual's Find* entries explicitly require zero-terminated name strings and return raw structure addresses. A Rust binding therefore needs a separately defined string-buffer and pointer-lifetime contract; the BASIC `iexp` annotation alone does not supply one.
+- Signal and interrupt calls operate on task/OS state. Treat them as unsafe platform interfaces until the interpreter's calling convention, synchronization, and interrupt-context rules are independently established.
+- The companion German 3.5 book contains additional explanatory material (including AllocSignal/AllocTrap), but those details are intentionally not used to expand this 3.0 English-base inventory. Keep 3.5 evidence separately version-scoped.
