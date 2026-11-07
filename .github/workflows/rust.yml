@@ -19,6 +19,7 @@ on:
       - "rust-toolchain.toml"
       - "crates/**"
       - "tests/corpus/amiga/3.5/combinatorics/**"
+      - "tests/corpus/amiga/3.5/matrix/**"
       - ".github/workflows/rust.yml"
 
 permissions:
