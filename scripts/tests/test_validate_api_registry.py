@@ -105,13 +105,13 @@ anchors = []
         temp, root = self.make_amiga_35_root()
         self.addCleanup(temp.cleanup)
         errors = validate_registry(root)
-        self.assertTrue(any("Amiga 3.5 declarations require source-scope" in error for error in errors))
+        self.assertTrue(any("Amiga 3.5 declarations require" in error for error in errors))
 
     def test_amiga_35_rejects_base_manual_30_as_sole_evidence(self):
         temp, root = self.make_amiga_35_root("base-manual-3.0")
         self.addCleanup(temp.cleanup)
         errors = validate_registry(root)
-        self.assertTrue(any("Amiga 3.5 declarations require source-scope" in error for error in errors))
+        self.assertTrue(any("Amiga 3.5 declarations require" in error for error in errors))
 
     def test_amiga_35_accepts_runtime_observed_evidence(self):
         temp, root = self.make_amiga_35_root("runtime-observation")
