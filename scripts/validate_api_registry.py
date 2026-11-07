@@ -243,6 +243,10 @@ def validate_registry(root: Path = ROOT) -> list[str]:
             for support in declaration.get("support", []):
                 classification = support.get("classification")
                 tests = support.get("tests", [])
+                if classification == "unknown" and not support.get("pending-reason"):
+                    errors.append(
+                        f"{path}: {declaration_id}: unknown support classification needs a pending reason"
+                    )
                 for test_id in tests:
                     if test_id not in test_ids:
                         errors.append(f"{path}: {declaration_id}: unknown test ID {test_id!r}")
