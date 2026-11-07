@@ -60,6 +60,16 @@ conformance = "not-tested"
         self.assertEqual(data["counts"]["by_target_support"]["x86_64-unknown-linux-gnu"], {"unknown": 2})
         self.assertEqual(data["entries"][0]["id"], "gfa.amiga.graphics.pcolor")
 
+    def test_real_registry_generates_all_current_declarations(self):
+        from scripts.generate_api_catalogue import ROOT
+
+        data = json.loads(render(ROOT))
+        self.assertGreaterEqual(data["counts"]["total"], 29)
+        self.assertEqual(data["counts"]["by_namespace"]["language-core"], 24)
+        self.assertEqual(data["counts"]["by_namespace"]["amiga"], 4)
+        self.assertEqual(data["counts"]["by_namespace"]["atari-st"], 1)
+        self.assertEqual(data["counts"]["by_evidence_status"]["disputed"], 1)
+
     def test_empty_registry_generates_valid_empty_catalogue(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
