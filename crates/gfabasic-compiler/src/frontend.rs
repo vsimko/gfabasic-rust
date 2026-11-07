@@ -777,6 +777,7 @@ mod tests {
             include_str!("../../../tests/corpus/amiga/3.5/matrix/mat-one-identity.bas"),
             include_str!("../../../tests/corpus/amiga/3.5/matrix/mat-clear-zero.bas"),
             include_str!("../../../tests/corpus/amiga/3.5/matrix/mat-set-scalar.bas"),
+            include_str!("../../../tests/corpus/amiga/3.5/matrix/mat-base-transpose.bas"),
         ];
 
         for source_text in fixtures {
