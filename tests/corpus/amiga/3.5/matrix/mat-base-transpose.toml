@@ -1,0 +1,16 @@
+id = "amiga-3.5-mat-base-transpose"
+dialect = "GFA BASIC Amiga"
+version = "3.5"
+api_profiles = []
+kind = "semantic"
+status = "verified"
+source_key = "AM-INTERPRETER-35"
+source_pages = "printed pp. 13-1–13-2, 13-19–13-20"
+evidence_status = "page-image-verified"
+expectation = "MAT BASE selects matrix index offset 0 or 1; MAT TRANS transposes a square matrix in place or copies the transpose of source matrix b into destination matrix a."
+notes = [
+  "Independently authored minimal fixture; not copied from the manual's example.",
+  "MAT BASE default is 1; the addendum documents explicit offsets 0 and 1.",
+  "MAT TRANS a() transposes a square matrix in place; MAT TRANS a()=b() copies the transpose of b into a.",
+  "Verified against the supplied Amiga GFA BASIC 3.5 addendum page images; no original interpreter execution has been performed.",
+]
