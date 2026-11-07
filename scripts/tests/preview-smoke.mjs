@@ -43,7 +43,7 @@ try {
   const categories = page.locator("#api-catalogue-results .api-category");
   assert.ok(await categories.count() > 0, "API catalogue categories did not load");
   assert.equal(await categories.first().getAttribute("open"), null, "API categories should start collapsed");
-  await categories.first().locator("> summary").click();
+  await categories.first().locator(":scope > summary").click();
   const functions = categories.first().locator(".api-function");
   await functions.first().waitFor({ state: "attached" });
   await functions.first().locator("summary").click();
