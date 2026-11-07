@@ -218,8 +218,6 @@ conformance = "not-tested"
 tests = []
 pending-reason = "The repository has a research fixture, but no registered executable conformance test or matrix runtime implementation."
 
-[declarations.evidence.notes]
-# (No separate evidence notes table; fixture ID is recorded in the source inventory.)
 
 [declarations.docs]
 path = "docs/research/amiga-gfa-basic-35-addendum-inventory.md"
