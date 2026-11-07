@@ -310,3 +310,81 @@ Unlike Chapters 2–12, Chapter 13 explicitly identifies itself as the GFA BASIC
 The first matrix pages state that the addendum's matrix/vector functions operate only on one- and two-dimensional fields with floating-point variables. MAT BASE changes the row/column indexing offset for specified matrix commands; the documented default is 1, and MAT BASE 0/1 is intended in conjunction with OPTION BASE 0. MAT CLR and MAT SET fill all elements; MAT ONE creates a square identity matrix. MAT READ consumes DATA rows and MAT PRINT formats vectors/matrices. These are directly supported by the 3.5 addendum and can be reconciled into 3.5 declarations after exact syntax and remaining operation semantics are extracted.
 
 Important boundary: the addendum's presence of an item is positive evidence for that 3.5 feature; absence from Chapter 13 is not proof that a 3.0 feature was removed. The older chapters still require runtime or 3.5-specific confirmation before claiming compatibility.
+
+
+## Chapter 11 — selected routine-level extraction
+
+The following signatures and behavior are transcribed from the supplied 3.0-era system-routine chapter. They are a first subset, not a complete binding specification.
+
+### Exec-Library (printed pp. 11-5–11-7, 11-9)
+
+- **AllocMem(byteSize, art) (p. 11-6):** allocates a memory block. Returns its address, or 0 if unavailable. The requested size is rounded up to a multiple of 8 bytes. The second argument selects memory attributes (the text gives MEMF_CHIP as an example).
+- **AvailMem(art) (p. 11-6):** returns the currently free memory for the requested memory attributes.
+- **Allocate(memheader, byteSize) (p. 11-5):** allocates from a task's own free-memory list. Returns the block address, or 0 on failure.
+- **Deallocate(memHeader, memBlock, byteSize) (p. 11-7):** returns a block to the task's own free-memory pool. The manual states no return value.
+- **AllocSignal(signalNum) (p. 11-6):** allocates a signal bit from the current task's pool; returns bit number 0–31 or -1. The input may be 0–31 or -1 to request any available bit.
+- **CloseDevice(IO_request) (p. 11-7):** releases the device association for the task using an initialized I/O request structure. No return value.
+- **DoIO(IO_request) (p. 11-9):** listed in the Exec API index and section. Its full signature/semantics should be captured from the page before exposing it in a typed wrapper.
+- **Forbid() / Permit() (p. 11-11):** disable and re-enable Amiga task switching, respectively. These calls affect system-wide scheduling behavior and must not be wrapped as ordinary safe operations.
+- **SuperState() / UserState(stack) (pp. 11-21–11-22):** switch the 68000 CPU into supervisor mode and back to user mode. The stack value returned by SuperState must be preserved for UserState. This is privileged, system-sensitive behavior.
+- **FreeMem(memBlock, byteSize) (p. 11-11):** the routine is listed in the chapter index; the supplied scan's detailed description is to be checked before encoding the exact argument order and memory-attribute constraints.
+
+### Graphics-Library (printed pp. 11-32–11-45)
+
+- **Draw(rastport, x, y) (p. 11-33):** draws from the current drawing-pen position to (x,y) in the specified RastPort.
+- **DrawCircle(rastport, x, y, radius) (p. 11-33):** draws a circle using the RastPort's drawing mode and colors.
+- **DrawEllipse(rastport, x, y, x_radius, y_radius) (p. 11-33):** draws an ellipse in the specified RastPort.
+- **ReadPixel(rastport, x, y) (p. 11-44):** returns the color-register number of the pixel at the given coordinates.
+- **RectFill(rastport, x1, y1, x2, y2) (p. 11-44):** fills a rectangle using the current fill pattern, drawing mode and colors.
+- **InitRastPort(rastport) (p. 11-39):** initializes a RastPort structure by clearing its fields and setting documented drawing defaults. No return value.
+- **Move(rastport, x, y) (p. 11-42):** positions the graphics pen at new coordinates in the output RastPort. No return value.
+- **LoadRGB4(viewport, colors, count) (p. 11-40):** assigns a set of RGB color-register values to a ViewPort. No return value.
+
+### Intuition-Library (printed pp. 11-66–11-68)
+
+- **OpenScreen(newscreen) (p. 11-68):** opens/displays a screen described by a NewScreen structure. Returns the Screen structure address or 0.
+- **OpenWindow(newwindow) (p. 11-68):** opens a window described by a NewWindow structure. Returns the Window structure address.
+- **ModifyIDCMP(window, flag) (p. 11-66):** changes the IDCMP event flags for a window. No return value.
+- **MoveScreen(screen, deltax, deltay) (p. 11-67):** moves a screen by relative offsets. No return value.
+- **MoveWindow(window, deltax, deltay) (p. 11-67):** moves a window by relative offsets. No return value.
+
+### DOS-Library (printed pp. 11-88–11-91)
+
+- **Lock(name, mode) (p. 11-88):** obtains a lock for a file or directory. ACCESS_READ (-2) allows shared read access; ACCESS_WRITE (-1) obtains a write lock. Returns a Lock structure address.
+- **Open(name, mode) (p. 11-89):** opens a file and returns a file handle. MODE_OLDFILE (1005) opens an existing file; MODE_NEWFILE (1006) creates a file for writing and overwrites an existing file of the same name.
+- **Close(filehandle) (p. 11-90):** closes an input or output file. The handle is the FileHandle structure address.
+- **Read(filehandle, adr, count) (p. 11-90):** reads into a memory buffer and returns the number of bytes read.
+- **Seek(filehandle, pos, mode) (pp. 11-90–11-91):** positions a file pointer and returns its old position. Modes documented are OFFSET_BEGINNING (1), OFFSET_END (-1) and OFFSET_CURRENT (0).
+- **Rename(old, new) (p. 11-90):** renames a file or directory and returns TRUE/FALSE.
+- **UnLock(lock) (p. 11-91):** releases a file/directory lock. No return value.
+
+### Binding boundary
+
+These routines transport addresses through the manual's generic BASIC numeric parameter notation. That notation does not define Rust pointer types, ownership, alignment, buffer length validity or lifetime. A future Rust layer must model each OS structure and allocation contract explicitly. The selected signatures above are documentation candidates only; they are not proof that the current interpreter exposes or safely validates every call.
+
+## Chapter 13 — matrix/vector operation semantics (3.5 addendum)
+
+The following details are explicitly in the 3.5 addendum, unlike the base-manual inventory above.
+
+### Matrix/vector input and copying
+
+- **MAT INPUT #i, a() (printed p. 13-4):** reads a matrix/vector from an ASCII file. Its format is the reverse of MAT PRINT; commas and row feeds may vary as with INPUT #.
+- **MAT CPY a([i,j])=b([k,l])[,h,w] (pp. 13-5 onward):** copies a rectangular region of h rows and w elements from source matrix b to destination a. The source and destination start offsets are supplied separately. Only elements with corresponding source/destination indices are copied.
+- **MAT COPY a()=b() (pp. 13-6, 13-10):** copies the complete matrix when dimensions are compatible; the text also describes copying only elements for which source and destination indices correspond. The addendum's explanatory paragraph contains an apparent wording/format inconsistency about region dimensions, so retain the examples and syntax as evidence and do not infer a more general resizing rule.
+- **MAT XCPY a([i,j])=b([k,l])[,h,w] (pp. 13-11–13-12):** like MAT CPY, but transposes the source while copying; source matrix b remains unchanged.
+- **Vector special cases (p. 13-12):** one-dimensional arrays are treated as row vectors. For column-vector treatment, the manual requires a two-dimensional declaration with one column. It states that MAT CPY should be used when both vectors have the same orientation, and gives a column-vector form for the operation.
+- **MAT TRANS a()[=b()] (p. 13-15):** transposes a square matrix in place when no destination is supplied; the source text says the original matrix is lost in that form. The two-matrix form is listed in the syntax, but its detailed semantics need a separate page check.
+
+### Arithmetic and linear algebra
+
+- **MAT ADD a()=b()+c() (pp. 13-16 onward):** element-wise addition; source matrices/vectors must have the same order and result is written to a().
+- **MAT ADD a(),b() / MAT ADD a(),x:** the addendum lists these in-place/constant variants; exact edge cases and rounding are not yet transcribed.
+- **MAT SUB a()=b()-c(), MAT SUB a(),b(), MAT SUB a(),x:** corresponding subtraction forms listed by the addendum.
+- **MAT MUL a()=b()*c() / MAT MUL x=a()*b() / MAT MUL x=a()*b()*c() / MAT MUL a(),x:** matrix product and scalar-result variants are listed; the manual examples include matrix×matrix and row-vector×matrix×column-vector calculations.
+- **MAT NORM a(),0 / MAT NORM a(),1 (pp. 13-23–13-24):** defined for matrices and vectors. 0 normalizes by rows and 1 by columns; the sum of squares of the elements in each normalized row/column is 1.
+- **MAT DET x=a([i,j])[,n] (pp. 13-25 onward):** computes the determinant of a square matrix; optional offsets and dimension select a submatrix.
+- **MAT QDET x=a([i,j])[,n]:** computes the same determinant using a speed-optimized routine; the addendum warns that small accuracy differences may occur.
+- **MAT RANG x=a([i,j])[,n] (p. 13-29):** computes the rank of a square matrix, optionally for a selected submatrix.
+- **MAT INV a()=b() (p. 13-29):** computes the inverse of square matrix b() into a(); the destination must have the same dimensions/type as the source.
+
+The exact page-level descriptions for MAT DET/QDET/RANG/INV should be checked in the scan before implementing numerical behavior. In particular, the source's use of the term rank and its submatrix parameters should be preserved rather than silently replaced with a textbook API interpretation.
