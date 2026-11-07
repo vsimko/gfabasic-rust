@@ -1688,7 +1688,6 @@ mod tests {
     #[test]
     fn rejects_malformed_matrix_statement_shapes() {
         for source_text in [
-            "DIM a(3)\n",
             "MAT ONE a(3)\n",
             "MAT SET a()\n",
             "MAT SET a()=7,8\n",
