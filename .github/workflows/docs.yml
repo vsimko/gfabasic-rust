@@ -67,6 +67,11 @@ jobs:
       - name: Install pinned validator dependency
         run: python -m pip install --disable-pip-version-check jsonschema==4.25.1
 
+      - name: Generate and verify static API catalogue
+        run: |
+          python scripts/generate_api_catalogue.py
+          python scripts/generate_api_catalogue.py --check
+
       - name: Validate registry
         run: python scripts/validate_api_registry.py
 
@@ -78,11 +83,6 @@ jobs:
 
       - name: Validate Amiga function inventory
         run: python scripts/validate_amiga_function_inventory.py
-
-      - name: Generate and verify static API catalogue
-        run: |
-          python scripts/generate_api_catalogue.py
-          python scripts/generate_api_catalogue.py --check
 
       - name: Run registry validator tests
         run: python -m unittest discover -s scripts/tests -p "test_*.py"
