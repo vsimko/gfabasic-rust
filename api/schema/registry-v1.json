@@ -98,7 +98,8 @@
           "required": ["status"],
           "properties": {
             "status": {"enum": ["not-implemented", "partial", "implemented", "unsafe-disabled"]},
-            "handler": {"type": "string", "minLength": 1}
+            "handler": {"type": "string", "minLength": 1},
+            "notes": {"$ref": "#/$defs/stringArray"}
           }
         },
         "support": {
