@@ -113,13 +113,13 @@ type = "no return value"
 [declarations.semantics]
 summary = "Disables GURU checking when the argument is 0 and enables it when the argument is nonzero. On a GURU Meditation, control transfers to ONERROR GOSUB or error #109 is generated."
 side-effects = ["Changes GURU-checking state.", "May transfer control to ONERROR GOSUB or raise error #109 on a GURU Meditation."]
-errors = ["Error #109: GURU Meditation"]
+errors = ["Error #109: GURU Meditation", "Errors #110–#118: normal GURU conditions $2–$A"]
 
 [declarations.evidence]
 status = "book-documented"
 sources = ["AM-INTERPRETER-35"]
 printed-pages = ["Chapter 13, printed p. 13-36 (same feature: combined update scan pp. 14-6–14-7)"]
-notes = ["The 3.5 addendum distinguishes the GURU command from the GURU function.", "In compiled 3.5 programs, RESUME NEXT and RESUME LABEL cannot be executed after an ONERROR GOSUB call caused by a GURU; this restriction is recorded in the source inventory."]
+notes = ["The 3.5 addendum distinguishes the GURU command from the GURU function. Error messages #110–#118 correspond to normal GURUs $2–$A.", "In compiled 3.5 programs, RESUME NEXT and RESUME LABEL cannot be executed after an ONERROR GOSUB call caused by a GURU; this restriction is recorded in the source inventory."]
 
 [declarations.implementation]
 status = "not-implemented"
