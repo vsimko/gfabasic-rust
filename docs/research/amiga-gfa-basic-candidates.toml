@@ -171,3 +171,74 @@ source-version = "3.5 addendum"
 printed-pages = ["13-31–13-39"]
 status = "confirmed-in-3.5"
 notes = "The family is documented in Chapter 13; MAT INV operand direction is explicitly disputed between summary and detailed example."
+
+
+[[candidates]]
+id = "amiga.35.editor-update"
+name = "Editor row layout, search and listing changes"
+kind = "editor-feature-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.5 editor update"
+printed-pages = ["1-25"]
+status = "confirmed-in-3.5"
+notes = "Explicit editor update; this is editor behavior, not a language/runtime declaration."
+
+[[candidates]]
+id = "amiga.35.combinatorics"
+name = "FACT, VARIAT, COMBIN"
+kind = "function-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.5 addendum"
+printed-pages = ["13-33–13-34 (469-page scan)", "14-1–14-2 (combined update scan)"]
+status = "confirmed-in-3.5"
+notes = "Factorial, permutations and combinations are explicitly enumerated as additional 3.5 functions."
+
+[[candidates]]
+id = "amiga.35.openw-negative-screen"
+name = "OPENW negative screen-number variant"
+kind = "syntax-variant"
+source = "AM-INTERPRETER-35"
+source-version = "3.5 addendum"
+printed-pages = ["13-34 (469-page scan)", "14-3 (combined update scan)"]
+status = "confirmed-in-3.5"
+notes = "Explicit variant opens a window on the current top screen."
+
+[[candidates]]
+id = "amiga.35.pcolor"
+name = "PCOLOR"
+kind = "procedure"
+source = "AM-INTERPRETER-35"
+source-version = "3.5 addendum"
+printed-pages = ["13-34 (469-page scan)", "14-4 (combined update scan)"]
+status = "confirmed-in-3.5"
+notes = "Applies foreground and optional background colors to PRINT screen output."
+
+[[candidates]]
+id = "amiga.35.data-pointer"
+name = "_DATA and _DATA="
+kind = "special-variable-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.5 addendum"
+printed-pages = ["13-34–13-35 (469-page scan)", "14-5 (combined update scan)"]
+status = "confirmed-in-3.5"
+notes = "The leading underscore is confirmed by page-image review; query and restore the DATA pointer."
+
+[[candidates]]
+id = "amiga.35.special-longwords"
+name = "_0 through _9"
+kind = "special-variable-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.5 addendum"
+printed-pages = ["13-35 (469-page scan)", "14-6 (combined update scan)"]
+status = "confirmed-in-3.5"
+notes = "Ten special longword variables; persistence and clearing behavior are described in the addendum."
+
+[[candidates]]
+id = "amiga.35.guru"
+name = "GURU statement and function"
+kind = "statement-function-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.5 addendum"
+printed-pages = ["13-35–13-36 (469-page scan)", "14-6–14-7 (combined update scan)"]
+status = "confirmed-in-3.5"
+notes = "GURU checking control and GURU-number function are explicitly documented; crash-recovery tests require isolation."
