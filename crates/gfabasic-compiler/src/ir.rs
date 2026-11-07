@@ -314,6 +314,20 @@ mod tests {
     }
 
     #[test]
+    fn rejects_matrix_statements_from_the_executable_build_subset() {
+        let source = include_str!("../../../tests/corpus/amiga/3.5/matrix/mat-one-identity.bas");
+        let mut sources = SourceMap::new();
+        let id = sources.add_source("matrix.bas", source);
+        let ast = parse(id, source).unwrap();
+
+        let errors = lower(&ast).expect_err("matrix execution is not implemented");
+        assert!(
+            errors.iter().any(|error| error.message.contains("matrix statements")),
+            "expected an explicit matrix support diagnostic: {errors:?}"
+        );
+    }
+
+    #[test]
     fn handles_zero_and_boundary_combinatorics_values() {
         let source = "x=FACT(0)\ny=VARIAT(20,0)\nz=COMBIN(20,10)\nPRINT x,y,z\n";
         let mut sources = SourceMap::new();
