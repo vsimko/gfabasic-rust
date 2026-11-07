@@ -7,9 +7,10 @@ Canonical declarations use TOML. The planned registry namespaces are `language-c
 - `atari-st/time.toml`: one research-status Atari ST `TIMER` declaration for version 3.0.
 - `amiga/math-and-matrix.toml`: `FACT`, `VARIAT`, `COMBIN`, `MAT BASE`, `MAT CLR`, `MAT SET`, `MAT ONE`, `MAT TRANS`, and `MAT NORM`.
 - `amiga/special-and-platform-commands.toml`: `_DATA`, `_DATA=`, `_0`…`_9`, `PCOLOR`, the negative-screen-number `OPENW` variant, and the `GURU` command/function forms.
+- `amiga/matrix-operations.toml`: matrix/vector DATA and file I/O, copy/transpose, arithmetic, determinant, rank, and inverse operations.
 - `language-core/`: no declarations yet.
 
-The Amiga catalogue currently contains 16 declarations, deliberately limited to features explicitly identified in the supplied 3.5 interpreter addendum. It does not claim completeness. The addendum's Chapter 13/14 page references and known source limitations are documented in [the extracted feature inventory](../../docs/research/amiga-gfa-basic-35-addendum-inventory.md).
+The Amiga catalogue currently contains 28 declarations, deliberately limited to features explicitly identified in the supplied 3.5 interpreter addendum. It does not claim completeness. The addendum's Chapter 13/14 page references and known source limitations are documented in [the extracted feature inventory](../../docs/research/amiga-gfa-basic-35-addendum-inventory.md).
 
 ## Evidence and implementation boundaries
 
@@ -18,7 +19,7 @@ The Amiga catalogue currently contains 16 declarations, deliberately limited to 
 - Evidence, implementation, target support, and conformance are independent. The Amiga declarations currently have unknown Linux support and untested conformance.
 - The experimental compiler prototype supports only a restricted literal subset of the three combinatorics intrinsics. That subset is recorded as an implementation note, not misrepresented as a complete runtime implementation or a registry-linked handler.
 - Existing 3.5 matrix fixtures are research fixtures in a `research_only` corpus. They are not executable conformance tests and are therefore not linked as passing tests.
-- The `MAT INV` operand direction remains disputed between the command summary and detailed example; it is intentionally not declared as settled syntax.
+- The `MAT INV` operand direction is represented as a disputed declaration with both source variants; it is not a settled syntax or implementation contract.
 
 ## Editing rules
 
