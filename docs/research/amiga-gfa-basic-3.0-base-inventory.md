@@ -493,3 +493,22 @@ Further extraction from the English GFA-BASIC 3.0 base manual documents these Ex
 - The English manual's Find* entries explicitly require zero-terminated name strings and return raw structure addresses. A Rust binding therefore needs a separately defined string-buffer and pointer-lifetime contract; the BASIC `iexp` annotation alone does not supply one.
 - Signal and interrupt calls operate on task/OS state. Treat them as unsafe platform interfaces until the interpreter's calling convention, synchronization, and interrupt-context rules are independently established.
 - The companion German 3.5 book contains additional explanatory material (including AllocSignal/AllocTrap), but those details are intentionally not used to expand this 3.0 English-base inventory. Keep 3.5 evidence separately version-scoped.
+
+
+## Chapter 11 — Exec allocation, interrupt masking, and list primitives (printed pp. 11-5–11-12)
+
+The English base-manual scan also supports the following additional Exec entries:
+
+- **AllocSignal(signalNum) (p. 11-5):** allocates a signal bit from the current task's available signal pool. Returns a bit number 0–31 or -1. The requested bit is 0–31, or -1 to request any available bit.
+- **FreeSignal(sigbit) (p. 11-12):** releases a previously allocated signal bit; the documented range is 0–31. No return value.
+- **AllocTrap(trapNum) (p. 11-5):** allocates a trap number from the current task's available trap numbers. The requested trap number is 0–15, or -1 for any available trap. The entry does not state an explicit return-value contract in the extracted text.
+- **FreeTrap(trapnr) (p. 11-12):** releases an allocated trap number for reuse in the task; range 0–15. No return value.
+- **Disable() (p. 11-8):** described as similar to Forbid, but additionally disables interrupts. No return value is documented.
+- **Enable() (p. 11-9):** activates interrupts after a Disable. No return value is documented.
+- **Enqueue(list, node) (p. 11-9):** inserts/appends a node to a system list; no return value. Both arguments are addresses of the list and node structures.
+
+### Safety and evidence notes
+
+- AllocSignal/FreeSignal and AllocTrap/FreeTrap are task-scoped resource pairs in the manual. Their pairing and ranges should be reflected in any wrapper; do not treat the returned integer as a generic application identifier.
+- Disable/Enable affects interrupt delivery, not merely task scheduling. It must not be exposed as an ordinary safe concurrency primitive without a platform-specific critical-section and restoration contract.
+- These declarations are sourced from Chapters 11 pages of the English manual labelled GFA-BASIC 3.0 Amiga. They are base-manual candidates only; no 3.5 support claim is made here.
