@@ -108,6 +108,21 @@ pub enum Statement {
         scalar: String,
         span: SourceSpan,
     },
+    MatAnalysis {
+        operation: MatAnalysisOperation,
+        destination: String,
+        matrix: String,
+        offsets: Option<(i64, i64)>,
+        order: Option<i64>,
+        span: SourceSpan,
+    },
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum MatAnalysisOperation {
+    Det,
+    QDet,
+    Rang,
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -758,6 +773,53 @@ impl Parser {
         }
     }
 
+    fn parse_mat_analysis(
+        &mut self,
+        start: SourceSpan,
+        operation: MatAnalysisOperation,
+    ) -> Result<Statement, Box<Diagnostic>> {
+        let destination_token = self.advance();
+        let destination = match destination_token.kind {
+            TokenKind::Identifier(name) => name,
+            _ => {
+                return Err(self.syntax_error(
+                    "expected a scalar destination in MAT matrix analysis",
+                    destination_token.span,
+                ));
+            }
+        };
+        self.expect(TokenKind::Equals, "'=' in MAT matrix analysis")?;
+        let (matrix, _) = self.parse_matrix_name()?;
+        self.expect(TokenKind::LeftParen, "'(' after matrix name")?;
+        let offsets = if matches!(self.current().kind, TokenKind::RightParen) {
+            None
+        } else {
+            let row = self.parse_nonnegative_matrix_integer()?;
+            self.expect(
+                TokenKind::Comma,
+                "',' between matrix row and column offsets",
+            )?;
+            let column = self.parse_nonnegative_matrix_integer()?;
+            Some((row, column))
+        };
+        self.expect(TokenKind::RightParen, "')' after matrix selection")?;
+        let order = if matches!(self.current().kind, TokenKind::Comma) {
+            self.advance();
+            Some(self.parse_nonnegative_matrix_integer()?)
+        } else {
+            None
+        };
+        let end = self.tokens[self.cursor - 1].span;
+        Ok(Statement::MatAnalysis {
+            operation,
+            destination,
+            matrix,
+            offsets,
+            order,
+            span: SourceSpan::new(self.source_id, start.start, end.end),
+        })
+    }
+
     fn parse_mat_statement(&mut self, start: SourceSpan) -> Result<Statement, Box<Diagnostic>> {
         let operation = self.advance();
         let operation_name = match operation.kind {
@@ -784,6 +846,9 @@ impl Parser {
                     span: SourceSpan::new(self.source_id, start.start, end.end),
                 })
             }
+            "DET" => self.parse_mat_analysis(start, MatAnalysisOperation::Det),
+            "QDET" => self.parse_mat_analysis(start, MatAnalysisOperation::QDet),
+            "RANG" => self.parse_mat_analysis(start, MatAnalysisOperation::Rang),
             "MUL" => self.parse_mat_mul(start),
             "ADD" => self.parse_mat_arithmetic(start, MatArithmeticOperation::Add),
             "SUB" => self.parse_mat_arithmetic(start, MatArithmeticOperation::Sub),
@@ -1088,6 +1153,71 @@ mod tests {
             &column_program.statements[0],
             Statement::MatNorm { name, mode: 1, .. } if name == "a"
         ));
+    }
+
+    #[test]
+    fn parses_verified_mat_det_qdet_and_rang_forms() {
+        use super::MatAnalysisOperation;
+
+        let source = "MAT DET x=a()\nMAT DET x=a(1,2),3\nMAT QDET x=b(0,0)\nMAT RANG y=a(2,1),4\n";
+        let mut sources = SourceMap::new();
+        let source_id = sources.add_source("mat-analysis.bas", source);
+        let program = parse(source_id, source).unwrap();
+
+        assert!(matches!(
+            &program.statements[0],
+            Statement::MatAnalysis {
+                operation: MatAnalysisOperation::Det,
+                destination,
+                matrix,
+                offsets: None,
+                order: None,
+                ..
+            } if destination == "x" && matrix == "a"
+        ));
+        assert!(matches!(
+            &program.statements[1],
+            Statement::MatAnalysis {
+                operation: MatAnalysisOperation::Det,
+                offsets: Some((1, 2)),
+                order: Some(3),
+                ..
+            }
+        ));
+        assert!(matches!(
+            &program.statements[2],
+            Statement::MatAnalysis {
+                operation: MatAnalysisOperation::QDet,
+                destination,
+                matrix,
+                offsets: Some((0, 0)),
+                order: None,
+                ..
+            } if destination == "x" && matrix == "b"
+        ));
+        assert!(matches!(
+            &program.statements[3],
+            Statement::MatAnalysis {
+                operation: MatAnalysisOperation::Rang,
+                destination,
+                offsets: Some((2, 1)),
+                order: Some(4),
+                ..
+            } if destination == "y"
+        ));
+    }
+
+    #[test]
+    fn rejects_malformed_matrix_analysis_selection() {
+        for source in [
+            "MAT DET x=a(1)\n",
+            "MAT QDET x=a(1,2,3)\n",
+            "MAT RANG x=a(),-1\n",
+        ] {
+            let mut sources = SourceMap::new();
+            let source_id = sources.add_source("invalid-mat-analysis.bas", source);
+            assert!(parse(source_id, source).is_err(), "accepted: {source:?}");
+        }
     }
 
     #[test]

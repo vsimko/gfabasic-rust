@@ -105,6 +105,7 @@ mod tests {
         MatMulMatrix(String, String, String),
         MatMulScalar(String, Vec<String>),
         MatMulScale(String, String),
+        MatAnalysis(String, String, Option<(i64, i64)>, Option<i64>, String),
     }
 
     fn meanings(program: &Program) -> Vec<Meaning> {
@@ -151,6 +152,27 @@ mod tests {
                     scalar,
                     ..
                 } => Meaning::MatMulScale(destination.clone(), scalar.clone()),
+                Statement::MatAnalysis {
+                    operation,
+                    destination,
+                    matrix,
+                    offsets,
+                    order,
+                    ..
+                } => {
+                    let operation = match operation {
+                        crate::frontend::MatAnalysisOperation::Det => "det",
+                        crate::frontend::MatAnalysisOperation::QDet => "qdet",
+                        crate::frontend::MatAnalysisOperation::Rang => "rang",
+                    };
+                    Meaning::MatAnalysis(
+                        destination.clone(),
+                        matrix.clone(),
+                        *offsets,
+                        *order,
+                        operation.to_owned(),
+                    )
+                }
                 Statement::MatArithmetic {
                     operation,
                     destination,
@@ -352,11 +374,29 @@ mod tests {
             ("MAT MUL x=a()*b()", "MAT MUL x = a() * b()\n"),
             ("MAT MUL y=a()*b()*a()", "MAT MUL y = a() * b() * a()\n"),
             ("MAT MUL a(),x", "MAT MUL a(), x\n"),
+            ("MAT DET x=a()", "MAT DET x = a()\n"),
+            ("MAT DET x=a(1,2),3", "MAT DET x = a(1, 2), 3\n"),
+            ("MAT QDET x=b(0,0)", "MAT QDET x = b(0, 0)\n"),
+            ("MAT RANG y=a(2,1),4", "MAT RANG y = a(2, 1), 4\n"),
         ];
 
         for (source, expected) in cases {
             assert_eq!(format(source), expected, "source: {source:?}");
         }
+    }
+
+    #[test]
+    fn mat_analysis_formatting_is_idempotent_and_semantics_preserving() {
+        let source = "MAT DET x=a()\nMAT QDET x=b(0,0)\nMAT RANG y=a(2,1),4\n";
+        let formatted = format(source);
+        assert_eq!(format(&formatted), formatted);
+        let mut before_sources = SourceMap::new();
+        let before_id = before_sources.add_source("before.bas", source);
+        let before = parse_document(before_id, source).unwrap();
+        let mut after_sources = SourceMap::new();
+        let after_id = after_sources.add_source("after.bas", formatted.as_str());
+        let after = parse_document(after_id, &formatted).unwrap();
+        assert_eq!(meanings(&before.program), meanings(&after.program));
     }
 
     #[test]

@@ -21,7 +21,9 @@ the documented in-place and destination/source forms. `MAT NORM` accepts only
 row mode 0 and column mode 1. `MAT ADD` and `MAT SUB` accept the documented
 result expressions and in-place matrix/scalar forms. `MAT MUL` accepts
 matrix-result products, scalar-result products with two or three matrix
-operands, and in-place scalar multiplication. Arithmetic operators are
+operands, and in-place scalar multiplication. `MAT DET`, `MAT QDET`, and
+`MAT RANG` accept a scalar destination, matrix reference with optional row
+and column offsets, and an optional square-submatrix order. Arithmetic operators are
 spaced on both sides by the formatter. The parser still limits matrix names
 to `a` and `b`; scalar operands retain their source identifier spelling.
 It does not implement
