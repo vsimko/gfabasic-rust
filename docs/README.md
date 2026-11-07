@@ -29,6 +29,7 @@ This index is the entry point for project documentation. It separates user guida
 | Frontend fuzzing strategy | [`architecture/FUZZING.md`](architecture/FUZZING.md) | Frontend implementers; planned fuzz targets, corpus separation, resource budgets, and CI policy |
 | Architecture decisions | [`architecture/adr/TEMPLATE.md`](architecture/adr/TEMPLATE.md) | Maintainers; structure for numbered, reviewable decisions |
 | Language and API research | [`reference/README.md`](reference/README.md) | Researchers; source-backed, dialect/version-specific notes |
+| Amiga GFA BASIC 3.5 formatter | [`reference/amiga-gfa-basic-35-formatter.md`](reference/amiga-gfa-basic-35-formatter.md) | Users and implementers; current formatter scope, style, CLI behavior, and evidence limits |
 | Source provenance | [`reference-sources.md`](reference-sources.md) | Researchers and reviewers; source identity, access, licensing, and evidence |
 | Research procedures and corpora | [`research/README.md`](research/README.md) | Researchers; experiment procedures and analysis of historical material |
 | Reusable page templates | [`templates/README.md`](templates/README.md) | Documentation authors; starting structures for guides and reference pages |
