@@ -41,6 +41,9 @@ jobs:
           python3 scripts/generate_api_catalogue.py --check
           node --check site/script.js
           grep -q 'id="api-catalogue"' site/index.html
+          grep -q 'class="dashboard-roadmap-progress"' site/index.html
+          grep -q 'class="dashboard-progress-fill"' site/index.html
+          ! grep -q 'fetch("data/project.json")' site/script.js
 
       - name: Publish or remove preview
         uses: rossjrw/pr-preview-action@873417d2df72380da1f3978378fb58560bcde976
