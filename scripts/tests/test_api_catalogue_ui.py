@@ -24,7 +24,7 @@ class ApiCatalogueRenderingTests(unittest.TestCase):
 
         self.assertIn('document.createElement("details")', before_population)
         self.assertNotIn('className = "api-function"', before_population)
-        self.assertNotIn('document.createElement("details")', before_population)
+        self.assertEqual(before_population.count('document.createElement("details")'), 1)
         self.assertIn('category.addEventListener("toggle"', render_entries)
         self.assertIn('if (category.open) populateNames()', render_entries)
         self.assertIn('category.dataset.namesLoaded = "true"', populate_names)
