@@ -320,6 +320,7 @@ mod tests {
             include_str!("../../../tests/corpus/amiga/3.5/matrix/mat-clear-zero.bas"),
             include_str!("../../../tests/corpus/amiga/3.5/matrix/mat-set-scalar.bas"),
             include_str!("../../../tests/corpus/amiga/3.5/matrix/mat-base-transpose.bas"),
+            include_str!("../../../tests/corpus/amiga/3.5/matrix/mat-norm-row.bas"),
         ];
 
         for source in fixtures {
