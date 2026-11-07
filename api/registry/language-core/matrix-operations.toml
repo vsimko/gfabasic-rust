@@ -29,7 +29,7 @@ errors = []
 [declarations.evidence]
 status = "book-documented"
 sources = ["AM-INTERPRETER-35"]
-printed-pages = ["Chapter 13, printed pp. 13-3–13-4"]
+printed-pages = ["Chapter 13, printed p. 13-5"]
 notes = ["The addendum specifies a previously dimensioned field and DATA-row input.", "The printed page images were visually checked; this declaration is still marked book-documented because its behavior has not been independently cross-checked against a second primary witness or observed runtime."]
 
 [declarations.implementation]
@@ -76,7 +76,7 @@ errors = []
 [declarations.evidence]
 status = "book-documented"
 sources = ["AM-INTERPRETER-35"]
-printed-pages = ["Chapter 13, printed pp. 13-3–13-4"]
+printed-pages = ["Chapter 13, printed pp. 13-5–13-6"]
 notes = ["The optional channel and formatting arguments are documented in the addendum.", "The printed page images were visually checked; this declaration is still marked book-documented because its behavior has not been independently cross-checked against a second primary witness or observed runtime."]
 
 [declarations.implementation]
@@ -121,7 +121,7 @@ errors = []
 [declarations.evidence]
 status = "book-documented"
 sources = ["AM-INTERPRETER-35"]
-printed-pages = ["Chapter 13, printed p. 13-4"]
+printed-pages = ["Chapter 13, printed p. 13-6"]
 notes = ["The addendum explicitly describes ASCII input and flexible commas/rowfeeds.", "The printed page images were visually checked; this declaration is still marked book-documented because its behavior has not been independently cross-checked against a second primary witness or observed runtime."]
 
 [declarations.implementation]
