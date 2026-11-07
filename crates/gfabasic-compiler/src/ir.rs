@@ -322,7 +322,9 @@ mod tests {
 
         let errors = lower(&ast).expect_err("matrix execution is not implemented");
         assert!(
-            errors.iter().any(|error| error.message.contains("matrix statements")),
+            errors
+                .iter()
+                .any(|error| error.message.contains("matrix statements")),
             "expected an explicit matrix support diagnostic: {errors:?}"
         );
     }
