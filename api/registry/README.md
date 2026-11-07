@@ -46,3 +46,15 @@ The supplied 3.5 interpreter manual contains both a 3.0 base manual and a 3.5 ad
 
 
 - Every Amiga 3.5 declaration must set evidence source-scope to `amiga-3.5-addendum` or `runtime-observation`. Base-manual 3.0 evidence alone cannot establish 3.5 availability. This is checked by the registry validator.
+
+
+## Static website payload format
+
+The website generator writes two kinds of deployment artifacts; neither is edited manually:
+
+- `site/data/api-catalogue.json` is schema version 2, a compact index containing category keys, declaration names, syntax/search summaries, independent status fields, counts, and each detail file's relative path.
+- `site/data/api-catalogue-details/<declaration-id>.json` contains the full registry record for one declaration.
+
+The browser downloads the index once. It creates category and declaration disclosure elements from index fields only; a declaration's detail JSON is fetched from the same static site origin only when its disclosure is opened. No runtime API, backend, database, or server-side catalogue logic is used.
+
+Run `python3 scripts/generate_api_catalogue.py` to regenerate the payloads and `python3 scripts/generate_api_catalogue.py --check` to verify byte-for-byte reproducibility and detect missing or stale detail files. CI runs both commands and tests the generator with empty, partial, populated, and 1,000-entry synthetic registries.

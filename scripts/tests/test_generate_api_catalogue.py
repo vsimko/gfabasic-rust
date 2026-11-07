@@ -3,21 +3,23 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from scripts.generate_api_catalogue import generate, render
+from scripts.generate_api_catalogue import generate, render, render_index
 
 
 class ApiCatalogueGeneratorTests(unittest.TestCase):
-    def make_root(self):
+    def make_root(self, count=2):
         temp = tempfile.TemporaryDirectory()
         root = Path(temp.name)
-        (root / "api/registry/language-core").mkdir(parents=True)
-        (root / "api/registry/amiga").mkdir(parents=True)
-        (root / "api/registry/language-core/math.toml").write_text(
-            """schema-version = 1
-[[declarations]]
-id = "gfa.language.math.fact"
-name = "FACT"
+        registry = root / "api/registry/language-core"
+        registry.mkdir(parents=True)
+        declarations = []
+        for index in range(count):
+            declarations.append(
+                f'''[[declarations]]
+id = "gfa.language.test.fn{index:04d}"
+name = "FN{index:04d}"
 kind = "function"
+syntax = [{{ form = "FN{index:04d}()" }}]
 [declarations.evidence]
 status = "book-documented"
 [declarations.implementation]
@@ -26,43 +28,31 @@ status = "not-implemented"
 target = "x86_64-unknown-linux-gnu"
 classification = "unknown"
 conformance = "not-tested"
-"""
-        )
-        (root / "api/registry/amiga/graphics.toml").write_text(
-            """schema-version = 1
-[[declarations]]
-id = "gfa.amiga.graphics.pcolor"
-name = "PCOLOR"
-kind = "statement"
-[declarations.evidence]
-status = "disputed"
-[declarations.implementation]
-status = "not-implemented"
-[[declarations.support]]
-target = "x86_64-unknown-linux-gnu"
-classification = "unknown"
-conformance = "not-tested"
-"""
+'''
+            )
+        (registry / "functions.toml").write_text(
+            "schema-version = 1\n" + "\n".join(declarations),
+            encoding="utf-8",
         )
         return temp, root
 
-    def test_output_is_deterministic_and_counts_dimensions_separately(self):
+    def test_index_and_details_are_deterministic_and_complete(self):
         temp, root = self.make_root()
         self.addCleanup(temp.cleanup)
-        first = render(root)
-        second = render(root)
-        self.assertEqual(first, second)
-        data = json.loads(first)
-        self.assertEqual(data["counts"]["total"], 2)
-        self.assertEqual(data["counts"]["by_namespace"], {"amiga": 1, "language-core": 1})
-        self.assertEqual(data["counts"]["by_evidence_status"], {"book-documented": 1, "disputed": 1})
-        self.assertEqual(data["counts"]["by_implementation_status"], {"not-implemented": 2})
-        self.assertEqual(data["counts"]["by_target_support"]["x86_64-unknown-linux-gnu"], {"unknown": 2})
-        self.assertEqual(data["entries"][0]["id"], "gfa.amiga.graphics.pcolor")
+        first_index, first_details = render_index(root)
+        second_index, second_details = render_index(root)
+        self.assertEqual(first_index, second_index)
+        self.assertEqual(first_details, second_details)
+        index = json.loads(first_index)
+        self.assertEqual(index["counts"]["total"], 2)
+        self.assertEqual([item["name"] for item in index["entries"]], ["FN0000", "FN0001"])
+        self.assertEqual(index["entries"][0]["syntax"], ["FN0000()"])
+        detail = json.loads(first_details["gfa.language.test.fn0000.json"])
+        self.assertEqual(detail["id"], index["entries"][0]["id"])
+        self.assertEqual(detail["evidence"]["status"], "book-documented")
 
     def test_real_registry_generates_all_current_declarations(self):
         from scripts.generate_api_catalogue import ROOT
-
         data = json.loads(render(ROOT))
         self.assertGreaterEqual(data["counts"]["total"], 29)
         self.assertEqual(data["counts"]["by_namespace"]["language-core"], 24)
@@ -70,22 +60,44 @@ conformance = "not-tested"
         self.assertEqual(data["counts"]["by_namespace"]["atari-st"], 1)
         self.assertEqual(data["counts"]["by_evidence_status"]["disputed"], 1)
 
-    def test_empty_registry_generates_valid_empty_catalogue(self):
+    def test_empty_and_partial_registries(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
             (root / "api/registry").mkdir(parents=True)
-            data = json.loads(render(root))
-            self.assertEqual(data["entries"], [])
-            self.assertEqual(data["counts"]["total"], 0)
+            index, details = render_index(root)
+            self.assertEqual(json.loads(index)["entries"], [])
+            self.assertEqual(details, {})
+        temp, root = self.make_root(1)
+        self.addCleanup(temp.cleanup)
+        index, details = render_index(root)
+        self.assertEqual(json.loads(index)["counts"]["total"], 1)
+        self.assertEqual(len(details), 1)
 
-    def test_check_mode_detects_stale_output(self):
+    def test_large_synthetic_registry_keeps_index_compact_and_resolves_details(self):
+        temp, root = self.make_root(1000)
+        self.addCleanup(temp.cleanup)
+        index_text, details = render_index(root)
+        index = json.loads(index_text)
+        self.assertEqual(len(index["entries"]), 1000)
+        self.assertEqual(len(details), 1000)
+        self.assertLess(len(index_text), sum(map(len, details.values())))
+        for entry in index["entries"]:
+            filename = entry["detail"].rsplit("/", 1)[1]
+            self.assertIn(filename, details)
+            self.assertEqual(json.loads(details[filename])["id"], entry["id"])
+
+    def test_check_mode_detects_missing_stale_and_extra_details(self):
         temp, root = self.make_root()
         self.addCleanup(temp.cleanup)
         output = root / "site/data/api-catalogue.json"
-        self.assertTrue(generate(root, output))
-        self.assertTrue(generate(root, output, check=True))
-        output.write_text("{}")
-        self.assertFalse(generate(root, output, check=True))
+        details = root / "site/data/api-catalogue-details"
+        self.assertTrue(generate(root, output, details))
+        self.assertTrue(generate(root, output, details, check=True))
+        (details / "gfa.language.test.fn0000.json").write_text("{}")
+        self.assertFalse(generate(root, output, details, check=True))
+        self.assertTrue(generate(root, output, details))
+        (details / "stale.json").write_text("{}")
+        self.assertFalse(generate(root, output, details, check=True))
 
 
 if __name__ == "__main__":

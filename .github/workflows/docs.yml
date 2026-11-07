@@ -76,6 +76,11 @@ jobs:
       - name: Validate corpus metadata
         run: python scripts/validate_corpus.py
 
+      - name: Generate and verify static API catalogue
+        run: |
+          python scripts/generate_api_catalogue.py
+          python scripts/generate_api_catalogue.py --check
+
       - name: Run registry validator tests
         run: python -m unittest discover -s scripts/tests -p "test_*.py"
 
