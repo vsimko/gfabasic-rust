@@ -2,8 +2,8 @@
 //!
 //! This is deliberately not a general GFA BASIC lexer/parser. It recognizes
 //! only the source forms demonstrated by the 3.5 addendum: FACT/VARIAT/COMBIN
-//! assignments and PRINT, plus the verified MAT ONE/SET/CLR/PRINT matrix
-//! examples. Other syntax is rejected rather than guessed.
+//! assignments and PRINT, plus selected verified MAT matrix commands. Other
+//! syntax is rejected rather than guessed.
 
 use crate::diagnostics::{Diagnostic, DiagnosticCategory, DiagnosticSeverity};
 use crate::source::{SourceId, SourceSpan};
@@ -526,12 +526,12 @@ impl Parser {
         Ok((name, SourceSpan::new(self.source_id, start.start, end.end)))
     }
 
-    fn parse_matrix_dimension(&mut self) -> Result<i64, Box<Diagnostic>> {
+    fn parse_nonnegative_matrix_integer(&mut self) -> Result<i64, Box<Diagnostic>> {
         let token = self.advance();
         match token.kind {
             TokenKind::Integer(value) => Ok(value),
             _ => Err(self.syntax_error(
-                "matrix dimensions must be non-negative integer literals in this MVP",
+                "expected a non-negative integer literal in the supported matrix command subset",
                 token.span,
             )),
         }
