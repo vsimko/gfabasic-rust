@@ -69,6 +69,8 @@ pub enum Statement {
     },
     MatPrint {
         name: String,
+        channel: Option<i64>,
+        format: Option<(i64, i64)>,
         span: SourceSpan,
     },
     MatBase {
@@ -997,15 +999,41 @@ impl Parser {
                     span: SourceSpan::new(self.source_id, start.start, end.end.max(destination_span.end)),
                 })
             }
-            "ONE" | "CLR" | "PRINT" => {
+            "ONE" | "CLR" => {
                 let (name, end) = self.parse_matrix_reference()?;
                 let span = SourceSpan::new(self.source_id, start.start, end.end);
                 match operation_name.as_str() {
                     "ONE" => Ok(Statement::MatOne { name, span }),
                     "CLR" => Ok(Statement::MatClr { name, span }),
-                    "PRINT" => Ok(Statement::MatPrint { name, span }),
                     _ => unreachable!(),
                 }
+            }
+            "PRINT" => {
+                let channel = if matches!(self.current().kind, TokenKind::Hash) {
+                    self.advance();
+                    let channel = self.parse_nonnegative_matrix_integer()?;
+                    self.expect(TokenKind::Comma, "',' after MAT PRINT channel")?;
+                    Some(channel)
+                } else {
+                    None
+                };
+                let (name, _) = self.parse_matrix_reference()?;
+                let format = if matches!(self.current().kind, TokenKind::Comma) {
+                    self.advance();
+                    let width = self.parse_nonnegative_matrix_integer()?;
+                    self.expect(TokenKind::Comma, "',' between MAT PRINT width and precision")?;
+                    let precision = self.parse_nonnegative_matrix_integer()?;
+                    Some((width, precision))
+                } else {
+                    None
+                };
+                let end = self.tokens[self.cursor - 1].span;
+                Ok(Statement::MatPrint {
+                    name,
+                    channel,
+                    format,
+                    span: SourceSpan::new(self.source_id, start.start, end.end),
+                })
             }
             "SET" => {
                 let (name, _) = self.parse_matrix_reference()?;
@@ -1266,6 +1294,64 @@ mod tests {
             &column_program.statements[0],
             Statement::MatNorm { name, mode: 1, .. } if name == "a"
         ));
+    }
+
+    #[test]
+    fn parses_verified_mat_print_channel_and_format_options() {
+        let source = "MAT PRINT a()\nMAT PRINT #1,a()\nMAT PRINT a(),7,3\nMAT PRINT #2,b(),8,4\n";
+        let mut sources = SourceMap::new();
+        let source_id = sources.add_source("mat-print-options.bas", source);
+        let program = parse(source_id, source).unwrap();
+
+        assert!(matches!(
+            &program.statements[0],
+            Statement::MatPrint {
+                name,
+                channel: None,
+                format: None,
+                ..
+            } if name == "a"
+        ));
+        assert!(matches!(
+            &program.statements[1],
+            Statement::MatPrint {
+                name,
+                channel: Some(1),
+                format: None,
+                ..
+            } if name == "a"
+        ));
+        assert!(matches!(
+            &program.statements[2],
+            Statement::MatPrint {
+                name,
+                channel: None,
+                format: Some((7, 3)),
+                ..
+            } if name == "a"
+        ));
+        assert!(matches!(
+            &program.statements[3],
+            Statement::MatPrint {
+                name,
+                channel: Some(2),
+                format: Some((8, 4)),
+                ..
+            } if name == "b"
+        ));
+    }
+
+    #[test]
+    fn rejects_malformed_mat_print_options() {
+        for source in [
+            "MAT PRINT #1 a()\n",
+            "MAT PRINT a(),7\n",
+            "MAT PRINT a(),7,3,2\n",
+        ] {
+            let mut sources = SourceMap::new();
+            let source_id = sources.add_source("invalid-mat-print.bas", source);
+            assert!(parse(source_id, source).is_err(), "accepted: {source:?}");
+        }
     }
 
     #[test]
