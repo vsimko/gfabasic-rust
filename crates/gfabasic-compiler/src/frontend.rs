@@ -986,6 +986,90 @@ mod tests {
     }
 
     #[test]
+    fn parses_verified_mat_add_and_sub_forms() {
+        use super::{MatArithmeticOperand, MatArithmeticOperation};
+
+        let source = "MAT ADD a()=b()+a()\\nMAT ADD a(),b()\\nMAT ADD a(),x\\nMAT SUB b()=a()-b()\\nMAT SUB b(),a()\\nMAT SUB b(),y\\n";
+        let mut sources = SourceMap::new();
+        let source_id = sources.add_source("mat-arithmetic.bas", source);
+        let program = parse(source_id, source).unwrap();
+
+        assert!(matches!(
+            &program.statements[0],
+            Statement::MatArithmetic {
+                operation: MatArithmeticOperation::Add,
+                destination,
+                left: Some(left),
+                right: MatArithmeticOperand::Matrix(right),
+                ..
+            } if destination == "a" && left == "b" && right == "a"
+        ));
+        assert!(matches!(
+            &program.statements[1],
+            Statement::MatArithmetic {
+                operation: MatArithmeticOperation::Add,
+                destination,
+                left: None,
+                right: MatArithmeticOperand::Matrix(right),
+                ..
+            } if destination == "a" && right == "b"
+        ));
+        assert!(matches!(
+            &program.statements[2],
+            Statement::MatArithmetic {
+                operation: MatArithmeticOperation::Add,
+                destination,
+                left: None,
+                right: MatArithmeticOperand::Scalar(scalar),
+                ..
+            } if destination == "a" && scalar == "x"
+        ));
+        assert!(matches!(
+            &program.statements[3],
+            Statement::MatArithmetic {
+                operation: MatArithmeticOperation::Sub,
+                destination,
+                left: Some(left),
+                right: MatArithmeticOperand::Matrix(right),
+                ..
+            } if destination == "b" && left == "a" && right == "b"
+        ));
+        assert!(matches!(
+            &program.statements[4],
+            Statement::MatArithmetic {
+                operation: MatArithmeticOperation::Sub,
+                destination,
+                left: None,
+                right: MatArithmeticOperand::Matrix(right),
+                ..
+            } if destination == "b" && right == "a"
+        ));
+        assert!(matches!(
+            &program.statements[5],
+            Statement::MatArithmetic {
+                operation: MatArithmeticOperation::Sub,
+                destination,
+                left: None,
+                right: MatArithmeticOperand::Scalar(scalar),
+                ..
+            } if destination == "b" && scalar == "y"
+        ));
+    }
+
+    #[test]
+    fn rejects_unsupported_mat_arithmetic_operators() {
+        for source in [
+            "MAT ADD a()=b()-a()\\n",
+            "MAT SUB a()=b()+a()\\n",
+            "MAT ADD a(),7\\n",
+        ] {
+            let mut sources = SourceMap::new();
+            let source_id = sources.add_source("invalid-mat-arithmetic.bas", source);
+            assert!(parse(source_id, source).is_err(), "accepted: {source:?}");
+        }
+    }
+
+    #[test]
     fn rejects_unsupported_mat_base_offsets_and_transpose_shapes() {
         for source in ["MAT BASE 2\n", "MAT BASE\n", "MAT TRANS a()=b(),c()\n"] {
             let mut sources = SourceMap::new();
