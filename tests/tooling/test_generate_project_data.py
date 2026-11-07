@@ -89,13 +89,13 @@ class ProjectDataGeneratorTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             source = root / "notes.md"
-            source.write_text("# Overview\\n\\n## Current scope and limitations\\n", encoding="utf-8")
+            source.write_text("# Overview\n\n## Current scope and limitations\n", encoding="utf-8")
             validate_evidence_reference("notes.md#current-scope-and-limitations", root)
             with self.assertRaisesRegex(ValueError, "heading anchor does not exist"):
                 validate_evidence_reference("notes.md#missing-section", root)
 
     def test_duplicate_heading_anchors_follow_github_suffixes(self):
-        self.assertEqual(markdown_heading_anchors("## Notes\\n## Notes\\n"), {"notes", "notes-1"})
+        self.assertEqual(markdown_heading_anchors("## Notes\n## Notes\n"), {"notes", "notes-1"})
 
     def test_all_current_dashboard_evidence_references_resolve(self):
         load_model(MODEL, ROOT)
