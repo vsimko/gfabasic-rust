@@ -37,6 +37,8 @@ jobs:
           test -s site/styles.css
           test -s site/script.js
           test -s site/data/api-catalogue.json
+          test -d site/data/api-catalogue-details
+          python3 scripts/generate_api_catalogue.py --check
           node --check site/script.js
           grep -q 'id="api-catalogue"' site/index.html
 
@@ -49,3 +51,8 @@ jobs:
           wait-for-pages-deployment: true
           comment: true
           qr-code: false
+
+      - name: Smoke-test deployed preview HTML
+        if: github.event.action != 'closed'
+        run: |
+          PREVIEW_URL="https://vsimko.github.io/gfabasic-rust/pr-preview/pr-${{ github.event.pull_request.number }}/" python3 scripts/tests/test_deployed_preview.py
