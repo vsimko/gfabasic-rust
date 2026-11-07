@@ -96,7 +96,7 @@ mod tests {
         MatBase(i64),
         MatTrans(String, Option<String>),
         MatNorm(String, i64),
-        MatArithmetic(String, Option<String>, String, bool),
+        MatArithmetic(String, Option<String>, String, String),
     }
 
     fn meanings(program: &Program) -> Vec<Meaning> {
@@ -128,15 +128,19 @@ mod tests {
                 } => Meaning::MatTrans(destination.clone(), source.clone()),
                 Statement::MatNorm { name, mode, .. } => Meaning::MatNorm(name.clone(), *mode),
                 Statement::MatArithmetic { operation, destination, left, right, .. } => {
-                    let (operand, is_scalar) = match right {
-                        crate::frontend::MatArithmeticOperand::Matrix(name) => (name.clone(), false),
-                        crate::frontend::MatArithmeticOperand::Scalar(name) => (name.clone(), true),
+                    let (operand, operand_kind) = match right {
+                        crate::frontend::MatArithmeticOperand::Matrix(name) => (name.clone(), "matrix"),
+                        crate::frontend::MatArithmeticOperand::Scalar(name) => (name.clone(), "scalar"),
+                    };
+                    let operation = match operation {
+                        crate::frontend::MatArithmeticOperation::Add => "add",
+                        crate::frontend::MatArithmeticOperation::Sub => "sub",
                     };
                     Meaning::MatArithmetic(
                         destination.clone(),
                         left.clone(),
                         operand,
-                        is_scalar ^ matches!(operation, crate::frontend::MatArithmeticOperation::Sub),
+                        format!("{operation}:{operand_kind}"),
                     )
                 },
             })
