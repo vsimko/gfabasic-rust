@@ -844,12 +844,19 @@ impl Parser {
             None
         } else {
             let row = self.parse_nonnegative_matrix_integer()?;
-            self.expect(TokenKind::Comma, "',' between matrix row and column offsets")?;
+            self.expect(
+                TokenKind::Comma,
+                "',' between matrix row and column offsets",
+            )?;
             let column = self.parse_nonnegative_matrix_integer()?;
             Some((row, column))
         };
         let end = self.expect(TokenKind::RightParen, "')' after matrix selection")?;
-        Ok((name, offset, SourceSpan::new(self.source_id, name_span.start, end.span.end)))
+        Ok((
+            name,
+            offset,
+            SourceSpan::new(self.source_id, name_span.start, end.span.end),
+        ))
     }
 
     fn parse_mat_copy(
