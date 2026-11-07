@@ -66,9 +66,9 @@ anchors = ["chapter-3"]
             schema_source.read_text(encoding="utf-8")
         )
         (root / "docs/reference-sources.md").write_text(
-            "| ID | Title | Scope |\\n|---|---|---|\\n| TEST-SOURCE | Test manual | Amiga 3.5 |\\n"
+            "| ID | Title | Scope |\n|---|---|---|\n| TEST-SOURCE | Test manual | Amiga 3.5 |\n"
         )
-        (root / "docs/research.md").write_text("# Chapter 3\\n")
+        (root / "docs/research.md").write_text("# Chapter 3\n")
         return temp, root
 
     def review_result(self, root, verdict="supported"):
