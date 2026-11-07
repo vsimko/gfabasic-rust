@@ -45,12 +45,10 @@ if (generatedStatus) {
   };
   const statusLabel = (status) => ({
     implemented: "Implemented",
-    implemented_subset: "Partial · implemented subset",
     partial: "Partial",
     prototype: "Prototype",
     research: "Research",
     planned: "Planned",
-    not_implemented: "Planned · not implemented",
     blocked: "Blocked",
   }[status] || "Unknown");
 
@@ -60,7 +58,7 @@ if (generatedStatus) {
       return response.json();
     })
     .then((data) => {
-      if (data.schema_version !== 1 || !data.project || !data.prototype || !Array.isArray(data.planned_components) || !Array.isArray(data.workspace_packages)) {
+      if (data.schema_version !== 2 || !data.project || !Array.isArray(data.components) || !Array.isArray(data.workspace_packages)) {
         throw new Error("Generated project data has an unsupported or incomplete schema");
       }
 
@@ -80,26 +78,22 @@ if (generatedStatus) {
       const heading = textNode("h3", "dashboard-subheading", "Implementation states");
       const grid = document.createElement("div");
       grid.className = "dashboard-components";
-      const components = [
-        { name: "Current compiler prototype", status: data.prototype.status, description: data.prototype.description, evidence: data.prototype.evidence || [], url: "https://github.com/vsimko/gfabasic-rust/tree/main/crates" },
-        ...data.planned_components.map((item) => ({ ...item, url: "https://github.com/vsimko/gfabasic-rust" })),
-      ];
-      for (const component of components) {
+      for (const component of data.components) {
         const card = document.createElement("article");
         card.className = "dashboard-component";
         const top = document.createElement("div");
         top.className = "dashboard-component-top";
         top.append(textNode("h4", "", component.name), textNode("span", "dashboard-status", statusLabel(component.status)));
-        card.append(top, textNode("p", "", component.description || "No additional status rationale is recorded in the generated model."));
+        card.append(top, textNode("p", "", component.rationale));
         const evidence = document.createElement("div");
         evidence.className = "dashboard-evidence";
-        if (component.evidence?.length) {
-          for (const item of component.evidence) {
-            const link = sourceLink(`https://github.com/vsimko/gfabasic-rust/blob/main/${item.replaceAll("#", "#")}`, item);
-            evidence.append(link);
-          }
-        } else {
-          evidence.append(sourceLink(component.url, "Repository evidence ↗"));
+        for (const item of component.evidence || []) {
+          const [path, ...anchorParts] = item.split("#");
+          const anchor = anchorParts.length ? `#${anchorParts.join("#")}` : "";
+          evidence.append(sourceLink(`https://github.com/vsimko/gfabasic-rust/blob/main/${path}${anchor}`, `${item} ↗`));
+        }
+        for (const issue of component.related_issues || []) {
+          evidence.append(sourceLink(`https://github.com/vsimko/gfabasic-rust/issues/${issue}`, `Issue #${issue} ↗`));
         }
         card.append(evidence);
         grid.append(card);
@@ -110,6 +104,7 @@ if (generatedStatus) {
       footer.append(
         sourceLink("https://github.com/vsimko/gfabasic-rust/blob/main/validation/project.json", "Canonical status model ↗"),
         sourceLink("https://github.com/vsimko/gfabasic-rust/blob/main/ROADMAP.md", "Delivery roadmap ↗"),
+        sourceLink(`https://github.com/vsimko/gfabasic-rust/commit/${data.source_revision}`, `Source revision: ${data.source_revision.slice(0, 7)} ↗`),
         sourceLink("https://github.com/vsimko/gfabasic-rust/issues", "Open implementation issues ↗")
       );
       generatedStatus.replaceChildren(overview, heading, grid, footer);
