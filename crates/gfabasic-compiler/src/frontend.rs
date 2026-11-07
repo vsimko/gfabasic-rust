@@ -540,9 +540,9 @@ impl Parser {
     fn parse_dim_matrix(&mut self, start: SourceSpan) -> Result<Statement, Box<Diagnostic>> {
         let (name, _) = self.parse_matrix_name()?;
         self.expect(TokenKind::LeftParen, "'(' after matrix name")?;
-        let rows = self.parse_matrix_dimension()?;
+        let rows = self.parse_nonnegative_matrix_integer()?;
         self.expect(TokenKind::Comma, "',' between matrix dimensions")?;
-        let columns = self.parse_matrix_dimension()?;
+        let columns = self.parse_nonnegative_matrix_integer()?;
         let end = self
             .expect(TokenKind::RightParen, "')' after matrix dimensions")?
             .span;
@@ -567,7 +567,7 @@ impl Parser {
         };
         match operation_name.as_str() {
             "BASE" => {
-                let index = self.parse_matrix_dimension()?;
+                let index = self.parse_nonnegative_matrix_integer()?;
                 if !matches!(index, 0 | 1) {
                     return Err(self.unsupported_error(
                         "MAT BASE supports only the documented index offsets 0 and 1",
@@ -608,7 +608,7 @@ impl Parser {
             "SET" => {
                 let (name, _) = self.parse_matrix_reference()?;
                 self.expect(TokenKind::Equals, "'=' in MAT SET")?;
-                let value = self.parse_matrix_dimension()?;
+                let value = self.parse_nonnegative_matrix_integer()?;
                 let span = SourceSpan::new(self.source_id, start.start, self.tokens[self.cursor - 1].span.end);
                 Ok(Statement::MatSet { name, value, span })
             }
