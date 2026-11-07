@@ -1151,6 +1151,71 @@ mod tests {
     }
 
     #[test]
+    fn parses_verified_mat_det_qdet_and_rang_forms() {
+        use super::MatAnalysisOperation;
+
+        let source = "MAT DET x=a()\nMAT DET x=a(1,2),3\nMAT QDET x=b(0,0)\nMAT RANG y=a(2,1),4\n";
+        let mut sources = SourceMap::new();
+        let source_id = sources.add_source("mat-analysis.bas", source);
+        let program = parse(source_id, source).unwrap();
+
+        assert!(matches!(
+            &program.statements[0],
+            Statement::MatAnalysis {
+                operation: MatAnalysisOperation::Det,
+                destination,
+                matrix,
+                offsets: None,
+                order: None,
+                ..
+            } if destination == "x" && matrix == "a"
+        ));
+        assert!(matches!(
+            &program.statements[1],
+            Statement::MatAnalysis {
+                operation: MatAnalysisOperation::Det,
+                offsets: Some((1, 2)),
+                order: Some(3),
+                ..
+            }
+        ));
+        assert!(matches!(
+            &program.statements[2],
+            Statement::MatAnalysis {
+                operation: MatAnalysisOperation::QDet,
+                destination,
+                matrix,
+                offsets: Some((0, 0)),
+                order: None,
+                ..
+            } if destination == "x" && matrix == "b"
+        ));
+        assert!(matches!(
+            &program.statements[3],
+            Statement::MatAnalysis {
+                operation: MatAnalysisOperation::Rang,
+                destination,
+                offsets: Some((2, 1)),
+                order: Some(4),
+                ..
+            } if destination == "y"
+        ));
+    }
+
+    #[test]
+    fn rejects_malformed_matrix_analysis_selection() {
+        for source in [
+            "MAT DET x=a(1)\n",
+            "MAT QDET x=a(1,2,3)\n",
+            "MAT RANG x=a(),-1\n",
+        ] {
+            let mut sources = SourceMap::new();
+            let source_id = sources.add_source("invalid-mat-analysis.bas", source);
+            assert!(parse(source_id, source).is_err(), "accepted: {source:?}");
+        }
+    }
+
+    #[test]
     fn parses_verified_mat_mul_forms() {
         let source =
             "MAT MUL a()=b()*a()\nMAT MUL x=a()*b()\nMAT MUL y=a()*b()*a()\nMAT MUL a(),x\n";
