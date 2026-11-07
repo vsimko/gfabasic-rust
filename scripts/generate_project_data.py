@@ -14,23 +14,38 @@ TASK_CHECKBOX = re.compile(r"^\s*-\s+\[([ xX])\]", re.MULTILINE)
 
 
 def parse_roadmap_progress(markdown: str) -> list[dict]:
-    """Count checked roadmap tasks within each canonical delivery phase."""
+    """Extract canonical phase summaries, task progress, and issue links."""
     headings = list(PHASE_HEADING.finditer(markdown))
     phases = []
+    issue_link = re.compile(r"\\[([^\\]]+)\\]\\((https://github\\.com/vsimko/gfabasic-rust/issues/[^)]+)\\)")
     for index, heading in enumerate(headings):
         end = headings[index + 1].start() if index + 1 < len(headings) else len(markdown)
         next_section = re.search(r"^### ", markdown[heading.end():end], re.MULTILINE)
         if next_section:
             end = heading.end() + next_section.start()
-        tasks = TASK_CHECKBOX.findall(markdown[heading.end():end])
+        section = markdown[heading.end():end]
+        first_task = TASK_CHECKBOX.search(section)
+        description_text = section[:first_task.start()] if first_task else section
+        description = " ".join(line.strip() for line in description_text.splitlines() if line.strip())
+        task_text = section[first_task.start():] if first_task else ""
+        tasks = TASK_CHECKBOX.findall(task_text)
         completed = sum(mark.lower() == "x" for mark in tasks)
         total = len(tasks)
+        issue_links = []
+        seen_urls = set()
+        for label, url in issue_link.findall(task_text):
+            if url not in seen_urls:
+                issue_links.append({"label": label, "url": url})
+                seen_urls.add(url)
         phases.append({
             "number": int(heading.group(1)),
             "name": heading.group(2).strip(),
+            "description": description,
             "completed": completed,
             "total": total,
             "percent": round(completed * 100 / total) if total else 0,
+            "status": "complete" if total and completed == total else "in-progress" if completed else "planned",
+            "issue_links": issue_links,
         })
     return phases
 
