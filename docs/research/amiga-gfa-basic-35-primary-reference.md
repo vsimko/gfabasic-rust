@@ -55,3 +55,8 @@ A second scan, supplied as `GFA-Basic 3.0 + 3.5 Upd (Amiga).pdf` (487 PDF pages)
 - PDF pp. 479–485 contain the printed Chapter 14 pages 14-1–14-7; the end of Chapter 13 is on PDF pp. 450–477; the explicit editor update printed p. 1-25 is PDF p. 41. These page mappings are scan-specific; cite printed addendum page numbers in specifications.
 
 This scan is a separately supplied witness for the same 3.0-base-plus-3.5-addendum structure. It does **not** change the version boundary: the base manual is explicitly 3.0, and only the identified addendum/editor changes are explicitly marked 3.5. Its page 3 title and page 4 imprint were visually inspected. Selected addendum sections have been checked as recorded in issue #65; the full Chapter 13/14 page-image review is not complete. The `MAT INV` operand-direction conflict remains unresolved because the command summary and detailed example disagree. Treat the 1990 DATA BECKER book as a separate supplementary source, not as this manual.
+
+
+## Base-manual versus addendum boundary
+
+The base chapters (2–12) describe the manual's original 3.0 baseline. The 3.5-specific additions are identified separately in the addendum. A topic's presence in this PDF is therefore not, by itself, proof that its detailed behavior is unchanged or applicable in interpreter 3.5. See the [version-scoped 3.0 base-manual inventory](amiga-gfa-basic-3.0-base-inventory.md) and issue #298. The normative 3.5 catalogue must contain only rules explicitly confirmed for 3.5.
