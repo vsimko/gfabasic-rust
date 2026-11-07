@@ -211,14 +211,13 @@ def validate_registry(root: Path = ROOT) -> list[str]:
                 for version in availability.get("versions", [])
             }
             source_scope = evidence.get("source-scope")
-            if "3.5" in declared_versions and source_scope != "amiga-3.5-addendum":
+            if "3.5" in declared_versions and source_scope not in {
+                "amiga-3.5-addendum",
+                "runtime-observation",
+            }:
                 errors.append(
                     f"{path}: {declaration_id}: Amiga 3.5 declarations require "
-                    "source-scope = 'amiga-3.5-addendum'; base-manual 3.0 evidence alone is insufficient"
-                )
-            if source_scope == "base-manual-3.0" and "3.5" in declared_versions:
-                errors.append(
-                    f"{path}: {declaration_id}: 3.0 base-manual evidence cannot establish 3.5 availability"
+                    "3.5-addendum or runtime-observation evidence scope"
                 )
             for source_id in evidence.get("sources", []):
                 if source_id not in source_ids:
