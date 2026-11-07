@@ -103,8 +103,8 @@ normative for 3.5.
 Formatter unit tests cover canonical whitespace, all currently supported
 statement forms, identifier/intrinsic/literal spelling preservation,
 idempotence, semantic preservation, unsupported syntax rejection, and blank
-line policy. The two verified Amiga 3.5 combinatorics fixtures are checked by
-CI with `gfabasic fmt --check`.
+line policy. The verified Amiga 3.5 combinatorics and matrix fixtures are checked by CI
+with `gfabasic fmt --check`.
 
 As the parser gains verified grammar constructs, add independently authored
 golden fixtures and semantic/idempotence tests before enabling formatting for
