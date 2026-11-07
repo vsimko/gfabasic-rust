@@ -17,7 +17,7 @@ LLVM needs a target identity for code generation. Runtime capability reporting, 
 4. The initial target is \`x86_64-unknown-linux-gnu\`: Linux, x86-64, GNU ABI, ELF 64-bit.
 5. Keep the frontend and project-owned IR independent of the target triple, host pointer width, endianness, OS APIs, and ABI. Target-specific lowering and code generation occur after the platform-independent IR boundary.
 6. The target descriptor selects the matching runtime libraries and reports unsupported target capabilities. Unsupported operations must produce deterministic diagnostics.
-7. Cross-compilation and additional target triples are future capabilities. They must be added through target descriptors and backend/runtime implementations, not by embedding target assumptions in language semantics.
+7. Linux x86-64 is the sole product output target under [ADR 0011](0011-amiga-35-linux-sdl3-product-scope.md). Cross-compilation and additional target triples are out of scope unless the product decision is explicitly revised.
 
 ## Alternatives considered
 
@@ -30,8 +30,8 @@ LLVM needs a target identity for code generation. Runtime capability reporting, 
 - Target identity is interoperable with LLVM while runtime capability metadata remains project-owned.
 - Build configuration must distinguish host and target.
 - Runtime selection and capability diagnostics must consume the project-owned descriptor.
-- The initial target is precisely named, but no compiler/backend/runtime implementation is implied.
-- Additional targets require an explicit descriptor and tested runtime support.
+- The sole target is precisely named, but no compiler/backend/runtime implementation is implied.
+- Any future proposal for another target requires a new product-scope decision; this ADR does not commit the project to additional targets.
 
 ## References
 
