@@ -70,6 +70,7 @@ fn needs_space(previous: &TokenKind, current: &TokenKind) -> bool {
         | (TokenKind::Minus, _)
         | (_, TokenKind::Star)
         | (TokenKind::Star, _) => true,
+        (_, TokenKind::Hash) => true,
         (TokenKind::Comma, _) => true,
         (_, TokenKind::Comma)
         | (_, TokenKind::LeftParen)
