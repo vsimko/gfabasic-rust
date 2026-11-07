@@ -62,7 +62,9 @@ pub fn format_source(source_id: SourceId, source: &str) -> Result<String, Vec<Di
 
 fn needs_space(previous: &TokenKind, current: &TokenKind) -> bool {
     match (previous, current) {
-        (_, TokenKind::Equals) | (TokenKind::Equals, _) => true,
+        (_, TokenKind::Equals) | (TokenKind::Equals, _)
+        | (_, TokenKind::Plus) | (TokenKind::Plus, _)
+        | (_, TokenKind::Minus) | (TokenKind::Minus, _) => true,
         (TokenKind::Comma, _) => true,
         (_, TokenKind::Comma)
         | (_, TokenKind::LeftParen)
@@ -94,6 +96,7 @@ mod tests {
         MatBase(i64),
         MatTrans(String, Option<String>),
         MatNorm(String, i64),
+        MatArithmetic(String, Option<String>, String, bool),
     }
 
     fn meanings(program: &Program) -> Vec<Meaning> {
@@ -124,6 +127,18 @@ mod tests {
                     ..
                 } => Meaning::MatTrans(destination.clone(), source.clone()),
                 Statement::MatNorm { name, mode, .. } => Meaning::MatNorm(name.clone(), *mode),
+                Statement::MatArithmetic { operation, destination, left, right, .. } => {
+                    let (operand, is_scalar) = match right {
+                        crate::frontend::MatArithmeticOperand::Matrix(name) => (name.clone(), false),
+                        crate::frontend::MatArithmeticOperand::Scalar(name) => (name.clone(), true),
+                    };
+                    Meaning::MatArithmetic(
+                        destination.clone(),
+                        left.clone(),
+                        operand,
+                        is_scalar ^ matches!(operation, crate::frontend::MatArithmeticOperation::Sub),
+                    )
+                },
             })
             .collect()
     }
@@ -291,11 +306,29 @@ mod tests {
         let cases = [
             ("MAT NORM a(),0", "MAT NORM a(), 0\n"),
             ("MAT NORM a(),1", "MAT NORM a(), 1\n"),
+            ("MAT ADD a()=b()+a()", "MAT ADD a() = b() + a()\n"),
+            ("MAT SUB a()=b()-a()", "MAT SUB a() = b() - a()\n"),
+            ("MAT ADD a(),b()", "MAT ADD a(), b()\n"),
+            ("MAT SUB a(),x", "MAT SUB a(), x\n"),
         ];
 
         for (source, expected) in cases {
             assert_eq!(format(source), expected, "source: {source:?}");
         }
+    }
+
+    #[test]
+    fn mat_arithmetic_formatting_is_idempotent_and_semantics_preserving() {
+        let source = "MAT ADD a()=b()+a()\nMAT SUB a(),x\n";
+        let formatted = format(source);
+        assert_eq!(format(&formatted), formatted);
+        let mut before_sources = SourceMap::new();
+        let before_id = before_sources.add_source("before.bas", source);
+        let before = parse_document(before_id, source).unwrap();
+        let mut after_sources = SourceMap::new();
+        let after_id = after_sources.add_source("after.bas", formatted.as_str());
+        let after = parse_document(after_id, &formatted).unwrap();
+        assert_eq!(meanings(&before.program), meanings(&after.program));
     }
 
     #[test]
