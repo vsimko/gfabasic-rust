@@ -91,3 +91,19 @@ The OCR table of contents has visibly corrupted words and punctuation. Verify ea
 - The actual page images have not yet been checked for command signatures or OCR-sensitive syntax.
 - The book's internal 3.0/3.03/“up to 3.5” wording requires edition-history investigation.
 - No claim is made about Amiga 3.52 conformance or Linux runtime implementation.
+
+
+## Additional supplied scan and page-image verification (2026-11-07)
+
+A second scan of this same edition was supplied as `Das Grosse Buch zu GFA-Basic 3.5 Amiga.pdf`. Its PDF metadata reports 515 viewer pages; the bibliographic listing above reports 508 printed/book pages for ISBN 3-89011-399-0. Treat these as scan/page-count differences, not as evidence of a different edition, unless further bibliographic evidence appears.
+
+The supplied scan's page images were checked directly:
+
+- PDF page 3 is the title page, *Das große GFA-BASIC-Buch zum Amiga*, by Wolf-Gideon Bleek, Martin Hecht, and Uwe Litzkendorf, Data Becker.
+- PDF page 4 gives ©1990 Data Becker GmbH, “1. Auflage 1990”, and ISBN 3-89011-399-0.
+- PDF page 7 (foreword) explicitly says the book documents all commands and functions of Amiga GFA-BASIC **version 3.0**; it describes the GFA-BASIC compiler as newly released.
+- Printed page 13 (PDF page 13), section 1 “Zu diesem Buch”, explicitly describes approximately 360 commands/functions provided by the **GFA-V3.03 interpreter**.
+
+This page-image check confirms the front-matter version conflict already recorded above. The cover/advertising line “Bis Version 3.5 und Compiler 3.5” must not be used to reclassify the interpreter command reference as 3.5: the foreword and section 1 identify interpreter coverage as 3.0/V3.03. The compiler chapter is a separate product area and does not establish interpreter 3.5 language semantics.
+
+The supplied scan is password-restricted against copying according to its PDF permissions metadata, although page rendering and front-matter inspection were possible in the provided environment. It remains an external research artifact and must not be committed or redistributed. The scan's 515 PDF pages do not change the printed-page citations used in this index.
