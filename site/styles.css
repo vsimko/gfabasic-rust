@@ -120,3 +120,10 @@
 .api-detail-loading{color:var(--muted);font-size:11px}
 .api-entry-detail .api-syntax{white-space:pre-wrap}
 @media(max-width:700px){.api-function-list{padding-left:18px}.api-category>summary{padding-inline:10px}}
+
+
+/* Keyboard access: visible focus and a skip link to the main content. */
+:focus-visible{outline:2px solid var(--green);outline-offset:4px}
+.skip-link{position:fixed;z-index:100;top:10px;left:10px;padding:11px 15px;background:var(--green);color:#152016;font:600 12px var(--sans);text-decoration:none;border-radius:4px;transform:translateY(-160%)}
+.skip-link:focus{transform:translateY(0);outline:3px solid var(--ink);outline-offset:3px}
+#main-content:focus{outline:none}
