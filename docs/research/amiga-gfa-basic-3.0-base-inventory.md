@@ -512,3 +512,54 @@ The English base-manual scan also supports the following additional Exec entries
 - AllocSignal/FreeSignal and AllocTrap/FreeTrap are task-scoped resource pairs in the manual. Their pairing and ranges should be reflected in any wrapper; do not treat the returned integer as a generic application identifier.
 - Disable/Enable affects interrupt delivery, not merely task scheduling. It must not be exposed as an ordinary safe concurrency primitive without a platform-specific critical-section and restoration contract.
 - These declarations are sourced from Chapters 11 pages of the English manual labelled GFA-BASIC 3.0 Amiga. They are base-manual candidates only; no 3.5 support claim is made here.
+
+
+## Chapter 11 — Graphics-Library drawing, raster, and palette calls (printed pp. 11-30–11-49)
+
+Additional Graphics-Library entries extracted from the English GFA-BASIC 3.0 base manual:
+
+- **ClearEOL(rastport) (p. 11-30):** erases a text rectangle in the specified RastPort.
+- **ClearRectRegion(region, rectangle) (p. 11-30):** clears areas of a Region that lie inside a clipping Rectangle; returns TRUE/FALSE.
+- **ClearRegion(region) (p. 11-30):** clears all clipping rectangles belonging to a Region.
+- **ClipBlit(srcRastPort, srcX, srcY, destRastPort, destX, destY, sizeX, sizeY, minTerm) (pp. 11-30–11-31):** copies a rectangular RastPort bitmap area to another RastPort using the specified logical blitter operand.
+- **CopySBitMap(layer) (p. 11-31):** copies a Superbitmap into a Layer bitmap; the Layer must first be defined as a Superbitmap.
+- **CWait(clist, xbeam, ybeam) (p. 11-31):** adds a Copper instruction, waits for the video beam position, and performs the instruction.
+- **DisownBlitter() (p. 11-31):** releases the blitter for other tasks.
+- **DisposeRegion(region) (p. 11-32):** frees a Region and its associated Rectangle structures.
+- **DoCollision(rastport) (p. 11-32):** tests graphic elements for collisions.
+- **DrawGList(rastport, viewport) (p. 11-33):** draws sprites and Bobs in the current graphic-elements list and associates virtual-sprite Copper instructions with the ViewPort.
+- **Flood(rastport, mode, x, y) (p. 11-34):** fills an area using the current fill pattern and foreground/background colors. Mode 1 fills the area matching the start-point color; mode 0 fills pixels not matching the current AOlPen color (the source's spelling is retained).
+- **FreeColorMap(colormap) (p. 11-34), FreeCopList(coplist) and FreeCprList(cprlist) (p. 11-35):** release the corresponding ColorMap/CopList/CprList allocations.
+- **FreeGBuffers(animob, rastport, buf) (p. 11-35):** releases animation-object buffers previously allocated by GetGBuffers.
+- **FreeSprite(spritenr) (p. 11-35):** frees a hardware sprite for other tasks; sprite number 0–7.
+- **FreeVPortCopLists(viewport) (p. 11-35):** deallocates Copper-list memory associated with a ViewPort.
+- **GetColorMap(count) (p. 11-35):** allocates and initializes a ColorMap; returns its address. `count` is the number of color registers.
+- **GetGBuffers(animob, rastport, buffer) (p. 11-35):** allocates buffers for an AnimOb; returns TRUE/FALSE. The buffer argument selects double buffering when TRUE.
+- **GetRGB4(cmap, regnr) (p. 11-36):** returns a ColorMap color-table entry; register number 0–63.
+- **GetScreenData(buffer, size, type, screen) (p. 11-36):** copies all or part of a Screen structure into a caller buffer; returns TRUE/FALSE. Types are WBENCHSCREEN (1) or CUSTOMSCREEN (15); the screen argument is ignored for type 1.
+- **InitRastPort(rastport) (p. 11-39):** zeroes RastPort fields, with FgPen, AOlPen and LinePtn set to -1; JAM2 drawing mode and font depend on Topaz 80/60 resolution. No return value.
+- **InitTmpRas(tmpras, buffer, size) (p. 11-39):** initializes a chip-memory block for Area functions; the block must be allocated. No return value.
+- **InitView(view) and InitVPort(viewport) (p. 11-39):** initialize View/ViewPort structures with defaults or cleared fields; no return value.
+- **InstallClipRegion(layer, region) (p. 11-39):** installs a clipping Region in a Layer; returns the last Region address or 0.
+- **LoadRGB4(viewport, colors, count) (p. 11-40):** loads a color-register table into a ViewPort.
+- **LoadView(view) (p. 11-40):** makes the View's Copper instruction list the current display view.
+- **MakeVPort(view, viewport) (p. 11-40):** creates ViewPort data for a View; the entry notes the second RasInfo requirement when DUALPF is set.
+- **Move(rastport, x, y) (p. 11-41):** positions the RastPort drawing pen.
+- **RasSize(w, h) (p. 11-44):** returns the byte size of a raster bitplane for the given width and height.
+- **ReadPixel(rastport, x, y) (p. 11-44):** returns the color-register number at the specified pixel.
+- **RectFill(rastport, x1, y1, x2, y2) (p. 11-44):** fills a rectangle with the current fill pattern, drawing mode and colors.
+- **ScrollRaster(rastport, deltax, deltay, x, y, w, h) (p. 11-45):** scrolls a RastPort area; the manual describes x/y as the upper-left and w/h as lower-right coordinates.
+- **ScrollVPort(viewport, deltax, deltay) (p. 11-45):** scrolls a Screen by changing ViewPort coordinates relative to their previous values.
+- **SetAPen/SetBPen(rastport, nr) (p. 11-46):** set foreground/background color-register numbers.
+- **SetCollision(number, routine, geisinfo) (p. 11-47):** installs a user collision handler at function number 0–15, with routine and Geisinfo addresses.
+- **SetDrMd(rastport, mode), SetDrPt(rastport, data) (pp. 11-47–11-48):** set drawing mode and 16-bit line pattern.
+- **SetFont(rastport, textfont) (p. 11-48):** applies a TextFont; returns 0 if no error.
+- **SetOPen(rastport, register) and SetRast(rastport, register) (pp. 11-48–11-49):** set outline pen or fill the entire raster with a color register.
+- **SetRGB4(viewport, register, red, green, blue) and SetRGB4CM(colormap, register, red, green, blue) (p. 11-49):** store color values; register ranges are 0–31 and RGB intensity components 0–15.
+- **SetSoftStyle(rastport, new, mask) (p. 11-49):** changes font style bits selected by the mask; returns the mask value according to the entry.
+
+### Graphics API safety and source caveats
+
+- Most calls take addresses of mutable OS structures and/or caller-owned buffers. The manual does not define aliasing, allocation provenance, or lifetimes; a Rust interface must not infer these from BASIC's `iexp` type.
+- Copper, blitter, sprite, and display-view operations interact with shared hardware/display state. Keep them behind an explicit Amiga platform boundary rather than treating them as portable drawing functions.
+- The source uses inconsistent or OCR-sensitive names (for example AOlPen, CWait, FreeCprList); preserve source spellings in evidence notes and normalize only after checking page images.
