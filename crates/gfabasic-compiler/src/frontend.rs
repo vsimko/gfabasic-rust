@@ -108,6 +108,21 @@ pub enum Statement {
         scalar: String,
         span: SourceSpan,
     },
+    MatAnalysis {
+        operation: MatAnalysisOperation,
+        destination: String,
+        matrix: String,
+        offsets: Option<(i64, i64)>,
+        order: Option<i64>,
+        span: SourceSpan,
+    },
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum MatAnalysisOperation {
+    Det,
+    QDet,
+    Rang,
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -758,6 +773,48 @@ impl Parser {
         }
     }
 
+    fn parse_mat_analysis(
+        &mut self,
+        start: SourceSpan,
+        operation: MatAnalysisOperation,
+    ) -> Result<Statement, Box<Diagnostic>> {
+        let destination_token = self.advance();
+        let destination = match destination_token.kind {
+            TokenKind::Identifier(name) => name,
+            _ => return Err(self.syntax_error(
+                "expected a scalar destination in MAT matrix analysis",
+                destination_token.span,
+            )),
+        };
+        self.expect(TokenKind::Equals, "'=' in MAT matrix analysis")?;
+        let (matrix, _) = self.parse_matrix_name()?;
+        self.expect(TokenKind::LeftParen, "'(' after matrix name")?;
+        let offsets = if matches!(self.current().kind, TokenKind::RightParen) {
+            None
+        } else {
+            let row = self.parse_nonnegative_matrix_integer()?;
+            self.expect(TokenKind::Comma, "',' between matrix row and column offsets")?;
+            let column = self.parse_nonnegative_matrix_integer()?;
+            Some((row, column))
+        };
+        self.expect(TokenKind::RightParen, "')' after matrix selection")?;
+        let order = if matches!(self.current().kind, TokenKind::Comma) {
+            self.advance();
+            Some(self.parse_nonnegative_matrix_integer()?)
+        } else {
+            None
+        };
+        let end = self.tokens[self.cursor - 1].span;
+        Ok(Statement::MatAnalysis {
+            operation,
+            destination,
+            matrix,
+            offsets,
+            order,
+            span: SourceSpan::new(self.source_id, start.start, end.end),
+        })
+    }
+
     fn parse_mat_statement(&mut self, start: SourceSpan) -> Result<Statement, Box<Diagnostic>> {
         let operation = self.advance();
         let operation_name = match operation.kind {
@@ -784,6 +841,9 @@ impl Parser {
                     span: SourceSpan::new(self.source_id, start.start, end.end),
                 })
             }
+            "DET" => self.parse_mat_analysis(start, MatAnalysisOperation::Det),
+            "QDET" => self.parse_mat_analysis(start, MatAnalysisOperation::QDet),
+            "RANG" => self.parse_mat_analysis(start, MatAnalysisOperation::Rang),
             "MUL" => self.parse_mat_mul(start),
             "ADD" => self.parse_mat_arithmetic(start, MatArithmeticOperation::Add),
             "SUB" => self.parse_mat_arithmetic(start, MatArithmeticOperation::Sub),
