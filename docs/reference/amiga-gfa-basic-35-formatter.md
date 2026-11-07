@@ -14,7 +14,9 @@ It currently formats only the evidence-gated prototype grammar:
 
 The matrix parser slice intentionally supports only the matrix name `a`, two
 integer dimensions, and a non-negative integer scalar for `MAT SET`. It does
-not implement matrix evaluation or general array semantics.
+not implement matrix evaluation or general array semantics. The executable
+compiler and semantic-analysis stages explicitly reject these matrix AST nodes;
+this increment is for parsing and formatting only.
 
 This is not a general GFA BASIC formatter and does not establish full
 interpreter compatibility. Syntax outside the implemented parser subset is
