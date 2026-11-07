@@ -108,7 +108,7 @@ def heading_anchors(path: Path) -> set[str]:
         if not match:
             continue
         heading = match.group(1).strip().lower()
-        heading = re.sub(r"\\s*[-–—−]\\s*", "-", heading)
+        heading = re.sub(r"\s*[-–—−]\s*", "-", heading)
         heading = re.sub(r"<[^>]+>", "", heading)
         heading = re.sub(r"[^\w\- ]", "", heading)
         base = re.sub(r"\s+", "-", heading).strip("-")
