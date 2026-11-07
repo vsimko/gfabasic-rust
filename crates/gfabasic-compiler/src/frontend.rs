@@ -714,10 +714,12 @@ impl Parser {
                 let scalar_token = self.advance();
                 let scalar = match scalar_token.kind {
                     TokenKind::Identifier(name) => name,
-                    _ => return Err(self.syntax_error(
-                        "expected a scalar variable after MAT MUL destination comma",
-                        scalar_token.span,
-                    )),
+                    _ => {
+                        return Err(self.syntax_error(
+                            "expected a scalar variable after MAT MUL destination comma",
+                            scalar_token.span,
+                        ));
+                    }
                 };
                 let end = self.tokens[self.cursor - 1].span;
                 Ok(Statement::MatMulScale {
@@ -730,10 +732,12 @@ impl Parser {
             let destination_token = self.advance();
             let destination = match destination_token.kind {
                 TokenKind::Identifier(name) => name,
-                _ => return Err(self.syntax_error(
-                    "expected a scalar destination or matrix destination in MAT MUL",
-                    destination_token.span,
-                )),
+                _ => {
+                    return Err(self.syntax_error(
+                        "expected a scalar destination or matrix destination in MAT MUL",
+                        destination_token.span,
+                    ));
+                }
             };
             self.expect(TokenKind::Equals, "'=' in scalar-result MAT MUL")?;
             let (first, _) = self.parse_matrix_reference()?;
@@ -1088,7 +1092,8 @@ mod tests {
 
     #[test]
     fn parses_verified_mat_mul_forms() {
-        let source = "MAT MUL a()=b()*a()\nMAT MUL x=a()*b()\nMAT MUL y=a()*b()*a()\nMAT MUL a(),x\n";
+        let source =
+            "MAT MUL a()=b()*a()\nMAT MUL x=a()*b()\nMAT MUL y=a()*b()*a()\nMAT MUL a(),x\n";
         let mut sources = SourceMap::new();
         let source_id = sources.add_source("mat-mul.bas", source);
         let program = parse(source_id, source).unwrap();
