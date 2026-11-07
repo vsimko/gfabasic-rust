@@ -50,6 +50,7 @@ def main():
         "dashboard-overview",
         "dashboard-stat",
         "dashboard-roadmap-progress",
+        "dashboard-api-progress",
         "dashboard-progress-fill",
         "dashboard-component",
         "roadmap-phase",
@@ -58,7 +59,9 @@ def main():
     assert not missing_classes, f"Missing generated dashboard/roadmap HTML: {sorted(missing_classes)}"
 
     for text in ("Implementation dashboard", "Project maturity", "Product target",
-                 "Workspace", "Roadmap progress", "Implementation states"):
+                 "Workspace", "Implemented 3.5 addendum API", "0 / 31",
+                 "not the complete Amiga GFA BASIC 3.5 language API",
+                 "Roadmap progress", "Implementation states"):
         assert text in html, f"Missing expected dashboard content: {text}"
 
     assert "Loading generated repository data" not in html
@@ -67,7 +70,7 @@ def main():
     assert "data/project.json" not in html, "Dashboard should be rendered into static HTML"
 
     print(f"Preview HTML QA passed: {url}")
-    print("Verified dashboard cards, roadmap progress bars, implementation states, roadmap and API catalogue.")
+    print("Verified dashboard cards, scoped API and roadmap progress bars, implementation states, roadmap and API catalogue.")
 
 
 if __name__ == "__main__":
