@@ -749,9 +749,9 @@ mod tests {
         let source_id = sources.add_source("matrix.bas", source_text);
         let program = parse(source_id, source_text).unwrap();
 
-        assert!(matches!(program.statements[1], Statement::MatOne { ref name, .. } if name == "a"));
-        assert!(matches!(program.statements[2], Statement::MatSet { ref name, value: 7, .. } if name == "a"));
-        assert!(matches!(program.statements[3], Statement::MatClr { ref name, .. } if name == "a"));
+        assert!(matches!(&program.statements[1], Statement::MatOne { name, .. } if name == "a"));
+        assert!(matches!(&program.statements[2], Statement::MatSet { name, value: 7, .. } if name == "a"));
+        assert!(matches!(&program.statements[3], Statement::MatClr { name, .. } if name == "a"));
     }
 
     #[test]
