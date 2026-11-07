@@ -85,6 +85,25 @@ pub enum Statement {
         mode: i64,
         span: SourceSpan,
     },
+    MatArithmetic {
+        operation: MatArithmeticOperation,
+        destination: String,
+        left: Option<String>,
+        right: MatArithmeticOperand,
+        span: SourceSpan,
+    },
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum MatArithmeticOperation {
+    Add,
+    Sub,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum MatArithmeticOperand {
+    Matrix(String),
+    Scalar(String),
 }
 
 /// A significant token kind recognized by the current evidence-gated lexer.
@@ -102,6 +121,10 @@ pub enum TokenKind {
     RightParen,
     /// An argument or print-list separator.
     Comma,
+    /// Matrix addition operator.
+    Plus,
+    /// Matrix subtraction operator.
+    Minus,
     /// A source line boundary, preserving CR, LF, or CRLF in its span.
     Newline,
     /// A zero-width end-of-input marker.
@@ -222,6 +245,22 @@ pub fn lex_lossless(source_id: SourceId, source: &str) -> Result<LexedSource, Ve
                 offset += 1;
                 tokens.push(Token {
                     kind: TokenKind::Newline,
+                    span: SourceSpan::new(source_id, start, offset),
+                });
+            }
+            b'+' => {
+                let start = offset;
+                offset += 1;
+                tokens.push(Token {
+                    kind: TokenKind::Plus,
+                    span: SourceSpan::new(source_id, start, offset),
+                });
+            }
+            b'-' => {
+                let start = offset;
+                offset += 1;
+                tokens.push(Token {
+                    kind: TokenKind::Minus,
                     span: SourceSpan::new(source_id, start, offset),
                 });
             }
@@ -559,6 +598,62 @@ impl Parser {
         })
     }
 
+    fn parse_mat_arithmetic(
+        &mut self,
+        start: SourceSpan,
+        operation: MatArithmeticOperation,
+    ) -> Result<Statement, Box<Diagnostic>> {
+        let (destination, _) = self.parse_matrix_reference()?;
+        let (left, right) = if matches!(self.current().kind, TokenKind::Equals) {
+            self.advance();
+            let (left, _) = self.parse_matrix_reference()?;
+            let operator = self.advance();
+            let expected = match operation {
+                MatArithmeticOperation::Add => TokenKind::Plus,
+                MatArithmeticOperation::Sub => TokenKind::Minus,
+            };
+            if std::mem::discriminant(&operator.kind) != std::mem::discriminant(&expected) {
+                return Err(self.syntax_error(
+                    match operation {
+                        MatArithmeticOperation::Add => "expected '+' in MAT ADD expression",
+                        MatArithmeticOperation::Sub => "expected '-' in MAT SUB expression",
+                    },
+                    operator.span,
+                ));
+            }
+            let (right, _) = self.parse_matrix_reference()?;
+            (Some(left), MatArithmeticOperand::Matrix(right))
+        } else {
+            self.expect(TokenKind::Comma, "',' in in-place MAT arithmetic")?;
+            let token = self.current().clone();
+            match &token.kind {
+                TokenKind::Identifier(name) if matches!(name.as_str(), "a" | "b")
+                    && self.tokens.get(self.cursor + 1).is_some_and(|next| matches!(next.kind, TokenKind::LeftParen)) =>
+                {
+                    let (matrix, _) = self.parse_matrix_reference()?;
+                    (None, MatArithmeticOperand::Matrix(matrix))
+                }
+                TokenKind::Identifier(name) => {
+                    let scalar = name.clone();
+                    self.advance();
+                    (None, MatArithmeticOperand::Scalar(scalar))
+                }
+                _ => return Err(self.syntax_error(
+                    "expected a matrix reference or scalar variable after MAT arithmetic comma",
+                    token.span,
+                )),
+            }
+        };
+        let end = self.tokens[self.cursor - 1].span;
+        Ok(Statement::MatArithmetic {
+            operation,
+            destination,
+            left,
+            right,
+            span: SourceSpan::new(self.source_id, start.start, end.end),
+        })
+    }
+
     fn parse_mat_statement(&mut self, start: SourceSpan) -> Result<Statement, Box<Diagnostic>> {
         let operation = self.advance();
         let operation_name = match operation.kind {
@@ -585,6 +680,8 @@ impl Parser {
                     span: SourceSpan::new(self.source_id, start.start, end.end),
                 })
             }
+            "ADD" => self.parse_mat_arithmetic(start, MatArithmeticOperation::Add),
+            "SUB" => self.parse_mat_arithmetic(start, MatArithmeticOperation::Sub),
             "NORM" => {
                 let (name, matrix_span) = self.parse_matrix_reference()?;
                 self.expect(TokenKind::Comma, "',' before MAT NORM mode")?;
