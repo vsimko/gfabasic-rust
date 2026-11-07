@@ -103,9 +103,12 @@ mod tests {
                 Statement::AssignVariat { name, n, k, .. } => Meaning::Variat(name.clone(), *n, *k),
                 Statement::AssignCombin { name, n, k, .. } => Meaning::Combin(name.clone(), *n, *k),
                 Statement::PrintVariables { names, .. } => Meaning::Print(names.clone()),
-                Statement::DimMatrix { name, rows, columns, .. } => {
-                    Meaning::DimMatrix(name.clone(), *rows, *columns)
-                }
+                Statement::DimMatrix {
+                    name,
+                    rows,
+                    columns,
+                    ..
+                } => Meaning::DimMatrix(name.clone(), *rows, *columns),
                 Statement::MatOne { name, .. } => Meaning::MatOne(name.clone()),
                 Statement::MatSet { name, value, .. } => Meaning::MatSet(name.clone(), *value),
                 Statement::MatClr { name, .. } => Meaning::MatClr(name.clone()),
