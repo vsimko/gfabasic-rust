@@ -1,6 +1,6 @@
 # API registry and declaration source of truth
 
-- Status: **Accepted by [ADR 0006](adr/0006-api-registry.md).** The v1 JSON Schema, Python validator, validator unit tests, and documentation CI check are implemented. The registry currently contains one unsupported Atari ST TIMER research declaration. Runtime handler resolution is tracked separately in #115; no documentation generator is implemented yet.
+- Status: **Accepted by [ADR 0006](adr/0006-api-registry.md).** The v1 JSON Schema, Python validator, validator unit tests, and documentation CI check are implemented. The registry currently contains one unsupported Atari ST TIMER research declaration and an initial nine-entry Amiga GFA BASIC 3.5 addendum slice. The Amiga entries are book-documented, not implemented as complete runtime features, and have unknown Linux support. Runtime handler resolution is tracked separately in #115; no documentation generator is implemented yet.
 - Tracking: [issue #12](https://github.com/vsimko/gfabasic-rust/issues/12), [metadata validation #55 (completed)](https://github.com/vsimko/gfabasic-rust/issues/55).
 
 ## 1. Purpose and ownership
@@ -60,7 +60,7 @@ A platform API declaration is available only when its required profile is select
 | signature | Yes | Ordered parameters, optionality, passing mode, type, and return type |
 | semantics | Yes | Contract, side effects, errors, resource lifecycle, and edge cases |
 | evidence | Yes | Source ID, edition, page/section, evidence state, and notes |
-| implementation | Yes | Implementation state and stable handler ID when applicable |
+| implementation | Yes | Implementation state, stable handler ID when applicable, and scope notes that explain partial prototypes or limitations |
 | support | Yes | Per-target support and conformance state |
 | tests | Yes | Test IDs or explicit pending reason |
 | docs | Yes | Canonical reference path and section anchors |
@@ -162,7 +162,7 @@ The implemented validator in `scripts/validate_api_registry.py` and its unit tes
 
 The validator does not yet resolve handler IDs to Rust symbols or runtime registrations. It also does not generate reference pages or compare generated output with checked-in pages. The schema and validator do not yet enforce all semantic constraints described by the architecture, including argument ordering rules, full version-range semantics, complete dialect/profile identifier registries, or syntax collision analysis across all enabled profile combinations. Treat those as open work, not implemented guarantees.
 
-The current registry has one research-status Atari ST `TIMER` declaration. It is explicitly unsupported and has no implementation or conformance test. No declaration currently claims support.
+The current registry has one research-status Atari ST `TIMER` declaration and an initial nine-entry Amiga 3.5 addendum slice. The Amiga records are explicitly documented but have no complete implementation or registered executable conformance tests; their Linux support remains unknown. The combinatorics prototype is restricted to literal expressions and is recorded in implementation notes, not promoted to complete support. Existing matrix corpus entries are research-only. No declaration currently claims support.
 
 ## 9. Documentation generation
 
@@ -189,6 +189,6 @@ Acceptance of a registry record does not mean implementation is complete. The re
 
 ## 11. Implementation boundary
 
-ADR 0006 accepts TOML as the canonical registry format, the directory structure above, the stable ID convention, and the separated evidence/implementation/support/conformance model. The v1 JSON Schema, Python validator, validator tests, and CI invocation are now implemented. The registry contains one unsupported Atari ST TIMER declaration; no supported GFA BASIC declaration, runtime handler mapping, or documentation generator is implemented. The presence of a research record is not a compiler or runtime feature claim.
+ADR 0006 accepts TOML as the canonical registry format, the directory structure above, the stable ID convention, and the separated evidence/implementation/support/conformance model. The v1 JSON Schema, Python validator, validator tests, and CI invocation are implemented. The schema allows implementation notes so partial prototypes and known limitations can be represented without overstating support. The registry contains one unsupported Atari ST TIMER declaration and nine Amiga 3.5 research-backed declarations; no declaration currently claims supported target behavior, and no runtime handler mapping or documentation generator is implemented. The presence of a research record is not a compiler or runtime feature claim.
 
 Tracking: [issue #12](https://github.com/vsimko/gfabasic-rust/issues/12), [metadata validation #55 (completed)](https://github.com/vsimko/gfabasic-rust/issues/55), [runtime handler resolution #115](https://github.com/vsimko/gfabasic-rust/issues/115), [conformance corpus #42](https://github.com/vsimko/gfabasic-rust/issues/42).

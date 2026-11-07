@@ -318,6 +318,27 @@ anchors = []
         self.assertTrue(any("supported entry needs passing conformance tests" in error for error in errors))
 
 
+    def test_unknown_support_requires_an_explicit_pending_reason(self):
+        content = self.valid_declaration().replace(
+            'classification = "unsupported"', 'classification = "unknown"'
+        )
+        temp, root = self.make_root(content)
+        self.addCleanup(temp.cleanup)
+        errors = validate_registry(root)
+        self.assertTrue(
+            any("unknown support classification needs a pending reason" in error for error in errors)
+        )
+
+        registry = root / "api/registry/atari-st/time.toml"
+        registry.write_text(
+            registry.read_text().replace(
+                "tests = []",
+                'tests = []\npending-reason = "No implementation or conformance test exists."'
+            )
+        )
+        self.assertEqual(validate_registry(root), [])
+
+
     def test_duplicate_ids_fail(self):
         temp, root = self.make_root(self.valid_declaration())
         self.addCleanup(temp.cleanup)
