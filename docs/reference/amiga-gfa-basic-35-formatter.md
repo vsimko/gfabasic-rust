@@ -8,7 +8,13 @@ It currently formats only the evidence-gated prototype grammar:
 
 - assignments of `FACT(n)`, `VARIAT(n,k)`, and `COMBIN(n,k)` to `x`, `y`,
   or `z`;
-- `PRINT` statements containing the supported variables.
+- `PRINT` statements containing the supported variables;
+- the independently verified matrix fixture forms: `DIM a(rows,columns)`,
+  `MAT ONE a()`, `MAT SET a()=value`, `MAT CLR a()`, and `MAT PRINT a()`.
+
+The matrix parser slice intentionally supports only the matrix name `a`, two
+integer dimensions, and a non-negative integer scalar for `MAT SET`. It does
+not implement matrix evaluation or general array semantics.
 
 This is not a general GFA BASIC formatter and does not establish full
 interpreter compatibility. Syntax outside the implemented parser subset is
