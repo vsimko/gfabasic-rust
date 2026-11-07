@@ -3,7 +3,10 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from scripts.generate_project_data import generate, load_model, parse_roadmap_progress, parse_roadmap_blockers
+from scripts.generate_project_data import (
+    generate, load_model, parse_roadmap_progress, parse_roadmap_blockers,
+    markdown_heading_anchors, validate_evidence_reference,
+)
 
 ROOT = Path(__file__).resolve().parents[2]
 MODEL = ROOT / "validation/project.json"
@@ -82,6 +85,20 @@ class ProjectDataGeneratorTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "evidence source does not exist"):
                 load_model(path, ROOT)
 
+    def test_evidence_heading_anchors_are_validated(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            source = root / "notes.md"
+            source.write_text("# Overview\\n\\n## Current scope and limitations\\n", encoding="utf-8")
+            validate_evidence_reference("notes.md#current-scope-and-limitations", root)
+            with self.assertRaisesRegex(ValueError, "heading anchor does not exist"):
+                validate_evidence_reference("notes.md#missing-section", root)
+
+    def test_duplicate_heading_anchors_follow_github_suffixes(self):
+        self.assertEqual(markdown_heading_anchors("## Notes\\n## Notes\\n"), {"notes", "notes-1"})
+
+    def test_all_current_dashboard_evidence_references_resolve(self):
+        load_model(MODEL, ROOT)
 
 if __name__ == "__main__":
     unittest.main()

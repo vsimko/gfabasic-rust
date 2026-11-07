@@ -71,6 +71,38 @@ def parse_roadmap_blockers(markdown: str) -> list[dict]:
         blockers.append({"summary": summary, "issue_links": links})
     return blockers
 
+def markdown_heading_anchors(markdown: str) -> set[str]:
+    """Return GitHub-style heading anchors, including duplicate-heading suffixes."""
+    anchors = set()
+    counts: dict[str, int] = {}
+    for line in markdown.splitlines():
+        heading = re.match(r"^#{1,6}\\s+(.+?)\\s*#*\\s*$", line)
+        if not heading:
+            continue
+        title = re.sub(r"!?(\\[([^]]*)\\])\\([^)]*\\)", r"\\2", heading.group(1))
+        title = re.sub(r"<[^>]+>|[*_~]", "", title).replace(chr(96), "").lower()
+        slug = re.sub(r"[^\\w -]", "", title, flags=re.UNICODE).strip().replace(" ", "-")
+        if slug:
+            count = counts.get(slug, 0)
+            anchors.add(f"{slug}-{count}" if count else slug)
+            counts[slug] = count + 1
+    return anchors
+
+def validate_evidence_reference(reference: str, root: Path) -> None:
+    """Require evidence files and, for Markdown links, their named heading anchors."""
+    path_text, separator, fragment = reference.partition("#")
+    target = (root / path_text).resolve()
+    try:
+        target.relative_to(root.resolve())
+    except ValueError as exc:
+        raise ValueError(f"evidence path escapes repository: {reference}") from exc
+    if not target.is_file():
+        raise ValueError(f"evidence source does not exist: {reference}")
+    if separator and fragment and target.suffix.lower() == ".md":
+        if fragment not in markdown_heading_anchors(target.read_text(encoding="utf-8")):
+            raise ValueError(f"evidence heading anchor does not exist: {reference}")
+
+
 def validate_component(component: dict, identifiers: set[str]) -> list[str]:
     required = ("id", "name", "status", "rationale", "evidence", "related_issues")
     for key in required:
@@ -118,13 +150,7 @@ def load_model(path: Path, root: Path) -> dict:
     for item in evidence:
         if not isinstance(item, str) or not item.strip():
             raise ValueError("evidence references must be non-empty strings")
-        target = (root / item.split("#", 1)[0]).resolve()
-        try:
-            target.relative_to(root.resolve())
-        except ValueError as exc:
-            raise ValueError(f"evidence path escapes repository: {item}") from exc
-        if not target.is_file():
-            raise ValueError(f"evidence source does not exist: {item}")
+        validate_evidence_reference(item, root)
     return model
 
 
