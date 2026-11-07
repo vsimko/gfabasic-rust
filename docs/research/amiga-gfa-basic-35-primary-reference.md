@@ -42,7 +42,11 @@ These areas remain open under [issue #20](https://github.com/vsimko/gfabasic-rus
 
 ## Next work
 
-Extract Chapter 13 into a structured command/editor feature inventory with exact printed/PDF page references. Then map the German Amiga book's command reference and compiler chapter to the interpreter manual, marking source scope and any unresolved differences. Build conformance tests from exact source examples and separately record actual interpreter observations.
+- Continue declaration-level extraction of the still-unreviewed Chapter 4 and Chapter 6–7 command families, keeping each candidate tied to a printed page and the 3.0 source scope.
+- Reconcile base-manual candidates against explicit 3.5 addendum passages or controlled interpreter observations; do not treat absence from the addendum as evidence of removal.
+- Review the remaining Chapter 13/14 page images and resolve documented source conflicts before tightening affected registry signatures.
+- Map the German Amiga book's command reference and compiler chapter separately from interpreter behavior, preserving its stated 3.0 command-reference scope.
+- Build conformance tests from exact source examples and separately record actual interpreter observations.
 
 
 ### Independently supplied 3.0 manual with bound 3.5 update (selected pages page-image checked)
