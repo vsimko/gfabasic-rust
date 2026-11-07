@@ -2,6 +2,7 @@
 
 | Topic | Scope | Document | Tracking |
 |---|---|---|---|
+| Implementation dashboard | Static maintainer dashboard, source-of-truth boundaries, progress states, evidence metrics, generation and freshness | [IMPLEMENTATION-DASHBOARD.md](IMPLEMENTATION-DASHBOARD.md); [ADR 0014](adr/0014-implementation-dashboard.md) | [#304](https://github.com/vsimko/gfabasic-rust/issues/304)–[#310](https://github.com/vsimko/gfabasic-rust/issues/310) |
 | Repository consistency validation | Deterministic Python/JSON checks for drift between repository sources | [VALIDATION.md](VALIDATION.md); [ADR 0013](adr/0013-repository-consistency-validation.md) | architecture [#248](https://github.com/vsimko/gfabasic-rust/issues/248), validator [#249](https://github.com/vsimko/gfabasic-rust/issues/249), website generator [#250](https://github.com/vsimko/gfabasic-rust/issues/250) |
 | Website previews | Per-PR preview URLs and automatic cleanup after PR closure | [WEBSITE_PREVIEWS.md](WEBSITE_PREVIEWS.md) |
 | Topic | Scope | Document | Tracking |

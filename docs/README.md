@@ -25,6 +25,7 @@ This index is the entry point for project documentation. It separates user guida
 | User entry point | [`user/README.md`](user/README.md) | Users; current support status and future user-guide structure |
 | Contributor entry point | [`contributor/README.md`](contributor/README.md) | Contributors; current contribution constraints and contribution workflow |
 | Architecture | [`architecture/README.md`](architecture/README.md) | Implementers; system boundaries and architecture document index |
+| Implementation dashboard | [`architecture/IMPLEMENTATION-DASHBOARD.md`](architecture/IMPLEMENTATION-DASHBOARD.md); [ADR 0014](architecture/adr/0014-implementation-dashboard.md) | Maintainers; dashboard purpose, canonical data sources, status vocabulary, metric rules, generation, and maintenance |
 | Language tooling and editor integration | [`architecture/LANGUAGE-TOOLING.md`](architecture/LANGUAGE-TOOLING.md) | Implementers; shared LSP server, editor boundaries, diagnostics, formatting, and safe refactoring |
 | Frontend fuzzing strategy | [`architecture/FUZZING.md`](architecture/FUZZING.md) | Frontend implementers; planned fuzz targets, corpus separation, resource budgets, and CI policy |
 | Architecture decisions | [`architecture/adr/TEMPLATE.md`](architecture/adr/TEMPLATE.md) | Maintainers; structure for numbered, reviewable decisions |
@@ -33,7 +34,6 @@ This index is the entry point for project documentation. It separates user guida
 | Source provenance | [`reference-sources.md`](reference-sources.md) | Researchers and reviewers; source identity, access, licensing, and evidence |
 | Research procedures and corpora | [`research/README.md`](research/README.md) | Researchers; experiment procedures and analysis of historical material |
 | Reusable page templates | [`templates/README.md`](templates/README.md) | Documentation authors; starting structures for guides and reference pages |
-
 ## High-level documentation layout
 
 The following tree is a non-exhaustive navigation sketch. It shows the main directories and their entry points, not every document; use each directory's `README.md` and the documentation map above to find the detailed pages.
