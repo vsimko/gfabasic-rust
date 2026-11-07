@@ -9,7 +9,7 @@
 | candidate | 0 |
 | confirmed-in-3.5 | 13 |
 | contradicted | 0 |
-| unresolved | 11 |
+| unresolved | 41 |
 
 ## Unresolved and pending candidates
 
@@ -26,6 +26,36 @@
 | `amiga.base.os-libraries` | Amiga OS library calls | 3.0 base manual | 11-2–11-92 | Seven library families and many routines are inventoried; exact wrapper contracts, OCR details and 3.5 availability remain unverified. |
 | `amiga.base.program-control` | Program handling and control flow | 3.0 base manual | 7-2–7-55 | Selected conditionals, loops and branching forms are extracted; procedures, events, errors and editor commands remain to be reconciled. |
 | `amiga.base.variables-memory` | Variables, arrays and memory | 3.0 base manual | 2-2–2-44 | Chapter 2 contains multiple declarations; this family row is a tracking boundary, not a claim that every listed feature is absent from 3.5. |
+| `amiga.base10.sprite` | SPRITE | 3.0 base manual | 10-5–10-6 | Defines, frees, moves, enables and disables Amiga hardware sprites; source describes eight sprite numbers and shared registers. 3.5 availability is unresolved. |
+| `amiga.base10.stick-strig` | STICK / STRIG | 3.0 base manual | 10-7 | Queries joystick position and fire-button state; port 0 interaction with mouse/Intuition is noted. 3.5 availability is unresolved. |
+| `amiga.base5.form-input` | FORM INPUT / FORM INPUT AS | 3.0 base manual | 5-6 | Edits a string field of width 1–255; FORM INPUT AS starts from the current value. 3.5 availability is unresolved. |
+| `amiga.base5.inkey` | INKEY$ | 3.0 base manual | 5-2 | Reads keyboard input; special keys use a CSI sequence. 3.0 source fact only; 3.5 availability is unresolved. |
+| `amiga.base5.input` | INPUT | 3.0 base manual | 5-3–5-4 | Reads numeric/string variables with optional prompt; window behavior and numeric re-entry are described. 3.5 availability is unresolved. |
+| `amiga.base5.line-input` | LINE INPUT | 3.0 base manual | 5-5 | Reads string input while allowing commas in the entered text. 3.5 availability is unresolved. |
+| `amiga.base5.print-using` | PRINT USING | 3.0 base manual | 5-9 | Formatted screen output; exact placeholder grammar remains unreviewed. 3.5 availability is unresolved. |
+| `amiga.base5.print-write` | PRINT, PRINT AT, WRITE, LOCATE | 3.0 base manual | 5-7–5-8 | Screen output, cursor positioning and comma-separated WRITE format are distinguished. 3.5 availability is unresolved. |
+| `amiga.base6.file-input` | INPUT # / LINE INPUT # | 3.0 base manual | 6-15 | Reads channel data as values or lines; keep channel forms distinct from screen input. 3.5 availability is unresolved. |
+| `amiga.base6.file-output` | PRINT # / WRITE # | 3.0 base manual | 6-16 | Writes expressions through a data channel; PRINT # supports USING but not PRINT AT. 3.5 availability is unresolved. |
+| `amiga.base6.inp-out` | INP / OUT | 3.0 base manual | 6-13 | INP reads one byte and OUT writes byte values through an opened channel; documented channel range is 0–99. 3.5 availability is unresolved. |
+| `amiga.base6.input-string` | INPUT$ | 3.0 base manual | 6-14 | Reads a specified character count from keyboard or an optional file channel. 3.5 availability is unresolved. |
+| `amiga.base7.do-loop` | DO / LOOP variants | 3.0 base manual | 7-17–7-19 | Beginning- and end-tested WHILE/UNTIL forms are described; exact grammar remains page-sensitive. 3.5 availability is unresolved. |
+| `amiga.base7.elseif` | ELSE IF / ELSEIF | 3.0 base manual | 7-6–7-7 | Chained conditional branches; editor spelling varies and needs lexer/editor confirmation. 3.5 availability is unresolved. |
+| `amiga.base7.exit-if` | EXIT IF | 3.0 base manual | 7-20 | Exits the active loop when its Boolean condition is satisfied; allowed within IF and SELECT structures per the source. 3.5 availability is unresolved. |
+| `amiga.base7.for-next` | FOR / NEXT | 3.0 base manual | 7-13–7-14 | Loop forms include DOWNTO and editor replacement ENDFOR; OCR-sensitive termination details remain open. 3.5 availability is unresolved. |
+| `amiga.base7.if` | IF / ELSE / ENDIF | 3.0 base manual | 7-4–7-5 | Conditional execution; THEN is optional and any nonzero numeric expression is logically true. 3.5 availability is unresolved. |
+| `amiga.base7.ongosub` | ON GOSUB | 3.0 base manual | 7-8 | Selects a procedure by numeric index; out-of-range selection calls none. 3.5 availability is unresolved. |
+| `amiga.base7.repeat-until` | REPEAT / UNTIL | 3.0 base manual | 7-15 | Post-tested loop; body executes at least once. 3.5 availability is unresolved. |
+| `amiga.base7.select-case` | SELECT / CASE / DEFAULT / ENDSELECT | 3.0 base manual | 7-9–7-10 | Numeric or short-string selector; CASE supports values, ranges and lists. 3.5 availability is unresolved. |
+| `amiga.base7.while-wend` | WHILE / WEND | 3.0 base manual | 7-16 | Pre-tested loop; condition is checked before each body execution. 3.5 availability is unresolved. |
+| `amiga.base8.box` | BOX / PBOX | 3.0 base manual | 8-15 | Draws outlined or filled rectangles. 3.5 availability is unresolved. |
+| `amiga.base8.circle-ellipse` | CIRCLE / PCIRCLE / ELLIPSE / PELLIPSE | 3.0 base manual | 8-16 | Draws outlined or filled circles and ellipses. 3.5 availability is unresolved. |
+| `amiga.base8.clip` | CLIP | 3.0 base manual | 8-9 | Restricts graphics output to a rectangle; source explicitly excludes GET and PUT. 3.5 availability is unresolved. |
+| `amiga.base8.deffill` | DEFFILL | 3.0 base manual | 8-3–8-4 | Configures fill color/style/pattern for filled graphics operations; pattern-string limits are described. 3.5 availability is unresolved. |
+| `amiga.base8.plot-line-draw` | PLOT / LINE / DRAW | 3.0 base manual | 8-10–8-14 | Point, line and path drawing; DRAW inquiry forms and OCR-sensitive command strings need exact grammar review. 3.5 availability is unresolved. |
+| `amiga.base8.point` | POINT | 3.0 base manual | 8-18 | Returns the color value at a screen coordinate. 3.5 availability is unresolved. |
+| `amiga.base8.poly` | POLYLINE / POLYFILL | 3.0 base manual | 8-17 | Uses coordinate arrays; polygon endpoints are connected automatically. 3.5 availability is unresolved. |
+| `amiga.base8.setcolor` | SETCOLOR / COLOR | 3.0 base manual | 8-2 | Sets palette RGB components and selects foreground/background/fill-outline colors. 3.5 availability is unresolved. |
+| `amiga.base9.fileselect` | FILESELECT | 3.0 base manual | 9-37–9-38 | Displays a file selector and returns the selected name or an empty string on Cancel. 3.5 availability is unresolved. |
 
 ## Explicitly confirmed by the 3.5 addendum
 
