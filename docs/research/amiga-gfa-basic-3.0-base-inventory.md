@@ -223,3 +223,35 @@ The remaining Chapter 6 topics (open modes, file position/status, random-access 
 ## Extraction scope and next checks
 
 This pass adds page-level evidence for selected Chapter 5, 6, 9 and 10 topics. Chapters 7, 8 and 11 remain contents-level inventories. Chapter 11 should be split between BASIC-facing wrappers and direct Amiga OS library calls before registry modelling. For all chapters, the printed page references are locators into the supplied manual's 3.0 base text; none of these notes independently establishes 3.5 availability.
+
+
+## Chapter 7 — program handling: page-level notes
+
+These are 3.0 base-manual descriptions, not confirmed 3.5 grammar.
+
+- **IF / ELSE / ENDIF (printed pp. 7-4–7-5):** IF evaluates a Boolean expression; THEN is optional. The true branch runs between IF and ELSE/ENDIF; the false branch runs between ELSE and ENDIF. The text defines logical true as any nonzero numeric expression.
+- **ELSE IF / ELSEIF (pp. 7-6–7-7):** chained conditions form a single conditional structure. The first satisfied branch runs and control continues after ENDIF; ELSE is the fallback. The editor spelling shown in syntax and examples varies between ELSE IF and ELSEIF; preserve this as an alias/spelling question until lexer/editor evidence is checked.
+- **ON GOSUB (p. 7-8):** selects the indexed procedure from a list. Decimal places in the selector are ignored; an out-of-range selector calls no procedure. The listed procedures take no parameters, and execution resumes after the ON GOSUB statement.
+- **SELECT / CASE / DEFAULT / ENDSELECT (pp. 7-9–7-10):** branches on a numeric expression or a short string constant (maximum four characters). CASE supports a single value, an inclusive TO range, or a comma-separated list. DEFAULT is the fallback; OTHERWISE is documented as an editor synonym replaced by DEFAULT.
+- **FOR / NEXT (pp. 7-13–7-14):** the contents execute at least once according to the manual's description. DOWNTO is an alternative to a negative STEP; ENDFOR is an editor replacement for NEXT. The OCR text around termination/step edge cases needs page-image review before precise conformance tests.
+- **REPEAT / UNTIL (p. 7-15):** body executes at least once, then UNTIL is tested; a false condition repeats. ENDREPEAT is documented as an editor replacement for UNTIL.
+- **WHILE / WEND (p. 7-16):** precondition loop; condition is checked before each body execution. END WHILE is replaced with WEND.
+- **DO / LOOP variants (pp. 7-17–7-19):** bare DO/LOOP is endless. DO WHILE/DO UNTIL tests at the beginning; LOOP WHILE/LOOP UNTIL tests at the end. The manual describes nine combinations. ENDDO is an editor replacement for LOOP.
+- **EXIT IF (p. 7-20):** exits the active loop when its Boolean condition is satisfied. The manual explicitly notes that, unlike older versions, EXIT IF is also allowed inside IF/ENDIF and SELECT/ENDSELECT structures.
+- **Procedures/functions, error/event handlers and program lifecycle:** the chapter index identifies GOSUB/PROCEDURE, LOCAL, FUNCTION/DEFFN, ON BREAK, ON ERROR, ERROR/ERR, EVERY/AFTER, GOTO, PAUSE/DELAY, END/EDIT/STOP, LOAD/SAVE/CHAIN/RUN and system calls. Their detailed parameter and control-flow semantics still need extraction.
+
+## Chapter 8 — graphics: page-level notes
+
+- **SETCOLOR / COLOR (printed p. 8-2):** SETCOLOR sets RGB components in a screen color register (component intensity 0–15), or accepts a packed red*512 + green*16 + blue value. Each open screen has its own palette. COLOR selects foreground, background and fill-outline colors; background behavior is tied to GRAPHMODE 1 in the description.
+- **DEFFILL (pp. 8-3–8-4):** configures fill color, style and pattern for PBOX, PCIRCLE, PELLIPSE, POLYFILL and FILL. Styles are empty, filled, dotted and hatched. The alternate form accepts a bit-pattern string; the manual describes width/height constraints and a maximum string length of 257.
+- **CLIP (p. 8-9):** restricts graphics output to a rectangular region, with forms using origin plus width/height, opposite corners, or a window number. OFFSET adjusts the origin; CLIP OFF disables clipping. The manual explicitly excludes GET and PUT from this clipping behavior.
+- **PLOT / LINE / DRAW (pp. 8-10–8-14):** PLOT writes one point; LINE draws between two coordinate pairs; DRAW supports relative/absolute path-style movement commands. DRAW also exposes inquiry functions for current position, angle, scaling and pen state. OCR-sensitive DRAW command strings should be checked against page images before grammar work.
+- **BOX / PBOX (p. 8-15):** draw an outlined or filled rectangle from two opposite corners.
+- **CIRCLE / PCIRCLE / ELLIPSE / PELLIPSE (p. 8-16):** draw outlined or filled circles/ellipses using center coordinates and radii.
+- **POLYLINE / POLYFILL (p. 8-17):** use coordinate arrays for polygon corners; first and last points are automatically connected. Optional OFFSET shifts the coordinates; POLYFILL uses the DEFFILL pattern.
+- **POINT (p. 8-18):** returns the color value at a specified screen coordinate.
+- **Graphics API boundary:** the later RASTPORT section (p. 8-8) permits selecting a raw Amiga RastPort address and explicitly warns that incorrect setup can crash the system. This is a platform/unsafe memory boundary, not ordinary portable drawing syntax.
+
+## Chapter 11 — system routines: classification note
+
+Chapter 11 is a catalogue of direct Amiga operating-system library calls, not a portable BASIC language-core feature list. Its introduction (printed pp. 11-1–11-2) says the interpreter assists with syntax/indentation for system calls, but invalid calls are left to operating-system error handling (the manual names the GURU error). The chapter is organized by Exec, Graphics, Workbench, Intuition, DiskFont, Layers and DOS libraries (contents pp. 11-2–11-85). Individual routines should be modelled under an Amiga platform API profile, with library, call signature, pointer/structure requirements and OS-version constraints. The contents list alone is not enough to claim a stable or safe Rust wrapper.
