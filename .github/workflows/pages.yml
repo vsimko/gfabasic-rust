@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - "site/**"
+      - "api/**"
       - "scripts/**"
       - "validation/**"
       - "tests/tooling/**"
@@ -31,6 +32,7 @@ jobs:
           if [ -f scripts/generate_project_data.py ]; then
             python3 scripts/generate_project_data.py
           fi
+          python3 scripts/generate_api_catalogue.py
 
       - name: Validate repository consistency
         run: |
@@ -44,8 +46,11 @@ jobs:
           test -s site/index.html
           test -s site/styles.css
           test -s site/script.js
+          test -s site/data/api-catalogue.json
+          node --check site/script.js
           grep -q 'name="description"' site/index.html
           grep -q 'id="main-nav"' site/index.html
+          grep -q 'id="api-catalogue"' site/index.html
 
       - name: Publish production site while preserving active previews
         env:

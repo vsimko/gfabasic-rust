@@ -20,7 +20,7 @@
     </a>
     <button class="menu-toggle" aria-expanded="false" aria-controls="main-nav" aria-label="Toggle navigation"><span></span><span></span></button>
     <nav id="main-nav" class="main-nav" aria-label="Main navigation">
-      <a href="#project">Project</a><a href="#prototype">Prototype</a><a href="#tools">Tools</a><a href="#architecture">Architecture</a><a href="#roadmap">Roadmap</a>
+      <a href="#project">Project</a><a href="#prototype">Prototype</a><a href="#tools">Tools</a><a href="#architecture">Architecture</a><a href="#api-catalogue">API catalogue</a><a href="#roadmap">Roadmap</a>
       <a class="nav-github" href="https://github.com/vsimko/gfabasic-rust" target="_blank" rel="noreferrer">GitHub <span aria-hidden="true">↗</span></a>
     </nav>
   </header>
@@ -110,9 +110,24 @@
       </div>
     </section>
 
+    <section id="api-catalogue" class="api-catalogue-section section-wrap" aria-labelledby="api-catalogue-title">
+      <div class="section-heading"><div class="eyebrow">05 / API CATALOGUE</div><h2 id="api-catalogue-title">What the language defines.</h2></div>
+      <p class="section-intro api-catalogue-intro">A generated, source-linked inventory of GFA BASIC declarations. Evidence, implementation, Linux support and conformance are shown separately; unknown and disputed behavior stays visible.</p>
+      <div id="api-catalogue-summary" class="api-catalogue-summary" aria-live="polite"></div>
+      <div class="api-catalogue-controls">
+        <label>Search declarations<input id="api-search" type="search" placeholder="Name, syntax, or ID"></label>
+        <label>Domain<select id="api-domain-filter"><option value="">All domains</option><option value="language-core">Language core</option><option value="amiga">Amiga API</option><option value="atari-st">Atari ST research</option></select></label>
+        <label>Evidence<select id="api-evidence-filter"><option value="">All evidence states</option><option value="book-documented">Book documented</option><option value="primary-reference-cross-checked">Primary-reference cross-checked</option><option value="runtime-observed">Runtime observed</option><option value="inferred">Inferred</option><option value="disputed">Disputed</option><option value="unknown">Unknown</option></select></label>
+        <label>Implementation<select id="api-implementation-filter"><option value="">All implementation states</option><option value="implemented">Implemented</option><option value="partial">Partial</option><option value="not-implemented">Not implemented</option><option value="unsafe-disabled">Unsafe disabled</option></select></label>
+        <label>Linux support<select id="api-support-filter"><option value="">All support states</option><option value="supported">Supported</option><option value="partial">Partial</option><option value="adapter-backed">Adapter-backed</option><option value="emulated">Emulated</option><option value="unsupported">Unsupported</option><option value="unsafe-disabled">Unsafe disabled</option><option value="unknown">Unknown</option></select></label>
+      </div>
+      <p class="api-catalogue-note">Coverage counts are independent and have explicit denominators. There is no aggregate “percent implemented”. Select an entry to open its source-linked project documentation.</p>
+      <div id="api-catalogue-results" class="api-catalogue-results" aria-live="polite"><p>Loading the generated API catalogue…</p></div>
+    </section>
+
     <section id="roadmap" class="roadmap-section">
       <div class="section-wrap">
-        <div class="section-heading"><div class="eyebrow">05 / THE ROAD AHEAD</div><h2>Built in deliberate stages.</h2></div>
+        <div class="section-heading"><div class="eyebrow">06 / THE ROAD AHEAD</div><h2>Built in deliberate stages.</h2></div>
         <div class="roadmap-list">
           <article><span class="roadmap-state done">FOUNDATION</span><div><h3>Architecture & research baseline</h3><p>Workspace structure, source provenance, evidence policy, diagnostics and initial frontend prototype.</p></div><span class="roadmap-check">✓</span></article>
           <article><span class="roadmap-state active">IN PROGRESS</span><div><h3>Language specification & frontend</h3><p>Turn verified Amiga 3.5 behavior into a precise grammar, semantic rules and conformance corpus.</p></div><span class="roadmap-arrow">↗</span></article>
@@ -124,7 +139,7 @@
     </section>
 
     <section class="resources-section section-wrap">
-      <div class="section-heading"><div class="eyebrow">06 / EXPLORE</div><h2>Go a little deeper.</h2></div>
+      <div class="section-heading"><div class="eyebrow">07 / EXPLORE</div><h2>Go a little deeper.</h2></div>
       <div class="resource-grid">
         <a class="resource-card" href="https://github.com/vsimko/gfabasic-rust/tree/main/docs" target="_blank" rel="noreferrer"><span>DOCUMENTATION</span><h3>Research & design notes</h3><p>Architecture decisions, language research and contributor guidance.</p><b>↗</b></a>
         <a class="resource-card" href="https://github.com/vsimko/gfabasic-rust/blob/main/ROADMAP.md" target="_blank" rel="noreferrer"><span>PROJECT PLAN</span><h3>Roadmap</h3><p>Delivery phases, dependencies, current maturity and open questions.</p><b>↗</b></a>
