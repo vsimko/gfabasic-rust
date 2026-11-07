@@ -11,14 +11,17 @@ It currently formats only the evidence-gated prototype grammar:
 - `PRINT` statements containing the supported variables;
 - the independently verified matrix fixture forms: `DIM a(rows,columns)`,
   `MAT ONE a()`, `MAT SET a()=value`, `MAT CLR a()`, `MAT PRINT a()`,
-  `MAT BASE 0|1`, `MAT TRANS a()[=b()]`, and `MAT NORM a(),0|1`.
+  `MAT BASE 0|1`, `MAT TRANS a()[=b()]`, `MAT NORM a(),0|1`, `MAT ADD`/`MAT SUB`, and the documented
+  `MAT MUL` matrix-result, scalar-result, and in-place scalar forms.
 
 The matrix parser slice intentionally supports only matrix names `a` and `b`,
 two integer dimensions, and a non-negative integer scalar for `MAT SET`.
 `MAT BASE` accepts only the documented offsets 0 and 1. `MAT TRANS` supports
 the documented in-place and destination/source forms. `MAT NORM` accepts only
 row mode 0 and column mode 1. `MAT ADD` and `MAT SUB` accept the documented
-result expressions and in-place matrix/scalar forms. Their operators are
+result expressions and in-place matrix/scalar forms. `MAT MUL` accepts
+matrix-result products, scalar-result products with two or three matrix
+operands, and in-place scalar multiplication. Arithmetic operators are
 spaced on both sides by the formatter. The parser still limits matrix names
 to `a` and `b`; scalar operands retain their source identifier spelling.
 It does not implement
