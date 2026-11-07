@@ -73,6 +73,7 @@
         ]
       },
       "evidence": {
+        "source-scope": "amiga-3.5-addendum",
         "status": "book-documented",
         "sources": [
           "AM-INTERPRETER-35"
@@ -135,6 +136,7 @@
         "side-effects": []
       },
       "evidence": {
+        "source-scope": "amiga-3.5-addendum",
         "status": "book-documented",
         "sources": [
           "AM-INTERPRETER-35"
@@ -206,6 +208,7 @@
         "errors": []
       },
       "evidence": {
+        "source-scope": "amiga-3.5-addendum",
         "status": "book-documented",
         "sources": [
           "AM-INTERPRETER-35"
@@ -282,6 +285,7 @@
         "errors": []
       },
       "evidence": {
+        "source-scope": "amiga-3.5-addendum",
         "status": "book-documented",
         "sources": [
           "AM-INTERPRETER-35"
@@ -419,6 +423,7 @@
         "side-effects": []
       },
       "evidence": {
+        "source-scope": "amiga-3.5-addendum",
         "status": "book-documented",
         "sources": [
           "AM-INTERPRETER-35"
@@ -491,6 +496,7 @@
         "side-effects": []
       },
       "evidence": {
+        "source-scope": "amiga-3.5-addendum",
         "status": "book-documented",
         "sources": [
           "AM-INTERPRETER-35"
@@ -565,6 +571,7 @@
         "errors": []
       },
       "evidence": {
+        "source-scope": "amiga-3.5-addendum",
         "status": "book-documented",
         "sources": [
           "AM-INTERPRETER-35"
@@ -636,6 +643,7 @@
         "errors": []
       },
       "evidence": {
+        "source-scope": "amiga-3.5-addendum",
         "status": "book-documented",
         "sources": [
           "AM-INTERPRETER-35"
@@ -713,6 +721,7 @@
         "errors": []
       },
       "evidence": {
+        "source-scope": "amiga-3.5-addendum",
         "status": "book-documented",
         "sources": [
           "AM-INTERPRETER-35"
@@ -785,6 +794,7 @@
         "errors": []
       },
       "evidence": {
+        "source-scope": "amiga-3.5-addendum",
         "status": "book-documented",
         "sources": [
           "AM-INTERPRETER-35"
@@ -862,6 +872,7 @@
         "errors": []
       },
       "evidence": {
+        "source-scope": "amiga-3.5-addendum",
         "status": "book-documented",
         "sources": [
           "AM-INTERPRETER-35"
@@ -940,6 +951,7 @@
         "errors": []
       },
       "evidence": {
+        "source-scope": "amiga-3.5-addendum",
         "status": "book-documented",
         "sources": [
           "AM-INTERPRETER-35"
@@ -1014,6 +1026,7 @@
         "side-effects": []
       },
       "evidence": {
+        "source-scope": "amiga-3.5-addendum",
         "status": "book-documented",
         "sources": [
           "AM-INTERPRETER-35"
@@ -1140,6 +1153,7 @@
         "errors": []
       },
       "evidence": {
+        "source-scope": "amiga-3.5-addendum",
         "status": "book-documented",
         "sources": [
           "AM-INTERPRETER-35"
@@ -1327,6 +1341,7 @@
         "errors": []
       },
       "evidence": {
+        "source-scope": "amiga-3.5-addendum",
         "status": "book-documented",
         "sources": [
           "AM-INTERPRETER-35"
@@ -1421,6 +1436,7 @@
         "errors": []
       },
       "evidence": {
+        "source-scope": "amiga-3.5-addendum",
         "status": "book-documented",
         "sources": [
           "AM-INTERPRETER-35"
@@ -1497,6 +1513,7 @@
         "errors": []
       },
       "evidence": {
+        "source-scope": "amiga-3.5-addendum",
         "status": "book-documented",
         "sources": [
           "AM-INTERPRETER-35"
@@ -1595,6 +1612,7 @@
         "errors": []
       },
       "evidence": {
+        "source-scope": "amiga-3.5-addendum",
         "status": "disputed",
         "sources": [
           "AM-INTERPRETER-35",
@@ -1761,6 +1779,7 @@
         "errors": []
       },
       "evidence": {
+        "source-scope": "amiga-3.5-addendum",
         "status": "book-documented",
         "sources": [
           "AM-INTERPRETER-35"
@@ -1848,6 +1867,7 @@
         "errors": []
       },
       "evidence": {
+        "source-scope": "amiga-3.5-addendum",
         "status": "book-documented",
         "sources": [
           "AM-INTERPRETER-35"
@@ -1941,6 +1961,7 @@
         "errors": []
       },
       "evidence": {
+        "source-scope": "amiga-3.5-addendum",
         "status": "book-documented",
         "sources": [
           "AM-INTERPRETER-35"
@@ -2033,6 +2054,7 @@
         "errors": []
       },
       "evidence": {
+        "source-scope": "amiga-3.5-addendum",
         "status": "book-documented",
         "sources": [
           "AM-INTERPRETER-35"
@@ -2104,6 +2126,7 @@
         "errors": []
       },
       "evidence": {
+        "source-scope": "amiga-3.5-addendum",
         "status": "book-documented",
         "sources": [
           "AM-INTERPRETER-35"
@@ -2227,6 +2250,7 @@
         "errors": []
       },
       "evidence": {
+        "source-scope": "amiga-3.5-addendum",
         "status": "book-documented",
         "sources": [
           "AM-INTERPRETER-35"
@@ -2334,6 +2358,7 @@
         "errors": []
       },
       "evidence": {
+        "source-scope": "amiga-3.5-addendum",
         "status": "book-documented",
         "sources": [
           "AM-INTERPRETER-35"
@@ -2400,6 +2425,7 @@
         "errors": []
       },
       "evidence": {
+        "source-scope": "amiga-3.5-addendum",
         "status": "book-documented",
         "sources": [
           "AM-INTERPRETER-35"
@@ -2462,6 +2488,7 @@
         "side-effects": []
       },
       "evidence": {
+        "source-scope": "amiga-3.5-addendum",
         "status": "book-documented",
         "sources": [
           "AM-INTERPRETER-35"
@@ -2533,6 +2560,7 @@
         "errors": []
       },
       "evidence": {
+        "source-scope": "amiga-3.5-addendum",
         "status": "book-documented",
         "sources": [
           "AM-INTERPRETER-35"
