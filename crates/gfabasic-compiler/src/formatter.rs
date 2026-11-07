@@ -428,7 +428,6 @@ mod tests {
             ("MAT READ a()", "MAT READ a()\n"),
             ("MAT INPUT #1,a()", "MAT INPUT #1, a()\n"),
             ("DIM a(5)", "DIM a(5)\n"),
-            ("DIM a(5)", "DIM a(5)\n"),
             ("MAT PRINT a()", "MAT PRINT a()\n"),
             ("MAT PRINT #1,a()", "MAT PRINT #1, a()\n"),
             ("MAT PRINT a(),7,3", "MAT PRINT a(), 7, 3\n"),
