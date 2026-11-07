@@ -154,6 +154,36 @@ mod tests {
     }
 
     #[test]
+    fn verified_amiga_35_fixtures_are_idempotent_and_semantics_preserving() {
+        let fixtures = [
+            include_str!("../../../tests/corpus/amiga/3.5/combinatorics/fact-zero.bas"),
+            include_str!("../../../tests/corpus/amiga/3.5/combinatorics/three-intrinsics.bas"),
+        ];
+
+        for source in fixtures {
+            let formatted = format(source);
+            assert_eq!(
+                format(&formatted),
+                formatted,
+                "verified fixture is not idempotent: {source:?}"
+            );
+
+            let mut before_sources = SourceMap::new();
+            let before_id = before_sources.add_source("fixture-before.bas", source);
+            let before = parse_document(before_id, source).unwrap();
+            let mut after_sources = SourceMap::new();
+            let after_id = after_sources.add_source("fixture-after.bas", formatted.as_str());
+            let after = parse_document(after_id, &formatted).unwrap();
+
+            assert_eq!(
+                meanings(&before.program),
+                meanings(&after.program),
+                "formatting changed verified fixture meaning: {source:?}"
+            );
+        }
+    }
+
+    #[test]
     fn formatting_preserves_parsed_program_meaning() {
         let cases = [
             "x=FACT(2)\n",
