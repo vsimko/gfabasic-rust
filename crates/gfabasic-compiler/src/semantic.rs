@@ -125,6 +125,15 @@ pub fn resolve_prototype_symbols(
                     declaration,
                 });
             }
+            Statement::DimMatrix { span, .. }
+            | Statement::MatOne { span, .. }
+            | Statement::MatSet { span, .. }
+            | Statement::MatClr { span, .. }
+            | Statement::MatPrint { span, .. } => errors.push(SemanticError {
+                code: "GFA-SEM-0003".to_owned(),
+                message: "matrix syntax is parsed for formatting but matrix semantic analysis is not implemented".to_owned(),
+                span: *span,
+            }),
             Statement::PrintVariables { names, span } => {
                 let identifiers: Vec<_> = document
                     .syntax
