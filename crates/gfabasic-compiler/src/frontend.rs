@@ -1269,6 +1269,37 @@ mod tests {
     }
 
     #[test]
+    fn parses_verified_mat_read_and_input_forms() {
+        let source = "MAT READ a()\nMAT INPUT #1,b()\n";
+        let mut sources = SourceMap::new();
+        let source_id = sources.add_source("mat-read-input.bas", source);
+        let program = parse(source_id, source).unwrap();
+
+        assert!(matches!(
+            &program.statements[0],
+            Statement::MatRead { matrix, .. } if matrix == "a"
+        ));
+        assert!(matches!(
+            &program.statements[1],
+            Statement::MatInput { channel: 1, matrix, .. } if matrix == "b"
+        ));
+    }
+
+    #[test]
+    fn rejects_malformed_mat_input_channel_and_target() {
+        for source in [
+            "MAT INPUT a()\n",
+            "MAT INPUT #1\n",
+            "MAT INPUT #x,a()\n",
+            "MAT INPUT #1,7\n",
+        ] {
+            let mut sources = SourceMap::new();
+            let source_id = sources.add_source("invalid-mat-input.bas", source);
+            assert!(parse(source_id, source).is_err(), "accepted: {source:?}");
+        }
+    }
+
+    #[test]
     fn parses_verified_mat_cpy_and_xcpy_forms() {
         use super::MatCopyOperation;
 
