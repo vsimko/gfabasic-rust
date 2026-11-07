@@ -39,6 +39,14 @@ jobs:
           test -s site/data/api-catalogue.json
           test -d site/data/api-catalogue-details
           python3 scripts/generate_api_catalogue.py --check
+          python3 -m unittest scripts.tests.test_generate_project_dashboard
+          grep -q 'Implementation dashboard' site/index.html
+          grep -q 'Project maturity' site/index.html
+          grep -q 'Roadmap progress' site/index.html
+          grep -q 'Implementation states' site/index.html
+          grep -q 'dashboard-progress-fill' site/index.html
+          ! grep -q 'Loading generated repository data' site/index.html
+          ! grep -q 'fetch("data/project.json")' site/script.js
           node --check site/script.js
           grep -q 'id="api-catalogue"' site/index.html
           grep -q 'class="dashboard-roadmap-progress"' site/index.html
