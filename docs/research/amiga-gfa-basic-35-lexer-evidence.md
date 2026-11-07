@@ -223,3 +223,19 @@ The 3.5 addendum review continues to support only the exact special spellings _D
 The narrow special-name tests remain the only positive underscore-prefix contract: accept exact _DATA and each _0…_9 spelling, preserve original bytes/spans, and tokenize _DATA= as identifier plus assignment. Negative boundary cases must reject _foo, _10, _DATA2, and _data as a whole (never accept a valid prefix and leave a suffix). These are exact-name boundary tests only. Do not add broad positive tests for identifiers, comments, strings, numeric prefixes, or operators until a 3.5 source passage or a reproducible 3.5 interpreter observation supports each case. Existing FACT/PRINT prototype tests remain scoped to their cited addendum examples and are not a general grammar conformance suite.
 
 This audit adds no newly verified general lexical rule and therefore intentionally makes no production lexer behavior change.
+
+
+## 9. Full Chapter 13 text sweep (2026-11-07)
+
+The complete OCR text of the supplied interpreter manual's Chapter 13 (the explicitly versioned 3.5 addendum, printed pp. 13-1 onward) was extracted and searched, rather than sampling only the last four pages. This is a text-level sweep; OCR-derived spellings below are discovery evidence and should be checked against page images before becoming exact-token regression fixtures.
+
+The sweep adds one useful qualification to the earlier abbreviation assessment:
+
+- **Amiga GFA BASIC 3.5 explicitly documents command abbreviations.** Printed p. 13-1 gives `MAT BASE 0` / `MAT BASE 1` and the abbreviation `m b 0/m b 1`. Printed pp. 13-2–13-3 give abbreviations for `MAT CLR`, `MAT SET`, `MAT ONE`, `MAT READ`, `MAT PRINT`, and `MAT INPUT`; later matrix-operation entries also document abbreviations for `MAT CPY`, `MAT XCPY`, and `MAT TRANS`. Therefore it is no longer accurate to describe all command abbreviations as evidenced only by the 3.0 editor appendix.
+- These are **specific command abbreviations in 3.5 documentation**, not proof that the editor's complete 3.0 abbreviation table applies to 3.5 source files, nor proof of abbreviation matching, case folding, token boundaries, or ambiguity resolution. Keep generic abbreviation support unimplemented until those details are established.
+- The chapter contains many 3.5 command signatures and examples using matrix names, parentheses, commas, brackets, assignment, numeric arguments, and command names. They are syntax examples for the documented matrix commands; they do not independently define the general identifier, literal, punctuation, or operator grammar.
+- The chapter's final pages also contain the already inventoried `_DATA` and `_0`…`_9` special names. No additional general lexical contract for identifiers, comments, strings, numeric literal prefixes, source encoding, or line endings was found in the OCR sweep.
+
+**Evidence matrix correction:** command abbreviations now have a narrow verified 3.5 subset (the explicit MAT abbreviations above), while the full abbreviation mechanism and reserved-word policy remain unresolved. This does not justify enabling abbreviations in the production lexer: abbreviation expansion is likely a command/parser/editor concern and needs a verified source-file rule.
+
+The OCR extraction is not a substitute for page-image inspection. Do not use OCR-normalized punctuation or damaged examples (including apparent decimal/comma substitutions) as lexical fixtures without checking the corresponding printed page image.
