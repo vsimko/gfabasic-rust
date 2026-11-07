@@ -15,7 +15,7 @@ It currently formats only the evidence-gated prototype grammar:
   `MAT MUL` matrix-result, scalar-result, and in-place scalar forms.
 
 The matrix parser slice intentionally supports only matrix names `a` and `b`,
-two integer dimensions, and a non-negative integer scalar for `MAT SET`.
+one or two integer dimensions, and a non-negative integer scalar for `MAT SET`.
 `MAT BASE` accepts only the documented offsets 0 and 1. `MAT TRANS` supports
 the documented in-place and destination/source forms. `MAT NORM` accepts only
 row mode 0 and column mode 1. `MAT ADD` and `MAT SUB` accept the documented

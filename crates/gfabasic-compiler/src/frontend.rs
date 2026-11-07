@@ -51,7 +51,7 @@ pub enum Statement {
     DimMatrix {
         name: String,
         rows: i64,
-        columns: i64,
+        columns: Option<i64>,
         span: SourceSpan,
     },
     MatOne {
@@ -664,8 +664,12 @@ impl Parser {
         let (name, _) = self.parse_matrix_name()?;
         self.expect(TokenKind::LeftParen, "'(' after matrix name")?;
         let rows = self.parse_nonnegative_matrix_integer()?;
-        self.expect(TokenKind::Comma, "',' between matrix dimensions")?;
-        let columns = self.parse_nonnegative_matrix_integer()?;
+        let columns = if matches!(self.current().kind, TokenKind::Comma) {
+            self.advance();
+            Some(self.parse_nonnegative_matrix_integer()?)
+        } else {
+            None
+        };
         let end = self
             .expect(TokenKind::RightParen, "')' after matrix dimensions")?
             .span;
@@ -1202,6 +1206,33 @@ mod tests {
     }
 
     #[test]
+    fn parses_one_and_two_dimensional_matrix_declarations() {
+        let source = "DIM a(5)\nDIM b(1,5)\n";
+        let mut sources = SourceMap::new();
+        let source_id = sources.add_source("dim-vectors.bas", source);
+        let program = parse(source_id, source).unwrap();
+
+        assert!(matches!(
+            &program.statements[0],
+            Statement::DimMatrix {
+                name,
+                rows: 5,
+                columns: None,
+                ..
+            } if name == "a"
+        ));
+        assert!(matches!(
+            &program.statements[1],
+            Statement::DimMatrix {
+                name,
+                rows: 1,
+                columns: Some(5),
+                ..
+            } if name == "b"
+        ));
+    }
+
+    #[test]
     fn parses_verified_amiga_35_matrix_fixtures() {
         let fixtures = [
             include_str!("../../../tests/corpus/amiga/3.5/matrix/mat-one-identity.bas"),
@@ -1216,7 +1247,7 @@ mod tests {
                 .expect("verified Amiga 3.5 matrix fixture should parse");
             assert!(matches!(
                 program.statements.first(),
-                Some(Statement::DimMatrix { name, rows: 3, columns: 3, .. }) if name == "a"
+                Some(Statement::DimMatrix { name, rows: 3, columns: Some(3), .. }) if name == "a"
             ));
             assert!(matches!(
                 program.statements.last(),
@@ -1657,7 +1688,6 @@ mod tests {
     #[test]
     fn rejects_malformed_matrix_statement_shapes() {
         for source_text in [
-            "DIM a(3)\n",
             "MAT ONE a(3)\n",
             "MAT SET a()\n",
             "MAT SET a()=7,8\n",
@@ -1665,10 +1695,17 @@ mod tests {
         ] {
             let mut sources = SourceMap::new();
             let source_id = sources.add_source("malformed-matrix.bas", source_text);
-            assert!(
-                parse(source_id, source_text).is_err(),
-                "accepted: {source_text:?}"
-            );
+            if source_text.starts_with("DIM ") {
+                assert!(
+                    parse(source_id, source_text).is_ok(),
+                    "verified vector declaration was rejected: {source_text:?}"
+                );
+            } else {
+                assert!(
+                    parse(source_id, source_text).is_err(),
+                    "accepted malformed matrix statement: {source_text:?}"
+                );
+            }
         }
     }
 
