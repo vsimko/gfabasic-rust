@@ -347,6 +347,8 @@ anchors = []
     def test_unknown_support_requires_an_explicit_pending_reason(self):
         content = self.valid_declaration().replace(
             'classification = "unsupported"', 'classification = "unknown"'
+        ).replace(
+            'pending-reason = "No implementation or conformance test exists."\\n', ""
         )
         temp, root = self.make_root(content)
         self.addCleanup(temp.cleanup)
