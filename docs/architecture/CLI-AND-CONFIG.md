@@ -51,21 +51,21 @@ Initial fields:
 - \`schema-version\`: required configuration schema version.
 - \`project.name\`: optional human-readable project name.
 - \`project.entry\`: source entry point, relative to the project root.
-- \`source.dialect\` and \`source.version\`: required explicit source dialect identity.
-- \`api.profiles\`: optional list of API profile identifiers; the default is an empty list.
-- \`target.triple\`: optional LLVM target triple; the accepted initial default is \`x86_64-unknown-linux-gnu\`.
+- source.dialect and source.version: fixed to the Amiga GFA BASIC interpreter 3.5 product identity; alternate values are rejected.
+- api.profiles: fixed to the Amiga API profile; alternate or additional profiles are rejected.
+- target.triple: fixed to x86_64-unknown-linux-gnu; alternate target triples are rejected.
 - \`build.output-dir\`: output directory, relative to the project root; default \`build\`.
 - \`build.artifact-name\`: optional output basename; default is derived from the entry-point filename.
 - \`build.emit\`: requested artifact kinds; default \`["executable"]\`.
 
-The example is a policy-level schema, not an implemented parser or frozen serialization library contract. The exact TOML field types and schema validator belong to the implementation work under #12 and #55.
+The example is a policy-level schema, not an implemented parser or frozen serialization library contract. The exact TOML field types and schema validator belong to the implementation work under #12 and #55. The schema must validate the fixed Amiga 3.5 / Amiga API / Linux x86-64 product combination rather than expose alternate product targets.
 
 ## Project discovery and paths
 
 1. \`--project PATH\` selects the project file explicitly and disables automatic discovery.
 2. Otherwise, start from the source file's parent directory when SOURCE is supplied, or the current working directory when it is omitted.
 3. Search that directory and its parents for the nearest \`gfabasic.toml\`; stop at the filesystem root.
-4. If no project file is found, use single-file mode. The source dialect and version must then be supplied explicitly on the CLI.
+4. If no project file is found, use single-file mode with the fixed Amiga GFA BASIC interpreter 3.5 product identity.
 5. Resolve project-relative source and output paths against the directory containing \`gfabasic.toml\`, not the process working directory.
 6. A missing, unreadable, malformed, or unsupported-version project file is an actionable configuration error.
 
@@ -78,11 +78,11 @@ Initial options:
 | Option | Meaning |
 |---|---|
 | \`--project PATH\` | Use the specified project file; no upward discovery |
-| \`--dialect ID\` | Override source dialect identifier |
-| \`--dialect-version VERSION\` | Override source dialect version |
-| \`--api-profile ID\` | Add an API profile; repeatable |
-| \`--no-api-profiles\` | Clear profiles from the project file |
-| \`--target TRIPLE\` | Override the output target |
+| `--dialect ID` | Validate the fixed Amiga GFA BASIC dialect; reject other IDs |
+| `--dialect-version VERSION` | Validate the fixed interpreter version 3.5; reject other versions |
+| `--api-profile ID` | Validate the sole Amiga API profile; reject other profiles |
+| `--no-api-profiles` | Not supported; the Amiga API profile is fixed by product scope |
+| `--target TRIPLE` | Validate the sole Linux x86-64 target; reject other triples |
 | \`--out-dir PATH\` | Override the output directory |
 | \`--emit KIND\` | Request an optional artifact kind; repeatable |
 | \`--diagnostic-format human\|json\` | Select human or machine-readable diagnostics |
@@ -97,9 +97,9 @@ Precedence is:
 2. Project-file value.
 3. Documented default, only where a default is safe.
 
-The dialect identifier and version are mandatory. The compiler must not infer them from file extensions, source contents, API profile, or output target. API profiles default to none. The target defaults to the accepted initial target unless explicitly overridden.
+The product dialect and version are fixed to Amiga GFA BASIC interpreter 3.5. The product API profile is fixed to Amiga, and the output target is fixed to x86_64-unknown-linux-gnu. The compiler must not infer these values from file extensions or source contents. Configuration may repeat these fixed values for clarity, but must reject unsupported alternatives; there is no user-selectable dialect/profile/target matrix.
 
-A repeated \`--api-profile\` adds profiles to the selected set; \`--no-api-profiles\` clears the project-file set. Duplicate identifiers are normalized to one entry. Conflicting declarations across selected profiles are semantic diagnostics, not load-order overrides.
+| `--no-api-profiles` | Not supported; the Amiga API profile is fixed by product scope |
 
 Unknown options, unknown project keys, invalid values, incompatible schema versions, and contradictory settings must fail with actionable diagnostics. Do not silently ignore configuration.
 
