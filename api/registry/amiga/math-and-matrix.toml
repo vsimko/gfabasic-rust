@@ -46,7 +46,7 @@ pending-reason = "No complete implementation or executable reference-interpreter
 
 [declarations.docs]
 path = "docs/research/amiga-gfa-basic-35-addendum-inventory.md"
-anchors = ["4-additional-commands-in-version-35-combined-scan-chapter-14-printed-pp-14-1-14-7"]
+anchors = ["4-additional-commands-in-version-35-combined-scan-chapter-14-printed-pp-14-114-7"]
 
 [[declarations]]
 id = "gfa.amiga.math.variat"
@@ -93,7 +93,7 @@ pending-reason = "No complete implementation or executable reference-interpreter
 
 [declarations.docs]
 path = "docs/research/amiga-gfa-basic-35-addendum-inventory.md"
-anchors = ["4-additional-commands-in-version-35-combined-scan-chapter-14-printed-pp-14-1-14-7"]
+anchors = ["4-additional-commands-in-version-35-combined-scan-chapter-14-printed-pp-14-114-7"]
 
 [[declarations]]
 id = "gfa.amiga.math.combin"
@@ -140,7 +140,7 @@ pending-reason = "No complete implementation or executable reference-interpreter
 
 [declarations.docs]
 path = "docs/research/amiga-gfa-basic-35-addendum-inventory.md"
-anchors = ["4-additional-commands-in-version-35-combined-scan-chapter-14-printed-pp-14-1-14-7"]
+anchors = ["4-additional-commands-in-version-35-combined-scan-chapter-14-printed-pp-14-114-7"]
 
 [[declarations]]
 id = "gfa.amiga.matrix.mat-base"
