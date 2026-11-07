@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - "site/**"
+      - "api/**"
       - "scripts/**"
       - "validation/**"
       - "tests/tooling/**"
@@ -46,6 +47,7 @@ jobs:
           test -s site/styles.css
           test -s site/script.js
           test -s site/data/api-catalogue.json
+          node --check site/script.js
           grep -q 'name="description"' site/index.html
           grep -q 'id="main-nav"' site/index.html
           grep -q 'id="api-catalogue"' site/index.html
