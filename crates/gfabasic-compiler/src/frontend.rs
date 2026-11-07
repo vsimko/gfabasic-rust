@@ -1207,7 +1207,7 @@ mod tests {
 
     #[test]
     fn parses_one_and_two_dimensional_matrix_declarations() {
-        let source = "DIM a(5)\nDIM b(1,5)\n";
+        let source = "DIM a(5)\nDIM b(1,5)\nDIM c(5,1)\n";
         let mut sources = SourceMap::new();
         let source_id = sources.add_source("dim-vectors.bas", source);
         let program = parse(source_id, source).unwrap();
@@ -1229,6 +1229,15 @@ mod tests {
                 columns: Some(5),
                 ..
             } if name == "b"
+        ));
+        assert!(matches!(
+            &program.statements[2],
+            Statement::DimMatrix {
+                name,
+                rows: 5,
+                columns: Some(1),
+                ..
+            } if name == "c"
         ));
     }
 
