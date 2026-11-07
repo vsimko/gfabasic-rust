@@ -50,6 +50,26 @@ def parse_roadmap_progress(markdown: str) -> list[dict]:
     return phases
 
 
+def parse_roadmap_blockers(markdown: str) -> list[dict]:
+    """Extract the explicit sequencing rules and their linked issue references."""
+    heading = re.search(r"^## Blockers and sequencing rules\s*$", markdown, re.MULTILINE)
+    if not heading:
+        return []
+    remainder = markdown[heading.end():]
+    next_section = re.search(r"^## ", remainder, re.MULTILINE)
+    section = remainder[:next_section.start()] if next_section else remainder
+    issue_link = re.compile(r"\[([^\]]+)\]\((https://github\.com/vsimko/gfabasic-rust/issues/[^)]+)\)")
+    blockers = []
+    for line in section.splitlines():
+        item = re.match(r"^\d+\.\s+(.*)$", line)
+        if not item:
+            continue
+        source = item.group(1).strip()
+        links = [{"label": label, "url": url} for label, url in issue_link.findall(source)]
+        summary = re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", source)
+        blockers.append({"summary": summary, "issue_links": links})
+    return blockers
+
 def validate_component(component: dict, identifiers: set[str]) -> list[str]:
     required = ("id", "name", "status", "rationale", "evidence", "related_issues")
     for key in required:
@@ -134,6 +154,7 @@ def generate(root: Path, model_path: Path, output: Path) -> dict:
         "project": model["project"],
         "components": model["components"],
         "roadmap_progress": parse_roadmap_progress((root / "ROADMAP.md").read_text(encoding="utf-8")),
+        "roadmap_blockers": parse_roadmap_blockers((root / "ROADMAP.md").read_text(encoding="utf-8")),
         "workspace_packages": packages,
     }
     output.parent.mkdir(parents=True, exist_ok=True)
