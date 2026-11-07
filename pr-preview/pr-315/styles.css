@@ -90,3 +90,9 @@
 .roadmap-phase-issues a:hover{text-decoration:underline}
 .roadmap-loading{grid-column:1/-1;color:#9ba99b;font-size:12px}
 @media(max-width:700px){.roadmap-list{grid-template-columns:1fr}.roadmap-phase{grid-template-columns:1fr;gap:8px}.roadmap-phase:last-child:nth-child(odd){grid-column:auto}.roadmap-phase-progress{align-items:flex-start;flex-direction:column}.roadmap-phase-progress .dashboard-progress-track{width:100%}}
+
+.roadmap-blockers-heading{grid-column:1/-1;margin:18px 0 0;padding-top:19px;border-top:1px solid var(--line);font-size:14px}
+.roadmap-blockers{grid-column:1/-1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.roadmap-blocker{min-width:0;padding:15px 18px;background:#131c16;border:1px solid var(--line);border-radius:4px}
+.roadmap-blocker p{margin:0;color:#aab7a9;font-size:11px;line-height:1.75}
+@media(max-width:700px){.roadmap-blockers{grid-template-columns:1fr}}

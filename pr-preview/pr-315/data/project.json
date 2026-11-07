@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "source_revision": "0d89bf7d6c68dc7d782220ecabc4f386e9f27631",
+  "source_revision": "82e15050c6718276c574144bfef2a3056d4e2828",
   "project": {
     "name": "gfabasic-rust",
     "language": "Rust",
@@ -439,6 +439,36 @@
           "url": "https://github.com/vsimko/gfabasic-rust/issues/310"
         }
       ]
+    }
+  ],
+  "roadmap_blockers": [
+    {
+      "summary": "The initial dialect/version is selected (Amiga GFA BASIC interpreter 3.5); 3.0/3.03 rules remain inherited candidates until confirmed for 3.5, and feature-level source evidence still gates language semantics, parser acceptance criteria, and conformance claims.",
+      "issue_links": []
+    },
+    {
+      "summary": "Source manager, lexer, parser, semantic analysis and typed IR are sequential dependencies for the first compiler path.",
+      "issue_links": []
+    },
+    {
+      "summary": "LLVM backend and runtime integration depend on a stable typed IR and runtime ABI.",
+      "issue_links": []
+    },
+    {
+      "summary": "Platform APIs depend on verified profile declarations; Amiga and Atari ST evidence must not be conflated.",
+      "issue_links": []
+    },
+    {
+      "summary": "A user quick start and installation guide depend on a working, tested CLI and distributable build.",
+      "issue_links": []
+    },
+    {
+      "summary": "The generic source-loader fuzz target is implemented; lexer/parser fuzz targets depend on stable frontend entry points and source contracts.",
+      "issue_links": []
+    },
+    {
+      "summary": "Release packaging depends on successful end-to-end builds and explicit runtime dependency policy.",
+      "issue_links": []
     }
   ],
   "workspace_packages": [

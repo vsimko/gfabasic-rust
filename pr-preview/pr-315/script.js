@@ -58,7 +58,7 @@ if (generatedStatus) {
       return response.json();
     })
     .then((data) => {
-      if (data.schema_version !== 2 || !data.project || !Array.isArray(data.components) || !Array.isArray(data.roadmap_progress) || !Array.isArray(data.workspace_packages)) {
+      if (data.schema_version !== 2 || !data.project || !Array.isArray(data.components) || !Array.isArray(data.roadmap_progress) || !Array.isArray(data.roadmap_blockers) || !Array.isArray(data.workspace_packages)) {
         throw new Error("Generated project data has an unsupported or incomplete schema");
       }
 
@@ -139,6 +139,22 @@ if (generatedStatus) {
           return card;
         });
         generatedRoadmap.replaceChildren(...phaseCards);
+        const blockerHeading = textNode("h3", "roadmap-blockers-heading", "Dependencies & sequencing rules");
+        const blockers = document.createElement("div");
+        blockers.className = "roadmap-blockers";
+        for (const item of data.roadmap_blockers) {
+          const blocker = document.createElement("article");
+          blocker.className = "roadmap-blocker";
+          blocker.append(textNode("p", "", item.summary));
+          if (Array.isArray(item.issue_links) && item.issue_links.length) {
+            const links = document.createElement("div");
+            links.className = "roadmap-phase-issues";
+            for (const issue of item.issue_links) links.append(sourceLink(issue.url, issue.label));
+            blocker.append(links);
+          }
+          blockers.append(blocker);
+        }
+        generatedRoadmap.append(blockerHeading, blockers);
       }
 
       const heading = textNode("h3", "dashboard-subheading", "Implementation states");
