@@ -166,3 +166,22 @@ These are concise source notes for the 3.0 baseline only; exact 3.5 compatibilit
 - **LSET/RSET (p. 4-36):** the contents page identifies left/right string assignment; exact padding/truncation semantics still need extraction and page-image review.
 
 The base-manual contents index and page-level descriptions together now provide a candidate inventory for the numeric, bitwise and string families. This is still not a 3.5 claim and should not be imported into the canonical 3.5 API registry without compatibility evidence.
+
+### Further Chapter 2 behavior extracted from the base-manual pages
+
+These notes describe the 3.0 baseline in the supplied manual. They are not evidence that the same behavior is present unchanged in Amiga interpreter 3.5.
+
+- **Variable types (printed pp. 2-2–2-3):** the manual describes Boolean, byte, word, longword integer, 8-byte floating-point, and string variables. It gives postfixes for Boolean/byte/word/longword/string and no postfix for float. Strings are limited to 32,767 characters. The page also documents string and array descriptors and distinguishes VARPTR (element/string data address) from ARRPTR or * (descriptor address).
+- **Array descriptors (pp. 2-3–2-4):** a six-byte descriptor stores a four-byte address and two-byte dimension count; dimension bounds precede the element data. The example documents column-major element ordering for a two-dimensional array. Treat this as source-described 3.0 memory layout, not an implementation requirement for the Rust interpreter unless 3.5 compatibility confirms it.
+- **DEFxxx (p. 2-5):** DEFBIT, DEFBYT, DEFWRD, DEFINT, DEFFLT and DEFSTR set default types for variable-name prefixes. An explicit postfix takes priority; declarations remain in effect until changed. The default is DEFFLT. The editor replaces DEFSNG/DEFDBL with DEFFLT.
+- **OPTION BASE (p. 2-10):** the default is zero if omitted. OPTION BASE 0 permits a zero element; OPTION BASE 1 starts indices at one. The manual says changing the option does not rewrite array contents, but shifts the interpreted position of elements by one.
+- **INSERT/DELETE (p. 2-11):** INSERT writes a value at an array index, shifts higher-indexed values upward and discards the last element. DELETE removes the indexed value, shifts later values down, and resets the final element to zero (or an empty string for string arrays).
+- **ARRAYFILL (p. 2-12):** fills every element of a numeric array with an arithmetic expression. The assigned value must fit the storage range of the element type; the manual gives a byte/word-range error example.
+- **ASC/CHR$ (p. 2-13):** ASC returns the ASCII code of the first character, or zero for an empty string. CHR$ returns a character using only the low byte (equivalent to x AND 255).
+- **BIN$/OCT$/HEX$ (p. 2-14):** convert integer expressions to binary, octal or hexadecimal strings; optional width controls the number of output places, with page-specific ranges.
+- **STR$ (p. 2-15):** converts a numeric expression to text. Optional width inserts leading spaces/truncates from the left according to the documented RIGHT$(SPACE$(n)+STR$(x),n) relation. A third argument selects a formatted slice/rounding form; the examples round the selected numeric output.
+- **VAL/VAL? (p. 2-16):** parse a numeric prefix from a string and stop at the first unrecognized character; return zero if no numeric prefix exists. The manual also lists hexadecimal, binary and octal prefixes. VAL? returns the number of characters consumed (the examples use it for this purpose).
+- **CINT/CFLOAT (p. 2-17):** CINT rounds a floating-point expression to an integer; CFLOAT converts an integer expression to floating point. The manual explicitly says these are only meaningful to the compiler, which is an important interpreter/compiler boundary to preserve.
+- **CVI/CVL/CVS and MKI$/MKL$/MKS$/MKF$/MKD$ (pp. 2-18–2-19):** convert between numeric values and their internal binary string representations for interchange with other programming languages. The prose/table has naming inconsistencies (CVS versus CVF, and MKS$ versus MKF$); do not normalize the exact floating-point pair until the page image and another edition/runtime are checked.
+
+The Chapter 2 base-manual pages therefore expose several implementation-relevant distinctions: storage type versus expression type, array descriptor versus element address, compiler-only conversions, and binary-string conversion versus ASCII VAL/STR$ conversion. All remain 3.0 candidates pending 3.5 confirmation.
