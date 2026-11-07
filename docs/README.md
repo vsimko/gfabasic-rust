@@ -34,6 +34,8 @@ This index is the entry point for project documentation. It separates user guida
 | Research procedures and corpora | [`research/README.md`](research/README.md) | Researchers; experiment procedures and analysis of historical material |
 | Reusable page templates | [`templates/README.md`](templates/README.md) | Documentation authors; starting structures for guides and reference pages |
 
+
+| Implementation dashboard | [`architecture/IMPLEMENTATION-DASHBOARD.md`](architecture/IMPLEMENTATION-DASHBOARD.md); [ADR 0014](architecture/adr/0014-implementation-dashboard.md) | Maintainers; dashboard purpose, canonical data sources, status vocabulary, metric rules, generation, and maintenance |
 ## High-level documentation layout
 
 The following tree is a non-exhaustive navigation sketch. It shows the main directories and their entry points, not every document; use each directory's `README.md` and the documentation map above to find the detailed pages.
