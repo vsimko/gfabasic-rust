@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "source_revision": "4bb7b247425b1eced920cfe30eb542c0362ce2ae",
+  "source_revision": "0d89bf7d6c68dc7d782220ecabc4f386e9f27631",
   "project": {
     "name": "gfabasic-rust",
     "language": "Rust",
@@ -377,9 +377,9 @@
       "number": 4,
       "name": "Release readiness",
       "description": "A release must publish an explicit support matrix and known deviations. Do not publish binaries or compatibility claims before the build and test gates exist.",
-      "completed": 2,
+      "completed": 4,
       "total": 13,
-      "percent": 15,
+      "percent": 31,
       "status": "in-progress",
       "issue_links": [
         {
