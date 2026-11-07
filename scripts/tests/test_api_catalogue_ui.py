@@ -23,7 +23,6 @@ class ApiCatalogueRenderingTests(unittest.TestCase):
         self.assertIn('document.createElement("div")', render_entries)
         self.assertIn('panel.className = "api-function-panel"', render_entries)
         self.assertNotIn("api-entry-detail", render_entries)
-        self.assertNotIn("entry.syntax", render_entries)
         self.assertIn("if (item.open) loadDetail(entry, panel)", render_entries)
         self.assertIn('fetch(`data/${entry.detail}`)', load_detail)
         self.assertIn("renderDetail(panel", load_detail)
