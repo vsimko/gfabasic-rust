@@ -200,3 +200,8 @@ The validator requires printed-page locators for book-documented and primary-ref
 
 
 The public API progress view is generated from the canonical registry by `scripts/generate_api_catalogue.py`. Its JSON is generated during production and PR-preview builds, not maintained by hand. The view exposes independent evidence, implementation, target-support, and conformance counts and filters declarations by domain/status; it deliberately avoids a misleading aggregate implementation percentage.
+
+
+### Version-scoped evidence
+
+The evidence record includes an optional source-scope field. Amiga declarations claiming version 3.5 must set it to `amiga-3.5-addendum`; `base-manual-3.0` alone cannot justify 3.5 availability. This prevents a declaration from being promoted solely because Chapters 2–12 occur in the same PDF as the 3.5 addendum. A 3.0 baseline inventory is maintained separately until 3.5 applicability is confirmed.
