@@ -58,12 +58,12 @@ class ReviewPackageTests(unittest.TestCase):
         (root / "tests/corpus").mkdir(parents=True)
         (root / "api/registry/amiga/example.toml").write_text(DECLARATION)
         (root / "docs/reference-sources.md").write_text(
-            "| ID | Title | Scope |\\n|---|---|---|\\n| TEST-SOURCE | Test manual | Amiga 3.5 |\\n"
+            "| ID | Title | Scope |\n|---|---|---|\n| TEST-SOURCE | Test manual | Amiga 3.5 |\n"
         )
         (root / "docs/research.md").write_text(
-            "# Chapter 3\\n\\nThe source documents this example.\\n\\n## Other section\\n"
+            "# Chapter 3\n\nThe source documents this example.\n\n## Other section\n"
         )
-        (root / "tests/corpus/manifest.toml").write_text("fixtures = []\\n")
+        (root / "tests/corpus/manifest.toml").write_text("fixtures = []\n")
         return temp, root
 
     def test_package_is_deterministic_and_contains_evidence_context(self):
