@@ -37,6 +37,7 @@ jobs:
           test -s site/styles.css
           test -s site/script.js
           test -s site/data/api-catalogue.json
+          grep -q 'id="api-catalogue"' site/index.html
 
       - name: Publish or remove preview
         uses: rossjrw/pr-preview-action@873417d2df72380da1f3978378fb58560bcde976
