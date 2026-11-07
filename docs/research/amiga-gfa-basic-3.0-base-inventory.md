@@ -222,7 +222,7 @@ The remaining Chapter 6 topics (open modes, file position/status, random-access 
 
 ## Extraction scope and next checks
 
-This pass adds page-level evidence for selected Chapter 5, 6, 9 and 10 topics. Chapters 7, 8 and 11 remain contents-level inventories. Chapter 11 should be split between BASIC-facing wrappers and direct Amiga OS library calls before registry modelling. For all chapters, the printed page references are locators into the supplied manual's 3.0 base text; none of these notes independently establishes 3.5 availability.
+Page-level notes now cover selected topics in Chapters 2–10, with declaration/family candidates tracked separately in the structured manifest. Chapter 11 has a selected routine-level extraction across Exec, Graphics, Intuition and DOS, while Workbench, DiskFont and Layers remain primarily family-level inventories. Chapter 12 remains reference material rather than a declaration catalogue. For all base chapters, printed page references locate 3.0 source text; none of these notes independently establishes 3.5 availability.
 
 
 ## Chapter 7 — program handling: page-level notes
@@ -282,7 +282,7 @@ The appendix's Table of Libraries (printed pp. 12-19–12-28) is an alphabetical
 - Separate calls that manipulate global OS state, tasks, interrupts, hardware registers or supervisor mode from ordinary memory-safe wrappers. A direct call can crash the system or corrupt another task.
 - The current source is a 3.0-era OS-call reference. Exact OS release/ROM compatibility and 3.5 interpreter exposure still require independent verification.
 
-The following library-specific material was found in the supplied scan: Exec pages include task, signal, memory and device operations; Graphics pages include drawing/bitmap and display structures; Workbench pages include object/icon operations; Intuition pages include window/screen/input management; DiskFont covers font operations; Layers covers layer lifecycle and locking; DOS covers file and CLI operations. This is a family-level inventory only; routine-by-routine extraction remains open.
+The supplied scan identifies Exec task/signal/memory/device operations, Graphics drawing/bitmap/display structures, Workbench object/icon operations, Intuition window/screen/input management, DiskFont font operations, Layers lifecycle/locking, and DOS file/CLI operations. Selected Exec, Graphics, Intuition and DOS routines are extracted below; remaining families and routines still require declaration-level review.
 
 ## Chapter 12 — appendices: reference material, not new language features
 
