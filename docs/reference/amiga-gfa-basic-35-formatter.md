@@ -25,7 +25,10 @@ operands, and in-place scalar multiplication. `MAT DET`, `MAT QDET`, and
 `MAT RANG` accept a scalar destination, matrix reference with optional row
 and column offsets, and an optional square-submatrix order. `MAT CPY` and
 `MAT XCPY` accept destination/source matrix selections with optional row and
-column offsets and an optional height/width extent. Arithmetic operators are
+column offsets and an optional height/width extent. `MAT READ a()` and
+`MAT INPUT #channel,a()` are also parsed. These statements remain outside the
+executable compiler because DATA and file-input semantics are not implemented.
+Arithmetic operators are
 spaced on both sides by the formatter. The parser still limits matrix names
 to `a` and `b`; scalar operands retain their source identifier spelling.
 It does not implement
