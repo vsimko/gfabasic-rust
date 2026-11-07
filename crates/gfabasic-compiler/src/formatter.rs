@@ -70,6 +70,7 @@ fn needs_space(previous: &TokenKind, current: &TokenKind) -> bool {
         | (TokenKind::Minus, _)
         | (_, TokenKind::Star)
         | (TokenKind::Star, _) => true,
+        (_, TokenKind::Hash) => true,
         (TokenKind::Comma, _) => true,
         (_, TokenKind::Comma)
         | (_, TokenKind::LeftParen)
@@ -114,6 +115,8 @@ mod tests {
             Option<(i64, i64)>,
             String,
         ),
+        MatRead(String),
+        MatInput(i64, String),
     }
 
     fn meanings(program: &Program) -> Vec<Meaning> {
@@ -160,6 +163,10 @@ mod tests {
                     scalar,
                     ..
                 } => Meaning::MatMulScale(destination.clone(), scalar.clone()),
+                Statement::MatRead { matrix, .. } => Meaning::MatRead(matrix.clone()),
+                Statement::MatInput {
+                    channel, matrix, ..
+                } => Meaning::MatInput(*channel, matrix.clone()),
                 Statement::MatCopy {
                     operation,
                     destination,
@@ -413,11 +420,27 @@ mod tests {
                 "MAT XCPY a(1,2)=b(3,4),5,6",
                 "MAT XCPY a(1, 2) = b(3, 4), 5, 6\n",
             ),
+            ("MAT READ a()", "MAT READ a()\n"),
+            ("MAT INPUT #1,a()", "MAT INPUT #1, a()\n"),
         ];
 
         for (source, expected) in cases {
             assert_eq!(format(source), expected, "source: {source:?}");
         }
+    }
+
+    #[test]
+    fn mat_read_input_formatting_is_idempotent_and_semantics_preserving() {
+        let source = "MAT READ a()\nMAT INPUT #1,a()\n";
+        let formatted = format(source);
+        assert_eq!(format(&formatted), formatted);
+        let mut before_sources = SourceMap::new();
+        let before_id = before_sources.add_source("before.bas", source);
+        let before = parse_document(before_id, source).unwrap();
+        let mut after_sources = SourceMap::new();
+        let after_id = after_sources.add_source("after.bas", formatted.as_str());
+        let after = parse_document(after_id, &formatted).unwrap();
+        assert_eq!(meanings(&before.program), meanings(&after.program));
     }
 
     #[test]
