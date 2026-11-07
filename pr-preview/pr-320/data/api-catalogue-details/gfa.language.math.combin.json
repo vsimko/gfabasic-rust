@@ -1,0 +1,78 @@
+{
+  "id": "gfa.language.math.combin",
+  "name": "COMBIN",
+  "kind": "function",
+  "namespace": "language-core",
+  "category": "math-and-matrix",
+  "availability": [
+    {
+      "dialect": "amiga-gfa-basic-interpreter",
+      "versions": [
+        "3.5"
+      ]
+    }
+  ],
+  "syntax": [
+    {
+      "form": "COMBIN(integer-expression, integer-expression)",
+      "contexts": [
+        "expression"
+      ],
+      "arguments": [
+        {
+          "name": "n",
+          "type": "integer expression",
+          "required": true
+        },
+        {
+          "name": "k",
+          "type": "integer expression",
+          "required": true
+        }
+      ]
+    }
+  ],
+  "signature": {
+    "returns": "arithmetic expression"
+  },
+  "semantics": {
+    "summary": "Returns the number of k-combinations of n elements without repetition: n!/((n-k)!*k!).",
+    "errors": [],
+    "side-effects": []
+  },
+  "evidence": {
+    "source-scope": "amiga-3.5-addendum",
+    "status": "book-documented",
+    "sources": [
+      "AM-INTERPRETER-35"
+    ],
+    "printed-pages": [
+      "Chapter 13, printed pp. 13-33–13-34 (same feature: combined update scan pp. 14-1–14-2)"
+    ],
+    "notes": [
+      "The 3.5 addendum page images were checked. Both arguments are documented as integer expressions.",
+      "The existing prototype evaluates only a restricted literal subset; it has no stable registry handler mapping and is not a complete implementation."
+    ]
+  },
+  "implementation": {
+    "status": "not-implemented",
+    "notes": [
+      "A restricted compile-time literal prototype exists in crates/gfabasic-compiler/src/prototype.rs; it is not a complete runtime implementation or a registry-linked handler."
+    ]
+  },
+  "support": [
+    {
+      "target": "x86_64-unknown-linux-gnu",
+      "classification": "unknown",
+      "conformance": "not-tested",
+      "tests": [],
+      "pending-reason": "No complete implementation or executable reference-interpreter conformance suite is registered."
+    }
+  ],
+  "docs": {
+    "path": "docs/research/amiga-gfa-basic-35-addendum-inventory.md",
+    "anchors": [
+      "4-additional-commands-in-version-35-combined-scan-chapter-14-printed-pp-14-1-14-7"
+    ]
+  }
+}
