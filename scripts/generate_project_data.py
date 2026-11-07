@@ -17,7 +17,7 @@ def parse_roadmap_progress(markdown: str) -> list[dict]:
     """Extract canonical phase summaries, task progress, and issue links."""
     headings = list(PHASE_HEADING.finditer(markdown))
     phases = []
-    issue_link = re.compile(r"\\[([^\\]]+)\\]\\((https://github\\.com/vsimko/gfabasic-rust/issues/[^)]+)\\)")
+    issue_link = re.compile(r"\[([^\]]+)\]\((https://github\.com/vsimko/gfabasic-rust/issues/[^)]+)\)")
     for index, heading in enumerate(headings):
         end = headings[index + 1].start() if index + 1 < len(headings) else len(markdown)
         next_section = re.search(r"^### ", markdown[heading.end():end], re.MULTILINE)
