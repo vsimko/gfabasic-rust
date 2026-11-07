@@ -603,7 +603,7 @@ impl Parser {
                 })
             }
             "TRANS" => {
-                let (destination, destination_span) = self.parse_matrix_reference()?
+                let (destination, destination_span) = self.parse_matrix_reference()?;
                 let source = if matches!(self.current().kind, TokenKind::Equals) {
                     self.advance();
                     Some(self.parse_matrix_reference()?.0)
