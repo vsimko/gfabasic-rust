@@ -75,6 +75,49 @@ path = "docs/reference.md"
 anchors = []
 '''
 
+    def make_amiga_35_root(self, source_scope=None):
+        temp = tempfile.TemporaryDirectory()
+        root = Path(temp.name)
+        (root / "api/schema").mkdir(parents=True)
+        (root / "api/registry/amiga").mkdir(parents=True)
+        (root / "docs").mkdir()
+        (root / "tests/corpus").mkdir(parents=True)
+        (root / "api/schema/registry-v1.json").write_text(json.dumps(VALID_SCHEMA))
+        (root / "docs/reference-sources.md").write_text("| ID | Title |\n|---|---|\n| TEST-SOURCE | Test source |\n")
+        (root / "docs/reference.md").write_text("# Example\n")
+        declaration = self.valid_declaration().replace(
+            "gfa.atari-st.system.timer", "gfa.amiga.test.example"
+        ).replace(
+            'dialect = "atari-st-gfa-basic"', 'dialect = "amiga-gfa-basic-interpreter"'
+        ).replace(
+            'versions = ["3.0"]', 'versions = ["3.5"]'
+        ).replace(
+            'profile = "atari-st"', 'profile = "amiga"'
+        )
+        if source_scope:
+            declaration = declaration.replace(
+                '[declarations.evidence]\n', f'[declarations.evidence]\nsource-scope = "{source_scope}"\n'
+            )
+        (root / "api/registry/amiga/example.toml").write_text(declaration)
+        return temp, root
+
+    def test_amiga_35_requires_addendum_or_runtime_scoped_evidence(self):
+        temp, root = self.make_amiga_35_root()
+        self.addCleanup(temp.cleanup)
+        errors = validate_registry(root)
+        self.assertTrue(any("Amiga 3.5 declarations require source-scope" in error for error in errors))
+
+    def test_amiga_35_rejects_base_manual_30_as_sole_evidence(self):
+        temp, root = self.make_amiga_35_root("base-manual-3.0")
+        self.addCleanup(temp.cleanup)
+        errors = validate_registry(root)
+        self.assertTrue(any("Amiga 3.5 declarations require source-scope" in error for error in errors))
+
+    def test_amiga_35_accepts_addendum_scoped_evidence(self):
+        temp, root = self.make_amiga_35_root("amiga-3.5-addendum")
+        self.addCleanup(temp.cleanup)
+        self.assertEqual(validate_registry(root), [])
+
     def test_source_register_heading_is_not_a_valid_source_id(self):
         content = self.valid_declaration().replace(
             'sources = ["TEST-SOURCE"]', 'sources = ["ID"]'
@@ -232,7 +275,7 @@ anchors = []
         temp, root = self.make_root(self.valid_declaration())
         self.addCleanup(temp.cleanup)
         outside = root.parent / f"{root.name}-outside.md"
-        outside.write_text("# Timer\\n")
+        outside.write_text("# Timer\n")
         self.addCleanup(lambda: outside.unlink(missing_ok=True))
         registry = root / "api/registry/atari-st/time.toml"
         registry.write_text(
@@ -246,7 +289,7 @@ anchors = []
         temp, root = self.make_root(self.valid_declaration())
         self.addCleanup(temp.cleanup)
         outside = root.parent / f"{root.name}-outside.md"
-        outside.write_text("# Timer\\n")
+        outside.write_text("# Timer\n")
         self.addCleanup(lambda: outside.unlink(missing_ok=True))
         registry = root / "api/registry/atari-st/time.toml"
         relative = f"../{outside.name}"
@@ -281,7 +324,7 @@ anchors = []
         self.addCleanup(temp.cleanup)
         docs = root / "docs/reference.md"
         target = root / "docs/alternate.md"
-        target.write_text("# Timer\\n")
+        target.write_text("# Timer\n")
         docs.unlink()
         try:
             docs.symlink_to(target)

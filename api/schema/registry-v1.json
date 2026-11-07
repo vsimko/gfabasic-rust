@@ -87,6 +87,7 @@
           "required": ["status", "sources"],
           "properties": {
             "status": {"enum": ["unknown", "inferred", "disputed", "book-documented", "primary-reference-cross-checked", "runtime-observed"]},
+            "source-scope": {"enum": ["base-manual-3.0", "amiga-3.5-addendum", "cross-version", "runtime-observation", "other"]},
             "sources": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
             "printed-pages": {"$ref": "#/$defs/stringArray"},
             "notes": {"$ref": "#/$defs/stringArray"}

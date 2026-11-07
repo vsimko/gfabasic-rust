@@ -29,6 +29,7 @@ side-effects = ["Changes colour state used by PRINT screen output."]
 errors = []
 
 [declarations.evidence]
+source-scope = "amiga-3.5-addendum"
 status = "book-documented"
 sources = ["AM-INTERPRETER-35"]
 printed-pages = ["Chapter 13, printed p. 13-34 (same feature: combined update scan p. 14-4)"]
@@ -72,6 +73,7 @@ side-effects = ["Creates a window on the current top screen."]
 errors = []
 
 [declarations.evidence]
+source-scope = "amiga-3.5-addendum"
 status = "book-documented"
 sources = ["AM-INTERPRETER-35"]
 printed-pages = ["Chapter 13, printed p. 13-34 (same feature: combined update scan p. 14-3)"]
@@ -116,6 +118,7 @@ side-effects = ["Changes GURU-checking state.", "May transfer control to ONERROR
 errors = ["Error #109: GURU Meditation", "Errors #110–#118: normal GURU conditions $2–$A"]
 
 [declarations.evidence]
+source-scope = "amiga-3.5-addendum"
 status = "book-documented"
 sources = ["AM-INTERPRETER-35"]
 printed-pages = ["Chapter 13, printed p. 13-36 (same feature: combined update scan pp. 14-6–14-7)"]
@@ -158,6 +161,7 @@ summary = "Returns the GURU number associated with the current GURU condition."
 side-effects = []
 
 [declarations.evidence]
+source-scope = "amiga-3.5-addendum"
 status = "book-documented"
 sources = ["AM-INTERPRETER-35"]
 printed-pages = ["Chapter 13, printed p. 13-36 (same feature: combined update scan pp. 14-6–14-7)"]

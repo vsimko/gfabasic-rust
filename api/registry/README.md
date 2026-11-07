@@ -38,3 +38,11 @@ Generate a bounded review package for a declaration with `scripts/build_api_revi
 
 
 The public site catalogue is generated from this registry by `scripts/generate_api_catalogue.py` into `site/data/api-catalogue.json`. The JSON is a deployment artifact, never an editable source. Production and PR-preview workflows regenerate it; generator tests cover deterministic ordering, independent status counts, empty registries, and stale-output detection.
+
+
+## Version-scoped base-manual research
+
+The supplied 3.5 interpreter manual contains both a 3.0 base manual and a 3.5 addendum. Do not treat Chapters 2–12 as 3.5-specific evidence merely because they occur in the same PDF. The initial 3.0 topic and page inventory is maintained separately in [the Amiga 3.0 base-manual inventory](../../docs/research/amiga-gfa-basic-3.0-base-inventory.md) and tracked by #298. Only add declarations to the 3.5 registry after their 3.5 applicability is independently established.
+
+
+- Every Amiga 3.5 declaration must set evidence source-scope to `amiga-3.5-addendum`. Base-manual 3.0 evidence alone cannot establish 3.5 availability. This is checked by the registry validator.

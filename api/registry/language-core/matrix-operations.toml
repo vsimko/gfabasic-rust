@@ -27,6 +27,7 @@ side-effects = ["Writes sequential DATA values into the supplied field."]
 errors = []
 
 [declarations.evidence]
+source-scope = "amiga-3.5-addendum"
 status = "book-documented"
 sources = ["AM-INTERPRETER-35"]
 printed-pages = ["Chapter 13, printed p. 13-5"]
@@ -74,6 +75,7 @@ side-effects = ["Writes formatted numeric output to the selected screen or outpu
 errors = []
 
 [declarations.evidence]
+source-scope = "amiga-3.5-addendum"
 status = "book-documented"
 sources = ["AM-INTERPRETER-35"]
 printed-pages = ["Chapter 13, printed pp. 13-5–13-6"]
@@ -119,6 +121,7 @@ side-effects = ["Reads from the selected open file channel and writes values int
 errors = []
 
 [declarations.evidence]
+source-scope = "amiga-3.5-addendum"
 status = "book-documented"
 sources = ["AM-INTERPRETER-35"]
 printed-pages = ["Chapter 13, printed p. 13-6"]
@@ -198,6 +201,7 @@ side-effects = ["Writes the selected destination elements; existing destination 
 errors = []
 
 [declarations.evidence]
+source-scope = "amiga-3.5-addendum"
 status = "book-documented"
 sources = ["AM-INTERPRETER-35"]
 printed-pages = ["Chapter 13, printed pp. 13-4–13-19"]
@@ -249,6 +253,7 @@ side-effects = ["Writes the transposed region into the destination field."]
 errors = []
 
 [declarations.evidence]
+source-scope = "amiga-3.5-addendum"
 status = "book-documented"
 sources = ["AM-INTERPRETER-35"]
 printed-pages = ["Chapter 13, printed pp. 13-15–13-19"]
@@ -311,6 +316,7 @@ side-effects = ["The in-place forms replace the original destination values."]
 errors = []
 
 [declarations.evidence]
+source-scope = "amiga-3.5-addendum"
 status = "book-documented"
 sources = ["AM-INTERPRETER-35"]
 printed-pages = ["Chapter 13, printed pp. 13-16–13-18"]
@@ -372,6 +378,7 @@ side-effects = ["The in-place forms replace the original destination values."]
 errors = []
 
 [declarations.evidence]
+source-scope = "amiga-3.5-addendum"
 status = "book-documented"
 sources = ["AM-INTERPRETER-35"]
 printed-pages = ["Chapter 13, printed pp. 13-18–13-20"]
@@ -445,6 +452,7 @@ side-effects = ["Matrix/vector destination forms write a result field; scalar fo
 errors = []
 
 [declarations.evidence]
+source-scope = "amiga-3.5-addendum"
 status = "book-documented"
 sources = ["AM-INTERPRETER-35"]
 printed-pages = ["Chapter 13, printed pp. 13-20–13-31"]
@@ -493,6 +501,7 @@ side-effects = ["Assigns the determinant to scalar-result."]
 errors = []
 
 [declarations.evidence]
+source-scope = "amiga-3.5-addendum"
 status = "book-documented"
 sources = ["AM-INTERPRETER-35"]
 printed-pages = ["Chapter 13, printed pp. 13-34–13-36"]
@@ -541,6 +550,7 @@ side-effects = ["Assigns the determinant to scalar-result."]
 errors = []
 
 [declarations.evidence]
+source-scope = "amiga-3.5-addendum"
 status = "book-documented"
 sources = ["AM-INTERPRETER-35"]
 printed-pages = ["Chapter 13, printed pp. 13-36–13-37"]
@@ -589,6 +599,7 @@ side-effects = ["Assigns the matrix rank to scalar-result."]
 errors = []
 
 [declarations.evidence]
+source-scope = "amiga-3.5-addendum"
 status = "book-documented"
 sources = ["AM-INTERPRETER-35"]
 printed-pages = ["Chapter 13, printed pp. 13-38–13-39"]
@@ -642,6 +653,7 @@ side-effects = ["Writes the inverse matrix to the destination operand."]
 errors = []
 
 [declarations.evidence]
+source-scope = "amiga-3.5-addendum"
 status = "disputed"
 sources = ["AM-INTERPRETER-35", "AM-INTERPRETER-30-35-UPDATE-SCAN"]
 printed-pages = ["Chapter 13, printed p. 13-22 command summary; printed p. 13-39 detailed description and example (combined update scan pp. 13-22 and 13-39)"]
