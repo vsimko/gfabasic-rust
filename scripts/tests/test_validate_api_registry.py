@@ -111,7 +111,7 @@ anchors = []
         temp, root = self.make_amiga_35_root("base-manual-3.0")
         self.addCleanup(temp.cleanup)
         errors = validate_registry(root)
-        self.assertTrue(any("base-manual 3.0 evidence cannot establish 3.5 availability" in error for error in errors))
+        self.assertTrue(any("Amiga 3.5 declarations require source-scope" in error for error in errors))
 
     def test_amiga_35_accepts_addendum_scoped_evidence(self):
         temp, root = self.make_amiga_35_root("amiga-3.5-addendum")
