@@ -14,7 +14,7 @@ It currently formats only the evidence-gated prototype grammar:
   `MAT BASE 0|1`, `MAT TRANS a()[=b()]`, `MAT NORM a(),0|1`, `MAT ADD`/`MAT SUB`, and the documented
   `MAT MUL` matrix-result, scalar-result, and in-place scalar forms.
 
-The matrix parser slice intentionally supports only matrix names `a` and `b`,
+The addendum distinguishes `DIM a(n)` (row vector), `DIM a(1,n)` (row vector), and `DIM a(n,1)` (column vector; printed pp. 13-17–13-18). The parser preserves the one- versus two-dimensional declaration shape, and golden tests cover both two-dimensional orientations. The matrix parser slice intentionally supports only matrix names `a` and `b`,
 one or two integer dimensions, and a non-negative integer scalar for `MAT SET`.
 `MAT BASE` accepts only the documented offsets 0 and 1. `MAT TRANS` supports
 the documented in-place and destination/source forms. `MAT NORM` accepts only
