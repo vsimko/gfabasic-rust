@@ -781,10 +781,12 @@ impl Parser {
         let destination_token = self.advance();
         let destination = match destination_token.kind {
             TokenKind::Identifier(name) => name,
-            _ => return Err(self.syntax_error(
-                "expected a scalar destination in MAT matrix analysis",
-                destination_token.span,
-            )),
+            _ => {
+                return Err(self.syntax_error(
+                    "expected a scalar destination in MAT matrix analysis",
+                    destination_token.span,
+                ));
+            }
         };
         self.expect(TokenKind::Equals, "'=' in MAT matrix analysis")?;
         let (matrix, _) = self.parse_matrix_name()?;
@@ -793,7 +795,10 @@ impl Parser {
             None
         } else {
             let row = self.parse_nonnegative_matrix_integer()?;
-            self.expect(TokenKind::Comma, "',' between matrix row and column offsets")?;
+            self.expect(
+                TokenKind::Comma,
+                "',' between matrix row and column offsets",
+            )?;
             let column = self.parse_nonnegative_matrix_integer()?;
             Some((row, column))
         };
