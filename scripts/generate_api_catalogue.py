@@ -121,7 +121,7 @@ def render_index(root: Path) -> tuple[str, dict[str, str]]:
             "percentage is calculated. Full declaration details are separate static JSON files."
         ),
     }
-    return json.dumps(result, indent=2, ensure_ascii=False) + "\n", details
+    return json.dumps(result, ensure_ascii=False, separators=(",", ":")) + "\n", details
 
 
 def render(root: Path) -> str:
