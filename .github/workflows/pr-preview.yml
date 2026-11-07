@@ -63,10 +63,7 @@ jobs:
           comment: true
           qr-code: false
 
-      - name: Test deployed preview in Chromium
+      - name: Smoke-test deployed preview HTML
         if: github.event.action != 'closed'
         run: |
-          npm install --no-save playwright
-          npx playwright install --with-deps chromium
-          PREVIEW_URL="https://vsimko.github.io/gfabasic-rust/pr-preview/pr-${{ github.event.pull_request.number }}/" node scripts/tests/preview-smoke.mjs
-
+          PREVIEW_URL="https://vsimko.github.io/gfabasic-rust/pr-preview/pr-${{ github.event.pull_request.number }}/" python3 scripts/tests/test_deployed_preview.py
