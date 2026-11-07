@@ -556,11 +556,10 @@ impl Parser {
                 }
             }
             "SET" => {
-                let (name, matrix_span) = self.parse_matrix_reference()?;
+                let (name, _) = self.parse_matrix_reference()?;
                 self.expect(TokenKind::Equals, "'=' in MAT SET")?;
                 let value = self.parse_matrix_dimension()?;
                 let span = SourceSpan::new(self.source_id, start.start, self.tokens[self.cursor - 1].span.end);
-                let _ = matrix_span;
                 Ok(Statement::MatSet { name, value, span })
             }
             _ => Err(self.unsupported_error(
@@ -717,6 +716,60 @@ mod tests {
             &program.statements[2],
             Statement::AssignCombin { name, n: 5, k: 2, .. } if name == "z"
         ));
+    }
+
+    #[test]
+    fn parses_verified_amiga_35_matrix_fixtures() {
+        let fixtures = [
+            include_str!("../../../tests/corpus/amiga/3.5/matrix/mat-one-identity.bas"),
+            include_str!("../../../tests/corpus/amiga/3.5/matrix/mat-clear-zero.bas"),
+            include_str!("../../../tests/corpus/amiga/3.5/matrix/mat-set-scalar.bas"),
+        ];
+
+        for source_text in fixtures {
+            let mut sources = SourceMap::new();
+            let source_id = sources.add_source("verified-matrix.bas", source_text);
+            let program = parse(source_id, source_text)
+                .expect("verified Amiga 3.5 matrix fixture should parse");
+            assert!(matches!(
+                program.statements.first(),
+                Some(Statement::DimMatrix { name, rows: 3, columns: 3, .. }) if name == "a"
+            ));
+            assert!(matches!(
+                program.statements.last(),
+                Some(Statement::MatPrint { name, .. }) if name == "a"
+            ));
+        }
+    }
+
+    #[test]
+    fn parses_matrix_operations_with_exact_fixture_shapes() {
+        let source_text = "DIM a(3,3)\nMAT ONE a()\nMAT SET a()=7\nMAT CLR a()\nMAT PRINT a()\n";
+        let mut sources = SourceMap::new();
+        let source_id = sources.add_source("matrix.bas", source_text);
+        let program = parse(source_id, source_text).unwrap();
+
+        assert!(matches!(program.statements[1], Statement::MatOne { ref name, .. } if name == "a"));
+        assert!(matches!(program.statements[2], Statement::MatSet { ref name, value: 7, .. } if name == "a"));
+        assert!(matches!(program.statements[3], Statement::MatClr { ref name, .. } if name == "a"));
+    }
+
+    #[test]
+    fn rejects_malformed_matrix_statement_shapes() {
+        for source_text in [
+            "DIM a(3)\n",
+            "MAT ONE a(3)\n",
+            "MAT SET a()\n",
+            "MAT SET a()=7,8\n",
+            "MAT INV a()\n",
+        ] {
+            let mut sources = SourceMap::new();
+            let source_id = sources.add_source("malformed-matrix.bas", source_text);
+            assert!(
+                parse(source_id, source_text).is_err(),
+                "accepted: {source_text:?}"
+            );
+        }
     }
 
     #[test]
