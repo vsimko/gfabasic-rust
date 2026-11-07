@@ -35,3 +35,6 @@ The language-core catalogue currently contains 28 declarations, and the Amiga pl
 ## AI-assisted evidence review
 
 Generate a bounded review package for a declaration with `scripts/build_api_review_package.py`. Store completed advisory results under `api/reviews/`; CI validates their schema, source references, and input hashes with `scripts/validate_api_reviews.py`. See [AI-assisted API verification](../../docs/architecture/AI-VERIFICATION.md). Agent verdicts never promote implementation or conformance status.
+
+
+The public site catalogue is generated from this registry by `scripts/generate_api_catalogue.py` into `site/data/api-catalogue.json`. The JSON is a deployment artifact, never an editable source. Production and PR-preview workflows regenerate it; generator tests cover deterministic ordering, independent status counts, empty registries, and stale-output detection.
