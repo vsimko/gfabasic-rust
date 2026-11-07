@@ -69,6 +69,8 @@ pub enum Statement {
     },
     MatPrint {
         name: String,
+        channel: Option<i64>,
+        format: Option<(i64, i64)>,
         span: SourceSpan,
     },
     MatBase {
@@ -997,15 +999,41 @@ impl Parser {
                     span: SourceSpan::new(self.source_id, start.start, end.end.max(destination_span.end)),
                 })
             }
-            "ONE" | "CLR" | "PRINT" => {
+            "ONE" | "CLR" => {
                 let (name, end) = self.parse_matrix_reference()?;
                 let span = SourceSpan::new(self.source_id, start.start, end.end);
                 match operation_name.as_str() {
                     "ONE" => Ok(Statement::MatOne { name, span }),
                     "CLR" => Ok(Statement::MatClr { name, span }),
-                    "PRINT" => Ok(Statement::MatPrint { name, span }),
                     _ => unreachable!(),
                 }
+            }
+            "PRINT" => {
+                let channel = if matches!(self.current().kind, TokenKind::Hash) {
+                    self.advance();
+                    let channel = self.parse_nonnegative_matrix_integer()?;
+                    self.expect(TokenKind::Comma, "',' after MAT PRINT channel")?;
+                    Some(channel)
+                } else {
+                    None
+                };
+                let (name, _) = self.parse_matrix_reference()?;
+                let format = if matches!(self.current().kind, TokenKind::Comma) {
+                    self.advance();
+                    let width = self.parse_nonnegative_matrix_integer()?;
+                    self.expect(TokenKind::Comma, "',' between MAT PRINT width and precision")?;
+                    let precision = self.parse_nonnegative_matrix_integer()?;
+                    Some((width, precision))
+                } else {
+                    None
+                };
+                let end = self.tokens[self.cursor - 1].span;
+                Ok(Statement::MatPrint {
+                    name,
+                    channel,
+                    format,
+                    span: SourceSpan::new(self.source_id, start.start, end.end),
+                })
             }
             "SET" => {
                 let (name, _) = self.parse_matrix_reference()?;
