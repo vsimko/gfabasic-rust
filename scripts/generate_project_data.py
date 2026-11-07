@@ -255,7 +255,8 @@ def generate(root: Path, model_path: Path, output: Path) -> dict:
     }
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(result, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-    render_static_site(root, result)
+    if (root / "site/index.html").is_file():
+        render_static_site(root, result)
     return result
 
 
