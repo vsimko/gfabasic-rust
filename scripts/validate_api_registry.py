@@ -205,6 +205,21 @@ def validate_registry(root: Path = ROOT) -> list[str]:
                         seen_names[key] = (str(path.relative_to(root)), group)
 
             evidence = declaration.get("evidence", {})
+            declared_versions = {
+                version
+                for availability in declaration.get("availability", [])
+                for version in availability.get("versions", [])
+            }
+            source_scope = evidence.get("source-scope")
+            if "3.5" in declared_versions and source_scope != "amiga-3.5-addendum":
+                errors.append(
+                    f"{path}: {declaration_id}: Amiga 3.5 declarations require "
+                    "source-scope = 'amiga-3.5-addendum'; base-manual 3.0 evidence alone is insufficient"
+                )
+            if source_scope == "base-manual-3.0" and "3.5" in declared_versions:
+                errors.append(
+                    f"{path}: {declaration_id}: 3.0 base-manual evidence cannot establish 3.5 availability"
+                )
             for source_id in evidence.get("sources", []):
                 if source_id not in source_ids:
                     errors.append(f"{path}: {declaration_id}: unknown source ID {source_id!r}")
