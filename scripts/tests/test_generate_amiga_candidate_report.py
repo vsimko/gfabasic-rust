@@ -4,7 +4,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from scripts.generate_amiga_candidate_report import load_candidates, render
+from scripts.generate_amiga_candidate_report import generate, load_candidates, render
 
 
 class AmigaCandidateReportTests(unittest.TestCase):
@@ -18,6 +18,7 @@ class AmigaCandidateReportTests(unittest.TestCase):
         self.assertIn("3.0 base manual", report)
         self.assertIn("3.5 addendum", report)
         self.assertIn("not implementation or runtime support", report)
+        self.assertTrue(generate(root, Path("docs/research/amiga-gfa-basic-candidates.toml"), Path("docs/research/amiga-gfa-basic-candidate-report.md"), check=True))
 
     def test_duplicate_ids_are_rejected(self) -> None:
         source = """schema-version = 1
