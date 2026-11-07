@@ -414,3 +414,30 @@ The detailed MAT ADD text confirms the distinction between result and in-place f
 - The addendum also lists MAT MUL a(),x; the exact scalar multiplication/division interpretation should be read from the following page before implementation.
 
 These observations refine the earlier summary: MAT ADD a(),b() and MAT ADD a(),x are explicitly in-place, not merely generic variants. The source's own examples should be the basis of conformance tests.
+
+
+## Chapter 13 — completed MAT SUB/MUL and determinant details
+
+Further page-level extraction from the 3.5 addendum resolves most of the previously open operation semantics.
+
+### MAT SUB (printed pp. 13-18–13-19)
+
+- **MAT SUB a()=b()-c():** b and c must have the same matrix/vector order; c is subtracted element-by-element from b and the result is written to a.
+- **MAT SUB a(),b():** b is subtracted element-by-element from a; a is overwritten and its original contents are lost. Matching dimensions are required.
+- **MAT SUB a(),x:** scalar x is subtracted from each element of a, in place. The page's prose has an OCR/typographical inconsistency ("matrix x"), but its example starts with a filled with 6, subtracts 5, and produces 1 in every element. The example therefore supports scalar subtraction from a; preserve the textual discrepancy in source review rather than treating the typo as a separate semantic rule.
+
+### MAT MUL (printed pp. 13-20–13-22)
+
+- **MAT MUL a()=b()*c():** conventional row-by-column matrix multiplication. The number of columns in b must equal the number of rows in c; a must have the row count of b and column count of c. For two vectors, the result is their dyadic/external product, written to matrix a.
+- **MAT MUL x=a()*b():** defined for vectors with equal element counts. Returns their scalar/inner product, the sum of corresponding element products.
+- **MAT MUL x=a()*b()*c():** defined for vector a, matrix b and vector c. The example computes a row-vector × matrix × column-vector scalar result.
+- **MAT MUL a(),x:** this form appears in the operation-command syntax list (p. 13-16), but the extracted explanatory pages do not establish its semantics. Do not assume it means scalar multiplication; retain it as an unresolved syntax candidate pending page-image inspection or runtime observation.
+
+### MAT DET / MAT QDET / MAT RANG / MAT INV (printed pp. 13-25–13-29)
+
+- **MAT DET x=a([i,j])[,n]:** computes a determinant for a square matrix. With no explicit offsets, the origin follows MAT BASE (0,0 or 1,1); with i,j,n, the operation uses an n×n submatrix beginning at row i, column j.
+- **MAT QDET x=a([i,j])[,n]:** same selection and result concept as MAT DET, optimized for speed rather than accuracy. The manual says the results are normally identical, but recommends MAT DET for critical matrices whose determinant is close to zero.
+- **MAT RANG x=a([i,j])[,n]:** returns the rank of a square matrix, with the same optional submatrix selection convention. The manual's example reports rank 5 for the full matrix and rank 2 for a 3×3 submatrix starting at a(1,2).
+- **MAT INV b()=a():** computes the inverse of square matrix a into b; b must be the same matrix type/dimensions as a. The addendum demonstrates checking the result by multiplying b×a to obtain the unity matrix.
+
+This resolves the previously open MAT SUB and the documented matrix/vector product forms. It does not resolve the separate MAT MUL a(),x syntax.
