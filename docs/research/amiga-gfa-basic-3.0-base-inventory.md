@@ -185,3 +185,41 @@ These notes describe the 3.0 baseline in the supplied manual. They are not evide
 - **CVI/CVL/CVS and MKI$/MKL$/MKS$/MKF$/MKD$ (pp. 2-18–2-19):** convert between numeric values and their internal binary string representations for interchange with other programming languages. The prose/table has naming inconsistencies (CVS versus CVF, and MKS$ versus MKF$); do not normalize the exact floating-point pair until the page image and another edition/runtime are checked.
 
 The Chapter 2 base-manual pages therefore expose several implementation-relevant distinctions: storage type versus expression type, array descriptor versus element address, compiler-only conversions, and binary-string conversion versus ASCII VAL/STR$ conversion. All remain 3.0 candidates pending 3.5 confirmation.
+
+
+## Chapter 5 — input and output: page-level notes
+
+The following details were checked against the chapter text. They describe the 3.0 base-manual behavior only.
+
+- **INKEY$ (printed p. 5-2):** reads a keyboard character. Modifier/control keys are not returned as ordinary characters; special keys such as function keys return a CSI sequence beginning with CHR$(155), followed by additional characters.
+- **INPUT (pp. 5-3–5-4):** reads one or more numeric/string variables, optionally with a prompt. It is window-based and opens standard window 0 if no window is open. A semicolon after the prompt adds "? "; a comma places the cursor immediately after the prompt. Numeric input rejects non-numeric text and requests re-entry.
+- **LINE INPUT (p. 5-5):** reads string variables while allowing commas inside the entered text. Editing before confirmation follows INPUT.
+- **FORM INPUT / FORM INPUT AS (p. 5-6):** edits a string variable with a declared field width from 1 to 255 characters. FORM INPUT AS displays the variable's current value for editing.
+- **PRINT / PRINT AT / WRITE / LOCATE (pp. 5-7–5-8):** PRINT writes to the most recently opened window; PRINT AT positions output at a column/line; LOCATE positions the cursor; WRITE emits comma-separated values in a format intended for reading back with INPUT. The manual distinguishes comma, semicolon and apostrophe separators.
+- **PRINT USING (p. 5-9):** formatted screen output; the format string controls numeric/string field presentation. Full placeholder grammar still needs page-image review.
+- **MODE, DEFNUM, cursor-positioning and DATA, mouse, printer, hardcopy, SOUND/WAVE:** present in the contents at pp. 5-11–5-22; detailed syntax has not yet been extracted here.
+
+## Chapter 6 — disk and file organization: page-level notes
+
+- **INP/OUT (printed p. 6-13):** INP(#n) reads one byte from an opened data channel; OUT #n writes byte values to an opened channel. The documented channel-number range is 0–99.
+- **INPUT$ (p. 6-14):** reads a specified number of characters from the keyboard, or from a file when a channel number is supplied. The manual documents the optional channel argument.
+- **INPUT # / LINE INPUT # (p. 6-15):** reads comma-separated individual values/variable lists from an opened data file; LINE INPUT # reads a line into string variable(s).
+- **PRINT # / WRITE # (p. 6-16):** writes expressions through a data channel. PRINT # supports a USING format; PRINT # does not support PRINT AT.
+- **Chapter boundary:** file-based INPUT/LINE INPUT/PRINT are related to the screen commands in Chapter 5 but have channel-specific semantics. Keep them as distinct declarations when later modelling the API.
+
+The remaining Chapter 6 topics (open modes, file position/status, random-access records, BLOAD/BSAVE and STORE/RECALL) are still only present in the contents-derived index above.
+
+## Chapter 9 — file selector note
+
+- **FILESELECT (printed pp. 9-37–9-38):** displays a file-selector requester. The title and OK-gadget text are supplied as strings; a path string selects the directory/file to display; the output string receives the selected file name, or an empty string when Cancel is selected. The text also describes drive switching and accepting a file path typed into the selector. This is a 3.0 source description, not a verified 3.5 compatibility claim.
+
+## Chapter 10 — hardware sprite and input-device notes
+
+- **SPRITE (printed pp. 10-5–10-6):** defines, frees, moves, enables and disables Amiga hardware sprites. The manual describes eight sprite numbers (0–7), with sprite 0 assigned to the mouse; each sprite is 16 pixels wide and uses a bitmap string whose rows are four bytes. Coordinates are expressed in the lowest screen resolution. SPRITE ON/OFF affects all defined sprites, including the mouse.
+- **Sprite colour registers (p. 10-6):** paired sprites share colour registers; the manual lists register groups 17–19, 21–23, 25–27 and 29–31.
+- **STICK/STRIG (p. 10-7):** query joystick position and fire-button state for ports 0 and 1. The manual notes that port 0 is shared with mouse/Intuition behavior; querying it can therefore interact with OS input handling.
+- **CLI/_dosCmd$, EXEC, library variables, SAY/TRANSLATE$, FD files, blitter objects and OBJECT commands:** are identified by the chapter contents. They need separate page-level extraction. In particular, OBJECT/BOB functionality should be treated as Amiga-specific advanced graphics, not folded into the portable language core.
+
+## Extraction scope and next checks
+
+This pass adds page-level evidence for selected Chapter 5, 6, 9 and 10 topics. Chapters 7, 8 and 11 remain contents-level inventories. Chapter 11 should be split between BASIC-facing wrappers and direct Amiga OS library calls before registry modelling. For all chapters, the printed page references are locators into the supplied manual's 3.0 base text; none of these notes independently establishes 3.5 availability.
