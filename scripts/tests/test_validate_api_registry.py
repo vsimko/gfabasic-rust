@@ -58,6 +58,7 @@ summary = "A reserved counter."
 [declarations.evidence]
 status = "book-documented"
 sources = ["TEST-SOURCE"]
+printed-pages = ["printed p. 1"]
 
 [declarations.implementation]
 status = "not-implemented"
@@ -67,6 +68,7 @@ target = "x86_64-unknown-linux-gnu"
 classification = "unsupported"
 conformance = "not-tested"
 tests = []
+pending-reason = "No implementation or conformance test exists."
 
 [declarations.docs]
 path = "docs/reference.md"
@@ -309,6 +311,30 @@ anchors = []
         self.addCleanup(temp.cleanup)
         self.assertTrue(any("does not match namespace" in error for error in validate_registry(root)))
 
+    def test_book_documented_evidence_requires_printed_page_locators(self):
+        content = self.valid_declaration().replace('printed-pages = ["printed p. 1"]\\n', "")
+        temp, root = self.make_root(content)
+        self.addCleanup(temp.cleanup)
+        errors = validate_registry(root)
+        self.assertTrue(any("documented/observed evidence needs printed-page locators" in error for error in errors))
+
+    def test_disputed_evidence_cannot_claim_implementation_support_or_conformance(self):
+        content = self.valid_declaration().replace(
+            'status = "book-documented"', 'status = "disputed"'
+        ).replace(
+            'status = "not-implemented"', 'status = "implemented"\\nhandler = "example.handler"'
+        ).replace(
+            'classification = "unsupported"', 'classification = "supported"'
+        ).replace(
+            'conformance = "not-tested"', 'conformance = "passing"'
+        )
+        temp, root = self.make_root(content)
+        self.addCleanup(temp.cleanup)
+        errors = validate_registry(root)
+        self.assertTrue(any("disputed evidence cannot claim an implemented behavior" in error for error in errors))
+        self.assertTrue(any("uncertain/disputed evidence cannot claim supported target behavior" in error for error in errors))
+        self.assertTrue(any("disputed evidence cannot have passing conformance" in error for error in errors))
+
     def test_supported_entry_requires_tests_and_implementation(self):
         content = self.valid_declaration().replace('classification = "unsupported"', 'classification = "supported"')
         temp, root = self.make_root(content)
@@ -326,7 +352,7 @@ anchors = []
         self.addCleanup(temp.cleanup)
         errors = validate_registry(root)
         self.assertTrue(
-            any("unknown support classification needs a pending reason" in error for error in errors)
+            any("unknown/unsupported classification needs a pending reason" in error for error in errors)
         )
 
         registry = root / "api/registry/atari-st/time.toml"
