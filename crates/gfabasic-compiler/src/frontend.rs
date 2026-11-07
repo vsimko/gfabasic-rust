@@ -777,7 +777,6 @@ mod tests {
             include_str!("../../../tests/corpus/amiga/3.5/matrix/mat-one-identity.bas"),
             include_str!("../../../tests/corpus/amiga/3.5/matrix/mat-clear-zero.bas"),
             include_str!("../../../tests/corpus/amiga/3.5/matrix/mat-set-scalar.bas"),
-            include_str!("../../../tests/corpus/amiga/3.5/matrix/mat-base-transpose.bas"),
         ];
 
         for source_text in fixtures {
@@ -834,6 +833,16 @@ mod tests {
             Statement::MatTrans { destination, source: Some(source), .. }
                 if destination == "a" && source == "b"
         ));
+
+        let fixture = include_str!("../../../tests/corpus/amiga/3.5/matrix/mat-base-transpose.bas");
+        let mut fixture_sources = SourceMap::new();
+        let fixture_id = fixture_sources.add_source("mat-base-transpose.bas", fixture);
+        let fixture_program = parse(fixture_id, fixture).unwrap();
+        assert!(fixture_program.statements.iter().any(|statement| matches!(
+            statement,
+            Statement::MatTrans { destination, source: Some(source), .. }
+                if destination == "a" && source == "b"
+        )));
     }
 
     #[test]
