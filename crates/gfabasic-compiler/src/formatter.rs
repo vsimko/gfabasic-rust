@@ -135,15 +135,22 @@ mod tests {
                     ..
                 } => Meaning::MatTrans(destination.clone(), source.clone()),
                 Statement::MatNorm { name, mode, .. } => Meaning::MatNorm(name.clone(), *mode),
-                Statement::MatMulMatrix { destination, left, right, .. } => {
-                    Meaning::MatMulMatrix(destination.clone(), left.clone(), right.clone())
-                }
-                Statement::MatMulScalar { destination, operands, .. } => {
-                    Meaning::MatMulScalar(destination.clone(), operands.clone())
-                }
-                Statement::MatMulScale { destination, scalar, .. } => {
-                    Meaning::MatMulScale(destination.clone(), scalar.clone())
-                }
+                Statement::MatMulMatrix {
+                    destination,
+                    left,
+                    right,
+                    ..
+                } => Meaning::MatMulMatrix(destination.clone(), left.clone(), right.clone()),
+                Statement::MatMulScalar {
+                    destination,
+                    operands,
+                    ..
+                } => Meaning::MatMulScalar(destination.clone(), operands.clone()),
+                Statement::MatMulScale {
+                    destination,
+                    scalar,
+                    ..
+                } => Meaning::MatMulScale(destination.clone(), scalar.clone())
                 Statement::MatArithmetic {
                     operation,
                     destination,
@@ -354,7 +361,8 @@ mod tests {
 
     #[test]
     fn mat_mul_formatting_is_idempotent_and_semantics_preserving() {
-        let source = "MAT MUL a()=b()*a()\nMAT MUL x=a()*b()\nMAT MUL y=a()*b()*a()\nMAT MUL a(),x\n";
+        let source =
+            "MAT MUL a()=b()*a()\nMAT MUL x=a()*b()\nMAT MUL y=a()*b()*a()\nMAT MUL a(),x\n";
         let formatted = format(source);
         assert_eq!(format(&formatted), formatted);
         let mut before_sources = SourceMap::new();
