@@ -240,7 +240,7 @@ def validate_registry(root: Path = ROOT) -> list[str]:
             implementation = declaration.get("implementation", {})
             if implementation.get("status") in {"implemented", "partial"} and not implementation.get("handler"):
                 errors.append(f"{path}: {declaration_id}: implemented entry has no handler ID")
-            if evidence.get("status") in PRIMARY_EVIDENCE and not evidence.get("printed-pages"):
+            if evidence.get("status") in {"book-documented", "primary-reference-cross-checked"} and not evidence.get("printed-pages"):
                 errors.append(f"{path}: {declaration_id}: documented/observed evidence needs printed-page locators")
             if evidence.get("status") == "disputed":
                 if not evidence.get("notes"):
