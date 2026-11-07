@@ -1,43 +1,46 @@
 # Current compatibility matrix
 
-- Status: **Amiga GFA BASIC interpreter 3.5 is the accepted initial normative source dialect. A narrow FACT/PRINT prototype exists; no complete dialect is implemented or conformant.**
+- Status: **The sole product target is Amiga GFA BASIC interpreter 3.5 to Linux x86-64. A narrow FACT/PRINT prototype exists; no complete dialect is implemented or conformant.**
 - Updated: 2026-11-05.
-- Tracking: [dialect policy #3](https://github.com/vsimko/gfabasic-rust/issues/3), [compatibility testing #10](https://github.com/vsimko/gfabasic-rust/issues/10), [versioning policy #58](https://github.com/vsimko/gfabasic-rust/issues/58).
+- Tracking: [dialect policy #3](https://github.com/vsimko/gfabasic-rust/issues/3), [compatibility testing #10](https://github.com/vsimko/gfabasic-rust/issues/10), [versioning policy #58](https://github.com/vsimko/gfabasic-rust/issues/58), [product scope ADR 0011](adr/0011-amiga-35-linux-sdl3-product-scope.md).
 
-This matrix separates accepted normative source scope from research evidence, compiler implementation, API profile implementation, output target, and conformance status. Selecting a source dialect does not mean that it is implemented or supported.
+This matrix separates the sole product target from historical research evidence, compiler implementation, Amiga API implementation, Linux/SDL3 implementation, and conformance status. A selected target does not mean that it is implemented or supported.
 
-## Current status
+## Product target
 
-| Evidence target | Policy status | Research evidence | Language implementation | API profile implementation | Output target | Conformance status |
-|---|---|---|---|---|---|---|
-| Amiga GFA BASIC interpreter 3.5 | **Accepted initial normative source dialect** | Supplied 3.5 Interpreter manual identifies the included software as 3.5 and contains version-specific addenda; the FACT/PRINT example is page-image-verified, but no original interpreter observation exists | Experimental FACT/PRINT frontend subset and temporary C/`cc` native bootstrap only; general language semantics/IR/LLVM are not implemented | Not implemented | One native host executable can be produced by the temporary bootstrap bridge; production Linux x86-64 backend is not implemented | Prototype fixture path only; not full dialect conformance |
-| Amiga GFA BASIC interpreter 3.0 / V3.03 | Historical research only; not the selected initial target | Separate 1989 3.0 and 1990 V3.03 book evidence; feature-by-feature applicability to 3.5 must be confirmed | Not implemented | Not implemented | Linux x86-64 is planned, not implemented | Historical/inherited candidates only; no 3.5 conformance claim |
-| Atari ST GFA BASIC V2.xx/V3.0 | Research-only; not in initial compiler contract | Preliminary source-backed research from the 1988 Atari book and July 1988 user manual; detailed OCR-sensitive rules still need review | Not implemented | Not implemented | Linux x86-64 is planned, not implemented | Research only; no compiler acceptance suite |
-| Amiga interpreter 3.51 / compiler 3.52 | Unselected; future research | Contemporary 1991 product listing distinguishes interpreter 3.51 and compiler 3.52; catalogue-labelled ADF images have not been inspected | Not implemented | Not implemented | Linux x86-64 is planned, not implemented | Not selected; component identity and runtime observations remain incomplete |
+| Dimension | Sole product target | Current implementation |
+|---|---|---|
+| Source dialect/version | Commodore Amiga GFA BASIC interpreter 3.5 | Experimental FACT/PRINT frontend subset only |
+| Historical source evidence | 3.5 Interpreter manual and version-specific addenda; 3.0/3.03 references are inherited candidates requiring 3.5 confirmation | Page-image-verified FACT/PRINT fixture; no original interpreter observation |
+| API profile | Amiga GFA BASIC 3.5 API only | Not implemented |
+| Output OS/architecture | Linux x86-64 | Temporary host C/cc bootstrap only; production backend not implemented |
+| ABI/object format | GNU ABI, ELF 64-bit; LLVM triple x86_64-unknown-linux-gnu | Not implemented by production backend |
+| Native backend | LLVM | Not implemented |
+| Graphics/window/input | SDL3 behind Linux platform adapter | Not implemented |
+| Conformance | Amiga 3.5 source-backed fixtures and original-interpreter observations where legally available | Narrow prototype tests only; not full dialect conformance |
+
+## Historical and excluded research
+
+| Material | Status | Permitted use |
+|---|---|---|
+| Amiga GFA BASIC 3.0 / V3.03 | Historical research only; not a supported source version | Inherited candidates only, after confirmation against Amiga 3.5 |
+| Atari ST GFA BASIC V2.xx/V3.0 and Atari ST 3.5 | Archival research only; outside product scope | Provenance/context only; never used to define Amiga behavior or product builds |
+| Amiga interpreter 3.51 / compiler 3.52 | Other product versions; outside product scope | Historical catalogue/source notes only; no support or compatibility commitment |
 
 ## Project-wide implementation status
 
-- Rust workspace: bootstrapped with compiler, generated-program runtime, and Linux platform crates. Compiler source-map, strict UTF-8 transport loading, structured diagnostics, an evidence-gated FACT/PRINT frontend subset, and a temporary C/`cc` native bootstrap are present. General semantic analysis, typed IR, LLVM backend, project configuration, runtime behavior, and platform adapter are not implemented.
-- A narrow `build` path exists for the FACT/PRINT prototype only. General GFA BASIC compilation, semantic analysis, project IR, and LLVM backend remain unimplemented; `check` remains unavailable.
-- GFA BASIC core runtime: not implemented.
-- Amiga and Atari ST compatibility runtimes: not implemented.
-- Linux platform layer and SDL3 integration: not implemented.
-- CI: documentation validation and fast Rust workspace checks are present; no GFA BASIC conformance runner or compiler/runtime integration workflows exist.
-- No dialect/version or API profile is currently claimed as implemented, stable, supported, or conformant. Amiga GFA BASIC interpreter 3.5 is selected as the normative target only.
+- Rust workspace: bootstrapped with compiler, generated-program runtime, and Linux platform crates. Compiler source-map, strict UTF-8 transport loading, structured diagnostics, an evidence-gated FACT/PRINT frontend subset, and a temporary C/cc native bootstrap are present.
+- General lexer/parser, semantic analysis, typed IR, LLVM backend, project configuration, GFA BASIC core runtime, Amiga API compatibility runtime, and Linux/SDL3 platform adapter are not implemented.
+- A narrow build path exists for the FACT/PRINT prototype only. General Amiga 3.5 compilation is not available; check remains unavailable.
+- CI: documentation validation and fast Rust workspace checks are present; no full GFA BASIC conformance runner or production compiler/runtime integration workflow exists.
+- No complete Amiga 3.5 language subset or Amiga API profile is currently claimed as fully supported or conformant.
 
 ## Rules for updating the matrix
 
-Add or change a row only when the evidence and implementation state are explicit.
-
-1. Name the exact upstream dialect, version, and platform. Do not merge interpreter and compiler versions.
-2. Identify the source documents and evidence status. Separate manual-backed claims from interpreter/compiler observations.
-3. Name the selected API profile set independently from the source dialect.
-4. Name the output target independently from the host machine and source platform.
-5. Report implementation status separately for language core, API profile, runtime, and target.
-6. Link conformance tests and state whether they are candidates, verified fixtures, or executed tests.
-7. List known deviations and blocked prerequisites.
-8. Do not use “supported” or “stable” until the exact scope is implemented and the relevant tests pass.
-
-The planned Linux x86-64 target is not evidence of a working backend. An Amiga or Atari ST API profile implemented for Linux would not make the output binary a native Amiga or Atari executable.
-
-The matrix must be reviewed with the release notes and updated whenever a compiler release changes the supported subset, runtime, API profiles, or target capabilities.
+1. Name the exact Amiga interpreter version and applicable source evidence.
+2. Distinguish historical 3.0/3.03 evidence from confirmed 3.5 behavior.
+3. Report implementation status separately for language core, Amiga API, runtime, backend, and Linux/SDL3 adapter.
+4. The only product target is Linux x86-64; do not add alternate dialects, profiles, or targets without a new product-scope decision.
+5. Link conformance tests and state whether they are candidate, verified, or executed tests.
+6. List known deviations and blocked prerequisites.
+7. Do not use “supported” or “stable” until the exact feature scope is implemented and relevant tests pass.
