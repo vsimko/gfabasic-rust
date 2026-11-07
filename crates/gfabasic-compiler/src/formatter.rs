@@ -68,7 +68,8 @@ fn needs_space(previous: &TokenKind, current: &TokenKind) -> bool {
         | (_, TokenKind::LeftParen)
         | (TokenKind::LeftParen, _)
         | (_, TokenKind::RightParen) => false,
-        (TokenKind::Identifier(_), TokenKind::Identifier(_)) => true,
+        (TokenKind::Identifier(_), TokenKind::Identifier(_))
+        | (TokenKind::Identifier(_), TokenKind::Integer(_)) => true,
         _ => false,
     }
 }
