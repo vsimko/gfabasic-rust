@@ -868,6 +868,27 @@ mod tests {
     }
 
     #[test]
+    fn parses_verified_mat_norm_row_fixture_and_column_mode() {
+        let source = include_str!("../../../tests/corpus/amiga/3.5/matrix/mat-norm-row.bas");
+        let mut sources = SourceMap::new();
+        let source_id = sources.add_source("mat-norm-row.bas", source);
+        let program = parse(source_id, source).unwrap();
+        assert!(matches!(
+            &program.statements[1],
+            Statement::MatNorm { name, mode: 0, .. } if name == "a"
+        ));
+
+        let column_source = "MAT NORM a(),1\n";
+        let mut column_sources = SourceMap::new();
+        let column_id = column_sources.add_source("mat-norm-column.bas", column_source);
+        let column_program = parse(column_id, column_source).unwrap();
+        assert!(matches!(
+            &column_program.statements[0],
+            Statement::MatNorm { name, mode: 1, .. } if name == "a"
+        ));
+    }
+
+    #[test]
     fn rejects_unsupported_mat_base_offsets_and_transpose_shapes() {
         for source in ["MAT BASE 2\n", "MAT BASE\n", "MAT TRANS a()=b(),c()\n"] {
             let mut sources = SourceMap::new();
