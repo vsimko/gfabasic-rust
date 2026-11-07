@@ -157,12 +157,13 @@ def render_project_dashboard(data: dict) -> tuple[str, str]:
     progress = ['<h3 class="dashboard-subheading">Roadmap progress</h3><div class="dashboard-roadmap-progress">']
     for phase in data["roadmap_progress"]:
         percent = max(0, min(100, int(phase["percent"])))
+        label = esc("Phase " + str(phase["number"]) + ": " + phase["name"])
         progress.append(
             '<div class="dashboard-phase-progress"><div class="dashboard-progress-top">'
             f'<span class="dashboard-progress-name">Phase {phase["number"]} · {esc(phase["name"])}</span>'
             f'<span class="dashboard-progress-value">{phase["completed"]}/{phase["total"]} · {percent}%</span>'
             '</div>'
-            f'<div class="dashboard-progress-track" role="progressbar" aria-label="{esc(f"Phase {phase[chr(110)+chr(117)+chr(109)+chr(98)+chr(101)+chr(114)]}: {phase[chr(110)+chr(97)+chr(109)+chr(101)]}")}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{percent}">'
+            f'<div class="dashboard-progress-track" role="progressbar" aria-label="{label}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{percent}">'
             f'<span class="dashboard-progress-fill" style="width:{percent}%"></span></div></div>'
         )
     progress.append('</div>')
