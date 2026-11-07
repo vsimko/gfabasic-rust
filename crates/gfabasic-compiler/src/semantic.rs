@@ -132,7 +132,8 @@ pub fn resolve_prototype_symbols(
             | Statement::MatPrint { span, .. }
             | Statement::MatBase { span, .. }
             | Statement::MatTrans { span, .. }
-            | Statement::MatNorm { span, .. } => errors.push(SemanticError {
+            | Statement::MatNorm { span, .. }
+            | Statement::MatArithmetic { span, .. } => errors.push(SemanticError {
                 code: "GFA-SEM-0003".to_owned(),
                 message: "matrix syntax is parsed for formatting but matrix semantic analysis is not implemented".to_owned(),
                 span: *span,

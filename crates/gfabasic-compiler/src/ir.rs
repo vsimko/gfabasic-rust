@@ -150,7 +150,8 @@ pub fn lower(program: &Program) -> Result<Module, Vec<IrError>> {
             | Statement::MatPrint { span, .. }
             | Statement::MatBase { span, .. }
             | Statement::MatTrans { span, .. }
-            | Statement::MatNorm { span, .. } => {
+            | Statement::MatNorm { span, .. }
+            | Statement::MatArithmetic { span, .. } => {
                 errors.push(IrError::at(
                     "matrix statements are supported by the parser and formatter but not by the executable compiler prototype",
                     *span,
