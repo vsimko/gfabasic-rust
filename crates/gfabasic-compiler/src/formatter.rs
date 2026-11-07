@@ -1,8 +1,8 @@
 //! Conservative, lossless-source-aware formatter for the supported frontend subset.
 //!
 //! Formatting is intentionally limited to syntax accepted by `parse_document`.
-//! Token spellings are copied from their original source spans; the formatter
-//! never case-folds or rewrites identifiers or numeric literal text.
+//! Token spellings and trailing comment text are copied from their original
+//! source spans; identifiers and numeric literal text are never rewritten.
 
 use crate::diagnostics::Diagnostic;
 use crate::frontend::{TokenKind, parse_document};
@@ -11,7 +11,7 @@ use crate::source::SourceId;
 /// Format the currently supported Amiga GFA BASIC 3.5 source subset.
 ///
 /// The formatter validates the complete input with the lossless parser before
-/// producing output. Unsupported syntax (including comments and string/DATA
+/// producing output. Unsupported syntax (including standalone comments and string/DATA
 /// payloads until their lexical rules are verified) returns diagnostics and
 /// never yields partially formatted text.
 ///
@@ -36,6 +36,17 @@ pub fn format_source(source_id: SourceId, source: &str) -> Result<String, Vec<Di
                     line_has_tokens = false;
                 }
                 previous = None;
+            }
+            TokenKind::Comment => {
+                if line_has_tokens {
+                    output.push(' ');
+                }
+                let spelling = source
+                    .get(token.span.start..token.span.end)
+                    .expect("lexer comment spans are valid UTF-8 source ranges");
+                output.push_str(spelling);
+                previous = None;
+                line_has_tokens = true;
             }
             kind => {
                 if let Some(previous_kind) = previous
@@ -181,12 +192,42 @@ mod tests {
     }
 
     #[test]
+    fn preserves_trailing_comment_text_and_normalizes_only_the_separator() {
+        let cases = [
+            ("x=FACT(1)'keep  spacing\n", "x = FACT(1) 'keep  spacing\n"),
+            ("PRINT   x,y,z   !  exact comment text  \r\n", "PRINT x, y, z !  exact comment text  \n"),
+        ];
+
+        for (source, expected) in cases {
+            let formatted = format(source);
+            assert_eq!(formatted, expected);
+            assert_eq!(format(&formatted), formatted);
+        }
+    }
+
+    #[test]
+    fn comments_do_not_change_parsed_program_meaning() {
+        let source = "x=FACT(2) ' comment\nPRINT x,y,z ! output\n";
+        let formatted = format(source);
+        let mut before_sources = SourceMap::new();
+        let before_id = before_sources.add_source("before.bas", source);
+        let before = parse_document(before_id, source).unwrap();
+        let mut after_sources = SourceMap::new();
+        let after_id = after_sources.add_source("after.bas", formatted.as_str());
+        let after = parse_document(after_id, &formatted).unwrap();
+
+        assert_eq!(meanings(&before.program), meanings(&after.program));
+        assert!(formatted.contains("' comment"));
+        assert!(formatted.contains("! output"));
+    }
+
+    #[test]
     fn unsupported_syntax_is_rejected_without_output() {
         let cases = [
             "PRINT \"not supported yet\"\n",
             "REM comment\n",
-            "' apostrophe comment\n",
-            "x=FACT(1) ! trailing comment\n",
+            "' standalone comment\n",
+            "! standalone comment\n",
             "DATA 1,2,3\n",
         ];
 
