@@ -2,8 +2,8 @@
 //!
 //! This is deliberately not a general GFA BASIC lexer/parser. It recognizes
 //! only the source forms demonstrated by the 3.5 addendum: FACT/VARIAT/COMBIN
-//! assignments and PRINT, plus the verified MAT ONE/SET/CLR/PRINT matrix
-//! examples. Other syntax is rejected rather than guessed.
+//! assignments and PRINT, plus selected verified MAT matrix commands. Other
+//! syntax is rejected rather than guessed.
 
 use crate::diagnostics::{Diagnostic, DiagnosticCategory, DiagnosticSeverity};
 use crate::source::{SourceId, SourceSpan};
@@ -69,6 +69,15 @@ pub enum Statement {
     },
     MatPrint {
         name: String,
+        span: SourceSpan,
+    },
+    MatBase {
+        index: i64,
+        span: SourceSpan,
+    },
+    MatTrans {
+        destination: String,
+        source: Option<String>,
         span: SourceSpan,
     },
 }
@@ -499,9 +508,9 @@ impl Parser {
     fn parse_matrix_name(&mut self) -> Result<(String, SourceSpan), Box<Diagnostic>> {
         let token = self.advance();
         match token.kind {
-            TokenKind::Identifier(name) if name == "a" => Ok((name, token.span)),
+            TokenKind::Identifier(name) if matches!(name.as_str(), "a" | "b") => Ok((name, token.span)),
             TokenKind::Identifier(name) => Err(self.unsupported_error(
-                format!("matrix name {name:?} is outside the current verified fixture subset (supported: a)"),
+                format!("matrix name {name:?} is outside the current verified matrix subset (supported: a, b)"),
                 token.span,
             )),
             _ => Err(self.syntax_error("expected matrix name 'a'", token.span)),
@@ -517,12 +526,12 @@ impl Parser {
         Ok((name, SourceSpan::new(self.source_id, start.start, end.end)))
     }
 
-    fn parse_matrix_dimension(&mut self) -> Result<i64, Box<Diagnostic>> {
+    fn parse_nonnegative_matrix_integer(&mut self) -> Result<i64, Box<Diagnostic>> {
         let token = self.advance();
         match token.kind {
             TokenKind::Integer(value) => Ok(value),
             _ => Err(self.syntax_error(
-                "matrix dimensions must be non-negative integer literals in this MVP",
+                "expected a non-negative integer literal in the supported matrix command subset",
                 token.span,
             )),
         }
@@ -531,9 +540,9 @@ impl Parser {
     fn parse_dim_matrix(&mut self, start: SourceSpan) -> Result<Statement, Box<Diagnostic>> {
         let (name, _) = self.parse_matrix_name()?;
         self.expect(TokenKind::LeftParen, "'(' after matrix name")?;
-        let rows = self.parse_matrix_dimension()?;
+        let rows = self.parse_nonnegative_matrix_integer()?;
         self.expect(TokenKind::Comma, "',' between matrix dimensions")?;
-        let columns = self.parse_matrix_dimension()?;
+        let columns = self.parse_nonnegative_matrix_integer()?;
         let end = self
             .expect(TokenKind::RightParen, "')' after matrix dimensions")?
             .span;
@@ -557,6 +566,35 @@ impl Parser {
             }
         };
         match operation_name.as_str() {
+            "BASE" => {
+                let index = self.parse_nonnegative_matrix_integer()?;
+                if !matches!(index, 0 | 1) {
+                    return Err(self.unsupported_error(
+                        "MAT BASE supports only the documented index offsets 0 and 1",
+                        self.tokens[self.cursor - 1].span,
+                    ));
+                }
+                let end = self.tokens[self.cursor - 1].span;
+                Ok(Statement::MatBase {
+                    index,
+                    span: SourceSpan::new(self.source_id, start.start, end.end),
+                })
+            }
+            "TRANS" => {
+                let (destination, destination_span) = self.parse_matrix_reference()?;
+                let source = if matches!(self.current().kind, TokenKind::Equals) {
+                    self.advance();
+                    Some(self.parse_matrix_reference()?.0)
+                } else {
+                    None
+                };
+                let end = self.tokens[self.cursor - 1].span;
+                Ok(Statement::MatTrans {
+                    destination,
+                    source,
+                    span: SourceSpan::new(self.source_id, start.start, end.end.max(destination_span.end)),
+                })
+            }
             "ONE" | "CLR" | "PRINT" => {
                 let (name, end) = self.parse_matrix_reference()?;
                 let span = SourceSpan::new(self.source_id, start.start, end.end);
@@ -570,7 +608,7 @@ impl Parser {
             "SET" => {
                 let (name, _) = self.parse_matrix_reference()?;
                 self.expect(TokenKind::Equals, "'=' in MAT SET")?;
-                let value = self.parse_matrix_dimension()?;
+                let value = self.parse_nonnegative_matrix_integer()?;
                 let span = SourceSpan::new(self.source_id, start.start, self.tokens[self.cursor - 1].span.end);
                 Ok(Statement::MatSet { name, value, span })
             }
@@ -769,6 +807,51 @@ mod tests {
             matches!(&program.statements[2], Statement::MatSet { name, value: 7, .. } if name == "a")
         );
         assert!(matches!(&program.statements[3], Statement::MatClr { name, .. } if name == "a"));
+    }
+
+    #[test]
+    fn parses_verified_mat_base_and_transpose_forms() {
+        let source = "MAT BASE 0\nMAT BASE 1\nMAT TRANS a()\nMAT TRANS a()=b()\n";
+        let mut sources = SourceMap::new();
+        let source_id = sources.add_source("mat-transpose.bas", source);
+        let program = parse(source_id, source).unwrap();
+
+        assert!(matches!(
+            &program.statements[0],
+            Statement::MatBase { index: 0, .. }
+        ));
+        assert!(matches!(
+            &program.statements[1],
+            Statement::MatBase { index: 1, .. }
+        ));
+        assert!(matches!(
+            &program.statements[2],
+            Statement::MatTrans { destination, source: None, .. } if destination == "a"
+        ));
+        assert!(matches!(
+            &program.statements[3],
+            Statement::MatTrans { destination, source: Some(source), .. }
+                if destination == "a" && source == "b"
+        ));
+
+        let fixture = include_str!("../../../tests/corpus/amiga/3.5/matrix/mat-base-transpose.bas");
+        let mut fixture_sources = SourceMap::new();
+        let fixture_id = fixture_sources.add_source("mat-base-transpose.bas", fixture);
+        let fixture_program = parse(fixture_id, fixture).unwrap();
+        assert!(fixture_program.statements.iter().any(|statement| matches!(
+            statement,
+            Statement::MatTrans { destination, source: Some(source), .. }
+                if destination == "a" && source == "b"
+        )));
+    }
+
+    #[test]
+    fn rejects_unsupported_mat_base_offsets_and_transpose_shapes() {
+        for source in ["MAT BASE 2\n", "MAT BASE\n", "MAT TRANS a()=b(),c()\n"] {
+            let mut sources = SourceMap::new();
+            let source_id = sources.add_source("invalid-mat.bas", source);
+            assert!(parse(source_id, source).is_err(), "accepted: {source:?}");
+        }
     }
 
     #[test]
