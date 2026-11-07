@@ -76,12 +76,12 @@ def markdown_heading_anchors(markdown: str) -> set[str]:
     anchors = set()
     counts: dict[str, int] = {}
     for line in markdown.splitlines():
-        heading = re.match(r"^#{1,6}\\s+(.+?)\\s*#*\\s*$", line)
+        heading = re.match(r"^#{1,6}\s+(.+?)\s*#*\s*$", line)
         if not heading:
             continue
-        title = re.sub(r"!?(\\[([^]]*)\\])\\([^)]*\\)", r"\\2", heading.group(1))
+        title = re.sub(r"!?(\[([^]]*)\])\([^)]*\)", r"\2", heading.group(1))
         title = re.sub(r"<[^>]+>|[*_~]", "", title).replace(chr(96), "").lower()
-        slug = re.sub(r"[^\\w -]", "", title, flags=re.UNICODE).strip().replace(" ", "-")
+        slug = re.sub(r"[^\w -]", "", title, flags=re.UNICODE).strip().replace(" ", "-")
         if slug:
             count = counts.get(slug, 0)
             anchors.add(f"{slug}-{count}" if count else slug)
