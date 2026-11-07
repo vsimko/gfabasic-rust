@@ -12,8 +12,8 @@ use crate::source::SourceId;
 ///
 /// The formatter validates the complete input with the lossless parser before
 /// producing output. Unsupported syntax (including standalone comments and
-/// string/DATA payloads until their lexical rules are verified) returns diagnostics and
-/// never yields partially formatted text.
+/// string/DATA payloads until their lexical rules are verified) returns
+/// diagnostics and never yields partially formatted text.
 ///
 /// The canonical prototype layout uses one space around assignment, one space
 /// after commas, no spaces inside intrinsic-call parentheses, LF line endings,
