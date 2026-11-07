@@ -817,8 +817,14 @@ mod tests {
         let source_id = sources.add_source("mat-transpose.bas", source);
         let program = parse(source_id, source).unwrap();
 
-        assert!(matches!(&program.statements[0], Statement::MatBase { index: 0, .. }));
-        assert!(matches!(&program.statements[1], Statement::MatBase { index: 1, .. }));
+        assert!(matches!(
+            &program.statements[0],
+            Statement::MatBase { index: 0, .. }
+        ));
+        assert!(matches!(
+            &program.statements[1],
+            Statement::MatBase { index: 1, .. }
+        ));
         assert!(matches!(
             &program.statements[2],
             Statement::MatTrans { destination, source: None, .. } if destination == "a"
