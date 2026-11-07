@@ -11,7 +11,8 @@ class FunctionInventoryTests(unittest.TestCase):
         result = validate(root / "docs/research/amiga-gfa-basic-functions.toml")
         self.assertEqual(result["all-identifiers"], 116)
         self.assertEqual(result["interpreter-identifiers-including-disputed-slot"], 114)
-        self.assertEqual(result["unambiguous-interpreter-identifiers"], 113)
+        self.assertEqual(result["unambiguous-interpreter-identifiers"], 112)
+        self.assertEqual(result["disputed-name-slots"], 2)
 
     def test_duplicate_names_are_rejected(self):
         root = Path(__file__).resolve().parents[2]

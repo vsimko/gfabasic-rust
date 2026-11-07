@@ -10,9 +10,43 @@
 | Explicit functions added in the 3.5 addendum | 4 |
 | **All names listed across the combined manual** | **116** |
 | Compiler-only names excluded from the interpreter population (`CINT`, `CFLOAT`) | 2 |
-| **Interpreter function candidates** | **114** |
+| **Interpreter function candidates (including disputed slots)** | **114** |
+| Unambiguous interpreter function names | 112 |
+| Disputed source-name slots | 2 |
 
-Of the 114 interpreter candidates, 113 have an unambiguous name in the source. One slot is disputed: the appendix table lists `CVD()`, while the Chapter 2-18 prose refers to `CVF` and the signature list does not settle the name. It is counted as one candidate, not two.
+Of the 114 interpreter candidates, 112 have unambiguous names. Two source slots are disputed: the appendix table lists `CVD()` while the Chapter 2-18 prose refers to `CVF`; likewise, the command table and signature list show `MKD# Amiga GFA BASIC 3.5 built-in function inventory
+
+> Source-derived inventory, not an implementation or runtime-conformance claim.
+
+## Count
+
+| Population | Unique names |
+|---|---:|
+| Base-manual functions (3.0 text included in the supplied 3.5 manual) | 112 |
+| Explicit functions added in the 3.5 addendum | 4 |
+| **All names listed across the combined manual** | **116** |
+| Compiler-only names excluded from the interpreter population (`CINT`, `CFLOAT`) | 2 |
+| **Interpreter function candidates (including disputed slots)** | **114** |
+| Unambiguous interpreter function names | 112 |
+| Disputed source-name slots | 2 |
+
+, while the Chapter 2-19 prose also mentions `MKF# Amiga GFA BASIC 3.5 built-in function inventory
+
+> Source-derived inventory, not an implementation or runtime-conformance claim.
+
+## Count
+
+| Population | Unique names |
+|---|---:|
+| Base-manual functions (3.0 text included in the supplied 3.5 manual) | 112 |
+| Explicit functions added in the 3.5 addendum | 4 |
+| **All names listed across the combined manual** | **116** |
+| Compiler-only names excluded from the interpreter population (`CINT`, `CFLOAT`) | 2 |
+| **Interpreter function candidates (including disputed slots)** | **114** |
+| Unambiguous interpreter function names | 112 |
+| Disputed source-name slots | 2 |
+
+. Each is counted as one candidate slot, not as two confirmed names.
 
 The count includes the manual's function-like typed conversions (`BYTE{}`, `CARD{}`, `CHAR{}`, `DOUBLE{}`, `FLOAT{}`, `INT{}`, `LONG{}`, `SINGLE{}`, `WORD{}`). Alternate forms such as `BYTE()` and `BYTE{}` are grouped under one identifier. `CINT` and `CFLOAT` are documented but explicitly described as meaningful only to the compiler, so they are not included in the interpreter count.
 

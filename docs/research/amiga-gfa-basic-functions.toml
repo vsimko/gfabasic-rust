@@ -6,11 +6,11 @@ counting-rule = "Count each distinct built-in function identifier once. Group al
 [expected-counts]
 all-identifiers = 116
 interpreter-identifiers-including-disputed-slot = 114
-unambiguous-interpreter-identifiers = 113
+unambiguous-interpreter-identifiers = 112
 compiler-only-identifiers = 2
 base-manual-identifiers = 112
 "explicit-3.5-addendum-identifiers" = 4
-disputed-name-slots = 1
+disputed-name-slots = 2
 
 [[functions]]
 name = "ABS"
@@ -484,8 +484,9 @@ printed-pages = ["4-16"]
 name = "MKD$"
 origin = "base-manual-3.0"
 applicability = "interpreter"
-evidence-status = "base-manual-entry"
-printed-pages = ["2-18"]
+evidence-status = "disputed-name"
+printed-pages = ["2-18", "2-19"]
+notes = "The command table and signature list name MKD$; the Chapter 2-19 prose also mentions MKF$. Counted as one unresolved MKx function slot, not as two confirmed names."
 
 [[functions]]
 name = "MKI$"
