@@ -123,6 +123,16 @@ anchors = []
         self.addCleanup(temp.cleanup)
         self.assertEqual(validate_registry(root), [])
 
+    def test_non_amiga_35_declaration_does_not_require_amiga_evidence_scope(self):
+        declaration = self.valid_declaration().replace(
+            'dialect = "atari-st-gfa-basic"', 'dialect = "other-basic-dialect"'
+        ).replace(
+            'versions = ["3.0"]', 'versions = ["3.5"]'
+        )
+        temp, root = self.make_root(declaration)
+        self.addCleanup(temp.cleanup)
+        self.assertEqual(validate_registry(root), [])
+
     def test_source_register_heading_is_not_a_valid_source_id(self):
         content = self.valid_declaration().replace(
             'sources = ["TEST-SOURCE"]', 'sources = ["ID"]'
