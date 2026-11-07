@@ -205,3 +205,6 @@ The public API progress view is generated from the canonical registry by `script
 ### Version-scoped evidence
 
 The evidence record includes an optional source-scope field. Amiga declarations claiming version 3.5 must set it to `amiga-3.5-addendum`; `base-manual-3.0` alone cannot justify 3.5 availability. This prevents a declaration from being promoted solely because Chapters 2–12 occur in the same PDF as the 3.5 addendum. A 3.0 baseline inventory is maintained separately until 3.5 applicability is confirmed.
+
+
+The website payload is split into a compact static index (`site/data/api-catalogue.json`) and one static JSON detail per declaration (`site/data/api-catalogue-details/<id>.json`). The browser renders only category and declaration names from the index; full detail DOM and its static file request are deferred until a declaration is expanded. Both payload layers are generated from TOML at build time and checked for deterministic output in CI. Runtime operation requires only static hosting.
