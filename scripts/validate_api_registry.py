@@ -205,13 +205,16 @@ def validate_registry(root: Path = ROOT) -> list[str]:
                         seen_names[key] = (str(path.relative_to(root)), group)
 
             evidence = declaration.get("evidence", {})
-            declared_versions = {
-                version
+            amiga_35_declaration = any(
+                "3.5" in availability.get("versions", [])
+                and (
+                    namespace == "amiga"
+                    or availability.get("dialect") == "amiga-gfa-basic-interpreter"
+                )
                 for availability in declaration.get("availability", [])
-                for version in availability.get("versions", [])
-            }
+            )
             source_scope = evidence.get("source-scope")
-            if "3.5" in declared_versions and source_scope not in {
+            if amiga_35_declaration and source_scope not in {
                 "amiga-3.5-addendum",
                 "runtime-observation",
             }:

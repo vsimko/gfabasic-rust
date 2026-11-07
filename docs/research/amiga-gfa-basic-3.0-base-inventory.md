@@ -185,3 +185,498 @@ These notes describe the 3.0 baseline in the supplied manual. They are not evide
 - **CVI/CVL/CVS and MKI$/MKL$/MKS$/MKF$/MKD$ (pp. 2-18–2-19):** convert between numeric values and their internal binary string representations for interchange with other programming languages. The prose/table has naming inconsistencies (CVS versus CVF, and MKS$ versus MKF$); do not normalize the exact floating-point pair until the page image and another edition/runtime are checked.
 
 The Chapter 2 base-manual pages therefore expose several implementation-relevant distinctions: storage type versus expression type, array descriptor versus element address, compiler-only conversions, and binary-string conversion versus ASCII VAL/STR$ conversion. All remain 3.0 candidates pending 3.5 confirmation.
+
+
+## Chapter 5 — input and output: page-level notes
+
+The following details were checked against the chapter text. They describe the 3.0 base-manual behavior only.
+
+- **INKEY$ (printed p. 5-2):** reads a keyboard character. Modifier/control keys are not returned as ordinary characters; special keys such as function keys return a CSI sequence beginning with CHR$(155), followed by additional characters.
+- **INPUT (pp. 5-3–5-4):** reads one or more numeric/string variables, optionally with a prompt. It is window-based and opens standard window 0 if no window is open. A semicolon after the prompt adds "? "; a comma places the cursor immediately after the prompt. Numeric input rejects non-numeric text and requests re-entry.
+- **LINE INPUT (p. 5-5):** reads string variables while allowing commas inside the entered text. Editing before confirmation follows INPUT.
+- **FORM INPUT / FORM INPUT AS (p. 5-6):** edits a string variable with a declared field width from 1 to 255 characters. FORM INPUT AS displays the variable's current value for editing.
+- **PRINT / PRINT AT / WRITE / LOCATE (pp. 5-7–5-8):** PRINT writes to the most recently opened window; PRINT AT positions output at a column/line; LOCATE positions the cursor; WRITE emits comma-separated values in a format intended for reading back with INPUT. The manual distinguishes comma, semicolon and apostrophe separators.
+- **PRINT USING (p. 5-9):** formatted screen output; the format string controls numeric/string field presentation. Full placeholder grammar still needs page-image review.
+- **MODE, DEFNUM, cursor-positioning and DATA, mouse, printer, hardcopy, SOUND/WAVE:** present in the contents at pp. 5-11–5-22; detailed syntax has not yet been extracted here.
+
+## Chapter 6 — disk and file organization: page-level notes
+
+- **INP/OUT (printed p. 6-13):** INP(#n) reads one byte from an opened data channel; OUT #n writes byte values to an opened channel. The documented channel-number range is 0–99.
+- **INPUT$ (p. 6-14):** reads a specified number of characters from the keyboard, or from a file when a channel number is supplied. The manual documents the optional channel argument.
+- **INPUT # / LINE INPUT # (p. 6-15):** reads comma-separated individual values/variable lists from an opened data file; LINE INPUT # reads a line into string variable(s).
+- **PRINT # / WRITE # (p. 6-16):** writes expressions through a data channel. PRINT # supports a USING format; PRINT # does not support PRINT AT.
+- **Chapter boundary:** file-based INPUT/LINE INPUT/PRINT are related to the screen commands in Chapter 5 but have channel-specific semantics. Keep them as distinct declarations when later modelling the API.
+
+The remaining Chapter 6 topics (open modes, file position/status, random-access records, BLOAD/BSAVE and STORE/RECALL) are still only present in the contents-derived index above.
+
+## Chapter 9 — file selector note
+
+- **FILESELECT (printed pp. 9-37–9-38):** displays a file-selector requester. The title and OK-gadget text are supplied as strings; a path string selects the directory/file to display; the output string receives the selected file name, or an empty string when Cancel is selected. The text also describes drive switching and accepting a file path typed into the selector. This is a 3.0 source description, not a verified 3.5 compatibility claim.
+
+## Chapter 10 — hardware sprite and input-device notes
+
+- **SPRITE (printed pp. 10-5–10-6):** defines, frees, moves, enables and disables Amiga hardware sprites. The manual describes eight sprite numbers (0–7), with sprite 0 assigned to the mouse; each sprite is 16 pixels wide and uses a bitmap string whose rows are four bytes. Coordinates are expressed in the lowest screen resolution. SPRITE ON/OFF affects all defined sprites, including the mouse.
+- **Sprite colour registers (p. 10-6):** paired sprites share colour registers; the manual lists register groups 17–19, 21–23, 25–27 and 29–31.
+- **STICK/STRIG (p. 10-7):** query joystick position and fire-button state for ports 0 and 1. The manual notes that port 0 is shared with mouse/Intuition behavior; querying it can therefore interact with OS input handling.
+- **CLI/_dosCmd$, EXEC, library variables, SAY/TRANSLATE$, FD files, blitter objects and OBJECT commands:** are identified by the chapter contents. They need separate page-level extraction. In particular, OBJECT/BOB functionality should be treated as Amiga-specific advanced graphics, not folded into the portable language core.
+
+## Extraction scope and next checks
+
+Page-level notes now cover selected topics in Chapters 2–10, with declaration/family candidates tracked separately in the structured manifest. Chapter 11 has a selected routine-level extraction across Exec, Graphics, Intuition and DOS, while Workbench, DiskFont and Layers remain primarily family-level inventories. Chapter 12 remains reference material rather than a declaration catalogue. For all base chapters, printed page references locate 3.0 source text; none of these notes independently establishes 3.5 availability.
+
+
+## Chapter 7 — program handling: page-level notes
+
+These are 3.0 base-manual descriptions, not confirmed 3.5 grammar.
+
+- **IF / ELSE / ENDIF (printed pp. 7-4–7-5):** IF evaluates a Boolean expression; THEN is optional. The true branch runs between IF and ELSE/ENDIF; the false branch runs between ELSE and ENDIF. The text defines logical true as any nonzero numeric expression.
+- **ELSE IF / ELSEIF (pp. 7-6–7-7):** chained conditions form a single conditional structure. The first satisfied branch runs and control continues after ENDIF; ELSE is the fallback. The editor spelling shown in syntax and examples varies between ELSE IF and ELSEIF; preserve this as an alias/spelling question until lexer/editor evidence is checked.
+- **ON GOSUB (p. 7-8):** selects the indexed procedure from a list. Decimal places in the selector are ignored; an out-of-range selector calls no procedure. The listed procedures take no parameters, and execution resumes after the ON GOSUB statement.
+- **SELECT / CASE / DEFAULT / ENDSELECT (pp. 7-9–7-10):** branches on a numeric expression or a short string constant (maximum four characters). CASE supports a single value, an inclusive TO range, or a comma-separated list. DEFAULT is the fallback; OTHERWISE is documented as an editor synonym replaced by DEFAULT.
+- **FOR / NEXT (pp. 7-13–7-14):** the contents execute at least once according to the manual's description. DOWNTO is an alternative to a negative STEP; ENDFOR is an editor replacement for NEXT. The OCR text around termination/step edge cases needs page-image review before precise conformance tests.
+- **REPEAT / UNTIL (p. 7-15):** body executes at least once, then UNTIL is tested; a false condition repeats. ENDREPEAT is documented as an editor replacement for UNTIL.
+- **WHILE / WEND (p. 7-16):** precondition loop; condition is checked before each body execution. END WHILE is replaced with WEND.
+- **DO / LOOP variants (pp. 7-17–7-19):** bare DO/LOOP is endless. DO WHILE/DO UNTIL tests at the beginning; LOOP WHILE/LOOP UNTIL tests at the end. The manual describes nine combinations. ENDDO is an editor replacement for LOOP.
+- **EXIT IF (p. 7-20):** exits the active loop when its Boolean condition is satisfied. The manual explicitly notes that, unlike older versions, EXIT IF is also allowed inside IF/ENDIF and SELECT/ENDSELECT structures.
+- **Procedures/functions, error/event handlers and program lifecycle:** the chapter index identifies GOSUB/PROCEDURE, LOCAL, FUNCTION/DEFFN, ON BREAK, ON ERROR, ERROR/ERR, EVERY/AFTER, GOTO, PAUSE/DELAY, END/EDIT/STOP, LOAD/SAVE/CHAIN/RUN and system calls. Their detailed parameter and control-flow semantics still need extraction.
+
+## Chapter 8 — graphics: page-level notes
+
+- **SETCOLOR / COLOR (printed p. 8-2):** SETCOLOR sets RGB components in a screen color register (component intensity 0–15), or accepts a packed red*512 + green*16 + blue value. Each open screen has its own palette. COLOR selects foreground, background and fill-outline colors; background behavior is tied to GRAPHMODE 1 in the description.
+- **DEFFILL (pp. 8-3–8-4):** configures fill color, style and pattern for PBOX, PCIRCLE, PELLIPSE, POLYFILL and FILL. Styles are empty, filled, dotted and hatched. The alternate form accepts a bit-pattern string; the manual describes width/height constraints and a maximum string length of 257.
+- **CLIP (p. 8-9):** restricts graphics output to a rectangular region, with forms using origin plus width/height, opposite corners, or a window number. OFFSET adjusts the origin; CLIP OFF disables clipping. The manual explicitly excludes GET and PUT from this clipping behavior.
+- **PLOT / LINE / DRAW (pp. 8-10–8-14):** PLOT writes one point; LINE draws between two coordinate pairs; DRAW supports relative/absolute path-style movement commands. DRAW also exposes inquiry functions for current position, angle, scaling and pen state. OCR-sensitive DRAW command strings should be checked against page images before grammar work.
+- **BOX / PBOX (p. 8-15):** draw an outlined or filled rectangle from two opposite corners.
+- **CIRCLE / PCIRCLE / ELLIPSE / PELLIPSE (p. 8-16):** draw outlined or filled circles/ellipses using center coordinates and radii.
+- **POLYLINE / POLYFILL (p. 8-17):** use coordinate arrays for polygon corners; first and last points are automatically connected. Optional OFFSET shifts the coordinates; POLYFILL uses the DEFFILL pattern.
+- **POINT (p. 8-18):** returns the color value at a specified screen coordinate.
+- **Graphics API boundary:** the later RASTPORT section (p. 8-8) permits selecting a raw Amiga RastPort address and explicitly warns that incorrect setup can crash the system. This is a platform/unsafe memory boundary, not ordinary portable drawing syntax.
+
+## Chapter 11 — system routines: classification note
+
+Chapter 11 is a catalogue of direct Amiga operating-system library calls, not a portable BASIC language-core feature list. Its introduction (printed pp. 11-1–11-2) says the interpreter assists with syntax/indentation for system calls, but invalid calls are left to operating-system error handling (the manual names the GURU error). The chapter is organized by Exec, Graphics, Workbench, Intuition, DiskFont, Layers and DOS libraries (contents pp. 11-2–11-85). Individual routines should be modelled under an Amiga platform API profile, with library, call signature, pointer/structure requirements and OS-version constraints. The contents list alone is not enough to claim a stable or safe Rust wrapper.
+
+
+## Chapter 11 — Amiga OS system-call catalogue
+
+The table of contents and library sections establish the following API families (printed pages):
+
+| Library family | Manual pages | Classification |
+|---|---:|---|
+| Exec | 11-3–11-23 | Tasking, memory, signals, devices, lists and low-level system services |
+| Graphics | 11-24–11-53 | RastPorts, bitmaps, drawing, sprites, copper and display structures |
+| Workbench | 11-54–11-57 | Workbench objects, icons, tool types and startup integration |
+| Intuition | 11-58–11-75 | Screens, windows, gadgets, menus, input and requesters |
+| DiskFont | 11-76–11-77 | Font discovery and loading |
+| Layers | 11-78–11-84 | Layer creation, locking, refresh and ordering |
+| DOS | 11-85–11-92 | Files, directories, locks, process/CLI and I/O |
+
+The appendix's Table of Libraries (printed pp. 12-19–12-28) is an alphabetical cross-reference of these calls and their Chapter 11 page locations. It is not a separate API specification.
+
+### Consequences for a Rust-facing catalogue
+
+- Preserve the library identity with each call; do not flatten same-named calls into one global function namespace.
+- Record the exact AmigaOS library, routine name, parameter order, return convention and source page.
+- Treat addresses as typed pointers to specific OS structures where the source identifies them; the manual's BASIC-side transport type is not a safe Rust type.
+- Mark ownership/lifetime and allocation/free pairs explicitly. The manual's brief descriptions do not always provide enough information to infer them.
+- Separate calls that manipulate global OS state, tasks, interrupts, hardware registers or supervisor mode from ordinary memory-safe wrappers. A direct call can crash the system or corrupt another task.
+- The current source is a 3.0-era OS-call reference. Exact OS release/ROM compatibility and 3.5 interpreter exposure still require independent verification.
+
+The supplied scan identifies Exec task/signal/memory/device operations, Graphics drawing/bitmap/display structures, Workbench object/icon operations, Intuition window/screen/input management, DiskFont font operations, Layers lifecycle/locking, and DOS file/CLI operations. Selected Exec, Graphics, Intuition and DOS routines are extracted below; remaining families and routines still require declaration-level review.
+
+## Chapter 12 — appendices: reference material, not new language features
+
+Chapter 12 contains support tables and indexes rather than a new command family:
+
+- Keyboard scan codes (printed p. 12-2).
+- ASCII table and special ASCII codes (pp. 12-3–12-5).
+- Fill patterns (p. 12-6).
+- AmigaDOS error messages (p. 12-7).
+- Alphabetical command/function table (pp. 12-8–12-18).
+- Alphabetical operating-system function table (pp. 12-19–12-28).
+
+The two alphabetical tables are navigation aids into Chapters 2–11; they must not be counted as independent declarations. The character, scan-code and fill-pattern tables are supporting constants/data and should be transcribed only where a concrete implementation or conformance test needs them. The DOS error list can seed an error-code mapping, but code names and numeric values require page-level extraction and OS-version qualification.
+
+## Chapter 13 — verified 3.5 addendum index and reconciliation candidates
+
+Unlike Chapters 2–12, Chapter 13 explicitly identifies itself as the GFA BASIC 3.5 addendum. The table of contents lists the following 3.5-specific topics:
+
+- Editor enhancements: backward scrolling, search in folded procedure/function headers, listing labels, and tab-key functions (printed p. 13-1).
+- Floating-point vector/matrix operations: MAT BASE, MAT CLR, MAT SET, MAT ONE, MAT READ, MAT PRINT, MAT INPUT, MAT CPY, MAT XCPY, MAT TRANS and MAT COPY (pp. 13-1–13-6).
+- Matrix operations: MAT ADD, MAT SUB, MAT MUL, MAT NORM, MAT DET, MAT QDET, MAT RANG and MAT INV (from p. 13-16).
+- FACT, VARIAT and COMBIN (p. 13-33).
+- OPENW negative-screen-number variant, PCOLOUR, DATA pointer inspection/assignment via DATA and _DATA=, special variables _0…_9, and GURU handling (pp. 13-34–13-36).
+
+The first matrix pages state that the addendum's matrix/vector functions operate only on one- and two-dimensional fields with floating-point variables. MAT BASE changes the row/column indexing offset for specified matrix commands; the documented default is 1, and MAT BASE 0/1 is intended in conjunction with OPTION BASE 0. MAT CLR and MAT SET fill all elements; MAT ONE creates a square identity matrix. MAT READ consumes DATA rows and MAT PRINT formats vectors/matrices. These are directly supported by the 3.5 addendum and can be reconciled into 3.5 declarations after exact syntax and remaining operation semantics are extracted.
+
+Important boundary: the addendum's presence of an item is positive evidence for that 3.5 feature; absence from Chapter 13 is not proof that a 3.0 feature was removed. The older chapters still require runtime or 3.5-specific confirmation before claiming compatibility.
+
+
+## Chapter 11 — selected routine-level extraction
+
+The following signatures and behavior are transcribed from the supplied 3.0-era system-routine chapter. They are a first subset, not a complete binding specification.
+
+### Exec-Library (printed pp. 11-5–11-7, 11-9)
+
+- **AllocMem(byteSize, art) (p. 11-6):** allocates a memory block. Returns its address, or 0 if unavailable. The requested size is rounded up to a multiple of 8 bytes. The second argument selects memory attributes (the text gives MEMF_CHIP as an example).
+- **AvailMem(art) (p. 11-6):** returns the currently free memory for the requested memory attributes.
+- **Allocate(memheader, byteSize) (p. 11-5):** allocates from a task's own free-memory list. Returns the block address, or 0 on failure.
+- **Deallocate(memHeader, memBlock, byteSize) (p. 11-7):** returns a block to the task's own free-memory pool. The manual states no return value.
+- **AllocSignal(signalNum) (p. 11-6):** allocates a signal bit from the current task's pool; returns bit number 0–31 or -1. The input may be 0–31 or -1 to request any available bit.
+- **CloseDevice(IO_request) (p. 11-7):** releases the device association for the task using an initialized I/O request structure. No return value.
+- **DoIO(IO_request) (p. 11-9):** listed in the Exec API index and section. Its full signature/semantics should be captured from the page before exposing it in a typed wrapper.
+- **Forbid() / Permit() (p. 11-11):** disable and re-enable Amiga task switching, respectively. These calls affect system-wide scheduling behavior and must not be wrapped as ordinary safe operations.
+- **SuperState() / UserState(stack) (pp. 11-21–11-22):** switch the 68000 CPU into supervisor mode and back to user mode. The stack value returned by SuperState must be preserved for UserState. This is privileged, system-sensitive behavior.
+- **FreeMem(memBlock, byteSize) (p. 11-11):** the routine is listed in the chapter index; the supplied scan's detailed description is to be checked before encoding the exact argument order and memory-attribute constraints.
+
+### Graphics-Library (printed pp. 11-32–11-45)
+
+- **Draw(rastport, x, y) (p. 11-33):** draws from the current drawing-pen position to (x,y) in the specified RastPort.
+- **DrawCircle(rastport, x, y, radius) (p. 11-33):** draws a circle using the RastPort's drawing mode and colors.
+- **DrawEllipse(rastport, x, y, x_radius, y_radius) (p. 11-33):** draws an ellipse in the specified RastPort.
+- **ReadPixel(rastport, x, y) (p. 11-44):** returns the color-register number of the pixel at the given coordinates.
+- **RectFill(rastport, x1, y1, x2, y2) (p. 11-44):** fills a rectangle using the current fill pattern, drawing mode and colors.
+- **InitRastPort(rastport) (p. 11-39):** initializes a RastPort structure by clearing its fields and setting documented drawing defaults. No return value.
+- **Move(rastport, x, y) (p. 11-42):** positions the graphics pen at new coordinates in the output RastPort. No return value.
+- **LoadRGB4(viewport, colors, count) (p. 11-40):** assigns a set of RGB color-register values to a ViewPort. No return value.
+
+### Intuition-Library (printed pp. 11-66–11-68)
+
+- **OpenScreen(newscreen) (p. 11-68):** opens/displays a screen described by a NewScreen structure. Returns the Screen structure address or 0.
+- **OpenWindow(newwindow) (p. 11-68):** opens a window described by a NewWindow structure. Returns the Window structure address.
+- **ModifyIDCMP(window, flag) (p. 11-66):** changes the IDCMP event flags for a window. No return value.
+- **MoveScreen(screen, deltax, deltay) (p. 11-67):** moves a screen by relative offsets. No return value.
+- **MoveWindow(window, deltax, deltay) (p. 11-67):** moves a window by relative offsets. No return value.
+
+### DOS-Library (printed pp. 11-88–11-91)
+
+- **Lock(name, mode) (p. 11-88):** obtains a lock for a file or directory. ACCESS_READ (-2) allows shared read access; ACCESS_WRITE (-1) obtains a write lock. Returns a Lock structure address.
+- **Open(name, mode) (p. 11-89):** opens a file and returns a file handle. MODE_OLDFILE (1005) opens an existing file; MODE_NEWFILE (1006) creates a file for writing and overwrites an existing file of the same name.
+- **Close(filehandle) (p. 11-90):** closes an input or output file. The handle is the FileHandle structure address.
+- **Read(filehandle, adr, count) (p. 11-90):** reads into a memory buffer and returns the number of bytes read.
+- **Seek(filehandle, pos, mode) (pp. 11-90–11-91):** positions a file pointer and returns its old position. Modes documented are OFFSET_BEGINNING (1), OFFSET_END (-1) and OFFSET_CURRENT (0).
+- **Rename(old, new) (p. 11-90):** renames a file or directory and returns TRUE/FALSE.
+- **UnLock(lock) (p. 11-91):** releases a file/directory lock. No return value.
+
+### Binding boundary
+
+These routines transport addresses through the manual's generic BASIC numeric parameter notation. That notation does not define Rust pointer types, ownership, alignment, buffer length validity or lifetime. A future Rust layer must model each OS structure and allocation contract explicitly. The selected signatures above are documentation candidates only; they are not proof that the current interpreter exposes or safely validates every call.
+
+## Chapter 13 — matrix/vector operation semantics (3.5 addendum)
+
+The following details are explicitly in the 3.5 addendum, unlike the base-manual inventory above.
+
+### Matrix/vector input and copying
+
+- **MAT INPUT #i, a() (printed p. 13-4):** reads a matrix/vector from an ASCII file. Its format is the reverse of MAT PRINT; commas and row feeds may vary as with INPUT #.
+- **MAT CPY a([i,j])=b([k,l])[,h,w] (pp. 13-5 onward):** copies a rectangular region of h rows and w elements from source matrix b to destination a. The source and destination start offsets are supplied separately. Only elements with corresponding source/destination indices are copied.
+- **MAT COPY a()=b() (pp. 13-6, 13-10):** copies the complete matrix when dimensions are compatible; the text also describes copying only elements for which source and destination indices correspond. The addendum's explanatory paragraph contains an apparent wording/format inconsistency about region dimensions, so retain the examples and syntax as evidence and do not infer a more general resizing rule.
+- **MAT XCPY a([i,j])=b([k,l])[,h,w] (pp. 13-11–13-12):** like MAT CPY, but transposes the source while copying; source matrix b remains unchanged.
+- **Vector special cases (p. 13-12):** one-dimensional arrays are treated as row vectors. For column-vector treatment, the manual requires a two-dimensional declaration with one column. It states that MAT CPY should be used when both vectors have the same orientation, and gives a column-vector form for the operation.
+- **MAT TRANS a()[=b()] (p. 13-15):** transposes a square matrix in place when no destination is supplied; the source text says the original matrix is lost in that form. The two-matrix form is listed in the syntax, but its detailed semantics need a separate page check.
+
+### Arithmetic and linear algebra
+
+- **MAT ADD a()=b()+c() (pp. 13-16 onward):** element-wise addition; source matrices/vectors must have the same order and result is written to a().
+- **MAT ADD a(),b() / MAT ADD a(),x:** the addendum lists these in-place/constant variants; exact edge cases and rounding are not yet transcribed.
+- **MAT SUB a()=b()-c(), MAT SUB a(),b(), MAT SUB a(),x:** corresponding subtraction forms listed by the addendum.
+- **MAT MUL a()=b()*c() / MAT MUL x=a()*b() / MAT MUL x=a()*b()*c() / MAT MUL a(),x:** matrix product and scalar-result variants are listed; the manual examples include matrix×matrix and row-vector×matrix×column-vector calculations.
+- **MAT NORM a(),0 / MAT NORM a(),1 (pp. 13-23–13-24):** defined for matrices and vectors. 0 normalizes by rows and 1 by columns; the sum of squares of the elements in each normalized row/column is 1.
+- **MAT DET x=a([i,j])[,n] (pp. 13-25 onward):** computes the determinant of a square matrix; optional offsets and dimension select a submatrix.
+- **MAT QDET x=a([i,j])[,n]:** computes the same determinant using a speed-optimized routine; the addendum warns that small accuracy differences may occur.
+- **MAT RANG x=a([i,j])[,n] (p. 13-29):** computes the rank of a square matrix, optionally for a selected submatrix.
+- **MAT INV a()=b() (p. 13-29):** computes the inverse of square matrix b() into a(); the destination must have the same dimensions/type as the source.
+
+The exact page-level descriptions for MAT DET/QDET/RANG/INV should be checked in the scan before implementing numerical behavior. In particular, the source's use of the term rank and its submatrix parameters should be preserved rather than silently replaced with a textbook API interpretation.
+
+
+## Follow-up: corrected and expanded details from the supplied scans
+
+### Chapter 11 — additional DOS and Exec observations
+
+- **DeleteFile(name) (printed p. 11-86):** deletes a file or an empty directory; returns TRUE/FALSE. IoErr can provide an error number.
+- **Examine(lock, fib) (p. 11-86):** writes file/directory metadata from a Lock into a FileInfoBlock, including name, size, creation date and entry type. Returns -1 on success; otherwise IoErr provides the error.
+- **ExNext(lock, fib) (p. 11-87):** enumerates subsequent directory entries. Examine supplies the first entry; ExNext is called once for each following entry. Returns -1 on successful completion.
+- **Execute(instruction, in, out) (p. 11-87):** executes a CLI command string using input/output file handles. The manual states that the C directory on the boot disk must contain the CLI Run command.
+- **Exit(ret) (p. 11-87):** terminates a program/process and returns the supplied value to CLI when started from CLI. The text says a Workbench-started process is ended and its memory/stack freed.
+- **CreateDir(name) (p. 11-85):** creates a directory in the current directory. The description says a shared read lock is created on success; the text's return-value wording is internally inconsistent, so do not infer a stable return contract without checking the page image.
+- **Delay(time) (p. 11-86):** suspends the current process for a time expressed in 1/50-second units.
+- **FreeMem:** the English scan index identifies the routine on p. 11-11, but the companion German reference expresses the call as returning a size from an address and size pair. The exact English manual entry should be checked before treating its return type or signature as settled.
+- The current scan search did not establish complete OpenDevice/DoIO/SendIO signatures. These remain unresolved; do not infer them from AmigaOS SDK knowledge.
+
+### Chapter 13 — in-place matrix operations
+
+The detailed MAT ADD text confirms the distinction between result and in-place forms:
+
+- **MAT ADD a(),b() (printed p. 13-17):** requires matching matrix/vector order, adds b element-by-element into a, and overwrites a.
+- **MAT ADD a(),x:** adds scalar x to every element of a and overwrites a.
+- The addendum lists matching in-place forms for MAT SUB and scalar subtraction, but their full paragraphs still need extraction.
+- The addendum also lists MAT MUL a(),x; the exact scalar multiplication/division interpretation should be read from the following page before implementation.
+
+These observations refine the earlier summary: MAT ADD a(),b() and MAT ADD a(),x are explicitly in-place, not merely generic variants. The source's own examples should be the basis of conformance tests.
+
+
+## Chapter 13 — completed MAT SUB/MUL and determinant details
+
+Further page-level extraction from the 3.5 addendum resolves most of the previously open operation semantics.
+
+### MAT SUB (printed pp. 13-18–13-19)
+
+- **MAT SUB a()=b()-c():** b and c must have the same matrix/vector order; c is subtracted element-by-element from b and the result is written to a.
+- **MAT SUB a(),b():** b is subtracted element-by-element from a; a is overwritten and its original contents are lost. Matching dimensions are required.
+- **MAT SUB a(),x:** scalar x is subtracted from each element of a, in place. The page's prose has an OCR/typographical inconsistency ("matrix x"), but its example starts with a filled with 6, subtracts 5, and produces 1 in every element. The example therefore supports scalar subtraction from a; preserve the textual discrepancy in source review rather than treating the typo as a separate semantic rule.
+
+### MAT MUL (printed pp. 13-20–13-22)
+
+- **MAT MUL a()=b()*c():** conventional row-by-column matrix multiplication. The number of columns in b must equal the number of rows in c; a must have the row count of b and column count of c. For two vectors, the result is their dyadic/external product, written to matrix a.
+- **MAT MUL x=a()*b():** defined for vectors with equal element counts. Returns their scalar/inner product, the sum of corresponding element products.
+- **MAT MUL x=a()*b()*c():** defined for vector a, matrix b and vector c. The example computes a row-vector × matrix × column-vector scalar result.
+- **MAT MUL a(),x:** this form appears in the operation-command syntax list (p. 13-16), but the extracted explanatory pages do not establish its semantics. Do not assume it means scalar multiplication; retain it as an unresolved syntax candidate pending page-image inspection or runtime observation.
+
+### MAT DET / MAT QDET / MAT RANG / MAT INV (printed pp. 13-25–13-29)
+
+- **MAT DET x=a([i,j])[,n]:** computes a determinant for a square matrix. With no explicit offsets, the origin follows MAT BASE (0,0 or 1,1); with i,j,n, the operation uses an n×n submatrix beginning at row i, column j.
+- **MAT QDET x=a([i,j])[,n]:** same selection and result concept as MAT DET, optimized for speed rather than accuracy. The manual says the results are normally identical, but recommends MAT DET for critical matrices whose determinant is close to zero.
+- **MAT RANG x=a([i,j])[,n]:** returns the rank of a square matrix, with the same optional submatrix selection convention. The manual's example reports rank 5 for the full matrix and rank 2 for a 3×3 submatrix starting at a(1,2).
+- **MAT INV b()=a():** computes the inverse of square matrix a into b; b must be the same matrix type/dimensions as a. The addendum demonstrates checking the result by multiplying b×a to obtain the unity matrix.
+
+This resolves the previously open MAT SUB and the documented matrix/vector product forms. It does not resolve the separate MAT MUL a(),x syntax.
+
+
+## Chapter 11 — Exec device I/O and message lifecycle (printed pp. 11-7–11-18)
+
+The scan search now resolves several earlier gaps in the Exec subset:
+
+- **FreeMem(adr, count) (p. 11-11):** frees a block back to the system free-memory list and returns the size of the memory block in bytes. Parameters are the block address and its byte size. This settles the previously unresolved return value.
+- **OpenDevice(devname, number, IORequest, flags) (p. 11-14):** opens a named device and initializes the supplied I/O request structure. Device number is documented as 0–4. Returns 0 on success, otherwise an error number.
+- **CloseDevice(IORequest) (p. 11-7):** closes the device association represented by the initialized I/O request.
+- **CreateExtIO(replyport, size) (p. 11-8):** allocates and initializes an extended I/O request; returns its address. The replyport must be an allocated and initialized MsgPort. The size argument is described as the amount of memory to reserve for the MsgPort structure.
+- **CreateStdIO(replyport) (p. 11-8):** allocates and initializes an IOStdReq; returns its address. The replyport must be an initialized message port.
+- **DoIO(IORequest) (p. 11-9):** asks the device driver to perform the command described by the initialized I/O request. Returns 0 on success, otherwise an error number.
+- **SendIO(IORequest) (p. 11-18):** asks the device driver to start the command described by an initialized I/O request. No return value is documented in the entry.
+- **AbortIO(IORequest) (p. 11-2):** attempts to abort the last I/O request; no return value is documented.
+- **GetMsg(MsgPort) (p. 11-11):** obtains the next message from a message port. The received message should subsequently be returned with ReplyMsg.
+- **ReplyMsg(message) (p. 11-18):** sends a processed message back; no return value.
+- **PutMsg(msgport, message) (p. 11-15):** appends a message to the specified message-port queue; no return value.
+
+### I/O and message safety notes
+
+The manual describes the request structures and lifecycle but does not specify Rust ownership, cancellation races, asynchronous completion guarantees, or buffer lifetime rules. A safe wrapper must not allow an I/O request, its message port, or any associated data buffer to be freed while the device can still access it. This is an implementation constraint inferred from the documented allocate/open/start/abort/close lifecycle, not a Rust API contract stated by the manual.
+
+The earlier FreeMem note is superseded: the English Chapter 11 scan does document FreeMem(adr,count) and its byte-count return value on p. 11-11.
+
+
+## Chapter 11 — Exec task, signal, and system-list routines (printed pp. 11-10–11-22)
+
+Further extraction from the English GFA-BASIC 3.0 base manual documents these Exec-Library calls. These are 3.0 reference findings, not evidence that the current Rust interpreter implements them.
+
+### Lookup and task control
+
+- **FindName(start, name) (p. 11-10):** searches a system node list for a node with the given name; returns the node address or 0. `start` is a node/list address; `name` points to a zero-terminated string.
+- **FindPort(name) (p. 11-10):** searches the system message-port list; returns the MsgPort address or 0. The name is a pointer to a zero-terminated string.
+- **FindResident(name) (p. 11-10):** attempts to locate a resident structure; returns its address or 0. The name is a pointer to a zero-terminated string.
+- **FindTask(name) (p. 11-10):** searches task lists and returns the TaskControlBlock address. An empty name string requests the current task's control block.
+- **SetTaskPri(task, pri) (p. 11-20):** changes a task's priority and returns its previous priority. The documented range is -128 through 127.
+- **Wait(signal) (p. 11-22):** suspends the current task until one or more signals arrive. The parameter is a signal bit/mask as described by the manual.
+- **Signal(task, signal) (p. 11-21):** sends the specified signal bit(s) to a task; no return value is documented.
+- **SetSignal(newsig, sigmask) (p. 11-20):** sets the task's received-signal state and returns the old signal bit/state. Both arguments are integer expressions; the mask is 32-bit.
+- **SetExcept(new, mask) (p. 11-19):** selects which of the 32 signal bits cause exceptions and returns the old signal bit/state. The manual labels both arguments as integer expressions.
+- **SetIntVector(number, interrupt) (p. 11-20):** installs code/data pointers for an interrupt and returns the address of the previous Interrupt structure. The interrupt number is a PAULA bit number from 0 to 14; the second argument is the new Interrupt structure address.
+
+### I/O completion and message-port waiting
+
+- **WaitIO(IORequest) (p. 11-22):** waits for the specified I/O request to finish; returns 0 or an error number. The argument is an IORequest structure address.
+- **WaitPort(msgport) (p. 11-23):** waits for an event from the specified message port. The entry describes the argument as a message-structure address despite naming it `msgport`; preserve this source wording as an ambiguity rather than silently correcting its type.
+
+### Source and implementation boundaries
+
+- The English manual's Find* entries explicitly require zero-terminated name strings and return raw structure addresses. A Rust binding therefore needs a separately defined string-buffer and pointer-lifetime contract; the BASIC `iexp` annotation alone does not supply one.
+- Signal and interrupt calls operate on task/OS state. Treat them as unsafe platform interfaces until the interpreter's calling convention, synchronization, and interrupt-context rules are independently established.
+- The companion German 3.5 book contains additional explanatory material (including AllocSignal/AllocTrap), but those details are intentionally not used to expand this 3.0 English-base inventory. Keep 3.5 evidence separately version-scoped.
+
+
+## Chapter 11 — Exec allocation, interrupt masking, and list primitives (printed pp. 11-5–11-12)
+
+The English base-manual scan also supports the following additional Exec entries:
+
+- **AllocSignal(signalNum) (p. 11-5):** allocates a signal bit from the current task's available signal pool. Returns a bit number 0–31 or -1. The requested bit is 0–31, or -1 to request any available bit.
+- **FreeSignal(sigbit) (p. 11-12):** releases a previously allocated signal bit; the documented range is 0–31. No return value.
+- **AllocTrap(trapNum) (p. 11-5):** allocates a trap number from the current task's available trap numbers. The requested trap number is 0–15, or -1 for any available trap. The entry does not state an explicit return-value contract in the extracted text.
+- **FreeTrap(trapnr) (p. 11-12):** releases an allocated trap number for reuse in the task; range 0–15. No return value.
+- **Disable() (p. 11-8):** described as similar to Forbid, but additionally disables interrupts. No return value is documented.
+- **Enable() (p. 11-9):** activates interrupts after a Disable. No return value is documented.
+- **Enqueue(list, node) (p. 11-9):** inserts/appends a node to a system list; no return value. Both arguments are addresses of the list and node structures.
+
+### Safety and evidence notes
+
+- AllocSignal/FreeSignal and AllocTrap/FreeTrap are task-scoped resource pairs in the manual. Their pairing and ranges should be reflected in any wrapper; do not treat the returned integer as a generic application identifier.
+- Disable/Enable affects interrupt delivery, not merely task scheduling. It must not be exposed as an ordinary safe concurrency primitive without a platform-specific critical-section and restoration contract.
+- These declarations are sourced from Chapters 11 pages of the English manual labelled GFA-BASIC 3.0 Amiga. They are base-manual candidates only; no 3.5 support claim is made here.
+
+
+## Chapter 11 — Graphics-Library drawing, raster, and palette calls (printed pp. 11-30–11-49)
+
+Additional Graphics-Library entries extracted from the English GFA-BASIC 3.0 base manual:
+
+- **ClearEOL(rastport) (p. 11-30):** erases a text rectangle in the specified RastPort.
+- **ClearRectRegion(region, rectangle) (p. 11-30):** clears areas of a Region that lie inside a clipping Rectangle; returns TRUE/FALSE.
+- **ClearRegion(region) (p. 11-30):** clears all clipping rectangles belonging to a Region.
+- **ClipBlit(srcRastPort, srcX, srcY, destRastPort, destX, destY, sizeX, sizeY, minTerm) (pp. 11-30–11-31):** copies a rectangular RastPort bitmap area to another RastPort using the specified logical blitter operand.
+- **CopySBitMap(layer) (p. 11-31):** copies a Superbitmap into a Layer bitmap; the Layer must first be defined as a Superbitmap.
+- **CWait(clist, xbeam, ybeam) (p. 11-31):** adds a Copper instruction, waits for the video beam position, and performs the instruction.
+- **DisownBlitter() (p. 11-31):** releases the blitter for other tasks.
+- **DisposeRegion(region) (p. 11-32):** frees a Region and its associated Rectangle structures.
+- **DoCollision(rastport) (p. 11-32):** tests graphic elements for collisions.
+- **DrawGList(rastport, viewport) (p. 11-33):** draws sprites and Bobs in the current graphic-elements list and associates virtual-sprite Copper instructions with the ViewPort.
+- **Flood(rastport, mode, x, y) (p. 11-34):** fills an area using the current fill pattern and foreground/background colors. Mode 1 fills the area matching the start-point color; mode 0 fills pixels not matching the current AOlPen color (the source's spelling is retained).
+- **FreeColorMap(colormap) (p. 11-34), FreeCopList(coplist) and FreeCprList(cprlist) (p. 11-35):** release the corresponding ColorMap/CopList/CprList allocations.
+- **FreeGBuffers(animob, rastport, buf) (p. 11-35):** releases animation-object buffers previously allocated by GetGBuffers.
+- **FreeSprite(spritenr) (p. 11-35):** frees a hardware sprite for other tasks; sprite number 0–7.
+- **FreeVPortCopLists(viewport) (p. 11-35):** deallocates Copper-list memory associated with a ViewPort.
+- **GetColorMap(count) (p. 11-35):** allocates and initializes a ColorMap; returns its address. `count` is the number of color registers.
+- **GetGBuffers(animob, rastport, buffer) (p. 11-35):** allocates buffers for an AnimOb; returns TRUE/FALSE. The buffer argument selects double buffering when TRUE.
+- **GetRGB4(cmap, regnr) (p. 11-36):** returns a ColorMap color-table entry; register number 0–63.
+- **GetScreenData(buffer, size, type, screen) (p. 11-36):** copies all or part of a Screen structure into a caller buffer; returns TRUE/FALSE. Types are WBENCHSCREEN (1) or CUSTOMSCREEN (15); the screen argument is ignored for type 1.
+- **InitRastPort(rastport) (p. 11-39):** zeroes RastPort fields, with FgPen, AOlPen and LinePtn set to -1; JAM2 drawing mode and font depend on Topaz 80/60 resolution. No return value.
+- **InitTmpRas(tmpras, buffer, size) (p. 11-39):** initializes a chip-memory block for Area functions; the block must be allocated. No return value.
+- **InitView(view) and InitVPort(viewport) (p. 11-39):** initialize View/ViewPort structures with defaults or cleared fields; no return value.
+- **InstallClipRegion(layer, region) (p. 11-39):** installs a clipping Region in a Layer; returns the last Region address or 0.
+- **LoadRGB4(viewport, colors, count) (p. 11-40):** loads a color-register table into a ViewPort.
+- **LoadView(view) (p. 11-40):** makes the View's Copper instruction list the current display view.
+- **MakeVPort(view, viewport) (p. 11-40):** creates ViewPort data for a View; the entry notes the second RasInfo requirement when DUALPF is set.
+- **Move(rastport, x, y) (p. 11-41):** positions the RastPort drawing pen.
+- **RasSize(w, h) (p. 11-44):** returns the byte size of a raster bitplane for the given width and height.
+- **ReadPixel(rastport, x, y) (p. 11-44):** returns the color-register number at the specified pixel.
+- **RectFill(rastport, x1, y1, x2, y2) (p. 11-44):** fills a rectangle with the current fill pattern, drawing mode and colors.
+- **ScrollRaster(rastport, deltax, deltay, x, y, w, h) (p. 11-45):** scrolls a RastPort area; the manual describes x/y as the upper-left and w/h as lower-right coordinates.
+- **ScrollVPort(viewport, deltax, deltay) (p. 11-45):** scrolls a Screen by changing ViewPort coordinates relative to their previous values.
+- **SetAPen/SetBPen(rastport, nr) (p. 11-46):** set foreground/background color-register numbers.
+- **SetCollision(number, routine, geisinfo) (p. 11-47):** installs a user collision handler at function number 0–15, with routine and Geisinfo addresses.
+- **SetDrMd(rastport, mode), SetDrPt(rastport, data) (pp. 11-47–11-48):** set drawing mode and 16-bit line pattern.
+- **SetFont(rastport, textfont) (p. 11-48):** applies a TextFont; returns 0 if no error.
+- **SetOPen(rastport, register) and SetRast(rastport, register) (pp. 11-48–11-49):** set outline pen or fill the entire raster with a color register.
+- **SetRGB4(viewport, register, red, green, blue) and SetRGB4CM(colormap, register, red, green, blue) (p. 11-49):** store color values; register ranges are 0–31 and RGB intensity components 0–15.
+- **SetSoftStyle(rastport, new, mask) (p. 11-49):** changes font style bits selected by the mask; returns the mask value according to the entry.
+
+### Graphics API safety and source caveats
+
+- Most calls take addresses of mutable OS structures and/or caller-owned buffers. The manual does not define aliasing, allocation provenance, or lifetimes; a Rust interface must not infer these from BASIC's `iexp` type.
+- Copper, blitter, sprite, and display-view operations interact with shared hardware/display state. Keep them behind an explicit Amiga platform boundary rather than treating them as portable drawing functions.
+- The source uses inconsistent or OCR-sensitive names (for example AOlPen, CWait, FreeCprList); preserve source spellings in evidence notes and normalize only after checking page images.
+
+
+## Chapter 11 — Workbench, DiskFont, Layers and remaining DOS routines
+
+The following entries extend the routine-level inventory using the English manual's Chapter 11 pages. They remain 3.0 base-manual candidates; the BASIC parameter annotation `iexp` is not a Rust pointer or ownership contract.
+
+### Workbench-Library (printed pp. 11-53–11-55)
+
+- **BumpRevision(newBuf, oldName) (p. 11-53):** generates a different name for a copied file; returns the resulting name size. Both buffers are zero-terminated and limited to 32 bytes.
+- **CloseWorkBench() (p. 11-53):** closes the Workbench screen; returns TRUE/FALSE.
+- **FindToolTypes(tools, typename) (p. 11-53):** searches a ToolType array and returns the address of the first matching tool name.
+- **FreeDiskObject(object) (p. 11-54):** frees memory used by an Info-file DiskObject; no return value.
+- **FreeWBObject(wbobject) (p. 11-54):** frees memory allocated for a Workbench object and its WBObject structure; no return value.
+- **GetDiskObject(name) (p. 11-54):** loads a disk object's information file and returns the DiskObject address.
+- **GetIcon(name, diskobject, freelist) (p. 11-54):** loads an icon while allowing the caller to supply the DiskObject and FreeList storage; returns TRUE/FALSE. The OCR spelling of the routine is uncertain (shown as “GetIcon” in the prose context); verify the printed heading before using it as a canonical identifier.
+- **GetWBObject(name) (p. 11-54):** reads Workbench object information and returns a WBObject address.
+
+### DiskFont-Library (printed pp. 11-75–11-77)
+
+- **AvailFonts(buffer, number_bytes, types) (p. 11-75):** writes available-font information into an AvailFontsHeader area, with one AvailFont structure per character set. Returns 0 on error; IoErr() supplies the error. Types are AFF_MEMORY (1) and AFF_DISK (2).
+- **CloseFont(textFont) (p. 11-75):** closes a font opened by OpenFont or OpenDiskFont.
+- **OpenDiskFont(textattr) (p. 11-76):** loads the disk font described by a TextAttr and returns a TextFont address.
+- **OpenFont(textattr) (p. 11-76):** opens a memory-resident/ROM font described by TextAttr and returns a TextFont address.
+- **RemFont(textfont) (p. 11-77):** removes a font from the system font list; returns 0 when no error occurred.
+
+### Layers-Library (printed pp. 11-77–11-84)
+
+- **AttemptLockLayerRom(layer) (p. 11-77):** attempts to lock a Layer against other tasks; returns TRUE/FALSE.
+- **BeginUpdate(layer) (p. 11-77):** prepares a Layer for updating.
+- **BehindLayer(layerInfo, layer) (p. 11-77):** sends a Layer behind the other Layers; returns TRUE/FALSE.
+- **CreateBehindLayer(layerInfo, bitmap, x0, y0, x1, y1, flags[, bitmap2]) (p. 11-78):** creates a Layer behind the others and returns its Layer address. The optional bitmap2 is a Superbitmap.
+- **CreateUpfrontLayer(layerInfo, bitmap, x0, y0, x1, y1, flags[, bitmap2]) (p. 11-78):** creates a Layer in front of the others and returns its Layer address.
+- **DeleteLayer(layerInfo, layer) (p. 11-79):** removes a Layer from its Layer list.
+- **DisposeLayerInfo(layerInfo) (p. 11-79):** releases LayerInfo memory.
+- **EndUpdate(layer, flags) (p. 11-79):** ends a Simple-Refresh update; the manual says this is also called by EndRefresh().
+- **FattenLayerInfo(info) / ThinLayerInfo(info) (pp. 11-80, 11-82):** allocate or release additional LayerInfo memory used with the legacy InitLayers() path.
+- **InitLayers(layerInfo) (p. 11-80):** initializes a caller-allocated LayerInfo structure; identified as an old OS V1.0 routine.
+- **LockLayer(info, layer), LockLayerInfo(info), LockLayerRom(layer), LockLayers(info) (pp. 11-80–11-81):** prevent other tasks from accessing one Layer, a LayerInfo structure, a Layer in ROM-compatible locking, or all Layers in a LayerInfo, respectively.
+- **MoveLayer(info, layer, dx, dy) (p. 11-81):** moves a normal Layer by relative coordinates.
+- **MoveLayerInFrontOf(layer1, layer2) (p. 11-81):** inserts layer1 in front of layer2 on the same level; returns TRUE/FALSE.
+- **NewLayerInfo(info) (p. 11-81):** allocates and initializes a LayerInfo structure; returns its address.
+- **ScrollLayer(info, layer, dx, dy) (p. 11-82):** moves the contents of a Superbitmap Layer.
+- **SizeLayer(info, layer, dx, dy) (p. 11-82):** changes a Layer's size by relative dimensions.
+- **SyncSBitMap(layer) (p. 11-82):** copies the contents of a Superbitmap Layer to its Superbitmap.
+- **UnlockLayer(layer), UnlockLayerInfo(info), UnlockLayerRom(layer), UnlockLayers(info) (pp. 11-82–11-83):** release the corresponding Layer/LayerInfo locks.
+- **UpfrontLayer(info, layer) (p. 11-83):** moves a Layer in front of the others.
+- **WhichLayer(info, x, y) (p. 11-83):** returns the Layer address at the given coordinates, or 0.
+
+### DOS-Library additions (printed pp. 11-84–11-92)
+
+- **Close(fileHandle) (p. 11-84):** closes an input or output file.
+- **CreateDir(name) (p. 11-84):** creates a directory and, on success, creates a shared read lock. The entry is internally inconsistent: it describes a zero return on failure and a lock on success, but labels the return as “No return value”. Keep the return contract unresolved pending runtime/OS reference verification.
+- **CurrentDir(lock) (p. 11-84):** changes the current directory and returns the previous directory's Lock address.
+- **DateStamp(address) (p. 11-84):** writes three longwords in AmigaDOS date/time format: day count, elapsed seconds and elapsed milliseconds.
+- **Delay(time) (p. 11-85):** suspends the current process for a duration measured in 1/50-second units.
+- **DeleteFile(name) (p. 11-85):** deletes a file or empty directory; returns TRUE/FALSE, with IoErr() available for error detail.
+- **DupLock(lock) (p. 11-85):** duplicates a shared Lock and returns the new Lock address.
+- **Examine(lock, fib) (p. 11-86):** copies file/directory metadata (name, size, creation date and type) into a FileInfoBlock. Returns -1 on success; otherwise inspect IoErr().
+- **Execute(instruction, in, out) (p. 11-86):** executes a CLI command using supplied input/output file handles.
+- **Exit(ret) (p. 11-87):** terminates the process and returns the supplied value to CLI; when started from Workbench it ends the process and releases its memory/stack.
+- **ExNext(lock, fib) (p. 11-87):** retrieves subsequent directory entries after Examine(); returns -1 on success. Call once per entry.
+- **Info(lock, info) (p. 11-88):** writes disk size, free/allocated blocks and soft-error count into a caller buffer; returns TRUE/FALSE. The buffer must be longword-aligned.
+- **Input() / Output() (pp. 11-88–11-89):** return the FileHandle address for the current input/output level.
+- **IoErr() (p. 11-88):** returns the last I/O error number.
+- **IsInteractive(handle) (p. 11-88):** tests whether a handle refers to an interactive device; returns TRUE/FALSE.
+- **LoadSeg(name) (p. 11-88):** loads a program into memory segments and returns the segment-list address.
+- **Lock(name, mode) (p. 11-89):** obtains a shared read lock with ACCESS_READ (-2), or an exclusive write lock with ACCESS_WRITE (-1); returns the Lock address.
+- **Open(name, mode) (p. 11-89):** opens an existing file with MODE_OLDFILE (1005), or creates/overwrites a file with MODE_NEWFILE (1006); returns a FileHandle address.
+- **ParentDir(lock) (p. 11-89):** returns the parent directory's Lock address.
+- **Read(fileHandle, address, count) (p. 11-89):** reads up to count bytes into a caller buffer and returns the number of bytes read.
+- **Rename(old, new) (p. 11-90):** renames a file or directory; returns TRUE/FALSE.
+- **Seek(fileHandle, pos, mode) (pp. 11-90):** changes the file position and returns the old position. Modes are OFFSET_BEGINNING (1), OFFSET_END (-1) and OFFSET_CURRENT (0).
+- **SetComment(name, comment) (p. 11-90):** sets a disk-directory comment of up to 80 characters; returns TRUE/FALSE.
+- **SetProtection(name, mode) (p. 11-90):** sets file protection bits; low bits 3..0 represent read, write, execute and delete protection. Returns TRUE/FALSE.
+- **UnLoadSeg(segment) (p. 11-91):** unloads a segment list previously returned by LoadSeg().
+- **UnLock(lock) (p. 11-91):** releases a file/directory Lock.
+- **WaitForChar(fileHandle, time) (p. 11-91):** waits up to the supplied duration for a character; returns TRUE/FALSE.
+- **Write(fileHandle, data, length) (p. 11-92):** writes a memory buffer to an opened file and returns the number of bytes written.
+
+### Remaining Graphics-Library entries (printed pp. 11-50–11-53)
+
+- **Text(rastport, text, length) (p. 11-50):** writes a string at the current RastPort cursor position; returns 0 on success.
+- **TextLength(rastport, text, length) (p. 11-50):** measures text in pixels using the RastPort's TextFont.
+- **Translate(text, length, phoneme, outLength) (p. 11-50):** converts text to phonetic output in a caller-provided buffer.
+- **UCopperListInit(clist, instructionCount) (p. 11-51):** initializes a UCopList for the requested maximum instruction count.
+- **VBeamPos() (p. 11-51):** returns the current vertical beam position.
+- **ViewAddress() (p. 11-51):** returns the current View address.
+- **ViewPortAddress(window) (p. 11-52):** returns the ViewPort address associated with a window.
+- **WaitBlit() (p. 11-52):** waits until the Blitter is available.
+- **WaitBOVP(viewport) (p. 11-52):** waits for the start of vertical retrace on a ViewPort.
+- **WritePixel(rastport, x, y) (p. 11-52):** writes one pixel using the current APen.
+- **XorRectRegion(region, rect) (p. 11-52):** XORs a clipping rectangle with a Region and stores the result in the Region.
+- **XorRegionRegion(region1, region2) (p. 11-53):** XORs two Regions and stores the result in region2.
+
+### Platform and evidence boundary
+
+These calls manipulate Workbench-owned objects, font lists, mutable Layer/RastPort structures, AmigaDOS locks and file handles, or hardware/display state. A safe Rust interface needs typed structure definitions, explicit allocation provenance, ownership and lock lifetimes, and error handling beyond the manual's generic BASIC-side `iexp` annotation. In particular, do not infer that a successful raw address remains valid after its matching Free*/Close*/UnLock* operation. All entries above remain candidates sourced from the English manual's 3.0 system-routine chapter; they are not evidence of 3.5 interpreter availability.
+
+
+## Chapter 12 — appendices and command index (printed pp. 12-5–12-8)
+
+The appendix pages provide reference material for interpreting programs and navigating the manual. They are not an independent 3.5 compatibility source.
+
+### Appendix reference material
+
+- **Appendix opening (p. 12-5):** the appendix section begins after the Chapter 11 DOS-Library material. The scan's page transition places the appendix at printed page 12-5.
+- **Fill patterns (p. 12-6):** the page illustrates the numbered fill-pattern set used by `DEFFILL`. Its caption says the first number selects the style and the second selects the pattern. The raster illustrations are visual source material; OCR text cannot reliably reconstruct their pixel patterns.
+- **AmigaDOS error messages (p. 12-7):** the table lists system error numbers and descriptions: 103 insufficient free store; 104 task table full; 120 argument line invalid or too long; 121 file is not object module; 122 invalid resident library during load; 202 object in use; 203 object already exists; 204 directory not found; 205 object not found; 206 invalid window; 209 packet request type unknown; 210 invalid file name; 211 invalid object lock; 212 object type mismatch; 213 disk not validated; 214 disk write protected; 215 cannot rename; 216 directory not empty; 218 device not mounted; 219 seek error; 220 comment too big; 221 disk full; 222 file protected from deletion; 223 file protected from writing; 224 file protected from reading; 225 not a DOS disk; 226 no disk in drive; 232 no more directory entries.
+- **Table of commands (begins p. 12-7; continues on p. 12-8 and following index pages):** alphabetical command/function lookup with abbreviations and printed page references. The visible entries include punctuation/operators, system-base variables, numeric/string functions, array and conversion functions, graphics, file, control-flow and platform commands. It is an index, not a semantic specification; page references point back to the relevant chapter text.
+
+### Index extraction limits
+
+The scan's OCR corrupts spacing, punctuation, some command names, abbreviations and page digits in the command table. Accordingly, this inventory records the index's existence and purpose rather than treating an OCR dump as a canonical declaration list. Use the referenced chapter pages and page images to verify each spelling and signature before creating a registry candidate. The fill-pattern illustrations likewise require visual inspection before their bitmap values can be transcribed.
+
+### Version boundary
+
+The appendix pages belong to the same 3.0 base-manual section as Chapters 2–11. Error numbers and fill-pattern references are therefore 3.0-source facts. The command index can help locate declarations, but its presence in a manual whose addendum documents 3.5 does not establish that every indexed entry is available in 3.5.
