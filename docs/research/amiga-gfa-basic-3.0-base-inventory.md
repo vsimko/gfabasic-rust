@@ -84,3 +84,57 @@ Otherwise retain it as a version-3.0 source fact or an unresolved compatibility 
 - Extract Chapters 5–12 into topic inventories, then select declarations for detailed review.
 - Reconcile each candidate against the 3.5 interpreter and, where possible, the supplied German editions without merging their pagination or version claims.
 - Keep the public 3.5 catalogue separate from this 3.0 baseline until evidence supports promotion.
+
+## Complete Chapter 4 topic index (base-manual 3.0)
+
+The contents pages enumerate the following additional topics. This list is a discovery index, not proof of detailed syntax or 3.5 availability.
+
+| Printed page | Topic headings |
+|---|---|
+| 4-2 | ADD / SUB / MUL / DIV / MOD |
+| 4-5 | SIN / COS / TAN |
+| 4-6 | SINQ / COSQ |
+| 4-7 | DEG / RAD |
+| 4-8 | SQR |
+| 4-9 | EXP / LOG |
+| 4-10 | DEC / INC |
+| 4-11 | PRED / SUCC |
+| 4-12 | ABS / SGN |
+| 4-13 | INT / TRUNC / FIX / FRAC |
+| 4-14 | ROUND |
+| 4-15 | ODD / EVEN |
+| 4-16 | MIN / MAX |
+| 4-17 | RND / RANDOM |
+| 4-19 | BCLR / BSET / BCHG / BTST |
+| 4-21 | SHL / SHR |
+| 4-22 | ROL / ROR |
+| 4-23 | AND / OR / XOR |
+| 4-24 | IMP / EQV |
+| 4-25 | SWAP |
+| 4-26 | BYTE / CARD / WORD |
+| 4-27 | LEFT$ / RIGHT$ |
+| 4-28 | MID$ |
+| 4-30 | INSTR |
+| 4-31 | RINSTR |
+| 4-32 | STRING$ / SPACE$ / SPC |
+| 4-33 | PRED / SUCC (string forms also discussed) |
+| 4-34 | LEN / TRIM$ |
+| 4-35 | UPPER$ |
+| 4-36 | LSET / RSET |
+
+The Chapter 4 index contains 29 topic rows. Several entries are related to Chapter 2 (for example SWAP, conversions and string operations); preserve separate source sections and do not assume the same syntax/semantics merely from repeated headings.
+
+## Remaining chapter contents — discovery index
+
+The supplied manual's contents also identify the following base-manual 3.0 feature groups. Exact command declarations, semantics and page images still need review.
+
+- **Chapter 5, Input and output:** INKEY$, INPUT, LINE INPUT, FORM INPUT, PRINT, PRINT USING, MODE, DEFNUM, CRSxxx/POS/TAB, DATA, MOUSE, LPRINT/LPOS, HARDCOPY, SOUND/WAVE (printed pp. 5-2–5-22).
+- **Chapter 6, Disk handling and file organization:** file specification, random access, CHDIR/DIRS/DFREE, DIR/FILES, EXIST, OPEN, LOF/LOC/EOF/CLOSE/TOUCH, NAME/RENAME/KILL, BLOAD/BSAVE/BGET/BPUT, INP/OUT, INPITOO, INPUT #/LINE INPUT, PRINT #/WRITE #, STORE/RECALL, SEEK/RELSEEK, FIELD, GET/PUT/RECORD (printed pp. 6-2–6-21).
+- **Chapter 7, Program handling:** loops; procedures/functions; IF/ELSE/ENDIF; ELSE IF; ONGOSUB; SELECT CASE; FOR/NEXT; REPEAT/UNTIL; WHILE/WEND; DO/LOOP; DO WHILE/UNTIL; EXIT IF; GOSUB/PROCEDURE; LOCAL; @func/FUNCTION; DEFFN; ON BREAK; ON ERROR; ERROR/ERR; EVERY/AFTER; REM; GOTO; PAUSE/DELAY; END/EDIT/STOP; NEW; LOAD; SAVE/PSAVE; LIST/LLIST; CHAIN; RUN; SYSTEM/QUIT; TRON/TROFF/TRACE; $, INLINE, C:, MONITOR, CALL and RCALL (printed pp. 7-2–7-55).
+- **Chapter 8, Graphics:** SETCOLOR, DEFFILL, BOUNDARY, DEFLINE, GRAPHMODE, RASTPORT, CLIP, PLOT/LINE/DRAW, DRAW/SETDRAW, BOX/PBOX, CIRCLE/ELLIPSE, POLYLINE, POINT, FILL, CLS, TEXT, GET/PUT, VSYNC, DISPLAY (printed pp. 8-2–8-24).
+- **Chapter 9, Event/menu/screen/window handling:** event handling, pull-down menus, MENU/MENUO, ON MENU and ON MENU...GOSUB, MENU KILL/MENU X,Y, OPENS/CLOSES, FRONTS/BACKS, MOVES, TITLES, SETSPEN, SCREEN, OPENW, CLEARW/TITLEW/BACKW/FULLW, MOVEW/SIZEW/LIMITW, SETWPEN, WINDOW, ALERT and FILESELECT (printed pp. 9-2–9-37).
+- **Chapter 10, Advanced programming:** CLI call/_dosCmd$, EXEC, library variables, SPRITE, STICK/STRIG, SAY/TRANSLATE$, FD-files, blitter objects and OBJECT commands (printed pp. 10-2–10-14).
+- **Chapter 11, System routines:** system routine calling plus Exec, Graphics, Workbench, Intuition, DiskFont, Layers and DOS libraries (printed pp. 11-2–11-85). Treat these as platform/OS API surface, not automatically as language-core declarations.
+- **Chapter 12, Appendices:** keyboard scan codes, ASCII table, special ASCII codes, fill-in patterns, Amiga-DOS error messages, table of commands and table of operating-system functions (printed pp. 12-2–12-19).
+
+This is the source table-of-contents extraction only. It does not assert that every listed 3.0 item exists unchanged in 3.5. In particular, Chapter 11 must be split into language-level wrappers versus Amiga OS library calls when the detailed inventory is created.
