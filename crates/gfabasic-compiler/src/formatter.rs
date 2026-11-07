@@ -150,7 +150,7 @@ mod tests {
                     destination,
                     scalar,
                     ..
-                } => Meaning::MatMulScale(destination.clone(), scalar.clone())
+                } => Meaning::MatMulScale(destination.clone(), scalar.clone()),
                 Statement::MatArithmetic {
                     operation,
                     destination,
