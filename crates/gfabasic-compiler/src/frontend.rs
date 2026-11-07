@@ -192,7 +192,10 @@ pub fn lex_lossless(source_id: SourceId, source: &str) -> Result<LexedSource, Ve
             }
             b'\'' | b'!' => {
                 let start = offset;
-                while bytes.get(offset).is_some_and(|byte| !matches!(byte, b'\r' | b'\n')) {
+                while bytes
+                    .get(offset)
+                    .is_some_and(|byte| !matches!(byte, b'\r' | b'\n'))
+                {
                     offset += 1;
                 }
                 tokens.push(Token {
@@ -680,11 +683,20 @@ mod tests {
                 .expect("documented trailing comments should not invalidate a statement");
             assert_eq!(document.program.statements.len(), 1);
 
-            let comment = document.syntax.tokens.iter()
+            let comment = document
+                .syntax
+                .tokens
+                .iter()
                 .find(|token| matches!(token.kind, super::TokenKind::Comment))
                 .expect("comment token should be retained");
-            assert_eq!(&source_text[comment.span.start..comment.span.end],
-                if source_text.contains('!') { "! keep spacing  and text" } else { "' keep this comment exactly" });
+            assert_eq!(
+                &source_text[comment.span.start..comment.span.end],
+                if source_text.contains('!') {
+                    "! keep spacing  and text"
+                } else {
+                    "' keep this comment exactly"
+                }
+            );
         }
     }
 
