@@ -1,6 +1,6 @@
 # gfabasic-rust
 
-A planned general-purpose GFA BASIC compiler and runtime implemented in Rust.
+A GFA BASIC compiler and runtime implemented in Rust, targeting Amiga GFA BASIC interpreter 3.5 and native Linux x86-64 executables.
 
 **[Project website](https://vsimko.github.io/gfabasic-rust/)** · [Documentation](docs/README.md) · [Roadmap](ROADMAP.md)
 
@@ -8,9 +8,7 @@ A planned general-purpose GFA BASIC compiler and runtime implemented in Rust.
 
 ## Project direction
 
-The current planning baseline is to compile GFA BASIC source to native executables, with LLVM as the planned code-generation infrastructure. The first planned output target is Linux x86-64 (ELF, GNU ABI). SDL3 is planned as an implementation detail of the Linux platform integration layer.
-
-The language core, platform API profiles, and output target are separate concepts. Amiga and Atari ST API profiles are planned as independently selectable profiles. Their behavior must be verified against the applicable GFA BASIC manuals before it is specified as supported.
+The sole supported source dialect is Commodore Amiga GFA BASIC interpreter 3.5. The sole planned output target is Linux x86-64 (ELF, GNU ABI), with LLVM as the native code-generation infrastructure. SDL3 is the Linux platform integration layer for graphics, windows, and input. Atari ST, other GFA BASIC versions, other output targets, and cross-compilation are out of scope. See [ADR 0011](docs/architecture/adr/0011-amiga-35-linux-sdl3-product-scope.md).
 
 Compilation must be deterministic and must not require an LLM. An LLM may assist external migration or analysis workflows, but it is not part of the compiler execution path.
 
@@ -36,6 +34,7 @@ Key documents:
 - [Project roadmap](ROADMAP.md)
 - [Architecture overview](docs/architecture/README.md)
 - [Project goals and compatibility](docs/architecture/GOALS.md)
+- [Product scope decision (ADR 0011)](docs/architecture/adr/0011-amiga-35-linux-sdl3-product-scope.md)
 - [Dialect and version policy](docs/architecture/DIALECTS.md)
 - [Documentation policy](docs/DOCUMENTATION.md)
 - [GFA BASIC reference sources](docs/reference-sources.md)
@@ -46,7 +45,7 @@ Key documents:
 
 ## Current scope and limitations
 
-The Rust workspace contains three architectural crates: compiler, generated-program runtime, and Linux platform adapter. The compiler crate includes source-map and strict UTF-8 file-loading primitives, structured diagnostics, the evidence-gated FACT/PRINT frontend subset, and a temporary native-executable bootstrap path. The general lexer/parser grammar, complete semantic model and general-purpose IR, LLVM backend, project configuration, core runtime, and Linux platform adapter remain unimplemented. The pinned Rust toolchain and fast workspace checks are defined in CI. No complete GFA BASIC dialect or API profile is implemented or conformant. Planned targets, API profiles, and language features are not implementation or compatibility claims.
+The Rust workspace contains three architectural crates: compiler, generated-program runtime, and Linux platform adapter. The compiler crate includes source-map and strict UTF-8 file-loading primitives, structured diagnostics, the evidence-gated FACT/PRINT frontend subset, and a temporary native-executable bootstrap path. The general lexer/parser grammar, complete semantic model and general-purpose IR, LLVM backend, project configuration, core runtime, and Linux platform adapter remain unimplemented. The pinned Rust toolchain and fast workspace checks are defined in CI. No complete Amiga GFA BASIC 3.5 dialect or Amiga API profile is implemented or conformant. The only product target is Amiga GFA BASIC 3.5 to Linux x86-64; this scope decision is not an implementation or compatibility claim.
 
 See the roadmap and architecture documents for decisions, assumptions, dependencies, and unresolved questions.
 
