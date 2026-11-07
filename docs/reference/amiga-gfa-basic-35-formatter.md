@@ -8,7 +8,15 @@ It currently formats only the evidence-gated prototype grammar:
 
 - assignments of `FACT(n)`, `VARIAT(n,k)`, and `COMBIN(n,k)` to `x`, `y`,
   or `z`;
-- `PRINT` statements containing the supported variables.
+- `PRINT` statements containing the supported variables;
+- the independently verified matrix fixture forms: `DIM a(rows,columns)`,
+  `MAT ONE a()`, `MAT SET a()=value`, `MAT CLR a()`, and `MAT PRINT a()`.
+
+The matrix parser slice intentionally supports only the matrix name `a`, two
+integer dimensions, and a non-negative integer scalar for `MAT SET`. It does
+not implement matrix evaluation or general array semantics. The executable
+compiler and semantic-analysis stages explicitly reject these matrix AST nodes;
+this increment is for parsing and formatting only.
 
 This is not a general GFA BASIC formatter and does not establish full
 interpreter compatibility. Syntax outside the implemented parser subset is
@@ -103,8 +111,8 @@ normative for 3.5.
 Formatter unit tests cover canonical whitespace, all currently supported
 statement forms, identifier/intrinsic/literal spelling preservation,
 idempotence, semantic preservation, unsupported syntax rejection, and blank
-line policy. The two verified Amiga 3.5 combinatorics fixtures are checked by
-CI with `gfabasic fmt --check`.
+line policy. The verified Amiga 3.5 combinatorics and matrix fixtures are checked by CI
+with `gfabasic fmt --check`.
 
 As the parser gains verified grammar constructs, add independently authored
 golden fixtures and semantic/idempotence tests before enabling formatting for

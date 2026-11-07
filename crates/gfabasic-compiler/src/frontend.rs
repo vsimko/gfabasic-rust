@@ -1,9 +1,9 @@
 //! Evidence-gated frontend for the first Amiga GFA BASIC 3.5 vertical slice.
 //!
 //! This is deliberately not a general GFA BASIC lexer/parser. It recognizes
-//! only the source forms demonstrated by the 3.5 addendum's FACT example:
-//! assignments to x/y/z using FACT(integer-literal), followed by PRINT x,y,z.
-//! Other syntax is rejected rather than guessed.
+//! only the source forms demonstrated by the 3.5 addendum: FACT/VARIAT/COMBIN
+//! assignments and PRINT, plus the verified MAT ONE/SET/CLR/PRINT matrix
+//! examples. Other syntax is rejected rather than guessed.
 
 use crate::diagnostics::{Diagnostic, DiagnosticCategory, DiagnosticSeverity};
 use crate::source::{SourceId, SourceSpan};
@@ -46,6 +46,29 @@ pub enum Statement {
     },
     PrintVariables {
         names: Vec<String>,
+        span: SourceSpan,
+    },
+    DimMatrix {
+        name: String,
+        rows: i64,
+        columns: i64,
+        span: SourceSpan,
+    },
+    MatOne {
+        name: String,
+        span: SourceSpan,
+    },
+    MatSet {
+        name: String,
+        value: i64,
+        span: SourceSpan,
+    },
+    MatClr {
+        name: String,
+        span: SourceSpan,
+    },
+    MatPrint {
+        name: String,
         span: SourceSpan,
     },
 }
@@ -473,10 +496,97 @@ impl Parser {
         })
     }
 
+    fn parse_matrix_name(&mut self) -> Result<(String, SourceSpan), Box<Diagnostic>> {
+        let token = self.advance();
+        match token.kind {
+            TokenKind::Identifier(name) if name == "a" => Ok((name, token.span)),
+            TokenKind::Identifier(name) => Err(self.unsupported_error(
+                format!("matrix name {name:?} is outside the current verified fixture subset (supported: a)"),
+                token.span,
+            )),
+            _ => Err(self.syntax_error("expected matrix name 'a'", token.span)),
+        }
+    }
+
+    fn parse_matrix_reference(&mut self) -> Result<(String, SourceSpan), Box<Diagnostic>> {
+        let (name, start) = self.parse_matrix_name()?;
+        self.expect(TokenKind::LeftParen, "'(' after matrix name")?;
+        let end = self
+            .expect(TokenKind::RightParen, "')' after matrix name")?
+            .span;
+        Ok((name, SourceSpan::new(self.source_id, start.start, end.end)))
+    }
+
+    fn parse_matrix_dimension(&mut self) -> Result<i64, Box<Diagnostic>> {
+        let token = self.advance();
+        match token.kind {
+            TokenKind::Integer(value) => Ok(value),
+            _ => Err(self.syntax_error(
+                "matrix dimensions must be non-negative integer literals in this MVP",
+                token.span,
+            )),
+        }
+    }
+
+    fn parse_dim_matrix(&mut self, start: SourceSpan) -> Result<Statement, Box<Diagnostic>> {
+        let (name, _) = self.parse_matrix_name()?;
+        self.expect(TokenKind::LeftParen, "'(' after matrix name")?;
+        let rows = self.parse_matrix_dimension()?;
+        self.expect(TokenKind::Comma, "',' between matrix dimensions")?;
+        let columns = self.parse_matrix_dimension()?;
+        let end = self
+            .expect(TokenKind::RightParen, "')' after matrix dimensions")?
+            .span;
+        Ok(Statement::DimMatrix {
+            name,
+            rows,
+            columns,
+            span: SourceSpan::new(self.source_id, start.start, end.end),
+        })
+    }
+
+    fn parse_mat_statement(&mut self, start: SourceSpan) -> Result<Statement, Box<Diagnostic>> {
+        let operation = self.advance();
+        let operation_name = match operation.kind {
+            TokenKind::Identifier(name) => name,
+            _ => {
+                return Err(self.syntax_error(
+                    "expected MAT ONE, MAT SET, MAT CLR, or MAT PRINT",
+                    operation.span,
+                ));
+            }
+        };
+        match operation_name.as_str() {
+            "ONE" | "CLR" | "PRINT" => {
+                let (name, end) = self.parse_matrix_reference()?;
+                let span = SourceSpan::new(self.source_id, start.start, end.end);
+                match operation_name.as_str() {
+                    "ONE" => Ok(Statement::MatOne { name, span }),
+                    "CLR" => Ok(Statement::MatClr { name, span }),
+                    "PRINT" => Ok(Statement::MatPrint { name, span }),
+                    _ => unreachable!(),
+                }
+            }
+            "SET" => {
+                let (name, _) = self.parse_matrix_reference()?;
+                self.expect(TokenKind::Equals, "'=' in MAT SET")?;
+                let value = self.parse_matrix_dimension()?;
+                let span = SourceSpan::new(self.source_id, start.start, self.tokens[self.cursor - 1].span.end);
+                Ok(Statement::MatSet { name, value, span })
+            }
+            _ => Err(self.unsupported_error(
+                format!("MAT operation {operation_name:?} is outside the current verified fixture subset"),
+                operation.span,
+            )),
+        }
+    }
+
     fn parse_statement(&mut self) -> Result<Statement, Box<Diagnostic>> {
         let first = self.advance();
         match first.kind {
             TokenKind::Identifier(name) if name == "PRINT" => self.parse_print(first.span),
+            TokenKind::Identifier(name) if name == "DIM" => self.parse_dim_matrix(first.span),
+            TokenKind::Identifier(name) if name == "MAT" => self.parse_mat_statement(first.span),
             TokenKind::Identifier(name) if matches!(name.as_str(), "x" | "y" | "z") => {
                 self.parse_assignment(name, first.span)
             }
@@ -484,7 +594,10 @@ impl Parser {
                 format!("statement {name:?} is not supported by the current MVP frontend"),
                 first.span,
             )),
-            _ => Err(self.syntax_error("expected an assignment or PRINT statement", first.span)),
+            _ => Err(self.syntax_error(
+                "expected an assignment, PRINT, DIM, or MAT statement",
+                first.span,
+            )),
         }
     }
 
@@ -618,6 +731,62 @@ mod tests {
             &program.statements[2],
             Statement::AssignCombin { name, n: 5, k: 2, .. } if name == "z"
         ));
+    }
+
+    #[test]
+    fn parses_verified_amiga_35_matrix_fixtures() {
+        let fixtures = [
+            include_str!("../../../tests/corpus/amiga/3.5/matrix/mat-one-identity.bas"),
+            include_str!("../../../tests/corpus/amiga/3.5/matrix/mat-clear-zero.bas"),
+            include_str!("../../../tests/corpus/amiga/3.5/matrix/mat-set-scalar.bas"),
+        ];
+
+        for source_text in fixtures {
+            let mut sources = SourceMap::new();
+            let source_id = sources.add_source("verified-matrix.bas", source_text);
+            let program = parse(source_id, source_text)
+                .expect("verified Amiga 3.5 matrix fixture should parse");
+            assert!(matches!(
+                program.statements.first(),
+                Some(Statement::DimMatrix { name, rows: 3, columns: 3, .. }) if name == "a"
+            ));
+            assert!(matches!(
+                program.statements.last(),
+                Some(Statement::MatPrint { name, .. }) if name == "a"
+            ));
+        }
+    }
+
+    #[test]
+    fn parses_matrix_operations_with_exact_fixture_shapes() {
+        let source_text = "DIM a(3,3)\nMAT ONE a()\nMAT SET a()=7\nMAT CLR a()\nMAT PRINT a()\n";
+        let mut sources = SourceMap::new();
+        let source_id = sources.add_source("matrix.bas", source_text);
+        let program = parse(source_id, source_text).unwrap();
+
+        assert!(matches!(&program.statements[1], Statement::MatOne { name, .. } if name == "a"));
+        assert!(
+            matches!(&program.statements[2], Statement::MatSet { name, value: 7, .. } if name == "a")
+        );
+        assert!(matches!(&program.statements[3], Statement::MatClr { name, .. } if name == "a"));
+    }
+
+    #[test]
+    fn rejects_malformed_matrix_statement_shapes() {
+        for source_text in [
+            "DIM a(3)\n",
+            "MAT ONE a(3)\n",
+            "MAT SET a()\n",
+            "MAT SET a()=7,8\n",
+            "MAT INV a()\n",
+        ] {
+            let mut sources = SourceMap::new();
+            let source_id = sources.add_source("malformed-matrix.bas", source_text);
+            assert!(
+                parse(source_id, source_text).is_err(),
+                "accepted: {source_text:?}"
+            );
+        }
     }
 
     #[test]

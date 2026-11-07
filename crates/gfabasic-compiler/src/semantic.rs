@@ -125,6 +125,15 @@ pub fn resolve_prototype_symbols(
                     declaration,
                 });
             }
+            Statement::DimMatrix { span, .. }
+            | Statement::MatOne { span, .. }
+            | Statement::MatSet { span, .. }
+            | Statement::MatClr { span, .. }
+            | Statement::MatPrint { span, .. } => errors.push(SemanticError {
+                code: "GFA-SEM-0003".to_owned(),
+                message: "matrix syntax is parsed for formatting but matrix semantic analysis is not implemented".to_owned(),
+                span: *span,
+            }),
             Statement::PrintVariables { names, span } => {
                 let identifiers: Vec<_> = document
                     .syntax
@@ -192,6 +201,18 @@ mod tests {
         assert_eq!(symbols.symbols[0].id, SymbolId(0));
         assert_eq!(symbols.symbols[0].name, "x");
         assert_eq!(symbols.references_to(SymbolId(0)).count(), 1);
+    }
+
+    #[test]
+    fn reports_matrix_semantics_as_not_implemented() {
+        let source = include_str!("../../../tests/corpus/amiga/3.5/matrix/mat-one-identity.bas");
+        let mut sources = SourceMap::new();
+        let source_id = sources.add_source("matrix.bas", source);
+        let document = parse_document(source_id, source).expect("matrix fixture syntax parses");
+
+        let errors = resolve_prototype_symbols(&document)
+            .expect_err("matrix semantics are outside the current semantic model");
+        assert!(errors.iter().any(|error| error.code == "GFA-SEM-0003"));
     }
 
     #[test]

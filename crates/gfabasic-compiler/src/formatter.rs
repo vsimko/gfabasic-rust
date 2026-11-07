@@ -85,6 +85,11 @@ mod tests {
         Variat(String, i64, i64),
         Combin(String, i64, i64),
         Print(Vec<String>),
+        DimMatrix(String, i64, i64),
+        MatOne(String),
+        MatSet(String, i64),
+        MatClr(String),
+        MatPrint(String),
     }
 
     fn meanings(program: &Program) -> Vec<Meaning> {
@@ -98,6 +103,16 @@ mod tests {
                 Statement::AssignVariat { name, n, k, .. } => Meaning::Variat(name.clone(), *n, *k),
                 Statement::AssignCombin { name, n, k, .. } => Meaning::Combin(name.clone(), *n, *k),
                 Statement::PrintVariables { names, .. } => Meaning::Print(names.clone()),
+                Statement::DimMatrix {
+                    name,
+                    rows,
+                    columns,
+                    ..
+                } => Meaning::DimMatrix(name.clone(), *rows, *columns),
+                Statement::MatOne { name, .. } => Meaning::MatOne(name.clone()),
+                Statement::MatSet { name, value, .. } => Meaning::MatSet(name.clone(), *value),
+                Statement::MatClr { name, .. } => Meaning::MatClr(name.clone()),
+                Statement::MatPrint { name, .. } => Meaning::MatPrint(name.clone()),
             })
             .collect()
     }
@@ -206,6 +221,47 @@ mod tests {
                 meanings(&before.program),
                 meanings(&after.program),
                 "source: {source:?}"
+            );
+        }
+    }
+
+    #[test]
+    fn golden_cases_cover_verified_matrix_statements() {
+        let cases = [
+            ("DIM a(3,3)", "DIM a(3, 3)\n"),
+            ("MAT ONE a()", "MAT ONE a()\n"),
+            ("MAT SET a()=7", "MAT SET a() = 7\n"),
+            ("MAT CLR a()", "MAT CLR a()\n"),
+            ("MAT PRINT a()", "MAT PRINT a()\n"),
+        ];
+
+        for (source, expected) in cases {
+            assert_eq!(format(source), expected, "source: {source:?}");
+        }
+    }
+
+    #[test]
+    fn verified_amiga_35_matrix_fixtures_are_idempotent_and_semantics_preserving() {
+        let fixtures = [
+            include_str!("../../../tests/corpus/amiga/3.5/matrix/mat-one-identity.bas"),
+            include_str!("../../../tests/corpus/amiga/3.5/matrix/mat-clear-zero.bas"),
+            include_str!("../../../tests/corpus/amiga/3.5/matrix/mat-set-scalar.bas"),
+        ];
+
+        for source in fixtures {
+            let formatted = format(source);
+            assert_eq!(format(&formatted), formatted, "not idempotent: {source:?}");
+
+            let mut before_sources = SourceMap::new();
+            let before_id = before_sources.add_source("matrix-before.bas", source);
+            let before = parse_document(before_id, source).unwrap();
+            let mut after_sources = SourceMap::new();
+            let after_id = after_sources.add_source("matrix-after.bas", formatted.as_str());
+            let after = parse_document(after_id, &formatted).unwrap();
+            assert_eq!(
+                meanings(&before.program),
+                meanings(&after.program),
+                "formatting changed matrix fixture meaning: {source:?}"
             );
         }
     }

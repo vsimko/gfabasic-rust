@@ -8,6 +8,7 @@ on:
       - "rust-toolchain.toml"
       - "crates/**"
       - "tests/corpus/amiga/3.5/combinatorics/**"
+      - "tests/corpus/amiga/3.5/matrix/**"
       - ".github/workflows/rust.yml"
   push:
     branches:
@@ -18,6 +19,7 @@ on:
       - "rust-toolchain.toml"
       - "crates/**"
       - "tests/corpus/amiga/3.5/combinatorics/**"
+      - "tests/corpus/amiga/3.5/matrix/**"
       - ".github/workflows/rust.yml"
 
 permissions:
@@ -71,7 +73,7 @@ jobs:
 
       - name: Check verified Amiga 3.5 formatter fixtures
         run: |
-          for source in tests/corpus/amiga/3.5/combinatorics/*.bas; do
+          for source in tests/corpus/amiga/3.5/combinatorics/*.bas tests/corpus/amiga/3.5/matrix/*.bas; do
             cargo run --quiet -p gfabasic-compiler -- fmt --check "$source"
           done
 

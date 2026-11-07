@@ -143,6 +143,16 @@ pub fn lower(program: &Program) -> Result<Module, Vec<IrError>> {
                     &mut errors,
                 );
             }
+            Statement::DimMatrix { span, .. }
+            | Statement::MatOne { span, .. }
+            | Statement::MatSet { span, .. }
+            | Statement::MatClr { span, .. }
+            | Statement::MatPrint { span, .. } => {
+                errors.push(IrError::at(
+                    "matrix statements are supported by the parser and formatter but not by the executable compiler prototype",
+                    *span,
+                ));
+            }
             Statement::PrintVariables { names, span } => {
                 let mut values = Vec::with_capacity(names.len());
                 for name in names {
@@ -301,6 +311,22 @@ mod tests {
         ));
         assert_eq!(value_type(&ir, ValueId(0)), Some(ValueType::I64));
         verify(&ir).unwrap();
+    }
+
+    #[test]
+    fn rejects_matrix_statements_from_the_executable_build_subset() {
+        let source = include_str!("../../../tests/corpus/amiga/3.5/matrix/mat-one-identity.bas");
+        let mut sources = SourceMap::new();
+        let id = sources.add_source("matrix.bas", source);
+        let ast = parse(id, source).unwrap();
+
+        let errors = lower(&ast).expect_err("matrix execution is not implemented");
+        assert!(
+            errors
+                .iter()
+                .any(|error| error.message.contains("matrix statements")),
+            "expected an explicit matrix support diagnostic: {errors:?}"
+        );
     }
 
     #[test]
