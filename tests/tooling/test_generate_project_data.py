@@ -3,7 +3,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from scripts.generate_project_data import generate, load_model, parse_roadmap_progress
+from scripts.generate_project_data import generate, load_model, parse_roadmap_progress, parse_roadmap_blockers
 
 ROOT = Path(__file__).resolve().parents[2]
 MODEL = ROOT / "validation/project.json"
@@ -20,10 +20,23 @@ class ProjectDataGeneratorTests(unittest.TestCase):
             self.assertEqual(first_bytes, output.read_bytes())
 
     def test_roadmap_progress_counts_only_tasks_in_each_phase(self):
-        roadmap = """### Phase 0 — Baseline\n- [x] First\n- [ ] Second\n### Phase 1 — Evidence\n- [x] Third\n"""
+        roadmap = """### Phase 0 — Baseline\nKeep the architecture stable.\n- [x] First [#7](https://github.com/vsimko/gfabasic-rust/issues/7)\n- [ ] Second\n### Phase 1 — Evidence\nGather verified evidence.\n- [x] Third\n"""
         self.assertEqual(parse_roadmap_progress(roadmap), [
-            {"number": 0, "name": "Baseline", "completed": 1, "total": 2, "percent": 50},
-            {"number": 1, "name": "Evidence", "completed": 1, "total": 1, "percent": 100},
+            {"number": 0, "name": "Baseline", "description": "Keep the architecture stable.", "completed": 1, "total": 2, "percent": 50, "status": "in-progress", "issue_links": [{"label": "#7", "url": "https://github.com/vsimko/gfabasic-rust/issues/7"}]},
+            {"number": 1, "name": "Evidence", "description": "Gather verified evidence.", "completed": 1, "total": 1, "percent": 100, "status": "complete", "issue_links": []},
+        ])
+
+    def test_roadmap_blockers_keep_explicit_issue_links(self):
+        roadmap = """## Blockers and sequencing rules
+1. The lexer precedes the parser — see [#46](https://github.com/vsimko/gfabasic-rust/issues/46).
+2. Runtime depends on typed IR.
+## Roadmap maintenance
+"""
+        self.assertEqual(parse_roadmap_blockers(roadmap), [
+            {"summary": "The lexer precedes the parser — see #46.", "issue_links": [
+                {"label": "#46", "url": "https://github.com/vsimko/gfabasic-rust/issues/46"}
+            ]},
+            {"summary": "Runtime depends on typed IR.", "issue_links": []},
         ])
 
     def test_workspace_packages_come_from_cargo_manifest(self):

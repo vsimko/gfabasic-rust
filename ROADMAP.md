@@ -114,12 +114,12 @@ The first end-to-end MVP integration gate is tracked separately in [#113](https:
 The public website also serves as a maintainer-facing, read-only implementation dashboard. The dashboard is a presentation of repository evidence, not a second project-management system. GitHub Issues remain authoritative for task scope and blockers; this roadmap remains authoritative for delivery phases; component registries, source evidence, tests, and workflow runs remain authoritative for their respective facts.
 
 - [ ] Add the owner-facing dashboard overview — [#304](https://github.com/vsimko/gfabasic-rust/issues/304)
-- [ ] Define generated progress data and component status model — [#305](https://github.com/vsimko/gfabasic-rust/issues/305)
+- [x] Define generated progress data and component status model — [#305](https://github.com/vsimko/gfabasic-rust/issues/305)
 - [ ] Visualize roadmap phases, dependencies, and blockers — [#306](https://github.com/vsimko/gfabasic-rust/issues/306)
 - [ ] Add evidence-based language compatibility metrics — [#307](https://github.com/vsimko/gfabasic-rust/issues/307)
 - [ ] Show CI, test, and supply-chain health — [#308](https://github.com/vsimko/gfabasic-rust/issues/308)
 - [ ] Add recent repository activity and delivery history — [#309](https://github.com/vsimko/gfabasic-rust/issues/309)
-- [ ] Document dashboard architecture, data provenance, and maintenance — [#310](https://github.com/vsimko/gfabasic-rust/issues/310)
+- [x] Document dashboard architecture, data provenance, and maintenance — [#310](https://github.com/vsimko/gfabasic-rust/issues/310)
 
 Dashboard status vocabulary is intentionally explicit: Implemented, Partial, Prototype, Research, Planned, and Blocked. Research is not implementation. Compatibility evidence, implementation state, Linux support, runtime observation, and conformance are independent dimensions with separate denominators. Do not publish one aggregate implementation or compatibility percentage. See [ADR 0014](docs/architecture/adr/0014-implementation-dashboard.md) and the [dashboard guide](docs/architecture/IMPLEMENTATION-DASHBOARD.md).
 
