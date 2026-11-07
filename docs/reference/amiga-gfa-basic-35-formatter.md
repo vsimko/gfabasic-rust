@@ -23,7 +23,9 @@ result expressions and in-place matrix/scalar forms. `MAT MUL` accepts
 matrix-result products, scalar-result products with two or three matrix
 operands, and in-place scalar multiplication. `MAT DET`, `MAT QDET`, and
 `MAT RANG` accept a scalar destination, matrix reference with optional row
-and column offsets, and an optional square-submatrix order. Arithmetic operators are
+and column offsets, and an optional square-submatrix order. `MAT CPY` and
+`MAT XCPY` accept destination/source matrix selections with optional row and
+column offsets and an optional height/width extent. Arithmetic operators are
 spaced on both sides by the formatter. The parser still limits matrix names
 to `a` and `b`; scalar operands retain their source identifier spelling.
 It does not implement

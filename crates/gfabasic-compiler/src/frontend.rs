@@ -116,7 +116,24 @@ pub enum Statement {
         order: Option<i64>,
         span: SourceSpan,
     },
+    MatCopy {
+        operation: MatCopyOperation,
+        destination: String,
+        destination_offset: Option<(i64, i64)>,
+        source: String,
+        source_offset: Option<(i64, i64)>,
+        extent: Option<(i64, i64)>,
+        span: SourceSpan,
+    },
 }
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum MatCopyOperation {
+    Copy,
+    TransposedCopy,
+}
+
+type ParsedMatrixSelection = (String, Option<(i64, i64)>, SourceSpan);
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum MatAnalysisOperation {
@@ -820,6 +837,57 @@ impl Parser {
         })
     }
 
+    fn parse_matrix_selection(&mut self) -> Result<ParsedMatrixSelection, Box<Diagnostic>> {
+        let (name, name_span) = self.parse_matrix_name()?;
+        self.expect(TokenKind::LeftParen, "'(' after matrix name")?;
+        let offset = if matches!(self.current().kind, TokenKind::RightParen) {
+            None
+        } else {
+            let row = self.parse_nonnegative_matrix_integer()?;
+            self.expect(
+                TokenKind::Comma,
+                "',' between matrix row and column offsets",
+            )?;
+            let column = self.parse_nonnegative_matrix_integer()?;
+            Some((row, column))
+        };
+        let end = self.expect(TokenKind::RightParen, "')' after matrix selection")?;
+        Ok((
+            name,
+            offset,
+            SourceSpan::new(self.source_id, name_span.start, end.span.end),
+        ))
+    }
+
+    fn parse_mat_copy(
+        &mut self,
+        start: SourceSpan,
+        operation: MatCopyOperation,
+    ) -> Result<Statement, Box<Diagnostic>> {
+        let (destination, destination_offset, _) = self.parse_matrix_selection()?;
+        self.expect(TokenKind::Equals, "'=' in MAT copy statement")?;
+        let (source, source_offset, _) = self.parse_matrix_selection()?;
+        let extent = if matches!(self.current().kind, TokenKind::Comma) {
+            self.advance();
+            let height = self.parse_nonnegative_matrix_integer()?;
+            self.expect(TokenKind::Comma, "',' between MAT copy height and width")?;
+            let width = self.parse_nonnegative_matrix_integer()?;
+            Some((height, width))
+        } else {
+            None
+        };
+        let end = self.tokens[self.cursor - 1].span;
+        Ok(Statement::MatCopy {
+            operation,
+            destination,
+            destination_offset,
+            source,
+            source_offset,
+            extent,
+            span: SourceSpan::new(self.source_id, start.start, end.end),
+        })
+    }
+
     fn parse_mat_statement(&mut self, start: SourceSpan) -> Result<Statement, Box<Diagnostic>> {
         let operation = self.advance();
         let operation_name = match operation.kind {
@@ -846,6 +914,8 @@ impl Parser {
                     span: SourceSpan::new(self.source_id, start.start, end.end),
                 })
             }
+            "CPY" => self.parse_mat_copy(start, MatCopyOperation::Copy),
+            "XCPY" => self.parse_mat_copy(start, MatCopyOperation::TransposedCopy),
             "DET" => self.parse_mat_analysis(start, MatAnalysisOperation::Det),
             "QDET" => self.parse_mat_analysis(start, MatAnalysisOperation::QDet),
             "RANG" => self.parse_mat_analysis(start, MatAnalysisOperation::Rang),
@@ -1153,6 +1223,73 @@ mod tests {
             &column_program.statements[0],
             Statement::MatNorm { name, mode: 1, .. } if name == "a"
         ));
+    }
+
+    #[test]
+    fn parses_verified_mat_cpy_and_xcpy_forms() {
+        use super::MatCopyOperation;
+
+        let source = "MAT CPY a()=b()\nMAT CPY a(1,2)=b(3,4),5,6\nMAT XCPY a()=b()\nMAT XCPY b(2,1)=a(0,3),4,5\n";
+        let mut sources = SourceMap::new();
+        let source_id = sources.add_source("mat-copy.bas", source);
+        let program = parse(source_id, source).unwrap();
+
+        assert!(matches!(
+            &program.statements[0],
+            Statement::MatCopy {
+                operation: MatCopyOperation::Copy,
+                destination,
+                destination_offset: None,
+                source,
+                source_offset: None,
+                extent: None,
+                ..
+            } if destination == "a" && source == "b"
+        ));
+        assert!(matches!(
+            &program.statements[1],
+            Statement::MatCopy {
+                operation: MatCopyOperation::Copy,
+                destination_offset: Some((1, 2)),
+                source_offset: Some((3, 4)),
+                extent: Some((5, 6)),
+                ..
+            }
+        ));
+        assert!(matches!(
+            &program.statements[2],
+            Statement::MatCopy {
+                operation: MatCopyOperation::TransposedCopy,
+                destination,
+                source,
+                ..
+            } if destination == "a" && source == "b"
+        ));
+        assert!(matches!(
+            &program.statements[3],
+            Statement::MatCopy {
+                operation: MatCopyOperation::TransposedCopy,
+                destination,
+                destination_offset: Some((2, 1)),
+                source,
+                source_offset: Some((0, 3)),
+                extent: Some((4, 5)),
+                ..
+            } if destination == "b" && source == "a"
+        ));
+    }
+
+    #[test]
+    fn rejects_malformed_mat_copy_selections() {
+        for source in [
+            "MAT CPY a(1)=b()\n",
+            "MAT XCPY a()=b(1,2,3)\n",
+            "MAT CPY a()=b(),4\n",
+        ] {
+            let mut sources = SourceMap::new();
+            let source_id = sources.add_source("invalid-mat-copy.bas", source);
+            assert!(parse(source_id, source).is_err(), "accepted: {source:?}");
+        }
     }
 
     #[test]

@@ -106,6 +106,14 @@ mod tests {
         MatMulScalar(String, Vec<String>),
         MatMulScale(String, String),
         MatAnalysis(String, String, Option<(i64, i64)>, Option<i64>, String),
+        MatCopy(
+            String,
+            Option<(i64, i64)>,
+            String,
+            Option<(i64, i64)>,
+            Option<(i64, i64)>,
+            String,
+        ),
     }
 
     fn meanings(program: &Program) -> Vec<Meaning> {
@@ -152,6 +160,28 @@ mod tests {
                     scalar,
                     ..
                 } => Meaning::MatMulScale(destination.clone(), scalar.clone()),
+                Statement::MatCopy {
+                    operation,
+                    destination,
+                    destination_offset,
+                    source,
+                    source_offset,
+                    extent,
+                    ..
+                } => {
+                    let operation = match operation {
+                        crate::frontend::MatCopyOperation::Copy => "cpy",
+                        crate::frontend::MatCopyOperation::TransposedCopy => "xcpy",
+                    };
+                    Meaning::MatCopy(
+                        destination.clone(),
+                        *destination_offset,
+                        source.clone(),
+                        *source_offset,
+                        *extent,
+                        operation.to_owned(),
+                    )
+                }
                 Statement::MatAnalysis {
                     operation,
                     destination,
@@ -378,11 +408,30 @@ mod tests {
             ("MAT DET x=a(1,2),3", "MAT DET x = a(1, 2), 3\n"),
             ("MAT QDET x=b(0,0)", "MAT QDET x = b(0, 0)\n"),
             ("MAT RANG y=a(2,1),4", "MAT RANG y = a(2, 1), 4\n"),
+            ("MAT CPY a()=b()", "MAT CPY a() = b()\n"),
+            (
+                "MAT XCPY a(1,2)=b(3,4),5,6",
+                "MAT XCPY a(1, 2) = b(3, 4), 5, 6\n",
+            ),
         ];
 
         for (source, expected) in cases {
             assert_eq!(format(source), expected, "source: {source:?}");
         }
+    }
+
+    #[test]
+    fn mat_copy_formatting_is_idempotent_and_semantics_preserving() {
+        let source = "MAT CPY a()=b()\nMAT XCPY a(1,2)=b(3,4),5,6\n";
+        let formatted = format(source);
+        assert_eq!(format(&formatted), formatted);
+        let mut before_sources = SourceMap::new();
+        let before_id = before_sources.add_source("before.bas", source);
+        let before = parse_document(before_id, source).unwrap();
+        let mut after_sources = SourceMap::new();
+        let after_id = after_sources.add_source("after.bas", formatted.as_str());
+        let after = parse_document(after_id, &formatted).unwrap();
+        assert_eq!(meanings(&before.program), meanings(&after.program));
     }
 
     #[test]
