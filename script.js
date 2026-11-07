@@ -58,7 +58,7 @@ if (generatedStatus) {
       return response.json();
     })
     .then((data) => {
-      if (data.schema_version !== 2 || !data.project || !Array.isArray(data.components) || !Array.isArray(data.roadmap_progress) || !Array.isArray(data.workspace_packages)) {
+      if (data.schema_version !== 2 || !data.project || !Array.isArray(data.components) || !Array.isArray(data.roadmap_progress) || !Array.isArray(data.roadmap_blockers) || !Array.isArray(data.workspace_packages)) {
         throw new Error("Generated project data has an unsupported or incomplete schema");
       }
 
@@ -100,6 +100,61 @@ if (generatedStatus) {
         track.append(fill);
         item.append(top, track);
         roadmap.append(item);
+      }
+
+      const generatedRoadmap = document.querySelector("#generated-roadmap");
+      if (generatedRoadmap) {
+        const phaseCards = data.roadmap_progress.map((phase) => {
+          const card = document.createElement("article");
+          card.className = "roadmap-phase";
+          const state = textNode("span", `roadmap-state ${phase.status}`, phase.status === "complete" ? "COMPLETE" : phase.status === "in-progress" ? "IN PROGRESS" : "PLANNED");
+          const body = document.createElement("div");
+          body.className = "roadmap-phase-body";
+          body.append(textNode("h3", "", `Phase ${phase.number} · ${phase.name}`));
+          body.append(textNode("p", "", phase.description || "See the canonical roadmap for phase details."));
+          const progress = document.createElement("div");
+          progress.className = "roadmap-phase-progress";
+          const progressTrack = document.createElement("div");
+          progressTrack.className = "dashboard-progress-track";
+          progressTrack.setAttribute("role", "progressbar");
+          progressTrack.setAttribute("aria-label", `Phase ${phase.number}: ${phase.name}`);
+          progressTrack.setAttribute("aria-valuemin", "0");
+          progressTrack.setAttribute("aria-valuemax", "100");
+          progressTrack.setAttribute("aria-valuenow", String(phase.percent));
+          const progressFill = document.createElement("span");
+          progressFill.className = "dashboard-progress-fill";
+          progressFill.style.width = `${phase.percent}%`;
+          progressTrack.append(progressFill);
+          progress.append(progressTrack, textNode("span", "roadmap-phase-count", `${phase.completed}/${phase.total} tasks · ${phase.percent}%`));
+          body.append(progress);
+          if (Array.isArray(phase.issue_links) && phase.issue_links.length) {
+            const links = document.createElement("div");
+            links.className = "roadmap-phase-issues";
+            for (const item of phase.issue_links) {
+              links.append(sourceLink(item.url, item.label));
+            }
+            body.append(links);
+          }
+          card.append(state, body);
+          return card;
+        });
+        generatedRoadmap.replaceChildren(...phaseCards);
+        const blockerHeading = textNode("h3", "roadmap-blockers-heading", "Dependencies & sequencing rules");
+        const blockers = document.createElement("div");
+        blockers.className = "roadmap-blockers";
+        for (const item of data.roadmap_blockers) {
+          const blocker = document.createElement("article");
+          blocker.className = "roadmap-blocker";
+          blocker.append(textNode("p", "", item.summary));
+          if (Array.isArray(item.issue_links) && item.issue_links.length) {
+            const links = document.createElement("div");
+            links.className = "roadmap-phase-issues";
+            for (const issue of item.issue_links) links.append(sourceLink(issue.url, issue.label));
+            blocker.append(links);
+          }
+          blockers.append(blocker);
+        }
+        generatedRoadmap.append(blockerHeading, blockers);
       }
 
       const heading = textNode("h3", "dashboard-subheading", "Implementation states");

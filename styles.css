@@ -70,3 +70,29 @@
 .dashboard-progress-fill{display:block;height:100%;background:var(--green);border-radius:8px;transition:width .25s ease}
 @media(max-width:700px){.dashboard-roadmap-progress{grid-template-columns:1fr;gap:15px}}
 @media(prefers-reduced-motion:reduce){.dashboard-progress-fill{transition:none}}
+
+/* Canonical five-phase roadmap cards */
+.roadmap-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;border:0}
+.roadmap-phase{display:grid;grid-template-columns:105px minmax(0,1fr);align-items:start;gap:16px;padding:22px;background:var(--panel);border:1px solid var(--line);border-radius:5px;min-width:0}
+.roadmap-phase:last-child:nth-child(odd){grid-column:1/-1}
+.roadmap-phase .roadmap-state{padding-top:5px}
+.roadmap-phase .complete{color:var(--green)}
+.roadmap-phase .in-progress{color:var(--orange)}
+.roadmap-phase .planned{color:#879487}
+.roadmap-phase-body{min-width:0}
+.roadmap-phase h3{font-size:15px;margin:0 0 7px}
+.roadmap-phase p{font-size:11px;line-height:1.75;color:#9ba99b;margin:0 0 14px}
+.roadmap-phase-progress{display:flex;align-items:center;gap:12px}
+.roadmap-phase-progress .dashboard-progress-track{flex:1}
+.roadmap-phase-count{flex:0 0 auto;color:#aab7a9;font:9px var(--mono);font-variant-numeric:tabular-nums}
+.roadmap-phase-issues{display:flex;flex-wrap:wrap;gap:8px 12px;margin-top:13px}
+.roadmap-phase-issues a{color:var(--green);font:9px var(--mono);text-decoration:none}
+.roadmap-phase-issues a:hover{text-decoration:underline}
+.roadmap-loading{grid-column:1/-1;color:#9ba99b;font-size:12px}
+@media(max-width:700px){.roadmap-list{grid-template-columns:1fr}.roadmap-phase{grid-template-columns:1fr;gap:8px}.roadmap-phase:last-child:nth-child(odd){grid-column:auto}.roadmap-phase-progress{align-items:flex-start;flex-direction:column}.roadmap-phase-progress .dashboard-progress-track{width:100%}}
+
+.roadmap-blockers-heading{grid-column:1/-1;margin:18px 0 0;padding-top:19px;border-top:1px solid var(--line);font-size:14px}
+.roadmap-blockers{grid-column:1/-1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.roadmap-blocker{min-width:0;padding:15px 18px;background:#131c16;border:1px solid var(--line);border-radius:4px}
+.roadmap-blocker p{margin:0;color:#aab7a9;font-size:11px;line-height:1.75}
+@media(max-width:700px){.roadmap-blockers{grid-template-columns:1fr}}
