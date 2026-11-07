@@ -325,7 +325,9 @@ anchors = []
         temp, root = self.make_root(content)
         self.addCleanup(temp.cleanup)
         errors = validate_registry(root)
-        self.assertTrue(any("unknown support classification needs a pending reason" in error for error in errors))
+        self.assertTrue(
+            any("unknown support classification needs a pending reason" in error for error in errors)
+        )
 
         registry = root / "api/registry/atari-st/time.toml"
         registry.write_text(
