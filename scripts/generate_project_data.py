@@ -174,14 +174,20 @@ def render_project_dashboard(data: dict) -> tuple[str, str]:
             f'{("#" + esc(ref.split("#", 1)[1])) if "#" in ref else ""}" target="_blank" rel="noreferrer">{esc(ref)} ↗</a>'
             for ref in item["evidence"]
         )
+        issues = "".join(
+            f'<a href="https://github.com/vsimko/gfabasic-rust/issues/{number}" target="_blank" rel="noreferrer">Issue #{number} ↗</a>'
+            for number in item["related_issues"]
+        )
         components.append(
             f'<article class="dashboard-component"><div class="dashboard-component-top"><h4>{esc(item["name"])}</h4>'
             f'<span class="dashboard-status">{esc(item["status"].replace("-", " ").title())}</span></div>'
-            f'<p>{esc(item["rationale"])}</p><div class="dashboard-evidence">{evidence}</div></article>'
+            f'<p>{esc(item["rationale"])}</p><div class="dashboard-evidence">{evidence}{issues}</div></article>'
         )
     components.append('</div>')
     footer = (
-        f'<div class="dashboard-footer"><span>Source revision: {esc(data["source_revision"][:7])}</span>'
+        f'<div class="dashboard-footer"><a href="https://github.com/vsimko/gfabasic-rust/blob/main/validation/project.json">Canonical status model ↗</a>'
+        '<a href="https://github.com/vsimko/gfabasic-rust/blob/main/ROADMAP.md">Delivery roadmap ↗</a>'
+        f'<a href="https://github.com/vsimko/gfabasic-rust/commit/{esc(data["source_revision"])}">Source revision: {esc(data["source_revision"][:7])} ↗</a>'
         '<a href="https://github.com/vsimko/gfabasic-rust/issues">Open implementation issues ↗</a></div>'
     )
     dashboard = overview + "".join(progress) + "".join(components) + footer
