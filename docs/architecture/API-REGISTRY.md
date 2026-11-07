@@ -192,3 +192,8 @@ Acceptance of a registry record does not mean implementation is complete. The re
 ADR 0006 accepts TOML as the canonical registry format, the directory structure above, the stable ID convention, and the separated evidence/implementation/support/conformance model. The v1 JSON Schema, Python validator, validator tests, and CI invocation are implemented. The schema allows implementation notes so partial prototypes and known limitations can be represented without overstating support. The registry contains one unsupported Atari ST TIMER declaration, 24 language-core declarations, and four Amiga 3.5 platform declarations; no declaration currently claims supported target behavior, and no runtime handler mapping or documentation generator is implemented. The presence of a research record is not a compiler or runtime feature claim.
 
 Tracking: [issue #12](https://github.com/vsimko/gfabasic-rust/issues/12), [metadata validation #55 (completed)](https://github.com/vsimko/gfabasic-rust/issues/55), [runtime handler resolution #115](https://github.com/vsimko/gfabasic-rust/issues/115), [conformance corpus #42](https://github.com/vsimko/gfabasic-rust/issues/42).
+
+
+## Evidence and status invariants
+
+The validator requires printed-page locators for book-documented and primary-reference-cross-checked declarations, explicit reasons for unknown/unsupported target support and non-passing conformance, and conflict notes for disputed evidence. Disputed evidence cannot claim an implemented behavior, supported target behavior, or passing conformance. Inferred/unknown evidence cannot claim supported target behavior. These checks enforce consistency of recorded claims; they do not prove that a cited page was interpreted correctly.
