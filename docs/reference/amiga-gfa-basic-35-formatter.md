@@ -36,7 +36,7 @@ Example:
 Input:
 
 ```basic
-  x=FACT(0001)\r
+  x=FACT(0001)
 y = VARIAT(5,2)
 PRINT   x,y,z
 ```
