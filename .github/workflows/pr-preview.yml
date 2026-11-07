@@ -53,6 +53,13 @@ jobs:
           grep -q 'class="dashboard-progress-fill"' site/index.html
           ! grep -q 'fetch("data/project.json")' site/script.js
 
+      - name: Test deployed preview in Chromium
+        if: github.event.action != 'closed'
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+          PREVIEW_URL="https://vsimko.github.io/gfabasic-rust/pr-preview/pr-${{ github.event.pull_request.number }}/" node scripts/tests/preview-smoke.mjs
+
       - name: Publish or remove preview
         uses: rossjrw/pr-preview-action@873417d2df72380da1f3978378fb58560bcde976
         with:
