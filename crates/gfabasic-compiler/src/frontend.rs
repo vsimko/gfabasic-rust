@@ -125,6 +125,15 @@ pub enum Statement {
         extent: Option<(i64, i64)>,
         span: SourceSpan,
     },
+    MatRead {
+        matrix: String,
+        span: SourceSpan,
+    },
+    MatInput {
+        channel: i64,
+        matrix: String,
+        span: SourceSpan,
+    },
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -175,6 +184,8 @@ pub enum TokenKind {
     Minus,
     /// Matrix multiplication operator.
     Star,
+    /// File channel prefix.
+    Hash,
     /// A source line boundary, preserving CR, LF, or CRLF in its span.
     Newline,
     /// A zero-width end-of-input marker.
@@ -311,6 +322,14 @@ pub fn lex_lossless(source_id: SourceId, source: &str) -> Result<LexedSource, Ve
                 offset += 1;
                 tokens.push(Token {
                     kind: TokenKind::Minus,
+                    span: SourceSpan::new(source_id, start, offset),
+                });
+            }
+            b'#' => {
+                let start = offset;
+                offset += 1;
+                tokens.push(Token {
+                    kind: TokenKind::Hash,
                     span: SourceSpan::new(source_id, start, offset),
                 });
             }
@@ -888,6 +907,28 @@ impl Parser {
         })
     }
 
+    fn parse_mat_read(&mut self, start: SourceSpan) -> Result<Statement, Box<Diagnostic>> {
+        let (matrix, _) = self.parse_matrix_reference()?;
+        let end = self.tokens[self.cursor - 1].span;
+        Ok(Statement::MatRead {
+            matrix,
+            span: SourceSpan::new(self.source_id, start.start, end.end),
+        })
+    }
+
+    fn parse_mat_input(&mut self, start: SourceSpan) -> Result<Statement, Box<Diagnostic>> {
+        self.expect(TokenKind::Hash, "'#' before MAT INPUT channel")?;
+        let channel = self.parse_nonnegative_matrix_integer()?;
+        self.expect(TokenKind::Comma, "',' after MAT INPUT channel")?;
+        let (matrix, _) = self.parse_matrix_reference()?;
+        let end = self.tokens[self.cursor - 1].span;
+        Ok(Statement::MatInput {
+            channel,
+            matrix,
+            span: SourceSpan::new(self.source_id, start.start, end.end),
+        })
+    }
+
     fn parse_mat_statement(&mut self, start: SourceSpan) -> Result<Statement, Box<Diagnostic>> {
         let operation = self.advance();
         let operation_name = match operation.kind {
@@ -914,6 +955,8 @@ impl Parser {
                     span: SourceSpan::new(self.source_id, start.start, end.end),
                 })
             }
+            "READ" => self.parse_mat_read(start),
+            "INPUT" => self.parse_mat_input(start),
             "CPY" => self.parse_mat_copy(start, MatCopyOperation::Copy),
             "XCPY" => self.parse_mat_copy(start, MatCopyOperation::TransposedCopy),
             "DET" => self.parse_mat_analysis(start, MatAnalysisOperation::Det),
