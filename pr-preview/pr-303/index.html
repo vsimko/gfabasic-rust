@@ -20,7 +20,7 @@
     </a>
     <button class="menu-toggle" aria-expanded="false" aria-controls="main-nav" aria-label="Toggle navigation"><span></span><span></span></button>
     <nav id="main-nav" class="main-nav" aria-label="Main navigation">
-      <a href="#project">Project</a><a href="#prototype">Prototype</a><a href="#tools">Tools</a><a href="#architecture">Architecture</a><a href="#api-catalogue">API catalogue</a><a href="#roadmap">Roadmap</a>
+      <a href="#dashboard">Dashboard</a><a href="#project">Project</a><a href="#prototype">Prototype</a><a href="#tools">Tools</a><a href="#architecture">Architecture</a><a href="#api-catalogue">API catalogue</a><a href="#roadmap">Roadmap</a>
       <a class="nav-github" href="https://github.com/vsimko/gfabasic-rust" target="_blank" rel="noreferrer">GitHub <span aria-hidden="true">↗</span></a>
     </nav>
   </header>
@@ -54,6 +54,15 @@
 
     <section class="ticker" aria-label="Project technologies">
       <div class="ticker-inner"><span>RUST</span><b>✳</b><span>GFA BASIC 3.5</span><b>✳</b><span>LLVM — PLANNED</span><b>✳</b><span>LINUX X86-64</span><b>✳</b><span>OPEN SOURCE</span><b>✳</b><span>RUST</span><b>✳</b><span>GFA BASIC 3.5</span></div>
+    </section>
+
+    <section id="dashboard" class="dashboard-section section-wrap" aria-labelledby="dashboard-title">
+      <div class="section-heading"><div class="eyebrow">MAINTAINER VIEW · REPOSITORY DATA</div><h2 id="dashboard-title">Implementation dashboard.</h2></div>
+      <p class="dashboard-intro">A source-linked snapshot of what exists today and what remains planned. Research, prototypes and supported implementation are deliberately kept separate.</p>
+      <div id="generated-project-status" class="dashboard-content" aria-live="polite" aria-busy="true">
+        <p class="dashboard-message">Loading generated repository data…</p>
+      </div>
+      <p class="dashboard-provenance">Build-time snapshot · Source freshness is not timestamped in the current data model. <a href="https://github.com/vsimko/gfabasic-rust/blob/main/validation/project.json">Status model ↗</a> · <a href="https://github.com/vsimko/gfabasic-rust/blob/main/ROADMAP.md">Detailed roadmap ↗</a></p>
     </section>
 
     <section id="project" class="content-section section-wrap">
@@ -103,12 +112,7 @@
       <div class="target-strip"><span>FIXED PRODUCT TARGET</span><strong>Amiga GFA BASIC interpreter 3.5</strong><b>→</b><strong>Linux x86-64 · ELF · GNU ABI</strong></div>
     </section>
 
-    <section class="generated-status-section section-wrap" aria-labelledby="generated-status-title">
-      <div class="section-heading"><div class="eyebrow">LIVE FROM THE REPOSITORY</div><h2 id="generated-status-title">Project snapshot.</h2></div>
-      <div id="generated-project-status" class="generated-status" aria-live="polite">
-        <p>Project data is generated from version-controlled sources during the site build.</p>
-      </div>
-    </section>
+
 
     <section id="api-catalogue" class="api-catalogue-section section-wrap" aria-labelledby="api-catalogue-title">
       <div class="section-heading"><div class="eyebrow">05 / API CATALOGUE</div><h2 id="api-catalogue-title">What the language defines.</h2></div>

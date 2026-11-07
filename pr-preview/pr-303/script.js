@@ -29,26 +29,94 @@ document.querySelector(".copy-button")?.addEventListener("click", async (event) 
 
 const generatedStatus = document.querySelector("#generated-project-status");
 if (generatedStatus) {
+  const textNode = (tag, className, value) => {
+    const node = document.createElement(tag);
+    if (className) node.className = className;
+    node.textContent = value;
+    return node;
+  };
+  const sourceLink = (href, label) => {
+    const link = document.createElement("a");
+    link.href = href;
+    link.target = "_blank";
+    link.rel = "noreferrer";
+    link.textContent = label;
+    return link;
+  };
+  const statusLabel = (status) => ({
+    implemented: "Implemented",
+    partial: "Partial",
+    prototype: "Prototype",
+    research: "Research",
+    planned: "Planned",
+    blocked: "Blocked",
+  }[status] || "Unknown");
+
   fetch("data/project.json")
     .then((response) => {
-      if (!response.ok) throw new Error("Project data is unavailable");
+      if (!response.ok) throw new Error("Generated project data is unavailable");
       return response.json();
     })
     .then((data) => {
-      const heading = document.createElement("h3");
-      heading.textContent = data.project.name;
-      const summary = document.createElement("p");
-      summary.textContent = `${data.project.source_dialect} · ${data.project.target} · ${data.project.maturity}`;
-      const prototype = document.createElement("p");
-      prototype.textContent = data.prototype.description;
-      const packages = document.createElement("p");
-      packages.textContent = `Workspace crates: ${data.workspace_packages.map((item) => item.name).join(", ")}`;
-      generatedStatus.replaceChildren(heading, summary, prototype, packages);
+      if (data.schema_version !== 2 || !data.project || !Array.isArray(data.components) || !Array.isArray(data.workspace_packages)) {
+        throw new Error("Generated project data has an unsupported or incomplete schema");
+      }
+
+      const overview = document.createElement("div");
+      overview.className = "dashboard-overview";
+      const maturity = document.createElement("article");
+      maturity.className = "dashboard-stat";
+      maturity.append(textNode("span", "dashboard-stat-label", "Project maturity"), textNode("strong", "", data.project.maturity || "Unknown"), textNode("small", "", "Experimental project"));
+      const target = document.createElement("article");
+      target.className = "dashboard-stat";
+      target.append(textNode("span", "dashboard-stat-label", "Product target"), textNode("strong", "", data.project.target || "Unknown"), textNode("small", "", data.project.source_dialect || "Dialect unknown"));
+      const packages = document.createElement("article");
+      packages.className = "dashboard-stat";
+      packages.append(textNode("span", "dashboard-stat-label", "Workspace"), textNode("strong", "", String(data.workspace_packages.length)), textNode("small", "", "Rust crates in Cargo workspace"));
+      overview.append(maturity, target, packages);
+
+      const heading = textNode("h3", "dashboard-subheading", "Implementation states");
+      const grid = document.createElement("div");
+      grid.className = "dashboard-components";
+      for (const component of data.components) {
+        const card = document.createElement("article");
+        card.className = "dashboard-component";
+        const top = document.createElement("div");
+        top.className = "dashboard-component-top";
+        top.append(textNode("h4", "", component.name), textNode("span", "dashboard-status", statusLabel(component.status)));
+        card.append(top, textNode("p", "", component.rationale));
+        const evidence = document.createElement("div");
+        evidence.className = "dashboard-evidence";
+        for (const item of component.evidence || []) {
+          const [path, ...anchorParts] = item.split("#");
+          const anchor = anchorParts.length ? `#${anchorParts.join("#")}` : "";
+          evidence.append(sourceLink(`https://github.com/vsimko/gfabasic-rust/blob/main/${path}${anchor}`, `${item} ↗`));
+        }
+        for (const issue of component.related_issues || []) {
+          evidence.append(sourceLink(`https://github.com/vsimko/gfabasic-rust/issues/${issue}`, `Issue #${issue} ↗`));
+        }
+        card.append(evidence);
+        grid.append(card);
+      }
+
+      const footer = document.createElement("div");
+      footer.className = "dashboard-footer";
+      footer.append(
+        sourceLink("https://github.com/vsimko/gfabasic-rust/blob/main/validation/project.json", "Canonical status model ↗"),
+        sourceLink("https://github.com/vsimko/gfabasic-rust/blob/main/ROADMAP.md", "Delivery roadmap ↗"),
+        sourceLink(`https://github.com/vsimko/gfabasic-rust/commit/${data.source_revision}`, `Source revision: ${data.source_revision.slice(0, 7)} ↗`),
+        sourceLink("https://github.com/vsimko/gfabasic-rust/issues", "Open implementation issues ↗")
+      );
+      generatedStatus.replaceChildren(overview, heading, grid, footer);
+      generatedStatus.setAttribute("aria-busy", "false");
     })
-    .catch(() => {
-      generatedStatus.textContent = "Generated project data is not available. See the repository README and roadmap.";
+    .catch((error) => {
+      generatedStatus.replaceChildren(textNode("p", "dashboard-message dashboard-error", `Dashboard data unavailable: ${error.message}. Check the generated site data or open the repository status model.`));
+      generatedStatus.append(sourceLink("https://github.com/vsimko/gfabasic-rust/blob/main/validation/project.json", "Open canonical status model ↗"));
+      generatedStatus.setAttribute("aria-busy", "false");
     });
 }
+
 
 const apiCatalogueResults = document.querySelector("#api-catalogue-results");
 if (apiCatalogueResults) {
@@ -181,24 +249,35 @@ if (apiCatalogueResults) {
       heading.append(makeText("span", "api-category-count", String(entries.length)));
       category.append(heading);
 
-      const names = document.createElement("div");
-      names.className = "api-function-list";
-      for (const entry of entries) {
-        const item = document.createElement("details");
-        item.className = "api-function";
-        item.id = `api-entry-${entry.id}`;
-        const name = document.createElement("summary");
-        name.textContent = entry.name;
-        const panel = document.createElement("div");
-        panel.className = "api-function-panel";
-        item.append(name, panel);
-        item.addEventListener("toggle", () => {
-          if (item.open) loadDetail(entry, panel);
-        });
-        names.append(item);
+      const populateNames = () => {
+        if (category.dataset.namesLoaded === "true") return;
+        const names = document.createElement("div");
+        names.className = "api-function-list";
+        for (const entry of entries) {
+          const item = document.createElement("details");
+          item.className = "api-function";
+          item.id = `api-entry-${entry.id}`;
+          const name = document.createElement("summary");
+          name.textContent = entry.name;
+          const panel = document.createElement("div");
+          panel.className = "api-function-panel";
+          item.append(name, panel);
+          item.addEventListener("toggle", () => {
+            if (item.open) loadDetail(entry, panel);
+          });
+          names.append(item);
+        }
+        category.append(names);
+        category.dataset.namesLoaded = "true";
+      };
+      category.addEventListener("toggle", () => {
+        if (category.open) populateNames();
+      });
+      const shouldExpand = Boolean(query || domain || evidence || implementation || support);
+      if (shouldExpand) {
+        category.open = true;
+        populateNames();
       }
-      category.append(names);
-      if (query || domain || evidence || implementation || support) category.open = true;
       categoryNodes.push(category);
     }
     apiCatalogueResults.replaceChildren(...categoryNodes);
@@ -215,11 +294,19 @@ if (apiCatalogueResults) {
       renderEntries();
       if (window.location.hash.startsWith("#api-entry-")) {
         const id = decodeURIComponent(window.location.hash.slice("#api-entry-".length));
-        const target = document.getElementById(`api-entry-${id}`);
-        if (target) {
-          target.open = true;
-          target.closest(".api-category")?.setAttribute("open", "");
-          target.scrollIntoView();
+        const entry = catalogueEntries.find((item) => item.id === id);
+        if (entry) {
+          const category = [...apiCatalogueResults.querySelectorAll(".api-category")]
+            .find((item) => item.dataset.category === `${entry.namespace}/${entry.category}`);
+          if (category) {
+            category.open = true;
+            category.dispatchEvent(new Event("toggle"));
+            const target = document.getElementById(`api-entry-${id}`);
+            if (target) {
+              target.open = true;
+              target.scrollIntoView();
+            }
+          }
         }
       }
     })
