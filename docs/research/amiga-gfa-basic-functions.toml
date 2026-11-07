@@ -9,7 +9,7 @@ interpreter-identifiers-including-disputed-slot = 114
 unambiguous-interpreter-identifiers = 113
 compiler-only-identifiers = 2
 base-manual-identifiers = 112
-explicit-3.5-addendum-identifiers = 4
+"explicit-3.5-addendum-identifiers" = 4
 disputed-name-slots = 1
 
 [[functions]]
