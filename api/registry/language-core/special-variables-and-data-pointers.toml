@@ -23,6 +23,7 @@ summary = "Returns the current DATA-pointer position; returns 0 when the next RE
 side-effects = []
 
 [declarations.evidence]
+source-scope = "amiga-3.5-addendum"
 status = "book-documented"
 sources = ["AM-INTERPRETER-35"]
 printed-pages = ["Chapter 13, printed p. 13-34 (same feature: combined update scan p. 14-5)"]
@@ -65,6 +66,7 @@ side-effects = ["Changes the current DATA-pointer position."]
 errors = []
 
 [declarations.evidence]
+source-scope = "amiga-3.5-addendum"
 status = "book-documented"
 sources = ["AM-INTERPRETER-35"]
 printed-pages = ["Chapter 13, printed p. 13-34 (same feature: combined update scan p. 14-5)"]
@@ -106,6 +108,7 @@ side-effects = ["Values persist across CLEAR, LOAD, CHAIN, and RUN; NEW clears t
 errors = []
 
 [declarations.evidence]
+source-scope = "amiga-3.5-addendum"
 status = "book-documented"
 sources = ["AM-INTERPRETER-35"]
 printed-pages = ["Chapter 13, printed p. 13-35 (same feature: combined update scan p. 14-6)"]
