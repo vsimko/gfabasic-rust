@@ -139,7 +139,6 @@ mod tests {
                 Statement::MatOne { name, .. } => Meaning::MatOne(name.clone()),
                 Statement::MatSet { name, value, .. } => Meaning::MatSet(name.clone(), *value),
                 Statement::MatClr { name, .. } => Meaning::MatClr(name.clone()),
-                Statement::MatPrint { name, .. } => Meaning::MatPrint(name.clone()),
                 Statement::MatBase { index, .. } => Meaning::MatBase(*index),
                 Statement::MatTrans {
                     destination,
