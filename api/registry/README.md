@@ -5,10 +5,11 @@ Canonical declarations use TOML. The planned registry namespaces are `language-c
 ## Current inventory
 
 - `atari-st/time.toml`: one research-status Atari ST `TIMER` declaration for version 3.0.
-- `amiga/math-and-matrix.toml`: an initial Amiga GFA BASIC 3.5 slice containing `FACT`, `VARIAT`, `COMBIN`, `MAT BASE`, `MAT CLR`, `MAT SET`, `MAT ONE`, `MAT TRANS`, and `MAT NORM`.
+- `amiga/math-and-matrix.toml`: `FACT`, `VARIAT`, `COMBIN`, `MAT BASE`, `MAT CLR`, `MAT SET`, `MAT ONE`, `MAT TRANS`, and `MAT NORM`.
+- `amiga/special-and-platform-commands.toml`: `_DATA`, `_DATA=`, `_0`…`_9`, `PCOLOR`, the negative-screen-number `OPENW` variant, and the `GURU` command/function forms.
 - `language-core/`: no declarations yet.
 
-The Amiga slice is deliberately limited to features explicitly identified in the supplied 3.5 interpreter addendum. It does not claim completeness. The addendum's Chapter 13/14 page references and known source limitations are documented in [the extracted feature inventory](../../docs/research/amiga-gfa-basic-35-addendum-inventory.md).
+The Amiga catalogue currently contains 16 declarations, deliberately limited to features explicitly identified in the supplied 3.5 interpreter addendum. It does not claim completeness. The addendum's Chapter 13/14 page references and known source limitations are documented in [the extracted feature inventory](../../docs/research/amiga-gfa-basic-35-addendum-inventory.md).
 
 ## Evidence and implementation boundaries
 
