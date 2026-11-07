@@ -80,6 +80,11 @@ pub enum Statement {
         source: Option<String>,
         span: SourceSpan,
     },
+    MatNorm {
+        name: String,
+        mode: i64,
+        span: SourceSpan,
+    },
 }
 
 /// A significant token kind recognized by the current evidence-gated lexer.
@@ -580,8 +585,25 @@ impl Parser {
                     span: SourceSpan::new(self.source_id, start.start, end.end),
                 })
             }
+            "NORM" => {
+                let (name, matrix_span) = self.parse_matrix_reference()?;
+                self.expect(TokenKind::Comma, "',' before MAT NORM mode")?;
+                let mode = self.parse_nonnegative_matrix_integer()?;
+                if !matches!(mode, 0 | 1) {
+                    return Err(self.unsupported_error(
+                        "MAT NORM supports only the documented row mode 0 and column mode 1",
+                        self.tokens[self.cursor - 1].span,
+                    ));
+                }
+                let end = self.tokens[self.cursor - 1].span;
+                Ok(Statement::MatNorm {
+                    name,
+                    mode,
+                    span: SourceSpan::new(self.source_id, start.start, end.end.max(matrix_span.end)),
+                })
+            }
             "TRANS" => {
-                let (destination, destination_span) = self.parse_matrix_reference()?;
+                let (destination, destination_span) = self.parse_matrix_reference()?
                 let source = if matches!(self.current().kind, TokenKind::Equals) {
                     self.advance();
                     Some(self.parse_matrix_reference()?.0)
