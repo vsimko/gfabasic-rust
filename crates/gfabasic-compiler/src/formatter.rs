@@ -163,9 +163,9 @@ mod tests {
                     ..
                 } => Meaning::MatMulScale(destination.clone(), scalar.clone()),
                 Statement::MatRead { matrix, .. } => Meaning::MatRead(matrix.clone()),
-                Statement::MatInput { channel, matrix, .. } => {
-                    Meaning::MatInput(*channel, matrix.clone())
-                }
+                Statement::MatInput {
+                    channel, matrix, ..
+                } => Meaning::MatInput(*channel, matrix.clone()),
                 Statement::MatCopy {
                     operation,
                     destination,
