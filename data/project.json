@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "source_revision": "0a029b45a933d57c5e5d56d615fc86740e808edc",
+  "source_revision": "b1de6302bdf7c944903447f3639e071f5db910a2",
   "project": {
     "name": "gfabasic-rust",
     "language": "Rust",
@@ -162,6 +162,43 @@
         40,
         39
       ]
+    }
+  ],
+  "roadmap_progress": [
+    {
+      "number": 0,
+      "name": "Maintain a trustworthy project baseline",
+      "completed": 10,
+      "total": 10,
+      "percent": 100
+    },
+    {
+      "number": 1,
+      "name": "Establish an evidence-backed first language subset",
+      "completed": 1,
+      "total": 8,
+      "percent": 12
+    },
+    {
+      "number": 2,
+      "name": "Build a minimal vertical compiler slice",
+      "completed": 1,
+      "total": 12,
+      "percent": 8
+    },
+    {
+      "number": 3,
+      "name": "Add platform APIs and robustness",
+      "completed": 1,
+      "total": 7,
+      "percent": 14
+    },
+    {
+      "number": 4,
+      "name": "Release readiness",
+      "completed": 2,
+      "total": 13,
+      "percent": 15
     }
   ],
   "workspace_packages": [

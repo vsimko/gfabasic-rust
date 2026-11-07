@@ -58,7 +58,7 @@ if (generatedStatus) {
       return response.json();
     })
     .then((data) => {
-      if (data.schema_version !== 2 || !data.project || !Array.isArray(data.components) || !Array.isArray(data.workspace_packages)) {
+      if (data.schema_version !== 2 || !data.project || !Array.isArray(data.components) || !Array.isArray(data.roadmap_progress) || !Array.isArray(data.workspace_packages)) {
         throw new Error("Generated project data has an unsupported or incomplete schema");
       }
 
@@ -74,6 +74,33 @@ if (generatedStatus) {
       packages.className = "dashboard-stat";
       packages.append(textNode("span", "dashboard-stat-label", "Workspace"), textNode("strong", "", String(data.workspace_packages.length)), textNode("small", "", "Rust crates in Cargo workspace"));
       overview.append(maturity, target, packages);
+
+      const roadmapHeading = textNode("h3", "dashboard-subheading", "Roadmap progress");
+      const roadmap = document.createElement("div");
+      roadmap.className = "dashboard-roadmap-progress";
+      for (const phase of data.roadmap_progress) {
+        const item = document.createElement("div");
+        item.className = "dashboard-phase-progress";
+        const top = document.createElement("div");
+        top.className = "dashboard-progress-top";
+        top.append(
+          textNode("span", "dashboard-progress-name", `Phase ${phase.number} · ${phase.name}`),
+          textNode("span", "dashboard-progress-value", `${phase.completed}/${phase.total} · ${phase.percent}%`)
+        );
+        const track = document.createElement("div");
+        track.className = "dashboard-progress-track";
+        track.setAttribute("role", "progressbar");
+        track.setAttribute("aria-label", `Phase ${phase.number}: ${phase.name}`);
+        track.setAttribute("aria-valuemin", "0");
+        track.setAttribute("aria-valuemax", "100");
+        track.setAttribute("aria-valuenow", String(phase.percent));
+        const fill = document.createElement("span");
+        fill.className = "dashboard-progress-fill";
+        fill.style.width = `${phase.percent}%`;
+        track.append(fill);
+        item.append(top, track);
+        roadmap.append(item);
+      }
 
       const heading = textNode("h3", "dashboard-subheading", "Implementation states");
       const grid = document.createElement("div");
@@ -107,7 +134,7 @@ if (generatedStatus) {
         sourceLink(`https://github.com/vsimko/gfabasic-rust/commit/${data.source_revision}`, `Source revision: ${data.source_revision.slice(0, 7)} ↗`),
         sourceLink("https://github.com/vsimko/gfabasic-rust/issues", "Open implementation issues ↗")
       );
-      generatedStatus.replaceChildren(overview, heading, grid, footer);
+      generatedStatus.replaceChildren(overview, roadmapHeading, roadmap, heading, grid, footer);
       generatedStatus.setAttribute("aria-busy", "false");
     })
     .catch((error) => {
