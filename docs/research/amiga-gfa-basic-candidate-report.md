@@ -35,15 +35,15 @@
 | `amiga.35.data-pointer` | _DATA and _DATA= | 13-34–13-35 (469-page scan), 14-5 (combined update scan) | The leading underscore is confirmed by page-image review; query and restore the DATA pointer. |
 | `amiga.35.editor-update` | Editor row layout, search and listing changes | 1-25 | Explicit editor update; this is editor behavior, not a language/runtime declaration. |
 | `amiga.35.guru` | GURU statement and function | 13-35–13-36 (469-page scan), 14-6–14-7 (combined update scan) | GURU checking control and GURU-number function are explicitly documented; crash-recovery tests require isolation. |
-| `amiga.35.openw-negative-screen` | OPENW negative screen-number variant | 13-34 (469-page scan), 14-3 (combined update scan) | Explicit variant opens a window on the current top screen. |
-| `amiga.35.pcolor` | PCOLOR | 13-34 (469-page scan), 14-4 (combined update scan) | Applies foreground and optional background colors to PRINT screen output. |
-| `amiga.35.special-longwords` | _0 through _9 | 13-35 (469-page scan), 14-6 (combined update scan) | Ten special longword variables; persistence and clearing behavior are described in the addendum. |
 | `amiga.35.mat-analysis` | MAT NORM, MAT DET, MAT QDET, MAT RANG, MAT INV | 13-31–13-39 | The family is documented in Chapter 13; MAT INV operand direction is explicitly disputed between summary and detailed example. |
 | `amiga.35.mat-arithmetic` | MAT ADD, MAT SUB, MAT MUL | 13-22–13-30 | Element-wise, scalar, matrix-product and vector-product forms are documented; MAT MUL a(),x semantics remain uncertain in the research notes. |
 | `amiga.35.mat-base` | MAT BASE | 13-1–13-2 | Explicitly documented in the version-specific Chapter 13 addendum; applicability is limited to the documented matrix operations. |
 | `amiga.35.mat-copy` | MAT CPY, MAT XCPY, MAT TRANS | 13-8–13-20 | Detailed source-checked shape, offset, extent, transpose and vector-orientation rules are recorded in the addendum inventory. |
 | `amiga.35.mat-generation` | MAT CLR, MAT SET, MAT ONE | 13-2–13-3 | Generation forms and floating-point field constraints are documented in Chapter 13. |
 | `amiga.35.mat-io` | MAT READ, MAT PRINT, MAT INPUT | 13-3–13-6 | Chapter 13 explicitly documents vector/matrix data I/O forms. |
+| `amiga.35.openw-negative-screen` | OPENW negative screen-number variant | 13-34 (469-page scan), 14-3 (combined update scan) | Explicit variant opens a window on the current top screen. |
+| `amiga.35.pcolor` | PCOLOR | 13-34 (469-page scan), 14-4 (combined update scan) | Applies foreground and optional background colors to PRINT screen output. |
+| `amiga.35.special-longwords` | _0 through _9 | 13-35 (469-page scan), 14-6 (combined update scan) | Ten special longword variables; persistence and clearing behavior are described in the addendum. |
 
 ## Contradicted candidates
 
