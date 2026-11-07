@@ -628,7 +628,7 @@ impl Parser {
             let token = self.current().clone();
             match &token.kind {
                 TokenKind::Identifier(name) if matches!(name.as_str(), "a" | "b")
-                    && self.tokens.get(self.cursor + 1).is_some_and(|next| matches!(next.kind, TokenKind::LeftParen)) =>
+                    && self.tokens.get(self.cursor + 1).is_some_and(|next| matches!(&next.kind, TokenKind::LeftParen)) =>
                 {
                     let (matrix, _) = self.parse_matrix_reference()?;
                     (None, MatArithmeticOperand::Matrix(matrix))
