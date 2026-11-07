@@ -388,3 +388,29 @@ The following details are explicitly in the 3.5 addendum, unlike the base-manual
 - **MAT INV a()=b() (p. 13-29):** computes the inverse of square matrix b() into a(); the destination must have the same dimensions/type as the source.
 
 The exact page-level descriptions for MAT DET/QDET/RANG/INV should be checked in the scan before implementing numerical behavior. In particular, the source's use of the term rank and its submatrix parameters should be preserved rather than silently replaced with a textbook API interpretation.
+
+
+## Follow-up: corrected and expanded details from the supplied scans
+
+### Chapter 11 — additional DOS and Exec observations
+
+- **DeleteFile(name) (printed p. 11-86):** deletes a file or an empty directory; returns TRUE/FALSE. IoErr can provide an error number.
+- **Examine(lock, fib) (p. 11-86):** writes file/directory metadata from a Lock into a FileInfoBlock, including name, size, creation date and entry type. Returns -1 on success; otherwise IoErr provides the error.
+- **ExNext(lock, fib) (p. 11-87):** enumerates subsequent directory entries. Examine supplies the first entry; ExNext is called once for each following entry. Returns -1 on successful completion.
+- **Execute(instruction, in, out) (p. 11-87):** executes a CLI command string using input/output file handles. The manual states that the C directory on the boot disk must contain the CLI Run command.
+- **Exit(ret) (p. 11-87):** terminates a program/process and returns the supplied value to CLI when started from CLI. The text says a Workbench-started process is ended and its memory/stack freed.
+- **CreateDir(name) (p. 11-85):** creates a directory in the current directory. The description says a shared read lock is created on success; the text's return-value wording is internally inconsistent, so do not infer a stable return contract without checking the page image.
+- **Delay(time) (p. 11-86):** suspends the current process for a time expressed in 1/50-second units.
+- **FreeMem:** the English scan index identifies the routine on p. 11-11, but the companion German reference expresses the call as returning a size from an address and size pair. The exact English manual entry should be checked before treating its return type or signature as settled.
+- The current scan search did not establish complete OpenDevice/DoIO/SendIO signatures. These remain unresolved; do not infer them from AmigaOS SDK knowledge.
+
+### Chapter 13 — in-place matrix operations
+
+The detailed MAT ADD text confirms the distinction between result and in-place forms:
+
+- **MAT ADD a(),b() (printed p. 13-17):** requires matching matrix/vector order, adds b element-by-element into a, and overwrites a.
+- **MAT ADD a(),x:** adds scalar x to every element of a and overwrites a.
+- The addendum lists matching in-place forms for MAT SUB and scalar subtraction, but their full paragraphs still need extraction.
+- The addendum also lists MAT MUL a(),x; the exact scalar multiplication/division interpretation should be read from the following page before implementation.
+
+These observations refine the earlier summary: MAT ADD a(),b() and MAT ADD a(),x are explicitly in-place, not merely generic variants. The source's own examples should be the basis of conformance tests.
