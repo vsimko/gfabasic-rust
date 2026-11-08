@@ -101,7 +101,11 @@ jobs:
           export RESULT="$GITHUB_WORKSPACE/amiga-volume/gfa-basic-launch.txt"
           export SDL_AUDIODRIVER=dummy
 
-          xvfb-run -a -s "-screen 0 1024x768x24 +extension GLX" bash -eo pipefail -c '
+          xvfb-run -a -s "-screen 0 1024x768x24 +extension GLX" bash -c '
+            # The caller exports SHELLOPTS with nounset enabled; disable it
+            # here because IPC socket discovery intentionally starts unset.
+            set +u
+            set -eo pipefail
             amiberry -G -f "$RUNNER_TEMP/amiga-smoke.uae" --log >"$AMIBERRY_LOG" 2>&1 &
             emulator_pid=$!
             cleanup() {
