@@ -2050,6 +2050,7 @@ The German wording for OrDestSource is unusual (“only between bits that are eq
 ### 38.4 Hardware SPRITE (printed pp. 265–267)
 
 The source lists four forms:
+
 ```basic
 SPRITE #Nummer,Def.var$
 SPRITE #Nummer [,0]
