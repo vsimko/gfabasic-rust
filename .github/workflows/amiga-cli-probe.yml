@@ -159,8 +159,9 @@ jobs:
             # Capture the requester after selecting DF0 to verify its state.
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-df0-selected.png" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
             # Move from DF0 button to the filename gadget, then focus it explicitly.
-            # The last screenshot shows the pointer at (421,164); filename gadget center is (294,165).
-            printf "SEND_MOUSE\\t-270\\t0\\t0\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
+            # From the measured DF0 button center (~541,329), move to filename field (~390,457).
+            # IPC mouse deltas scale ~0.44x horizontally and ~2.1x vertically.
+            printf "SEND_MOUSE\\t-340\\t62\\t0\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
             sleep 0.2
             printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
             sleep 0.2
