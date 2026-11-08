@@ -183,14 +183,12 @@ jobs:
             done
             # Raw keycode 0x39 (57) is the Amiga period key.
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-smoke/merge-filename.png" | timeout 5s nc -U -N "$ipc_socket_path"
-            # Move the emulated mouse to the right-hand requester button.
-            # Relative SEND_MOUSE works with Amiberry builds that reject ABS
-            # coordinates when tablet mode is active.
-            printf "SEND_MOUSE\\t264\\t262\\t0\\n" | timeout 5s nc -U -N "$ipc_socket_path" | tee "$GITHUB_WORKSPACE/artifacts/amiga-smoke/merge-mouse-move.txt"
+            # The filename gadget remains focused after typing. Return
+            # activates the requester's default (Merge/Load) action without
+            # relying on host mouse coordinate mapping.
+            printf "SEND_KEY\\t68\\t1\\n" | timeout 5s nc -U -N "$ipc_socket_path" | tee "$GITHUB_WORKSPACE/artifacts/amiga-smoke/merge-return-press.txt"
             sleep 0.3
-            printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "$ipc_socket_path" | tee "$GITHUB_WORKSPACE/artifacts/amiga-smoke/merge-mouse-press.txt"
-            sleep 0.3
-            printf "SEND_MOUSE\\t0\\t0\\t0\\n" | timeout 5s nc -U -N "$ipc_socket_path" | tee "$GITHUB_WORKSPACE/artifacts/amiga-smoke/merge-mouse-release.txt"
+            printf "SEND_KEY\\t68\\t0\\n" | timeout 5s nc -U -N "$ipc_socket_path" | tee "$GITHUB_WORKSPACE/artifacts/amiga-smoke/merge-return-release.txt"
             sleep 5
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-smoke/after-merge-click.png" | timeout 5s nc -U -N "$ipc_socket_path"
             if ! kill -0 "$emulator_pid" 2>/dev/null; then
