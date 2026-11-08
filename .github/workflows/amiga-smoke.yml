@@ -185,7 +185,7 @@ jobs:
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-smoke/merge-filename.png" | timeout 5s nc -U -N "$ipc_socket_path"
             # Move from the filename gadget toward the right-hand Merge
             # button. SEND_MOUSE uses relative guest coordinates.
-            printf "SEND_MOUSE\\t250\\t-137\\t0\\n" | timeout 5s nc -U -N "$ipc_socket_path" | tee "$GITHUB_WORKSPACE/artifacts/amiga-smoke/merge-mouse-move.txt"
+            printf "SEND_MOUSE\\t525\\t-206\\t0\\n" | timeout 5s nc -U -N "$ipc_socket_path" | tee "$GITHUB_WORKSPACE/artifacts/amiga-smoke/merge-mouse-move.txt"
             sleep 1
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-smoke/before-merge-click.png" | timeout 5s nc -U -N "$ipc_socket_path"
             printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "$ipc_socket_path" | tee "$GITHUB_WORKSPACE/artifacts/amiga-smoke/merge-mouse-press.txt"
