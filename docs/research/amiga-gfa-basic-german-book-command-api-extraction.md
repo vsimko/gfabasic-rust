@@ -1983,3 +1983,91 @@ The chapter includes a user-defined Rubberbox procedure that tracks a rectangle 
 ### 25.4 Evidence boundary
 
 The chapter is only partially extracted here. The OCR has substantial corruption in example code, punctuation and German prose. Do not treat the example helper routines as built-ins or infer complete requester layout, mouse event semantics, or joystick hardware compatibility from these pages alone.
+
+
+## 26. Window and screen programming: detailed flags and behavior from Chapters 14.1–14.2 (printed pp. 375–388)
+
+This pass adds details from the chapter text and tables to the earlier command inventory. The book explicitly labels the described Amiga GFA window/screen forms as V3.0.
+
+### 26.1 Window management details
+
+The book describes GFA-managed Window numbers 0–15. Its default arrangement places window 0 across the Workbench screen below the title bar, windows 1–4 in quadrants, and windows 5–15 centered at the same general size as windows 1–4.
+
+- `CLEARW Nummer` clears the specified window. The text says `CLS` affects only the current window and may fail to erase graphics at the right/bottom edges.
+- `OPENW Nummer` opens or activates a window. The extended form is `OPENW Nummer,Xpos,Ypos,Breite,Höhe,IDCMP,Flaggen[,Screen[,BitMap]]`. X/Y and dimensions are in screen pixels. IDCMP selects Intuition messages delivered to the program; Flaggen selects window properties/gadgets. Screen and bitmap are optional.
+- `FULLW Nummer` expands the window to the maximum screen width/height.
+- `CLOSEW Nummer` closes a window; the text gives the range 0–15.
+- `TITLEW Nummer,"Window-Titel"[,"Screen-Titel"]` sets the window title and optional screen title shown when the window is active.
+- `FRONTW Nummer` and `BACKW Nummer` change the window's depth order.
+- `MOVEW Nummer,Xpos,Ypos` moves it to an absolute screen position.
+- `SIZEW Nummer,Breite,Höhe` changes its dimensions.
+- `LIMITW Nummer,Xmin,Ymin,Xmax,Ymax` constrains the minimum/maximum size, including user sizing.
+- `SETWPEN LinienStift,FüllStift` sets standard window frame/fill pens and must be called before opening the window.
+
+The book warns that invalid window positions or dimensions can crash the Amiga. It also says ordinary window contents are the application programmer's responsibility: Intuition does not automatically preserve/redraw arbitrary graphics unless the appropriate window refresh strategy is selected. Text can be restored by rewriting it; graphics restoration is more involved.
+
+### 26.2 IDCMP message names and window flags
+
+The IDCMP table names these message classes: `SIZEVERIFY`, `NEWSIZE`, `REFRESHWINDOW`, `MOUSEBUTTONS`, `MOUSEMOVE`, `GADGETDOWN`, `GADGETUP`, `REQSET`, `MENUPICK`, `CLOSEWINDOW`, `RAWKEY`, `REQCLEAR`, `NEWPREFS`, `DISKINSERTED`, `DISKREMOVED`, `ACTIVEWINDOW`, `INACTIVEWINDOW`, `DELTAMOVE`, `VANILLAKEY`, and `INTUITICKS`. The printed decimal/hex/binary columns are damaged by OCR; do not use the OCR values as constants without checking the page image or primary Amiga headers.
+
+The Window flags table names: `SMART_REFRESH`, `WINDOW_SIZING`, `WINDOW_DRAG`, `WINDOW_DEPTH`, `WINDOW_CLOSE`, `SIZE_RIGHT`, `SIMPLE_REFRESH`, `SUPER_BITMAP`, `BACKDROP`, `REPORTMOUSE`, `GIMMEZEROZERO`, `BORDERLESS`, `ACTIVATE`, `RMB_TRAP`, and `NOCAREREFRESH`. The example combines flags in an OPENW call, but the OCR of the table's binary/hex values is not reliable enough to establish all numeric constants.
+
+### 26.3 Screen commands and display model
+
+The chapter gives these Screen forms (V3.0):
+
+| Command/function | Syntax | Description |
+|---|---|---|
+| `OPENS` | `OPENS Nummer[,Xpos,Ypos,Breite,Höhe,BitPlanes,Modus]` | Opens a screen; indices 0–15, with 0 representing Workbench. The text says X is retained for compatibility and should be 0 on the described hardware. |
+| `WINDOW()` | `WINDOW(Nummer)`, `WINDOW(Adresse)` | Converts between GFA window number and the corresponding Window structure address. |
+| `FRONTS` / `BACKS` | `FRONTS Nummer`, `BACKS Nummer` | Brings a screen to front or sends it behind other screens. |
+| `CLOSES` | `CLOSES Nummer` | Closes the screen and all windows on it. |
+| `TITLES` | `TITLES Nummer,TitelText` | Sets the screen's default title, shown when no window on that screen is active. |
+| `MOVES` | `MOVES Nummer,Xpos,Ypos` | Moves a screen to an absolute position. |
+| `SCREEN()` | `SCREEN(Nummer)`, `SCREEN(Adresse)` | Converts between GFA screen number and Screen structure address. |
+| `SETSPEN` | `SETSPEN LinienStift,FlächenStift` | Sets screen title/detail and block/fill pens before opening the screen. |
+
+The book describes screen mode bits named `GENLOCK VIDEO`, `INTERLACE`, `EXTRA HALFBRITE`, `HOLD AND MODIFY`, `SPRITES`, and `HIRES`. It gives mode values and resolution/plane tables, but OCR corrupts portions of the table; preserve the names only until values are visually verified. The text explains bitplanes as per-pixel bit storage and notes that increasing planes increases the number of representable colors and consumes graphics memory.
+
+### 26.4 Safety and evidence boundary
+
+The book warns that out-of-range window/screen geometry can cause an unhandled system crash. The OCR-corrupted IDCMP and Window flag numeric tables must not be used to implement constants. Screen mode names and qualitative bitplane explanation are legible, but resolution table entries need page-image validation.
+
+## 27. BASIC menu programming: Chapter 15 (printed pp. 389–393)
+
+The book describes a BASIC-level menu system built from a one-dimensional string array.
+
+| Command | Syntax recorded in the book | Description |
+|---|---|---|
+| `MENU` | `MENU Menütext$()` | Installs/builds the pull-down menu from a one-dimensional string array. |
+| `MENU` | `MENU Menüpunkt,Attribut` | Sets a menu item's attributes, including checkmark and enabled/disabled appearance. |
+| `MENU` | `MENU Menüpunkt,Text` | Replaces the text of an existing menu item. The new text must not exceed the original allocated text length. |
+| `MENU KEY` | `MENU KEY Menüpunkt,ASCIIcode` | Assigns a keyboard shortcut to a menu item; the book describes a right-Amiga-key combination. |
+| `MENU KILL` | `MENU KILL` | Deactivates/removes the pull-down menu from the window without discarding the menu text array; MENU can install it again. |
+
+The attribute values shown in the book include 64 and 256 for checkmark set/clear, and 16 and 64 for disabled/enabled appearance. The OCR/table layout does not unambiguously preserve which value maps to each operation; verify the page image before assigning constants.
+
+The menu array format uses strings for menu titles and entries. A null string terminates each menu row; the book's example builds the array from DATA/READ and appends an empty string. A line of hyphens is used as a separator. Two leading spaces reserve room for a checkmark; a leading hyphen marks an item as disabled when the menu is installed. The first menu is described as a desktop/accessories menu following an ST-like convention, with later menus appended.
+
+## 28. Event monitoring: Chapter 16 (printed pp. 395 onward; partial)
+
+The book describes `MENU(Index)` as access to an integer event buffer populated with Intuition event data. The readable portion identifies these fields:
+
+| Expression | Meaning in the book |
+|---|---|
+| `MENU(0)` | Menu number and selected item number within the menu string array. |
+| `MENU(1)` | Intuition message class. |
+| `MENU(2)` | Message-class-dependent code/data, e.g. selected menu item number. |
+| `MENU(3)` | Qualifier keys such as Shift and Ctrl. |
+| `MENU(4)` | Address of the Intuition object responsible for the message (e.g. Gadget or Window). |
+| `MENU(5)`, `MENU(6)` | Mouse X/Y relative to the window's upper-left corner; negative values are possible when the window is offset. |
+| `MENU(7)`, `MENU(8)` | Event timestamp seconds and microseconds. |
+| `MENU(9)` | Window structure address from which the message originated. |
+
+The text says the event data range can be queried from MENU(0) through MENU(10); the description of MENU(10) is present in the book's earlier overview as the Window address, while this later page labels the window pointer at MENU(9). This is an apparent source inconsistency; retain both observations and do not resolve the index without page-image/runtime verification.
+
+The book's menu event example uses `ON MENU GOSUB Auswertung`, then reads MENU(0) in the handler and dispatches based on the selected menu number. It also shows `MENU KILL` during handling and a `SLEEP` loop while waiting for an event. Chapter 16 continues beyond the currently reviewed pages; event classes, additional fields and handler commands remain to be extracted.
+
+### 28.1 Evidence boundary
+
+The event-buffer field numbering is not fully consistent across the book's overview and detailed pages. The current extraction records the discrepancy rather than silently correcting it. Exact event class values and further event handlers require the remaining Chapter 16 pages and page-image checks.
