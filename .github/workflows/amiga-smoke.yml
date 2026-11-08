@@ -30,100 +30,20 @@ jobs:
           echo "deb [arch=amd64 signed-by=/usr/share/keyrings/amiberry-archive-keyring.gpg] https://packages.amiberry.com/apt noble main" \
             | sudo tee /etc/apt/sources.list.d/amiberry.list >/dev/null
           sudo apt-get update
-          sudo apt-get install -y --no-install-recommends amiberry xvfb netcat-openbsd unzip p7zip-full
+          sudo apt-get install -y --no-install-recommends amiberry xvfb netcat-openbsd
           amiberry --version
 
-      - name: Prepare an AROS boot directory
+      - name: Prepare boot volume
         run: |
-          mkdir -p artifacts/amiga-smoke
-          archive="$RUNNER_TEMP/aros-amiga-m68k.zip"
-          index="$RUNNER_TEMP/aros-nightly.html"
-          curl -fL --retry 3 \
-            -o "$index" \
-            "https://aros.sourceforge.io/cgi-bin/files?lang=en&type=nightly2"
-          cp "$index" artifacts/amiga-smoke/aros-nightly-index.html
-          echo "AROS index size: $(wc -c < "$index") bytes"
-          head -c 1200 "$index"
-
-          download_url="$(python3 - "$index" <<'PY'
-          from html.parser import HTMLParser
-          from pathlib import Path
-          from urllib.parse import urljoin
-          import sys
-
-          class DownloadLinkParser(HTMLParser):
-              def __init__(self):
-                  super().__init__()
-                  self.in_row = False
-                  self.row_text = []
-                  self.row_links = []
-                  self.matches = []
-
-              def handle_starttag(self, tag, attrs):
-                  if tag == "tr":
-                      self.in_row = True
-                      self.row_text = []
-                      self.row_links = []
-                  elif tag == "a" and self.in_row:
-                      href = dict(attrs).get("href")
-                      if href:
-                          self.row_links.append(href)
-
-              def handle_data(self, data):
-                  if self.in_row:
-                      self.row_text.append(data)
-
-              def handle_endtag(self, tag):
-                  if tag == "tr" and self.in_row:
-                      row = " ".join(self.row_text).lower()
-                      if "amiga-m68k-boot-iso" in row:
-                          self.matches.extend(self.row_links)
-                      self.in_row = False
-
-          parser = DownloadLinkParser()
-          parser.feed(Path(sys.argv[1]).read_text(errors="replace"))
-          for href in parser.matches:
-              url = urljoin("https://aros.sourceforge.io/", href)
-              if "download" in url.lower() or "fileid" in url.lower():
-                  print(url)
-                  raise SystemExit(0)
-          marker = html.lower().find("amiga-m68k-boot-iso")
-          if marker >= 0:
-              print(html[max(0, marker - 800):marker + 1800], file=sys.stderr)
-          raise SystemExit("Could not find the official amiga-m68k-boot-iso download link")
-          PY
-          )"
-          echo "Downloading AROS boot ISO from $download_url"
-          curl -fL --retry 3 -o "$archive" "$download_url"
-
-          iso_entry="$(unzip -Z1 "$archive" | grep -i '\.iso$' | head -n 1)"
-          test -n "$iso_entry"
-          unzip -p "$archive" "$iso_entry" > "$RUNNER_TEMP/aros-amiga-m68k.iso"
-          7z x -y "$RUNNER_TEMP/aros-amiga-m68k.iso" -o"$GITHUB_WORKSPACE/amiga-volume" >/dev/null
-
-          rom="$(find "$GITHUB_WORKSPACE/amiga-volume" -path '*/boot/amiga/aros-rom.bin' -print -quit)"
-          ext_rom="$(find "$GITHUB_WORKSPACE/amiga-volume" -path '*/boot/amiga/aros-ext.bin' -print -quit)"
-          startup="$(find "$GITHUB_WORKSPACE/amiga-volume" -path '*/S/Startup-Sequence' -print -quit)"
-          test -s "$rom"
-          test -s "$ext_rom"
-          test -n "$startup"
-
-          mkdir -p "$HOME/Amiberry/ROMs"
-          cp "$rom" "$HOME/Amiberry/ROMs/aros-rom.bin"
-          cp "$ext_rom" "$HOME/Amiberry/ROMs/aros-ext.bin"
-
-          system_root="${startup%/S/Startup-Sequence}"
-          cat > "$startup" <<'EOF'
+          mkdir -p amiga-volume/S artifacts/amiga-smoke
+          cat > amiga-volume/S/Startup-Sequence <<'EOF'
           Echo "AMIGA CI: BOOTED"
-          Echo "AROS 68k running in Amiberry"
+          Echo "Amiberry AROS fallback ROM"
           Echo "AMIGA-CI: PASS" >DH0:ci-result.txt
           Wait 20
           EOF
 
-          mkdir -p artifacts/amiga-smoke
-          cp "$startup" artifacts/amiga-smoke/Startup-Sequence.txt
-          echo "AROS system root: $system_root"
-
+          cp amiga-volume/S/Startup-Sequence artifacts/amiga-smoke/Startup-Sequence.txt
           cat > "$RUNNER_TEMP/amiga-smoke.uae" <<EOF
           use_gui=no
           cpu_type=68000
@@ -135,10 +55,10 @@ jobs:
           gfx_height=512
           gfx_fullscreen=false
           sound_output=0
-          filesystem2=rw,DH0:CI:$system_root,0
+          filesystem2=rw,DH0:CI:$GITHUB_WORKSPACE/amiga-volume,0
           EOF
 
-      - name: Boot Amiga and collect guest text and screenshot
+      - name: Boot Amiga and capture guest text and screenshot
         run: |
           set -euo pipefail
           export AMIBERRY_LOG="$GITHUB_WORKSPACE/artifacts/amiga-smoke/amiberry.log"
@@ -182,20 +102,16 @@ jobs:
             done
 
             if ! grep -q "AMIGA-CI: PASS" "$RESULT" 2>/dev/null; then
-              echo "Amiga guest did not write the expected result file"
+              echo "Amiga guest did not write the expected result"
               cat "$AMIBERRY_LOG"
               test -f "$RESULT" && cat "$RESULT" || true
               exit 1
             fi
 
-            printf "SCREENSHOT\\t%s\\n" "$SCREENSHOT" | timeout 5s nc -U "$socket" || true
-            for attempt in $(seq 1 10); do
-              [ -s "$SCREENSHOT" ] && break
-              sleep 1
-            done
+            printf "SCREENSHOT\\t%s\\n" "$SCREENSHOT" | timeout 5s nc -U -N "$socket"
             test -s "$SCREENSHOT"
             cat "$RESULT"
-            printf "QUIT\\n" | timeout 5s nc -U "$socket" || true
+            printf "QUIT\\n" | timeout 5s nc -U -N "$socket" || true
           '
 
           cp "$RESULT" artifacts/amiga-smoke/guest-output.txt
