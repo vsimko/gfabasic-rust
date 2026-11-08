@@ -156,15 +156,16 @@ jobs:
             sleep 3
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-dialog.png" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
 
-            # Avoid unreliable mouse IPC: use the file-list keyboard navigation.
-            # Entries are ordered: parent, S, GFABasic, factzero.LST.
-            # Move down four times to highlight the LST entry, then capture evidence.
-            for _ in 1 2 3 4; do
-              printf "SEND_KEY\\t77\\t1\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}" >/dev/null
-              sleep 0.15
-              printf "SEND_KEY\\t77\\t0\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}" >/dev/null
-              sleep 0.15
-            done
+            # Amiberry SEND_MOUSE takes relative dx/dy. Run #107 measured
+            # (380,94) -> about (+65,+60) screen px. From (~75,38), target row
+            # center (~335,238): use a calibrated relative move of (~1490,310).
+            printf "SEND_MOUSE\\t1490\\t310\\t0\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
+            sleep 0.5
+            printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-file-row-pointer.png" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
+            printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
+            sleep 0.2
+            printf "SEND_MOUSE\\t0\\t0\\t0\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
+            sleep 0.5
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-file-selected.png" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
 
             # AmigaOS requester shortcut: Left-Amiga-V activates the left gadget (Merge).
