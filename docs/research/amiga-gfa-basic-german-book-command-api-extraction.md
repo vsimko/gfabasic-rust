@@ -1468,3 +1468,93 @@ For bit-indexed functions, bit numbering starts at zero from the right. The book
 ### 17.7 Evidence boundary
 
 This is a transcription of the German book's Chapter 8. Some OCR around parity tests, EXP/LOG descriptions and typed bit-operation variants is degraded; those details are flagged rather than silently normalized. Operator associativity, overflow behavior, division-by-zero behavior and exact coercion rules are not established by this extraction and require page-image or interpreter verification.
+
+
+## 18. Graphics definitions and drawing operations: Chapter 9 (printed pp. 225–256)
+
+The book introduces Amiga-specific graphics facilities and notes that Atari ST graphics commands could not all be carried over unchanged. The commands below are source-derived from the German 3.0/V3.03-era book. This section records the chapter's documented behavior; it does not claim later 3.5 compatibility.
+
+### 18.1 Graphics state and drawing attributes
+
+| Command | Syntax | Description in the book |
+|---|---|---|
+| `BOUNDARY` | `BOUNDARY Flag` | Enables (1) or disables (0) outlines around P-graphics objects such as PBOX and PCIRCLE. |
+| `COLOR` | `COLOR Front,Back,OutLine` | Selects line/point drawing color, background color and outline color for P-prefixed objects. |
+| `DEFFILL` | `DEFFILL [Farbe],[Stil][,Muster]`; also `DEFFILL [Farbe],Muster$` | Defines fill color, fill style and fill pattern for P-graphics and FILL. The book lists solid, dotted, hatched, user-defined and system-pattern choices. |
+| `DEFLINE` | `DEFLINE [Stil]` | Selects line style for line-drawing commands. The book lists predefined styles and negative custom 15-bit patterns. It says line-style changes apply only to line width 1; wider lines are solid. |
+| `DEFMOUSE` | `DEFMOUSE Form` or `DEFMOUSE Maus$` | Selects a predefined or user-defined mouse pointer shape. A pointer can be set separately per window. |
+| `GRAPHMODE` | `GRAPHMODE Modus` | Selects the raster operation used when graphics are drawn over existing content. |
+| `SETCOLOR` | `SETCOLOR Reg,Rot,Grün,Blau` or `SETCOLOR Reg,Mischwert` | Sets an active screen's hardware color register, using RGB components (0–15 each) or a combined value (0–4095). |
+| `CLIP` | See §18.5 | Defines a graphics clipping rectangle and/or graphics coordinate origin. |
+
+DEFFILL user-defined patterns are supplied as a binary string in MKI$ format. The book describes 16 words for a 16-row pattern, with additional 16-word blocks for additional bitplanes. It also provides a procedure that captures a 16×16 screen area in DEFFILL-compatible format; that procedure is example code, not a built-in.
+
+The book lists GRAPHMODE modes JAM1 (transparent), JAM2 (replace), COMPLEMENT (invert affected pixels) and INVERSEVID. It says mode values may be added to combine certain operations. The exact numeric mode constants should be checked against page images before being encoded as normative constants.
+
+SETCOLOR's combined value is described as red × 256 + green × 16 + blue, with each component in the range 0–15. The book also documents default Workbench-window color-register roles for registers 0–3; those are environment-specific defaults, not universal screen semantics.
+
+### 18.2 Filled and unfilled primitives
+
+| Command | Syntax | Description in the book |
+|---|---|---|
+| `BOX` / `PBOX` | `[P]BOX X_links,Y_oben,X_rechts,Y_unten` | Draws a rectangle; PBOX fills it using the current DEFFILL pattern. |
+| `CIRCLE` / `PCIRCLE` | `[P]CIRCLE X_cent,Y_cent,Radius` | Draws a circle or filled circle. The book says the radius is limited to 511 because of the Blitter's graphics-area limitation. |
+| `ELLIPSE` / `PELLIPSE` | `[P]ELLIPSE Xcent,Ycent,Xrad,Yrad` | Draws an ellipse or filled ellipse. |
+| `POLYLINE` | `POLYLINE Pkte,Xp(),Yp()[OFFSET Xdiff,Ydiff]` | Draws a polygonal line through coordinate arrays. Up to 128 points are documented; to close the path, repeat the first point as the final point. |
+| `POLYFILL` | `POLYFILL Pkte,Xp(),Yp()[OFFSET Xdiff,Ydiff]` | Draws and fills a polygon using current fill attributes. |
+| `LINE` | `LINE X1,Y1,X2,Y2` | Draws a straight line using the current line attributes. |
+| `PLOT` | `PLOT Xpos,Ypos` | Sets a pixel at the specified coordinate. |
+| `POINT` | `POINT(Xpos,Ypos)` | Returns the color-register number of the specified screen pixel. |
+| `FILL` | `FILL Xpos,Ypos[,Farbe]` | Flood-fills from the selected point until reaching boundaries. In the book's Amiga V3.0 description, the optional Farbe parameter makes only that color a boundary; other colors are filled. |
+| `SCROLL` | `SCROLL Dx,Dy,X1,Y1[,X2,Y2]` | Scrolls a bitmap region. Positive Dx moves content left and positive Dy moves it down; the book warns that pixels pushed out are not saved and the exposed opposite edge is filled with the background color. |
+
+The book notes that POLYLINE/POLYFILL use the current DEFLINE, DEFFILL or DEFMARK attributes. OFFSET shifts the polygon coordinates without rewriting the source coordinate arrays. The printed description of SCROLL's argument list is partly obscured in OCR; verify whether both lower-right coordinates are required before implementing its exact grammar.
+
+### 18.3 Text and turtle/plotter graphics
+
+| Command | Syntax | Description in the book |
+|---|---|---|
+| `TEXT` | `TEXT Xt,Yt,"Text"` | Draws text in graphics mode. The anchor is the lower-left point of the first character's character box, including when the first character is a space. Output is clipped to the screen. |
+| `DRAW` | `DRAW TO Xpos,Ypos`; also coordinate-chain forms | Connects the current graphics point to the specified point, or draws a polyline through a sequence of points. |
+| `DRAW$` | `DRAW Def$[,Const[,"Text"[,Var[,...]]]]` | Simulates LOGO-style turtle/plotter graphics using a command string. |
+| `DRAW(Index)` | `DRAW(Index)` | Returns turtle state: X, Y, angle, X/Y scale and pen flag for indices 0–5. |
+| `SETDRAW` | `SETDRAW Xpos,Ypos,Grad` | Sets the turtle's absolute position and heading. |
+
+The DRAW$ command strings documented in the book include:
+
+- `fd n` / `bk n`: move forward/backward by n pixels.
+- `sx n` / `sy n`: set X/Y scaling for forward/backward movement; zero disables the respective scaling.
+- `pu` / `pd`: pen up/down.
+- `co n`: select line color.
+- `dr x,y`: draw to an absolute coordinate.
+- `ma x,y`: move to an absolute coordinate with pen up.
+- `da x,y`: draw to a position relative to the current turtle position.
+- `mr x,y`: move to a relative position.
+- `lt n` / `rt n`: turn left/right by n degrees.
+- `tt n`: set an absolute heading in degrees.
+
+The book says distances, angles and coordinates may be expressions, constants, variables or values embedded in the DRAW$ command string. The number of comma-separated commands is limited by the maximum input-line length.
+
+### 18.4 Screen capture and bitmap access
+
+| Command | Syntax | Description in the book |
+|---|---|---|
+| `GET` | `GET X_links,Y_oben,X_rechts,Y_unten,Var$` | Reads a screen rectangle into a binary string as a bitmap. The specified corners must lie within the screen or the interpreter does not execute the command. |
+
+The book explicitly distinguishes this graphics GET from disk-file GET#. The captured bitmap string can subsequently be used by bitmap transfer operations described elsewhere in the reference.
+
+### 18.5 CLIP coordinate and clipping forms
+
+The book documents these forms:
+
+- `CLIP Xpos,Ypos,Breite,Höhe[OFFSET X,Y]`
+- `CLIP X1,Y0 TO Xr,Yu[OFFSET X,Y]`
+- `CLIP #Windownummer[OFFSET X,Y]`
+- `CLIP OFFSET X,Y`
+- `CLIP OFF`
+
+CLIP can restrict graphics output to a rectangle, or set the graphics origin relative to the upper-left screen corner. The book says graphics such as LINE, BOX, PBOX and DRAW are clipped at the rectangle boundary, while PUT is excluded from clipping. A window-number form selects the window whose work area supplies the clipping rectangle. CLIP OFF disables clipping; CLIP OFFSET 0,0 restores the origin to zero.
+
+### 18.6 Evidence boundary
+
+This chapter contains Amiga-specific behavior and explicit V3.0 labels. Some OCR-sensitive details—especially SCROLL's full syntax, GRAPHMODE numeric values, and exact DRAW$ token grammar—remain unverified. Example procedures such as the magnifier, popup menu and custom fill-pattern copier are user code, not built-ins. Do not add those procedure names to the language command inventory.
