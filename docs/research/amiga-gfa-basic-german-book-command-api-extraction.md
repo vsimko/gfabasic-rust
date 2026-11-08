@@ -1739,3 +1739,71 @@ The book documents these options:
 ### 21.4 Evidence boundary
 
 The OCR makes the command names and principal syntax legible, but exact array-base behavior when OPTION BASE changes after allocation, sort stability, treatment of equal keys, and all boundary/error cases are not specified here. The custom ordering table's exact integer element width is described as 1-, 2- or 4-byte integer in the prose; verify which array declarations the interpreter accepts before implementation.
+
+
+## 22. Memory access, allocation and pointer operations: Chapter 11.2–11.4 (printed pp. 305–316)
+
+The following API is described by the German book as Amiga GFA BASIC 3.0-era functionality. These operations expose raw memory and can corrupt the interpreter or operating system if used with incorrect addresses or sizes.
+
+### 22.1 Block transfer and typed memory access
+
+| Command / function | Syntax | Description |
+|---|---|---|
+| `BMOVE` | `BMOVE Quelle,Ziel,Anz` | Copies Anz bytes from Quelle to Ziel. The book explicitly allows overlapping source and destination ranges. Anz must not be zero; it suggests `MAX(1,Anz)` to prevent a zero-length transfer. |
+| `BYTE{}` | `BYTE{Adresse}` / `BYTE{Adresse}=Wert` | Reads or writes one byte. |
+| `CARD{}` | `CARD{Adresse}` / `CARD{Adresse}=Wert` | Reads or writes an unsigned 16-bit word. The book requires an even address. |
+| `LONG{}` | `LONG{Adresse}` / `LONG{Adresse}=Wert` | Reads or writes a 32-bit longword. The book requires an even address. |
+| `INT{}` / `WORD{}` | `INT{Adresse}`, `WORD{Adresse}`; assignment form `INT{Adresse}=Wert` | Reads or writes a signed 16-bit integer. The book says INT{} and WORD{} are two names for the same operation. |
+| `FLOAT{}` | `FLOAT{Adresse}` / `FLOAT{Adresse}=Wert` | Reads or writes an 8-byte GFA BASIC 3.0 real value. |
+| `SINGLE{}` | `SINGLE{Adresse}` / `SINGLE{Adresse}=Wert` | Reads or writes a 4-byte IEEE real value. |
+| `DOUBLE{}` | `DOUBLE{Adresse}` / `DOUBLE{Adresse}=Wert` | Reads or writes an 8-byte IEEE real value. |
+| `CHAR{}` | `CHAR{Adresse}` / `CHAR{Adresse}=Expr$` | Reads or writes a NUL-terminated C string. Writing appends a zero byte; reading stops at the first zero byte. |
+| `PEEK` / `DPEEK` / `LPEEK` | `PEEK(Adresse)`, `DPEEK(Adresse)`, `LPEEK(Adresse)` | Reads 1, 2 or 4 bytes, respectively. The 2- and 4-byte forms require even addresses. |
+| `POKE` / `DPOKE` / `LPOKE` | `POKE Adresse,Wert`, `DPOKE Adresse,Wert`, `LPOKE Adresse,Wert` | Writes 1, 2 or 4 bytes, respectively. DPOKE and LPOKE require even addresses. |
+| `INLINE` | `INLINE Adresse%,Bytes` | Reserves up to 32,700 bytes in the program listing and returns the start address when execution reaches the INLINE line. |
+
+The book also describes `DOUBLE{}` and `SINGLE{}` as IEEE-format accessors, while `FLOAT{}` uses the 8-byte GFA 3.0 real format. The unqualified LONG{} form is described as a 4-byte access. For CARD{} and LONG{}, alignment is required.
+
+For signed 16-bit reads, the book describes bit 15 as the sign bit; values with that bit set are interpreted as negative. It notes that assigning the result to a byte variable can only retain unsigned values 0–255.
+
+### 22.2 System memory allocation
+
+| Function | Syntax | Description |
+|---|---|---|
+| `MALLOC` | `Back=MALLOC(Anz,Art)` | Reserves system memory and returns its start address; zero indicates failure. |
+| `MFREE` | `Back=MFREE(Adresse,Anz)` | Releases a block previously reserved with MALLOC. The address and size must match the allocation. |
+
+The book says MALLOC rounds Anz up to the next multiple of eight. Its Art parameter selects memory characteristics:
+
+- `1`: Chip memory.
+- `2`: non-movable memory.
+- `4`: Fast memory.
+- `65536`: initialize/clear the allocated block to zero.
+- Values may be combined with bitwise OR; for example, `2 OR 1` requests non-movable Chip memory.
+
+If neither Chip nor Fast memory is explicitly selected, the book says it first tries Fast memory and then Chip memory. It warns that an incorrect address or size passed to MFREE can cause a system crash.
+
+### 22.3 BASIC workspace reservation
+
+`RESERVE[Anz]` sets the size in bytes of the BASIC workspace (program plus variables). The book states that the default is 64 KiB when Anz is omitted, and explicitly warns that RESERVE clears the variable storage.
+
+### 22.4 Pointer and address functions
+
+| Function / form | Syntax | Description |
+|---|---|---|
+| `VARPTR` | `VARPTR(Var)` or `V:Var` | Returns the address of a numeric variable, or the address of the first character of a string. |
+| `ARRPTR` | `ARRPTR(Var$)`, `ARRPTR(Feld())` | Returns the address of a string or array descriptor. |
+| Pointer marker | `*Var`, `*Feld()` | Passing a variable/array with * passes its address/descriptor rather than its value. |
+| Indirect access | `*Pointer=Value`; `Value=*Pointer` | Uses a pointer to access the referenced variable indirectly. |
+
+The book distinguishes numeric variable addresses from string/array descriptors. It says VARPTR is useful for numeric variables and the first character of strings, while ARRPTR returns the descriptor address for strings and arrays. It also describes pointer arguments in procedures as both input and output parameters, avoiding copying values into locals and copying them back.
+
+### 22.5 INLINE editor storage
+
+INLINE reserves up to 32,700 bytes associated with a source listing line. The book explains that the editor can load, save, print or clear this storage through a Help-key menu when the cursor is on a checked INLINE line. Saving the program with the editor's Save, SAVE or PSAVE retains INLINE contents; saving only an ASCII listing does not preserve the binary payload. Merging an ASCII listing reserves the space again but leaves it empty.
+
+The book says a newly created INLINE area is zero-filled. Deleting its source line releases the area. An INLINE line cannot contain a comment. Changing an existing INLINE declaration may prompt the editor to discard the old buffer and create a new one.
+
+### 22.6 Evidence boundary
+
+This is low-level, version-sensitive memory behavior. Address alignment, allocation flags, binary real layouts, INLINE persistence and pointer conventions are reported as described by the book, not as safe modern API recommendations. Verify all details against interpreter behavior and Amiga memory APIs before implementing them.
