@@ -11,14 +11,14 @@ Primary source: AM-INTERPRETER-35, *GFA BASIC 3.5 Interpreter*, base-manual chap
 | 2 | Variables and memory handling | pp. 2-2–2-44: variable types, arrays, DEFxxx, LET, CLEAR/CLR, ERASE, DIM, OPTION BASE, INSERT/DELETE, ARRAY FILL, conversions, sorting, dates/time, memory access and allocation | Base-manual 3.0; not independently confirmed for 3.5 |
 | 3 | Operators | pp. 3-2–3-16: precedence, logical, arithmetic, string and comparison operators | Base-manual 3.0; not independently confirmed for 3.5 |
 | 4 | Numeric functions and strings | starts p. 4-2; arithmetic, trigonometry, conversion, numeric and string functions | Base-manual 3.0; not independently confirmed for 3.5 |
-| 5 | Input and output | Chapter listed in contents | Individual declarations/pages not yet extracted |
-| 6 | Disk handling and file organization | Chapter listed in contents | Individual declarations/pages not yet extracted |
-| 7 | Program handling | Chapter listed in contents | Individual declarations/pages not yet extracted |
-| 8 | Graphics | Chapter listed in contents | Individual declarations/pages not yet extracted |
-| 9 | Event, menu, screen and window handling | Chapter listed in contents | Individual declarations/pages not yet extracted |
-| 10 | Advanced programming | Chapter listed in contents | Individual declarations/pages not yet extracted |
-| 11 | System routines | Chapter listed in contents | Individual declarations/pages not yet extracted |
-| 12 | Appendices | Chapter listed in contents | Tables/index still to be extracted |
+| 5 | Input and output | pp. 5-2–5-22: keyboard/form input, cursor, mouse, printing, sound, DATA/READ/RESTORE | Chapter 5 page-level extraction is partly covered by I/O and DATA notes; detailed output/device signatures and sound remain candidates |
+| 6 | Disk handling and file organization | pp. 6-2–6-21: directories, OPEN/CLOSE, metadata, binary/sequential/random I/O, STORE/RECALL, FIELD/GET/PUT/RECORD | Page-level evidence added in `amiga-gfa-basic-3.0-control-file-data-io.md`; 3.5 applicability and representation details unresolved |
+| 7 | Program handling | pp. 7-2–7-55: branches, loops, procedures/functions, errors/events, timers, program load/save/chain/run, tracing and system calls | Page-level evidence added in `amiga-gfa-basic-3.0-control-file-data-io.md`; detailed statement inventory remains version-scoped 3.0 evidence |
+| 8 | Graphics | pp. 8-2–8-24: drawing state, raster modes, clipping, primitives, fill, GET/PUT, VSYNC, DISPLAY | Page-level evidence in `amiga-gfa-basic-3.0-graphics-evidence.md`; full signatures and 3.5 confirmation remain open |
+| 9 | Event, menu, screen and window handling | pp. 9-2–9-39: menus/events, screen/window management, requesters and file selector | Page-level evidence in `amiga-gfa-basic-3.0-events-windows-evidence.md`; menu/event signatures need more extraction and 3.5 confirmation |
+| 10 | Advanced programming | pp. 10-2–10-16: CLI, library bases, sprites, joystick, speech, FD wrappers, BOBs | Page-level evidence in `amiga-gfa-basic-3.0-advanced-programming-evidence.md`; OS/runtime semantics remain Amiga-specific |
+| 11 | System routines | pp. 11-2–11-92: Exec, Graphics, Workbench, Intuition, DiskFont, Layers and DOS libraries | Library groups and representative names in `amiga-gfa-basic-3.0-system-routines-evidence.md`; per-call signatures remain untranscribed |
+| 12 | Appendices | pp. 12-2–12-28: keyboard/ASCII tables, fill patterns, AmigaDOS errors, BASIC command index and OS routine index | BASIC command index transcribed in `amiga-gfa-basic-3.0-command-index.md`; OS index identified separately; OCR spellings need review |
 
 ## Chapter 2 — variables and memory
 
@@ -733,3 +733,8 @@ The scan's OCR corrupts spacing, punctuation, some command names, abbreviations 
 ### Version boundary
 
 The appendix pages belong to the same 3.0 base-manual section as Chapters 2–11. Error numbers and fill-pattern references are therefore 3.0-source facts. The command index can help locate declarations, but its presence in a manual whose addendum documents 3.5 does not establish that every indexed entry is available in 3.5.
+
+
+## Appendix command-index cross-check
+
+The alphabetical BASIC command index is transcribed in [amiga-gfa-basic-3.0-command-index.md](amiga-gfa-basic-3.0-command-index.md), with the base-manual printed page for each entry and an explicit separation of the 3.5 addendum additions. This closes the index-discovery step; it does not confirm all indexed entries for 3.5 or establish complete signatures. The separate Amiga OS library-call index occupies printed pp. 12-19–12-28 and must not be counted as language-core declarations.
