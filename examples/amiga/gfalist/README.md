@@ -9,9 +9,10 @@ does not merge binary GFA files.
 
 The upstream package identifies the program as part of the GFABASIC4
 development package, copyright (C) 1992-2001 Peter Backes, and licenses
-it under GNU GPL version 2 only. The upstream GPL-2.0-only license text is not vendored in this repository.
+it under GNU GPL version 2 only. The archive's license text and binary test
+fixtures were inspected but are not currently included in this repository.
 
-The upstream source archive also contains a format note and an example tokenized program; neither historical archive member is vendored here.
+The source archive also contains format notes at [doc/gfa_frmt.txt](doc/gfa_frmt.txt).
 
 The archived README describes GFA BASIC version 3.x input support. This
 tool is a format/conversion reference, not a runtime or language conformance
