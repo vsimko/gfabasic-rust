@@ -35,11 +35,15 @@ jobs:
 
       - name: Prepare an AROS boot directory
         run: |
+          mkdir -p artifacts/amiga-smoke
           archive="$RUNNER_TEMP/aros-amiga-m68k.zip"
           index="$RUNNER_TEMP/aros-nightly.html"
           curl -fL --retry 3 \
             -o "$index" \
             "https://aros.sourceforge.io/cgi-bin/files?lang=en&type=nightly2"
+          cp "$index" artifacts/amiga-smoke/aros-nightly-index.html
+          echo "AROS index size: $(wc -c < "$index") bytes"
+          head -c 1200 "$index"
 
           download_url="$(python3 - "$index" <<'PY'
           from html.parser import HTMLParser
