@@ -544,3 +544,27 @@ source-version = "3.0 base manual"
 printed-pages = ["10-7"]
 status = "unresolved"
 notes = "Queries joystick position and fire-button state; port 0 interaction with mouse/Intuition is noted. 3.5 availability is unresolved."
+
+
+# Error handling and recovery are present in the 3.0 base manual, but the
+# 3.5 addendum only confirms a narrower GURU interaction (printed p. 13-36).
+# Keep these as unresolved until the full grammar is reconciled.
+[[candidates]]
+id = "amiga.base7.on-error"
+name = "ON ERROR / ON ERROR GOSUB"
+kind = "statement-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["7-29"]
+status = "unresolved"
+notes = "The 3.0 manual documents reset-to-default handling and procedure-based error handling. The 3.5 addendum confirms that GURU Meditation may transfer to ONERROR GOSUB, but does not restate the complete syntax or general 3.5 availability."
+
+[[candidates]]
+id = "amiga.base7.resume"
+name = "RESUME / RESUME NEXT / RESUME label"
+kind = "statement-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["7-29"]
+status = "unresolved"
+notes = "The 3.0 manual documents retry, continue-next and continue-at-label behavior, plus a FATAL-error restriction. The 3.5 addendum specifically disallows RESUME NEXT and RESUME LABEL after a GURU-triggered ONERROR GOSUB in compiled 3.5 programs; broader 3.5 behavior remains unverified."
