@@ -1696,3 +1696,46 @@ This section is explanatory material rather than additional interpreter commands
 ### 20.5 Evidence boundary
 
 The conversion-function signatures are mostly legible, but the CVD spelling and accepted VAL prefixes need page-image/runtime verification. The book does not fully specify malformed-input handling, numeric overflow, exponent parsing edge cases or locale-dependent decimal separators.
+
+
+## 21. Array operations and sorting: Chapter 11.1 (printed pp. 291–304)
+
+This section captures the first part of the book's Chapter 11 on arrays, memory and pointers. The material below covers array allocation, element insertion/deletion, initialization, base indexing and sorting. Source classification is the German book's 3.0/V3.03-era reference.
+
+### 21.1 Array allocation and lifecycle
+
+| Command | Syntax | Description in the book |
+|---|---|---|
+| `DIM` | `DIM Arr(Ind1[,Ind2,...])[,Arr2(...),...]` | Allocates storage and sets the dimensions for one or more numeric or string arrays. |
+| `DIM?` | `DIM?(Feld())` | Returns the total number of elements in an array; returns 0 if the array has not been dimensioned. |
+| `ERASE` | `ERASE Feld()[,Feld2(),...]` | Removes the dimensions and releases the storage occupied by one or more arrays. |
+| `ARRAYFILL` | `ARRAYFILL Feld(),Var` | Assigns Var to every element of an already dimensioned numeric array. The value's type must match the array type. |
+| `INSERT` | `INSERT Feld(Index)=Wert`; `INSERT Feld$(Index)=Text` | Inserts an element at Index, shifts higher elements up one position and discards the last element. |
+| `DELETE` | `DELETE Feld(Index)`; `DELETE Feld$(Index)` | Deletes the element at Index, shifts higher elements down and clears the final element (zero or empty string). |
+
+The book describes the number of elements in multidimensional arrays as the product of their dimension sizes, subject to OPTION BASE. It warns that large dimensions may relocate other variables, especially strings; machine code stored in string variables can therefore become unsafe if the program does not re-check addresses with VARPTR. It recommends INLINE for storing such routines.
+
+### 21.2 OPTION BASE
+
+`OPTION BASE` selects the first index of arrays (0 or 1). The book says it affects all dimensioned arrays and may be changed during a program; existing array indices are adjusted to the new base. Examples show `DIM Feld(5)` as indices 0–5 with base 0, or 1–5 with base 1. The book's array examples generally assume OPTION BASE 0 unless stated otherwise.
+
+### 21.3 QSORT and SSORT
+
+| Command | Syntax recorded in the book | Description |
+|---|---|---|
+| `QSORT` | `QSORT Feld([Sign])[,Anz[,Feld2%()]]` | Sorts a numeric array by numeric value, or a string array by character/ASCII order. |
+| `QSORT` with custom string order | `QSORT Feld$([Sign]) [WITH Vorgabe%()][,Anz[,Feld2%()]]` | Sorts strings using a caller-supplied integer ordering table. |
+| `SSORT` | `SSORT Feld([Sign])[,Anz[,Feld2%()]]` | Shell-sort variant with the same general options as QSORT. |
+| `SSORT` with custom string order | `SSORT Feld$([Sign]) [WITH Vorgabe%()][,Anz[,Feld2%()]]` | String Shell sort using a custom ordering table. |
+
+The book documents these options:
+
+- A plus sign or no sign sorts ascending; a minus sign sorts descending. The sign is supplied inside the array's parentheses, for example `QSORT Feld%(-)`.
+- `Anz` limits the number of elements sorted. The examples show a prefix of the array being sorted while the remaining elements stay in their original positions.
+- An optional 4-byte integer array may be supplied as a parallel/index array. Its elements are reordered in step with the sorted array, preserving a mapping to the original positions.
+- For string sorting, `WITH Vorgabe%()` supplies a custom character ordering. The book describes a table of at least 256 elements, whose entries define the ordering of ASCII characters. It demonstrates changing the relative order of lowercase letters and German umlauts.
+- The book characterizes QSORT as recursive and generally faster, but requiring more memory; SSORT is described as generally slower but useful for arrays that are already partly sorted.
+
+### 21.4 Evidence boundary
+
+The OCR makes the command names and principal syntax legible, but exact array-base behavior when OPTION BASE changes after allocation, sort stability, treatment of equal keys, and all boundary/error cases are not specified here. The custom ordering table's exact integer element width is described as 1-, 2- or 4-byte integer in the prose; verify which array declarations the interpreter accepts before implementation.
