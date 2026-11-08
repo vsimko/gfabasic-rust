@@ -2889,3 +2889,44 @@ The printed timer value is `4194303`, while the earlier IDCMP flag table on p. 3
 ### 42.5 Validation boundary
 
 The event numbers, payload slots, activation value correction and timer discrepancy are now checked against page images. The values are manual descriptions of messages delivered through the Intuition message channel; exact event delivery, pointer lifetime and message-draining requirements still need runtime/AmigaOS validation.
+
+
+## 43. Page-image validation: STRIG() and event-dispatch commands (printed pp. 373, 397, 403–404)
+
+### 43.1 STRIG() (printed p. 373)
+
+The page image confirms the function form `STRIG(Maus-Port)`. It reports the current fire-button state for the specified mouse/joystick port: pressed = 1, not pressed = 0. The adjacent example tests `STRIG(0)` and draws a visual effect while the fire button is pressed. This confirms the spelling and return convention in the book's Version 3.0 material; it does not establish hardware-port behavior outside the documented example.
+
+### 43.2 ON MENU and SLEEP (printed p. 403)
+
+The image confirms both forms:
+
+```basic
+ON MENU
+ON MENU [Zeit]
+SLEEP
+```
+
+ON MENU waits for a message and branches to the program location defined for the event. The optional Zeit value is in thousandths of a second; after that interval, ON MENU must return control to BASIC. The prose says a sufficiently long interval gives the input device time to register, for example a mouse-button release. The book requires ON MENU BUTTON GOSUB for reliable recognition of button release. It also recommends invoking ON MENU from internal wait loops (example: REPEAT...UNTIL MOUSEK), otherwise events can accumulate while the program is not servicing the message channel.
+
+SLEEP is described as a simplified ON MENU: it sets the time variable to 1 and waits for any message sent through Intuition's message channel. Do not assume from this description that SLEEP is a general-purpose OS sleep primitive independent of Intuition.
+
+### 43.3 ON MENU GOSUB, BUTTON and KEY (printed p. 404)
+
+The page image confirms:
+
+```basic
+ON MENU GOSUB Prozedurname
+ON MENU BUTTON GOSUB Prozedurname
+ON MENU KEY GOSUB Prozedurname
+```
+
+- `ON MENU GOSUB` selects the procedure called when a pull-down menu item is clicked. The procedure can identify the selected item with MENU(0). If the named procedure does not exist, menu monitoring is switched off. The source warns that invoking this before a window with a menu has been defined crashes the program.
+- `ON MENU BUTTON GOSUB` selects a procedure for mouse-button events, including one or more presses and releases. The procedure must inspect MENU() to determine which button and how often it changed state.
+- `ON MENU KEY GOSUB` selects a procedure for keyboard events. MENU(14) supplies the pressed key's code. If the named procedure does not exist, keyboard monitoring is switched off.
+
+These are source-specific control-flow descriptions; handler reentrancy, event queue overflow and pointer ownership are not established by the pages.
+
+### 43.4 Validation boundary
+
+STRIG() syntax and 0/1 return values, ON MENU's optional timeout unit and dispatch behavior, SLEEP's Intuition-message wait, and all three ON MENU GOSUB forms are now checked against page images. Runtime behavior and event-queue edge cases remain untested.
