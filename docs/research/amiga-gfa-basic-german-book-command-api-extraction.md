@@ -2340,3 +2340,23 @@ These are source-specific control-flow descriptions; handler reentrancy, event q
 ### 43.4 Validation boundary
 
 STRIG() syntax and 0/1 return values, ON MENU's optional timeout unit and dispatch behavior, SLEEP's Intuition-message wait, and all three ON MENU GOSUB forms are now checked against page images. Runtime behavior and event-queue edge cases remain untested.
+
+
+## 44. Conflict resolution pass: matrix inverse and IntuiTicks (2026-11-08)
+
+### 44.1 MAT INV operand direction — resolved from explicit semantics and worked examples
+
+The 3.5 addendum's operation summary on printed p. 13-16 lists `MAT INV a()=b()`. However, the detailed definition and executable example on printed p. 13-30 explicitly use `MAT INV b()=a()`, state that the inverse of source matrix `a()` is written to destination `b()`, and then verify the result with `MAT MUL c()=b()*a()` against the identity matrix. The German 1990 book independently gives `MAT INV i()=m()` on printed p. 475 and says that `i()` receives the inverse of `m()`.
+
+**Resolution:** use destination-first syntax `MAT INV destination()=source()`. The summary form on p. 13-16 is a transposition/operand-order typo. For the manual's example, `b()` is the destination and `a()` the source. This is a source-based resolution; runtime numeric edge cases (singular matrices, precision, failure reporting) remain untested.
+
+### 44.2 IntuiTicks decimal value — resolved as a printed decimal typo
+
+The German 1990 book's IDCMP flag table on printed p. 378 gives `INTUITICKS = 4194304`. Its event-dispatch example on p. 402 prints `4194303`. The English GFA BASIC 3.5 manual repeats `4194303` for the timer message and in its IDCMP table, but in the latter pairs it with hexadecimal `&H400000`. That hexadecimal value is exactly decimal 4194304.
+
+**Resolution:** the intended IntuiTicks flag is `&H400000` = `4194304`; `4194303` is a repeated decimal transcription/printing error in the event descriptions. The source's hexadecimal value and the German IDCMP table agree. The discrepancy is documentary, not evidence of two distinct event classes.
+
+### 44.3 Remaining issues
+
+- Error #86 still has an inconsistent legacy message: the appendix says `FACT/COMBIN/PERMUT not defined`, while the 3.5 function chapter documents `FACT`, `VARIAT`, and `COMBIN`. The source set documents `VARIAT` as the permutation/variation function; it does not document `PERMUT` as an alias. Treat the error text as stale/inconsistent catalogue text; only an interpreter test can determine whether `PERMUT` is accepted.
+- MENU attribute 64 is visibly listed for both “clear checkmark” and “activate menu item” on printed p. 389. No supplied source explains whether this is an intentional overloaded operation, a manual error, or a behavior dependent on current menu state. Keep the duplicate as a source fact; resolving actual command behavior requires testing the interpreter or inspecting its implementation.
