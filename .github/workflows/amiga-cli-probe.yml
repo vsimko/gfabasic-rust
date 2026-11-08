@@ -110,7 +110,7 @@ jobs:
           env -u SHELLOPTS xvfb-run -a -s "-screen 0 1024x768x24 +extension GLX" bash -c '
             set +u
             set -eo pipefail
-            amiberry -G -f "$RUNNER_TEMP/amiga-cli-probe.uae" --log >"$AMIBERRY_LOG" 2>&1 &
+            amiberry -G -f "$RUNNER_TEMP/amiga-cli-probe.uae" -0 "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/factzero.adf" --log >"$AMIBERRY_LOG" 2>&1 &
             emulator_pid=$!
             cleanup() { kill "$emulator_pid" 2>/dev/null || true; wait "$emulator_pid" 2>/dev/null || true; }
             trap cleanup EXIT
