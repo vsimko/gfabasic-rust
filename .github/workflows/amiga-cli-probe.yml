@@ -86,8 +86,8 @@ jobs:
           gfx_height=512
           gfx_fullscreen=false
           sound_output=0
-          filesystem2=rw,GFAVol:GFA:$GITHUB_WORKSPACE/amiga-volume,0
-          uaehf0=dir,rw,GFAVol:GFA:$GITHUB_WORKSPACE/amiga-volume,0
+          filesystem2=rw,GFA:GFAVol:$GITHUB_WORKSPACE/amiga-volume,0
+          uaehf0=dir,rw,GFA:GFAVol:$GITHUB_WORKSPACE/amiga-volume,0
           EOF
 
       - name: Merge textual LST in the GFA BASIC editor
@@ -148,7 +148,12 @@ jobs:
             # Click the left requester gadget (Merge), not the right Cancel gadget.
             # On the 768x512 capture it is centered near (323, 426).
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/before-merge-click.png" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
-            printf "SEND_MOUSE\\t245\\t388\\t0\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
+            # SEND_MOUSE deltas are capped by the input bridge; move in smaller steps.
+            for delta in "100 100" "100 100" "45 88"; do
+              set -- $delta
+              printf "SEND_MOUSE\\t%s\\t%s\\t0\\n" "$1" "$2" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
+              sleep 0.2
+            done
             sleep 0.3
             printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
             sleep 0.3
