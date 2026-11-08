@@ -145,18 +145,25 @@ jobs:
             done
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-filename.png" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
 
-            # Avoid guessed mouse coordinates: accept the focused filename gadget
-            # with Amiga raw Return (0x44). This should activate the requesters
-            # default accept action without risking the adjacent Cancel gadget.
+            # Move from the centered pointer to the right-hand bottom requester gadget.
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/before-merge-click.png" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
-            printf "SEND_KEY\\t68\\t1\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
+            printf "SEND_MOUSE\\t80\\t160\\t0\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
             sleep 0.3
-            printf "SEND_KEY\\t68\\t0\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
+            printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
+            sleep 0.3
+            printf "SEND_MOUSE\\t0\\t0\\t0\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
             sleep 5
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-merge.png" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
             kill -0 "$emulator_pid"
             printf "QUIT\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}" || true
           '
+          for diagnostic in t-directory-check.txt t-file-check.txt cli-output.txt probe-status.txt stdin-save.LST; do
+            if test -f "amiga-volume/$diagnostic"; then
+              cp "amiga-volume/$diagnostic" "artifacts/amiga-cli-probe/$diagnostic"
+            else
+              printf "MISSING: %s\\n" "$diagnostic" > "artifacts/amiga-cli-probe/$diagnostic.missing"
+            fi
+          done
           for screenshot in editor-before-merge.png merge-dialog.png merge-filename.png before-merge-click.png after-merge.png; do
             test -s "artifacts/amiga-cli-probe/$screenshot"
           done
