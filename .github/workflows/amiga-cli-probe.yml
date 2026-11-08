@@ -104,7 +104,7 @@ jobs:
           xdftool artifacts/amiga-cli-probe/factzero.adf create + format GFABASIC ofs + write amiga-volume/factzero.LST + write amiga-volume/GFABasic + write amiga-volume/S
           xdftool artifacts/amiga-cli-probe/factzero.adf boot install boot1x
           xdftool artifacts/amiga-cli-probe/factzero.adf info > artifacts/amiga-cli-probe/factzero-adf-info.txt
-          xdftool artifacts/amiga-cli-probe/factzero.adf list all > artifacts/amiga-cli-probe/factzero-adf-list.txt
+          xdftool artifacts/amiga-cli-probe/factzero.adf list / all > artifacts/amiga-cli-probe/factzero-adf-list.txt
           xdftool artifacts/amiga-cli-probe/factzero.adf boot show > artifacts/amiga-cli-probe/factzero-adf-boot.txt
           cp amiga-volume/factzero.LST artifacts/amiga-cli-probe/factzero.LST
           cp amiga-volume/cli-input.txt artifacts/amiga-cli-probe/cli-input.txt
