@@ -141,17 +141,13 @@ jobs:
             done
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-filename.png" | timeout 5s nc -U -N "$ipc_socket_path"
 
-            # Click the left accept button; coordinates calibrated for 640x512.
-            printf "SEND_MOUSE\\t210\\t125\\t0\\n" | timeout 5s nc -U -N "$ipc_socket_path"
-            sleep 0.3
-            printf "SEND_MOUSE\\t200\\t100\\t0\\n" | timeout 5s nc -U -N "$ipc_socket_path"
-            sleep 0.3
-            printf "SEND_MOUSE\\t9\\t-27\\t0\\n" | timeout 5s nc -U -N "$ipc_socket_path"
-            sleep 1
+            # Avoid guessed mouse coordinates: accept the focused filename gadget
+            # with Amiga raw Return (0x44). This should activate the requester's
+            # default/accept action without risking the adjacent Cancel gadget.
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/before-merge-click.png" | timeout 5s nc -U -N "$ipc_socket_path"
-            printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "$ipc_socket_path"
+            printf "SEND_KEY\\t68\\t1\\n" | timeout 5s nc -U -N "$ipc_socket_path"
             sleep 0.3
-            printf "SEND_MOUSE\\t0\\t0\\t0\\n" | timeout 5s nc -U -N "$ipc_socket_path"
+            printf "SEND_KEY\\t68\\t0\\n" | timeout 5s nc -U -N "$ipc_socket_path"
             sleep 5
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-merge.png" | timeout 5s nc -U -N "$ipc_socket_path"
             kill -0 "$emulator_pid"
