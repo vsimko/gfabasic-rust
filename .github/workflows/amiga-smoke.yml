@@ -30,7 +30,7 @@ jobs:
           echo "deb [arch=amd64 signed-by=/usr/share/keyrings/amiberry-archive-keyring.gpg] https://packages.amiberry.com/apt noble main" \
             | sudo tee /etc/apt/sources.list.d/amiberry.list >/dev/null
           sudo apt-get update
-          sudo apt-get install -y --no-install-recommends amiberry xvfb imagemagick
+          sudo apt-get install -y --no-install-recommends amiberry xvfb netcat-openbsd
           amiberry --version
 
       - name: Prepare a bootable directory volume
@@ -39,7 +39,7 @@ jobs:
           cat > amiga-volume/S/Startup-Sequence <<'EOF'
           Echo "AMIGA CI: BOOTED"
           Echo "Amiberry emulator with the bundled AROS fallback ROM"
-          Echo "AMIGA-CI: PASS" >PRT:
+          Echo "AMIGA-CI: PASS" >PAR:
           Wait 10
           EOF
 
@@ -78,9 +78,26 @@ jobs:
             }
             trap cleanup EXIT
 
-            sleep 5
-            import -window root "$SCREENSHOT"
-            identify "$SCREENSHOT"
+            socket=""
+            for attempt in $(seq 1 20); do
+              socket="$(find /run/user -type s -name amiberry.sock -print -quit 2>/dev/null || true)"
+              if [ -n "$socket" ]; then
+                break
+              fi
+              sleep 1
+            done
+            if [ -z "$socket" ]; then
+              echo "Amiberry IPC socket was not created"
+              cat "$AMIBERRY_LOG"
+              exit 1
+            fi
+
+            timeout 5s bash -c 'printf "SCREENSHOT\\t%s\\n" "$1" | nc -U "$2"' _ "$SCREENSHOT" "$socket"
+            for attempt in $(seq 1 10); do
+              [ -s "$SCREENSHOT" ] && break
+              sleep 1
+            done
+            test -s "$SCREENSHOT"
 
             for attempt in $(seq 1 45); do
               if ! kill -0 "$emulator_pid" 2>/dev/null; then
@@ -102,6 +119,7 @@ jobs:
             fi
 
             cat "$PRINTER_LOG"
+            timeout 5s bash -c 'printf "QUIT\\n" | nc -U "$1"' _ "$socket" || true
           '
 
           grep -q "AMIGA-CI: PASS" "$PRINTER_LOG"
