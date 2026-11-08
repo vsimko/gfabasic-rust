@@ -146,7 +146,7 @@ jobs:
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-filename.png" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
 
             # Avoid guessed mouse coordinates: accept the focused filename gadget
-            # with Amiga raw Return (0x44). This should activate the requester's
+            # with Amiga raw Return (0x44). This should activate the requesters
             # default accept action without risking the adjacent Cancel gadget.
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/before-merge-click.png" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
             printf "SEND_KEY\\t68\\t1\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
