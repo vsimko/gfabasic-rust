@@ -96,9 +96,12 @@ Page-level excerpts reviewed:
 - XOR (p. 3-7): true when exactly one logical operand is true; bitwise use sets bits present in exactly one operand.
 - IMP (p. 3-8): implication is false only for true followed by false; operand order matters.
 - EQV (p. 3-9): equivalence is true when both logical values match; bitwise behavior is described as the complement of XOR.
-- String comparisons (pp. 3-13–3-16): comparison uses character codes in sequence and stops at the first differing character or when one string ends. The manual documents >, <, >=, <=, and <>, including alternate spellings for greater/less-or-equal operators.
+- Arithmetic and strings (p. 3-10): `+` and `-` are numeric arithmetic operators and can also be prefixes; `+` concatenates strings, while string subtraction is not supported.
+- Equality and assignment (pp. 3-11–3-12): `=` compares numeric or string expressions and returns logical true/false, but also assigns the right-hand expression to a variable. Numeric expressions must be assigned to numeric variables and strings to string variables. `==` is a separate approximate-equality comparison for numeric expressions; the manual says it compares 8.5 decimal places (28 mantissa bits).
+- Relational comparisons (pp. 3-13–3-16): `<`, `>`, `<=`, `>=` compare numeric or string expressions. String ordering follows character codes, stops at the first differing character, and otherwise ends when either string ends; the manual's examples establish `"AA">"A"` and `"A"+CHR$(0)>"A"`. It explicitly accepts both `x<=y` and `x=<y`, and both `x>=y` and `x=>y`. `<>` tests inequality.
+- Logical truth and bit operations (pp. 3-3–3-9): logical false is 0, every other numeric value is interpreted as true, and TRUE is -1. AND, OR, XOR, NOT, IMP and EQV also operate bit-by-bit on 32-bit integer values. NOT is unary; the others combine two operands. IMP is order-sensitive and false only for true IMP false. EQV sets matching bits and is described as the complement of XOR.
 
-The exact precedence and operator token spellings should be checked against page images before adding individual operator declarations. No 3.5 availability is inferred here.
+The page-image transcription of p. 3-2 preserves the printed comparison rows as scanned; detailed prose on pp. 3-13–3-16 clarifies the accepted alternate spellings. This inventory does not infer associativity or a full expression grammar from the precedence table. These are 3.0 base-manual statements only; their 3.5 availability remains unverified.
 
 ## Chapter 4 — numeric functions and strings
 
