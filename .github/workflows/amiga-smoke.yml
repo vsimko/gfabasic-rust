@@ -178,10 +178,10 @@ jobs:
               printf "SEND_KEY\\t%s\\t0\\n" "$1" | timeout 5s nc -U -N "$ipc_socket_path" >/dev/null
               sleep 0.15
             }
-            for keycode in 35 32 51 20 49 18 19 24 58 40 33 20; do
+            for keycode in 35 32 51 20 49 18 19 24 57 40 33 20; do
               send_key "$keycode"
             done
-            # Exact sequence above is "factzero.lst".
+            # Raw keycode 0x39 (57) is the Amiga period key.
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-smoke/merge-filename.png" | timeout 5s nc -U -N "$ipc_socket_path"
             # Confirm the requester selection.
             send_key 68
