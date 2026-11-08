@@ -36,11 +36,141 @@ jobs:
       - name: Prepare an AROS boot directory
         run: |
           archive="$RUNNER_TEMP/aros-amiga-m68k.zip"
+          index="$RUNNER_TEMP/aros-nightly.html"
           curl -fL --retry 3 \
-            -o "$archive" \
-            "https://sourceforge.net/projects/aros/files/nightly2/20261107/Binaries/AROS-20261107-amiga-m68k-boot-iso.zip/download"
+            -o "$index" \
+            "https://aros.sourceforge.io/cgi-bin/files?lang=en&type=nightly2"
 
-          iso_entry="$(unzip -Z1 "$archive" | grep -i '\.iso$' | head -n 1)"
+          download_url="$(python3 - "$index" <<'PY'
+          import re
+          import sys
+          from pathlib import Path
+
+          html = Path(sys.argv[1]).read_text(errors="replace")
+          rows = re.findall(r"<tr\\b.*?</tr>", html, flags=re.I | re.S)
+          for row in rows:
+              if "amiga-m68k-boot-iso" not in row.lower():
+                  continue
+              links = re.findall(r'href=["\\']([^"\\']+)["\\']', row, flags=re.I)
+              for link in links:
+                  if "sourceforge.net/projects/aros/files/" in link and "download" in link.lower():
+                      print(link)
+                      raise SystemExit(0)
+          raise SystemExit("Could not find the official amiga-m68k-boot-iso download link")
+          PY
+          )"
+          echo "Downloading AROS boot ISO from $download_url"
+          curl -fL --retry 3 -o "$archive" "$download_url"
+
+          iso_entry="$(unzip -Z1 "$archive" | grep -i '\\.iso          test -n "$iso_entry"
+          unzip -p "$archive" "$iso_entry" > "$RUNNER_TEMP/aros-amiga-m68k.iso"
+          7z x -y "$RUNNER_TEMP/aros-amiga-m68k.iso" -o"$GITHUB_WORKSPACE/amiga-volume" >/dev/null
+
+          rom_dir="$GITHUB_WORKSPACE/amiga-volume/boot/amiga"
+          test -s "$rom_dir/aros-rom.bin"
+          test -s "$rom_dir/aros-ext.bin"
+          mkdir -p "$HOME/Amiberry/ROMs"
+          cp "$rom_dir/aros-rom.bin" "$HOME/Amiberry/ROMs/"
+          cp "$rom_dir/aros-ext.bin" "$HOME/Amiberry/ROMs/"
+
+          startup="$GITHUB_WORKSPACE/amiga-volume/S/Startup-Sequence"
+          test -f "$startup"
+          cat > "$startup" <<'EOF'
+          Echo "AMIGA CI: BOOTED"
+          Echo "AROS 68k running in Amiberry"
+          Echo "AMIGA-CI: PASS" >DH0:ci-result.txt
+          Wait 20
+          EOF
+
+          mkdir -p artifacts/amiga-smoke
+          cp "$startup" artifacts/amiga-smoke/Startup-Sequence.txt
+
+          cat > "$RUNNER_TEMP/amiga-smoke.uae" <<EOF
+          use_gui=no
+          cpu_type=68000
+          chipset=ocs
+          chipmem_size=2
+          fastmem_size=0
+          bogomem_size=0
+          gfx_width=640
+          gfx_height=512
+          gfx_fullscreen=false
+          sound_output=0
+          filesystem2=rw,DH0:CI:$GITHUB_WORKSPACE/amiga-volume,0
+          EOF
+
+      - name: Boot Amiga and collect guest text and screenshot
+        run: |
+          set -euo pipefail
+          export AMIBERRY_LOG="$GITHUB_WORKSPACE/artifacts/amiga-smoke/amiberry.log"
+          export SCREENSHOT="$GITHUB_WORKSPACE/artifacts/amiga-smoke/amiga-screen.png"
+          export RESULT="$GITHUB_WORKSPACE/amiga-volume/ci-result.txt"
+          export SDL_AUDIODRIVER=dummy
+
+          xvfb-run -a -s "-screen 0 1024x768x24 +extension GLX" bash -euo pipefail -c '
+            amiberry -G -f "$RUNNER_TEMP/amiga-smoke.uae" --log >"$AMIBERRY_LOG" 2>&1 &
+            emulator_pid=$!
+            cleanup() {
+              kill "$emulator_pid" 2>/dev/null || true
+              wait "$emulator_pid" 2>/dev/null || true
+            }
+            trap cleanup EXIT
+
+            socket=""
+            for attempt in $(seq 1 30); do
+              socket="$(find /run/user -type s -name amiberry.sock -print -quit 2>/dev/null || true)"
+              if [ -n "$socket" ]; then
+                break
+              fi
+              sleep 1
+            done
+            if [ -z "$socket" ]; then
+              echo "Amiberry IPC socket was not created"
+              cat "$AMIBERRY_LOG"
+              exit 1
+            fi
+
+            for attempt in $(seq 1 45); do
+              if [ -s "$RESULT" ]; then
+                break
+              fi
+              if ! kill -0 "$emulator_pid" 2>/dev/null; then
+                echo "Amiberry exited before the guest wrote its result"
+                cat "$AMIBERRY_LOG"
+                exit 1
+              fi
+              sleep 1
+            done
+
+            if ! grep -q "AMIGA-CI: PASS" "$RESULT" 2>/dev/null; then
+              echo "Amiga guest did not write the expected result file"
+              cat "$AMIBERRY_LOG"
+              test -f "$RESULT" && cat "$RESULT" || true
+              exit 1
+            fi
+
+            printf "SCREENSHOT\\t%s\\n" "$SCREENSHOT" | timeout 5s nc -U "$socket" || true
+            for attempt in $(seq 1 10); do
+              [ -s "$SCREENSHOT" ] && break
+              sleep 1
+            done
+            test -s "$SCREENSHOT"
+            cat "$RESULT"
+            printf "QUIT\\n" | timeout 5s nc -U "$socket" || true
+          '
+
+          cp "$RESULT" artifacts/amiga-smoke/guest-output.txt
+          grep -q "AMIGA-CI: PASS" artifacts/amiga-smoke/guest-output.txt
+
+      - name: Upload Amiga output and screenshot
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: amiga-smoke-test
+          path: artifacts/amiga-smoke/
+          if-no-files-found: warn
+          retention-days: 7
+ | head -n 1)"
           test -n "$iso_entry"
           unzip -p "$archive" "$iso_entry" > "$RUNNER_TEMP/aros-amiga-m68k.iso"
           7z x -y "$RUNNER_TEMP/aros-amiga-m68k.iso" -o"$GITHUB_WORKSPACE/amiga-volume" >/dev/null
