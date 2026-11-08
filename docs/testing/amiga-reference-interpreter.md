@@ -29,15 +29,21 @@ public repository.
 3. Select **Run workflow** on the `main` branch (or the branch containing the workflow).
 4. Download the `gfa-basic-3.52-amiga` artifact from the successful run.
 
-## Emulator prerequisites and limits
+## Emulator environment
 
-The artifact contains only the `GFABasic` executable. It does not contain an
-Amiga Kickstart ROM, Workbench disk, or full disk image. A separately licensed
-and configured Amiga environment is required before the interpreter can be
-executed in FS-UAE or another Amiga emulator. This workflow only fetches,
-validates, and packages the executable; it does not claim that the interpreter
-has been run.
+**AROS m68k is the selected free operating-system candidate** for the Amiga
+reference environment. It is distinct from the x86-64 AROS port. See the
+[AROS m68k emulator plan](aros-m68k-emulator.md) for the selected upstream
+images, FS-UAE setup references, provenance requirements, and planned CI
+stages.
 
-Do not commit commercial interpreter binaries, ROMs, or disk images to this
-public repository. Keep any version-specific observations clearly labelled
-with the exact interpreter version and media provenance.
+The current workflow still only fetches, validates, and packages the GFA BASIC
+executable. It does not yet download AROS, boot FS-UAE, or execute the
+interpreter. A successful AROS boot and GFA BASIC launch smoke test remain
+required before runtime observations can be claimed.
+
+If AROS proves insufficient for a specific behavior, a legally held Amiga
+Kickstart/AmigaOS setup may be evaluated separately. Keep any such ROM files
+private; do not commit them or commercial disk images to this public
+repository. Keep all observations labelled with the exact interpreter version,
+OS image, emulator profile, and media provenance.
