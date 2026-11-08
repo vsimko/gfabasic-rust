@@ -92,7 +92,7 @@ jobs:
               exit 1
             fi
 
-            timeout 5s bash -c 'printf "SCREENSHOT\\t%s\\n" "$1" | nc -U "$2"' _ "$SCREENSHOT" "$socket"
+            printf "SCREENSHOT\\t%s\\n" "$SCREENSHOT" | timeout 5s nc -U "$socket"
             for attempt in $(seq 1 10); do
               [ -s "$SCREENSHOT" ] && break
               sleep 1
@@ -119,7 +119,7 @@ jobs:
             fi
 
             cat "$PRINTER_LOG"
-            timeout 5s bash -c 'printf "QUIT\\n" | nc -U "$1"' _ "$socket" || true
+            printf "QUIT\\n" | timeout 5s nc -U "$socket" || true
           '
 
           grep -q "AMIGA-CI: PASS" "$PRINTER_LOG"
