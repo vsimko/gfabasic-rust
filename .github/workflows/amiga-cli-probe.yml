@@ -126,7 +126,6 @@ jobs:
               printf "SEND_KEY\\t%s\\t0\\n" "$1" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}" >/dev/null
               sleep 0.15
             }
-            # The filename gadget initially contains "T:" with the caret at
             # The requester starts with T: and the caret after the volume prefix.
             # Enter only the basename; this avoids fragile path editing.
             for keycode in 35 32 51 20 49 18 19 24 57 40 33 20; do
@@ -154,7 +153,7 @@ jobs:
               printf "MISSING: %s\\n" "$diagnostic" > "artifacts/amiga-cli-probe/$diagnostic.missing"
             fi
           done
-          for screenshot in editor-before-merge.png merge-dialog.png merge-filename.png before-merge-shortcut.png after-merge.png; do
+          for screenshot in editor-before-merge.png merge-dialog.png merge-filename.png before-merge-click.png after-merge.png; do
             test -s "artifacts/amiga-cli-probe/$screenshot"
           done
           tesseract artifacts/amiga-cli-probe/after-merge.png stdout 2>/dev/null | tee artifacts/amiga-cli-probe/after-merge-ocr.txt
