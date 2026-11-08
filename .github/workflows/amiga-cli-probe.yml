@@ -156,12 +156,17 @@ jobs:
             sleep 3
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-dialog.png" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
 
-            # Amiberry SEND_MOUSE takes relative dx/dy. A single oversized
-            # event is clamped; split the measured target movement into bounded steps.
-            # From Run #115 pointer (~140,104) to row center (~335,238):
-            # three (380,70) events yield about (+195,+134) screen pixels.
+            # SEND_MOUSE uses relative dx/dy and the observed cursor scaling is
+            # about +61 screen px for dx=380 and +35 px for dy=70.
+            # Run #117 ended at (260,145), short of the factzero.LST row center
+            # (335,238). Two bounded (230,93) steps should cover the remaining
+            # (+75,+93); verify the pointer screenshot before clicking.
             for _ in 1 2 3; do
               printf "SEND_MOUSE\\t380\\t70\\t0\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
+              sleep 0.2
+            done
+            for _ in 1 2; do
+              printf "SEND_MOUSE\\t230\\t93\\t0\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
               sleep 0.2
             done
             sleep 0.5
