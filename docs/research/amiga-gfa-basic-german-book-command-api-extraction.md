@@ -475,3 +475,77 @@ The chapter distinguishes:
 - `SER:`: serial interface, described as using the same file-open/write/close approach as PAR:.
 
 The printer chapter includes extensive ESC/P-style control-sequence tables and examples for font, pitch, margins, tabs and character sets. Those strings are device-control payloads, not additional GFA BASIC keywords; they should be catalogued separately if printer emulation becomes an implementation target.
+
+
+## 13. Sound and speech output: Chapter 5.9–5.10
+
+This completes the remaining sound/speech material in Chapter 5 (printed pp. 139–144). It is source-derived from the German 1990 book and therefore belongs to the 3.0/V3.03 reference layer, not to the explicit 3.5 addendum.
+
+### 13.1 SOUND and WAVE (printed pp. 139–141)
+
+| Command | Syntax recorded in the book | Source-derived behavior |
+|---|---|---|
+| `SOUND` | `SOUND Frequenz, Dauer [,Lautstärke] [,Kanal]` | Plays a tone on one of four Amiga sound channels. Frequency range: 20–15,000 Hz. Duration is a 16-bit value described as the number of repetitions of the WAVE envelope. Volume range: 0–255, default 127, linear. Channel range: 0–3, default 0. |
+| `WAVE` | `WAVE Kanal, Hüllkurve()` | Sets the waveform/envelope for the selected channel. The envelope is a 256-element array; each element is in the range −128 to +127. The book recommends an integer-byte array for this data. |
+
+Additional details stated by the book:
+
+- Four independent channels are available, numbered 0–3.
+- Stereo routing is fixed in the described setup: channels 0 and 3 are sent left; channels 1 and 2 right.
+- If SOUND is used before a WAVE has been set, the interpreter generates a sine waveform for that channel.
+- The sine waveform can also be selected explicitly with `WAVE Kanal,SIN()`.
+- The note table gives note frequencies by octave; each octave doubles the frequency. Its examples identify A as 440 Hz in octave 3, 880 Hz in octave 4 and 1,760 Hz in octave 5.
+
+The OCR extraction identifies the array as a byte-integer array but its displayed type-prefix character is not sufficiently reliable to transcribe as normative syntax. Confirm the exact declaration spelling from the page image or runtime before using it in parser tests.
+
+### 13.2 SAY and voice parameters (printed pp. 142–143)
+
+| Command | Syntax recorded in the book | Source-derived behavior |
+|---|---|---|
+| `SAY` | `SAY Sprech$ [,Modi%()]` | Speaks the supplied phoneme-code string. The optional seven-element integer array controls voice parameters. |
+| `TRANSLATE$` | `Sprech$=TRANSLATE$("Text")` | Converts natural-language text into phoneme code suitable for SAY. The book warns that the translator applies English pronunciation rules; German text may therefore sound unintelligible. |
+
+The seven voice-control array elements are described as follows:
+
+| Element | Meaning | Range / choices | Default |
+|---:|---|---|---:|
+| `Modi%(0)` | Sampling frequency; mainly affects voice pitch | 5,000–28,000 | 22,000 |
+| `Modi%(1)` | Voice gender | 0 = male; 1 = female | 0 |
+| `Modi%(2)` | Speaking speed, words per minute | 40–400 | 150 |
+| `Modi%(3)` | Voice modulation | 0 = emphatic; 1 = monotone | 0 |
+| `Modi%(4)` | Voice frequency/pitch | 65–320 | 110 |
+| `Modi%(5)` | Voice volume | 0–64 | 64 |
+| `Modi%(6)` | Output channel selection | 0–11, mapping below | 10 |
+
+The channel-selection values for `Modi%(6)` are printed as:
+
+| Value | Selected output |
+|---:|---|
+| 0 | Channel 0 |
+| 1 | Channel 1 |
+| 2 | Channel 2 |
+| 3 | Channel 3 |
+| 4 | Channels 0 and 1 |
+| 5 | Channels 0 and 2 |
+| 6 | Channels 3 and 1 |
+| 7 | Channels 3 and 2 |
+| 8 | Channel 0 and/or 3 |
+| 9 | Channel 1 and/or 2 |
+| 10 | Any free channel pair (default) |
+| 11 | Any free channel |
+
+The book says SAY requires the Amiga Narrator device in the boot disk's DEVS directory. If it is unavailable, the system may request the boot disk. It also gives an example of changing the voice from male to female by setting the second element (`Modi%(1)`) to 1.
+
+### 13.3 Combining SAY and TRANSLATE$
+
+The book explicitly permits the direct form:
+
+```basic
+SAY TRANSLATE$("HALLO")
+```
+
+It also notes that text can be rewritten phonetically to improve German output because TRANSLATE$ uses English pronunciation rules. The examples are suggestions for experimentation, not general conversion rules.
+
+### 13.4 Evidence boundary
+
+These commands and parameter descriptions are documented in the German book's 3.0/V3.03-era reference. The book does not identify them as 3.5 additions. The source's exact byte-array type prefix remains OCR-uncertain; the Narrator device requirement and channel map are retained as printed rather than replaced with modern Amiga audio assumptions.
