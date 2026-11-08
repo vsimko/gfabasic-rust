@@ -43,6 +43,32 @@ jobs:
           file amiga-volume/GFABasic | tee artifacts/amiga-cli-probe/binary-info.txt
           strings -a amiga-volume/GFABasic | grep -i -E 'MERGE|SAVE|LIST|DOSCMD|GFA.BASIC' | head -80 > artifacts/amiga-cli-probe/binary-strings.txt || true
 
+      - name: Download original Amiga Kickstart ROM
+        env:
+          GFA_ASSETS_TOKEN: ${{ secrets.GFA_ASSETS_TOKEN }}
+        run: |
+          set -euo pipefail
+          mkdir -p private-kickstart artifacts/amiga-cli-probe
+          curl --fail --silent --show-error --location \
+            --header "Authorization: Bearer $GFA_ASSETS_TOKEN" \
+            --header "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/vsimko/gfabasic-private-assets/contents?ref=main" \
+            --output "$RUNNER_TEMP/private-assets-index.json"
+          jq -r '.[] | select(.type == "file") | [.name, (.size|tostring)] | @tsv' \
+            "$RUNNER_TEMP/private-assets-index.json" > artifacts/amiga-cli-probe/private-assets-index.txt
+          ROM_NAME="$(jq -r '[.[] | select(.type == "file" and (.size == 524288 or .size == 262144) and (.name|test("(?i)(kick|rom)"))) ] | sort_by((.name|ascii_downcase|contains("a1200"))|not) | .[0].name // empty' "$RUNNER_TEMP/private-assets-index.json")"
+          test -n "$ROM_NAME" || { echo "No raw 256/512 KiB Kickstart ROM found in private assets"; exit 1; }
+          curl --fail --silent --show-error --location \
+            --header "Authorization: Bearer $GFA_ASSETS_TOKEN" \
+            --header "Accept: application/vnd.github.raw" \
+            "https://api.github.com/repos/vsimko/gfabasic-private-assets/contents/$ROM_NAME?ref=main" \
+            --output "private-kickstart/kick.rom"
+          ROM_SIZE="$(wc -c < private-kickstart/kick.rom)"
+          test "$ROM_SIZE" -eq 524288 -o "$ROM_SIZE" -eq 262144
+          sha256sum private-kickstart/kick.rom > artifacts/amiga-cli-probe/kickstart-sha256.txt
+          printf 'Kickstart candidate: %s (%s bytes)\\n' "$ROM_NAME" "$ROM_SIZE" > artifacts/amiga-cli-probe/kickstart-info.txt
+          printf 'KICKSTART_ROM_PATH=%s/private-kickstart/kick.rom\\n' "$GITHUB_WORKSPACE" >> "$GITHUB_ENV"
+
       - name: Install emulator and OCR
         run: |
           sudo install -d -m 0755 /usr/share/keyrings
@@ -91,7 +117,8 @@ jobs:
           cat > "$RUNNER_TEMP/amiga-cli-probe.uae" <<EOF
           use_gui=no
           cpu_type=68020
-          chipset=ecs
+          chipset=aga
+          kickstart_rom_file=$KICKSTART_ROM_PATH
           chipmem_size=2
           fastmem_size=8
           bogomem_size=0
