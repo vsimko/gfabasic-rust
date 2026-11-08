@@ -44,13 +44,16 @@
     "source-scope": "amiga-3.5-addendum",
     "status": "book-documented",
     "sources": [
-      "AM-INTERPRETER-35"
+      "AM-INTERPRETER-35",
+      "AM-BOOK-DE-1990"
     ],
     "printed-pages": [
-      "Chapter 13, printed pp. 13-33–13-34 (same feature: combined update scan pp. 14-1–14-2)"
+      "Chapter 13, printed pp. 13-33–13-34 (same feature: combined update scan pp. 14-1–14-2)",
+      "Chapter 19.1, printed pp. 478–479 (explicit 3.5 additions)"
     ],
     "notes": [
       "The 3.5 addendum page images were checked. Both arguments are documented as integer expressions.",
+      "The companion German book explicitly places VARIAT among the 3.5 additions and states the domain condition n >= k; it defines permutations without repetition (printed p. 478).",
       "The existing prototype evaluates only a restricted literal subset; it has no stable registry handler mapping and is not a complete implementation."
     ]
   },
