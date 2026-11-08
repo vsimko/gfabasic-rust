@@ -26,17 +26,67 @@ The contents list variable types (p. 2-2), arrays (p. 2-4), DEFxxx (p. 2-5), LET
 
 Page-level excerpts reviewed so far:
 
+- Variable types (printed pp. 2-2–2-3): names begin with A–Z and may continue with letters, digits, dots or underscores. The table lists Boolean `!` (one byte; one bit per Boolean array element), Byte `|` (one byte), Word `&` (two bytes), Integer `%` (four bytes), Float `#` (eight bytes; no suffix normally required), and String `# Amiga GFA BASIC 3.0 base-manual inventory
+
+> **Version boundary:** This is a research inventory, not a 3.5 compatibility claim. The supplied *GFA BASIC 3.5 Interpreter* manual says that it was originally printed for version 3.0 and that version 3.5 additions are described in its addendum (Chapter 13 in this scan). The material below comes from base-manual chapters. Keep it outside the normative 3.5 registry until each item is reconciled against a 3.5-specific source or runtime observation.
+
+Primary source: AM-INTERPRETER-35, *GFA BASIC 3.5 Interpreter*, base-manual chapters 2–12. References below are printed page numbers, not PDF viewer pages.
+
+## Chapter inventory from the contents
+
+| Chapter | Subject | Initial printed-page range / topics | 3.5 status |
+|---|---|---|---|
+| 2 | Variables and memory handling | pp. 2-2–2-44: variable types, arrays, DEFxxx, LET, CLEAR/CLR, ERASE, DIM, OPTION BASE, INSERT/DELETE, ARRAY FILL, conversions, sorting, dates/time, memory access and allocation | Base-manual 3.0; not independently confirmed for 3.5 |
+| 3 | Operators | pp. 3-2–3-16: precedence, logical, arithmetic, string and comparison operators | Base-manual 3.0; not independently confirmed for 3.5 |
+| 4 | Numeric functions and strings | starts p. 4-2; arithmetic, trigonometry, conversion, numeric and string functions | Base-manual 3.0; not independently confirmed for 3.5 |
+| 5 | Input and output | Chapter listed in contents | Individual declarations/pages not yet extracted |
+| 6 | Disk handling and file organization | Chapter listed in contents | Individual declarations/pages not yet extracted |
+| 7 | Program handling | Chapter listed in contents | Individual declarations/pages not yet extracted |
+| 8 | Graphics | Chapter listed in contents | Individual declarations/pages not yet extracted |
+| 9 | Event, menu, screen and window handling | Chapter listed in contents | Individual declarations/pages not yet extracted |
+| 10 | Advanced programming | Chapter listed in contents | Individual declarations/pages not yet extracted |
+| 11 | System routines | Chapter listed in contents | Individual declarations/pages not yet extracted |
+| 12 | Appendices | Chapter listed in contents | Tables/index still to be extracted |
+
+## Chapter 2 — variables and memory
+
+The contents list variable types (p. 2-2), arrays (p. 2-4), DEFxxx (p. 2-5), LET (p. 2-6), CLEAR/CLR (p. 2-7), ERASE (p. 2-8), DIM (p. 2-9), OPTION BASE (p. 2-10), INSERT/DELETE (p. 2-11), ARRAY FILL (p. 2-12), conversion and string functions (pp. 2-13–2-18), SWAP (p. 2-20), QSORT/SSORT (p. 2-22), constants (p. 2-25), dates/time (pp. 2-26–2-28), FRE/TYPE/DUMP/VARPTR/ARRPTR, POKE/PEEK, ABSOLUTE, VOID, MALLOC/MFREE, BMOVE and RESERVE (pp. 2-29–2-44).
+
+ (length-dependent). Boolean values are 0/-1; assigning any nonzero value yields -1. Byte values are 0–255; Word values are -32768–32767; Integer values are -2147483648–2147483647. Strings have a maximum length of 32767 characters and use a six-byte descriptor containing address and length. These are explicitly 3.0 base-manual facts, not yet a 3.5 compatibility claim.
+- Default typing (printed p. 2-5): DEFBIT, DEFBYT, DEFWRD, DEFINT, DEFFLT and DEFSTR map name-prefix patterns to Boolean, Byte, Word, Integer, Float and String types. The manual says an explicit type suffix takes priority over a global DEFxxx declaration, and the declaration remains valid until another declaration is made. It also says the editor replaces DEFSNG/DEFDBL with DEFFLT.
+- Assignment (printed p. 2-6): LET assigns an arithmetic or string expression to a variable; source and destination must both be numeric or both be strings. LET is normally unnecessary. The example `LET print=3` illustrates that a command spelling may be used as a variable name.
 - Arrays (printed pp. 2-3–2-4): arrays may use any variable type and are created with DIM; DIM? returns the number of elements. The manual describes a six-byte array descriptor and in-memory layout. These are implementation-relevant representation details, but remain 3.0 source facts.
 - DEFxxx (p. 2-5): DEFBIT, DEFBYT, DEFINT, DEFWRD, DEFFLT and DEFSTR define default variable types based on variable-name prefixes.
 - LET (p. 2-6): assigns an arithmetic or string expression to a matching numeric or string variable; the manual says LET is normally optional.
 - CLEAR/CLR (p. 2-7): CLEAR erases all variables and fields and has documented execution restrictions; CLR clears listed scalar variables and cannot erase arrays.
 - ERASE (p. 2-8): erases complete arrays; erased arrays must be dimensioned again before use.
 - DIM/DIM? (p. 2-9): dimensions numeric/string arrays; the manual documents multidimensional arrays and a 65,535-element limit on the last dimension.
-- OPTION BASE (p. 2-10): controls whether array indexing starts at zero or one. Its interaction with matrix commands is separately documented in the 3.5 addendum and must not be conflated with the base-manual description.
+- OPTION BASE (p. 2-10): controls whether array indexing starts at zero or one. With no OPTION BASE, indices start at zero; OPTION BASE 0 permits the null element, while OPTION BASE 1 starts indices at one. The example demonstrates that switching to BASE 1 makes a subsequent access to index zero fail with a field-index error. Its interaction with matrix commands is separately documented in the 3.5 addendum and must not be conflated with the base-manual description.
+- Array descriptors and layout (pp. 2-3–2-4): every variable type can form an array. DIM creates it and DIM? returns its element count. The six-byte descriptor stores a four-byte array address and a two-byte dimension count; the array body stores four bytes per dimension followed by elements. String-array elements contain string descriptors. The source example `DIM a%(2,3)` explains the dimension metadata and element ordering; this is a source-level layout description, not a portable host-memory ABI.
+- DIM bounds (p. 2-9): DIM accepts any variable type and multiple dimensions. The manual says the number of dimensions is practically unlimited, but the last dimension may contain at most 65,535 elements. Only elements of the array's declared type can exist in that array. The example reports 11 elements for `DIM x(10)` and 12 for `DIM y%(2,3)`.
+- INSERT/DELETE (p. 2-11): INSERT writes a value at an index and shifts later elements up, discarding the final element. DELETE removes the indexed element and shifts later elements down; the final element becomes zero, or an empty string for string arrays.
+- ARRAYFILL (p. 2-12): fills every element of a numeric array with one numeric expression. The assigned value must fit the element type; the source specifically warns that a byte array cannot receive integer-sized values outside its allowed range.
+- ERASE (p. 2-8): releases a complete array; an erased array must be dimensioned again before use. CLR cannot erase arrays, while CLEAR erases all variables and fields and has restrictions against execution inside a FOR/NEXT loop or subroutine.
 
 ## Chapter 3 — operators
 
-The operator hierarchy is documented on printed p. 3-2. The manual orders parentheses, string operations, prefixes/power, multiplication/division, integer division/modulo, addition/subtraction, comparisons, logical operations and NOT. The scan's OCR corrupts some operator glyphs; do not use OCR text alone to normalize the complete precedence table.
+The operator hierarchy is documented on printed p. 3-2. The page image (PDF page 80) has now been checked visually. It lists the following precedence levels, from highest to lowest:
+
+1. Parentheses: `( )`.
+2. String addition: `+`.
+3. String comparisons: the printed token row reads `= <> => <= <>`. The repeated `<>` and `=>` spelling are preserved as printed; they are not silently normalized.
+4. Prefixes: `+ -`.
+5. Power: `^`.
+6. Multiplication and division: `* /`.
+7. Whole-number division and modulo: `DIV MOD`.
+8. Addition and subtraction: `+ -`.
+9. Numeric comparison operations: the printed row reads `= == < <= >= > <>`.
+10. Logical operations: `AND OR XOR IMP EQV`.
+11. Negation: `NOT`.
+
+The manual states that operators higher in this list are processed first and that parentheses can force lower-precedence operations to be evaluated first. Its examples are `2+4*3`, `(2+4)*3`, `2+(4*3)`, and `3*2^2`, with displayed results 14, 18, 14, and 12 respectively. It additionally says that the rule “points before line calculations” is recognized; the meaning of that phrase is not expanded here.
+
+This is a transcription of the Amiga 3.0 base-manual page, not a normative 3.5 grammar. In particular, the two comparison-token rows should remain source-faithful until their intended spellings and parser behavior are confirmed independently for 3.5. Do not collapse the string and numeric comparison rows into one operator set.
 
 Page-level excerpts reviewed:
 
@@ -46,9 +96,12 @@ Page-level excerpts reviewed:
 - XOR (p. 3-7): true when exactly one logical operand is true; bitwise use sets bits present in exactly one operand.
 - IMP (p. 3-8): implication is false only for true followed by false; operand order matters.
 - EQV (p. 3-9): equivalence is true when both logical values match; bitwise behavior is described as the complement of XOR.
-- String comparisons (pp. 3-13–3-16): comparison uses character codes in sequence and stops at the first differing character or when one string ends. The manual documents >, <, >=, <=, and <>, including alternate spellings for greater/less-or-equal operators.
+- Arithmetic and strings (p. 3-10): `+` and `-` are numeric arithmetic operators and can also be prefixes; `+` concatenates strings, while string subtraction is not supported.
+- Equality and assignment (pp. 3-11–3-12): `=` compares numeric or string expressions and returns logical true/false, but also assigns the right-hand expression to a variable. Numeric expressions must be assigned to numeric variables and strings to string variables. `==` is a separate approximate-equality comparison for numeric expressions; the manual says it compares 8.5 decimal places (28 mantissa bits).
+- Relational comparisons (pp. 3-13–3-16): `<`, `>`, `<=`, `>=` compare numeric or string expressions. String ordering follows character codes, stops at the first differing character, and otherwise ends when either string ends; the manual's examples establish `"AA">"A"` and `"A"+CHR$(0)>"A"`. It explicitly accepts both `x<=y` and `x=<y`, and both `x>=y` and `x=>y`. `<>` tests inequality.
+- Logical truth and bit operations (pp. 3-3–3-9): logical false is 0, every other numeric value is interpreted as true, and TRUE is -1. AND, OR, XOR, NOT, IMP and EQV also operate bit-by-bit on 32-bit integer values. NOT is unary; the others combine two operands. IMP is order-sensitive and false only for true IMP false. EQV sets matching bits and is described as the complement of XOR.
 
-The exact precedence and operator token spellings should be checked against page images before adding individual operator declarations. No 3.5 availability is inferred here.
+The page-image transcription of p. 3-2 preserves the printed comparison rows as scanned; detailed prose on pp. 3-13–3-16 clarifies the accepted alternate spellings. This inventory does not infer associativity or a full expression grammar from the precedence table. These are 3.0 base-manual statements only; their 3.5 availability remains unverified.
 
 ## Chapter 4 — numeric functions and strings
 
