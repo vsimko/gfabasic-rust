@@ -40,7 +40,6 @@ jobs:
           Echo "AMIGA CI: BOOTED"
           Echo "Amiberry AROS fallback ROM"
           Echo "AMIGA-CI: PASS" >DH0:ci-result.txt
-          Wait 20
           EOF
 
           cp amiga-volume/S/Startup-Sequence artifacts/amiga-smoke/Startup-Sequence.txt
