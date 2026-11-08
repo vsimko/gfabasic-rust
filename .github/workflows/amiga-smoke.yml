@@ -66,6 +66,8 @@ jobs:
           export PRINTER_LOG="$GITHUB_WORKSPACE/artifacts/amiga-smoke/printer.txt"
           export AMIBERRY_LOG="$GITHUB_WORKSPACE/artifacts/amiga-smoke/amiberry.log"
           export SCREENSHOT="$GITHUB_WORKSPACE/artifacts/amiga-smoke/amiga-screen.png"
+          export SDL_AUDIODRIVER=dummy
+          touch "$PRINTER_LOG"
 
           xvfb-run -a -s "-screen 0 1024x768x24 +extension GLX" bash -euo pipefail -c '
             amiberry -G -f "$RUNNER_TEMP/amiga-smoke.uae" -p "$PRINTER_LOG" --log >"$AMIBERRY_LOG" 2>&1 &
@@ -75,6 +77,11 @@ jobs:
               wait "$emulator_pid" 2>/dev/null || true
             }
             trap cleanup EXIT
+
+            sleep 5
+            xwd -root -silent -out "$RUNNER_TEMP/amiga-screen.xwd"
+            convert "$RUNNER_TEMP/amiga-screen.xwd" "$SCREENSHOT"
+            identify "$SCREENSHOT"
 
             for attempt in $(seq 1 45); do
               if ! kill -0 "$emulator_pid" 2>/dev/null; then
@@ -95,9 +102,6 @@ jobs:
               exit 1
             fi
 
-            xwd -root -silent -out "$RUNNER_TEMP/amiga-screen.xwd"
-            convert "$RUNNER_TEMP/amiga-screen.xwd" "$SCREENSHOT"
-            identify "$SCREENSHOT"
             cat "$PRINTER_LOG"
           '
 
