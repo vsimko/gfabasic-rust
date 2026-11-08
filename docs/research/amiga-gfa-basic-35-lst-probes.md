@@ -49,3 +49,4 @@ Keep manual expectation, editor acceptance, and runtime observation as separate 
 - Do not use a 3.52 result as evidence for the normative 3.5 target. Record it separately if used for exploratory testing.
 - Do not infer invalid syntax from a failed load until environment, version, and editor diagnostics are recorded.
 - Do not make `.GFA` token decoding a prerequisite for this work.
+
