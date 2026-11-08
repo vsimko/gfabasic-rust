@@ -753,3 +753,12 @@ The BASIC command index is expanded into grouped statement/declaration candidate
 ## Additional declaration-level extraction (Chapters 5, 7, 9 and 10)
 
 Further page-level notes are linked here: [Chapter 5 output/device operations](amiga-gfa-basic-3.0-output-device-details.md), [Chapter 7 procedures and error flow](amiga-gfa-basic-3.0-procedure-error-details.md), [Chapter 9 menu/event operations](amiga-gfa-basic-3.0-menu-event-details.md), [Chapter 9 screen/window operations](amiga-gfa-basic-3.0-screen-window-details.md), and [Chapter 10 BOB/OBJECT operations](amiga-gfa-basic-3.0-bob-object-details.md). These remain 3.0 source candidates; none is promoted to 3.5 merely because it is in the combined manual.
+
+## Chapter 7 — error handling: page-level notes
+
+The following details are extracted from the 3.0 base-manual source and are **not** a declaration that the complete syntax is confirmed for interpreter 3.5.
+
+- **ON ERROR / ON ERROR GOSUB (printed p. 7-29):** bare `ON ERROR` restores normal error handling, which produces the normal error message and program break. `ON ERROR GOSUB proc` diverts execution to the named procedure when an error occurs. The manual says the handler must contain `ON ERROR GOSUB proc` again if it is to handle multiple successive errors.
+- **RESUME (printed p. 7-29):** the source lists `RESUME [NEXT]` and `RESUME [label]`. In an error handler, `RESUME NEXT` continues with the command following the failing command; `RESUME label` continues at the named label. With no NEXT or label, RESUME retries the command that caused the error. For a FATAL error, the manual permits only `RESUME label`; it disallows bare RESUME and `RESUME NEXT`.
+- **3.5-specific cross-reference (printed p. 13-36):** the 3.5 GURU section explicitly says that a GURU Meditation can transfer to the `ONERROR GOSUB` routine or generate error #109. It further says that in compiled 3.5 programs, `RESUME NEXT` and `RESUME LABEL` cannot be executed after an `ONERROR GOSUB` call caused by a GURU. This confirms that these spellings participate in a 3.5 GURU/error-handler interaction, but it does not independently restate the full Chapter 7 syntax or all interpreter-mode behavior.
+- **Version status:** retain ON ERROR/ONERROR GOSUB and RESUME as unresolved 3.5 candidates until their base-manual grammar and semantics are reconciled against a 3.5-specific source or an authorized 3.5 runtime observation. Do not promote the full 3.0 descriptions to the normative 3.5 registry from the GURU cross-reference alone.
