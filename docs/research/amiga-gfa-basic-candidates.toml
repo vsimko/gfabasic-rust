@@ -9,7 +9,7 @@ kind = "topic-family"
 source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["2-2–2-44"]
-status = "unresolved"
+status = "documented-in-3.0-only"
 notes = "Chapter 2 contains multiple declarations; this family row is a tracking boundary, not a claim that every listed feature is absent from 3.5."
 
 [[candidates]]
@@ -19,7 +19,7 @@ kind = "topic-family"
 source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["3-2–3-16"]
-status = "unresolved"
+status = "documented-in-3.0-only"
 notes = "OCR-sensitive operator glyphs and precedence spellings require page-image and 3.5 reconciliation."
 
 [[candidates]]
@@ -29,7 +29,7 @@ kind = "topic-family"
 source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["4-2–4-36"]
-status = "unresolved"
+status = "documented-in-3.0-only"
 notes = "The base inventory extracts selected semantics only; the full Chapter 4 family is not individually verified for 3.5."
 
 [[candidates]]
@@ -39,7 +39,7 @@ kind = "topic-family"
 source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["5-2–5-22"]
-status = "unresolved"
+status = "documented-in-3.0-only"
 notes = "Selected command forms have page-backed notes; complete declaration-by-declaration 3.5 reconciliation remains outstanding."
 
 [[candidates]]
@@ -49,7 +49,7 @@ kind = "topic-family"
 source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["6-2–6-21"]
-status = "unresolved"
+status = "documented-in-3.0-only"
 notes = "File-channel I/O is partially extracted; other disk and random-access operations need separate 3.5 checks."
 
 [[candidates]]
@@ -59,7 +59,7 @@ kind = "topic-family"
 source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["7-2–7-55"]
-status = "unresolved"
+status = "documented-in-3.0-only"
 notes = "Selected conditionals, loops and branching forms are extracted; procedures, events, errors and editor commands remain to be reconciled."
 
 [[candidates]]
@@ -69,7 +69,7 @@ kind = "topic-family"
 source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["8-2–8-24"]
-status = "unresolved"
+status = "documented-in-3.0-only"
 notes = "Selected drawing and fill operations have page-backed notes; full graphics surface is not individually reconciled."
 
 [[candidates]]
@@ -79,7 +79,7 @@ kind = "topic-family"
 source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["9-2–9-37"]
-status = "unresolved"
+status = "documented-in-3.0-only"
 notes = "FILESELECT and selected screen/window topics are inventoried; event/menu/window behavior needs systematic 3.5 verification."
 
 [[candidates]]
@@ -89,7 +89,7 @@ kind = "topic-family"
 source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["10-2–10-14"]
-status = "unresolved"
+status = "documented-in-3.0-only"
 notes = "SPRITE, STICK and STRIG have selected notes; CLI, EXEC, SAY, FD-files and object commands need reconciliation."
 
 [[candidates]]
@@ -99,7 +99,7 @@ kind = "topic-family"
 source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["11-2–11-92"]
-status = "unresolved"
+status = "documented-in-3.0-only"
 notes = "Seven library families and many routines are inventoried; exact wrapper contracts, OCR details and 3.5 availability remain unverified."
 
 [[candidates]]
@@ -109,7 +109,7 @@ kind = "reference-material"
 source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["12-2–12-19"]
-status = "unresolved"
+status = "documented-in-3.0-only"
 notes = "Reference material is not a declaration candidate by itself; index entries must be checked against their cited chapter pages."
 
 [[candidates]]
@@ -252,7 +252,7 @@ kind = "function"
 source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["5-2"]
-status = "unresolved"
+status = "documented-in-3.0-only"
 notes = "Reads keyboard input; special keys use a CSI sequence. 3.0 source fact only; 3.5 availability is unresolved."
 
 [[candidates]]
@@ -262,7 +262,7 @@ kind = "statement"
 source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["5-3–5-4"]
-status = "unresolved"
+status = "documented-in-3.0-only"
 notes = "Reads numeric/string variables with optional prompt; window behavior and numeric re-entry are described. 3.5 availability is unresolved."
 
 [[candidates]]
@@ -272,7 +272,7 @@ kind = "statement"
 source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["5-5"]
-status = "unresolved"
+status = "documented-in-3.0-only"
 notes = "Reads string input while allowing commas in the entered text. 3.5 availability is unresolved."
 
 [[candidates]]
@@ -282,7 +282,7 @@ kind = "statement-family"
 source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["5-6"]
-status = "unresolved"
+status = "documented-in-3.0-only"
 notes = "Edits a string field of width 1–255; FORM INPUT AS starts from the current value. 3.5 availability is unresolved."
 
 [[candidates]]
@@ -292,7 +292,7 @@ kind = "statement-family"
 source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["5-7–5-8"]
-status = "unresolved"
+status = "documented-in-3.0-only"
 notes = "Screen output, cursor positioning and comma-separated WRITE format are distinguished. 3.5 availability is unresolved."
 
 [[candidates]]
@@ -302,7 +302,7 @@ kind = "statement"
 source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["5-9"]
-status = "unresolved"
+status = "documented-in-3.0-only"
 notes = "Formatted screen output; exact placeholder grammar remains unreviewed. 3.5 availability is unresolved."
 
 [[candidates]]
@@ -312,7 +312,7 @@ kind = "function-statement"
 source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["6-13"]
-status = "unresolved"
+status = "documented-in-3.0-only"
 notes = "INP reads one byte and OUT writes byte values through an opened channel; documented channel range is 0–99. 3.5 availability is unresolved."
 
 [[candidates]]
@@ -322,7 +322,7 @@ kind = "function"
 source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["6-14"]
-status = "unresolved"
+status = "documented-in-3.0-only"
 notes = "Reads a specified character count from keyboard or an optional file channel. 3.5 availability is unresolved."
 
 [[candidates]]
@@ -332,7 +332,7 @@ kind = "statement-family"
 source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["6-15"]
-status = "unresolved"
+status = "documented-in-3.0-only"
 notes = "Reads channel data as values or lines; keep channel forms distinct from screen input. 3.5 availability is unresolved."
 
 [[candidates]]
@@ -342,7 +342,7 @@ kind = "statement-family"
 source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["6-16"]
-status = "unresolved"
+status = "documented-in-3.0-only"
 notes = "Writes expressions through a data channel; PRINT # supports USING but not PRINT AT. 3.5 availability is unresolved."
 
 [[candidates]]
@@ -352,7 +352,7 @@ kind = "statement-family"
 source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["7-4–7-5"]
-status = "unresolved"
+status = "documented-in-3.0-only"
 notes = "Conditional execution; THEN is optional and any nonzero numeric expression is logically true. 3.5 availability is unresolved."
 
 [[candidates]]
@@ -362,7 +362,7 @@ kind = "statement-family"
 source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["7-6–7-7"]
-status = "unresolved"
+status = "documented-in-3.0-only"
 notes = "Chained conditional branches; editor spelling varies and needs lexer/editor confirmation. 3.5 availability is unresolved."
 
 [[candidates]]
@@ -372,7 +372,7 @@ kind = "statement"
 source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["7-8"]
-status = "unresolved"
+status = "documented-in-3.0-only"
 notes = "Selects a procedure by numeric index; out-of-range selection calls none. 3.5 availability is unresolved."
 
 [[candidates]]
@@ -382,7 +382,7 @@ kind = "statement-family"
 source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["7-9–7-10"]
-status = "unresolved"
+status = "documented-in-3.0-only"
 notes = "Numeric or short-string selector; CASE supports values, ranges and lists. 3.5 availability is unresolved."
 
 [[candidates]]
@@ -392,7 +392,7 @@ kind = "statement-family"
 source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["7-13–7-14"]
-status = "unresolved"
+status = "documented-in-3.0-only"
 notes = "Loop forms include DOWNTO and editor replacement ENDFOR; OCR-sensitive termination details remain open. 3.5 availability is unresolved."
 
 [[candidates]]
@@ -402,7 +402,7 @@ kind = "statement-family"
 source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["7-15"]
-status = "unresolved"
+status = "documented-in-3.0-only"
 notes = "Post-tested loop; body executes at least once. 3.5 availability is unresolved."
 
 [[candidates]]
@@ -412,7 +412,7 @@ kind = "statement-family"
 source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["7-16"]
-status = "unresolved"
+status = "documented-in-3.0-only"
 notes = "Pre-tested loop; condition is checked before each body execution. 3.5 availability is unresolved."
 
 [[candidates]]
@@ -422,7 +422,7 @@ kind = "statement-family"
 source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["7-17–7-19"]
-status = "unresolved"
+status = "documented-in-3.0-only"
 notes = "Beginning- and end-tested WHILE/UNTIL forms are described; exact grammar remains page-sensitive. 3.5 availability is unresolved."
 
 [[candidates]]
@@ -432,7 +432,7 @@ kind = "statement"
 source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["7-20"]
-status = "unresolved"
+status = "documented-in-3.0-only"
 notes = "Exits the active loop when its Boolean condition is satisfied; allowed within IF and SELECT structures per the source. 3.5 availability is unresolved."
 
 [[candidates]]
@@ -442,7 +442,7 @@ kind = "statement-family"
 source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["8-2"]
-status = "unresolved"
+status = "documented-in-3.0-only"
 notes = "Sets palette RGB components and selects foreground/background/fill-outline colors. 3.5 availability is unresolved."
 
 [[candidates]]
@@ -452,7 +452,7 @@ kind = "statement"
 source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["8-3–8-4"]
-status = "unresolved"
+status = "documented-in-3.0-only"
 notes = "Configures fill color/style/pattern for filled graphics operations; pattern-string limits are described. 3.5 availability is unresolved."
 
 [[candidates]]
@@ -462,7 +462,7 @@ kind = "statement"
 source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["8-9"]
-status = "unresolved"
+status = "documented-in-3.0-only"
 notes = "Restricts graphics output to a rectangle; source explicitly excludes GET and PUT. 3.5 availability is unresolved."
 
 [[candidates]]
@@ -472,7 +472,7 @@ kind = "statement-family"
 source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["8-10–8-14"]
-status = "unresolved"
+status = "documented-in-3.0-only"
 notes = "Point, line and path drawing; DRAW inquiry forms and OCR-sensitive command strings need exact grammar review. 3.5 availability is unresolved."
 
 [[candidates]]
@@ -482,7 +482,7 @@ kind = "statement-family"
 source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["8-15"]
-status = "unresolved"
+status = "documented-in-3.0-only"
 notes = "Draws outlined or filled rectangles. 3.5 availability is unresolved."
 
 [[candidates]]
@@ -492,7 +492,7 @@ kind = "statement-family"
 source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["8-16"]
-status = "unresolved"
+status = "documented-in-3.0-only"
 notes = "Draws outlined or filled circles and ellipses. 3.5 availability is unresolved."
 
 [[candidates]]
@@ -502,7 +502,7 @@ kind = "statement-family"
 source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["8-17"]
-status = "unresolved"
+status = "documented-in-3.0-only"
 notes = "Uses coordinate arrays; polygon endpoints are connected automatically. 3.5 availability is unresolved."
 
 [[candidates]]
@@ -512,7 +512,7 @@ kind = "function"
 source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["8-18"]
-status = "unresolved"
+status = "documented-in-3.0-only"
 notes = "Returns the color value at a screen coordinate. 3.5 availability is unresolved."
 
 [[candidates]]
@@ -522,7 +522,7 @@ kind = "function-procedure"
 source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["9-37–9-38"]
-status = "unresolved"
+status = "documented-in-3.0-only"
 notes = "Displays a file selector and returns the selected name or an empty string on Cancel. 3.5 availability is unresolved."
 
 [[candidates]]
@@ -532,7 +532,7 @@ kind = "statement-family"
 source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["10-5–10-6"]
-status = "unresolved"
+status = "documented-in-3.0-only"
 notes = "Defines, frees, moves, enables and disables Amiga hardware sprites; source describes eight sprite numbers and shared registers. 3.5 availability is unresolved."
 
 [[candidates]]
@@ -542,7 +542,7 @@ kind = "function-family"
 source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["10-7"]
-status = "unresolved"
+status = "documented-in-3.0-only"
 notes = "Queries joystick position and fire-button state; port 0 interaction with mouse/Intuition is noted. 3.5 availability is unresolved."
 
 
@@ -556,7 +556,7 @@ kind = "statement-family"
 source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["7-29"]
-status = "unresolved"
+status = "documented-in-3.0-only"
 notes = "The 3.0 manual documents reset-to-default handling and procedure-based error handling. The 3.5 addendum confirms that GURU Meditation may transfer to ONERROR GOSUB, but does not restate the complete syntax or general 3.5 availability."
 
 [[candidates]]
@@ -566,5 +566,5 @@ kind = "statement-family"
 source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["7-29"]
-status = "unresolved"
+status = "documented-in-3.0-only"
 notes = "The 3.0 manual documents retry, continue-next and continue-at-label behavior, plus a FATAL-error restriction. The 3.5 addendum specifically disallows RESUME NEXT and RESUME LABEL after a GURU-triggered ONERROR GOSUB in compiled 3.5 programs; broader 3.5 behavior remains unverified."
