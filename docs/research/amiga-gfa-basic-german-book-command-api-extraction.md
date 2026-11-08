@@ -1642,3 +1642,57 @@ OBJECT.HIT uses two bit masks: the first identifies the object's collision parti
 ### 19.6 Evidence boundary
 
 The sprite binary format, PUT raster modes, BOB bitplane masks and collision masks are low-level Amiga graphics details. They are recorded as the book describes them; do not infer undocumented parameter defaults or modern AmigaOS behavior. The exact sprite syntax, PUT mask semantics, OBJECT.AX/AY units and OBJECT.VY spelling require page-image/runtime verification.
+
+
+## 20. Data conversion and number-format functions: Chapter 10 (printed pp. 279–290)
+
+This section records the conversion functions and number-system material described by the German book. It is 3.0/V3.03-era source evidence.
+
+### 20.1 Character and numeric conversions
+
+| Function | Syntax | Description in the book |
+|---|---|---|
+| `ASC` | `ASC("Zeichen")` | Returns the ASCII value of the first character. An empty string returns 0. |
+| `CHR$` | `CHR$(Wert)` | Returns the character corresponding to the value; the book describes the effective character value as Wert MOD 256. |
+| `CFLOAT` | `CFLOAT(Wert)` | Converts an integer value to a real value; inverse of CINT. |
+| `CINT` | `CINT(Wert)` | Converts a real value to an integer after mathematical rounding; the book contrasts this with INT. |
+| `VAL` | `VAL(Var$)` | Converts the initial numeric portion of a string to a decimal numeric value. Parsing stops at the first non-convertible character; an empty string or a non-numeric first character yields zero. |
+| `VAL?` | `VAL?(Var$)` | Returns the number of leading characters that can be converted as numeric notation, stopping at the first invalid character. |
+
+The book says VAL recognizes decimal, hexadecimal, binary and octal prefixes. It shows hexadecimal forms using `$...`, `&...` and `&H...`, binary using `&X...`, and octal using `&O...`. It also says some standard hexadecimal prefixes are converted by the interpreter into GFA's `&H` form. The exact accepted prefix set and normalization behavior should be verified against the page image/runtime.
+
+### 20.2 Binary, hexadecimal, octal and decimal string formatting
+
+| Function | Syntax | Description |
+|---|---|---|
+| `BIN$` | `BIN$(Expr[,Stellen])` | Converts a numeric expression to a binary string. Optional width is 1–32 positions. |
+| `HEX$` | `HEX$(Expr[,Stellen])` | Converts a numeric expression to a hexadecimal string. Optional width is 1–8 positions. |
+| `OCT$` | `OCT$(Expr[,Stellen])` | Converts a numeric expression to an octal string. Optional width is 1–11 positions. |
+| `STR$` | `STR$(Wert[,Stellen[,Real]])` | Converts a numeric value to a decimal text string. Optional width controls the output field; Real specifies the number of decimal places to round to. |
+
+The book states that BIN$/HEX$/OCT$ accept numeric variables, constants, expressions or functions. It gives `&0` as an octal literal prefix. STR$ may include leading spaces to meet the requested field width; its optional Real argument controls rounding of decimal places.
+
+### 20.3 Binary string encodings for numeric values
+
+The book documents binary encoders and inverse decoders:
+
+| Encoder | Input / output | Decoder | Input / output |
+|---|---|---|---|
+| `MKI$(Wert)` | 16-bit integer → 2-character string | `CVI(Var$)` | 2-character string → 16-bit integer |
+| `MKL$(Wert)` | 32-bit integer → 4-character string | `CVL(Var$)` | 4-character string → 32-bit integer |
+| `MKS$(Wert)` | Amiga GFA real → 4-character string | `CVS(Var$)` | 4-character string → Amiga GFA real |
+| `MKD$(Wert)` | MBASIC or GFA real → 8-character string | `CVD(Var$)` | 8-character string → real value |
+
+The OCR rendering of the last decoder is damaged (it appears as `CW`/a truncated form in the extracted text). The matching encoder MKD$ and the stated 8-character real format indicate the intended pair is CVD, but confirm the printed page before treating that spelling as verified.
+
+The book emphasizes that these functions are useful for binary storage and data exchange between languages/interpreters whose numeric representations differ. They are also used in the book's own examples to pack integer coordinates into strings.
+
+### 20.4 Number systems
+
+The book introduces decimal (base 10), hexadecimal (base 16), binary (base 2) and octal (base 8). It explains positional value using powers of the base and notes that one hexadecimal digit represents four binary bits: two hex digits per byte, four per 16-bit word and eight per 32-bit longword. Hex digits 10–15 are represented by A–F.
+
+This section is explanatory material rather than additional interpreter commands. Its examples demonstrate manual conversion by repeated division and remainders; they should not be treated as a separate built-in API.
+
+### 20.5 Evidence boundary
+
+The conversion-function signatures are mostly legible, but the CVD spelling and accepted VAL prefixes need page-image/runtime verification. The book does not fully specify malformed-input handling, numeric overflow, exponent parsing edge cases or locale-dependent decimal separators.
