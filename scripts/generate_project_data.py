@@ -154,6 +154,39 @@ def load_model(path: Path, root: Path) -> dict:
     return model
 
 
+def load_addendum_api_progress(root: Path) -> dict:
+    """Count only declarations explicitly scoped to the Amiga 3.5 addendum."""
+    registry_root = root / "api" / "registry"
+    declarations = []
+    for path in sorted(registry_root.rglob("*.toml")):
+        data = tomllib.loads(path.read_text(encoding="utf-8"))
+        declarations.extend(data.get("declarations", []))
+
+    population = [
+        declaration
+        for declaration in declarations
+        if declaration.get("evidence", {}).get("source-scope") == "amiga-3.5-addendum"
+        and any(
+            availability.get("dialect") == "amiga-gfa-basic-interpreter"
+            and "3.5" in availability.get("versions", [])
+            for availability in declaration.get("availability", [])
+        )
+    ]
+    if not population:
+        raise ValueError("the Amiga 3.5 addendum API inventory is empty")
+
+    implemented = sum(
+        declaration.get("implementation", {}).get("status") == "implemented"
+        for declaration in population
+    )
+    total = len(population)
+    return {
+        "implemented": implemented,
+        "total": total,
+        "percent": round(implemented * 100 / total),
+        "population": "Explicitly documented interpreter declarations from the Amiga 3.5 addendum only; includes language-core and Amiga platform declarations. Excludes inherited 3.0 base-manual features, editor-only changes, compiler-only features, and Atari ST declarations.",
+    }
+
 def source_revision(root: Path) -> str:
     result = subprocess.run(
         ["git", "rev-parse", "HEAD"],
@@ -180,6 +213,18 @@ def render_project_dashboard(data: dict) -> tuple[str, str]:
         f'<strong>{esc(value)}</strong><small>{esc(note)}</small></article>'
         for label, value, note in stats
     ) + '</div>'
+    api = data["api_progress"]
+    api_percent = max(0, min(100, int(api["percent"])))
+    api_progress = (
+        '<h3 class="dashboard-subheading">Implemented 3.5 addendum API</h3>'
+        '<div class="dashboard-api-progress"><div class="dashboard-progress-top">'
+        '<span class="dashboard-progress-name">Fully implemented declarations</span>'
+        f'<span class="dashboard-progress-value">{api["implemented"]} / {api["total"]}</span></div>'
+        f'<div class="dashboard-progress-track" role="progressbar" aria-label="Implemented Amiga GFA BASIC 3.5 addendum API" '
+        f'aria-valuemin="0" aria-valuemax="100" aria-valuenow="{api_percent}">'
+        f'<span class="dashboard-progress-fill" style="width:{api_percent}%"></span></div>'
+        f'<p class="dashboard-provenance">{esc(api["population"])} This is a confirmed addendum subset, not the complete Amiga GFA BASIC 3.5 language API.</p></div>'
+    )
     progress = ['<h3 class="dashboard-subheading">Roadmap progress</h3><div class="dashboard-roadmap-progress">']
     for phase in data["roadmap_progress"]:
         percent = max(0, min(100, int(phase["percent"])))
@@ -216,7 +261,7 @@ def render_project_dashboard(data: dict) -> tuple[str, str]:
         f'<a href="https://github.com/vsimko/gfabasic-rust/commit/{esc(data["source_revision"])}">Source revision: {esc(data["source_revision"][:7])} ↗</a>'
         '<a href="https://github.com/vsimko/gfabasic-rust/issues">Open implementation issues ↗</a></div>'
     )
-    dashboard = overview + "".join(progress) + "".join(components) + footer
+    dashboard = overview + api_progress + "".join(progress) + "".join(components) + footer
 
     roadmap = []
     for phase in data["roadmap_progress"]:
@@ -284,6 +329,7 @@ def generate(root: Path, model_path: Path, output: Path) -> dict:
         "roadmap_progress": parse_roadmap_progress((root / "ROADMAP.md").read_text(encoding="utf-8")),
         "roadmap_blockers": parse_roadmap_blockers((root / "ROADMAP.md").read_text(encoding="utf-8")),
         "workspace_packages": packages,
+        "api_progress": load_addendum_api_progress(root),
     }
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(result, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")

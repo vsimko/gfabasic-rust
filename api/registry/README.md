@@ -11,7 +11,7 @@ Canonical declarations use TOML. The planned registry namespaces are `language-c
 - `amiga/special-and-platform-commands.toml`: `PCOLOR`, the negative-screen-number `OPENW` variant, and the `GURU` command/function forms.
 - `language-core/`: no declarations yet.
 
-The language-core catalogue currently contains 28 declarations, and the Amiga platform profile contains three declarations. All are limited to features explicitly identified in the supplied 3.5 interpreter addendum. Neither catalogue claims completeness. The addendum's Chapter 13/14 page references and known source limitations are documented in [the extracted feature inventory](../../docs/research/amiga-gfa-basic-35-addendum-inventory.md).
+The language-core catalogue currently contains 24 declarations, and the Amiga platform profile contains four declarations. All are limited to features explicitly identified in the supplied 3.5 interpreter addendum. Neither catalogue claims completeness. The addendum's Chapter 13/14 page references and known source limitations are documented in [the extracted feature inventory](../../docs/research/amiga-gfa-basic-35-addendum-inventory.md).
 
 ## Evidence and implementation boundaries
 
@@ -58,3 +58,9 @@ The website generator writes two kinds of deployment artifacts; neither is edite
 The browser downloads the index once. It creates category and declaration disclosure elements from index fields only; a declaration's detail JSON is fetched from the same static site origin only when its disclosure is opened. No runtime API, backend, database, or server-side catalogue logic is used.
 
 Run `python3 scripts/generate_api_catalogue.py` to regenerate the payloads and `python3 scripts/generate_api_catalogue.py --check` to verify byte-for-byte reproducibility and detect missing or stale detail files. CI runs both commands and tests the generator with empty, partial, populated, and 1,000-entry synthetic registries.
+
+## Dashboard implementation progress scope
+
+The maintainer dashboard exposes an interim **Implemented 3.5 addendum API** metric. Its denominator is generated from declarations whose availability is the Amiga GFA BASIC interpreter 3.5 and whose evidence source-scope is exactly `amiga-3.5-addendum`. It currently covers 24 language-core declarations and four Amiga platform declarations (28 total). The numerator counts only declarations with implementation status exactly `implemented`; prototype, partial, planned, research, and blocked statuses do not count.
+
+This is deliberately not labelled as the total Amiga GFA BASIC 3.5 API. It excludes inherited 3.0 base-manual declarations that have not been individually reconciled for 3.5, editor-only changes, compiler-only features, and Atari ST declarations. The complete language-wide denominator remains blocked on declaration-level 3.5 reconciliation or controlled interpreter observations tracked by issue #307. Evidence, implementation, Linux target support, and conformance remain separate dimensions.

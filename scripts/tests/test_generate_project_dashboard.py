@@ -21,6 +21,7 @@ class StaticDashboardTests(unittest.TestCase):
                 "source_dialect": "Amiga GFA BASIC 3.5",
             },
             "workspace_packages": [{"name": "compiler", "path": "crates/compiler"}],
+            "api_progress": {"implemented": 0, "total": 28, "percent": 0, "population": "Confirmed 3.5 addendum declarations only."},
             "roadmap_progress": [
                 {
                     "number": 1,
@@ -80,6 +81,9 @@ class StaticDashboardTests(unittest.TestCase):
         self.assertIn("experimental", page)
         self.assertIn("Linux x86-64", page)
         self.assertIn("Workspace", page)
+        self.assertIn("Implemented 3.5 addendum API", page)
+        self.assertIn("0 / 28", page)
+        self.assertIn("not the complete Amiga GFA BASIC 3.5 language API", page)
         self.assertIn("Roadmap progress", page)
         self.assertIn("Phase 1 · Foundation", page)
         self.assertIn("2/4 · 50%", page)
@@ -93,6 +97,67 @@ class StaticDashboardTests(unittest.TestCase):
         self.assertNotIn("Loading generated repository data", page)
         self.assertNotIn("Loading canonical roadmap phases", page)
         self.assertNotIn("Loading…", page)
+
+
+    def test_addendum_progress_counts_only_fully_implemented_35_declarations(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            registry = root / "api" / "registry" / "language-core"
+            registry.mkdir(parents=True)
+            (registry / "sample.toml").write_text(
+                """
+[[declarations]]
+id = "included-implemented"
+[declarations.evidence]
+source-scope = "amiga-3.5-addendum"
+[declarations.implementation]
+status = "implemented"
+[[declarations.availability]]
+dialect = "amiga-gfa-basic-interpreter"
+versions = ["3.5"]
+
+[[declarations]]
+id = "included-prototype"
+[declarations.evidence]
+source-scope = "amiga-3.5-addendum"
+[declarations.implementation]
+status = "prototype"
+[[declarations.availability]]
+dialect = "amiga-gfa-basic-interpreter"
+versions = ["3.5"]
+
+[[declarations]]
+id = "excluded-base-manual"
+[declarations.evidence]
+source-scope = "amiga-3.0-base-manual"
+[declarations.implementation]
+status = "implemented"
+[[declarations.availability]]
+dialect = "amiga-gfa-basic-interpreter"
+versions = ["3.5"]
+
+[[declarations]]
+id = "excluded-other-version"
+[declarations.evidence]
+source-scope = "amiga-3.5-addendum"
+[declarations.implementation]
+status = "implemented"
+[[declarations.availability]]
+dialect = "amiga-gfa-basic-interpreter"
+versions = ["3.0"]
+""",
+                encoding="utf-8",
+            )
+            result = GENERATOR.load_addendum_api_progress(root)
+
+        self.assertEqual(result["implemented"], 1)
+        self.assertEqual(result["total"], 2)
+        self.assertEqual(result["percent"], 50)
+
+    def test_repository_addendum_population_is_explicit_and_scoped(self):
+        result = GENERATOR.load_addendum_api_progress(ROOT)
+        self.assertEqual(result["total"], 28)
+        self.assertEqual(result["implemented"], 0)
 
     def test_dashboard_renderer_escapes_repository_content(self):
         data = self.sample_data()
