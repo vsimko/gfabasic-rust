@@ -61,16 +61,14 @@ jobs:
           cat "$RUNNER_TEMP/amiga-smoke.uae"
 
       - name: Boot Amiga, collect printer text and screenshot
-        env:
-          DISPLAY: :99
         run: |
           set -euo pipefail
-          printer="$GITHUB_WORKSPACE/artifacts/amiga-smoke/printer.txt"
-          log="$GITHUB_WORKSPACE/artifacts/amiga-smoke/amiberry.log"
-          screenshot="$GITHUB_WORKSPACE/artifacts/amiga-smoke/amiga-screen.png"
+          export PRINTER_LOG="$GITHUB_WORKSPACE/artifacts/amiga-smoke/printer.txt"
+          export AMIBERRY_LOG="$GITHUB_WORKSPACE/artifacts/amiga-smoke/amiberry.log"
+          export SCREENSHOT="$GITHUB_WORKSPACE/artifacts/amiga-smoke/amiga-screen.png"
 
           xvfb-run -a -s "-screen 0 1024x768x24 +extension GLX" bash -euo pipefail -c '
-            amiberry -G -f "$RUNNER_TEMP/amiga-smoke.uae" -p "'"$printer"'" --log >"'"$log"'" 2>&1 &
+            amiberry -G -f "$RUNNER_TEMP/amiga-smoke.uae" -p "$PRINTER_LOG" --log >"$AMIBERRY_LOG" 2>&1 &
             emulator_pid=$!
             cleanup() {
               kill "$emulator_pid" 2>/dev/null || true
@@ -81,33 +79,33 @@ jobs:
             for attempt in $(seq 1 45); do
               if ! kill -0 "$emulator_pid" 2>/dev/null; then
                 echo "Amiberry exited before the smoke test completed"
-                cat "'"$log"'"
+                cat "$AMIBERRY_LOG"
                 exit 1
               fi
-              if grep -q "AMIGA-CI: PASS" "'"$printer"'" 2>/dev/null; then
+              if grep -q "AMIGA-CI: PASS" "$PRINTER_LOG" 2>/dev/null; then
                 break
               fi
               sleep 1
             done
 
-            if ! grep -q "AMIGA-CI: PASS" "'"$printer"'" 2>/dev/null; then
+            if ! grep -q "AMIGA-CI: PASS" "$PRINTER_LOG" 2>/dev/null; then
               echo "Did not receive the expected Amiga printer output"
-              cat "'"$log"'"
-              test -f "'"$printer"'" && cat "'"$printer"'" || true
+              cat "$AMIBERRY_LOG"
+              test -f "$PRINTER_LOG" && cat "$PRINTER_LOG" || true
               exit 1
             fi
 
-            xwd -root -silent -out "'"$RUNNER_TEMP"'/amiga-screen.xwd"
-            convert "'"$RUNNER_TEMP"'/amiga-screen.xwd" "'"$screenshot"'"
-            identify "'"$screenshot"'"
-            cat "'"$printer"'"
+            xwd -root -silent -out "$RUNNER_TEMP/amiga-screen.xwd"
+            convert "$RUNNER_TEMP/amiga-screen.xwd" "$SCREENSHOT"
+            identify "$SCREENSHOT"
+            cat "$PRINTER_LOG"
           '
 
-          grep -q "AMIGA-CI: PASS" "$printer"
+          grep -q "AMIGA-CI: PASS" "$PRINTER_LOG"
 
       - name: Upload Amiga output and screenshot
         if: always()
-        uses: actions/upload-artifact@ea8e6e9e8a9a2621b4b3f2d5c8e8c2b2d5e1f9c2
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         with:
           name: amiga-smoke-test
           path: artifacts/amiga-smoke/
