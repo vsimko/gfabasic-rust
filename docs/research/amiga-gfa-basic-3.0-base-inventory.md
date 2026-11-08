@@ -743,3 +743,8 @@ The alphabetical BASIC command index is transcribed in [amiga-gfa-basic-3.0-comm
 ## Source composition and editor evidence
 
 The editor's tokenized `.GFA` Load/Save, ASCII `.LST` Merge/Save,A, block export, direct mode, procedure folding and editor-only marks are extracted in [amiga-gfa-basic-3.0-source-format-editor-evidence.md](amiga-gfa-basic-3.0-source-format-editor-evidence.md), with the explicit 3.5 editor delta on printed p. 1-25 separated from 3.0 behavior. Source encoding, BOM, line endings, statement boundaries, identifier grammar, literal escaping and exact Merge semantics remain unresolved for 3.5; editor behavior is not silently treated as lexical grammar.
+
+
+## Statement and command candidate catalogue
+
+The BASIC command index is expanded into grouped statement/declaration candidates in [amiga-gfa-basic-3.0-statement-command-candidates.md](amiga-gfa-basic-3.0-statement-command-candidates.md). It separates language-core forms from I/O, Amiga graphics/UI and advanced platform integration, and marks all base-manual entries as 3.0 candidates pending 3.5 confirmation. Function identifiers remain in the separate function inventory; Amiga OS library calls remain a separate platform index.
