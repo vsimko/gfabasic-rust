@@ -123,6 +123,9 @@ jobs:
             test -n "$ipc_socket_path" || { cat "$AMIBERRY_LOG"; exit 1; }
             export IPC_SOCKET_PATH="$ipc_socket_path"
             sleep 35
+            # Insert and verify the test ADF through Amiberry IPC.
+            printf "INSERTFLOPPY\\t%s\\t0\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/factzero.adf" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}" >"$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/insert-floppy-ipc.txt"
+            printf "LIST_FLOPPIES\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}" >"$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/list-floppies-ipc.txt"
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/editor-before-merge.png" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
 
             # Amiga raw keycode 0x51 (decimal 81) is F2, the Editor Merge command.
@@ -171,7 +174,7 @@ jobs:
             kill -0 "$emulator_pid"
             printf "QUIT\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}" || true
           '
-          for diagnostic in volume-directory-check.txt volume-file-check.txt device-directory-check.txt device-file-check.txt floppy-directory-check.txt floppy-file-check.txt dos-info.txt dos-assign.txt cli-output.txt probe-status.txt stdin-save.LST; do
+          for diagnostic in volume-directory-check.txt volume-file-check.txt device-directory-check.txt device-file-check.txt floppy-directory-check.txt floppy-file-check.txt dos-info.txt dos-assign.txt cli-output.txt probe-status.txt insert-floppy-ipc.txt list-floppies-ipc.txt stdin-save.LST; do
             if test -f "amiga-volume/$diagnostic"; then
               cp "amiga-volume/$diagnostic" "artifacts/amiga-cli-probe/$diagnostic"
             else
