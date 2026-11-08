@@ -1558,3 +1558,87 @@ CLIP can restrict graphics output to a rectangle, or set the graphics origin rel
 ### 18.6 Evidence boundary
 
 This chapter contains Amiga-specific behavior and explicit V3.0 labels. Some OCR-sensitive details—especially SCROLL's full syntax, GRAPHMODE numeric values, and exact DRAW$ token grammar—remain unverified. Example procedures such as the magnifier, popup menu and custom fill-pattern copier are user code, not built-ins. Do not add those procedure names to the language command inventory.
+
+
+## 19. Bitmap transfer, sprites and Blitter objects: Chapter 9.4.1–9.5 (printed pp. 261–278)
+
+This section continues the graphics chapter beyond the primitive drawing commands. It records the book's Amiga-specific bitmap, sprite and BOB (Blitter Object) facilities. Source provenance remains the German book's 3.0/V3.03-era reference.
+
+### 19.1 PUT and bitmap-string layout
+
+| Command | Syntax | Description |
+|---|---|---|
+| `PUT` | `PUT X_links,Y_oben,Var$[,Modus[,Maske]]` | Draws a bitmap previously captured with GET at the specified upper-left coordinate. The stored width and height are retained; the destination may be partially or wholly outside the visible screen. |
+
+The book distinguishes graphics PUT from disk-file PUT#. It describes the first three 16-bit words of the bitmap string as:
+
+1. Width: X-right minus X-left.
+2. Height: Y-bottom minus Y-top.
+3. Number of words per row (the row width rounded up to a 16-bit boundary).
+
+The bitmap data follows the header, row by row. Each row is padded to a whole number of 16-bit words; unused bits in the final word are not meaningful. For multiple bitplanes, the corresponding plane data is stored in successive blocks/planes and the combination of plane bits determines the color-register index.
+
+The optional mode selects a raster operation. The book lists source/destination combinations including OR, exclusive-OR and inversion forms; without a mode it says Replace is used. It warns against negative mode values because they may cause malfunction. The optional mask parameter is present in the syntax but its detailed semantics are not sufficiently legible in the OCR passage to specify here.
+
+### 19.2 SPRITE
+
+The book documents the following forms:
+
+- `SPRITE #Nummer,DefVar$`: define a sprite from a string in the described MKI$/bitmap-like sprite format.
+- `SPRITE #Nummer[,TO]`: remove the selected sprite image (the OCR around the optional keyword is imperfect).
+- `SPRITE #Nummer[,Xpos,Ypos]`: position a sprite on the screen.
+- `SPRITE ON/OFF`: enable or disable sprites; the text also says this affects the mouse pointer.
+
+Additional source details:
+
+- Sprite 0 corresponds to the mouse pointer. The book says sprites are positioned in a 320×256 coordinate grid, independent of the screen's current resolution.
+- The sprite image is described as a 16-pixel-wide raster with variable height. Four bytes are used per image row, representing two 16-bit bitplanes.
+- A two-bit pixel value of 00 is transparent; the other three combinations select one of three sprite colors. The actual color registers depend on the sprite number.
+- The book gives these color-register groups: sprite pairs 0/1 use registers 17–19; 2/3 use 21–23; 4/5 use 25–27; 6/7 use 29–31.
+
+The exact syntax of the second form and the sprite string's byte ordering should be verified against the page image/runtime before implementation.
+
+### 19.3 VSYNC
+
+`VSYNC` waits for the next vertical blank interval. The book explains that synchronizing GET/PUT graphics output with the screen refresh can reduce interference/flicker. It cautions that operations taking longer than one refresh interval may still produce interference.
+
+### 19.4 BOB / OBJECT command family
+
+The book describes BOBs as Blitter-managed graphics objects used for fast movement/animation of larger graphic areas. The object commands documented in the scanned pages are:
+
+| Command | Syntax recorded in the book | Description |
+|---|---|---|
+| `OBJECT.SHAPE` | `OBJECT.SHAPE ObjNummer,DefString$` or `OBJECT.SHAPE ObjNummer,AltesObjekt` | Defines an object's image from a definition string or copies the shape of an existing object. |
+| `OBJECT.ON` | `OBJECT.ON [ObjNummer[, ...]]` | Displays selected objects; with no numbers, enables all defined objects. |
+| `OBJECT.OFF` | `OBJECT.OFF [ObjNummer[, ...]]` | Hides selected objects but retains their definitions so they can be enabled again. |
+| `OBJECT.CLOSE` | `OBJECT.CLOSE [ObjNummer[, ...]]` | Removes objects completely from the window; they must be defined again before reuse. |
+| `OBJECT.CLIP` | `OBJECT.CLIP X_links,Y_oben,X_rechts,Y_unten` | Restricts the area in the window in which BOBs may operate. Coordinates are absolute within the window. |
+| `OBJECT.START` | `OBJECT.START [ObjNummer[, ...]]` | Starts movement of selected objects; without numbers, starts all active objects. |
+| `OBJECT.STOP` | `OBJECT.STOP [ObjNummer[, ...]]` | Stops movement of selected objects; without numbers, stops all objects. |
+| `OBJECT.X` / `OBJECT.Y` | `OBJECT.X ObjNummer,X_Position`; `OBJECT.Y ObjNummer,Y_Position` | Sets an object's position within its window. |
+| `OBJECT.VX` / `OBJECT.VY` | `OBJECT.VX ObjNummer,X_Geschwindigkeit`; `OBJECT.VY ObjNummer,Y_Geschwindigkeit` | Sets velocity in pixels per second. |
+| `OBJECT.AX` / `OBJECT.AY` | `OBJECT.AX ObjNummer,PixSec`; `OBJECT.AY ObjNummer,PixSec` | Sets acceleration in the corresponding axis, described in pixels per second. |
+| `OBJECT.PLANES` | `OBJECT.PLANES ObjNummer[,Bitebenen[,Ebenenwert]]` | Controls which bitplanes of the BOB are drawn and how cleared planes are filled; both values are bit masks. |
+| `OBJECT.PRIORITY` | `OBJECT.PRIORITY ObjNummer,Wert` | Sets drawing priority; higher values are drawn later and appear above lower-priority objects. The book gives a range of 0–32767. |
+| `OBJECT.HIT` | `OBJECT.HIT ObjNummer[,Wert1[,Wert2]]` | Configures which object collisions are reported using bit masks. |
+
+The book also documents query forms:
+
+- `OBJECT.X(ObjNummer)` and `OBJECT.Y(ObjNummer)` return current position.
+- `OBJECT.VX(ObjNummer)` and `OBJECT.VY(ObjNummer)` return current velocity.
+- `OBJECT.AX(ObjNummer)` and `OBJECT.AY(ObjNummer)` return current acceleration.
+
+The OCR appears to misread the Y-velocity setter once as OBJECT.VV; the surrounding text and query form identify OBJECT.VY, but confirm the printed page before treating the correction as authoritative.
+
+### 19.5 Collision reporting
+
+- `ON COLLISION GOSUB Prozedur` selects the procedure called when an object collides with another object or the window boundary.
+- `COLLISION(ObjNummer)` returns the number of the object involved in the collision.
+- The book lists special negative results for window-edge collisions: −1 top, −2 left, −3 bottom and −4 right.
+- `COLLISION(0)` returns the object number involved in the most recent collision; `COLLISION(-1)` returns the window number in which it occurred.
+
+OBJECT.HIT uses two bit masks: the first identifies the object's collision participation mask and the second the mask used when another object's value is combined with it. The book says a collision is reported only when the bitwise combination is nonzero.
+
+### 19.6 Evidence boundary
+
+The sprite binary format, PUT raster modes, BOB bitplane masks and collision masks are low-level Amiga graphics details. They are recorded as the book describes them; do not infer undocumented parameter defaults or modern AmigaOS behavior. The exact sprite syntax, PUT mask semantics, OBJECT.AX/AY units and OBJECT.VY spelling require page-image/runtime verification.
