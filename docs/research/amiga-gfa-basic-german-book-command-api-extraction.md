@@ -187,9 +187,11 @@ The book states that loop types may be nested, and that terminators must close n
 The book defines PROCEDURE as a named subprogram that may contain arbitrary program text and returns to the statement after its caller when RETURN executes.
 
 ```basic
+
 PROCEDURE Name [(Variablenliste)]
   ... statements ...
 RETURN
+
 ```
 
 - Procedure names may contain letters, digits, underscore and period; unlike variable names, the first character may be a digit.
@@ -204,7 +206,9 @@ RETURN
 The book also describes computed procedure dispatch:
 
 ```basic
+
 ON Wert GOSUB Proc1 [, Proc2, Proc3, ...]
+
 ```
 
 The value selects a procedure by one-based position: 1 calls the first procedure, 2 the second, and so on. Zero or a value greater than the number of supplied procedures causes execution to continue at the next statement without branching. The described targets must be procedures that do not expect a parameter list.
@@ -541,7 +545,9 @@ The book says SAY requires the Amiga Narrator device in the boot disk's DEVS dir
 The book explicitly permits the direct form:
 
 ```basic
+
 SAY TRANSLATE$("HALLO")
+
 ```
 
 It also notes that text can be rewritten phonetically to improve German output because TRANSLATE$ uses English pronunciation rules. The examples are suggestions for experimentation, not general conversion rules.
@@ -625,9 +631,11 @@ This section expands the existing §7 summary with details from the German book'
 The book's core form is:
 
 ```basic
+
 PROCEDURE Name [(Variablenliste)]
   ... statements ...
 RETURN
+
 ```
 
 - A PROCEDURE is a named subprogram. `GOSUB Name[(Parameterliste)]` enters it; `RETURN` resumes at the statement following the GOSUB call.
@@ -648,8 +656,10 @@ The book documents two ways to make variables local or pass caller variables int
 - Alternatively, `VAR` in the routine header provides direct variable passing:
 
 ```basic
+
 PROCEDURE Name([ordinary parameters] VAR Var1[,Var2,...])
 FUNCTION Name([ordinary parameters] VAR Var1[,Var2,...])
+
 ```
 
 The variables following VAR are placed at the end of the receiving-variable list and stand for the actual variables passed by GOSUB or FN. Their types must match. Constants and expressions cannot be passed as VAR variables; the book gives a “Wrong VAR type” error for mismatches. The corresponding global variable is temporarily accessible under the receiving name and changes made through it affect the caller's variable directly.
@@ -670,7 +680,9 @@ The book distinguishes one-line `DEFFN` functions from multi-line `FUNCTION` rou
 The book describes `C:()` as a call interface for a C-compiled machine routine:
 
 ```basic
+
 Var=C:Adressvar([Parameterliste])
+
 ```
 
 - `Adressvar` contains the address of the machine routine.
@@ -687,7 +699,9 @@ These are the book's stated calling-convention details; do not generalize them t
 The documented form is:
 
 ```basic
+
 CALL Adressvar([Parameterliste])
+
 ```
 
 - `Adressvar` contains the address of the assembly routine.
@@ -702,7 +716,9 @@ CALL Adressvar([Parameterliste])
 The syntax is:
 
 ```basic
+
 EXEC Kommando$,In,Out
+
 ```
 
 - `Kommando$` contains the CLI command or program name, optionally with a path.
@@ -1953,7 +1969,9 @@ Page 250 independently labels `GRAPHMODE 3` as XOR mode in its turtle-graphics e
 The page image confirms the exact syntax:
 
 ```basic
+
 SCROLL Dx,Dy,X1,Y1,X2,Y2
+
 ```
 
 The command shifts the screen bitmap rectangle bounded by the coordinate pairs (X1,Y1) and (X2,Y2). Dx and Dy separately specify shift direction and distance on X and Y. Positive Dx/Dy shift left/down; negative values shift in the opposite directions (right/up).
@@ -1965,7 +1983,9 @@ The example on p. 246 uses `SCROLL dx,dy,x1,y1,x2,y2` with random offsets and ex
 The image confirms the header and syntax:
 
 ```basic
+
 DRAW Def$, [Const, ["Def"] [,Var[, ...]]]
+
 ```
 
 The command simulates plotter/turtle graphics on screen. Def$ may be an alphanumeric expression, string variable or text constant; the optional values may be expressions, constants or variables. The source limits the number of comma-separated individual values as described on p. 249 and states a maximum input-line length of 255 characters.
@@ -1993,7 +2013,9 @@ Page 250 confirms `DRAW()` as the turtle-attribute query. Its documented indices
 The page image confirms the exact command spelling `OBJECT.VY` (not OBJECT.VY0 or OBJECT.VVO):
 
 ```basic
+
 OBJECT.VY ObjNummer, Y_Geschwindigkeit
+
 ```
 
 It sets an object's Y-direction velocity in pixels per second.
@@ -2001,7 +2023,9 @@ It sets an object's Y-direction velocity in pixels per second.
 The same page confirms:
 
 ```basic
+
 OBJECT.PLANES ObjNummer [,Bitebenen [,Ebenenwert]]
+
 ```
 
 The accompanying prose describes the first value as selecting which bitplanes receive the BOB graphic. A set bit means the BOB graphic is drawn in that plane; clearing a bit removes that plane's color contribution. The optional Ebenenwert controls the state of otherwise disabled bitplanes, allowing colors to be added/removed from the BOB representation as described by the source. This is a low-level BOB operation; the book's prose is not a substitute for checking actual Amiga graphics-library behavior.
@@ -2020,7 +2044,9 @@ The source describes `GET X_links,Y_oben,X_rechts,Y_unten,Var$` as capturing a s
 The page-image checked PUT syntax is:
 
 ```basic
+
 PUT X_links,Y_oben,Var$ [,Modus,Maske]
+
 ```
 
 PUT draws a previously captured GET image at the supplied upper-left position. The dimensions remain those stored by GET, so the destination lower-right corner follows from the stored width and height. The destination may be partially or wholly outside the screen. Without Modus, the source says Replace mode is used. It warns against negative Modus values because they can cause malfunctions.
@@ -2050,11 +2076,14 @@ The German wording for OrDestSource is unusual (“only between bits that are eq
 ### 38.4 Hardware SPRITE (printed pp. 265–267)
 
 The source lists four forms:
+
 ```basic
+
 SPRITE #Nummer,Def.var$
 SPRITE #Nummer [,0]
 SPRITE #Nummer [,XPos,YPos]
 SPRITE ON/OFF
+
 ```
 
 The definition string is a bitmap-converted string. Each sprite is 16 pixels wide; each graphics row uses four bytes stored as ASCII characters. The two 16-bit bit rows are interpreted as two overlaid bitplanes, yielding four combinations: 00 transparent, 01 first color register, 10 second color register, 11 third color register.
@@ -2081,7 +2110,9 @@ The GET/PUT syntax, coordinate restriction for GET, PUT placement behavior, five
 The page-image checked command header is:
 
 ```basic
+
 DUMP [Defstring$] [TO Datei$]
+
 ```
 
 Without options, DUMP outputs all variable contents and dimensions of all arrays. The optional selector is described as follows:
@@ -2102,7 +2133,9 @@ The selector table is transcribed from the page text and image. The printed layo
 The page image confirms:
 
 ```basic
+
 MODE Modus
+
 ```
 
 The book defines Modus as a two-bit vector:
@@ -2131,7 +2164,9 @@ DUMP's command header, output categories, string truncation/representation and f
 The page-image checked syntax is:
 
 ```basic
+
 ALERT Icon%,Boxtext$,Def_Button%,Buttontext$,Backvar%
+
 ```
 
 The book describes an Intuition-style alert box with at most three choices:
@@ -2148,7 +2183,9 @@ The prose says an overlong message line is truncated by the interpreter after ch
 The printed syntax is:
 
 ```basic
+
 FILESELECT "Titel","OKText","Pfad",Backvar$
+
 ```
 
 It opens a file-selection dialog and returns a selected filename, potentially including its path. The book distinguishes outcomes:
@@ -2164,7 +2201,9 @@ The dialog lists files in the supplied path; entries marked with an asterisk are
 The page text gives:
 
 ```basic
+
 MOUSE Xpos,Ypos,Tasten
+
 ```
 
 Xpos/Ypos receive current pointer coordinates. Tasten is a bit field:
@@ -2246,9 +2285,11 @@ FILESELECT's four return situations, device/path navigation, the sample-only sta
 The image confirms `MENU(1)=256` for a selected menu item. `MENU(2)` contains the encoded menu, item and sub-item numbers. The book's decoding expressions are:
 
 ```basic
+
 MenuNummer = MENU(2) AND 31
 MenüPunkt = SHR(MENU(2),5) AND 63
 UnterMenüPunkt = SHR(MENU(2),11) AND 31
+
 ```
 
 ### 42.2 Window events (printed pp. 398–400)
@@ -2312,9 +2353,11 @@ The page image confirms the function form `STRIG(Maus-Port)`. It reports the cur
 The image confirms both forms:
 
 ```basic
+
 ON MENU
 ON MENU [Zeit]
 SLEEP
+
 ```
 
 ON MENU waits for a message and branches to the program location defined for the event. The optional Zeit value is in thousandths of a second; after that interval, ON MENU must return control to BASIC. The prose says a sufficiently long interval gives the input device time to register, for example a mouse-button release. The book requires ON MENU BUTTON GOSUB for reliable recognition of button release. It also recommends invoking ON MENU from internal wait loops (example: REPEAT...UNTIL MOUSEK), otherwise events can accumulate while the program is not servicing the message channel.
@@ -2326,9 +2369,11 @@ SLEEP is described as a simplified ON MENU: it sets the time variable to 1 and w
 The page image confirms:
 
 ```basic
+
 ON MENU GOSUB Prozedurname
 ON MENU BUTTON GOSUB Prozedurname
 ON MENU KEY GOSUB Prozedurname
+
 ```
 
 - `ON MENU GOSUB` selects the procedure called when a pull-down menu item is clicked. The procedure can identify the selected item with MENU(0). If the named procedure does not exist, menu monitoring is switched off. The source warns that invoking this before a window with a menu has been defined crashes the program.
