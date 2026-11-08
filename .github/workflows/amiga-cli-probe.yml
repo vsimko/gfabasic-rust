@@ -66,6 +66,7 @@ jobs:
           cat > amiga-volume/S/Startup-Sequence <<'EOF'
           Echo "AMIGA CLI PROBE: BOOTED"
           CD CI:
+          Copy CI:factzero.LST T:factzero.LST
           Run <DH0:cli-input.txt >DH0:cli-output.txt DH0:GFABasic
           Echo "CLI launch without program argument" >DH0:probe-status.txt
           EOF
