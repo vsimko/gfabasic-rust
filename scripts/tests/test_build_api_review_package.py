@@ -83,7 +83,7 @@ class ReviewPackageTests(unittest.TestCase):
         from scripts.build_api_review_package import ROOT
 
         fact = build_package(ROOT, "gfa.language.math.fact")
-        self.assertEqual(fact["declaration"]["evidence"]["sources"], ["AM-INTERPRETER-35"])
+        self.assertEqual(fact["declaration"]["evidence"]["sources"], ["AM-INTERPRETER-35", "AM-BOOK-DE-1990"])
         self.assertTrue(fact["documentation_sections"][0]["content"])
 
         inverse = build_package(ROOT, "gfa.language.matrix.mat-inv")
