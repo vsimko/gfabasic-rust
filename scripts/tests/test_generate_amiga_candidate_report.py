@@ -8,12 +8,14 @@ from scripts.generate_amiga_candidate_report import generate, load_candidates, r
 
 
 class AmigaCandidateReportTests(unittest.TestCase):
-    def test_report_separates_unresolved_base_from_addendum_confirmed(self) -> None:
+    def test_report_separates_3_0_only_from_addendum_confirmed(self) -> None:
         root = Path(__file__).resolve().parents[2]
         manifest = root / "docs/research/amiga-gfa-basic-candidates.toml"
         candidates = load_candidates(manifest)
         report = render(candidates)
         self.assertIn("amiga.base.variables-memory", report)
+        self.assertIn("documented-in-3.0-only", report)
+        self.assertIn("3.5 applicability not established", report)
         self.assertIn("amiga.35.mat-copy", report)
         self.assertIn("3.0 base manual", report)
         self.assertIn("3.5 addendum", report)

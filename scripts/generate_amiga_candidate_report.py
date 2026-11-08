@@ -10,7 +10,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_MANIFEST = Path("docs/research/amiga-gfa-basic-candidates.toml")
 DEFAULT_OUTPUT = Path("docs/research/amiga-gfa-basic-candidate-report.md")
-STATUSES = {"candidate", "confirmed-in-3.5", "contradicted", "unresolved"}
+STATUSES = {"candidate", "confirmed-in-3.5", "contradicted", "documented-in-3.0-only", "unresolved"}
 REQUIRED = {"id", "name", "kind", "source", "source-version", "printed-pages", "status", "notes"}
 
 
@@ -59,6 +59,16 @@ def render(candidates: list[dict]) -> str:
         lines.append(f"| `{item['id']}` | {item['name']} | {item['source-version']} | {pages} | {note} |")
     if not pending:
         lines.append("| — | None | — | — | — |")
+    lines.extend(["", "## Documented in the 3.0 base only (3.5 applicability not established)", "",
+                  "| ID | Candidate | Printed pages | Evidence boundary |",
+                  "|---|---|---|---|"])
+    base_only = [item for item in candidates if item["status"] == "documented-in-3.0-only"]
+    for item in base_only:
+        note = item["notes"].replace("|", "\\|")
+        pages = ", ".join(item["printed-pages"])
+        lines.append(f"| `{item['id']}` | {item['name']} | {pages} | {note} |")
+    if not base_only:
+        lines.append("| — | None | — | — |")
     lines.extend(["", "## Explicitly confirmed by the 3.5 addendum", "",
                   "| ID | Declaration family | Printed pages | Qualification |",
                   "|---|---|---|---|"])
@@ -79,7 +89,8 @@ def render(candidates: list[dict]) -> str:
         "",
         "## Interpretation and limitations",
         "",
-        "- The 3.0 base-manual entries are retained as unresolved until each declaration or feature family is checked against explicit 3.5 addendum evidence or a reproducible runtime observation.",
+        "- `documented-in-3.0-only` closes the source audit: the cited evidence is from the 3.0 base manual, and neither the 3.5 addendum nor a reproducible runtime observation establishes 3.5 applicability. This does not mean removed, incompatible, or confirmed in 3.5.",
+        "- `unresolved` is reserved for candidates whose source scope or declaration identity still needs research.",
         "- A confirmed family does not settle every overload or edge case; qualifications in the manifest and detailed research notes remain authoritative.",
         "- Chapter 12 indexes and reference tables are navigation aids, not declarations or proof of availability.",
         "- No absence-based removal or compatibility inference is made.",
