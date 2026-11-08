@@ -89,8 +89,8 @@ def render(candidates: list[dict]) -> str:
         "",
         "## Interpretation and limitations",
         "",
-        "- `documented-in-3.0-only` closes the source audit: the cited evidence is from the 3.0 base manual, and neither the 3.5 addendum nor a reproducible runtime observation establishes 3.5 applicability. This does not mean removed, incompatible, or confirmed in 3.5.
-- `unresolved` is reserved for candidates whose source scope or declaration identity still needs research.",
+        "- `documented-in-3.0-only` closes the source audit: the cited evidence is from the 3.0 base manual, and neither the 3.5 addendum nor a reproducible runtime observation establishes 3.5 applicability. This does not mean removed, incompatible, or confirmed in 3.5.",
+        "- `unresolved` is reserved for candidates whose source scope or declaration identity still needs research.",
         "- A confirmed family does not settle every overload or edge case; qualifications in the manifest and detailed research notes remain authoritative.",
         "- Chapter 12 indexes and reference tables are navigation aids, not declarations or proof of availability.",
         "- No absence-based removal or compatibility inference is made.",
