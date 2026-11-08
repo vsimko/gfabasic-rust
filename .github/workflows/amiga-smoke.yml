@@ -190,7 +190,8 @@ jobs:
             test -n "$window_id"
             xdotool getwindowgeometry --shell "$window_id" | tee "$GITHUB_WORKSPACE/artifacts/amiga-smoke/window-geometry.txt"
             xdotool windowfocus --sync "$window_id"
-            xdotool mousemove --sync --window "$window_id" 270 360
+            printf "TOGGLE_MOUSE_GRAB\\n" | timeout 5s nc -U -N "$ipc_socket_path" | tee "$GITHUB_WORKSPACE/artifacts/amiga-smoke/mouse-grab.txt"
+            xdotool mousemove --sync 352 384
             sleep 1
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-smoke/before-merge-click.png" | timeout 5s nc -U -N "$ipc_socket_path"
             xdotool click --window "$window_id" 1
