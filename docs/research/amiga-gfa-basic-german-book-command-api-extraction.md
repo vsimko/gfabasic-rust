@@ -549,3 +549,68 @@ It also notes that text can be rewritten phonetically to improve German output b
 ### 13.4 Evidence boundary
 
 These commands and parameter descriptions are documented in the German book's 3.0/V3.03-era reference. The book does not identify them as 3.5 additions. The source's exact byte-array type prefix remains OCR-uncertain; the Narrator device requirement and channel map are retained as printed rather than replaced with modern Amiga audio assumptions.
+
+
+## 14. Program text, DATA records and variable declarations: Chapter 6.3–6.4
+
+This section captures the Chapter 6 material not yet detailed in §7: comments, DATA-pointer operations and global variable-type declarations. Source: German 1990 book, printed pp. 166–172 (3.0/V3.03-era reference).
+
+### 14.1 Comments
+
+| Form | Syntax recorded in the book | Source-derived behavior |
+|---|---|---|
+| `REM` | `REM [Kommentar]` | Introduces a comment line; the text is ignored during program execution. |
+| Apostrophe | `' Kommentar` | Alternative comment marker for REM. |
+| Exclamation mark | `Befehlszeile ! Kommentartext` | Introduces an inline comment after a statement. At the beginning of a line, the editor converts it to the REM apostrophe form. |
+
+The book warns that the inline comment marker is not available in the same way inside DATA lines, where the text is treated as DATA content.
+
+### 14.2 DATA, READ and RESTORE
+
+| Statement | Syntax recorded in the book | Source-derived behavior |
+|---|---|---|
+| `DATA` | `DATA [Wertedatas [, ["Textdatas"] [, ...]]]` | Stores comma-separated numeric and/or text data for later READ statements. Text DATA does not generally need quotation marks unless the text contains commas. Without READ statements, DATA text is ignored like REM content. |
+| `READ` | `READ Var [,Var2,Var3,Var2$, ...]` | Assigns successive DATA entries to the listed variables. Numeric READ requires numeric DATA; text READ treats a numeric-looking entry as text. Variables cannot be supplied as DATA values. |
+| `RESTORE` | `RESTORE [Labelname]` | Resets the DATA pointer to the first DATA entry, or to the first DATA entry following the named label. The book also says a label may be used both as a GOTO target and as a RESTORE target. |
+
+Additional constraints and observations:
+
+- DATA entries are consumed in sequence. If more READ operations execute than there are DATA entries before program end, the interpreter reports an error.
+- Numeric DATA may be written in decimal, binary, hexadecimal or octal notation.
+- Text DATA entries are separated by commas. The book explains that quotation marks are needed when a text entry contains a comma, otherwise that comma is interpreted as a DATA separator.
+- If a text DATA item is unquoted, the characters between its delimiting commas—including spaces—are read as text.
+- RESTORE without a label points to the first DATA entry in the program.
+
+### 14.3 Global variable-type declarations
+
+The book describes DEF declarations as global naming rules that assign a variable type based on its leading character(s). A declaration string may contain individual letters and ranges. Examples in the book include `"a-c,x-z"` and `"i1,i2,i3"`.
+
+| Declaration | Syntax | Type assigned by the book |
+|---|---|---|
+| `DEFBIT` | `DEFBIT Defstring$` | Boolean variables (the book's example assigns names beginning with `a`; Boolean suffix shown as `!`). |
+| `DEFBYT` | `DEFBYT Defstring$` | 1-byte integer variables (suffix `&` in the examples' type discussion). |
+| `DEFWRD` | `DEFWRD Defstring$` | 2-byte integer variables. |
+| `DEFINT` | `DEFINT Defstring$` | 4-byte integer variables. |
+| `DEFFLT` | `DEFFLT Defstring$` | 8-byte floating-point variables. |
+| `DEFSTR` | `DEFSTR Defstring$` | String variables. |
+
+The book gives these further details:
+
+- A definition string identifies the first character or character patterns used to classify variable names. Its contents may be supplied as a string constant, variable or expression.
+- A new global declaration replaces the previous declaration rule; the book recommends placing declarations near the beginning of the program.
+- A variable with an explicit type postfix remains individually typed and takes precedence over the global naming rule.
+- The examples show that a variable such as `l_string$` remains a string despite a preceding `DEFINT "i"`, while an un-suffixed `l_4byte` is treated as a 4-byte integer.
+- The editor may accept `DEFSNG` or `DEFDBL`, but the book says it converts these spellings to `DEFFLT` during syntax checking. Preserve this as an editor-normalization claim, not as evidence of separate runtime types.
+
+The OCR's visual rendering of the DEFBYT suffix and some example letters is imperfect. The type widths and declaration names are legible, but exact suffix spelling and character-set parsing should be verified against page images or the interpreter before parser implementation.
+
+### 14.4 LOCAL scope and GOTO boundary
+
+The same chapter describes:
+
+- `LOCAL Var [,Var2, ...]` declares variables local to the current PROCEDURE or FUNCTION. They can be used in that routine and routines called from it; a same-named variable in the main program or a higher-level routine remains distinct and becomes visible again after returning.
+- `GOTO Label` branches to a label terminated by a colon. The label may use letters, digits and other characters; unlike variable names, it may begin with a digit.
+- The book explicitly prohibits GOTO jumps into or out of FOR…NEXT loops and PROCEDUREs, and says such attempts produce an error.
+- The label may also identify the DATA position used by `RESTORE Label`.
+
+These scope and control-flow statements are source claims from the German book. They are not substitutes for runtime tests of nested procedure scope, label parsing or error behavior.
