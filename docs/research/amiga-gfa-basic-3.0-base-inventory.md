@@ -748,3 +748,8 @@ The editor's tokenized `.GFA` Load/Save, ASCII `.LST` Merge/Save,A, block export
 ## Statement and command candidate catalogue
 
 The BASIC command index is expanded into grouped statement/declaration candidates in [amiga-gfa-basic-3.0-statement-command-candidates.md](amiga-gfa-basic-3.0-statement-command-candidates.md). It separates language-core forms from I/O, Amiga graphics/UI and advanced platform integration, and marks all base-manual entries as 3.0 candidates pending 3.5 confirmation. Function identifiers remain in the separate function inventory; Amiga OS library calls remain a separate platform index.
+
+
+## Additional declaration-level extraction (Chapters 5, 7, 9 and 10)
+
+Further page-level notes are linked here: [Chapter 5 output/device operations](amiga-gfa-basic-3.0-output-device-details.md), [Chapter 7 procedures and error flow](amiga-gfa-basic-3.0-procedure-error-details.md), [Chapter 9 menu/event operations](amiga-gfa-basic-3.0-menu-event-details.md), [Chapter 9 screen/window operations](amiga-gfa-basic-3.0-screen-window-details.md), and [Chapter 10 BOB/OBJECT operations](amiga-gfa-basic-3.0-bob-object-details.md). These remain 3.0 source candidates; none is promoted to 3.5 merely because it is in the combined manual.
