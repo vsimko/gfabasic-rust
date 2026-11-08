@@ -79,7 +79,12 @@ jobs:
           EOF
 
           cp amiga-volume/S/Startup-Sequence artifacts/amiga-smoke/Startup-Sequence.txt
-          cp tests/interpreter-probes/amiga-3.5/fact-zero.LST amiga-volume/fact-zero.LST
+          cat > amiga-volume/fact-zero.LST <<'EOF'
+          x = FACT(0)
+          y = FACT(1)
+          z = FACT(2)
+          PRINT x, y, z
+          EOF
           cp amiga-volume/fact-zero.LST artifacts/amiga-smoke/fact-zero.LST
           cat > "$RUNNER_TEMP/amiga-smoke.uae" <<EOF
           use_gui=no
