@@ -123,6 +123,19 @@ jobs:
               printf "SEND_KEY\\t%s\\t0\\n" "$1" | timeout 5s nc -U -N "$ipc_socket_path" >/dev/null
               sleep 0.15
             }
+            # The filename gadget initially contains "T:" with the caret at
+            # its beginning. Delete that default path, then enter T:factzero.lst.
+            send_key 70
+            send_key 70
+            for keycode in 20; do send_key "$keycode"; done
+            printf "SEND_KEY\\t96\\t1\\n" | timeout 5s nc -U -N "$ipc_socket_path" >/dev/null
+            sleep 0.15
+            printf "SEND_KEY\\t41\\t1\\n" | timeout 5s nc -U -N "$ipc_socket_path" >/dev/null
+            sleep 0.15
+            printf "SEND_KEY\\t41\\t0\\n" | timeout 5s nc -U -N "$ipc_socket_path" >/dev/null
+            sleep 0.15
+            printf "SEND_KEY\\t96\\t0\\n" | timeout 5s nc -U -N "$ipc_socket_path" >/dev/null
+            sleep 0.15
             for keycode in 35 32 51 20 49 18 19 24 57 40 33 20; do
               send_key "$keycode"
             done
