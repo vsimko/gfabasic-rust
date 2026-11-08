@@ -184,7 +184,7 @@ jobs:
             # Raw keycode 0x39 (57) is the Amiga period key.
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-smoke/merge-filename.png" | timeout 5s nc -U -N "$ipc_socket_path"
             # Move keyboard focus from the filename gadget to the
-            # requester's controls, then activate the selected action.
+            # the requester controls, then activate the selected action.
             printf "SEND_KEY\\t66\\t1\\n" | timeout 5s nc -U -N "$ipc_socket_path" | tee "$GITHUB_WORKSPACE/artifacts/amiga-smoke/merge-tab-press.txt"
             sleep 0.3
             printf "SEND_KEY\\t66\\t0\\n" | timeout 5s nc -U -N "$ipc_socket_path" | tee "$GITHUB_WORKSPACE/artifacts/amiga-smoke/merge-tab-release.txt"
