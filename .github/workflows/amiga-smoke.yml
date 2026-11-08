@@ -61,7 +61,9 @@ jobs:
           echo "deb [arch=amd64 signed-by=/usr/share/keyrings/amiberry-archive-keyring.gpg] https://packages.amiberry.com/apt noble main" \
             | sudo tee /etc/apt/sources.list.d/amiberry.list >/dev/null
           sudo apt-get update
-          sudo apt-get install -y --no-install-recommends amiberry xvfb netcat-openbsd
+          # Keep downloaded archives: Ubuntu's APT defaults may remove them
+          # after installation, leaving nothing for actions/cache to save.
+          sudo apt-get -o APT::Keep-Downloaded-Packages=true install -y --no-install-recommends amiberry xvfb netcat-openbsd
           amiberry --version | tee artifacts/amiga-smoke/amiberry-version.txt
 
       - name: Prepare boot volume
