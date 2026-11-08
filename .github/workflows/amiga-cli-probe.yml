@@ -156,24 +156,15 @@ jobs:
             sleep 3
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-dialog.png" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
 
-            # The Merge requester opens with its filename gadget focused.
-            # Amiga raw keycodes spell "factzero.lst".
-            send_key() {
-              printf "SEND_KEY\\t%s\\t1\\n" "$1" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}" >/dev/null
+            # Avoid unreliable mouse IPC: use the file-list keyboard navigation.
+            # Entries are ordered: parent, S, GFABasic, factzero.LST.
+            # Move down four times to highlight the LST entry, then capture evidence.
+            for _ in 1 2 3 4; do
+              printf "SEND_KEY\\t77\\t1\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}" >/dev/null
               sleep 0.15
-              printf "SEND_KEY\\t%s\\t0\\n" "$1" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}" >/dev/null
+              printf "SEND_KEY\\t77\\t0\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}" >/dev/null
               sleep 0.15
-            }
-            # SEND_MOUSE uses absolute Amiberry input coordinates, not deltas.
-            # Raw (380,94) rendered at screen (~142,88), scale ~= (0.375,0.94).
-            # Target factzero.LST row center (~335,238) => raw (~893,254).
-            printf "SEND_MOUSE\\t2060\\t605\\t0\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
-            sleep 0.5
-            printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-file-row-pointer.png" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
-            printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
-            sleep 0.2
-            printf "SEND_MOUSE\\t0\\t0\\t0\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
-            sleep 0.5
+            done
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-file-selected.png" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
 
             # AmigaOS requester shortcut: Left-Amiga-V activates the left gadget (Merge).
