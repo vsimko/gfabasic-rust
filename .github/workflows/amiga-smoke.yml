@@ -165,6 +165,9 @@ jobs:
             sleep 2
             printf "SCREENSHOT\\t%s\\n" "$SCREENSHOT" | timeout 5s nc -U -N "$socket"
             test -s "$SCREENSHOT"
+            tesseract "$SCREENSHOT" "$GITHUB_WORKSPACE/artifacts/amiga-smoke/screen-ocr" --psm 6
+            cat "$GITHUB_WORKSPACE/artifacts/amiga-smoke/screen-ocr.txt"
+            grep -Eq "(^|[^0-9])42([^0-9]|$)" "$GITHUB_WORKSPACE/artifacts/amiga-smoke/screen-ocr.txt"
             cat "$RESULT"
             printf "QUIT\\n" | timeout 5s nc -U -N "$socket" || true
           '
