@@ -2787,3 +2787,43 @@ The page-372 diagram also depicts diagonal direction values; the prose defines t
 ### 40.5 Validation boundary
 
 ALERT's parameter meanings and line limits, FILESELECT's result cases, MOUSE button values/negative-coordinate note, and STICK()/STRIG() behavior are indexed from the printed pages. Page images were checked for ALERT's page-363 definition and the STICK/STICK() pages 371–372. FILESELECT's longer dialog narrative and STRIG's final definition remain text-layer/OCR-derived and should receive direct image review before treating fine wording as exact. All described interaction behavior is from the book's Amiga V3.0 material, not proof of interpreter runtime compatibility.
+
+
+## 41. Page-image validation: FILESELECT return cases, backup example and MOUSE buttons (printed pp. 366–368)
+
+### 41.1 FILESELECT outcomes (printed pp. 365–366)
+
+The page images confirm the syntax `FILESELECT "Titel","OKText","Pfad",Backvar$` and the four result situations previously extracted:
+1. Selecting a listed file returns its name with the complete path.
+2. Pressing OK while a filename remains in the entry gadget returns that entered name/path, even if no list row was selected.
+3. Pressing OK with no selected file and an empty entry returns an empty string.
+4. Pressing Cancel returns an empty string.
+
+The dialog lists entries in the given path; asterisk-marked entries are subdirectories. The user can change the path by selecting a device entry or editing the path gadget and pressing Return. This is the book's described UI behavior, not a claim about filesystem canonicalization or path normalization.
+
+### 41.2 Extension and backup routines are examples, not built-ins (printed pp. 366–368)
+
+The page images show two user-written procedures, `extend` and `backup`, called after FILESELECT. They are not additional FILESELECT options or interpreter commands. The example:
+- scans the path/name from right to left for the last slash,
+- adds or replaces a requested extension,
+- uses the literal sentinel `"000"` for an unusable/empty filename,
+- checks existence with EXIST,
+- removes a prior backup with KILL,
+- renames the original to the backup extension with NAME ... AS.
+
+The example's slash/path assumptions and its use of a three-character sentinel are properties of this sample routine only. Do not promote them into general path or FILESELECT semantics.
+
+### 41.3 MOUSE button field (printed p. 368)
+
+The page image confirms `MOUSE Xpos,Ypos,Tasten` and enumerates:
+- 0: no button pressed.
+- 1: left button (bit 0).
+- 2: right button (bit 1).
+- 3: left and right together (bits 0 and 1).
+- 4: middle button (bit 2).
+
+The accompanying prose explicitly says only the lowest two bits are relevant when treating the two main buttons as a bit vector, while separately listing the middle button as value 4. Preserve both statements as printed; do not infer how combinations involving the middle button are reported beyond the bit interpretation.
+
+### 41.4 Validation status
+
+FILESELECT's four return situations, device/path navigation, the sample-only status of extension/backup helpers, and the MOUSE values are now page-image verified. This resolves the earlier OCR-only status for FILESELECT and STRIG is handled separately below.
