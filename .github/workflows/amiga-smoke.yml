@@ -183,16 +183,13 @@ jobs:
             done
             # Raw keycode 0x39 (57) is the Amiga period key.
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-smoke/merge-filename.png" | timeout 5s nc -U -N "$ipc_socket_path"
-            # Move keyboard focus from the filename gadget to the
-            # the requester controls, then activate the selected action.
-            printf "SEND_KEY\\t66\\t1\\n" | timeout 5s nc -U -N "$ipc_socket_path" | tee "$GITHUB_WORKSPACE/artifacts/amiga-smoke/merge-tab-press.txt"
+            # Move from the filename gadget toward the right-hand Merge
+            # button. SEND_MOUSE uses relative guest coordinates.
+            printf "SEND_MOUSE\\t312\\t75\\t0\\n" | timeout 5s nc -U -N "$ipc_socket_path" | tee "$GITHUB_WORKSPACE/artifacts/amiga-smoke/merge-mouse-move.txt"
             sleep 0.3
-            printf "SEND_KEY\\t66\\t0\\n" | timeout 5s nc -U -N "$ipc_socket_path" | tee "$GITHUB_WORKSPACE/artifacts/amiga-smoke/merge-tab-release.txt"
-            sleep 1
-            printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-smoke/after-merge-tab.png" | timeout 5s nc -U -N "$ipc_socket_path"
-            printf "SEND_KEY\\t68\\t1\\n" | timeout 5s nc -U -N "$ipc_socket_path" | tee "$GITHUB_WORKSPACE/artifacts/amiga-smoke/merge-return-press.txt"
+            printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "$ipc_socket_path" | tee "$GITHUB_WORKSPACE/artifacts/amiga-smoke/merge-mouse-press.txt"
             sleep 0.3
-            printf "SEND_KEY\\t68\\t0\\n" | timeout 5s nc -U -N "$ipc_socket_path" | tee "$GITHUB_WORKSPACE/artifacts/amiga-smoke/merge-return-release.txt"
+            printf "SEND_MOUSE\\t0\\t0\\t0\\n" | timeout 5s nc -U -N "$ipc_socket_path" | tee "$GITHUB_WORKSPACE/artifacts/amiga-smoke/merge-mouse-release.txt"
             sleep 5
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-smoke/after-merge-click.png" | timeout 5s nc -U -N "$ipc_socket_path"
             if ! kill -0 "$emulator_pid" 2>/dev/null; then
