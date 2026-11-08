@@ -67,6 +67,7 @@ jobs:
           Echo "AMIGA CLI PROBE: BOOTED"
           CD CI:
           Copy CI:factzero.LST T:factzero.LST
+          List T:factzero.LST >DH0:t-file-check.txt
           Run <DH0:cli-input.txt >DH0:cli-output.txt DH0:GFABasic
           Echo "CLI launch without program argument" >DH0:probe-status.txt
           EOF
@@ -93,6 +94,7 @@ jobs:
           export AMIBERRY_LOG="$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/amiberry.log"
           export SDL_AUDIODRIVER=dummy
           env -u SHELLOPTS xvfb-run -a -s "-screen 0 1024x768x24 +extension GLX" bash -c '
+            set +u
             set -eo pipefail
             amiberry -G -f "$RUNNER_TEMP/amiga-cli-probe.uae" --log >"$AMIBERRY_LOG" 2>&1 &
             emulator_pid=$!
@@ -145,9 +147,9 @@ jobs:
             # with Amiga raw Return (0x44). This should activate the requester's
             # default/accept action without risking the adjacent Cancel gadget.
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/before-merge-click.png" | timeout 5s nc -U -N "$ipc_socket_path"
-            printf "SEND_KEY\\t68\\t1\\n" | timeout 5s nc -U -N "$ipc_socket_path"
+            printf "SEND_KEY\\t68\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
             sleep 0.3
-            printf "SEND_KEY\\t68\\t0\\n" | timeout 5s nc -U -N "$ipc_socket_path"
+            printf "SEND_KEY\\t68\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
             sleep 5
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-merge.png" | timeout 5s nc -U -N "$ipc_socket_path"
             kill -0 "$emulator_pid"
