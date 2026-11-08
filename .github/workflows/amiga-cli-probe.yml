@@ -56,8 +56,8 @@ jobs:
             --output "$RUNNER_TEMP/private-assets-index.json"
           jq -r '.[] | select(.type == "file") | [.name, (.size|tostring)] | @tsv' \
             "$RUNNER_TEMP/private-assets-index.json" > artifacts/amiga-cli-probe/private-assets-index.txt
-          ROM_NAME="$(jq -r '[.[] | select(.type == "file" and .size == 262144 and (.name|test("(?i)(kick.*1[.]3|1[.]3.*kick|34[.]005)"))) ] | .[0].name // empty' "$RUNNER_TEMP/private-assets-index.json")"
-          test -n "$ROM_NAME" || { echo "No raw 256/512 KiB Kickstart ROM found in private assets"; exit 1; }
+          ROM_NAME="$(jq -r '[.[] | select(.type == "file" and .size == 524288 and (.name|test("(?i)kickstart.*v?1[.]3.*34[.]5"))) ] | .[0].name // empty' "$RUNNER_TEMP/private-assets-index.json")"
+          test -n "$ROM_NAME" || { echo "No 512 KiB Kickstart 1.3 rev 34.5 ROM found in private assets"; exit 1; }
           ROM_PATH_ENCODED="$(jq -rn --arg path "$ROM_NAME" '$path | @uri')"
           curl --fail --silent --show-error --location \
             --header "Authorization: Bearer $GFA_ASSETS_TOKEN" \
@@ -65,7 +65,7 @@ jobs:
             "https://api.github.com/repos/vsimko/gfabasic-private-assets/contents/$ROM_PATH_ENCODED?ref=main" \
             --output "private-kickstart/kick.rom"
           ROM_SIZE="$(wc -c < private-kickstart/kick.rom)"
-          test "$ROM_SIZE" -eq 262144
+          test "$ROM_SIZE" -eq 524288
           sha256sum private-kickstart/kick.rom > artifacts/amiga-cli-probe/kickstart-sha256.txt
           printf 'Kickstart candidate: %s (%s bytes)\n' "$ROM_NAME" "$ROM_SIZE" > artifacts/amiga-cli-probe/kickstart-info.txt
           printf 'KICKSTART_ROM_PATH=%s/private-kickstart/kick.rom\n' "$GITHUB_WORKSPACE" >> "$GITHUB_ENV"
