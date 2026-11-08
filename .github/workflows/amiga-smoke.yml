@@ -81,10 +81,10 @@ jobs:
           cp amiga-volume/S/Startup-Sequence artifacts/amiga-smoke/Startup-Sequence.txt
           cat > "$RUNNER_TEMP/amiga-smoke.uae" <<EOF
           use_gui=no
-          cpu_type=68000
-          chipset=ocs
+          cpu_type=68020
+          chipset=ecs
           chipmem_size=2
-          fastmem_size=0
+          fastmem_size=8
           bogomem_size=0
           gfx_width=640
           gfx_height=512
@@ -143,9 +143,19 @@ jobs:
               exit 1
             fi
 
-            # Keep input injection disabled: the bundled AROS input.device
-            # crashes under synthetic SEND_KEY events. Verify the visible editor UI.
+            # AROS' bundled input.device previously crashed on injected keys with
+            # the 68000/OCS configuration. Retry under the 68020/ECS profile first.
+            # Amiga raw keycode 0x20 is the A key; press and release it explicitly.
             sleep 5
+            printf "SEND_KEY\\t32\\t1\\n" | timeout 5s nc -U -N "$socket" | tee "$GITHUB_WORKSPACE/artifacts/amiga-smoke/input-press.txt"
+            sleep 1
+            printf "SEND_KEY\\t32\\t0\\n" | timeout 5s nc -U -N "$socket" | tee "$GITHUB_WORKSPACE/artifacts/amiga-smoke/input-release.txt"
+            sleep 2
+            if ! kill -0 "$emulator_pid" 2>/dev/null; then
+              echo "Amiberry exited after synthetic keyboard input"
+              cat "$AMIBERRY_LOG"
+              exit 1
+            fi
             printf "SCREENSHOT\\t%s\\n" "$SCREENSHOT" | timeout 5s nc -U -N "$socket"
             test -s "$SCREENSHOT"
             cat "$RESULT"
