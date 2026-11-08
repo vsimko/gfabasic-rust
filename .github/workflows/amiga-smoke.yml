@@ -15,12 +15,32 @@ concurrency:
 
 jobs:
   boot-amiga:
-    name: Boot Amiga and capture output
+    name: Boot AROS and launch GFA BASIC
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+
+      - name: Download and verify private GFA BASIC interpreter
+        env:
+          GFA_ASSETS_TOKEN: ${{ secrets.GFA_ASSETS_TOKEN }}
+        run: |
+          set -euo pipefail
+          test -n "$GFA_ASSETS_TOKEN" || {
+            echo "::error::GFA_ASSETS_TOKEN is not configured."
+            exit 1
+          }
+          mkdir -p amiga-volume artifacts/amiga-smoke
+          curl --fail --silent --show-error --location --retry 3 \
+            --header "Authorization: Bearer $GFA_ASSETS_TOKEN" \
+            --header "Accept: application/vnd.github.raw" \
+            "https://api.github.com/repos/vsimko/gfabasic-private-assets/contents/GFABasic?ref=main" \
+            --output amiga-volume/GFABasic
+          echo "fd80f6093e8d0163856af5849121e945e37051a2ad2a9053aa1930021783d962  amiga-volume/GFABasic" | sha256sum --check
+          test "$(wc -c < amiga-volume/GFABasic)" -eq 136548
+          printf '\\x00\\x00\\x03\\xf3' | cmp -n 4 - amiga-volume/GFABasic
+          file amiga-volume/GFABasic | tee artifacts/amiga-smoke/gfa-basic-file.txt
 
       - name: Prepare APT cache
         run: sudo chown -R "$USER":"$USER" /var/cache/apt/archives
@@ -42,15 +62,20 @@ jobs:
             | sudo tee /etc/apt/sources.list.d/amiberry.list >/dev/null
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends amiberry xvfb netcat-openbsd
-          amiberry --version
+          amiberry --version | tee artifacts/amiga-smoke/amiberry-version.txt
 
       - name: Prepare boot volume
         run: |
-          mkdir -p amiga-volume/S artifacts/amiga-smoke
+          mkdir -p amiga-volume/S
           cat > amiga-volume/S/Startup-Sequence <<'EOF'
           Echo "AMIGA CI: BOOTED"
           Echo "Amiberry AROS fallback ROM"
-          Echo "AMIGA-CI: PASS" >DH0:ci-result.txt
+          Run >NIL: DH0:GFABasic
+          If WARN
+            Echo "GFA BASIC launch failed" >DH0:gfa-basic-launch.txt
+          Else
+            Echo "GFA BASIC launch command accepted" >DH0:gfa-basic-launch.txt
+          EndIf
           EOF
 
           cp amiga-volume/S/Startup-Sequence artifacts/amiga-smoke/Startup-Sequence.txt
@@ -68,12 +93,12 @@ jobs:
           filesystem2=rw,DH0:CI:$GITHUB_WORKSPACE/amiga-volume,0
           EOF
 
-      - name: Boot Amiga and capture guest text and screenshot
+      - name: Boot AROS and verify GFA BASIC launch
         run: |
           set -euo pipefail
           export AMIBERRY_LOG="$GITHUB_WORKSPACE/artifacts/amiga-smoke/amiberry.log"
           export SCREENSHOT="$GITHUB_WORKSPACE/artifacts/amiga-smoke/amiga-screen.png"
-          export RESULT="$GITHUB_WORKSPACE/amiga-volume/ci-result.txt"
+          export RESULT="$GITHUB_WORKSPACE/amiga-volume/gfa-basic-launch.txt"
           export SDL_AUDIODRIVER=dummy
 
           xvfb-run -a -s "-screen 0 1024x768x24 +extension GLX" bash -euo pipefail -c '
@@ -104,20 +129,21 @@ jobs:
                 break
               fi
               if ! kill -0 "$emulator_pid" 2>/dev/null; then
-                echo "Amiberry exited before the guest wrote its result"
+                echo "Amiberry exited before the guest launched GFA BASIC"
                 cat "$AMIBERRY_LOG"
                 exit 1
               fi
               sleep 1
             done
 
-            if ! grep -q "AMIGA-CI: PASS" "$RESULT" 2>/dev/null; then
-              echo "Amiga guest did not write the expected result"
+            if ! grep -q "GFA BASIC launch command accepted" "$RESULT" 2>/dev/null; then
+              echo "AROS did not successfully start the GFA BASIC executable"
               cat "$AMIBERRY_LOG"
               test -f "$RESULT" && cat "$RESULT" || true
               exit 1
             fi
 
+            sleep 5
             printf "SCREENSHOT\\t%s\\n" "$SCREENSHOT" | timeout 5s nc -U -N "$socket"
             test -s "$SCREENSHOT"
             cat "$RESULT"
@@ -125,13 +151,13 @@ jobs:
           '
 
           cp "$RESULT" artifacts/amiga-smoke/guest-output.txt
-          grep -q "AMIGA-CI: PASS" artifacts/amiga-smoke/guest-output.txt
+          grep -q "GFA BASIC launch command accepted" artifacts/amiga-smoke/guest-output.txt
 
-      - name: Upload Amiga output and screenshot
+      - name: Upload boot log and screenshot (never upload commercial binary)
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         with:
-          name: amiga-smoke-test
+          name: amiga-gfa-basic-aros-smoke
           path: artifacts/amiga-smoke/
           if-no-files-found: warn
           retention-days: 7
