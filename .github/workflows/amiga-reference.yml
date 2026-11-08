@@ -38,7 +38,7 @@ jobs:
           cd dist/amiga/gfa-basic-3.52
           echo "fd80f6093e8d0163856af5849121e945e37051a2ad2a9053aa1930021783d962  GFABasic" | sha256sum --check
           test "$(wc -c < GFABasic)" -eq 136548
-          printf '\\x00\\x00\\x03\\xf3' | cmp -n 4 - GFABasic
+          printf '\x00\x00\x03\xf3' | cmp -n 4 - GFABasic
           file GFABasic || true
 
       - name: Package emulator input
