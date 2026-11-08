@@ -189,7 +189,11 @@ jobs:
             window_id="$(xdotool search --onlyvisible --class amiberry | head -n 1)"
             test -n "$window_id"
             xdotool getwindowgeometry --shell "$window_id" | tee "$GITHUB_WORKSPACE/artifacts/amiga-smoke/window-geometry.txt"
-            xdotool mousemove --window "$window_id" 270 360 click 1
+            xdotool windowfocus --sync "$window_id"
+            xdotool mousemove --sync --window "$window_id" 270 360
+            sleep 1
+            printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-smoke/before-merge-click.png" | timeout 5s nc -U -N "$ipc_socket_path"
+            xdotool click --window "$window_id" 1
             sleep 5
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-smoke/after-merge-click.png" | timeout 5s nc -U -N "$ipc_socket_path"
             if ! kill -0 "$emulator_pid" 2>/dev/null; then
