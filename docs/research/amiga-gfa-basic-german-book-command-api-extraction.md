@@ -1807,3 +1807,97 @@ The book says a newly created INLINE area is zero-filled. Deleting its source li
 ### 22.6 Evidence boundary
 
 This is low-level, version-sensitive memory behavior. Address alignment, allocation flags, binary real layouts, INLINE persistence and pointer conventions are reported as described by the book, not as safe modern API recommendations. Verify all details against interpreter behavior and Amiga memory APIs before implementing them.
+
+
+## 23. Amiga Exec library overview: Chapter 11.5 (printed pp. 317–328)
+
+The book introduces Exec as the Amiga's multitasking, interrupt and memory-management library. It warns that these calls require detailed knowledge of AmigaOS internals and can destabilize the machine. It states that GFA BASIC can call the routines directly as functions, without the library-opening ceremony used by Amiga BASIC. The entries below are a source-derived index, not a complete ABI specification.
+
+### 23.1 Tasks and scheduling
+
+| Routine | Syntax in the book | Purpose |
+|---|---|---|
+| `SetTaskPri` | `SetTaskPri(Task,Priorneu)` | Changes a task's priority and returns its previous priority. |
+| `FindTask` | `FindTask(Name)` | Searches for a task by name and returns its address. |
+| `AddTask` | `AddTask(TaskCB,InitialPC,FinalPC)` | Adds a new task to the system. |
+| `RemTask` | `RemTask(Task)` | Terminates and removes a task. |
+| `Forbid` | `Forbid()` | Disables task switching. |
+| `Permit` | `Permit()` | Re-enables task switching. |
+
+The book explains that task priorities range from −127 to +128 in its description, while its example uses priorities −5 and +5. Treat this range and the example as historical text, not as a reconciled ABI contract.
+
+### 23.2 Interrupts, processor state and resident modules
+
+| Routine | Syntax in the book | Purpose |
+|---|---|---|
+| `Disable` / `Enable` | `Disable()`, `Enable()` | Disables or re-enables interrupts. |
+| `Cause` | `Cause(Adr)` | Triggers a software interrupt at the supplied address. |
+| `AddIntServer` | `AddIntServer(Name,Adr)` | Adds an interrupt-server routine. |
+| `SetIntVector` | `SetIntVector(Nummer,Adrneu)` | Replaces an interrupt vector and returns the old structure address. |
+| `SuperState` | `SuperState()` | Enters supervisor mode and returns the previous stack pointer. |
+| `UserState` | `UserState(Stack)` | Returns to user mode using the saved stack value. |
+| `SetSr` | `SetSr(Neu,Maske)` | Changes the 68000 status register and returns its old value. |
+| `Supervisor` | `Supervisor()` | Switches the 68000 processor into supervisor mode. |
+| `Debug` | `Debug()` | Activates the operating system's ROM-Wack/debug facility. |
+| `InitCode` | `InitCode(Startwert,Versionsnummer)` | Initializes resident modules with the supplied start value and version. |
+| `InitStruct` | `InitStruct(Init,Puffer,Größe)` | Initializes a memory structure from data at Init. |
+| `MakeLibrary` | `MakeLibrary(...)` | Creates a function library and returns its address. |
+| `FindResident` | `FindResident(Name)` | Searches for a resident structure by name. |
+| `InitResident` | `InitResident(Adr,Seglist)` | Initializes a resident structure using a segment list. |
+
+### 23.3 Memory lists and system memory
+
+| Routine | Syntax in the book | Purpose |
+|---|---|---|
+| `AvailMem` | `AvailMem(Art)` | Returns currently available memory for the requested memory type. |
+| `AllocMem` | `AllocMem(Größe,Art)` | Allocates system memory; the book compares it with GFA MALLOC. |
+| `FreeMem` | `FreeMem(Adr,Größe)` | Frees system memory; compared with GFA MFREE. |
+| `Allocate` | `Allocate(Memheader,Größe)` | Allocates a block from a memory list. |
+| `Deallocate` | `Deallocate(Memheader,Adr,Größe)` | Releases a block allocated from a memory list. |
+| `AllocEntry` | `AllocEntry(MemList)` | Initializes/allocates memory-list entries. |
+| `FreeEntry` | `FreeEntry(MemList)` | Frees blocks associated with a memory list. |
+
+### 23.4 System lists and nodes
+
+| Routine | Syntax in the book | Purpose |
+|---|---|---|
+| `FindName` | `FindName(Start,Name)` | Searches a system node list by name. |
+| `Enqueue` | `Enqueue(List,Node)` | Inserts a node into a system list. |
+| `AddHead` / `AddTail` | `AddHead(List,Node)`, `AddTail(List,Node)` | Inserts a node at the head or tail of a doubly linked list. |
+| `Insert` | `Insert(List,Node1,Node2)` | Inserts a node into a node list. |
+| `Remove` | `Remove(Node)` | Removes a node from a list. |
+| `RemHead` / `RemTail` | `RemHead(List)`, `RemTail(List)` | Removes and returns the first or last node. |
+
+### 23.5 Signals, message ports and traps
+
+| Routine | Syntax in the book | Purpose |
+|---|---|---|
+| `AllocSignal` | `AllocSignal(Signalnr)` | Reserves an available signal bit. |
+| `FreeSignal` | `FreeSignal(Signalnr)` | Releases a previously reserved signal bit. |
+| `SetSignal` | `SetSignal(Signeu,Signmaske)` | Changes task signal state and returns the old state. |
+| `SetExcept` | `SetExcept(Signeu,Maske)` | Selects exception signal bits and returns the old mask. |
+| `Wait` | `Wait(Signal)` | Suspends the task until a signal is received. |
+| `Signal` | `Signal(Task,Signal)` | Sends a signal to another task. |
+| `AddPort` / `RemPort` | `AddPort(MsgPort)`, `RemPort(MsgPort)` | Adds or removes a message port. |
+| `WaitPort` | `WaitPort(MsgPort)` | Waits for an event on a message port. |
+| `PutMsg` / `GetMsg` | `PutMsg(MsgPort,Message)`, `GetMsg(MsgPort)` | Sends a message to a port or retrieves its next message. |
+| `ReplyMsg` | `ReplyMsg(Message)` | Replies to a received message. |
+| `AllocTrap` / `FreeTrap` | `AllocTrap(Trapnr)`, `FreeTrap(Trapnr)` | Reserves or releases a trap number. |
+
+### 23.6 Libraries, resources and devices
+
+| Routine | Syntax in the book | Purpose |
+|---|---|---|
+| `OpenLibrary` | `OpenLibrary(Name,Version)` | Opens a function library and returns its structure address. |
+| `CloseLibrary` | `CloseLibrary(Adr)` | Closes a library. |
+| `AddLibrary` / `RemLibrary` | `AddLibrary(Adr)`, `RemLibrary(Adr)` | Adds or removes a library from the system library list. |
+| `SetFunction` | `SetFunction(Library,Funkoffset,Funkadr)` | Replaces a library function and returns the old function address. |
+| `SumLibrary` | `SumLibrary(Library)` | Recalculates a library checksum. |
+| `OpenResource` | `OpenResource(Name)` | Opens a resource by name. |
+| `AddDevice` / `RemDevice` | `AddDevice(Adr)`, `RemDevice(Adr)` | Adds or removes a device from the system device list. |
+| `OpenDevice` | `OpenDevice(Name,Unit,IORequest,Flags)` | Opens a device and initializes its IORequest. |
+| `CloseDevice` | `CloseDevice(IORequest)` | Closes a device. |
+
+### 23.7 Evidence boundary
+
+The book deliberately presents these Exec calls only briefly and says detailed AmigaDOS/Exec knowledge is outside its scope. Argument layouts, structure definitions, calling conventions, return-code details and version-specific availability are not established here. Treat this section as a list of callable names and brief descriptions only; do not implement an Exec ABI from these summaries alone.
