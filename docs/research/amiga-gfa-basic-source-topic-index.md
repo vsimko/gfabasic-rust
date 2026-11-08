@@ -95,3 +95,29 @@ Detailed definitions, examples, disputes and evidence boundaries are in the [3.5
 - Direct Amiga OS library wrappers need ABI/layout/runtime validation before implementation decisions.
 - Known source disagreements and unresolved OCR/runtime questions remain visible in the extraction notes and the candidate manifest.
 - Historical scans and OCR dumps must not be committed or redistributed. Only concise citations, source metadata, original summaries and independently authored tests belong in the repository.
+
+
+## Selected command/function navigation
+
+This is a compact name-to-page index for the principal interpreter families extracted in this pass. It is intentionally a **selected index**, not a claim to reproduce every entry of Appendix D. Where a command is part of the 3.5 addendum, the version-specific 3.5 table above takes precedence over the older book's page number.
+
+| Names / family | Printed pages | Scope |
+|---|---:|---|
+| `INPUT`, `LINE INPUT`, `FORM INPUT`, `INKEY$`, `PRINT`, `WRITE`, `LOCATE`, `HTAB`, `VTAB` | 75–92 | Screen and keyboard I/O; 3.0/V3.03 source |
+| `OPEN`, `CLOSE`, `INPUT #`, `LINE INPUT #`, `PRINT #`, `WRITE #`, `FIELD`, `GET`, `PUT`, `SEEK`, `RELSEEK`, `RECORD`, `BGET`, `BPUT` | 92–119 | File and channel operations; 3.0/V3.03 source |
+| `INP`, `OUT` | 119 | Port I/O; 3.0/V3.03 source |
+| `OPENW`, `CLOSEW`, `MOVEW`, `FULLW`, `LIMITW`, `TITLEW`, `FRONTW`, `SIZEW`, `WINDOW()` | 375–388 | Amiga window API; negative-screen OPENW variant separately confirmed in 3.5 addendum |
+| `OPENS`, `CLOSES`, `SCREEN()`, `SCREEN` and screen geometry/mode operations | 383–388 | Amiga screen API; 3.0/V3.03 source |
+| `MENU`, `MENUTEXT`, `MENUMENU`, `MENUKEY`, `MENUKILL`, `ON MENU`, `ON MENU GOSUB`, `ON MENU BUTTON GOSUB`, `ON MENU KEY GOSUB`, `SLEEP` | 389–404 | Menu creation and Intuition event dispatch; page-image verified selected event tables |
+| `ALERT`, `FILESELECT`, `MOUSE`, `MOUSEX`, `MOUSEY`, `MOUSEK`, `STICK`, `STICK()`, `STRIG()` | 363–373 | Requesters and input devices; 3.0/V3.03 source |
+| `PLOT`, `LINE`, `DRAW`, `DRAW$`, `BOX`, `PBOX`, `CIRCLE`, `PCIRCLE`, `ELLIPSE`, `PELLIPSE`, `POLYLINE`, `POLYFILL`, `POINT`, `SCROLL`, `TEXT`, `GRAPHMODE` | 225–256 | Raster and vector graphics; selected syntax page-image verified |
+| `GET`, `PUT`, `SPRITE`, `VSYNC`, `OBJECT.*`, `ON COLLISION GOSUB` | 257–278 | Bitmap transfer, hardware sprites and Blitter objects; mask/runtime caveats retained |
+| `OPTION BASE`, `DIM`, `ERASE`, `INSERT`, `QSORT`, `SSORT`, `ARRAYFILL`, `ARRPTR` | 291–304 | Arrays and sorting |
+| `PEEK`, `POKE`, `DPEEK`, `DPOKE`, `LPEEK`, `LPOKE`, `MALLOC`, `MFREE`, `VARPTR`, `ABSOLUTE`, `INLINE` | 305–316 | Memory and pointers; low-level ABI/runtime validation required |
+| `SOUND`, `WAVE`, `SAY`, `TRANSLATE$` | 139–144 | Sound and speech output |
+| `DATA`, `READ`, `RESTORE`, `DEFBIT`, `DEFBYT`, `DEFINT`, `DEFSTR`, `DEFWRD`, `LOCAL`, `PROCEDURE`, `FUNCTION`, `DEFFN`, `CALL`, `EXEC`, `MONITOR`, `RCALL` | 145–191 | Program structure, declarations and external code |
+| `DUMP`, `MODE`, `TRACE$`, `TRON`, `TROFF`, `ERROR`, `ERR`, `ERR$`, `RESUME` | 331–361 | Diagnostics, error handling and interpreter control |
+| `MAT BASE`, `MAT CLR`, `MAT SET`, `MAT ONE`, `MAT READ`, `MAT PRINT`, `MAT INPUT`, `MAT CPY`, `MAT XCPY`, `MAT TRANS`, `MAT ADD`, `MAT SUB`, `MAT MUL`, `MAT NORM`, `MAT DET`, `MAT QDET`, `MAT RANG`, `MAT INV` | 13-1–13-41 (3.5 addendum) | Version-specific matrix/vector API; floating-point fields only |
+| `FACT`, `VARIAT`, `COMBIN`, `PCOLOR`, `GURU`, `_DATA`, `_DATA=`, `_0`…`_9` | 13-33–13-36 (3.5 addendum) | Explicit additional 3.5 interpreter features |
+
+Names are normalized only for navigation; this table does not settle OCR spellings where the source is damaged or internally inconsistent. For example, the book's error appendix uses `PERMUT` where Chapter 19 describes `VARIAT`, and the function inventory retains disputed `CVD/CVF` and `MKD/MKF` name slots. Consult the [candidate manifest](amiga-gfa-basic-candidates.toml) and the detailed source notes before using any spelling as a parser requirement.
