@@ -2278,3 +2278,75 @@ This index confirms the page placement and spelling of the matrix/function famil
 ### 32.3 Scope and limitations
 
 The command index is not a normative language specification. It confirms that the book covers these entries but does not establish parameter types, runtime semantics, or compatibility beyond the book's stated version. Error-code wording and numeric assignments should be checked against the English 3.5 addendum/interpreter reference before using them as implementation constants.
+
+## 33. Compiler tooling (not interpreter language API): Chapter 17 (printed pp. 405–450)
+
+This chapter describes the separate GFA-BASIC 3.0 compiler, linker, CLI tools and the MENUX compiler shell. It is recorded for completeness, but compiler switches are not interpreter statements and do not establish interpreter runtime semantics.
+
+### 33.1 Compiler and linker workflow
+
+The book distinguishes interpretation (execute BASIC source statement by statement) from compilation (translate source into object code) and linking (combine object module(s), library routines and options into an executable program). The described workflow is: select a .GFA source file, compile it to an object module, link the module, then test/execute the resulting program. The source file remains necessary for later changes.
+
+The MENUX shell provides file selection, Compiler, Linker, Interpreter, Test, Execute and Quit functions. The book also describes CLI invocation using GFA_BCOM and GL.
+
+### 33.2 Compiler options and source flags
+
+The chapter describes options for optimization, interrupt checks, integer arithmetic, procedures/functions, error messages and stack reservation. OCR preserves these flag spellings; some descriptions are clearer than the exact punctuation/variant mapping.
+
+| Flag | Source-described purpose |
+|---|---|
+| I+ / I- | Enable/disable checking for the compiler's keyboard break combination. |
+| U+ / U- | Enable/disable interrupt routines (AFTER/EVERY). |
+| S& | Select handling with 2-byte parameters/values, as described in the compiler's Select optimization section. |
+| S< / S> | Select optimization for program size versus execution speed; the size-oriented algorithm is slower. |
+| P> / P< | Procedures handled with GFA-managed procedure frames (recursion/RESUME support) versus compiled as plain 68000 subroutines. |
+| F% | Function return parameters treated as Integer (as described in the flag table). |
+| F> / F< | Controls generation of ENDFUNC; omitting it is possible when RETURN is used and may be faster. |
+| E$ | Include textual error messages in the compiled program. |
+| E# | Store/report error messages as numbers rather than full text. |
+| %0 / %3 | Select integer division behavior; the chapter distinguishes integer division only when assigned to an integer target versus integer division throughout. |
+| %6 | Force mixed integer/floating-point addition to floating-point arithmetic; the book warns this can be significantly slower. |
+| *% / *& | Select integer long-word multiplication implementation (LMUL routine versus 68000 MULS instruction). |
+| N+ / N- | Enable/disable additional overflow/loop-boundary checks. The faster default can permit an integer FOR/NEXT loop to wrap and continue indefinitely. |
+| C+ / C- | Save/restore registers A3–A6 around CALL to assembler routines. |
+| Mxxxx | Reserve xxxx bytes of stack memory for the compiled program. |
+| X name | Mark an external assembler routine for linking with the named GFA library routine. |
+| -s | Link symbol/debug information into the executable (linker option). |
+
+The book says options can be set globally through the compiler shell/CLI and locally in source using dollar-prefixed compiler directives, e.g. $ U+, $%6, $ m2000, or $ s&,s<. These are compiler directives, not runtime BASIC statements.
+
+### 33.3 CLI and linker switches
+
+The compiler is invoked with a source filename followed by option flags. The linker is invoked separately; the book's examples use GL Test.
+
+| Linker switch | Source-described purpose |
+|---|---|
+| -s | Include the symbol table for debugging. |
+| +Lib | Use the named library instead of the default GFA library. |
+| -Lname | Select the link library. |
+| -Oname | Replace the default object module (e.g. TEST.O) with name.O. |
+| -Pname | Name the generated executable. |
+| -W | Enable the wait flag for disk changes. |
+
+The book also describes adding additional object modules to the standard object and excluding/replacing the default TEST.O module. Exact punctuation/order of some linker switches is OCR-sensitive; verify against the compiler's own command help or original distribution before implementation.
+
+### 33.4 Optimization guidance and compiler limitations
+
+The examples show that compilation does not speed up operating-system drawing or I/O in the same way it speeds up arithmetic loops. The book recommends choosing integer types appropriate to the value range, using 2-byte or 1-byte values where sufficient, and using the integer multiplication option for suitable workloads. It gives a sieve benchmark with a large speedup in the compiled version, while a graphics-heavy example improves little.
+
+The chapter warns about compiler-specific correctness/performance trade-offs:
+- Loop termination checks may be delayed until NEXT; integer wraparound can therefore produce an endless loop unless the overflow-check option is enabled.
+- Mixed integer/real addition can truncate fractional parts when converted to integer; the floating-point option avoids this at a performance cost.
+- Plain 68000 procedure compilation is faster but removes GFA-managed recursion/RESUME handling.
+- Skipping runtime error handling or reducing checks can produce unpredictable behavior.
+- Debug symbols consume additional memory.
+
+### 33.5 MENUX shell source and caveats
+
+The book prints and annotates a sample compiler shell implemented in GFA-BASIC. It describes procedures for menu/key handling, file selection, compiler option-string generation, environment/linker arguments, compile/link execution, timing and output-window display. It identifies defects in the supplied shell and proposes source edits, including correcting a menu case index, redirecting version text to the output channel, configuring a working path and adjusting EXEC behavior to allow the shell to respond while a compiled program runs.
+
+These are example application fixes, not changes to the BASIC language or compiler ABI. The printed listing contains extensive OCR damage and must not be copied as a verified working implementation.
+
+### 33.6 Evidence boundary
+
+Chapter 17 documents the GFA-BASIC 3.0 compiler tooling. The book's later Chapters 18–19 explicitly introduce interpreter-facing 3.5 features, so the compiler option list remains a separate compatibility layer. Exact flag aliases, command-line quoting, ABI/register preservation, stack sizing and generated-code behavior require compiler-binary/runtime verification.
