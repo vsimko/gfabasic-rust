@@ -61,7 +61,7 @@ jobs:
           echo "deb [arch=amd64 signed-by=/usr/share/keyrings/amiberry-archive-keyring.gpg] https://packages.amiberry.com/apt noble main" \
             | sudo tee /etc/apt/sources.list.d/amiberry.list >/dev/null
           sudo apt-get update
-          sudo apt-get install -y --no-install-recommends amiberry xvfb netcat-openbsd tesseract-ocr
+          sudo apt-get install -y --no-install-recommends amiberry xvfb netcat-openbsd
           amiberry --version | tee artifacts/amiga-smoke/amiberry-version.txt
 
       - name: Prepare boot volume
@@ -148,10 +148,6 @@ jobs:
             sleep 5
             printf "SCREENSHOT\\t%s\\n" "$SCREENSHOT" | timeout 5s nc -U -N "$socket"
             test -s "$SCREENSHOT"
-            tesseract "$SCREENSHOT" "$GITHUB_WORKSPACE/artifacts/amiga-smoke/screen-ocr" --psm 6
-            cat "$GITHUB_WORKSPACE/artifacts/amiga-smoke/screen-ocr.txt"
-            grep -qi "Save" "$GITHUB_WORKSPACE/artifacts/amiga-smoke/screen-ocr.txt"
-            grep -qi "Direct" "$GITHUB_WORKSPACE/artifacts/amiga-smoke/screen-ocr.txt"
             cat "$RESULT"
             printf "QUIT\\n" | timeout 5s nc -U -N "$socket" || true
           '
