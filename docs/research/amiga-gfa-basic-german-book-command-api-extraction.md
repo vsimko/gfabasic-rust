@@ -1362,3 +1362,109 @@ The chapter includes user-written procedures such as ASTRING (collecting all mat
 ### 16.5 Evidence boundary
 
 The syntax and behavior above are transcribed from the German book's Chapter 7. Exact abbreviation rules, treatment of out-of-range positions, and edge cases beyond those explicitly stated remain unverified. The source is not evidence that every item is unchanged in interpreter 3.5.
+
+
+## 17. Arithmetic, numeric and bit operations: Chapter 8 (printed pp. 201–224)
+
+This extraction records the arithmetic chapter's operators, statements and functions. It follows the German book's descriptions and examples; it is historical 3.0/V3.03-era evidence, not a claim that every behavior is unchanged in 3.5.
+
+### 17.1 Operators and precedence
+
+The book groups arithmetic operators as follows:
+
+- Exponentiation (`^`).
+- Unary minus.
+- Multiplication and division (`*`, `/`).
+- Integer division (`DIV`) and modulo (`MOD`).
+- Addition and subtraction (`+`, `-`).
+- Comparisons: equality, inequality (`<>` or `><`), greater/less than, and inclusive comparisons (`>=`, `<=`; alternate orderings are also shown).
+- Boolean operators: `NOT`, `AND`, `OR`, `XOR`, `IMP`, `EQV`.
+
+Parentheses have the highest priority; Boolean operators have the lowest. The book's displayed precedence table places comparison operators above Boolean operators and groups the Boolean operators at the bottom. Exact tie-breaking between operators at the same level is not specified by the OCR passage and should be tested separately.
+
+### 17.2 Arithmetic statements and integer arithmetic functions
+
+| Name | Form | Book's description |
+|---|---|---|
+| `INC` | `INC Var` | Increments the numeric variable by 1. |
+| `DEC` | `DEC Var` | Decrements the numeric variable by 1. |
+| `ADD` | `ADD Var,Wert` | Adds Wert to Var and stores the result in Var. |
+| `SUB` | `SUB Var,Wert` | Subtracts Wert from Var and stores the result in Var. |
+| `MUL` | `MUL Var,Wert` | Multiplies Var by Wert and stores the result in Var. |
+| `DIV` | `DIV Var,Wert` | Divides Var by Wert and stores the result in Var. |
+| `ADD()` | `ADD(Wert1,Wert2)` | Returns the integer result of addition. |
+| `SUB()` | `SUB(Wert1,Wert2)` | Returns the integer result of subtraction. |
+| `MUL()` | `MUL(Wert1,Wert2)` | Returns the integer result of multiplication. |
+| `DIV()` | `DIV(Wert1,Wert2)` | Returns the integer-division result. |
+| `MOD()` | `MOD(Wert1,Wert2)` | Returns the integer remainder. |
+
+The book distinguishes the mutating statements ADD/SUB/MUL/DIV from their function forms: function arguments are not changed, and the function forms can be embedded in expressions, assignments and conditions. Real arguments are reduced to their integer parts before these operations; the result is an integer and no rounding is performed. For the statement forms, the book similarly notes that a real Wert is treated as an integer when Var is an integer variable.
+
+### 17.3 Numeric functions
+
+| Function | Syntax | Description in the book |
+|---|---|---|
+| `ABS` | `ABS(Arg)` | Absolute value. |
+| `EVEN` | `EVEN(Arg)` | Returns −1 for an even integer argument and 0 otherwise (the OCR sentence is split; verify the truth convention in the page image). |
+| `ODD` | `ODD(Arg)` | Corresponding odd-number test. |
+| `FIX` | `FIX(Arg)` | Removes the fractional part (truncates toward zero); identical to TRUNC. |
+| `TRUNC` | `TRUNC(Arg)` | Identical to FIX. |
+| `INT` | `INT(Arg)` | Returns the next lower integer; for negative non-integers this moves farther from zero (e.g. the book gives INT(−12.33)=−13). |
+| `FRAC` | `FRAC(Arg)` | Returns the fractional part; returns zero for an integer argument. |
+| `ROUND` | `ROUND(Arg[,Stelle])` | Rounds mathematically to an integer or to the requested decimal place. A negative Stelle rounds to a place left of the decimal point. |
+| `PRED` | `PRED(Arg)` | Previous integer. |
+| `SUCC` | `SUCC(Arg)` | Next integer. |
+| `SGN` | `SGN(Arg)` | Sign: 1 for positive, −1 for negative, 0 for zero. |
+| `SQR` | `SQR(Arg)` | Square root. Higher roots may be expressed using fractional exponents. |
+| `EXP` | `EXP(Arg)` | Exponential function with base e; the book requires Arg greater than zero. |
+| `LOG` | `LOG(Arg)` | Natural logarithm (base e); the book requires Arg greater than zero. |
+| `LOG10` | `LOG10(Arg)` | Decimal logarithm (base 10). |
+
+The book's prose for EXP/LOG domain restrictions and its numeric examples should be checked against page images before turning these into runtime assertions; the OCR is damaged in several places.
+
+### 17.4 Trigonometry, angle conversion and extrema
+
+| Function / constant | Syntax | Description in the book |
+|---|---|---|
+| `SIN` / `COS` / `TAN` | `SIN(Arg)`, etc. | Trigonometric functions with angles in radians. |
+| `ASIN` / `ACOS` / `ATN` | `ASIN(Arg)`, etc. | Inverse sine, cosine and tangent; ATN returns an angle in radians. |
+| `DEG` | `DEG(Radiant)` | Converts radians to degrees; equivalent to Arg × 180 / PI. |
+| `RAD` | `RAD(Grad)` | Converts degrees to radians. |
+| `SINQ` / `COSQ` | `SINQ(Grad)`, `COSQ(Grad)` | Sixteenth-degree interpolated sine/cosine using degree input; the book claims roughly ten times the speed of SIN/COS. |
+| `PI` | `PI` | Reserved constant for π, printed as approximately 3.1415926536. |
+| `MIN` | `MIN(Expr1,Expr2[, ...])` | Returns the smallest value or, for string arguments, the lexicographically smallest string. |
+| `MAX` | `MAX(Expr1,Expr2[, ...])` | Returns the largest value or, for string arguments, the lexicographically largest string. |
+
+For MIN/MAX, the book requires all arguments in a call to have the same type. String comparison proceeds character by character using ASCII values; if one string is a prefix of the other, the longer string is considered greater.
+
+### 17.5 Boolean and bitwise operations
+
+The book documents Boolean functions as function-form equivalents of the corresponding operators: `AND(a,b)`, `OR(a,b)`, `XOR(a,b)`, `EQV(a,b)` and `IMP(a,b)`. It describes their results as integer values. Do not assume short-circuit evaluation; this chapter describes logical combination, not evaluation order.
+
+| Function | Syntax | Description |
+|---|---|---|
+| `BCHG` | `BCHG(Wert,Bit)` | Toggles the selected bit. |
+| `BCLR` | `BCLR(Wert,Bit)` | Clears the selected bit. |
+| `BSET` | `BSET(Wert,Bit)` | Sets the selected bit. |
+| `BTST` | `BTST(Wert,Bit)` | Tests the selected bit; returns −1 when set and 0 otherwise. |
+| `BYTE` | `BYTE(Wert)` | Returns the unsigned low 8 bits. |
+| `CARD` | `CARD(Wert)` | Returns the unsigned low 16 bits. |
+| `WORD` | `WORD(Wert)` | Sign-extends a 16-bit value to 32 bits. |
+| `SWAP` | `SWAP(Wert)` | Swaps the low and high 16-bit words of a 32-bit value. |
+| `SHL` / `SHR` | `SHL(Wert,Bits)`, `SHR(Wert,Bits)` | Logical left/right shift. |
+| `ROL` / `ROR` | `ROL(Wert,Bits)`, `ROR(Wert,Bits)` | Rotate left/right. |
+
+For bit-indexed functions, bit numbering starts at zero from the right. The book says bit indices greater than 31 are not processed correctly and values larger than the maximum 32-bit unsigned value are not handled. It documents typed variants of shifts and rotates: the plain form works on a long (32-bit) value, `&` selects a word (16-bit) operation, and `!` selects a byte (8-bit) operation. The word variants are described as sign-extending bit 15 into the upper 16 bits; byte variants return only the low 8 bits.
+
+### 17.6 Random-number generation
+
+| Function / statement | Syntax | Description |
+|---|---|---|
+| `RANDOMIZE` | `RANDOMIZE [(Start)]` | Initializes the random-number generator. Reusing the same Start reproduces the same sequence. The argument is optional. |
+| `RANDOM` | `RANDOM(n)` | Returns a 32-bit integer random value in the interval from zero (inclusive) to n (exclusive); n may be negative. |
+| `RAND` | `RAND(n)` | Returns an unsigned 16-bit integer random value from zero (inclusive) to n (exclusive). Values of n above 65535 are reduced using n MOD 65535. |
+| `RND` | `RND[(Arg)]` | Returns a 13-decimal-digit real random value from zero (inclusive) to one (exclusive). The optional argument is a dummy argument with no effect. |
+
+### 17.7 Evidence boundary
+
+This is a transcription of the German book's Chapter 8. Some OCR around parity tests, EXP/LOG descriptions and typed bit-operation variants is degraded; those details are flagged rather than silently normalized. Operator associativity, overflow behavior, division-by-zero behavior and exact coercion rules are not established by this extraction and require page-image or interpreter verification.
