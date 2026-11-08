@@ -365,3 +365,82 @@ Use these labels in future command inventories:
 - OS-library-call: Amiga API routine, not a GFA BASIC language keyword.
 
 This distinction avoids treating the entire 3.0 reference as a fully verified 3.5 specification while still preserving the inherited command baseline.
+
+
+## 11. AmigaDOS library: detailed Chapter 5.7 extraction
+
+This expands §4.4 from the German book's printed pp. 120–132. The chapter says there are 31 routines. The entries below are OS-library calls exposed to GFA BASIC, not BASIC statements. Signatures retain the book's parameter names and level of detail; pointer arguments are addresses, not BASIC strings passed by value.
+
+### 11.1 File I/O routines (printed pp. 120–123)
+
+| Routine | Signature | Source-derived behavior and constraints |
+|---|---|---|
+| `Open` | `Filehandle = Open(Name, Modus)` | Opens the NUL-terminated name and returns a pointer to the AmigaDOS FileHandle structure; zero means failure. Modes described: 1005 opens an existing file for reading/writing; 1006 creates a file for writing and overwrites an existing same-name file; 1004 is like 1005 but exclusive while open. The book's wording for 1005 says writing or reading, and should not be silently narrowed. |
+| `Seek` | `Position = Seek(Filehandle, Abstand, Modus)` | Repositions the next-byte pointer. Mode -1 is relative to file start, 0 relative to current position, and 1 relative to file end. Positive and negative offsets are allowed. The returned Position is the pointer position after the operation; `Seek(handle,0,0)` is shown to query the current position. |
+| `Write` | `Anzahl = Write(Filehandle, Puffer, Länge)` | Writes Länge bytes from memory address Puffer. Returns actual bytes written; -1 indicates an error. |
+| `Read` | `Anzahl = Read(Filehandle, Puffer, Länge)` | Reads up to Länge bytes into memory at Puffer. Returns actual bytes read; -1 indicates an error. |
+| `Close` | `VOID Close(Filehandle)` | Closes the file opened by Open. The argument is the FileHandle pointer returned by Open. |
+| `WaitForChar` | `Status = WaitForChar(Filehandle, Timeout)` | Waits Timeout microseconds for a character on the channel. Returns 0 if none arrives in the interval, -1 if a character arrives; the character can then be read with Read. |
+| `Output` | `Filehandle = Output()` | Returns the standard output channel's FileHandle. |
+| `Input` | `Filehandle = Input()` | Returns the standard input channel's FileHandle. |
+| `IsInteractive` | `Status = IsInteractive(Filehandle)` | Returns -1 if the channel is interactive (input/output possible), otherwise 0. |
+| `IoErr` | `Fehler = IoErr()` | Returns the error number from the most recent failed operation. The book says many other routines indicate failure by returning zero; IoErr then supplies the reason. |
+
+For the later file/directory routines, the book uses a FileHandle-like integer to identify the channel where applicable, but lock-based routines instead take a Lock structure address. Do not conflate these two handle types.
+
+### 11.2 Lock and directory routines (printed pp. 123–129)
+
+| Routine | Signature | Source-derived behavior and constraints |
+|---|---|---|
+| `Lock` | `Lockstruktur = Lock(Name, Modus)` | Looks up a file or subdirectory and creates a Lock structure; zero indicates failure. The book describes mode -2 as read access that permits shared readers and mode -1 as write access restricted to the current program. |
+| `UnLock` | `VOID UnLock(Lockstruktur)` | Removes a Lock structure created by Lock or DupLock. |
+| `DupLock` | `Lockstruktur2 = DupLock(Lockstruktur1)` | Copies a Lock structure. The book says only read-enabled locks (mode -2) may be duplicated. |
+| `Info` | `Status = Info(Lockstruktur, Infoadresse)` | Writes disk/volume information to a memory block. The lock may refer to a volume name, file, or directory; a drive name such as `DF0:` may be used. The buffer address must be 4-byte aligned. The example allocates 36 bytes with MALLOC, calls Info, reads status at offset +11, then frees the buffer. |
+| `Examine` | `Status = Examine(Lockstruktur, Infoadresse)` | Writes information about the file/directory referred to by the lock into a caller-supplied buffer. The example reserves 260 bytes with MALLOC and reads fields by offsets. |
+| `ExNext` | `Status = ExNext(Lockstruktur, Infoadresse)` | Retrieves the next entry in the directory represented by the lock and fills the Examine-style information buffer. Returns zero when no further entry exists; the appendix identifies DOS error 232 as “no more entries in directory”. |
+| `ParentDir` | `neue_Lockstruktur = ParentDir(Lockstruktur)` | Returns a lock for the parent directory of the directory identified by the input lock. |
+| `CurrentDir` | `alte_Lockstruktur = CurrentDir(Lockstruktur)` | Makes the supplied locked directory current and returns a lock for the directory that was current before the call. |
+| `CreateDir` | `Lockstruktur = CreateDir(Name)` | Creates a subdirectory in the current directory and returns a lock structure for it. |
+
+The book's example Examine buffer layout is recorded as follows (byte offsets, as printed pp. 128–129):
+
+| Offset | Meaning |
+|---:|---|
+| 0–3 | Disk number |
+| 4–7 | Entry type (>0 directory; otherwise file) |
+| 8–115 | Entry name storage (the text says only 30 bytes are usable) |
+| 116–119 | Protection/access status |
+| 120–123 | Entry type, repeated |
+| 124–127 | File length in bytes |
+| 128–131 | Number of allocated blocks |
+| 132–143 | Creation date |
+| 144–259 | Comment storage (the text says up to 80 characters are usable) |
+
+The four low protection bits are described as: bit 0 = not deletable; bit 1 = not executable; bit 2 = not overwritable; bit 3 = not readable. The Info and Examine structures are different: the former is 36 bytes in the example and requires 4-byte alignment; the latter is 260 bytes in the example. Do not reuse one layout for the other.
+
+### 11.3 File metadata and process routines (printed pp. 129–132)
+
+| Routine | Signature | Source-derived behavior and constraints |
+|---|---|---|
+| `SetProtection` | `Status = SetProtection(Name, Modus)` | Changes protection bits for a file or subdirectory. Only the lowest four mode bits are meaningful, with each set bit enabling the corresponding restriction listed above. |
+| `Rename` | `Status = Rename(alter_Name, neuer_Name)` | Renames a file or directory. |
+| `DeleteFile` | `Status = DeleteFile(Name)` | Deletes a file or directory. A directory must be empty; files within it must first be deleted individually. |
+| `SetComment` | `Status = SetComment(Name, Kommentar)` | Attaches a comment of up to 80 characters to a file or directory. Both arguments are passed as pointers to NUL-terminated strings in the example. |
+| `LoadSeg` | `Segment = LoadSeg(Name)` | Loads a program file into memory and returns the address of its first program segment. |
+| `UnLoadSeg` | `VOID UnLoadSeg(Segment)` | Unloads a segment previously loaded by LoadSeg and releases its memory. |
+| `DateStamp` | `VOID DateStamp(Adresse)` | Writes current date/time in AmigaDOS format into three longwords at the supplied address. |
+| `Execute` | `Status = Execute(Kommando, Input, Output)` | Executes a CLI command. Kommando is a pointer to the command text; Input and Output are FileHandles for the chosen channels. |
+| `Delay` | `VOID Delay(Zeit)` | Suspends the current process for Zeit units of 1/50 second. |
+| `Exit` | `VOID Exit(Parameter)` | Terminates the current process/program and frees process-allocated memory. |
+| `DeviceProc` | `Prozess = DeviceProc(Name)` | Returns the process identifier currently using the named I/O channel. |
+| `CreateProc` | `Prozess = CreateProc(Name, Prior, Segment, Stack)` | Creates a new process under Name using the supplied priority, program segment and stack size. The chapter gives no further ABI-level detail here. |
+
+The chapter notes that DOS functions `GetPacket` and `QueuePacket` are not directly callable from GFA BASIC at the time described. They are therefore not counted as callable members of the chapter's 31-routine list.
+
+### 11.4 Error and safety notes from the source
+
+- GFA BASIC's editor checks call syntax, but the book warns that semantically invalid OS arguments may escape BASIC error handling and produce an AmigaDOS error or a Guru Meditation.
+- The examples consistently append `CHR$(0)` to names/comments and pass `VARPTR(string)` addresses to OS calls. Treat this as a calling-convention requirement for these examples, not as ordinary GFA BASIC string semantics.
+- The chapter's sample code uses `MALLOC`/`MFREE` for the Info and Examine buffers. Preserve the stated size/alignment requirements; the book's 36-byte Info example and 260-byte Examine example are not interchangeable.
+- The German text's numeric Open modes and Lock modes are source claims. Confirm them against the target AmigaDOS/NDK documentation before treating them as ABI constants in the Rust implementation.
+- This is 3.0/3.03-era reference material. The chapter does not separately label these DOS calls as new or modified in GFA BASIC 3.5.
