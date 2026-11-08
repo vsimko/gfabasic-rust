@@ -444,3 +444,34 @@ The chapter notes that DOS functions `GetPacket` and `QueuePacket` are not direc
 - The chapter's sample code uses `MALLOC`/`MFREE` for the Info and Examine buffers. Preserve the stated size/alignment requirements; the book's 36-byte Info example and 260-byte Examine example are not interchangeable.
 - The German text's numeric Open modes and Lock modes are source claims. Confirm them against the target AmigaDOS/NDK documentation before treating them as ABI constants in the Rust implementation.
 - This is 3.0/3.03-era reference material. The chapter does not separately label these DOS calls as new or modified in GFA BASIC 3.5.
+
+
+## 12. Printer output and hardcopy: Chapter 5.8
+
+Chapter 5.8 (printed pp. 131–139) adds printer-specific commands and explains the Amiga printer devices. These entries belong to the I/O command inventory; they are not DOS library calls.
+
+| Command/function | Syntax recorded in the book | Source-derived behavior |
+|---|---|---|
+| `HARDCOPY` | `HARDCOPY`; extended form `HARDCOPY Rastport, Colormap, Modi, Abst_l, Abst_r, Breite, Höhe, Spalten, Zeilen, Flags` | Prints a graphical copy of the current screen or a selected raster area. The extended form accepts RastPort and ColorMap addresses, display mode, margins, dimensions, grid and flags. The chapter says at least one window must be open on the relevant screen for HARDCOPY to work. |
+| `LPOS` | `Var = LPOS(dummy)` | Returns the current virtual print-head position in the printer's character buffer (maximum 255). The dummy argument is arbitrary and has no semantic meaning. After carriage return from LPRINT, the count restarts at zero. |
+| `LLIST` | The prose describes printing the current program listing; the OCR renders the command heading as `LUST` and its abbreviation as `LL`. | The command sends the current program listing to the printer. It can be interrupted using the GFA Break key combination; the interpreter returns to readiness and the printer buffer is still output. Exact spelling should be checked against the printed heading before parser use. |
+| `LPRINT` | `LPRINT [,'] "Text" [[;,'] Var1 [;,']]` | Works like PRINT but sends text/strings/values to the printer. The syntax is described as matching PRINT except for the AT(Xpos,Ypos) form. On logical device PRT:, standard printer control sequences are translated according to Preferences. |
+
+### 12.1 HARDCOPY flags
+
+The chapter describes the following flag bits in the extended HARDCOPY form (printed pp. 132–134). The OCR/table alignment is damaged, so retain the descriptions as source evidence and verify bit positions against the page image before encoding constants:
+
+- Selects the horizontal and vertical scaling interpretation (1/1000-inch units, maximum width/height, or divisors of maximum width/height).
+- Centers the printout.
+- Preserves the screen image's aspect ratio on paper.
+- Selects printer resolution; the text describes a three-bit field from lowest (`001`) to highest (`111`) resolution.
+- Suppresses the final page feed, allowing multiple hardcopies to be joined.
+
+### 12.2 Printer devices
+
+The chapter distinguishes:
+- `PRT:`: logical printer device with standard control-sequence translation based on Preferences.
+- `PAR:`: parallel printer interface; sends control characters unfiltered, bypassing Preferences translation. The example opens it with `OPEN "O",#1,"PAR:"`, writes via `PRINT #1,...`, then closes it.
+- `SER:`: serial interface, described as using the same file-open/write/close approach as PAR:.
+
+The printer chapter includes extensive ESC/P-style control-sequence tables and examples for font, pitch, margins, tabs and character sets. Those strings are device-control payloads, not additional GFA BASIC keywords; they should be catalogued separately if printer emulation becomes an implementation target.
