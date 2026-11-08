@@ -159,10 +159,10 @@ jobs:
             # Capture the requester after selecting DF0 to verify its state.
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-df0-selected.png" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
             # Move from DF0 button to the filename gadget, then focus it explicitly.
-            # Measured from Run #81: (-1400,+161) moved the pointer from
-            # (~541,329) to (~78,549). Target filename gadget is (~294,165).
-            # Apply the calibrated inverse delta in small increments.
-            for delta in "-105 -16" "-105 -16" "-105 -16" "-105 -16" "-105 -16" "-105 -16" "-105 -19"; do
+            # Run #83 measured (-735,-115) from (~541,329) to (~78,90):
+            # horizontal scale ~= 0.63, vertical scale ~= 2.08, same sign.
+            # Target filename gadget center (~294,165): input delta ~= (-393,-79).
+            for delta in "-98 -20" "-98 -20" "-98 -20" "-99 -19"; do
               set -- $delta
               printf "SEND_MOUSE\\t%s\\t%s\\t0\\n" "$1" "$2" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
               sleep 0.2
