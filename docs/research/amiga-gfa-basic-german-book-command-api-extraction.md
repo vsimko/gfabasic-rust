@@ -1901,3 +1901,85 @@ The book explains that task priorities range from −127 to +128 in its descript
 ### 23.7 Evidence boundary
 
 The book deliberately presents these Exec calls only briefly and says detailed AmigaDOS/Exec knowledge is outside its scope. Argument layouts, structure definitions, calling conventions, return-code details and version-specific availability are not established here. Treat this section as a list of callable names and brief descriptions only; do not implement an Exec ABI from these summaries alone.
+
+
+## 24. Program control, debugging and interpreter configuration: Chapter 12 (printed pp. 331–361)
+
+This continuation completes the Chapter 12 extraction beyond the earlier run/stop, error and timer notes.
+
+### 24.1 Interrupt control
+
+| Command / variable | Syntax recorded in the book | Source-derived behavior |
+|---|---|---|
+| `EVERY STOP` | `EVERY STOP` | Suspends the recurring `EVERY ... GOSUB` interrupt until `EVERY CONT`. |
+| `EVERY CONT` | `EVERY CONT` | Resumes the recurring EVERY interrupt. |
+| `AFTER STOP` / `AFTER CONT` | `AFTER STOP`, `AFTER CONT` | Suspends/resumes the single scheduled AFTER interrupt. The book says a new AFTER request replaces the previous pending one; it does not support simultaneous independent AFTER requests. |
+| `AFTER` | `AFTER Ticks [GOSUB] Prozedur` | Calls a procedure once after the specified number of 1/200-second ticks. Dispatch occurs after completion of a BASIC statement; blocking operations may defer it until execution resumes. |
+| `EVERY` | `EVERY Ticks [GOSUB] Prozedur` | Repeatedly calls a procedure at the requested tick interval, with the same statement-boundary/deferred-dispatch qualification. |
+
+The book's examples explicitly warn that interrupt procedures can interact recursively with application code. It demonstrates suspending EVERY around a time/date routine and restarting it afterwards. It also notes that AFTER can be re-armed from its own procedure, but this does not guarantee the same regular cadence as EVERY.
+
+### 24.2 Debugging and trace output
+
+| Command / variable | Syntax | Description |
+|---|---|---|
+| `DUMP` | `DUMP [DefinitionsString$] [TO Datei$]` | Lists variable contents and array dimensions; optional selectors filter names, labels, procedures and functions. Optional TO redirects output to a file. |
+| `TRON Proc` | `TRON Prozedurname` | Routes trace processing to a user procedure rather than automatically printing each line. |
+| `TRACE$` | `Var$=TRACE$` | In the TRON Proc context, returns the next BASIC source line as text. Outside that context it is empty. |
+| `TROFF` | `TROFF` | Disables trace mode; the book says TRON and TRON Proc are switched off afterwards. |
+
+The book says DUMP output identifies procedure names with `@`, functions with `FN`, and string functions with an additional `$`. It documents selectors for labels (colon prefix), procedures/functions (@ prefix), and initial-letter filtering. String values are truncated to 60 characters in the dump. Deleted names may remain in an internal reference list until Save/SetNew/Merge cleanup, so the dump can show stale entries.
+
+The trace text says TRON Proc excludes AFTER/EVERY interrupt procedures and the debugging procedure itself from TRACE$ output. TROFF inside a TRON Proc routine has no effect.
+
+### 24.3 Other Chapter 12 entries
+
+| Command / variable | Syntax | Description |
+|---|---|---|
+| `DEFNUM` | `DEFNUM Stelle` | Sets the decimal digit position used for rounding values printed by output statements; the book gives positions 3–13 and says 13 restores normal output. It does not change internal calculation precision. |
+| `DEFLIST` | `DEFLIST Format` | Selects the capitalization format used by interpreter direct-mode listings. The book says it is available only in the interpreter direct mode. |
+| `MODE` | `MODE Modus` | Selects European/USA conventions for date and numeric formatting; the described mode is a two-bit vector. |
+| `FALSE`, `TRUE` | reserved values | FALSE is 0; TRUE is -1. |
+| `LET` | `LET Var=Wert`, `LET Var$=Text` | Assignment form retained for compatibility with other BASIC dialects; the book says it is otherwise unnecessary. |
+| `SWAP` | `SWAP Var1,Var2`; array/pointer forms also shown | Exchanges values of like-typed variables, array elements, arrays (including dimensions), or a pointer/array descriptor. |
+| `VOID` | `VOID Funktion` | Calls a function while discarding its return value; presented as a faster alternative to assigning an unused result. |
+| `$ Text` | `$ Text` | Marks a source line as text storage for the V3.0 compiler; interpreted like REM or apostrophe comment in interpreter mode. |
+| `ALERT` | `ALERT Icon%,Boxtext$,Def_Button%,Buttontext$,Backvar%` | Described as a three-button alert/requester function; Icon is explicitly not implemented in the Amiga V3.0 version. |
+
+The book also documents `FALSE`/`TRUE` use in Boolean expressions and bit-flag examples. Its ALERT description limits the message to five lines of up to 40 characters each, with vertical bars separating lines and button labels; the selected button number is returned in Backvar%.
+
+### 24.4 Evidence boundary
+
+The OCR is noisy around DUMP selector punctuation, MODE bit descriptions and the exact formatting of the compiler-only dollar-line construct. Treat those spellings and edge cases as provisional pending page-image review. The compiler text-storage feature is not an interpreter statement in the described mode.
+
+## 25. User interaction and input devices: Chapter 13 (printed pp. 363–374; partial)
+
+The next chapter begins with requester/dialogue functions and mouse/joystick input. This extraction covers the readable material through the first joystick examples; the chapter continues beyond the current source chunk.
+
+### 25.1 Requesters and file selection
+
+| Command / function | Syntax recorded in the book | Description |
+|---|---|---|
+| `ALERT` | `ALERT Icon%,Boxtext$,Def_Button%,Buttontext$,Backvar%` | Displays an Intuition-style alert with up to three buttons and returns the selected button number. The book says the icon parameter is not implemented in Amiga V3.0. |
+| `FILESELECT` | `FILESELECT "Titel","OKText","Pfad",Backvar$` | Displays a file-selection requester and returns the selected path/name in a string variable. |
+| `MOUSE` | `MOUSE Xpos,Ypos,Tasten` | Returns mouse coordinates and button state. |
+| `MOUSEX`, `MOUSEY`, `MOUSEK` | individual reserved variables | Return X position, Y position and mouse-button state. |
+| `STICK` | `STICK(Modus)` | Compatibility setting for mouse/joystick port mode; the book says it has no effect in the Amiga implementation, although mouse/joystick commands select the relevant mode automatically. |
+| `STICK()` | `STICK(Maus-Port)` | Returns joystick-direction bits for the selected port; the book documents port 0/1 and says port 0 requires joystick mode. |
+| `STRIG()` | `STRIG(Maus-Port)` | Returns the fire-button state for the selected port. |
+
+For FILESELECT, the book describes the returned string cases as follows: selected file returns its name with path; OK with no selection returns an empty string; Cancel returns an empty string. The chapter's examples add user-written extension/backup helper procedures, which are examples rather than built-in commands.
+
+### 25.2 Mouse and joystick values
+
+The MOUSE button status is described as a bit vector: 0 means no button, 1 left, 2 right, 3 both left and right, and 4 middle button. The individual MOUSEX/MOUSEY/MOUSEK variables expose the same values separately. The book notes that V3.0 may return negative coordinates when the pointer is left of or above the window/clip origin.
+
+For STICK(), the book assigns the low four bits to joystick directions: bit 0 up, bit 1 down, bit 2 left, bit 3 right. STRIG(port) reports the fire button as 1 when pressed and 0 otherwise. These are source descriptions; hardware-port behavior should be verified on an Amiga runtime.
+
+### 25.3 Example-only helper routine
+
+The chapter includes a user-defined Rubberbox procedure that tracks a rectangle while the mouse is dragged, saves/restores the background with GET/PUT, and returns signed width/height through pointer parameters. It explicitly changes DEFLINE, COLOR and GRAPHMODE settings and expects callers to restore prior graphics state if needed. This is an example routine, not a built-in GFA command.
+
+### 25.4 Evidence boundary
+
+The chapter is only partially extracted here. The OCR has substantial corruption in example code, punctuation and German prose. Do not treat the example helper routines as built-ins or infer complete requester layout, mouse event semantics, or joystick hardware compatibility from these pages alone.
