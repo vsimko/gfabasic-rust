@@ -53,7 +53,7 @@ jobs:
           Amiga Kickstart/OS environment and emulator configuration are separate
           prerequisites; this workflow does not bundle ROMs or disk images.
           EOF
-          tar -C dist/amiga -czf dist/gfa-basic-3.52-amiga.tar.gz gfa-basic-3.52
+          tar -czf "$GITHUB_WORKSPACE/dist/gfa-basic-3.52-amiga.tar.gz" -C dist/amiga gfa-basic-3.52
 
       - name: Upload verified emulator input
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
