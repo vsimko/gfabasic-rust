@@ -2662,3 +2662,53 @@ The second form deletes a sprite; the source notes that sprite 0 is the mouse po
 ### 38.5 Validation boundary
 
 The GET/PUT syntax, coordinate restriction for GET, PUT placement behavior, five mode constants, three-word header, 16-pixel row padding and sprite format/color-register table are page-image checked. The source's mask parameter has not been fully specified in these pages; mask semantics, clipping details, color-register interaction on real Amiga hardware and sprite resource limits remain runtime/OS compatibility questions.
+
+
+## 39. Page-image validation: DUMP diagnostics and MODE locale bits (printed pp. 352–354, 358)
+
+### 39.1 DUMP syntax and selectors (printed pp. 352–354)
+
+The page-image checked command header is:
+
+```basic
+DUMP [Defstring$] [TO Datei$]
+```
+
+Without options, DUMP outputs all variable contents and dimensions of all arrays. The optional selector is described as follows:
+| Selector | Output |
+|---|---|
+| `"a"` | Variables and array dimensions for names beginning with a. |
+| `":"` | All labels and their line numbers. |
+| `":a"` | Labels beginning with a and their line numbers. |
+| `"@"` | All procedure and function names and line numbers. |
+| `"@a"` | Procedures/functions beginning with a and their line numbers. |
+
+Procedure names are marked with `@`; functions with `FN`, and string functions additionally with `$`. Deleted procedure/function/label names may remain listed without line numbers. Strings are displayed with at most 60 characters in quotation marks; longer strings receive a trailing `>`. String characters below ASCII 32 are represented by a dot. The optional `TO Datei$` redirects output to a file; absent a different extension, the source says `.DMP` is used and an existing same-name DMP file receives a `.BAK` backup extension.
+
+The selector table is transcribed from the page text and image. The printed layout around the label selector is visually compressed; retain the exact colon forms above as source syntax, not as a runtime-validated parser grammar.
+
+### 39.2 MODE two-bit behavior (printed p. 358)
+
+The page image confirms:
+
+```basic
+MODE Modus
+```
+
+The book defines Modus as a two-bit vector:
+- Bit 0 selects date presentation for DATE$/FILES and date input through SETTIME and DATE$=.
+- Bit 1 selects numeric formatting for PRINT USING and STR$.
+
+The printed table:
+| Modus | PRINT USING | DATE$ |
+|---|---|---|
+| `&X00` | `#,###.##` | `25.05.1988` |
+| `&X01` | `#,###.##` | `05/25/1988` |
+| `&X10` | `#.###,##` | `25.05.1988` |
+| `&X11` | `#.###,##` | `05/25/1988` |
+
+The prose says European format is the default (comma thousands separator, point decimal separator) and US format reverses those conventions. The examples and two-bit assignment are source-derived; behavior under different system locale settings is not established.
+
+### 39.3 Validation boundary
+
+DUMP's command header, output categories, string truncation/representation and file-output note, plus MODE's four table rows and bit meanings, are now checked against the page images. The colon selector typography and exact file overwrite/backup behavior still merit runtime confirmation.
