@@ -61,7 +61,7 @@ jobs:
           echo "deb [arch=amd64 signed-by=/usr/share/keyrings/amiberry-archive-keyring.gpg] https://packages.amiberry.com/apt noble main" \
             | sudo tee /etc/apt/sources.list.d/amiberry.list >/dev/null
           sudo apt-get update
-          sudo apt-get install -y --no-install-recommends amiberry xvfb netcat-openbsd
+          sudo apt-get install -y --no-install-recommends amiberry xvfb netcat-openbsd tesseract-ocr
           amiberry --version | tee artifacts/amiga-smoke/amiberry-version.txt
 
       - name: Prepare boot volume
@@ -143,11 +143,30 @@ jobs:
               exit 1
             fi
 
-            sleep 5
-            printf "SCREENSHOT\t%s\n" "$SCREENSHOT" | timeout 5s nc -U -N "$socket"
+            # Escape enters GFA-BASIC direct mode. Execute a harmless expression.
+            send_key() {
+              local keycode="$1"
+              local response
+              response="$(printf "SEND_KEY\\t%s\\t1\\n" "$keycode" | timeout 5s nc -U -N "$socket")"
+              grep -q "^OK" <<<"$response"
+              sleep 0.08
+              response="$(printf "SEND_KEY\\t%s\\t0\\n" "$keycode" | timeout 5s nc -U -N "$socket")"
+              grep -q "^OK" <<<"$response"
+              sleep 0.08
+            }
+
+            sleep 2
+            send_key 69 # Escape
+            sleep 1
+            # Amiga raw key codes for PRINT 42 followed by Return.
+            for keycode in 25 19 23 54 20 64 4 2 68; do
+              send_key "$keycode"
+            done
+            sleep 2
+            printf "SCREENSHOT\\t%s\\n" "$SCREENSHOT" | timeout 5s nc -U -N "$socket"
             test -s "$SCREENSHOT"
             cat "$RESULT"
-            printf "QUIT\n" | timeout 5s nc -U -N "$socket" || true
+            printf "QUIT\\n" | timeout 5s nc -U -N "$socket" || true
           '
 
           cp "$RESULT" artifacts/amiga-smoke/guest-output.txt
