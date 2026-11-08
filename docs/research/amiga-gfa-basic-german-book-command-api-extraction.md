@@ -2524,3 +2524,78 @@ The source therefore assigns decimal 64 to both “clear checkmark” and “act
 ### 36.4 Updated validation status
 
 The IDCMP table, Window flags table and MENU attribute list are now page-image verified for printed pages 378, 379 and 389. Earlier OCR caveats for these exact numeric tables can be narrowed: the printed values are readable, but their interpretation against AmigaOS headers/runtime and the duplicate MENU value still require independent compatibility testing. Other OCR-sensitive areas (including SCROLL/GRAPHMODE/DRAW$, sprite/BOB syntax, and low-level API details) remain unvalidated.
+
+
+## 37. Page-image validation: graphics scrolling, DRAW$ grammar and BOB velocity/planes (printed pp. 240, 245–250, 272–273)
+
+These entries were checked against the rendered page images, replacing OCR-only readings for the exact syntax and spellings listed here.
+
+### 37.1 GRAPHMODE examples (printed p. 240 and p. 250)
+
+The page-240 example explicitly uses:
+- `GRAPHMODE 3` with the adjacent comment “XOR-Modus für Flimmerbox”.
+- `GRAPHMODE 1` with the adjacent comment “REPLACE-Modus an”.
+
+Page 250 independently labels `GRAPHMODE 3` as XOR mode in its turtle-graphics example. These examples verify the two values and their described roles in this book; they do not provide a complete enumeration of all GRAPHMODE values or prove compatibility with other GFA versions.
+
+### 37.2 SCROLL (printed pp. 245–246)
+
+The page image confirms the exact syntax:
+
+```basic
+SCROLL Dx,Dy,X1,Y1,X2,Y2
+```
+
+The command shifts the screen bitmap rectangle bounded by the coordinate pairs (X1,Y1) and (X2,Y2). Dx and Dy separately specify shift direction and distance on X and Y. Positive Dx/Dy shift left/down; negative values shift in the opposite directions (right/up).
+
+The example on p. 246 uses `SCROLL dx,dy,x1,y1,x2,y2` with random offsets and explicitly notes that pixels shifted out at the edges are not saved; the newly exposed opposite edge is filled with the background color. This edge behavior is directly stated in the source. The OCR caveat for SCROLL's parameter order and sign direction can therefore be removed.
+
+### 37.3 DRAW$ (printed pp. 248–250)
+
+The image confirms the header and syntax:
+
+```basic
+DRAW Def$, [Const, ["Def"] [,Var[, ...]]]
+```
+
+The command simulates plotter/turtle graphics on screen. Def$ may be an alphanumeric expression, string variable or text constant; the optional values may be expressions, constants or variables. The source limits the number of comma-separated individual values as described on p. 249 and states a maximum input-line length of 255 characters.
+
+Documented turtle commands:
+| Token | Meaning |
+|---|---|
+| `fd n` | Move pen forward n pixels. |
+| `bk n` | Move pen backward n pixels. |
+| `sx n`, `sy n` | Scale X/Y values used by fd and bk. |
+| `sx 0`, `sy 0` | Disable the corresponding scaling. |
+| `lt n`, `rt n` | Turn left/right by n degrees. |
+| `tt n` | Set absolute direction to n degrees; degree convention is referenced to SETDRAW. |
+| `ma x,y` | Move pen up to absolute position x,y. |
+| `da x,y` | Move pen down to absolute position x,y and draw a line. |
+| `mr x,y` | Move pen up by relative x,y from current turtle position. |
+| `dr x,y` | Move pen down by relative x,y and draw a line. |
+| `co n` | Set line color n (reference: COLOR). |
+| `pu`, `pd` | Pen up/down. |
+
+Page 250 confirms `DRAW()` as the turtle-attribute query. Its documented indices are 0=current X position, 1=current Y position, 2=current angle in degrees, 3=X scaling, 4=Y scaling, and 5=pen flag (-1=pen down, 0=pen up). The source says indices 0–4 return floating-point values.
+
+### 37.4 OBJECT.VY and OBJECT.PLANES (printed p. 273)
+
+The page image confirms the exact command spelling `OBJECT.VY` (not OBJECT.VY0 or OBJECT.VVO):
+
+```basic
+OBJECT.VY ObjNummer, Y_Geschwindigkeit
+```
+
+It sets an object's Y-direction velocity in pixels per second.
+
+The same page confirms:
+
+```basic
+OBJECT.PLANES ObjNummer [,Bitebenen [,Ebenenwert]]
+```
+
+The accompanying prose describes the first value as selecting which bitplanes receive the BOB graphic. A set bit means the BOB graphic is drawn in that plane; clearing a bit removes that plane's color contribution. The optional Ebenenwert controls the state of otherwise disabled bitplanes, allowing colors to be added/removed from the BOB representation as described by the source. This is a low-level BOB operation; the book's prose is not a substitute for checking actual Amiga graphics-library behavior.
+
+### 37.5 Validation boundary
+
+The printed syntax, parameter order, sign convention, turtle tokens, DRAW() index meanings and OBJECT.VY spelling are now page-image verified. GRAPHMODE is verified only for the two explicit examples (1=REPLACE and 3=XOR); other values remain unspecified here. Runtime behavior, boundary clipping, floating-point precision and OBJECT.PLANES interaction with actual screen bitplanes still require interpreter/Amiga runtime tests.
