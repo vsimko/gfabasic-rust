@@ -64,7 +64,7 @@ jobs:
           EOF
           # If the process attaches its standard input to a command console,
           # this direct-mode command should create an ASCII listing on GFAVol.
-          printf 'LIST "GFAVol:stdin-save.LST"\n' > amiga-volume/cli-input.txt
+          printf 'LIST "Work:stdin-save.LST"\n' > amiga-volume/cli-input.txt
           # Use a real OFS floppy image for the LST fixture. AROS can access
           # DF0: without depending on Amiberry's host-directory DOS handler.
           xdftool artifacts/amiga-cli-probe/factzero.adf create + format GFABASIC ofs + write amiga-volume/factzero.LST
@@ -73,17 +73,17 @@ jobs:
           cat > amiga-volume/S/Startup-Sequence <<'EOF'
           Echo "AMIGA CLI PROBE: BOOTED"
           Wait 45
-          CD GFAVol:
-          List GFAVol: >GFAVol:volume-directory-check.txt
-          List GFAVol:factzero.LST >GFAVol:volume-file-check.txt
-          List GFA: >GFAVol:device-directory-check.txt
-          List GFA:factzero.LST >GFAVol:device-file-check.txt
-          List DF0: >GFAVol:floppy-directory-check.txt
-          List DF0:factzero.LST >GFAVol:floppy-file-check.txt
-          Info >GFAVol:dos-info.txt
-          Assign >GFAVol:dos-assign.txt
-          Run <GFAVol:cli-input.txt >GFAVol:cli-output.txt GFAVol:GFABasic
-          Echo "CLI launch without program argument" >GFAVol:probe-status.txt
+          CD Work:
+          List Work: >Work:volume-directory-check.txt
+          List Work:factzero.LST >Work:volume-file-check.txt
+          List DH0: >Work:device-directory-check.txt
+          List DH0:factzero.LST >Work:device-file-check.txt
+          List DF0: >Work:floppy-directory-check.txt
+          List DF0:factzero.LST >Work:floppy-file-check.txt
+          Info >Work:dos-info.txt
+          Assign >Work:dos-assign.txt
+          Run <Work:cli-input.txt >Work:cli-output.txt Work:GFABasic
+          Echo "CLI launch without program argument" >Work:probe-status.txt
           EOF
           cp amiga-volume/factzero.LST artifacts/amiga-cli-probe/factzero.LST
           cp amiga-volume/cli-input.txt artifacts/amiga-cli-probe/cli-input.txt
@@ -100,8 +100,8 @@ jobs:
           gfx_fullscreen=false
           sound_output=0
           floppy0=$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/factzero.adf
-          filesystem2=rw,GFA:GFAVol:$GITHUB_WORKSPACE/amiga-volume,0
-          uaehf0=dir,rw,GFA:GFAVol:$GITHUB_WORKSPACE/amiga-volume,0
+          filesystem2=rw,DH0:Work:$GITHUB_WORKSPACE/amiga-volume,0
+          uaehf0=dir,rw,DH0:Work:$GITHUB_WORKSPACE/amiga-volume,0
           EOF
 
       - name: Merge textual LST in the GFA BASIC editor
@@ -159,9 +159,13 @@ jobs:
             # Capture the requester after selecting DF0 to verify its state.
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-df0-selected.png" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
             # Move from DF0 button to the filename gadget, then focus it explicitly.
-            # From the measured DF0 button center (~541,329), move to filename field (~390,457).
-            # IPC mouse deltas scale ~0.44x horizontally and ~2.1x vertically.
-            printf "SEND_MOUSE\\t-340\\t62\\t0\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
+            # From DF0 button center (~541,329), move to the TOP filename gadget (~294,165).
+            # Split movement into small relative steps; the previous target was the bottom path display.
+            for delta in "-100 -40" "-100 -40" "-100 -39" "-100 0" "-100 0" "-100 0" "-100 0"; do
+              set -- $delta
+              printf "SEND_MOUSE\\t%s\\t%s\\t0\\n" "$1" "$2" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
+              sleep 0.2
+            done
             sleep 0.2
             printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
             sleep 0.2
