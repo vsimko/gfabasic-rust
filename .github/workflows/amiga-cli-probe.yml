@@ -62,14 +62,14 @@ jobs:
           EOF
           # If the process attaches its standard input to a command console,
           # this direct-mode command should create an ASCII listing on DH0.
-          printf 'LIST "T:stdin-save.LST"\n' > amiga-volume/cli-input.txt
+          printf 'LIST "GFA:stdin-save.LST"\n' > amiga-volume/cli-input.txt
           cat > amiga-volume/S/Startup-Sequence <<'EOF'
           Echo "AMIGA CLI PROBE: BOOTED"
-          CD T:
-          List T: >T:t-directory-check.txt
-          List T:factzero.LST >T:t-file-check.txt
-          Run <T:cli-input.txt >T:cli-output.txt T:GFABasic
-          Echo "CLI launch without program argument" >T:probe-status.txt
+          CD GFA:
+          List GFA: >GFA:gfa-directory-check.txt
+          List GFA:factzero.LST >GFA:gfa-file-check.txt
+          Run <GFA:cli-input.txt >GFA:cli-output.txt GFA:GFABasic
+          Echo "CLI launch without program argument" >GFA:probe-status.txt
           EOF
           cp amiga-volume/factzero.LST artifacts/amiga-cli-probe/factzero.LST
           cp amiga-volume/cli-input.txt artifacts/amiga-cli-probe/cli-input.txt
@@ -85,7 +85,7 @@ jobs:
           gfx_height=512
           gfx_fullscreen=false
           sound_output=0
-          filesystem2=rw,DH0:T:$GITHUB_WORKSPACE/amiga-volume,0
+          filesystem2=rw,GFAVol:GFA:$GITHUB_WORKSPACE/amiga-volume,0
           EOF
 
       - name: Merge textual LST in the GFA BASIC editor
@@ -136,7 +136,7 @@ jobs:
             # Click the left requester gadget (Merge), not the right Cancel gadget.
             # On the 768x512 capture it is centered near (323, 426).
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/before-merge-click.png" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
-            printf "SEND_MOUSE\\t246\\t388\\t0\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
+            printf "SEND_MOUSE\\t256\\t240\\t0\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
             sleep 0.3
             printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
             sleep 0.3
@@ -146,7 +146,7 @@ jobs:
             kill -0 "$emulator_pid"
             printf "QUIT\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}" || true
           '
-          for diagnostic in t-directory-check.txt t-file-check.txt cli-output.txt probe-status.txt stdin-save.LST; do
+          for diagnostic in gfa-directory-check.txt gfa-file-check.txt cli-output.txt probe-status.txt stdin-save.LST; do
             if test -f "amiga-volume/$diagnostic"; then
               cp "amiga-volume/$diagnostic" "artifacts/amiga-cli-probe/$diagnostic"
             else
