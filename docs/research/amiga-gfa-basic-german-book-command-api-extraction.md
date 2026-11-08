@@ -2406,3 +2406,52 @@ The English addendum p. 13-1 states:
 - Tab moves to the next tab stop; Ctrl+Tab moves to the previous one; LeftShift+Tab inserts spaces up to the next tab stop; RightShift+Tab deletes blank spaces on one row up to/from the cursor.
 
 This resolves the German book's OCR ambiguity for the two Shift+Tab actions. Treat the editor changes as editor behavior, not interpreter language syntax.
+
+
+## 35. Final German-book index and appendix audit: printed pp. 486–508
+
+The remaining back matter was checked against the Chapter 18–19 extraction. It contains no additional interpreter command descriptions, but it adds useful cross-checks and source boundaries.
+
+### 35.1 German command-index evidence
+
+The German alphabetical command index independently points to:
+- `FACT` on printed p. 478.
+- `VARIAT` on printed p. 478.
+- `_DATA` / DATA-pointer operations on printed p. 479.
+- Matrix/vector command family in Chapter 18, printed pp. 454–475, including `MAT CPY`, `MAT XCPY` and `MAT TRANS`.
+
+The index corroborates the location of these entries but is not a complete 3.5 delta list. In particular, do not infer that a feature absent from the index does not exist: the English addendum separately documents PCOLOR, GURU, _0…_9 and the MAT COPY forms.
+
+### 35.2 GFA-BASIC error appendix: additional exact GURU mapping
+
+The German book's error appendix (printed p. 487) gives the following mapping:
+| Error | Appendix wording |
+|---:|---|
+| 109 | Guru Meditation |
+| 110 | Bus Error |
+| 111 | Address Error |
+| 112 | Illegal Instruction |
+| 113 | Zero Divide |
+| 114 | CHK Instruction |
+| 115 | TRAPV Instruction |
+| 116 | Privilege Violation |
+| 117 | Trace |
+| 118 | Line A Emulator |
+| 119 | Line F Emulator |
+| 120 | Argument line invalid or too long |
+| 121 | No executable program |
+| 122 | Invalid resident library addressed during load |
+
+This gives a concrete exception-name table for the GURU handling introduced by the English 3.5 addendum. Note the boundary: the English addendum calls #110–#118 the “normal” GURUs $2–$A, while the German appendix additionally lists #119 as Line F Emulator. Do not silently extend the English statement's $2–$A range to #119.
+
+The German appendix also lists #86 as “FACT/COMBIN/PERMUT not defined”. This remains inconsistent with the Chapter 19 function prose, which documents FACT, VARIAT and COMBIN. Treat PERMUT as an unresolved source spelling/compatibility question, not as a proven synonym for VARIAT.
+
+### 35.3 DOS errors and appendix scope
+
+The DOS error appendix lists AmigaDOS-level failures such as insufficient free store, full task table, invalid/overlong argument line, non-object/executable file, invalid resident library, object/lock errors, disk protection/fullness, missing device/disk and directory errors. These are operating-system error numbers and should remain distinct from GFA-BASIC interpreter error codes.
+
+The last pages contain the alphabetical subject index and a source note crediting E. Lehmann's *Lineare Algebra mit dem Computer* for the matrix illustration example (German book printed p. 470). That credit identifies the example's external origin; it does not alter the GFA-BASIC command semantics described around it.
+
+### 35.4 Completion boundary
+
+The German book's substantive interpreter/compiler chapters and back matter are now indexed through its final printed page 508. The remaining work is no longer bulk text extraction: it is page-image verification of OCR-sensitive spellings/tables and runtime compatibility testing. The English 3.5 addendum has been separately reconciled through its final printed page 13-36. No claim is made that these manual-only sources establish undocumented runtime edge cases.
