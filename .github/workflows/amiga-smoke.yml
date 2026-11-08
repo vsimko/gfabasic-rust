@@ -167,6 +167,24 @@ jobs:
             printf "SEND_KEY\\t81\\t0\\n" | timeout 5s nc -U -N "$ipc_socket_path" | tee "$GITHUB_WORKSPACE/artifacts/amiga-smoke/merge-key-release.txt"
             sleep 3
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-smoke/merge-dialog.png" | timeout 5s nc -U -N "$ipc_socket_path"
+
+            # The Merge requester opens with its filename gadget focused.
+            # Type fact-zero.lst using Amiga raw keycodes (lowercase ASCII).
+            send_key() {
+              printf "SEND_KEY\\t%s\\t1\\n" "$1" | timeout 5s nc -U -N "$ipc_socket_path" >/dev/null
+              sleep 0.15
+              printf "SEND_KEY\\t%s\\t0\\n" "$1" | timeout 5s nc -U -N "$ipc_socket_path" >/dev/null
+              sleep 0.15
+            }
+            for keycode in 23 18 22 12 27 10 15 28 21 36 28 17 28 17; do
+              send_key "$keycode"
+            done
+            # Exact sequence above is "fact-zero.lst".
+            printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-smoke/merge-filename.png" | timeout 5s nc -U -N "$ipc_socket_path"
+            # Confirm the requester selection.
+            send_key 68
+            sleep 5
+            printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-smoke/after-merge-enter.png" | timeout 5s nc -U -N "$ipc_socket_path"
             if ! kill -0 "$emulator_pid" 2>/dev/null; then
               echo "Amiberry exited after synthetic keyboard input"
               cat "$AMIBERRY_LOG"
