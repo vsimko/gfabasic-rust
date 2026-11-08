@@ -186,7 +186,7 @@ jobs:
             # Move the emulated mouse to the right-hand requester button.
             # Relative SEND_MOUSE works with Amiberry builds that reject ABS
             # coordinates when tablet mode is active.
-            printf "SEND_MOUSE\\t107\\t63\\t0\\n" | timeout 5s nc -U -N "$ipc_socket_path" | tee "$GITHUB_WORKSPACE/artifacts/amiga-smoke/merge-mouse-move.txt"
+            printf "SEND_MOUSE\\t264\\t262\\t0\\n" | timeout 5s nc -U -N "$ipc_socket_path" | tee "$GITHUB_WORKSPACE/artifacts/amiga-smoke/merge-mouse-move.txt"
             sleep 0.3
             printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "$ipc_socket_path" | tee "$GITHUB_WORKSPACE/artifacts/amiga-smoke/merge-mouse-press.txt"
             sleep 0.3
