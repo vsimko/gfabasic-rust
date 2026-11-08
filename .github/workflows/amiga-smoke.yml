@@ -101,7 +101,7 @@ jobs:
           export RESULT="$GITHUB_WORKSPACE/amiga-volume/gfa-basic-launch.txt"
           export SDL_AUDIODRIVER=dummy
 
-          xvfb-run -a -s "-screen 0 1024x768x24 +extension GLX" bash -euo pipefail -c '
+          xvfb-run -a -s "-screen 0 1024x768x24 +extension GLX" bash -eo pipefail -c '
             amiberry -G -f "$RUNNER_TEMP/amiga-smoke.uae" --log >"$AMIBERRY_LOG" 2>&1 &
             emulator_pid=$!
             cleanup() {
@@ -110,15 +110,15 @@ jobs:
             }
             trap cleanup EXIT
 
-            socket=""
+            ipc_socket_path=""
             for attempt in $(seq 1 30); do
-              socket="$(find /run/user -type s -name amiberry.sock -print -quit 2>/dev/null || true)"
-              if [ -n "$socket" ]; then
+              ipc_socket_path="$(find /run/user -type s -name amiberry.sock -print -quit 2>/dev/null || true)"
+              if [ -n "$ipc_socket_path" ]; then
                 break
               fi
               sleep 1
             done
-            if [ -z "$socket" ]; then
+            if [ -z "$ipc_socket_path" ]; then
               echo "Amiberry IPC socket was not created"
               cat "$AMIBERRY_LOG"
               exit 1
@@ -147,19 +147,19 @@ jobs:
             # the 68000/OCS configuration. Retry under the 68020/ECS profile first.
             # Amiga raw keycode 0x20 is the A key; press and release it explicitly.
             sleep 5
-            printf "SEND_KEY\\t32\\t1\\n" | timeout 5s nc -U -N "$socket" | tee "$GITHUB_WORKSPACE/artifacts/amiga-smoke/input-press.txt"
+            printf "SEND_KEY\\t32\\t1\\n" | timeout 5s nc -U -N "$ipc_socket_path" | tee "$GITHUB_WORKSPACE/artifacts/amiga-smoke/input-press.txt"
             sleep 1
-            printf "SEND_KEY\\t32\\t0\\n" | timeout 5s nc -U -N "$socket" | tee "$GITHUB_WORKSPACE/artifacts/amiga-smoke/input-release.txt"
+            printf "SEND_KEY\\t32\\t0\\n" | timeout 5s nc -U -N "$ipc_socket_path" | tee "$GITHUB_WORKSPACE/artifacts/amiga-smoke/input-release.txt"
             sleep 2
             if ! kill -0 "$emulator_pid" 2>/dev/null; then
               echo "Amiberry exited after synthetic keyboard input"
               cat "$AMIBERRY_LOG"
               exit 1
             fi
-            printf "SCREENSHOT\\t%s\\n" "$SCREENSHOT" | timeout 5s nc -U -N "$socket"
+            printf "SCREENSHOT\\t%s\\n" "$SCREENSHOT" | timeout 5s nc -U -N "$ipc_socket_path"
             test -s "$SCREENSHOT"
             cat "$RESULT"
-            printf "QUIT\\n" | timeout 5s nc -U -N "$socket" || true
+            printf "QUIT\\n" | timeout 5s nc -U -N "$ipc_socket_path" || true
           '
 
           cp "$RESULT" artifacts/amiga-smoke/guest-output.txt
