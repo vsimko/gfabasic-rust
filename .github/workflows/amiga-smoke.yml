@@ -72,7 +72,7 @@ jobs:
           cat > amiga-volume/S/Startup-Sequence <<'EOF'
           Echo "AMIGA CI: BOOTED"
           Echo "Amiberry AROS fallback ROM"
-          Run >NIL: DH0:GFABasic
+          CD CI:\n          Run >NIL: DH0:GFABasic
           If WARN
             Echo "GFA BASIC launch failed" >DH0:gfa-basic-launch.txt
           Else
