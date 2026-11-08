@@ -62,15 +62,15 @@ jobs:
           EOF
           # If the process attaches its standard input to a command console,
           # this direct-mode command should create an ASCII listing on DH0.
-          printf 'LIST "DH0:stdin-save.LST"\n' > amiga-volume/cli-input.txt
+          printf 'LIST "CI:stdin-save.LST"\n' > amiga-volume/cli-input.txt
           cat > amiga-volume/S/Startup-Sequence <<'EOF'
           Echo "AMIGA CLI PROBE: BOOTED"
           CD CI:
-          Copy CI:factzero.LST DH0:factzero.LST
-          List DH0: >DH0:dh0-directory-check.txt
-          List DH0:factzero.LST >DH0:dh0-file-check.txt
-          Run <DH0:cli-input.txt >DH0:cli-output.txt DH0:GFABasic
-          Echo "CLI launch without program argument" >DH0:probe-status.txt
+          Copy CI:factzero.LST CI:factzero.LST
+          List CI: >CI:ci-directory-check.txt
+          List CI:factzero.LST >CI:ci-file-check.txt
+          Run <CI:cli-input.txt >CI:cli-output.txt CI:GFABasic
+          Echo "CLI launch without program argument" >CI:probe-status.txt
           EOF
           cp amiga-volume/factzero.LST artifacts/amiga-cli-probe/factzero.LST
           cp amiga-volume/cli-input.txt artifacts/amiga-cli-probe/cli-input.txt
@@ -128,10 +128,10 @@ jobs:
               sleep 0.15
             }
             # The filename gadget initially contains "T:" with the caret at
-            # its beginning. Delete that default path, then enter DH0:factzero.lst.
+            # its beginning. Delete that default path, then enter CI:factzero.lst.
             send_key 70
             send_key 70
-            for keycode in 34 37 10; do send_key "$keycode"; done
+            for keycode in 51 23; do send_key "$keycode"; done
             printf "SEND_KEY\\t96\\t1\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}" >/dev/null
             sleep 0.15
             printf "SEND_KEY\\t41\\t1\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}" >/dev/null
@@ -160,7 +160,7 @@ jobs:
             kill -0 "$emulator_pid"
             printf "QUIT\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}" || true
           '
-          for diagnostic in dh0-directory-check.txt dh0-file-check.txt cli-output.txt probe-status.txt stdin-save.LST; do
+          for diagnostic in ci-directory-check.txt ci-file-check.txt cli-output.txt probe-status.txt stdin-save.LST; do
             if test -f "amiga-volume/$diagnostic"; then
               cp "amiga-volume/$diagnostic" "artifacts/amiga-cli-probe/$diagnostic"
             else
@@ -171,7 +171,7 @@ jobs:
             test -s "artifacts/amiga-cli-probe/$screenshot"
           done
           tesseract artifacts/amiga-cli-probe/after-merge.png stdout 2>/dev/null | tee artifacts/amiga-cli-probe/after-merge-ocr.txt
-          if ! grep -Eiq 'Merge File' artifacts/amiga-cli-probe/after-merge-ocr.txt && grep -Eiq 'PRINT|FACT\\(|x[[:space:]]*=' artifacts/amiga-cli-probe/after-merge-ocr.txt; then
+          if ! grep -Fqi 'Merge File' artifacts/amiga-cli-probe/after-merge-ocr.txt && grep -Eiq 'PRINT|^[[:space:]]*[xyz][[:space:]]*=' artifacts/amiga-cli-probe/after-merge-ocr.txt; then
             echo "EDITOR_MERGE_LST_CONTENT_VISIBLE=yes" | tee artifacts/amiga-cli-probe/result.txt
           else
             echo "EDITOR_MERGE_LST_CONTENT_VISIBLE=no" | tee artifacts/amiga-cli-probe/result.txt
