@@ -149,7 +149,7 @@ jobs:
             # On the 768x512 capture it is centered near (323, 426).
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/before-merge-click.png" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
             # SEND_MOUSE deltas are capped by the input bridge; move in smaller steps.
-            for delta in "100 100" "100 100" "45 88"; do
+            for delta in "100 100" "100 100" "45 100" "0 88"; do
               set -- $delta
               printf "SEND_MOUSE\\t%s\\t%s\\t0\\n" "$1" "$2" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
               sleep 0.2
