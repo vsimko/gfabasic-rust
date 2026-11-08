@@ -62,15 +62,15 @@ jobs:
           EOF
           # If the process attaches its standard input to a command console,
           # this direct-mode command should create an ASCII listing on DH0.
-          printf 'LIST "GFA:stdin-save.LST"\n' > amiga-volume/cli-input.txt
+          printf 'LIST "GFAVol:stdin-save.LST"\n' > amiga-volume/cli-input.txt
           cat > amiga-volume/S/Startup-Sequence <<'EOF'
           Echo "AMIGA CLI PROBE: BOOTED"
           Wait 3
-          CD GFA:
-          List GFA: >GFA:gfa-directory-check.txt
-          List GFA:factzero.LST >GFA:gfa-file-check.txt
-          Run <GFA:cli-input.txt >GFA:cli-output.txt GFA:GFABasic
-          Echo "CLI launch without program argument" >GFA:probe-status.txt
+          CD GFAVol:
+          List GFAVol: >GFAVol:volume-directory-check.txt
+          List GFAVol:factzero.LST >GFAVol:volume-file-check.txt
+          Run <GFAVol:cli-input.txt >GFAVol:cli-output.txt GFAVol:GFABasic
+          Echo "CLI launch without program argument" >GFAVol:probe-status.txt
           EOF
           cp amiga-volume/factzero.LST artifacts/amiga-cli-probe/factzero.LST
           cp amiga-volume/cli-input.txt artifacts/amiga-cli-probe/cli-input.txt
@@ -128,10 +128,10 @@ jobs:
               printf "SEND_KEY\\t%s\\t0\\n" "$1" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}" >/dev/null
               sleep 0.15
             }
-            # Replace the default volume prefix with the dedicated GFA: volume.
-            send_key 70
-            send_key 70
-            for keycode in 36 35 32; do send_key "$keycode"; done
+            # The DOS volume label is GFAVol: (GFA: is the device name).
+            # The filename gadget caret is at the start; Delete clears its remaining default "Vol:".
+            for _ in $(seq 1 16); do send_key 70; done
+            for keycode in 36 35 32 52 24 40; do send_key "$keycode"; done
             printf "SEND_KEY\\t96\\t1\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}" >/dev/null
             sleep 0.15
             printf "SEND_KEY\\t41\\t1\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}" >/dev/null
@@ -140,30 +140,25 @@ jobs:
             sleep 0.15
             printf "SEND_KEY\\t96\\t0\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}" >/dev/null
             sleep 0.15
-            for keycode in 35 32 51 20 49 18 19 24 57 40 33 20; do
-              send_key "$keycode"
-            done
+            for keycode in 35 32 51 20 49 18 19 24 57 40 33 20; do send_key "$keycode"; done
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-filename.png" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
 
-            # Click the left requester gadget (Merge), not the right Cancel gadget.
-            # On the 768x512 capture it is centered near (323, 426).
-            printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/before-merge-click.png" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
-            # SEND_MOUSE deltas are capped by the input bridge; move in smaller steps.
-            for delta in "100 100" "100 100" "45 100" "0 88"; do
-              set -- $delta
-              printf "SEND_MOUSE\\t%s\\t%s\\t0\\n" "$1" "$2" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
-              sleep 0.2
-            done
-            sleep 0.3
-            printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
-            sleep 0.3
-            printf "SEND_MOUSE\\t0\\t0\\t0\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
+            printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-filename.png" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
+
+            # AmigaOS requester shortcut: Left-Amiga-V activates the left gadget (Merge).
+            printf "SEND_KEY\\t102\\t1\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
+            sleep 0.2
+            printf "SEND_KEY\\t52\\t1\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
+            sleep 0.2
+            printf "SEND_KEY\\t52\\t0\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
+            sleep 0.2
+            printf "SEND_KEY\\t102\\t0\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
             sleep 5
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-merge.png" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
             kill -0 "$emulator_pid"
             printf "QUIT\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}" || true
           '
-          for diagnostic in gfa-directory-check.txt gfa-file-check.txt cli-output.txt probe-status.txt stdin-save.LST; do
+          for diagnostic in volume-directory-check.txt volume-file-check.txt cli-output.txt probe-status.txt stdin-save.LST; do
             if test -f "amiga-volume/$diagnostic"; then
               cp "amiga-volume/$diagnostic" "artifacts/amiga-cli-probe/$diagnostic"
             else
