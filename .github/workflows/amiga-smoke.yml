@@ -183,16 +183,10 @@ jobs:
             done
             # Raw keycode 0x39 (57) is the Amiga period key.
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-smoke/merge-filename.png" | timeout 5s nc -U -N "$ipc_socket_path"
-            # Tab advances from the filename gadget to the requester
-            # action gadget; Space activates the focused button.
-            printf "SEND_KEY\\t66\\t1\\n" | timeout 5s nc -U -N "$ipc_socket_path" | tee "$GITHUB_WORKSPACE/artifacts/amiga-smoke/merge-tab-press.txt"
-            sleep 0.3
-            printf "SEND_KEY\\t66\\t0\\n" | timeout 5s nc -U -N "$ipc_socket_path" | tee "$GITHUB_WORKSPACE/artifacts/amiga-smoke/merge-tab-release.txt"
+            # Probe both relative axes to calibrate the AROS mouse pointer.
+            printf "SEND_MOUSE\\t200\\t200\\t0\\n" | timeout 5s nc -U -N "$ipc_socket_path" | tee "$GITHUB_WORKSPACE/artifacts/amiga-smoke/merge-mouse-move.txt"
             sleep 1
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-smoke/before-merge-click.png" | timeout 5s nc -U -N "$ipc_socket_path"
-            printf "SEND_KEY\\t64\\t1\\n" | timeout 5s nc -U -N "$ipc_socket_path" | tee "$GITHUB_WORKSPACE/artifacts/amiga-smoke/merge-space-press.txt"
-            sleep 0.3
-            printf "SEND_KEY\\t64\\t0\\n" | timeout 5s nc -U -N "$ipc_socket_path" | tee "$GITHUB_WORKSPACE/artifacts/amiga-smoke/merge-space-release.txt"
             sleep 5
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-smoke/after-merge-click.png" | timeout 5s nc -U -N "$ipc_socket_path"
             if ! kill -0 "$emulator_pid" 2>/dev/null; then
