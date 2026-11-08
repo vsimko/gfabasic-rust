@@ -183,18 +183,16 @@ jobs:
             done
             # Raw keycode 0x39 (57) is the Amiga period key.
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-smoke/merge-filename.png" | timeout 5s nc -U -N "$ipc_socket_path"
-            # Click the left (accept/Merge) requester button using X11
-            # coordinates in the emulator window; IPC relative mouse input
-            # is unreliable with the bundled AROS pointer driver.
-            window_id="$(xdotool search --onlyvisible --class amiberry | head -n 1)"
-            test -n "$window_id"
-            xdotool getwindowgeometry --shell "$window_id" | tee "$GITHUB_WORKSPACE/artifacts/amiga-smoke/window-geometry.txt"
-            xdotool windowfocus --sync "$window_id"
-            printf "TOGGLE_MOUSE_GRAB\\n" | timeout 5s nc -U -N "$ipc_socket_path" | tee "$GITHUB_WORKSPACE/artifacts/amiga-smoke/mouse-grab.txt"
-            xdotool mousemove --sync 352 384
+            # Tab advances from the filename gadget to the requester
+            # action gadget; Space activates the focused button.
+            printf "SEND_KEY\\t66\\t1\\n" | timeout 5s nc -U -N "$ipc_socket_path" | tee "$GITHUB_WORKSPACE/artifacts/amiga-smoke/merge-tab-press.txt"
+            sleep 0.3
+            printf "SEND_KEY\\t66\\t0\\n" | timeout 5s nc -U -N "$ipc_socket_path" | tee "$GITHUB_WORKSPACE/artifacts/amiga-smoke/merge-tab-release.txt"
             sleep 1
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-smoke/before-merge-click.png" | timeout 5s nc -U -N "$ipc_socket_path"
-            xdotool click --window "$window_id" 1
+            printf "SEND_KEY\\t64\\t1\\n" | timeout 5s nc -U -N "$ipc_socket_path" | tee "$GITHUB_WORKSPACE/artifacts/amiga-smoke/merge-space-press.txt"
+            sleep 0.3
+            printf "SEND_KEY\\t64\\t0\\n" | timeout 5s nc -U -N "$ipc_socket_path" | tee "$GITHUB_WORKSPACE/artifacts/amiga-smoke/merge-space-release.txt"
             sleep 5
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-smoke/after-merge-click.png" | timeout 5s nc -U -N "$ipc_socket_path"
             if ! kill -0 "$emulator_pid" 2>/dev/null; then
