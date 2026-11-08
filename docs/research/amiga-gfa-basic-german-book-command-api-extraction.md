@@ -2712,3 +2712,78 @@ The prose says European format is the default (comma thousands separator, point 
 ### 39.3 Validation boundary
 
 DUMP's command header, output categories, string truncation/representation and file-output note, plus MODE's four table rows and bit meanings, are now checked against the page images. The colon selector typography and exact file overwrite/backup behavior still merit runtime confirmation.
+
+
+## 40. Page-image validation: ALERT, FILESELECT, mouse and joystick input (printed pp. 363–373)
+
+### 40.1 ALERT (printed pp. 363–364)
+
+The page-image checked syntax is:
+
+```basic
+ALERT Icon%,Boxtext$,Def_Button%,Buttontext$,Backvar%
+```
+
+The book describes an Intuition-style alert box with at most three choices:
+- `Icon%`: icon selector, explicitly noted as not implemented in Amiga GFA-BASIC 3.0.
+- `Boxtext$`: message text; pipe character `|` separates lines. Up to five lines of at most 40 characters each.
+- `Def_Button%`: default button number 1, 2 or 3; 0 means no default. The selected default can also be confirmed with Return.
+- `Buttontext$`: button labels separated by `|`.
+- `Backvar%`: numeric result receiving the selected button number (1–3).
+
+The prose says an overlong message line is truncated by the interpreter after character 40. The source frames ALERT as suitable for short notices/queries rather than large menus.
+
+### 40.2 FILESELECT (printed pp. 364–368)
+
+The printed syntax is:
+
+```basic
+FILESELECT "Titel","OKText","Pfad",Backvar$
+```
+
+It opens a file-selection dialog and returns a selected filename, potentially including its path. The book distinguishes outcomes:
+- A selected file returns its name with full path.
+- OK with a still-entered filename can return that entered name/path even if no file row was selected.
+- OK with no selection and an empty entry returns an empty string.
+- Cancel returns an empty string.
+
+The dialog lists files in the supplied path; entries marked with an asterisk are subdirectories, which can be opened. The path can be changed by selecting a listed device or editing the path gadget and pressing Return. The following extension/backup procedures are examples written in BASIC, not built-in FILESELECT features.
+
+### 40.3 MOUSE and individual status variables (printed pp. 369–371)
+
+The page text gives:
+
+```basic
+MOUSE Xpos,Ypos,Tasten
+```
+
+Xpos/Ypos receive current pointer coordinates. Tasten is a bit field:
+- 0: no button
+- 1: left button (bit 0)
+- 2: right button (bit 1)
+- 3: left and right buttons
+- 4: middle button (bit 2)
+
+The book notes that on Amiga GFA-BASIC 3.0, X/Y may be negative when the pointer is left of or above the window (or the CLIP offset, as applicable). It also warns that the illustrated Rubberbox example changes DEFLINE, COLOR and GRAPHMODE settings and does not restore their previous values.
+
+Individual reads are available as `MOUSEX`, `MOUSEY` and `MOUSEK` for X position, Y position and button status respectively.
+
+### 40.4 STICK, STICK() and STRIG() (printed pp. 371–373)
+
+`STICK(Modus)` selects port query mode: 0 mouse, 1 joystick. The book explicitly says this command is present for compatibility and has no effect by itself; MOUSE commands and STICK() switch the corresponding mode automatically.
+
+`STICK(Maus-Port)` returns the current state for port 0 or 1. STICK(1) can be queried even when joystick mode has not been selected; STICK(0) gives useful values only in joystick mode. The four low bits are:
+| Bit | Direction |
+|---:|---|
+| 0 | Up |
+| 1 | Down |
+| 2 | Left |
+| 3 | Right |
+
+The page-372 diagram also depicts diagonal direction values; the prose defines the directional bit mask, so implementations should compose directions from these four bits rather than treat the diagram as a separate enum.
+
+`STRIG(Maus-Port)` reads the fire button for that port: pressed = 1, not pressed = 0.
+
+### 40.5 Validation boundary
+
+ALERT's parameter meanings and line limits, FILESELECT's result cases, MOUSE button values/negative-coordinate note, and STICK()/STRIG() behavior are indexed from the printed pages. Page images were checked for ALERT's page-363 definition and the STICK/STICK() pages 371–372. FILESELECT's longer dialog narrative and STRIG's final definition remain text-layer/OCR-derived and should receive direct image review before treating fine wording as exact. All described interaction behavior is from the book's Amiga V3.0 material, not proof of interpreter runtime compatibility.
