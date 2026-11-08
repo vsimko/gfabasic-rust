@@ -26,6 +26,35 @@ The contents list variable types (p. 2-2), arrays (p. 2-4), DEFxxx (p. 2-5), LET
 
 Page-level excerpts reviewed so far:
 
+- Variable types (printed pp. 2-2–2-3): names begin with A–Z and may continue with letters, digits, dots or underscores. The table lists Boolean `!` (one byte; one bit per Boolean array element), Byte `|` (one byte), Word `&` (two bytes), Integer `%` (four bytes), Float `#` (eight bytes; no suffix normally required), and String `# Amiga GFA BASIC 3.0 base-manual inventory
+
+> **Version boundary:** This is a research inventory, not a 3.5 compatibility claim. The supplied *GFA BASIC 3.5 Interpreter* manual says that it was originally printed for version 3.0 and that version 3.5 additions are described in its addendum (Chapter 13 in this scan). The material below comes from base-manual chapters. Keep it outside the normative 3.5 registry until each item is reconciled against a 3.5-specific source or runtime observation.
+
+Primary source: AM-INTERPRETER-35, *GFA BASIC 3.5 Interpreter*, base-manual chapters 2–12. References below are printed page numbers, not PDF viewer pages.
+
+## Chapter inventory from the contents
+
+| Chapter | Subject | Initial printed-page range / topics | 3.5 status |
+|---|---|---|---|
+| 2 | Variables and memory handling | pp. 2-2–2-44: variable types, arrays, DEFxxx, LET, CLEAR/CLR, ERASE, DIM, OPTION BASE, INSERT/DELETE, ARRAY FILL, conversions, sorting, dates/time, memory access and allocation | Base-manual 3.0; not independently confirmed for 3.5 |
+| 3 | Operators | pp. 3-2–3-16: precedence, logical, arithmetic, string and comparison operators | Base-manual 3.0; not independently confirmed for 3.5 |
+| 4 | Numeric functions and strings | starts p. 4-2; arithmetic, trigonometry, conversion, numeric and string functions | Base-manual 3.0; not independently confirmed for 3.5 |
+| 5 | Input and output | Chapter listed in contents | Individual declarations/pages not yet extracted |
+| 6 | Disk handling and file organization | Chapter listed in contents | Individual declarations/pages not yet extracted |
+| 7 | Program handling | Chapter listed in contents | Individual declarations/pages not yet extracted |
+| 8 | Graphics | Chapter listed in contents | Individual declarations/pages not yet extracted |
+| 9 | Event, menu, screen and window handling | Chapter listed in contents | Individual declarations/pages not yet extracted |
+| 10 | Advanced programming | Chapter listed in contents | Individual declarations/pages not yet extracted |
+| 11 | System routines | Chapter listed in contents | Individual declarations/pages not yet extracted |
+| 12 | Appendices | Chapter listed in contents | Tables/index still to be extracted |
+
+## Chapter 2 — variables and memory
+
+The contents list variable types (p. 2-2), arrays (p. 2-4), DEFxxx (p. 2-5), LET (p. 2-6), CLEAR/CLR (p. 2-7), ERASE (p. 2-8), DIM (p. 2-9), OPTION BASE (p. 2-10), INSERT/DELETE (p. 2-11), ARRAY FILL (p. 2-12), conversion and string functions (pp. 2-13–2-18), SWAP (p. 2-20), QSORT/SSORT (p. 2-22), constants (p. 2-25), dates/time (pp. 2-26–2-28), FRE/TYPE/DUMP/VARPTR/ARRPTR, POKE/PEEK, ABSOLUTE, VOID, MALLOC/MFREE, BMOVE and RESERVE (pp. 2-29–2-44).
+
+ (length-dependent). Boolean values are 0/-1; assigning any nonzero value yields -1. Byte values are 0–255; Word values are -32768–32767; Integer values are -2147483648–2147483647. Strings have a maximum length of 32767 characters and use a six-byte descriptor containing address and length. These are explicitly 3.0 base-manual facts, not yet a 3.5 compatibility claim.
+- Default typing (printed p. 2-5): DEFBIT, DEFBYT, DEFWRD, DEFINT, DEFFLT and DEFSTR map name-prefix patterns to Boolean, Byte, Word, Integer, Float and String types. The manual says an explicit type suffix takes priority over a global DEFxxx declaration, and the declaration remains valid until another declaration is made. It also says the editor replaces DEFSNG/DEFDBL with DEFFLT.
+- Assignment (printed p. 2-6): LET assigns an arithmetic or string expression to a variable; source and destination must both be numeric or both be strings. LET is normally unnecessary. The example `LET print=3` illustrates that a command spelling may be used as a variable name.
 - Arrays (printed pp. 2-3–2-4): arrays may use any variable type and are created with DIM; DIM? returns the number of elements. The manual describes a six-byte array descriptor and in-memory layout. These are implementation-relevant representation details, but remain 3.0 source facts.
 - DEFxxx (p. 2-5): DEFBIT, DEFBYT, DEFINT, DEFWRD, DEFFLT and DEFSTR define default variable types based on variable-name prefixes.
 - LET (p. 2-6): assigns an arithmetic or string expression to a matching numeric or string variable; the manual says LET is normally optional.
