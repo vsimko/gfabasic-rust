@@ -39,7 +39,7 @@ jobs:
             --output amiga-volume/GFABasic
           echo "fd80f6093e8d0163856af5849121e945e37051a2ad2a9053aa1930021783d962  amiga-volume/GFABasic" | sha256sum --check
           test "$(wc -c < amiga-volume/GFABasic)" -eq 136548
-          printf '\\x00\\x00\\x03\\xf3' | cmp -n 4 - amiga-volume/GFABasic
+          printf '\x00\x00\x03\xf3' | cmp -n 4 - amiga-volume/GFABasic
           file amiga-volume/GFABasic | tee artifacts/amiga-smoke/gfa-basic-file.txt
 
       - name: Prepare APT cache
