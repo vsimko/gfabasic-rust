@@ -67,8 +67,8 @@ jobs:
           ROM_SIZE="$(wc -c < private-kickstart/kick.rom)"
           test "$ROM_SIZE" -eq 524288 -o "$ROM_SIZE" -eq 262144
           sha256sum private-kickstart/kick.rom > artifacts/amiga-cli-probe/kickstart-sha256.txt
-          printf 'Kickstart candidate: %s (%s bytes)\\n' "$ROM_NAME" "$ROM_SIZE" > artifacts/amiga-cli-probe/kickstart-info.txt
-          printf 'KICKSTART_ROM_PATH=%s/private-kickstart/kick.rom\\n' "$GITHUB_WORKSPACE" >> "$GITHUB_ENV"
+          printf 'Kickstart candidate: %s (%s bytes)\n' "$ROM_NAME" "$ROM_SIZE" > artifacts/amiga-cli-probe/kickstart-info.txt
+          printf 'KICKSTART_ROM_PATH=%s/private-kickstart/kick.rom\n' "$GITHUB_WORKSPACE" >> "$GITHUB_ENV"
 
       - name: Install emulator and OCR
         run: |
