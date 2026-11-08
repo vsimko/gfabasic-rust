@@ -1,6 +1,11 @@
 name: Amiga GFA BASIC CLI/stdin probe
 
 on:
+  push:
+    branches:
+      - "experiment/amiga-cli-stdin-probe"
+    paths:
+      - ".github/workflows/amiga-cli-probe.yml"
   pull_request:
     paths:
       - ".github/workflows/amiga-cli-probe.yml"
