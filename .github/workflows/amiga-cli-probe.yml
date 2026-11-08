@@ -98,7 +98,6 @@ jobs:
           mkdir -p amiga-volume/S
           cp amiga-volume/GFABasic amiga-volume/GFABasic.bin
           cat > amiga-volume/S/Startup-Sequence <<'EOF'
-          CD DF0:
           GFABasic
           EOF
           xdftool artifacts/amiga-cli-probe/factzero.adf create + format GFABASIC ofs + write amiga-volume/factzero.LST + write amiga-volume/GFABasic + write amiga-volume/S
