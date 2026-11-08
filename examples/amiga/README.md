@@ -21,6 +21,9 @@ utility and format notes.
 
 - [gfalist/doc/gfa_frmt.txt](gfalist/doc/gfa_frmt.txt) — archived technical
   notes about tokenized GFA file layout, variable tables and function tokens.
+- [Frontend comparison](../../docs/research/gfalist-format-vs-rust-frontend.md)
+  — separates binary `.GFA` decoding from textual source lexing and records
+  the currently uncovered format areas.
 - [gfalist/README.md](gfalist/README.md) — description and provenance of the
   GPL-2.0-only GFA 3.x listing converter.
 
