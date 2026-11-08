@@ -36,7 +36,23 @@ Page-level excerpts reviewed so far:
 
 ## Chapter 3 — operators
 
-The operator hierarchy is documented on printed p. 3-2. The manual orders parentheses, string operations, prefixes/power, multiplication/division, integer division/modulo, addition/subtraction, comparisons, logical operations and NOT. The scan's OCR corrupts some operator glyphs; do not use OCR text alone to normalize the complete precedence table.
+The operator hierarchy is documented on printed p. 3-2. The page image (PDF page 80) has now been checked visually. It lists the following precedence levels, from highest to lowest:
+
+1. Parentheses: `( )`.
+2. String addition: `+`.
+3. String comparisons: the printed token row reads `= <> => <= <>`. The repeated `<>` and `=>` spelling are preserved as printed; they are not silently normalized.
+4. Prefixes: `+ -`.
+5. Power: `^`.
+6. Multiplication and division: `* /`.
+7. Whole-number division and modulo: `DIV MOD`.
+8. Addition and subtraction: `+ -`.
+9. Numeric comparison operations: the printed row reads `= == < <= >= > <>`.
+10. Logical operations: `AND OR XOR IMP EQV`.
+11. Negation: `NOT`.
+
+The manual states that operators higher in this list are processed first and that parentheses can force lower-precedence operations to be evaluated first. Its examples are `2+4*3`, `(2+4)*3`, `2+(4*3)`, and `3*2^2`, with displayed results 14, 18, 14, and 12 respectively. It additionally says that the rule “points before line calculations” is recognized; the meaning of that phrase is not expanded here.
+
+This is a transcription of the Amiga 3.0 base-manual page, not a normative 3.5 grammar. In particular, the two comparison-token rows should remain source-faithful until their intended spellings and parser behavior are confirmed independently for 3.5. Do not collapse the string and numeric comparison rows into one operator set.
 
 Page-level excerpts reviewed:
 
