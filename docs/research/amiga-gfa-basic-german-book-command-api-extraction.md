@@ -2599,3 +2599,66 @@ The accompanying prose describes the first value as selecting which bitplanes re
 ### 37.5 Validation boundary
 
 The printed syntax, parameter order, sign convention, turtle tokens, DRAW() index meanings and OBJECT.VY spelling are now page-image verified. GRAPHMODE is verified only for the two explicit examples (1=REPLACE and 3=XOR); other values remain unspecified here. Runtime behavior, boundary clipping, floating-point precision and OBJECT.PLANES interaction with actual screen bitplanes still require interpreter/Amiga runtime tests.
+
+
+## 38. Page-image validation: GET/PUT bitmap format and hardware sprites (printed pp. 257–268)
+
+### 38.1 GET and PUT contract (printed pp. 257, 261)
+
+The source describes `GET X_links,Y_oben,X_rechts,Y_unten,Var$` as capturing a screen rectangle into a string as a bitmap. All four corner coordinates must be inside the screen; otherwise the interpreter does not execute the command.
+
+The page-image checked PUT syntax is:
+
+```basic
+PUT X_links,Y_oben,Var$ [,Modus,Maske]
+```
+
+PUT draws a previously captured GET image at the supplied upper-left position. The dimensions remain those stored by GET, so the destination lower-right corner follows from the stored width and height. The destination may be partially or wholly outside the screen. Without Modus, the source says Replace mode is used. It warns against negative Modus values because they can cause malfunctions.
+
+### 38.2 PUT raster header and pixel planes (printed pp. 262–264)
+
+The first three 16-bit words (six bytes) in a PUT string are:
+1. Width minus one (`X_rechts - X_links`).
+2. Height minus one (`Y_unten - Y_oben`).
+3. Number of bitplanes.
+
+The raster row width is padded to a multiple of 16 pixels. The source explicitly notes that unused trailing bits in the final word of a row contain unusable “bit garbage”. For a single bitplane, a set raster bit corresponds to a set pixel. With multiple planes, corresponding bits are overlaid; their bit-sum selects the color register. The page-264 example sums plane bits 1, 2 and 8 to obtain color register 11 for a pixel. This describes the source's string layout; it is not a guarantee of compatibility with every GFA version or screen mode.
+
+### 38.3 PUT drawing modes (printed pp. 261–262)
+
+The page-image checked mode table gives these hexadecimal values and descriptions:
+| Name | Value | Source description |
+|---|---:|---|
+| DestInvert | `&H30` | Put the inverted screen area into the image. |
+| SourceInvert | `&H50` | Invert the screen area within the image rectangle. |
+| ExclDestSource | `&H60` | Exclusive-OR the screen area with the image. |
+| OrDestSource | `&H80` | OR only the bits that are equal in screen and image. |
+| DestSource | `&HC0` | Replace the screen area with the image. |
+
+The German wording for OrDestSource is unusual (“only between bits that are equal”); it is retained as source wording rather than reinterpreted as a conventional Boolean OR definition. The optional Mask parameter is present in the syntax, but these pages do not fully define its semantics.
+
+### 38.4 Hardware SPRITE (printed pp. 265–267)
+
+The source lists four forms:
+```basic
+SPRITE #Nummer,Def.var$
+SPRITE #Nummer [,0]
+SPRITE #Nummer [,XPos,YPos]
+SPRITE ON/OFF
+```
+
+The definition string is a bitmap-converted string. Each sprite is 16 pixels wide; each graphics row uses four bytes stored as ASCII characters. The two 16-bit bit rows are interpreted as two overlaid bitplanes, yielding four combinations: 00 transparent, 01 first color register, 10 second color register, 11 third color register.
+
+The page-267 table assigns sprite-number pairs to color registers:
+| Sprite numbers | Color registers |
+|---|---|
+| 0/1 | 17, 18, 19 |
+| 2/3 | 21, 22, 23 |
+| 4/5 | 25, 26, 27 |
+| 6/7 | 29, 30, 31 |
+
+The second form deletes a sprite; the source notes that sprite 0 is the mouse pointer and can be deleted this way. The position form uses a 320×256 coordinate raster independent of screen resolution. SPRITE ON/OFF enables or disables all sprites and also affects the mouse pointer. The sample creates a 64-byte sprite string, positions sprite #1 in a loop, synchronizes with VSYNC and finally issues SPRITE OFF.
+
+### 38.5 Validation boundary
+
+The GET/PUT syntax, coordinate restriction for GET, PUT placement behavior, five mode constants, three-word header, 16-pixel row padding and sprite format/color-register table are page-image checked. The source's mask parameter has not been fully specified in these pages; mask semantics, clipping details, color-register interaction on real Amiga hardware and sprite resource limits remain runtime/OS compatibility questions.
