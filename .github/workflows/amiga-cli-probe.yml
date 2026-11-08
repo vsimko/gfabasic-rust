@@ -67,6 +67,7 @@ jobs:
           Echo "AMIGA CLI PROBE: BOOTED"
           CD CI:
           Copy CI:factzero.LST T:factzero.LST
+          List T: >DH0:t-directory-check.txt
           List T:factzero.LST >DH0:t-file-check.txt
           Run <DH0:cli-input.txt >DH0:cli-output.txt DH0:GFABasic
           Echo "CLI launch without program argument" >DH0:probe-status.txt
@@ -103,10 +104,11 @@ jobs:
             ipc_socket_path=""
             for attempt in $(seq 1 45); do
               ipc_socket_path="$(find /run/user -type s -name amiberry.sock -print -quit 2>/dev/null || true)"
-              if [ -n "$ipc_socket_path" ]; then break; fi
+              if [ -n "${IPC_SOCKET_PATH:-}" ]; then break; fi
               sleep 1
             done
             test -n "$ipc_socket_path" || { cat "$AMIBERRY_LOG"; exit 1; }
+            export IPC_SOCKET_PATH="$ipc_socket_path"
             sleep 35
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/editor-before-merge.png" | timeout 5s nc -U -N "$ipc_socket_path"
 
