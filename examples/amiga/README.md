@@ -24,6 +24,9 @@ utility and format notes.
 - [Frontend comparison](../../docs/research/gfalist-format-vs-rust-frontend.md)
   — separates binary `.GFA` decoding from textual source lexing and records
   the currently uncovered format areas.
+- [Build and fixture validation](../../docs/research/gfalist-build-and-fixture-validation.md)
+  — records the successful GCC build workaround and seven passing archived
+  listing comparisons plus the INLINE-data fixture.
 - [gfalist/README.md](gfalist/README.md) — description and provenance of the
   GPL-2.0-only GFA 3.x listing converter.
 
