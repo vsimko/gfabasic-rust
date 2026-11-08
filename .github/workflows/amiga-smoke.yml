@@ -80,9 +80,12 @@ jobs:
           parser.feed(Path(sys.argv[1]).read_text(errors="replace"))
           for href in parser.matches:
               url = urljoin("https://aros.sourceforge.io/", href)
-              if "sourceforge.net/projects/aros/files/" in url and "download" in url.lower():
+              if "download" in url.lower() or "fileid" in url.lower():
                   print(url)
                   raise SystemExit(0)
+          marker = html.lower().find("amiga-m68k-boot-iso")
+          if marker >= 0:
+              print(html[max(0, marker - 800):marker + 1800], file=sys.stderr)
           raise SystemExit("Could not find the official amiga-m68k-boot-iso download link")
           PY
           )"
