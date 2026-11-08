@@ -65,6 +65,7 @@ jobs:
           printf 'LIST "GFA:stdin-save.LST"\n' > amiga-volume/cli-input.txt
           cat > amiga-volume/S/Startup-Sequence <<'EOF'
           Echo "AMIGA CLI PROBE: BOOTED"
+          Wait 3
           CD GFA:
           List GFA: >GFA:gfa-directory-check.txt
           List GFA:factzero.LST >GFA:gfa-file-check.txt
@@ -146,7 +147,7 @@ jobs:
             # Click the left requester gadget (Merge), not the right Cancel gadget.
             # On the 768x512 capture it is centered near (323, 426).
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/before-merge-click.png" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
-            printf "SEND_MOUSE\\t256\\t240\\t0\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
+            printf "SEND_MOUSE\\t125\\t147\\t0\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
             sleep 0.3
             printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
             sleep 0.3
