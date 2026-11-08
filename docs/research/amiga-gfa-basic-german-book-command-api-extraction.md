@@ -286,9 +286,9 @@ The book warns that registering ON MENU GOSUB before defining a window with a me
 | MENU(3) | Qualifier/modifier-key state (e.g. Shift and Control). |
 | MENU(4) | Address of the Intuition object responsible for the message (e.g. Gadget or Requester). |
 | MENU(5), MENU(6) | Mouse X/Y coordinates relative to the window, or movement deltas for relevant mouse-move messages. |
-| MENU(7), MENU(8) | Event time in seconds and microseconds respectively. |
+| MENU(7), MENU(8) | The German book describes seconds and microseconds respectively. The English handbook says MENU(7) through MENU(10) are always populated independently of message type; reconcile the complete field layout against page images before implementation. |
 | MENU(10) | Address of the Window structure that generated the message; WINDOW(address) maps it to a GFA window number. |
-| MENU(14) | Keyboard code in the ON MENUKEY handler. |
+| MENU(14) | The German book's OCR assigns a keyboard code here, but the English interpreter handbook assigns the key code to MENU(2). This is conflicting source evidence; do not implement MENU(14) as the keyboard-code field without runtime/page-image verification. |
 
 The book lists message classes for menu-pick, keyboard, gadget, window activation/refresh/resize, mouse movement/button, and requester events. Some numeric values in the OCR are damaged or ambiguous (digit grouping/leading zeros); do not encode an IDCMP constant table from OCR alone. Check the printed page images or primary interpreter manual first.
 
