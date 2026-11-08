@@ -39,7 +39,7 @@ jobs:
             --output amiga-volume/GFABasic
           echo "fd80f6093e8d0163856af5849121e945e37051a2ad2a9053aa1930021783d962  amiga-volume/GFABasic" | sha256sum --check
           test "$(wc -c < amiga-volume/GFABasic)" -eq 136548
-          printf '\x00\x00\x03\xf3' | cmp -n 4 - amiga-volume/GFABasic
+          printf '\\x00\\x00\\x03\\xf3' | cmp -n 4 - amiga-volume/GFABasic
           file amiga-volume/GFABasic | tee artifacts/amiga-smoke/gfa-basic-file.txt
 
       - name: Prepare APT cache
@@ -101,10 +101,9 @@ jobs:
           export RESULT="$GITHUB_WORKSPACE/amiga-volume/gfa-basic-launch.txt"
           export SDL_AUDIODRIVER=dummy
 
-          xvfb-run -a -s "-screen 0 1024x768x24 +extension GLX" bash -c '
-            # The caller exports SHELLOPTS with nounset enabled; disable it
-            # here because IPC socket discovery intentionally starts unset.
-            set +u
+          # Do not pass the runner's exported SHELLOPTS (which includes nounset)
+          # through xvfb-run into its nested Bash process.
+          env -u SHELLOPTS xvfb-run -a -s "-screen 0 1024x768x24 +extension GLX" bash -c '
             set -eo pipefail
             amiberry -G -f "$RUNNER_TEMP/amiga-smoke.uae" --log >"$AMIBERRY_LOG" 2>&1 &
             emulator_pid=$!
@@ -147,8 +146,7 @@ jobs:
               exit 1
             fi
 
-            # AROS' bundled input.device previously crashed on injected keys with
-            # the 68000/OCS configuration. Retry under the 68020/ECS profile first.
+            # Retry synthetic input under the 68020/ECS guest profile.
             # Amiga raw keycode 0x20 is the A key; press and release it explicitly.
             sleep 5
             printf "SEND_KEY\\t32\\t1\\n" | timeout 5s nc -U -N "$ipc_socket_path" | tee "$GITHUB_WORKSPACE/artifacts/amiga-smoke/input-press.txt"
