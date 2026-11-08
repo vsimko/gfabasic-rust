@@ -144,14 +144,14 @@ jobs:
             done
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-filename.png" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
 
-            # AmigaOS requester shortcut: Left-Amiga-B activates the right gadget.
-            # Raw keycodes: Left Amiga=0x66 (102), B=0x35 (53).
+            # AmigaOS requester shortcut: Left-Amiga-V activates the left (Merge) gadget.
+            # Raw keycodes: Left Amiga=0x66 (102), V=0x34 (52).
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/before-merge-shortcut.png" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
             printf "SEND_KEY\\t102\\t1\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
             sleep 0.15
-            printf "SEND_KEY\\t53\\t1\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
+            printf "SEND_KEY\\t52\\t1\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
             sleep 0.15
-            printf "SEND_KEY\\t53\\t0\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
+            printf "SEND_KEY\\t52\\t0\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
             sleep 0.15
             printf "SEND_KEY\\t102\\t0\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
             sleep 5
