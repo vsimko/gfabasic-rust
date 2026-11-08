@@ -295,3 +295,73 @@ The book lists message classes for menu-pick, keyboard, gadget, window activatio
 ### 9.3 Event-loop implication
 
 The sample pattern repeatedly waits for/dispatches Intuition messages (ON MENU or SLEEP) and processes MENU() values. The book warns that internal polling loops which do not yield to event handling can prevent event processing. Do not assume this Amiga event queue/scheduling behavior matches a non-Amiga runtime.
+
+
+## 10. Cross-check against the English interpreter handbook and explicit 3.5 addendum
+
+### 10.1 What the uploaded English PDF actually establishes
+
+The title/introductory pages identify the publication as a handbook originally printed for Version 3.0. Its opening statement says that the supplied software is GFA BASIC 3.5 and that Chapter 13 is an addendum describing the extra features in Version 3.5. The contents distinguish the original Chapters 1–12 from Chapter 13, “GFA BASIC 3.5 Addendum”.
+
+Therefore the evidence model for this PDF is:
+- Chapters 1–12: the 3.0 reference baseline (with later 3.5 software supplied alongside the book).
+- Chapter 13: explicit 3.5 additions.
+- A construct described only in Chapters 1–12 is a documented 3.0 feature and may be inherited by the 3.5 interpreter, but this handbook does not individually re-certify every old construct as changed/unchanged in 3.5.
+- Chapter 13 entries are direct 3.5 evidence.
+
+### 10.2 Direct 3.5 additions (English handbook, Chapter 13)
+
+The following are explicitly placed under “New features in GFA Basic 3.5” / “GFA-BASIC 3.5 Addendum”.
+
+| Feature / command | Evidence and recorded behavior | Addendum pages |
+|---|---|---:|
+| Editor changes | Editor uses two extra bytes per program row versus versions 3.0–3.07; backward scrolling is accelerated; functions can be folded; search includes headers of closed procedures/functions; listing indents labels two characters to the left. | 13-1 |
+| Tab editing | TAB, CTRL+TAB, LEFTSHIFT+TAB, RIGHTSHIFT+TAB provide next/previous tab stop, insert spaces to next tab stop, and remove spaces in a row. | 13-1 |
+| MAT BASE 0/1 | Controls the row/column indexing offset for the matrix operations. Intended for use with OPTION BASE 0; the addendum says the default is MAT BASE 1. | 13-1 |
+| MAT CLR a() | Sets every element of a numeric vector/matrix to zero; equivalent to ARRAYFILL a(),0. | 13-2 |
+| MAT SET a()=x | Sets every element of a numeric vector/matrix to scalar x; equivalent to ARRAYFILL a(),x. | 13-2 |
+| MAT ONE a() | Generates the identity/unit matrix for a square matrix. | 13-2 |
+| MAT READ a() | Reads a previously dimensioned matrix/vector from DATA rows. | 13-3 |
+| MAT PRINT [#i,]a()[,g,n] | Outputs a vector or matrix; vectors are one row with comma-separated elements, matrix rows are line-separated; optional #i redirects output. | 13-3 |
+| MAT INPUT #i,a() | Listed as a matrix input operation. Its detailed behavior should be transcribed from the page text before implementing. | 13-3 |
+| MAT CPY, MAT XCPY, MAT TRANS | Listed as matrix/vector copy and transpose operations. MAT TRANS a() transposes a square matrix in place; the original is replaced, and another transpose restores it. | 13-5–13-15 |
+| MAT ADD, MAT SUB, MAT MUL | Element-wise addition/subtraction, matrix/vector multiplication, and scalar/dyadic products. Detailed forms include MAT ADD a()=b()+c(), MAT ADD a(),b(), MAT ADD a(),x; MAT SUB a()=b()-c(), MAT SUB a(),b(), MAT SUB a(),x; MAT MUL a()=b()*c(), MAT MUL x=a()*b(), MAT MUL x=a()*b()*c(), MAT MUL a(),x. | 13-16–13-22 |
+| MAT NORM a(),0/1 | Normalizes rows (0) or columns (1) so the sum of squares in each normalized row/column is 1. | 13-22 onward |
+| MAT DET, MAT QDET, MAT RANG, MAT INV | Determinant, quick determinant, rank and inverse operations are listed in the addendum. Extracted forms: MAT DET x=a([i,j])[,n], MAT QDET x=a([i,j])[,n], MAT RANG x=a([i,j])[,n], MAT INV a()=b(). Verify exact semantics and bounds in the corresponding pages before implementation. | 13-23–13-32 |
+| FACT(n) | Calculates factorial; explicitly defined with 0! = 1. | 13-33 |
+| VARIAT(n,k) | Calculates variations without repetition: n!/(n-k)!. | 13-33 |
+| COMBIN(n,k) | Calculates combinations without repetition: n!/((n-k)!*k!). | 13-33 |
+| OPENW negative screen index | New variant: if the screen number is negative, the window opens on the current/top screen. | 13-34 |
+| PCOLOR foreground,background | Does the same as COLOR, but applies to actual screen output through PRINT. | 13-34 |
+| DATA / _DATA= | DATA returns the current DATA-pointer position (zero if the next READ would be out of DATA); _DATA= restores/sets the pointer to a previously captured position. | 13-34 |
+| _0 … _9 | Ten special longword variables, not floating-point. They survive CLEAR, LOAD, CHAIN and RUN; only NEW erases them. Suggested use includes retaining AllocMem addresses and library bases for cleanup across RUN/CHAIN. | 13-35 |
+| GURU / GURU x | Enables/disables GURU checking and exposes the GURU number. With checking enabled, a GURU meditation can be redirected to ON ERROR GOSUB or reported as error #109. The addendum warns that compiled 3.5 programs cannot use RESUME NEXT or RESUME LABEL after a GURU-triggered ON ERROR call. | 13-36 |
+
+This list is the high-confidence 3.5 delta from the uploaded handbook. Matrix operation details beyond the signatures and semantics above remain only partially extracted; do not fill them from generic linear algebra assumptions.
+
+### 10.3 Corrections and clarifications from the English 3.0 baseline
+
+The English handbook is more explicit than the German book in several places. Update the research catalogue accordingly:
+
+- Window indices are explicitly documented as 0–31 in the English handbook (printed p. 9-26), not 0–15. The 0–15 range describes the built-in default window layouts (windows 1–15), not the full index range.
+- The English syntax for OPENW is shown as OPENW no[,x,y,w,h,IDCMP,flags], optionally followed by scrno and bitmap. Chapter 13 adds the negative-screen-number behavior noted above.
+- ON MENU KEY GOSUB proc is the spelling shown in the English handbook. The German OCR's ON MENUKEY spelling should not be treated as normative.
+- The English handbook also documents ON MESSAGE GOSUB proc, absent from the earlier German extraction. Add it to the event command inventory.
+- In the English handbook, keyboard input is described as the key code in MENU(2) for ON MENU KEY; the German extraction's MENU(14) claim is not supported by the English reference and should be treated as unverified/likely erroneous.
+- The English handbook says MENU(7) through MENU(10) are always set independently of message type. MENU(10) is the window address. The earlier German extraction only listed MENU(7), MENU(8) as seconds/microseconds; keep the fuller field interpretation anchored to the English manual.
+- SLEEP is explicitly equivalent to ON MENU 1; the ON MENU parameter is an Intui-tick timeout (tenths of a second). The German book's shorthand agrees, but the English manual supplies the exact unit and relationship.
+- The English handbook gives explicit EVERY ticks GOSUB proc, EVERY STOP, EVERY CONT, AFTER ticks GOSUB proc, AFTER STOP, and AFTER CONT. Add these control forms; the German extraction did not capture the STOP/CONT variants.
+- The English RESUME description says RESUME NEXT continues after the failing command, RESUME label jumps to a label, and plain RESUME retries the failing command. For fatal errors only RESUME label is permitted. This is more precise than the German summary.
+- Loop documentation confirms ENDREPEAT condition as a replacement for UNTIL condition, and writes the WHILE terminator as END WHILE (two words) in the English manual. Preserve exact spelling variants separately rather than normalizing them without parser evidence.
+- FOR documentation says the loop body is executed at least once and the counter remains at the first value that exceeds the end criterion. This is the handbook's documented behavior; test it against the actual interpreter before relying on it.
+
+### 10.4 Version classification policy for the catalogue
+
+Use these labels in future command inventories:
+- 3.5-addendum-confirmed: explicitly described in Chapter 13.
+- 3.0-reference: described in Chapters 1–12, without a separate 3.5 change statement.
+- German-book-only: found only in the German book; retain as a lead, not a confirmed parser/runtime fact.
+- conflicting-or-OCR-uncertain: sources differ or OCR is ambiguous; do not implement until checked against a page image or runtime.
+- OS-library-call: Amiga API routine, not a GFA BASIC language keyword.
+
+This distinction avoids treating the entire 3.0 reference as a fully verified 3.5 specification while still preserving the inherited command baseline.
