@@ -2236,3 +2236,45 @@ These are editor features, not interpreter commands. OCR damages the key labels 
 ### 31.4 Evidence boundary
 
 The book's explicit 3.5 introduction makes the functions and _DATA variable strong version-specific evidence. Exact factorial limits, numeric overflow, _DATA pointer indexing, and editor shortcut assignments are not fully specified. Do not infer runtime edge cases from the examples.
+
+
+## 32. Version 3.5 error catalogue and command-index cross-check: Appendices B–D (printed pp. 487–497)
+
+The appendices provide an explicit “Neue Fehlermeldungen ab Version 3.5” list and a command index. These are useful corroborating evidence for the 3.5 additions extracted above.
+
+### 32.1 Explicitly listed 3.5 error codes
+
+| Error code | Source wording / meaning |
+|---:|---|
+| 11 | Kein GFA-BASIC-3.5-Programm |
+| 76 | Matrix operations only for one- or two-dimensional arrays |
+| 77 | Matrices do not have the same order/dimensions |
+| 78 | Vector product not defined |
+| 79 | Matrix product not defined |
+| 80 | Scalar product not defined |
+| 81 | Transposition only for two-dimensional matrices |
+| 82 | Matrix is not square |
+| 83 | Transposition not defined |
+| 86 | FACT/COMBIN/PERMUT not defined |
+| 120 | Invalid or too-long argument line |
+| 121 | File is not an executable program/object module |
+| 122 | Invalid resident library addressed during load |
+
+The book's appendix heading explicitly identifies the list as new errors from version 3.5. Error 11 is printed in the 3.5 error list as “Kein GFA-BASIC-3.5-Programm”; the command index and error appendix also identify the version-specific status. The factorial/combinatorics error line mentions PERMUT, although the Chapter 19 prose section extracted above names VARIAT and COMBIN; preserve this source difference rather than assuming PERMUT is an alias or typo.
+
+The appendix gives explanatory DOS error descriptions for 120–122: malformed/overlong command arguments, a non-loadable file, and an invalid resident library. These are AmigaDOS-facing launch/load errors rather than ordinary BASIC syntax errors.
+
+### 32.2 Command-index cross-checks
+
+The command index independently lists the following Chapter 18/19 entries and page references:
+
+- Matrix family: MAT BASE, MAT CLR, MAT SET, MAT ONE, MAT READ, MAT PRINT, MAT INPUT, MAT CPY, MAT XCPY, MAT TRANS, MAT ADD, MAT SUB, MAT MUL, MAT NORM, MAT DET, MAT QDET, MAT RANG and MAT INV (printed pp. 454–475).
+- New mathematical functions: FACT (p. 477), VARIAT (p. 478), COMBIN (p. 479).
+- DATA pointer operations: _DATA (p. 479).
+- Compiler flags and linker options are indexed separately in Chapter 17 and remain compiler-tooling features, not interpreter commands.
+
+This index confirms the page placement and spelling of the matrix/function families, but the OCR is unreliable for some abbreviations and page digits (for example MAT BASE appears as “545” in the index OCR while its chapter text places it on p. 454). Use the chapter body as the primary page/syntax evidence and the index only as a cross-check.
+
+### 32.3 Scope and limitations
+
+The command index is not a normative language specification. It confirms that the book covers these entries but does not establish parameter types, runtime semantics, or compatibility beyond the book's stated version. Error-code wording and numeric assignments should be checked against the English 3.5 addendum/interpreter reference before using them as implementation constants.
