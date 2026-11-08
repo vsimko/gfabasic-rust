@@ -142,7 +142,7 @@ jobs:
             }
             # Select the DF0: device button (bottom button in the right column).
             # Move from the measured pointer origin (78,38) to its center (~531,318).
-            for delta in "110 38" "110 38" "110 38" "110 36" "13 0"; do
+            for delta in "110 35" "110 35" "110 35" "110 35" "13 0"; do
               set -- $delta
               printf "SEND_MOUSE\\t%s\\t%s\\t0\\n" "$1" "$2" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
               sleep 0.2
