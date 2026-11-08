@@ -1,15 +1,15 @@
-# Amiga GFA BASIC 3.0 command index — source transcription
+# Amiga GFA BASIC 3.0 command index — grouped cross-check
 
 Source: *GFA BASIC 3.5 Interpreter*, Appendix 12, “Table of commands”, printed pp. 12-8–12-18 (PDF pp. 410–420). The manual says Chapters 2–12 are the original 3.0 baseline and Chapter 13 is the 3.5 addendum. This is a 3.0 discovery index, not a normative 3.5 declaration list.
 
 ## Reading this index
 
-- Names and printed-page references below follow the appendix index; language-core and Amiga-specific APIs are mixed in its alphabetical table.
+- The appendix itself is an alphabetical table. This compact cross-check groups related names by subsystem to make omissions easier to spot; it is not a verbatim transcription of every row.
 - An index entry proves only that a name is indexed at a page. It does not establish complete syntax, semantics, interpreter/compiler availability, or 3.5 retention.
 - OCR-damaged names are marked for visual verification. Do not normalize them into registry identifiers without checking the page image and detailed entry.
 - The index is a completeness cross-check, not a replacement for declaration-level documentation.
 
-## Alphabetical index
+## Grouped command-index cross-check
 
 | Name | Printed page | Area / qualification |
 |---|---:|---|
@@ -81,4 +81,4 @@ Appendix 12, printed pp. 12-19–12-28, contains a separate alphabetical table o
 
 ## Completion status
 
-This closes the appendix command-index discovery pass only. It does not close issue #19: the 3.0 base candidates still require declaration-level 3.5 confirmation or controlled interpreter observations; OCR-sensitive spellings require visual review; and the complete language-core/platform-API split, exact signatures and conformance fixtures must be linked to the canonical inventory. Absence from the 3.5 addendum is not evidence that a 3.0 feature was removed or retained.
+This records the principal command-index families and their page ranges; it is not yet a row-for-row exhaustive transcription of every index entry. The remaining exact index normalization and OCR review are tracked as follow-up work. It does not close issue #19: the 3.0 base candidates still require declaration-level 3.5 confirmation or controlled interpreter observations; OCR-sensitive spellings require visual review; and the complete language-core/platform-API split, exact signatures and conformance fixtures must be linked to the canonical inventory. Absence from the 3.5 addendum is not evidence that a 3.0 feature was removed or retained.
