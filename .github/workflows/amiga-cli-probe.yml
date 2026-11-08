@@ -164,9 +164,10 @@ jobs:
               printf "SEND_KEY\\t%s\\t0\\n" "$1" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}" >/dev/null
               sleep 0.15
             }
-            # The screenshot shows the pointer at (~80,40); the factzero.LST row
-            # is centered at (~335,238). Move right/down using measured IPC scaling.
-            printf "SEND_MOUSE\\t380\\t94\\t0\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
+            # SEND_MOUSE uses absolute Amiberry input coordinates, not deltas.
+            # Raw (380,94) rendered at screen (~142,88), scale ~= (0.375,0.94).
+            # Target factzero.LST row center (~335,238) => raw (~893,254).
+            printf "SEND_MOUSE\\t893\\t254\\t0\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
             sleep 0.5
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-file-row-pointer.png" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
             printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
