@@ -2455,3 +2455,72 @@ The last pages contain the alphabetical subject index and a source note creditin
 ### 35.4 Completion boundary
 
 The German book's substantive interpreter/compiler chapters and back matter are now indexed through its final printed page 508. The remaining work is no longer bulk text extraction: it is page-image verification of OCR-sensitive spellings/tables and runtime compatibility testing. The English 3.5 addendum has been separately reconciled through its final printed page 13-36. No claim is made that these manual-only sources establish undocumented runtime edge cases.
+
+
+## 36. Page-image validation: IDCMP flags, Window flags and MENU attributes (printed pp. 378–379, 389)
+
+Unlike the earlier OCR-only extraction, these three tables were checked directly against rendered page images. The decimal values and names below are legible in the source images.
+
+### 36.1 IDCMP message flags (printed p. 378)
+
+| Decimal | Hex | Flag name |
+|---:|---|---|
+| 1 | &H00000001 | SIZEVERIFY |
+| 2 | &H00000002 | NEWSIZE |
+| 4 | &H00000004 | REFRESHWINDOW |
+| 8 | &H00000008 | MOUSEBUTTONS |
+| 16 | &H00000010 | MOUSEMOVE |
+| 32 | &H00000020 | GADGETDOWN |
+| 64 | &H00000040 | GADGETUP |
+| 128 | &H00000080 | REQSET |
+| 256 | &H00000100 | MENUPICK |
+| 512 | &H00000200 | CLOSEWINDOW |
+| 1024 | &H00000400 | RAWKEY |
+| 4096 | &H00001000 | REQCLEAR |
+| 16384 | &H00004000 | NEWPREFS |
+| 32768 | &H00008000 | DISKINSERTED |
+| 65536 | &H00010000 | DISKREMOVED |
+| 262144 | &H00040000 | ACTIVEWINDOW |
+| 524288 | &H00080000 | INACTIVEWINDOW |
+| 1048576 | &H00100000 | DELTAMOVE |
+| 2097152 | &H00200000 | VANILLAKEY |
+| 4194304 | &H00400000 | INTUITICKS |
+
+The table is a bit-flag list: values are powers of two and can be combined as flags. This observation follows directly from the displayed decimal/hex columns; it does not establish any additional undocumented combinations or runtime delivery guarantees.
+
+### 36.2 Window flags (printed p. 379)
+
+| Decimal | Hex | Flag name |
+|---:|---|---|
+| 0 | &H00000000 | SMARTREFRESH |
+| 1 | &H00000001 | WINDOW sizing |
+| 2 | &H00000002 | WINDOWDRAG |
+| 4 | &H00000004 | WINDOWDEPTH |
+| 8 | &H00000008 | WINDOWCLOSE |
+| 16 | &H00000010 | SIZEBRIGHT |
+| 32 | &H00000020 | SIZEBOTTOM |
+| 64 | &H00000040 | SIMPLEREFRESH |
+| 128 | &H00000080 | SUPERBITMAP |
+| 256 | &H00000100 | BACKDROP |
+| 512 | &H00000200 | REPORTMOUSE |
+| 1024 | &H00000400 | GIMMEZEROZERO |
+| 2048 | &H00000800 | BORDERLESS |
+| 4096 | &H00001000 | ACTIVATE |
+| 65536 | &H00010000 | RMBTRAP |
+| 131072 | &H00020000 | NOCARE refresh |
+
+The source prints the second name as WINDOW SIZING (the OCR/text layer had merged it as WINDOW/SIZING) and the last as NOCARE REFRESH. The sample directly below the table is `OPENW 0,0,0,640,256,0,4111`, described as opening a window with all system gadgets and active display. Preserve the source spelling and the sample's literal final value; do not derive an alternative flag combination.
+
+### 36.3 MENU item attributes (printed p. 389)
+
+The page-image table reads:
+- `64`: clear a checkmark.
+- `256`: set (toggle/check) a checkmark.
+- `16`: deactivate/ghost a menu item.
+- `64`: activate a menu item.
+
+The source therefore assigns decimal 64 to both “clear checkmark” and “activate menu item”. This is an internal duplicate in the printed source, not an OCR ambiguity. Do not silently change either value to a presumed correction. The text also states that a checkmark is requested by prefixing two spaces before the relevant menu-item text in MENU text.
+
+### 36.4 Updated validation status
+
+The IDCMP table, Window flags table and MENU attribute list are now page-image verified for printed pages 378, 379 and 389. Earlier OCR caveats for these exact numeric tables can be narrowed: the printed values are readable, but their interpretation against AmigaOS headers/runtime and the duplicate MENU value still require independent compatibility testing. Other OCR-sensitive areas (including SCROLL/GRAPHMODE/DRAW$, sprite/BOB syntax, and low-level API details) remain unvalidated.
