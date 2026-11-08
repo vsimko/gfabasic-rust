@@ -176,7 +176,7 @@ jobs:
               printf "SEND_KEY\\t%s\\t0\\n" "$1" | timeout 5s nc -U -N "$ipc_socket_path" >/dev/null
               sleep 0.15
             }
-            for keycode in 23 18 22 12 27 10 15 28 21 36 28 17 28 17; do
+            for keycode in 35 32 51 20 11 49 18 19 24 58 40 33 20; do
               send_key "$keycode"
             done
             # Exact sequence above is "fact-zero.lst".
