@@ -72,7 +72,7 @@ jobs:
           xdftool artifacts/amiga-cli-probe/factzero.adf list > artifacts/amiga-cli-probe/factzero-adf-list.txt
           cat > amiga-volume/S/Startup-Sequence <<'EOF'
           Echo "AMIGA CLI PROBE: BOOTED"
-          Wait 3
+          Wait 45
           CD GFAVol:
           List GFAVol: >GFAVol:volume-directory-check.txt
           List GFAVol:factzero.LST >GFAVol:volume-file-check.txt
@@ -159,7 +159,8 @@ jobs:
             # Capture the requester after selecting DF0 to verify its state.
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-df0-selected.png" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
             # Move from DF0 button to the filename gadget, then focus it explicitly.
-            printf "SEND_MOUSE\\t-238\\t-82\\t0\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
+            # The last screenshot shows the pointer at (421,164); filename gadget center is (294,165).
+            printf "SEND_MOUSE\\t-270\\t0\\t0\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
             sleep 0.2
             printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
             sleep 0.2
