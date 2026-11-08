@@ -220,3 +220,78 @@ The exact semantics and state transitions should be checked against the interpre
 ### 7.5 Evidence boundary
 
 This chapter provides strong evidence for the existence and broad syntax of the constructs above in the book's Amiga interpreter reference. It does not establish every whitespace, abbreviation, nesting, error-recovery or expression-precedence rule. Those details should be taken from the primary 3.5 interpreter manual or verified with the interpreter, not guessed from OCR.
+
+
+## 8. Program control and error handling: Chapter 12
+
+Extracted from printed pp. 331–361.
+
+### 8.1 Lifecycle commands
+
+| Command | Behavior described by the book |
+|---|---|
+| RUN | Restarts the current program and clears variables/screen. RUN "program-name" is also shown for loading and starting another program, with version/context caveats. |
+| STOP | Suspends execution and displays an ALERT box, allowing continuation or entry to direct mode. |
+| CONT | Continues after STOP at the following statement. Not available after CLEAR, listing edits, or introduction of new variables. |
+| END | Stops the current program but retains variable contents and open files in the interpreter; direct mode can inspect them and CONT may resume. |
+| SYSTEM / QUIT | Exits to Workbench or the caller (CLI/EXEC). QUIT is described as identical to SYSTEM; QUIT [x] is marked Version 3.0. |
+| CLEAR | Sets numeric variables to zero, strings to empty, erases arrays and removes dimensions. The book says not to use it inside procedures or FOR/NEXT loops. |
+| NEW | Clears the BASIC program and its variables from memory. |
+| EDIT | Exits execution to the editor. |
+
+### 8.2 Error handling
+
+- ON ERROR GOSUB Procedure redirects BASIC/system errors to a procedure; the programmer owns error handling.
+- ON ERROR restores normal error reporting/termination. The editor may insert GOSUB automatically in the described 3.0 environment.
+- ERR is a reserved variable containing the error identifier.
+- ERR$(index) returns the text for an error number; the book labels this function Version 3.0.
+- FATAL distinguishes fatal system errors (-1) from ordinary BASIC errors (0), according to the book.
+- ERROR number deliberately raises/simulates the selected error.
+- RESUME is allowed only inside a procedure. RESUME retries the failed statement; RESUME NEXT continues with the following statement; RESUME Label continues at a label. After the error procedure returns, the interpreter resets error handling to normal, so ON ERROR GOSUB must be installed again if required.
+
+Do not assume the book's special fatal-system-error recovery is reproducible in a modern host runtime.
+
+### 8.3 Timer callbacks
+
+The book states that the timer unit is 1/200 second (200 ticks = 1 second).
+
+- AFTER Ticks [GOSUB] Procedure schedules a one-shot callback. It is dispatched only after the current BASIC statement completes; blocking operations can delay it.
+- A later AFTER GOSUB replaces the previous pending callback. The described implementation cannot process multiple AFTER callbacks simultaneously.
+- EVERY GOSUB is described as the periodic counterpart. The book suggests re-arming an AFTER handler before RETURN as an approximation; the extracted text does not establish complete EVERY edge-case semantics.
+
+## 9. Intuition event handling: Chapters 15–16
+
+Extracted from printed pp. 389–404. These are interpreter event facilities layered over Amiga Intuition messages.
+
+### 9.1 Dispatch commands
+
+| Command | Syntax / role described in the book |
+|---|---|
+| ON MENU [Zeit] | Waits for an Intuition message and dispatches the configured handler. The book recommends calling it repeatedly in a loop; without it, ON MENU…GOSUB handlers are not dispatched. |
+| ON MENU GOSUB Procedure | Registers a menu-selection handler; MENU(0) identifies the selected entry. |
+| ON MENU BUTTON GOSUB Procedure | Registers a mouse-button handler; inspect MENU() to determine which button changed and how. |
+| ON MENUKEY GOSUB Procedure | Registers a keyboard handler; MENU(14) provides the key code in the described interface. |
+| MENU KILL | Prevents further menu selection (shown in the menu-handler example). |
+| SLEEP | Waits for an Intuition message; described as a simplified ON MENU wait using time parameter 1. |
+
+The book warns that registering ON MENU GOSUB before defining a window with a menu can crash the program. If a named handler does not exist, the corresponding monitoring is disabled.
+
+### 9.2 MENU() event record
+
+| Field | Meaning described in the book |
+|---|---|
+| MENU(0) | Menu index / selected menu entry in the simple menu interface. |
+| MENU(1) | Intuition message class; values correspond to IDCMP flags requested when the window was defined. |
+| MENU(2) | Message-specific data. For menu-pick messages: menu number = MENU(2) AND 31; item = SHR(MENU(2), 5) AND 63; subitem = SHR(MENU(2), 11) AND 31. |
+| MENU(3) | Qualifier/modifier-key state (e.g. Shift and Control). |
+| MENU(4) | Address of the Intuition object responsible for the message (e.g. Gadget or Requester). |
+| MENU(5), MENU(6) | Mouse X/Y coordinates relative to the window, or movement deltas for relevant mouse-move messages. |
+| MENU(7), MENU(8) | Event time in seconds and microseconds respectively. |
+| MENU(10) | Address of the Window structure that generated the message; WINDOW(address) maps it to a GFA window number. |
+| MENU(14) | Keyboard code in the ON MENUKEY handler. |
+
+The book lists message classes for menu-pick, keyboard, gadget, window activation/refresh/resize, mouse movement/button, and requester events. Some numeric values in the OCR are damaged or ambiguous (digit grouping/leading zeros); do not encode an IDCMP constant table from OCR alone. Check the printed page images or primary interpreter manual first.
+
+### 9.3 Event-loop implication
+
+The sample pattern repeatedly waits for/dispatches Intuition messages (ON MENU or SLEEP) and processes MENU() values. The book warns that internal polling loops which do not yield to event handling can prevent event processing. Do not assume this Amiga event queue/scheduling behavior matches a non-Amiga runtime.
