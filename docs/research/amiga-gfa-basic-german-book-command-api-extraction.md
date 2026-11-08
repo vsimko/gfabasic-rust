@@ -2071,3 +2071,62 @@ The book's menu event example uses `ON MENU GOSUB Auswertung`, then reads MENU(0
 ### 28.1 Evidence boundary
 
 The event-buffer field numbering is not fully consistent across the book's overview and detailed pages. The current extraction records the discrepancy rather than silently correcting it. Exact event class values and further event handlers require the remaining Chapter 16 pages and page-image checks.
+
+
+## 29. Intuition event classes and dispatch: Chapter 16 continuation (printed pp. 397–404)
+
+The continuation provides message-class examples and the BASIC handlers used to wait for and dispatch events.
+
+### 29.1 Menu event decoding
+
+For a menu-pick event, the book gives this bit-field decoding of `MENU(2)`:
+
+- Menu number = `MENU(2) AND 31`
+- Menu item = `SHR(MENU(2),5) AND 63`
+- Submenu item = `SHR(MENU(2),11) AND 31`
+
+It separately identifies `MENU(1)=256` as a menu-selection message. This is a different representation from the simpler menu index in MENU(0).
+
+### 29.2 Message classes and event payloads
+
+The following class values and descriptions are legible in the source. They are the book's Amiga V3.0-era examples; verify numeric values against the matching AmigaOS headers before implementation.
+
+| MENU(1) value | Event described | Payload fields called out by the book |
+|---:|---|---|
+| 2 | Window size changed | `MENU(10)` contains the Window structure address. |
+| 4 | Window refresh required | `MENU(10)` contains the Window address; application must redraw/restore window contents. |
+| 8 | Mouse button event | `MENU(2)` contains button state; the book gives 104 for left press and 232 for right press, adding 1 when the button is released. `MENU(10)` identifies the Window. |
+| 16 | Mouse moved | `MENU(5)`/`MENU(6)` contain absolute mouse coordinates relative to the Window. |
+| 32 | Gadget pressed | `MENU(4)` is the Gadget structure address; `MENU(10)` is the Window address. |
+| 64 | Gadget released | Same Gadget/Window address fields. |
+| 128 | Requester opened in a Window | `MENU(4)` is the Requester structure address; `MENU(10)` is the Window address. |
+| 512 | Requester cannot be displayed in the Window | `MENU(10)` is the Window address. |
+| 4096 | Last Requester in the Window closed | `MENU(10)` is the Window address. |
+| 1024 | Key pressed (raw-key event) | `MENU(2)` contains the keyboard code; `MENU(3)` contains qualifier state. |
+| 2097152 | Key pressed (vanilla-key event) | `MENU(2)` contains the translated ASCII code. |
+| 16384 | System Preferences changed | No additional payload detail in the extracted passage. |
+| 32768 (OCR appears as 3276…) | Disk inserted | The OCR truncates/corrupts the numeric value; verify from page image. |
+| 65536 (OCR appears in a damaged line) | Disk removed | Numeric association requires page-image verification. |
+| 131072 | Workbench changed | The book says Workbench sends this when changes are made to it. |
+| 524288 | Window became inactive because another Window was activated or the user clicked the screen | `MENU(10)` contains the Window address. |
+| 4194303 | IntuiTick/time notification | The book says a message is sent every tenth of a second. |
+
+The passage also describes a mouse-move variant where MENU(5)/MENU(6) report coordinate deltas relative to the previous position. The OCR around the corresponding message constant is damaged (rendered as “048576”); do not assign a numeric value from that fragment.
+
+The book's event descriptions repeatedly identify `MENU(10)` as the Window structure pointer, convertible to a GFA Window number using `WINDOW(Adresse)`. This repeated detailed usage supports MENU(10); the earlier isolated apparent MENU(9) reading is likely OCR ambiguity, but remains recorded as an unresolved transcription discrepancy until page-image review.
+
+### 29.3 Event waiting and callback registration
+
+| Command | Syntax recorded in the book | Description |
+|---|---|---|
+| `SLEEP` | `SLEEP` | Waits for an Intuition message; presented as a simple event wait. The book says to include it inside internal wait loops so event handling can run while polling. |
+| `ON MENU` | `ON MENU` or `ON MENU [Zeit]` | Waits for an event and dispatches to registered event procedures. Optional Zeit is in milliseconds and bounds the wait; the text links timed use to ON MENU BUTTON GOSUB. |
+| `ON MENU GOSUB` | `ON MENU GOSUB Prozedurname` | Registers the procedure for pull-down menu selection. The handler reads MENU(0) to determine the selected item. If the procedure does not exist, menu monitoring is disabled. The book warns calling it before defining a Window with a menu can crash the program. |
+| `ON MENU BUTTON GOSUB` | `ON MENU BUTTON GOSUB Prozedurname` | Registers a mouse-button event procedure; the handler inspects MENU() to determine which button was pressed/released and when. |
+| `ON MENU KEY GOSUB` | `ON MENU KEY GOSUB Prozedurname` | Registers a keyboard event procedure. The passage says MENU(14) provides the key code; if the named procedure does not exist, keyboard monitoring is disabled. |
+
+The source says ON MENU must be called repeatedly/in a loop if events are to be reliably received; without it, the ON MENU ... GOSUB procedures are not dispatched. It also explains that SLEEP is a simpler wait when no custom timeout is needed. A time-limited ON MENU wait is described as allowing the input device to register a mouse-button release, but only when ON MENU BUTTON GOSUB is also installed.
+
+### 29.4 Chapter boundary and evidence
+
+Chapter 16 ends at printed p. 404; Chapter 17 begins the separate compiler discussion. The compiler chapter must not be merged into the interpreter language/API inventory. Event constants and the mouse-button numeric states are transcribed from OCR and require page-image/AmigaOS-header validation before being treated as implementation constants.
