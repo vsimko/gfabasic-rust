@@ -30,7 +30,7 @@ jobs:
           echo "deb [arch=amd64 signed-by=/usr/share/keyrings/amiberry-archive-keyring.gpg] https://packages.amiberry.com/apt noble main" \
             | sudo tee /etc/apt/sources.list.d/amiberry.list >/dev/null
           sudo apt-get update
-          sudo apt-get install -y --no-install-recommends amiberry xvfb x11-utils imagemagick
+          sudo apt-get install -y --no-install-recommends amiberry xvfb imagemagick
           amiberry --version
 
       - name: Prepare a bootable directory volume
@@ -79,8 +79,7 @@ jobs:
             trap cleanup EXIT
 
             sleep 5
-            xwd -root -silent -out "$RUNNER_TEMP/amiga-screen.xwd"
-            convert "$RUNNER_TEMP/amiga-screen.xwd" "$SCREENSHOT"
+            import -window root "$SCREENSHOT"
             identify "$SCREENSHOT"
 
             for attempt in $(seq 1 45); do
