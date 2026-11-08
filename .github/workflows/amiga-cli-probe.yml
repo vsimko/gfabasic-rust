@@ -69,6 +69,10 @@ jobs:
           CD GFAVol:
           List GFAVol: >GFAVol:volume-directory-check.txt
           List GFAVol:factzero.LST >GFAVol:volume-file-check.txt
+          List GFA: >GFAVol:device-directory-check.txt
+          List GFA:factzero.LST >GFAVol:device-file-check.txt
+          Info >GFAVol:dos-info.txt
+          Assign >GFAVol:dos-assign.txt
           Run <GFAVol:cli-input.txt >GFAVol:cli-output.txt GFAVol:GFABasic
           Echo "CLI launch without program argument" >GFAVol:probe-status.txt
           EOF
@@ -156,7 +160,7 @@ jobs:
             kill -0 "$emulator_pid"
             printf "QUIT\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}" || true
           '
-          for diagnostic in volume-directory-check.txt volume-file-check.txt cli-output.txt probe-status.txt stdin-save.LST; do
+          for diagnostic in volume-directory-check.txt volume-file-check.txt device-directory-check.txt device-file-check.txt dos-info.txt dos-assign.txt cli-output.txt probe-status.txt stdin-save.LST; do
             if test -f "amiga-volume/$diagnostic"; then
               cp "amiga-volume/$diagnostic" "artifacts/amiga-cli-probe/$diagnostic"
             else
