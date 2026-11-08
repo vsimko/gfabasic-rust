@@ -155,7 +155,7 @@ jobs:
               sleep 0.08
             }
 
-            sleep 2
+            sleep 5
             send_key 69 # Escape
             sleep 1
             # Amiga raw key codes for PRINT 42 followed by Return.
@@ -168,6 +168,10 @@ jobs:
             tesseract "$SCREENSHOT" "$GITHUB_WORKSPACE/artifacts/amiga-smoke/screen-ocr" --psm 6
             cat "$GITHUB_WORKSPACE/artifacts/amiga-smoke/screen-ocr.txt"
             grep -Eq "(^|[^0-9])42([^0-9]|$)" "$GITHUB_WORKSPACE/artifacts/amiga-smoke/screen-ocr.txt"
+            if grep -q "PRINT" "$GITHUB_WORKSPACE/artifacts/amiga-smoke/screen-ocr.txt"; then
+              echo "GFA BASIC did not leave the editor; direct-mode command was not executed"
+              exit 1
+            fi
             cat "$RESULT"
             printf "QUIT\\n" | timeout 5s nc -U -N "$socket" || true
           '
