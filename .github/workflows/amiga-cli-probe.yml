@@ -49,7 +49,9 @@ jobs:
           curl -fsSL https://packages.amiberry.com/gpg.key | sudo tee /usr/share/keyrings/amiberry-archive-keyring.gpg >/dev/null
           echo "deb [arch=amd64 signed-by=/usr/share/keyrings/amiberry-archive-keyring.gpg] https://packages.amiberry.com/apt noble main" | sudo tee /etc/apt/sources.list.d/amiberry.list >/dev/null
           sudo apt-get update
-          sudo apt-get install -y --no-install-recommends amiberry xvfb netcat-openbsd tesseract-ocr
+          sudo apt-get install -y --no-install-recommends amiberry xvfb netcat-openbsd tesseract-ocr python3-pip
+          python3 -m pip install --break-system-packages amitools
+          command -v xdftool
           amiberry --version | tee artifacts/amiga-cli-probe/amiberry-version.txt
 
       - name: Prepare CLI input and boot volume
@@ -63,6 +65,9 @@ jobs:
           # If the process attaches its standard input to a command console,
           # this direct-mode command should create an ASCII listing on GFAVol.
           printf 'LIST "GFAVol:stdin-save.LST"\n' > amiga-volume/cli-input.txt
+          # Use a real OFS floppy image for the LST fixture. AROS can access
+          # DF0: without depending on Amiberry's host-directory DOS handler.
+          xdftool artifacts/amiga-cli-probe/factzero.adf create + format GFABASIC ofs + write amiga-volume/factzero.LST
           cat > amiga-volume/S/Startup-Sequence <<'EOF'
           Echo "AMIGA CLI PROBE: BOOTED"
           Wait 3
@@ -71,6 +76,8 @@ jobs:
           List GFAVol:factzero.LST >GFAVol:volume-file-check.txt
           List GFA: >GFAVol:device-directory-check.txt
           List GFA:factzero.LST >GFAVol:device-file-check.txt
+          List DF0: >GFAVol:floppy-directory-check.txt
+          List DF0:factzero.LST >GFAVol:floppy-file-check.txt
           Info >GFAVol:dos-info.txt
           Assign >GFAVol:dos-assign.txt
           Run <GFAVol:cli-input.txt >GFAVol:cli-output.txt GFAVol:GFABasic
@@ -90,7 +97,8 @@ jobs:
           gfx_height=512
           gfx_fullscreen=false
           sound_output=0
-          filesystem2=rw,GFA:GFAVol:$GITHUB_WORKSPACE/amiga-volume,0
+          floppy0=$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/factzero.adf
+                    filesystem2=rw,GFA:GFAVol:$GITHUB_WORKSPACE/amiga-volume,0
           uaehf0=dir,rw,GFA:GFAVol:$GITHUB_WORKSPACE/amiga-volume,0
           EOF
 
@@ -132,18 +140,9 @@ jobs:
               printf "SEND_KEY\\t%s\\t0\\n" "$1" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}" >/dev/null
               sleep 0.15
             }
-            # The DOS volume label is GFAVol: (GFA: is the device name).
-            # The filename gadget caret is at the start; Delete clears its remaining default "Vol:".
+            # The fixture is on a real OFS floppy. Enter only the basename;
+            # choose DF0: in the requester rather than typing a DOS path.
             for _ in $(seq 1 16); do send_key 70; done
-            for keycode in 36 35 32 52 24 40; do send_key "$keycode"; done
-            printf "SEND_KEY\\t96\\t1\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}" >/dev/null
-            sleep 0.15
-            printf "SEND_KEY\\t41\\t1\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}" >/dev/null
-            sleep 0.15
-            printf "SEND_KEY\\t41\\t0\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}" >/dev/null
-            sleep 0.15
-            printf "SEND_KEY\\t96\\t0\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}" >/dev/null
-            sleep 0.15
             for keycode in 35 32 51 20 49 18 19 24 57 40 33 20; do send_key "$keycode"; done
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-filename.png" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
 
@@ -160,7 +159,7 @@ jobs:
             kill -0 "$emulator_pid"
             printf "QUIT\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}" || true
           '
-          for diagnostic in volume-directory-check.txt volume-file-check.txt device-directory-check.txt device-file-check.txt dos-info.txt dos-assign.txt cli-output.txt probe-status.txt stdin-save.LST; do
+          for diagnostic in volume-directory-check.txt volume-file-check.txt device-directory-check.txt device-file-check.txt floppy-directory-check.txt floppy-file-check.txt dos-info.txt dos-assign.txt cli-output.txt probe-status.txt stdin-save.LST; do
             if test -f "amiga-volume/$diagnostic"; then
               cp "amiga-volume/$diagnostic" "artifacts/amiga-cli-probe/$diagnostic"
             else
