@@ -183,9 +183,13 @@ jobs:
             done
             # Raw keycode 0x39 (57) is the Amiga period key.
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-smoke/merge-filename.png" | timeout 5s nc -U -N "$ipc_socket_path"
-            # The filename gadget remains focused after typing. Return
-            # activates the requester default (Merge/Load) action without
-            # relying on host mouse coordinate mapping.
+            # Move keyboard focus from the filename gadget to the
+            # requester's controls, then activate the selected action.
+            printf "SEND_KEY\\t66\\t1\\n" | timeout 5s nc -U -N "$ipc_socket_path" | tee "$GITHUB_WORKSPACE/artifacts/amiga-smoke/merge-tab-press.txt"
+            sleep 0.3
+            printf "SEND_KEY\\t66\\t0\\n" | timeout 5s nc -U -N "$ipc_socket_path" | tee "$GITHUB_WORKSPACE/artifacts/amiga-smoke/merge-tab-release.txt"
+            sleep 1
+            printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-smoke/after-merge-tab.png" | timeout 5s nc -U -N "$ipc_socket_path"
             printf "SEND_KEY\\t68\\t1\\n" | timeout 5s nc -U -N "$ipc_socket_path" | tee "$GITHUB_WORKSPACE/artifacts/amiga-smoke/merge-return-press.txt"
             sleep 0.3
             printf "SEND_KEY\\t68\\t0\\n" | timeout 5s nc -U -N "$ipc_socket_path" | tee "$GITHUB_WORKSPACE/artifacts/amiga-smoke/merge-return-release.txt"
