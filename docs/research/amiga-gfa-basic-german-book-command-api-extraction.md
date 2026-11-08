@@ -2294,7 +2294,7 @@ The page image gives:
 | 131072 | Workbench reports changes made to it | no payload specified here |
 | 4194303 | Timer-message request | one IntuiTick message every 1/10 second |
 
-The printed timer value is `4194303`, while the earlier IDCMP flag table on p. 378 lists `INTUITICKS = 4194304`. Preserve this one-off mismatch as a source inconsistency; do not silently normalize the event value.
+The event description prints decimal `4194303`, but the German IDCMP table on p. 378 gives `4194304`; the English 3.5 manual repeats `4194303` alongside hexadecimal `&H400000`. Since `&H400000` equals decimal `4194304`, treat `4194303` as a repeated decimal typo. The corrected flag is `4194304` (`&H400000`). See §44.2.
 
 ### 42.5 Validation boundary
 
