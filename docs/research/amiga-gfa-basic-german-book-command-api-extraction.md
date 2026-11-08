@@ -2350,3 +2350,59 @@ These are example application fixes, not changes to the BASIC language or compil
 ### 33.6 Evidence boundary
 
 Chapter 17 documents the GFA-BASIC 3.0 compiler tooling. The book's later Chapters 18–19 explicitly introduce interpreter-facing 3.5 features, so the compiler option list remains a separate compatibility layer. Exact flag aliases, command-line quoting, ABI/register preservation, stack sizing and generated-code behavior require compiler-binary/runtime verification.
+
+
+## 34. Reconciliation against the English GFA-BASIC 3.5 Interpreter addendum
+
+**Source boundary:** The English handbook identifies Chapters 1–12 as the original 3.0 manual and Chapters 13–14 as a 3.5 addendum. Its printed addendum pages are numbered 13-1 through 13-36. This is the primary direct 3.5 reference for additions not present in the German 1990 book's Chapter 18–19 treatment. The following is an additive reconciliation, not a replacement of the German book's wording.
+
+### 34.1 Additional 3.5 features omitted from the German book extraction
+
+| Feature | English addendum evidence | Source-derived behavior |
+|---|---|---|
+| `PCOLOR` | p. 13-34 | `PCOLOR foreground,background`; same color selection role as COLOR, but intended for subsequent PRINT output. |
+| `GURU x` | p. 13-35 | x=0 disables GURU checking; nonzero enables handling of a GURU Meditation by invoking ON ERROR GOSUB or generating error #109. |
+| `GURU` | p. 13-35 | Function returning the GURU number; example prints HEX$(GURU) in an ON ERROR handler. |
+| `_0` … `_9` | p. 13-35 | Ten special longword variables, not floating-point variables. NEW clears them; CLEAR, LOAD, CHAIN and RUN do not. Suggested use includes retaining AllocMem addresses and library bases across RUN/CHAIN. |
+| Negative screen number in `OPENW` | p. 13-34 | A negative screen number opens the window on the current (top) screen. |
+| `MAT COPY` | pp. 13-6–13-10 | Four source/destination offset forms for copying whole matrices or subregions, in addition to the German book's MAT CPY form. |
+| `MAT COPY` / `MAT XCPY` vector handling | pp. 13-11–13-13 | Explicit row-vector/column-vector rules, including the required dimensioning and which h/w parameters are effective. |
+
+These are direct interpreter 3.5 addendum features. The German book's index and body do not provide equivalent detail for PCOLOR, GURU, _0…_9 or MAT COPY; do not attribute them to its Chapter 18/19 text.
+
+### 34.2 MAT family constraints clarified by the English addendum
+
+The English addendum states that all vector/matrix operations in its 3.5 section apply only to one- or two-dimensional fields with floating-point variables. This is a material constraint missing from the German book's broader “numeric variables” descriptions. The commands must therefore not be generalized to integer/byte/word arrays without runtime evidence.
+
+- `MAT BASE 0/1`: meaningful in conjunction with OPTION BASE 0; sets the index offset for matrix operations. Default is 1. It affects MAT READ, MAT PRINT, MAT CPY, MAT XCPY, MAT ADD, MAT SUB and MAT MUL (the list is source-specific; do not silently extend it to every MAT command).
+- `MAT CLR`, `MAT SET`, `MAT ONE`: CLEAR all elements to zero; set all elements to a scalar; create a square identity matrix respectively. The English prose calls MAT ONE a “uniform matrix” but defines diagonal elements as 1 and all others as 0.
+- `MAT INPUT #channel,a()`: reads matrix/vector data from ASCII input; its format is the reverse of MAT PRINT and uses comma/line-feed separators.
+- `MAT CPY`: copies h rows by w elements between explicit offsets. The addendum also documents four offset forms: destination offset/source whole matrix, destination whole matrix/source offset, both offsets, and both whole matrices. Only elements with matching source/destination indices are copied.
+- `MAT XCPY`: same copy model but transposes the source while copying; the source array remains unchanged. For vectors, one must be dimensioned as a row vector and the other as a column vector. The addendum specifies when h or w is used and when zero prevents copying.
+- `MAT TRANS a()`: in-place transpose; source says it is for square matrices. `MAT TRANS a()=b()` copies a transposed b() into dimension-compatible a().
+- `MAT ADD` and `MAT SUB`: element-wise forms require matching dimensions; in-place forms overwrite the first matrix. Scalar forms add/subtract the scalar from every element.
+- `MAT MUL a()=b()*c()`: standard row-by-column matrix product with compatible dimensions. For two vectors, the destination matrix receives their dyadic/external product. `MAT MUL x=a()*b()` for equal-length vectors returns the scalar (inner) product. `MAT MUL x=a()*b()*c()` is also documented for vector–matrix–vector multiplication.
+- `MAT NORM a(),0/1`: normalizes by rows/columns so the sum of squares in each row/column is 1.
+- `MAT DET`, `MAT QDET`, `MAT RANG`: operate on square matrices and support a selected n-by-n submatrix beginning at an i,j offset. QDET is the optimized determinant routine; the German book independently warns of small precision differences.
+- `MAT INV b()=a()`: inverse of a square matrix a() into b(); source requires b() to be the same type as a().
+
+### 34.3 German/English source differences and unresolved questions
+
+1. **Numeric array type:** German Chapter 18 often says numeric fields; English addendum explicitly restricts its matrix/vector operations to floating-point fields. Use the stricter English constraint for the documented 3.5 addendum unless the interpreter proves otherwise.
+2. **MAT COPY vs MAT CPY:** English addendum includes MAT COPY as a separate set of four offset forms. German Chapter 18 describes MAT CPY and its region syntax, but not these distinct MAT COPY forms. Do not collapse these spellings without parser/runtime evidence.
+3. **MAT ONE wording:** German says identity matrix; English says “uniform matrix” then defines the identity matrix. Semantics agree despite terminology.
+4. **MAT MUL:** German text covers matrix multiplication and scalar multiplication, while English additionally documents vector outer/dyadic product, vector scalar/inner product and vector–matrix–vector chain product.
+5. **MAT NORM:** English makes the invariant explicit: row/column sum of squares becomes 1. German explains unit-length normalization but is less precise for matrix rows/columns.
+6. **_DATA:** English states DATA is zero exactly when the next READ would be out of data; assigning _DATA restores only a value previously obtained from DATA. This clarifies the German book's less precise pointer description.
+7. **Error #109 and GURU:** English addendum documents GURU-specific handling and warns that compiled programs cannot RESUME NEXT or RESUME LABEL after an ON ERROR call caused by a GURU. It recommends terminating promptly after #109; GURUs #110–#118 are described as less dangerous.
+8. **FACT/VARIAT/COMBIN:** English addendum specifies 0!=1 and the combinatorial formulas. The German error appendix's code #86 says FACT/COMBIN/PERMUT not defined, while the chapter prose documents VARIAT. Preserve this source discrepancy; do not assume PERMUT is an alias.
+
+### 34.4 Editor-specific 3.5 addendum
+
+The English addendum p. 13-1 states:
+- The editor uses two additional bytes per program row compared with versions 3.0–3.07; this accelerates backward scrolling and permits folding functions as well as procedures.
+- Search can include header rows of folded/closed procedures or functions.
+- Listing prints labels two characters further left, as with CASE.
+- Tab moves to the next tab stop; Ctrl+Tab moves to the previous one; LeftShift+Tab inserts spaces up to the next tab stop; RightShift+Tab deletes blank spaces on one row up to/from the cursor.
+
+This resolves the German book's OCR ambiguity for the two Shift+Tab actions. Treat the editor changes as editor behavior, not interpreter language syntax.
