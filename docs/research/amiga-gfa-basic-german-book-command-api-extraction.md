@@ -1313,3 +1313,52 @@ For RCALL, the book maps array elements 0–7 to data registers d0–d7 and elem
 ### 15.8 Evidence boundary
 
 The stack layouts, register mapping and exception-vector behavior above are transcribed as described in the historical book. They are high-risk low-level interfaces: verify them with the actual target interpreter and Amiga ABI before implementing or documenting them as compatibility guarantees. The chapter does not establish that these interfaces are unchanged in later 3.5 builds.
+
+
+## 16. Text operations: Chapter 7 (printed pp. 193–200)
+
+This section extracts the book's built-in string operations and their stated behavior. The custom procedures shown in examples (such as ASTRING and CUT) are example code, not built-in commands. Source classification remains 3.0/V3.03-era.
+
+### 16.1 String construction and character conversion
+
+| Function | Syntax recorded in the book | Behavior |
+|---|---|---|
+| `SPACES` | `Var$=SPACES(Anz)` | Returns a string containing the requested number of spaces. |
+| `STRINGS` | `Var$=STRINGS(Anz,Text)` or `Var$=STRINGS(Anz,Ascii)` | Repeats the supplied string or character the requested number of times. The book permits a character's ASCII value instead of a one-character string. |
+| `PRED` | `Var$=PRED(Expr$)` | Returns the preceding ASCII character for the first character of Expr$. The book describes it as equivalent to CHR$(ASC(Expr$)-1). |
+| `SUCC` | `Var$=SUCC(Expr$)` | Returns the next ASCII character for the first character of Expr$; equivalent to CHR$(ASC(Expr$)+1). |
+| `UPPER$` | `Var$=UPPER$(Ziel$)` | Converts lowercase letters to uppercase; German umlauts are also converted. Other characters remain unchanged. |
+| `TRIM$` | `Var$=TRIM$(Ziel$)` | Removes spaces at the beginning and end. An empty or all-space input returns an empty string. |
+
+The book states a maximum string length of 32,767 characters.
+
+### 16.2 Fixed-width string assignment
+
+| Statement | Syntax | Behavior |
+|---|---|---|
+| `LSET` | `LSET Ziel$="Text"` | Copies text to the left side of Ziel$ without changing the target string's existing length. Longer text is truncated; shorter text is padded on the right with spaces. |
+| `RSET` | `RSET Ziel$="Text"` | Same fixed-length behavior as LSET, but aligns the supplied text to the right and pads on the left. |
+| `MID$` assignment | `MID$(Ziel$,Start[,Anz])="Text"` | Replaces part of an existing string beginning at Start, optionally limiting the number of copied characters. The original target length is retained. |
+
+The book particularly associates LSET/RSET with fixed-length records in random-access files.
+
+### 16.3 Substring and search functions
+
+| Function | Syntax recorded in the book | Behavior |
+|---|---|---|
+| `LEN` | `Var=LEN(Var$)` | Returns the string length. |
+| `LEFT$` | `Var$=LEFT$(Ziel$[,Anz])` | Returns the first Anz characters; without Anz, returns the first character. If Anz exceeds the string length, returns the whole string. |
+| `MID$` | `Var$=MID$(Ziel$,Start[,Anz])` | Returns a substring beginning at Start. Without Anz, or when Anz exceeds the remaining length, returns the rest of the string. |
+| `RIGHT$` | `Var$=RIGHT$(Ziel$[,Anz])` | Returns the final Anz characters; without Anz, returns the last character. |
+| `INSTR` | `Var=INSTR(Ziel$,Such$[,Start])`; also documented as `INSTR([Start,]Ziel$,Such$)` | Returns the first matching position, optionally starting at Start. Search is case-sensitive. Returns 0 when not found; the book says two empty strings yield position 1. |
+| `RINSTR` | `Var=RINSTR(Ziel$,Such$[,Start])`; also `RINSTR([Start,]Ziel$,Such$)` | Searches from the end of the target string and returns the first match encountered in that reverse search. |
+
+For LEFT$/MID$/RIGHT$, an empty input string produces an empty result. The book's examples and wording use one-based character positions.
+
+### 16.4 Example-only routines and encoding note
+
+The chapter includes user-written procedures such as ASTRING (collecting all match positions) and CUT (splitting a string into bounded pieces). These are not built-ins. The examples encode integer positions/lengths in a binary string using `MKI$` and recover them with `CVI`; do not add ASTRING or CUT to the interpreter's built-in command inventory on the basis of these examples.
+
+### 16.5 Evidence boundary
+
+The syntax and behavior above are transcribed from the German book's Chapter 7. Exact abbreviation rules, treatment of out-of-range positions, and edge cases beyond those explicitly stated remain unverified. The source is not evidence that every item is unchanged in interpreter 3.5.
