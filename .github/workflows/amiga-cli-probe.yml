@@ -164,9 +164,9 @@ jobs:
               printf "SEND_KEY\\t%s\\t0\\n" "$1" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}" >/dev/null
               sleep 0.15
             }
-            # The booted OFS disk already shows factzero.LST in the Merge requester.
-            # Select that row directly (pointer currently near 386,117; row center ~345,237).
-            printf "SEND_MOUSE\\t-39\\t56\\t0\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
+            # The screenshot shows the pointer at (~80,40); the factzero.LST row
+            # is centered at (~335,238). Move right/down using measured IPC scaling.
+            printf "SEND_MOUSE\\t380\\t94\\t0\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
             sleep 0.5
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-file-row-pointer.png" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
             printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
@@ -195,7 +195,7 @@ jobs:
               printf "MISSING: %s\\n" "$diagnostic" > "artifacts/amiga-cli-probe/$diagnostic.missing"
             fi
           done
-          for screenshot in editor-before-merge.png merge-dialog.png merge-df0-selected.png merge-filename-pointer.png merge-filename-focused.png merge-filename.png merge-file-row-pointer.png merge-file-selected.png after-merge.png; do
+          for screenshot in editor-before-merge.png merge-dialog.png merge-file-row-pointer.png merge-file-selected.png after-merge.png; do
             test -s "artifacts/amiga-cli-probe/$screenshot"
           done
           tesseract artifacts/amiga-cli-probe/after-merge.png stdout 2>/dev/null | tee artifacts/amiga-cli-probe/after-merge-ocr.txt
