@@ -738,3 +738,8 @@ The appendix pages belong to the same 3.0 base-manual section as Chapters 2–11
 ## Appendix command-index cross-check
 
 The alphabetical BASIC command index is transcribed in [amiga-gfa-basic-3.0-command-index.md](amiga-gfa-basic-3.0-command-index.md), with the base-manual printed page for each entry and an explicit separation of the 3.5 addendum additions. This closes the index-discovery step; it does not confirm all indexed entries for 3.5 or establish complete signatures. The separate Amiga OS library-call index occupies printed pp. 12-19–12-28 and must not be counted as language-core declarations.
+
+
+## Source composition and editor evidence
+
+The editor's tokenized `.GFA` Load/Save, ASCII `.LST` Merge/Save,A, block export, direct mode, procedure folding and editor-only marks are extracted in [amiga-gfa-basic-3.0-source-format-editor-evidence.md](amiga-gfa-basic-3.0-source-format-editor-evidence.md), with the explicit 3.5 editor delta on printed p. 1-25 separated from 3.0 behavior. Source encoding, BOM, line endings, statement boundaries, identifier grammar, literal escaping and exact Merge semantics remain unresolved for 3.5; editor behavior is not silently treated as lexical grammar.
