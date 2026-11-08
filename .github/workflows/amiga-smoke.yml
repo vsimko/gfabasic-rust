@@ -63,7 +63,7 @@ jobs:
           sudo apt-get update
           # Keep downloaded archives: Ubuntu's APT defaults may remove them
           # after installation, leaving nothing for actions/cache to save.
-          sudo apt-get -o APT::Keep-Downloaded-Packages=true install -y --no-install-recommends amiberry xvfb netcat-openbsd xdotool
+          sudo apt-get -o APT::Keep-Downloaded-Packages=true install -y --no-install-recommends amiberry xvfb netcat-openbsd
           amiberry --version | tee artifacts/amiga-smoke/amiberry-version.txt
 
       - name: Prepare boot volume
@@ -183,10 +183,11 @@ jobs:
             done
             # Raw keycode 0x39 (57) is the Amiga period key.
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-smoke/merge-filename.png" | timeout 5s nc -U -N "$ipc_socket_path"
-            # The filename gadget accepts text, but Return does not activate
-            # the requester button on this AROS build. Click the right-hand
-            # (Open/Merge) button in the centered 756x576 Amiberry window.
-            xdotool mousemove 584 522 click 1
+            # Click the right-hand requester button through Amiberry IPC.
+            # Coordinates are in the emulated window (756x576 screenshot).
+            printf "SEND_MOUSE_ABS\\t450\\t426\\t1\\n" | timeout 5s nc -U -N "$ipc_socket_path" | tee "$GITHUB_WORKSPACE/artifacts/amiga-smoke/merge-mouse-press.txt"
+            sleep 0.3
+            printf "SEND_MOUSE_ABS\\t450\\t426\\t0\\n" | timeout 5s nc -U -N "$ipc_socket_path" | tee "$GITHUB_WORKSPACE/artifacts/amiga-smoke/merge-mouse-release.txt"
             sleep 5
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-smoke/after-merge-click.png" | timeout 5s nc -U -N "$ipc_socket_path"
             if ! kill -0 "$emulator_pid" 2>/dev/null; then
