@@ -54,7 +54,7 @@ The *GFA BASIC 3.5 Interpreter* manual contains a 3.0 base plus explicitly ident
 | Matrix READ/PRINT/INPUT | 13-3–13-6 | 13-3–13-6 | MAT PRINT punctuation visually checked; MAT INPUT is ASCII-file input |
 | Matrix copy, transpose and vector special cases | 13-8–13-20 | 13-8–13-20 | MAT CPY/XCPY/TRANS and separate MAT COPY forms are distinguished by source |
 | Matrix arithmetic and multiplication | 13-22–13-33 | 13-22–13-33 | Element-wise, scalar, matrix and vector forms; preserve uncertain operand orientation |
-| Matrix norm, determinant, quick determinant, rank and inverse | 13-31–13-41 | 13-31–13-41 | MAT INV direction remains disputed between summary and detailed example |
+| Matrix norm, determinant, quick determinant, rank and inverse | 13-31–13-41 | 13-31–13-41 | MAT INV destination-first form resolved from detailed definition/example; summary on p. 13-16 is reversed typo |
 | FACT, VARIAT, COMBIN | 13-33–13-34 | 14-1–14-2 | Explicit added mathematical functions |
 | Negative-screen OPENW, PCOLOR | 13-34 | 14-3–14-4 | Additional interpreter commands |
 | _DATA, _DATA=, _0…_9, GURU statement/function | 13-34–13-36 | 14-5–14-7 | Special variables and GURU behavior; preserve error-code caveats |
@@ -69,10 +69,10 @@ Detailed definitions, examples, disputes and evidence boundaries are in the [3.5
 | Matrix array types | Floating-point fields, 1D/2D | Broader “numeric fields” phrasing | Use narrower explicit 3.5 constraint |
 | Matrix copy | Distinct MAT CPY and MAT COPY forms | MAT CPY documented | Do not merge spellings |
 | Vector multiplication | Outer/dyadic, inner/scalar, vector–matrix–vector | Less complete treatment | Preserve explicit 3.5 addendum forms |
-| Inverse | MAT INV operand direction differs between summary and worked example | Matrix chapter adds a separate witness | Keep disputed; do not choose a direction |
+| Inverse | Summary p. 13-16 reverses operands; detailed definition/example p. 13-30 specifies destination first | German book p. 475 independently agrees | Use MAT INV destination()=source(); summary line is a typo |
 | FACT/VARIAT/COMBIN vs error #86 | Chapter 14 function list | Error appendix says FACT/COMBIN/PERMUT; Chapter 19 says FACT/VARIAT/COMBIN | Keep PERMUT/VARIAT discrepancy unresolved |
 | MENU attribute value 64 | Not part of 3.5 addendum | German page 389 prints 64 for both clear-checkmark and activate-item | Preserve source duplicate; do not silently repair |
-| Intuition timer event | Not part of 3.5 addendum | p.378 IDCMP INTUITICKS=4194304; p.402 timer request=4194303 | Preserve and flag source mismatch |
+| Intuition timer event | English manual prints 4194303 beside &H400000 in its IDCMP table | German p.378 gives 4194304; event descriptions repeat 4194303 | Resolve as decimal typo: &H400000 = 4194304 |
 
 ## Page-image validation register
 
@@ -121,3 +121,11 @@ This is a compact name-to-page index for the principal interpreter families extr
 | `FACT`, `VARIAT`, `COMBIN`, `PCOLOR`, `GURU`, `_DATA`, `_DATA=`, `_0`…`_9` | 13-33–13-36 (3.5 addendum) | Explicit additional 3.5 interpreter features |
 
 Names are normalized only for navigation; this table does not settle OCR spellings where the source is damaged or internally inconsistent. For example, the book's error appendix uses `PERMUT` where Chapter 19 describes `VARIAT`, and the function inventory retains disputed `CVD/CVF` and `MKD/MKF` name slots. Consult the [candidate manifest](amiga-gfa-basic-candidates.toml) and the detailed source notes before using any spelling as a parser requirement.
+
+
+## Resolved source discrepancies (2026-11-08)
+
+- **MAT INV:** `MAT INV destination()=source()` is established by the 3.5 addendum's detailed definition and worked example (printed p. 13-30), and independently by the German book (p. 475). The reversed summary line on 3.5 p. 13-16 is a typo.
+- **INTUITICKS:** use decimal `4194304` / hexadecimal `&H400000`. The repeated decimal `4194303` in event prose is a typo; the hexadecimal representation and German IDCMP table agree.
+- **Error #86 / PERMUT:** `VARIAT` is the documented function name; `PERMUT` occurs only in the inconsistent error catalogue entry. No alias is established.
+- **MENU attribute 64:** duplicate values are confirmed in the source. The runtime effect remains unknown and requires interpreter testing.
