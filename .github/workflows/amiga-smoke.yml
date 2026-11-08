@@ -81,13 +81,13 @@ jobs:
           EOF
 
           cp amiga-volume/S/Startup-Sequence artifacts/amiga-smoke/Startup-Sequence.txt
-          cat > amiga-volume/fact-zero.LST <<'EOF'
+          cat > amiga-volume/factzero.LST <<'EOF'
           x = FACT(0)
           y = FACT(1)
           z = FACT(2)
           PRINT x, y, z
           EOF
-          cp amiga-volume/fact-zero.LST artifacts/amiga-smoke/fact-zero.LST
+          cp amiga-volume/factzero.LST artifacts/amiga-smoke/factzero.LST
           cat > "$RUNNER_TEMP/amiga-smoke.uae" <<EOF
           use_gui=no
           cpu_type=68020
@@ -171,17 +171,17 @@ jobs:
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-smoke/merge-dialog.png" | timeout 5s nc -U -N "$ipc_socket_path"
 
             # The Merge requester opens with its filename gadget focused.
-            # Type fact-zero.lst using Amiga raw keycodes (lowercase ASCII).
+            # Type factzero.lst using Amiga raw keycodes (lowercase ASCII).
             send_key() {
               printf "SEND_KEY\\t%s\\t1\\n" "$1" | timeout 5s nc -U -N "$ipc_socket_path" >/dev/null
               sleep 0.15
               printf "SEND_KEY\\t%s\\t0\\n" "$1" | timeout 5s nc -U -N "$ipc_socket_path" >/dev/null
               sleep 0.15
             }
-            for keycode in 35 32 51 20 11 49 18 19 24 58 40 33 20; do
+            for keycode in 35 32 51 20 49 18 19 24 58 40 33 20; do
               send_key "$keycode"
             done
-            # Exact sequence above is "fact-zero.lst".
+            # Exact sequence above is "factzero.lst".
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-smoke/merge-filename.png" | timeout 5s nc -U -N "$ipc_socket_path"
             # Confirm the requester selection.
             send_key 68
