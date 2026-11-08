@@ -27,7 +27,7 @@ Use **Save,A (Shift+F2)** only as an optional round-trip check: save the loaded 
 
 ## Initial probe
 
-Start with the independently authored `fact-zero.LST` fixture in this directory. It exercises the 3.5 addendum's documented `FACT` example at the zero boundary. The expected result is manual-backed; it is **not** an interpreter observation until the procedure above has actually been run on a version-identified interpreter.
+Start with [`fact-zero.LST`](../../tests/interpreter-probes/amiga-3.5/fact-zero.LST) and its [observation metadata](../../tests/interpreter-probes/amiga-3.5/fact-zero.toml). It exercises the 3.5 addendum's documented `FACT` example at the zero boundary. The expected result is manual-backed; it is **not** an interpreter observation until the procedure above has actually been run on a version-identified interpreter.
 
 ## Observation record
 
