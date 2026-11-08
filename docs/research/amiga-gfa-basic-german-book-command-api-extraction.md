@@ -1204,3 +1204,112 @@ The same chapter describes:
 - The label may also identify the DATA position used by `RESTORE Label`.
 
 These scope and control-flow statements are source claims from the German book. They are not substitutes for runtime tests of nested procedure scope, label parsing or error behavior.
+
+
+## 15. Procedures, functions and external code: Chapter 6.5–6.6
+
+This section expands the existing §7 summary with details from the German book's printed pp. 172–191. It remains evidence for the book's 3.0/V3.03-era Amiga interpreter, not a claim of 3.5-specific behavior.
+
+### 15.1 PROCEDURE, GOSUB and parameter passing (printed pp. 172–185)
+
+The book's core form is:
+
+```basic
+PROCEDURE Name [(Variablenliste)]
+  ... statements ...
+RETURN
+```
+
+- A PROCEDURE is a named subprogram. `GOSUB Name[(Parameterliste)]` enters it; `RETURN` resumes at the statement following the GOSUB call.
+- The receiving variables listed in the procedure header are local to the procedure. Same-named global variables are restored/visible again after returning.
+- Parameter count, type and order at the call site must match the receiving-variable list.
+- Receiving variables may be of mixed types. The book describes the parameter list as limited by the maximum BASIC line length (256 characters).
+- Procedures may call other procedures and may call themselves recursively.
+- `SUB` is an alternative spelling for `PROCEDURE`; `ENDPROC` and `ENDSUB` are alternative terminators that the interpreter converts to `RETURN`.
+- Procedure names may contain letters, digits, underscore and period; the first character may be a digit.
+- The computed form `ON Wert GOSUB Proc1[,Proc2,...]` selects a procedure by one-based index. A value of zero or a value greater than the number of targets continues with the next statement. The book says targets in ON…GOSUB forms must not expect parameter lists.
+
+### 15.2 LOCAL and VAR parameter modes
+
+The book documents two ways to make variables local or pass caller variables into a routine:
+
+- `LOCAL Var[,Var2,...]` declares local variables inside a PROCEDURE or FUNCTION. These names are local to the current routine and are also available to routines called from that routine; a same-named variable in the main program or a higher-level routine remains distinct.
+- A pointer parameter written with a leading `*` passes the address of a variable. The receiving parameter is itself a pointer; assigning through it changes the caller's variable.
+- Alternatively, `VAR` in the routine header provides direct variable passing:
+
+```basic
+PROCEDURE Name([ordinary parameters] VAR Var1[,Var2,...])
+FUNCTION Name([ordinary parameters] VAR Var1[,Var2,...])
+```
+
+The variables following VAR are placed at the end of the receiving-variable list and stand for the actual variables passed by GOSUB or FN. Their types must match. Constants and expressions cannot be passed as VAR variables; the book gives a “Wrong VAR type” error for mismatches. The corresponding global variable is temporarily accessible under the receiving name and changes made through it affect the caller's variable directly.
+
+### 15.3 FUNCTION and DEFFN distinction (printed pp. 173–178)
+
+The book distinguishes one-line `DEFFN` functions from multi-line `FUNCTION` routines.
+
+- `DEFFN Name[(Varliste)]=Ausdruck` defines a compact expression function, invoked with `FN Name[(Parameterliste)]` or the `@Name` shorthand.
+- A DEFFN definition is scanned/initialized at program start, so it may appear after the first call in source order. Its definition is limited by the 256-character program-line length.
+- `FUNCTION Name[(Var1,Var2,...)]` starts a multi-line function and `ENDFUNC` closes its structural body. `RETURN Back` returns a value to the caller; the book explicitly distinguishes this from the procedure's bare `RETURN`.
+- FUNCTION may return numeric or string results. For string results, the function name carries the `$` suffix (for example `FUNCTION Name$`).
+- FUNCTION routines may recursively call themselves. The book warns that mutual or recursive DEFFN calls can become uninterruptible by the usual Break key sequence.
+- The book documents the same local-variable and VAR passing concepts for FUNCTION as for PROCEDURE.
+
+### 15.4 C:() calls to C-compiled routines (printed pp. 185–187)
+
+The book describes `C:()` as a call interface for a C-compiled machine routine:
+
+```basic
+Var=C:Adressvar([Parameterliste])
+```
+
+- `Adressvar` contains the address of the machine routine.
+- The optional parameter list contains numeric parameters passed using the described C convention.
+- The stack is described as containing, in order, the return address, a 16-bit parameter count, and a 32-bit address pointing to a contiguous parameter block.
+- Parameters in that block are represented as 32-bit values. String parameters are passed as the address of their first character.
+- The returned value may be used in an expression, condition or assignment, or printed directly as `PRINT C:Var()`.
+- The example notes that the called routine should return with RTS.
+
+These are the book's stated calling-convention details; do not generalize them to arbitrary compiler ABIs without testing.
+
+### 15.5 CALL to assembly routines (printed pp. 186–187)
+
+The documented form is:
+
+```basic
+CALL Adressvar([Parameterliste])
+```
+
+- `Adressvar` contains the address of the assembly routine.
+- If no parameters are passed, the book requires empty parentheses.
+- The stack contains the return address, followed by a 16-bit parameter count and a pointer to the parameter block.
+- Parameters are stored sequentially as 32-bit values. The default parameter representation is a 16-bit word; prefixing a parameter with `L:` requests a 32-bit long value.
+- String parameters are passed by their starting address.
+- The assembly example reads the return address and parameters from the stack and returns using RTS.
+
+### 15.6 EXEC: CLI command and program launch (printed pp. 187–189)
+
+The syntax is:
+
+```basic
+EXEC Kommando$,In,Out
+```
+
+- `Kommando$` contains the CLI command or program name, optionally with a path.
+- `In` and `Out` are input/output channel numbers (file handles). The value −1 selects the current GFA-BASIC window/console channel.
+- A file handle for another device or file may be obtained through the DOS Open operation and supplied as In or Out.
+- The book distinguishes a synchronous launch, where GFA-BASIC waits until the called program exits, from a command prefixed with `Run`, where the child program runs concurrently and GFA-BASIC can continue.
+- The example uses `EXEC "df0:Utilities/Calculator",-1,-1` for the waiting form and `EXEC "Run df0:clock"` for the concurrent form.
+
+### 15.7 MONITOR and RCALL (printed pp. 189–191)
+
+| Command | Syntax | Description in the book |
+|---|---|---|
+| `MONITOR` | `MONITOR [(Parameter)]` | Deliberately triggers an Illegal Instruction exception, allowing a monitor/debugger handler to take control. The optional value is delivered in DO to the called routine. The book warns that the exception vector must first be redirected to the MONITOR program; otherwise the normal system Guru handler may run. |
+| `RCALL` | `RCALL Adresse,Feld%()` | Calls machine code at the supplied address with CPU registers initialized from an integer array of at least 16 elements. |
+
+For RCALL, the book maps array elements 0–7 to data registers d0–d7 and elements 8–14 to address registers a0–a6. After the routine returns, the register values are written back to the array in the same order. The current user stack pointer (SP/a7) is returned in element 15 when OPTION BASE 0 is active, otherwise in element 16. OPTION BASE therefore affects the array indices used by this interface.
+
+### 15.8 Evidence boundary
+
+The stack layouts, register mapping and exception-vector behavior above are transcribed as described in the historical book. They are high-risk low-level interfaces: verify them with the actual target interpreter and Amiga ABI before implementing or documenting them as compatibility guarantees. The chapter does not establish that these interfaces are unchanged in later 3.5 builds.
