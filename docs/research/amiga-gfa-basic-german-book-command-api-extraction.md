@@ -2130,3 +2130,109 @@ The source says ON MENU must be called repeatedly/in a loop if events are to be 
 ### 29.4 Chapter boundary and evidence
 
 Chapter 16 ends at printed p. 404; Chapter 17 begins the separate compiler discussion. The compiler chapter must not be merged into the interpreter language/API inventory. Event constants and the mouse-button numeric states are transcribed from OCR and require page-image/AmigaOS-header validation before being treated as implementation constants.
+
+
+## 30. GFA-BASIC 3.5 additions: vector and matrix operations, Chapter 18 (printed pp. 451–476)
+
+**Version boundary:** Unlike the preceding Chapters 12–17, Chapter 18 explicitly introduces commands added in version 3.5. The book states that the existing commands were not fundamentally changed; it presents the following as the new 3.5 commands. This is direct evidence for the book's stated 3.5 feature set.
+
+All command names in this section use the `MAT` prefix. Vectors are described as one-dimensional matrices; matrices are numeric arrays, usually two-dimensional.
+
+### 30.1 Matrix base and initialization
+
+| Command | Syntax recorded in the book | Description |
+|---|---|---|
+| `MAT BASE` | `MAT BASE 0` / `MAT BASE 1` | Sets the starting index used by matrix/vector operations. Default is 1; the book recommends matching OPTION BASE where arrays are dimensioned with base 0. |
+| `MAT CLR` | `MAT CLR m()` | Clears all elements of the specified matrix/vector to zero, independent of its dimensionality. The book notes this is equivalent in effect to ARRAYFILL m(),0. |
+| `MAT SET` | `MAT SET m()=x` | Sets every element to a constant value. |
+| `MAT ONE` | `MAT ONE m()` | Creates an identity matrix; the source requires a square, two-dimensional matrix. |
+
+### 30.2 Matrix input and output
+
+| Command | Syntax | Description |
+|---|---|---|
+| `MAT READ` | `MAT READ m()` | Reads as many DATA values as required by the matrix dimensions and MAT BASE setting. The book says the tested version did not support reading multiple fields/vectors/matrices consecutively in one statement as READ does. |
+| `MAT INPUT` | `MAT INPUT #channel,m()` | Reads matrix data from a file/channel. |
+| `MAT PRINT` | `MAT PRINT [#channel,]m()[,g,n]` | Prints a matrix/vector, optionally to a channel. Optional g is total number display width and n is number of decimal places; the book relates this format to Pascal-style formatting and STR$. |
+
+The source says MAT READ starts at the current DATA pointer and consumes the number of elements required by the target field. It does not support reading only a subrange of a field; insufficient DATA values cause an error. MAT PRINT calculates the row/column output itself, avoiding a user-written loop.
+
+### 30.3 Copying, transposition and reflection
+
+| Command | Syntax | Description |
+|---|---|---|
+| `MAT CPY` | `MAT CPY a([i,j])=b([k,l])[,h,w]` | Copies a source region to a destination region. i/j and k/l identify top-left coordinates; h/w give region height/width. Without a region size, the book also demonstrates whole-matrix copying. |
+| `MAT XCPY` | `MAT XCPY a([i,j])=b([k,l])[,h,w]` | Copies with rows and columns exchanged; can convert row vectors to column vectors and vice versa. |
+| `MAT TRANS` | `MAT TRANS a() [=b()]` | Transposes a matrix across its main diagonal. The book says the source/destination dimensions must be compatible; a square matrix can be transposed in place. |
+
+The copy examples demonstrate whole matrix copies, one-row copies, one-column copies, and rectangular regions. The text says only elements whose indices exist in both source and destination are copied when maxima differ. Exact omitted-parameter defaults should be verified from runtime rather than inferred from the examples.
+
+### 30.4 Element-wise arithmetic and matrix multiplication
+
+| Command | Syntax | Description |
+|---|---|---|
+| `MAT ADD` | `MAT ADD a()=b()+c()`; `MAT ADD a(),b()`; `MAT ADD a(),x` | Element-wise addition into a destination matrix, in-place addition, or addition of a scalar to every element. |
+| `MAT SUB` | `MAT SUB a()=b()-c()`; `MAT SUB a(),b()`; `MAT SUB a(),x` | Corresponding element-wise subtraction forms. |
+| `MAT MUL` | `MAT MUL a()=b()*c()`; `MAT MUL x=a()*b()`; `MAT MUL a(),x` | Matrix multiplication and scalar multiplication forms. The book also shows chained matrix products. |
+| `MAT NORM` | `MAT NORM v(),0` / `MAT NORM m(),1` | Normalizes a vector/matrix. For matrices the second argument selects row-wise (0) or column-wise (1) normalization; for vectors it is irrelevant. |
+
+For MAT ADD and MAT SUB, operands must have equal dimensions and are combined element by element. In-place variants overwrite the first matrix. MAT MUL uses conventional matrix multiplication: the first matrix's column count must equal the second matrix's row count; the result dimensions are the first matrix's row count by the second matrix's column count. The book also demonstrates multiplying every element by a scalar.
+
+MAT NORM scales a vector to unit length while retaining direction/sign. The book's explanation calculates vector length from the square root of the sum of squared components. For matrices it describes row/column normalization. Some OCR in the example listings is damaged; use the prose and command forms as evidence, not the corrupted example tokens.
+
+### 30.5 Matrix analysis
+
+| Command | Syntax | Description |
+|---|---|---|
+| `MAT DET` | `MAT DET y=m([i,j])[,d]` | Calculates the determinant of a square matrix; optional i/j and d select a submatrix extent. |
+| `MAT QDET` | `MAT QDET y=m(n,n)[,d]` | Faster determinant calculation using an optimized routine; the book warns that small precision differences may occur. |
+| `MAT RANG` | `MAT RANG y=m()` | Calculates the rank of a square matrix. |
+| `MAT INV` | `MAT INV i()=m()` | Calculates the inverse matrix and stores it in i(). The source requires a square matrix. |
+
+The book describes determinant as an indicator related to whether a matrix is solvable/invertible. The exact optional submatrix parameter grammar is partly OCR-damaged; verify before implementing.
+
+### 30.6 Evidence and implementation cautions
+
+Chapter 18 is a clearly labeled 3.5 addition in this German book. It provides syntax and conceptual behavior, but not a complete formal specification for dimension mismatch, aliasing, numeric precision, singular matrices, error codes, or every omitted argument. The OCR contains damaged brackets, parentheses and example listings; do not derive exact parser grammar from those corrupted examples. Treat all such edge cases as runtime-validation work.
+
+## 31. GFA-BASIC 3.5 additions: mathematical helpers, DATA pointer and editor commands, Chapter 19 (printed pp. 477–482)
+
+Chapter 19 begins with additional 3.5 functions and editor enhancements. The book explicitly places these among the new 3.5 features.
+
+### 31.1 Mathematical functions
+
+| Function | Syntax | Description |
+|---|---|---|
+| `FACT` | `FACT(n)` | Calculates factorial. The book says it is defined for integer values and demonstrates a result for FACT(421). |
+| `VARIAT` | `VARIAT(m,k)` | Calculates the number of ordered variations of m elements taken k at a time, without repetition. |
+| `COMBIN` | `COMBIN(m,k)` | Calculates the number of combinations of m elements taken k at a time. |
+
+The book gives the standard combinatorial relationships:
+- Variations: (m!/(m-k)!), with (m ≥ k).
+- Combinations: (m! / ((m-k)! · k!)), with (m ≥ k).
+
+The printed FACT discussion claims support through 421 and gives a large scientific-notation example. It does not specify overflow behavior or accepted numeric types beyond saying factorial is defined for integer values.
+
+### 31.2 DATA pointer variable
+
+| Variable | Syntax | Description |
+|---|---|---|
+| `_DATA` | Read `_DATA`; assign `_DATA=value` | Reads the current DATA-pointer position and allows that position to be saved/restored independently of RESTORE. |
+
+The book says _DATA contains an integer position representing the current DATA read pointer. A previously read position can be stored and later assigned back to _DATA to resume reading from that point. It warns not to assign arbitrary positions; use positions that have actually been read. In the example, _DATA becomes zero at the end of the DATA list. Exact pointer origin/index semantics should be confirmed against the interpreter.
+
+### 31.3 Editor keyboard additions
+
+Chapter 19 also describes editor key combinations rather than BASIC language statements:
+
+- Tab moves the cursor to the next tab stop without shifting source text.
+- Shift+Tab moves to the previous tab stop.
+- Tab+Shift inserts spaces up to the next tab stop.
+- Shift+Tab (left/right variants are difficult to distinguish in OCR) is described for aligning comment text; one command deletes spaces on the current line.
+- The book explicitly says the last two editor functions were not implemented in the test version it had available and recommends checking the installed version.
+
+These are editor features, not interpreter commands. OCR damages the key labels for the final two combinations; preserve the prose-level description only until page-image review.
+
+### 31.4 Evidence boundary
+
+The book's explicit 3.5 introduction makes the functions and _DATA variable strong version-specific evidence. Exact factorial limits, numeric overflow, _DATA pointer indexing, and editor shortcut assignments are not fully specified. Do not infer runtime edge cases from the examples.
