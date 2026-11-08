@@ -2827,3 +2827,65 @@ The accompanying prose explicitly says only the lowest two bits are relevant whe
 ### 41.4 Validation status
 
 FILESELECT's four return situations, device/path navigation, the sample-only status of extension/backup helpers, and the MOUSE values are now page-image verified. This resolves the earlier OCR-only status for FILESELECT and STRIG is handled separately below.
+
+
+## 42. Page-image validation: MENU(1) event values and payload fields (printed pp. 398–402)
+
+### 42.1 Menu selection payload (printed p. 398)
+
+The image confirms `MENU(1)=256` for a selected menu item. `MENU(2)` contains the encoded menu, item and sub-item numbers. The book's decoding expressions are:
+
+```basic
+MenuNummer = MENU(2) AND 31
+MenüPunkt = SHR(MENU(2),5) AND 63
+UnterMenüPunkt = SHR(MENU(2),11) AND 31
+```
+
+### 42.2 Window events (printed pp. 398–400)
+
+The page images explicitly show:
+| MENU(1) | Meaning | Additional field |
+|---:|---|---|
+| 1 | Size gadget pressed | MENU(10): Intuition Window address |
+| 2 | Window size changed | MENU(10): Window address; WINDOW(address) yields GFA window number |
+| 4 | Window refresh requested | MENU(10): Window address |
+| 512 | Close gadget pressed | MENU(10): Window-structure address |
+| 8192 | Window cannot provide the menu requested with the right mouse button | MENU(10): Window address |
+| 262144 | Window activated by mouse click | MENU(10): Window address; convert with WINDOW(address) |
+| 524288 | Window deactivated | MENU(10): Window address; convert with WINDOW(address) |
+
+Important OCR correction: the page image reads `262144` for activation, not `264144`. The earlier OCR-derived 264144 reading should be treated as corrected by the scan.
+
+### 42.3 Mouse, gadget and requester events (printed pp. 400–401)
+
+| MENU(1) | Meaning | Payload |
+|---:|---|---|
+| 8 | Mouse button event | MENU(2): button state; 104=left pressed, 232=right pressed; add 1 when released |
+| 16 | Mouse moved | MENU(5), MENU(6): absolute X/Y relative to window |
+| 1048576 | Mouse moved | MENU(5), MENU(6): relative X/Y delta from previous position inside window |
+| 32 | Gadget pressed | MENU(4): Gadget-structure pointer; MENU(10): Window address |
+| 64 | Gadget released | MENU(4): Gadget-structure pointer; MENU(10): Window address |
+| 128 | Requester opened in window | MENU(4): Requester-structure address; MENU(10): Window address |
+| 2048 | Requester cannot be displayed in window | MENU(10): Window address |
+| 4096 | Last requester closed; window input/output released | MENU(10): Window address |
+
+The button-state numbers and “add 1 on release” rule are transcribed as printed. They should not be generalized to arbitrary button combinations without runtime evidence.
+
+### 42.4 Keyboard and other events (printed p. 402)
+
+The page image gives:
+| MENU(1) | Meaning | Payload |
+|---:|---|---|
+| 1024 | Key pressed | MENU(2): keyboard code; MENU(3): qualifier/status |
+| 2097152 | Key pressed after ASCII-table interpretation | MENU(2): ASCII code |
+| 16384 | System preferences changed by another program | no payload specified here |
+| 32768 | Disk inserted in a drive | no payload specified here |
+| 65536 | Disk removed from a drive | no payload specified here |
+| 131072 | Workbench reports changes made to it | no payload specified here |
+| 4194303 | Timer-message request | one IntuiTick message every 1/10 second |
+
+The printed timer value is `4194303`, while the earlier IDCMP flag table on p. 378 lists `INTUITICKS = 4194304`. Preserve this one-off mismatch as a source inconsistency; do not silently normalize the event value.
+
+### 42.5 Validation boundary
+
+The event numbers, payload slots, activation value correction and timer discrepancy are now checked against page images. The values are manual descriptions of messages delivered through the Intuition message channel; exact event delivery, pointer lifetime and message-draining requirements still need runtime/AmigaOS validation.
