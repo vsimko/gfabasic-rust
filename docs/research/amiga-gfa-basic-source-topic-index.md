@@ -70,7 +70,7 @@ Detailed definitions, examples, disputes and evidence boundaries are in the [3.5
 | Matrix copy | Distinct MAT CPY and MAT COPY forms | MAT CPY documented | Do not merge spellings |
 | Vector multiplication | Outer/dyadic, inner/scalar, vector–matrix–vector | Less complete treatment | Preserve explicit 3.5 addendum forms |
 | Inverse | Summary p. 13-16 reverses operands; detailed definition/example p. 13-30 specifies destination first | German book p. 475 independently agrees | Use MAT INV destination()=source(); summary line is a typo |
-| FACT/VARIAT/COMBIN vs error #86 | Chapter 14 function list | Error appendix says FACT/COMBIN/PERMUT; Chapter 19 says FACT/VARIAT/COMBIN | Keep PERMUT/VARIAT discrepancy unresolved |
+| FACT/VARIAT/COMBIN vs error #86 | 3.5 addendum documents FACT/VARIAT/COMBIN | Error appendix retains stale FACT/COMBIN/PERMUT wording | VARIAT is documented; PERMUT alias is not established; error text is inconsistent |
 | MENU attribute value 64 | Not part of 3.5 addendum | German page 389 prints 64 for both clear-checkmark and activate-item | Preserve source duplicate; do not silently repair |
 | Intuition timer event | English manual prints 4194303 beside &H400000 in its IDCMP table | German p.378 gives 4194304; event descriptions repeat 4194303 | Resolve as decimal typo: &H400000 = 4194304 |
 
