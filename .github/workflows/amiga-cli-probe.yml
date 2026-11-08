@@ -92,25 +92,20 @@ jobs:
           # If the process attaches its standard input to a command console,
           # this direct-mode command should create an ASCII listing on GFAVol.
           printf 'LIST "Work:stdin-save.LST"\n' > amiga-volume/cli-input.txt
-          # Use a real OFS floppy image for the LST fixture. AROS can access
-          # DF0: without depending on Amiberry's host-directory DOS handler.
-          xdftool artifacts/amiga-cli-probe/factzero.adf create + format GFABASIC ofs + write amiga-volume/factzero.LST
-          xdftool artifacts/amiga-cli-probe/factzero.adf info > artifacts/amiga-cli-probe/factzero-adf-info.txt
-          xdftool artifacts/amiga-cli-probe/factzero.adf list > artifacts/amiga-cli-probe/factzero-adf-list.txt
+          # Build a bootable AmigaDOS 1.x OFS floppy. Kickstart 1.3 has no
+          # built-in Workbench/CLI disk, so the boot block and Startup-Sequence
+          # must live on the same disk as the interpreter and textual listing.
+          mkdir -p amiga-volume/S
+          cp amiga-volume/GFABasic amiga-volume/GFABasic.bin
           cat > amiga-volume/S/Startup-Sequence <<'EOF'
-          Echo "AMIGA CLI PROBE: BOOTED"
-          CD Work:
-          List Work: >Work:volume-directory-check.txt
-          List Work:factzero.LST >Work:volume-file-check.txt
-          List DH0: >Work:device-directory-check.txt
-          List DH0:factzero.LST >Work:device-file-check.txt
-          List DF0: >Work:floppy-directory-check.txt
-          List DF0:factzero.LST >Work:floppy-file-check.txt
-          Info >Work:dos-info.txt
-          Assign >Work:dos-assign.txt
-          Run <Work:cli-input.txt >Work:cli-output.txt Work:GFABasic
-          Echo "CLI launch without program argument" >Work:probe-status.txt
+          CD DF0:
+          GFABasic
           EOF
+          xdftool artifacts/amiga-cli-probe/factzero.adf create + format GFABASIC ofs + write amiga-volume/factzero.LST + write amiga-volume/GFABasic + write amiga-volume/S
+          xdftool artifacts/amiga-cli-probe/factzero.adf boot install boot1x
+          xdftool artifacts/amiga-cli-probe/factzero.adf info > artifacts/amiga-cli-probe/factzero-adf-info.txt
+          xdftool artifacts/amiga-cli-probe/factzero.adf list all > artifacts/amiga-cli-probe/factzero-adf-list.txt
+          xdftool artifacts/amiga-cli-probe/factzero.adf boot show > artifacts/amiga-cli-probe/factzero-adf-boot.txt
           cp amiga-volume/factzero.LST artifacts/amiga-cli-probe/factzero.LST
           cp amiga-volume/cli-input.txt artifacts/amiga-cli-probe/cli-input.txt
           cp amiga-volume/S/Startup-Sequence artifacts/amiga-cli-probe/Startup-Sequence.txt
@@ -127,8 +122,6 @@ jobs:
           gfx_fullscreen=false
           sound_output=0
           floppy0=$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/factzero.adf
-          filesystem2=rw,DH0:Work:$GITHUB_WORKSPACE/amiga-volume,0
-          uaehf0=dir,rw,DH0:Work:$GITHUB_WORKSPACE/amiga-volume,0
           EOF
 
       - name: Merge textual LST in the GFA BASIC editor
@@ -219,7 +212,7 @@ jobs:
             kill -0 "$emulator_pid"
             printf "QUIT\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}" || true
           '
-          for diagnostic in volume-directory-check.txt volume-file-check.txt device-directory-check.txt device-file-check.txt floppy-directory-check.txt floppy-file-check.txt dos-info.txt dos-assign.txt cli-output.txt probe-status.txt insert-floppy-ipc.txt list-floppies-ipc.txt stdin-save.LST; do
+          for diagnostic in insert-floppy-ipc.txt list-floppies-ipc.txt stdin-save.LST; do
             if test -f "amiga-volume/$diagnostic"; then
               cp "amiga-volume/$diagnostic" "artifacts/amiga-cli-probe/$diagnostic"
             else
