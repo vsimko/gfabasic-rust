@@ -159,15 +159,16 @@ jobs:
             # Capture the requester after selecting DF0 to verify its state.
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-df0-selected.png" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
             # Move from DF0 button to the filename gadget, then focus it explicitly.
-            # Run #83 measured (-735,-115) from (~541,329) to (~78,90):
-            # horizontal scale ~= 0.63, vertical scale ~= 2.08, same sign.
-            # Target filename gadget center (~294,165): input delta ~= (-393,-79).
-            for delta in "-98 -20" "-98 -20" "-98 -20" "-99 -19"; do
+            # Run #85 screenshot: pointer at (~138,160), filename gadget center (~294,165).
+            # Measured scale is about 1x horizontally and 2.15x vertically.
+            # Move right by 156 pixels and down by 5 pixels in screen coordinates.
+            for delta in "39 1" "39 1" "39 1" "39 1"; do
               set -- $delta
               printf "SEND_MOUSE\\t%s\\t%s\\t0\\n" "$1" "$2" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
               sleep 0.2
             done
             sleep 0.2
+            printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-filename-pointer.png" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
             printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
             sleep 0.2
             printf "SEND_MOUSE\\t0\\t0\\t0\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
@@ -198,7 +199,7 @@ jobs:
               printf "MISSING: %s\\n" "$diagnostic" > "artifacts/amiga-cli-probe/$diagnostic.missing"
             fi
           done
-          for screenshot in editor-before-merge.png merge-dialog.png merge-df0-selected.png merge-filename-focused.png merge-filename.png after-merge.png; do
+          for screenshot in editor-before-merge.png merge-dialog.png merge-df0-selected.png merge-filename-pointer.png merge-filename-focused.png merge-filename.png after-merge.png; do
             test -s "artifacts/amiga-cli-probe/$screenshot"
           done
           tesseract artifacts/amiga-cli-probe/after-merge.png stdout 2>/dev/null | tee artifacts/amiga-cli-probe/after-merge-ocr.txt
