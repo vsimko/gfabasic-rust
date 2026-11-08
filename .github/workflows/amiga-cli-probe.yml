@@ -66,7 +66,6 @@ jobs:
           cat > amiga-volume/S/Startup-Sequence <<'EOF'
           Echo "AMIGA CLI PROBE: BOOTED"
           CD CI:
-          Copy CI:factzero.LST CI:factzero.LST
           List CI: >CI:ci-directory-check.txt
           List CI:factzero.LST >CI:ci-file-check.txt
           Run <CI:cli-input.txt >CI:cli-output.txt CI:GFABasic
