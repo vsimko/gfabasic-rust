@@ -68,6 +68,8 @@ jobs:
           # Use a real OFS floppy image for the LST fixture. AROS can access
           # DF0: without depending on Amiberry's host-directory DOS handler.
           xdftool artifacts/amiga-cli-probe/factzero.adf create + format GFABASIC ofs + write amiga-volume/factzero.LST
+          xdftool artifacts/amiga-cli-probe/factzero.adf info > artifacts/amiga-cli-probe/factzero-adf-info.txt
+          xdftool artifacts/amiga-cli-probe/factzero.adf list > artifacts/amiga-cli-probe/factzero-adf-list.txt
           cat > amiga-volume/S/Startup-Sequence <<'EOF'
           Echo "AMIGA CLI PROBE: BOOTED"
           Wait 3
@@ -156,7 +158,15 @@ jobs:
             sleep 1
             # Capture the requester after selecting DF0 to verify its state.
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-df0-selected.png" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
-            # The selected floppy filename gadget is now focused; enter basename only.
+            # Move from DF0 button to the filename gadget, then focus it explicitly.
+            printf "SEND_MOUSE\\t-238\\t-82\\t0\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
+            sleep 0.2
+            printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
+            sleep 0.2
+            printf "SEND_MOUSE\\t0\\t0\\t0\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
+            sleep 0.5
+            printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-filename-focused.png" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
+            # Clear any default text and enter the listing basename.
             for _ in $(seq 1 16); do send_key 70; done
             for keycode in 35 32 51 20 49 18 19 24 57 40 33 20; do send_key "$keycode"; done
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-filename.png" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
@@ -181,7 +191,7 @@ jobs:
               printf "MISSING: %s\\n" "$diagnostic" > "artifacts/amiga-cli-probe/$diagnostic.missing"
             fi
           done
-          for screenshot in editor-before-merge.png merge-dialog.png merge-df0-selected.png merge-filename.png after-merge.png; do
+          for screenshot in editor-before-merge.png merge-dialog.png merge-df0-selected.png merge-filename-focused.png merge-filename.png after-merge.png; do
             test -s "artifacts/amiga-cli-probe/$screenshot"
           done
           tesseract artifacts/amiga-cli-probe/after-merge.png stdout 2>/dev/null | tee artifacts/amiga-cli-probe/after-merge-ocr.txt
