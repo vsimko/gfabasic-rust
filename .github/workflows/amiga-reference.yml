@@ -1,0 +1,64 @@
+name: Prepare Amiga reference interpreter
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: amiga-reference-assets
+  cancel-in-progress: false
+
+jobs:
+  prepare:
+    name: Fetch and verify GFA BASIC 3.52
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Download private interpreter binary
+        env:
+          GFA_ASSETS_TOKEN: ${{ secrets.GFA_ASSETS_TOKEN }}
+        run: |
+          set -euo pipefail
+          test -n "$GFA_ASSETS_TOKEN" || {
+            echo "::error::GFA_ASSETS_TOKEN is not configured."
+            exit 1
+          }
+          mkdir -p dist/amiga/gfa-basic-3.52
+          curl --fail --silent --show-error --location --retry 3 \
+            --header "Authorization: Bearer $GFA_ASSETS_TOKEN" \
+            --header "Accept: application/vnd.github.raw" \
+            "https://api.github.com/repos/vsimko/gfabasic-private-assets/contents/GFABasic?ref=main" \
+            --output dist/amiga/gfa-basic-3.52/GFABasic
+
+      - name: Verify binary identity and Amiga executable header
+        run: |
+          set -euo pipefail
+          cd dist/amiga/gfa-basic-3.52
+          echo "fd80f6093e8d0163856af5849121e945e37051a2ad2a9053aa1930021783d962  GFABasic" | sha256sum --check
+          test "$(wc -c < GFABasic)" -eq 136548
+          printf '\\x00\\x00\\x03\\xf3' | cmp -n 4 - GFABasic
+          file GFABasic || true
+
+      - name: Package emulator input
+        run: |
+          set -euo pipefail
+          cat > dist/amiga/gfa-basic-3.52/README.txt <<'EOF'
+          GFA BASIC 3.52 Amiga interpreter
+          Source: private repository vsimko/gfabasic-private-assets, path GFABasic
+          SHA-256: fd80f6093e8d0163856af5849121e945e37051a2ad2a9053aa1930021783d962
+          Version scope: 3.52 (1990), not the project's normative 3.5 target.
+          This package contains the interpreter executable only. A legally usable
+          Amiga Kickstart/OS environment and emulator configuration are separate
+          prerequisites; this workflow does not bundle ROMs or disk images.
+          EOF
+          tar -C dist/amiga -czf dist/gfa-basic-3.52-amiga.tar.gz gfa-basic-3.52
+
+      - name: Upload verified emulator input
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: gfa-basic-3.52-amiga
+          path: dist/gfa-basic-3.52-amiga.tar.gz
+          if-no-files-found: error
+          retention-days: 7
