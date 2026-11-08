@@ -126,8 +126,18 @@ jobs:
               printf "SEND_KEY\\t%s\\t0\\n" "$1" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}" >/dev/null
               sleep 0.15
             }
-            # The requester starts with T: and the caret after the volume prefix.
-            # Enter only the basename; this avoids fragile path editing.
+            # Replace the default volume prefix with the dedicated GFA: volume.
+            send_key 70
+            send_key 70
+            for keycode in 36 35 32; do send_key "$keycode"; done
+            printf "SEND_KEY\\t96\\t1\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}" >/dev/null
+            sleep 0.15
+            printf "SEND_KEY\\t41\\t1\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}" >/dev/null
+            sleep 0.15
+            printf "SEND_KEY\\t41\\t0\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}" >/dev/null
+            sleep 0.15
+            printf "SEND_KEY\\t96\\t0\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}" >/dev/null
+            sleep 0.15
             for keycode in 35 32 51 20 49 18 19 24 57 40 33 20; do
               send_key "$keycode"
             done
