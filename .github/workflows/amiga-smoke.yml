@@ -1,0 +1,115 @@
+name: Amiga emulator smoke test
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - ".github/workflows/amiga-smoke.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: amiga-smoke-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  boot-amiga:
+    name: Boot Amiga and capture output
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+
+      - name: Install Amiberry and virtual display
+        run: |
+          sudo install -d -m 0755 /usr/share/keyrings
+          curl -fsSL https://packages.amiberry.com/gpg.key \
+            | sudo tee /usr/share/keyrings/amiberry-archive-keyring.gpg >/dev/null
+          echo "deb [arch=amd64 signed-by=/usr/share/keyrings/amiberry-archive-keyring.gpg] https://packages.amiberry.com/apt noble main" \
+            | sudo tee /etc/apt/sources.list.d/amiberry.list >/dev/null
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends amiberry xvfb x11-utils imagemagick
+          amiberry --version
+
+      - name: Prepare a bootable directory volume
+        run: |
+          mkdir -p amiga-volume/S artifacts/amiga-smoke
+          cat > amiga-volume/S/Startup-Sequence <<'EOF'
+          Echo "AMIGA CI: BOOTED"
+          Echo "Amiberry emulator with the bundled AROS fallback ROM"
+          Echo "AMIGA-CI: PASS" >PRT:
+          Wait 10
+          EOF
+
+          cat > "$RUNNER_TEMP/amiga-smoke.uae" <<EOF
+          use_gui=no
+          cpu_type=68000
+          chipset=ocs
+          chipmem_size=2
+          fastmem_size=0
+          bogomem_size=0
+          gfx_width=640
+          gfx_height=512
+          gfx_fullscreen=false
+          sound_output=0
+          filesystem2=rw,DH0:CI:$GITHUB_WORKSPACE/amiga-volume,0
+          EOF
+
+          cp amiga-volume/S/Startup-Sequence artifacts/amiga-smoke/Startup-Sequence.txt
+          cat "$RUNNER_TEMP/amiga-smoke.uae"
+
+      - name: Boot Amiga, collect printer text and screenshot
+        env:
+          DISPLAY: :99
+        run: |
+          set -euo pipefail
+          printer="$GITHUB_WORKSPACE/artifacts/amiga-smoke/printer.txt"
+          log="$GITHUB_WORKSPACE/artifacts/amiga-smoke/amiberry.log"
+          screenshot="$GITHUB_WORKSPACE/artifacts/amiga-smoke/amiga-screen.png"
+
+          xvfb-run -a -s "-screen 0 1024x768x24 +extension GLX" bash -euo pipefail -c '
+            amiberry -G -f "$RUNNER_TEMP/amiga-smoke.uae" -p "'"$printer"'" --log >"'"$log"'" 2>&1 &
+            emulator_pid=$!
+            cleanup() {
+              kill "$emulator_pid" 2>/dev/null || true
+              wait "$emulator_pid" 2>/dev/null || true
+            }
+            trap cleanup EXIT
+
+            for attempt in $(seq 1 45); do
+              if ! kill -0 "$emulator_pid" 2>/dev/null; then
+                echo "Amiberry exited before the smoke test completed"
+                cat "'"$log"'"
+                exit 1
+              fi
+              if grep -q "AMIGA-CI: PASS" "'"$printer"'" 2>/dev/null; then
+                break
+              fi
+              sleep 1
+            done
+
+            if ! grep -q "AMIGA-CI: PASS" "'"$printer"'" 2>/dev/null; then
+              echo "Did not receive the expected Amiga printer output"
+              cat "'"$log"'"
+              test -f "'"$printer"'" && cat "'"$printer"'" || true
+              exit 1
+            fi
+
+            xwd -root -silent -out "'"$RUNNER_TEMP"'/amiga-screen.xwd"
+            convert "'"$RUNNER_TEMP"'/amiga-screen.xwd" "'"$screenshot"'"
+            identify "'"$screenshot"'"
+            cat "'"$printer"'"
+          '
+
+          grep -q "AMIGA-CI: PASS" "$printer"
+
+      - name: Upload Amiga output and screenshot
+        if: always()
+        uses: actions/upload-artifact@ea8e6e9e8a9a2621b4b3f2d5c8e8c2b2d5e1f9c2
+        with:
+          name: amiga-smoke-test
+          path: artifacts/amiga-smoke/
+          if-no-files-found: warn
+          retention-days: 7
