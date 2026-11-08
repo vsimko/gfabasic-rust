@@ -140,8 +140,18 @@ jobs:
               printf "SEND_KEY\\t%s\\t0\\n" "$1" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}" >/dev/null
               sleep 0.15
             }
-            # The fixture is on a real OFS floppy. Enter only the basename;
-            # choose DF0: in the requester rather than typing a DOS path.
+            # Select the DF0: device button (bottom button in the right column).
+            # Move from the measured pointer origin (78,38) to its center (~531,318).
+            for delta in "110 70" "110 70" "110 70" "110 70" "13 0"; do
+              set -- $delta
+              printf "SEND_MOUSE\\t%s\\t%s\\t0\\n" "$1" "$2" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
+              sleep 0.2
+            done
+            printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
+            sleep 0.2
+            printf "SEND_MOUSE\\t0\\t0\\t0\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
+            sleep 1
+            # The selected floppy's filename gadget is now focused; enter basename only.
             for _ in $(seq 1 16); do send_key 70; done
             for keycode in 35 32 51 20 49 18 19 24 57 40 33 20; do send_key "$keycode"; done
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-filename.png" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
