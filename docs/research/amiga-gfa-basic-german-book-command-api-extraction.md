@@ -149,3 +149,74 @@ The book's Chapter 16 explains that `MENU(1)` carries the Intuition message clas
 5. The book itself warns about system crashes from invalid library arguments. Do not infer ABI safety or Linux emulation semantics from these descriptions.
 6. Compare each relevant command with the supplied *GFA BASIC 3.5 Interpreter* manual and record 3.5 confirmation separately.
 
+
+
+## 7. Interpreter language constructs: Chapter 6
+
+The following entries are extracted from Chapter 6, printed pp. 145–191. They are language constructs, not Amiga library calls. The OCR is sufficient to identify the constructs and most syntax, but not to settle every parser edge case.
+
+### 7.1 Loop constructs (printed pp. 145–150)
+
+| Construct | Syntax recorded in the book | Semantics / aliases |
+|---|---|---|
+| FOR … NEXT | FOR Zaehl=Start TO [DOWNTO]Ende [STEP Schritt]; body; NEXT Zaehl | Counted loop. Without STEP, TO advances by +1. DOWNTO advances by -1 and does not permit STEP. Negative STEP values are possible with TO. |
+| ENDFOR | ENDFOR Zaehl | Alternative to NEXT Zaehl; interpreter converts it to NEXT. |
+| DO … LOOP | DO; body; LOOP | Unconditional loop if no conditions are supplied. Both endpoints can optionally carry WHILE condition or UNTIL condition, allowing entry/exit conditions. |
+| ENDDO | ENDDO | Alternative to LOOP; interpreter converts it to LOOP. |
+| REPEAT … UNTIL | REPEAT; body; UNTIL condition | Post-tested loop; body executes at least once. |
+| ENDREPEAT | ENDREPEAT condition (as an alternate terminator) | Interpreter converts this terminator to UNTIL. The OCR around the exact operand placement is imperfect; verify against the page image before implementing syntax. |
+| WHILE … WEND | WHILE condition; body; WEND | Pre-tested loop; body is skipped if the condition is false on entry. |
+| ENDWHILE | ENDWHILE | Alternative to WEND; interpreter converts it to WEND. |
+| EXIT IF | EXIT IF condition | Exits the current enclosing loop when condition is true. The book says it applies inside FOR/NEXT, DO/LOOP, REPEAT/UNTIL and WHILE/WEND loops. Execution continues after the loop's terminator; statements between the EXIT IF and terminator are not run again. |
+
+The book states that loop types may be nested, and that terminators must close nested loops in reverse order. It also documents Boolean operators AND, OR, NOT, XOR, IMP and EQV for combining conditions.
+
+### 7.2 Conditional branching and selection (printed pp. 149–167)
+
+| Construct | Syntax recorded in the book | Semantics / aliases |
+|---|---|---|
+| IF | IF condition [THEN]; body; optional ELSE; ENDIF | THEN is optional. IF blocks may be nested. |
+| ELSE IF | ELSE IF condition; body; repeated as needed | Additional branch conditions; only reached if preceding conditions were false. |
+| SELECT | SELECT expression; one or more CASE clauses; optional DEFAULT; ENDSELECT | Selects a matching case. The book says statements before the first CASE are not registered/executed as part of the selection. |
+| CASE | CASE value[, value...] or CASE lower TO upper | Supports single values, comma-separated alternatives and inclusive ranges. Either range bound may be omitted to represent the minimum/maximum bound. |
+| DEFAULT | DEFAULT; fallback body; ENDSELECT | Fallback when no CASE matched. OTHERWISE is an alias converted by the interpreter to DEFAULT. |
+| CONT in SELECT | CONT immediately before a CASE or DEFAULT | Allows the next CASE/default sequence to execute in addition to the already matched branch. Outside this position, CONT has its ordinary program-continuation meaning. |
+
+### 7.3 Procedures and variable passing (printed pp. 170–185)
+
+The book defines PROCEDURE as a named subprogram that may contain arbitrary program text and returns to the statement after its caller when RETURN executes.
+
+```basic
+PROCEDURE Name [(Variablenliste)]
+  ... statements ...
+RETURN
+```
+
+- Procedure names may contain letters, digits, underscore and period; unlike variable names, the first character may be a digit.
+- A procedure may declare a list of local receiving variables. The book says these receive values passed through GOSUB; parameter types must match the corresponding argument types.
+- Procedures may call other procedures and may recursively call themselves.
+- ENDPROC and ENDSUB are documented as alternatives to RETURN; the interpreter normalizes them to RETURN.
+- The book documents a VAR marker in PROCEDURE/FUNCTION parameter lists for direct variable passing, as an alternative to indirect pointer variables. The OCR examples show the shape PROCEDURE Name([ordinary parameters] VAR variable[, ...]) and similarly for FUNCTION; exact punctuation and mixed-parameter grammar need page-image verification.
+- The chapter cross-references LOCAL, VAR, GOSUB and FUNCTION. Do not infer their complete grammar from the cross-reference alone.
+
+### 7.4 Computed procedure dispatch and Break handling
+
+The book also describes computed procedure dispatch:
+
+```basic
+ON Wert GOSUB Proc1 [, Proc2, Proc3, ...]
+```
+
+The value selects a procedure by one-based position: 1 calls the first procedure, 2 the second, and so on. Zero or a value greater than the number of supplied procedures causes execution to continue at the next statement without branching. The described targets must be procedures that do not expect a parameter list.
+
+Break handling is documented with these forms:
+
+- ON BREAK GOSUB Procedure: redirects the break key sequence to a procedure.
+- ON BREAK: restores normal break behavior.
+- ON BREAK CONT: disables normal break termination until a later ON BREAK/ON BREAK GOSUB, according to the chapter's description.
+
+The exact semantics and state transitions should be checked against the interpreter manual before implementation.
+
+### 7.5 Evidence boundary
+
+This chapter provides strong evidence for the existence and broad syntax of the constructs above in the book's Amiga interpreter reference. It does not establish every whitespace, abbreviation, nesting, error-recovery or expression-precedence rule. Those details should be taken from the primary 3.5 interpreter manual or verified with the interpreter, not guessed from OCR.
