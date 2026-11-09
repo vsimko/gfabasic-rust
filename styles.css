@@ -151,3 +151,84 @@
 .ci-health-links a:hover,.ci-health-success a:hover,.ci-health-generated a:hover{text-decoration:underline}
 .ci-health-generated{margin:17px 0 0;color:#829184;font-size:10px;line-height:1.7}
 @media(max-width:700px){.ci-health-section{padding-block:65px}.ci-health-grid{grid-template-columns:1fr}.ci-health-card-top{flex-direction:column;gap:7px}}
+
+
+/* Generated OKF documentation pages */
+.docs-site {
+  min-height: 100vh;
+  background: #f7f8f6;
+  color: #17231d;
+}
+.docs-header {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 1rem max(1.5rem, calc((100vw - 76rem) / 2));
+  border-bottom: 1px solid #dce4dc;
+  background: #fff;
+  font-family: "DM Mono", monospace;
+  font-size: 0.85rem;
+}
+.docs-header a, .docs-sidebar a {
+  color: #245d3a;
+  text-decoration: none;
+}
+.docs-header a:hover, .docs-sidebar a:hover { text-decoration: underline; }
+.docs-layout {
+  display: grid;
+  grid-template-columns: minmax(13rem, 17rem) minmax(0, 52rem);
+  gap: 2.5rem;
+  max-width: 76rem;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 5rem;
+}
+.docs-sidebar {
+  align-self: start;
+  position: sticky;
+  top: 1.5rem;
+  max-height: calc(100vh - 3rem);
+  overflow: auto;
+  font-size: 0.9rem;
+}
+.docs-sidebar ul { list-style: none; margin: 1rem 0 0; padding: 0; }
+.docs-sidebar li { margin: 0.5rem 0; }
+.docs-home { font-weight: 700; }
+.docs-content {
+  min-width: 0;
+  background: #fff;
+  border: 1px solid #e1e7e1;
+  border-radius: 0.8rem;
+  padding: clamp(1.5rem, 4vw, 3.25rem);
+  box-shadow: 0 8px 32px rgb(23 35 29 / 5%);
+  line-height: 1.7;
+}
+.docs-content h1, .docs-content h2, .docs-content h3 { line-height: 1.25; }
+.docs-content h1 { margin-top: 0; font-size: clamp(2rem, 4vw, 2.7rem); }
+.docs-content h2 { margin-top: 2.5rem; }
+.docs-content a { color: #245d3a; }
+.docs-content pre {
+  overflow-x: auto;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  background: #17231d;
+  color: #edf5ed;
+}
+.docs-content code { font-family: "DM Mono", monospace; font-size: 0.9em; }
+.docs-content :not(pre) > code { padding: 0.12rem 0.3rem; background: #edf2ed; border-radius: 0.2rem; }
+.docs-content table { width: 100%; border-collapse: collapse; display: block; overflow-x: auto; }
+.docs-content th, .docs-content td { padding: 0.55rem 0.75rem; border: 1px solid #dce4dc; text-align: left; }
+.docs-content th { background: #f0f4ef; }
+.docs-meta { margin: -0.5rem 0 2rem; color: #5d6d62; font: 0.75rem "DM Mono", monospace; }
+.docs-meta span { display: inline-block; border: 1px solid #dce4dc; border-radius: 999px; padding: 0.15rem 0.55rem; }
+@media (max-width: 760px) {
+  .docs-layout { grid-template-columns: 1fr; gap: 1.25rem; padding-top: 1.25rem; }
+  .docs-sidebar { position: static; max-height: none; }
+  .docs-content { padding: 1.35rem; }
+}
+
+.docs-deprecated {
+  padding: 0.85rem 1rem;
+  border-left: 3px solid #9a6a1f;
+  background: #fff7e8;
+  color: #684714;
+}
