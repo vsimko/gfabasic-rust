@@ -103,6 +103,47 @@ jobs:
       - name: Build analysis index
         run: python3 scripts/build_amiga_analysis_report.py analysis-output
 
+      - name: Validate Ghidra analysis outputs
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+
+          out = Path("analysis-output")
+          required = (
+              "REPORT.md", "strings.json", "functions.json",
+              "memory_blocks.json", "analysis_stats.json",
+              "instructions.jsonl", "references.jsonl", "decompiled.c",
+          )
+          missing = [name for name in required if not (out / name).is_file()]
+          if missing:
+              raise SystemExit(f"Missing analysis outputs: {', '.join(missing)}")
+
+          stats = json.loads((out / "analysis_stats.json").read_text())
+          functions = json.loads((out / "functions.json").read_text())
+          blocks = json.loads((out / "memory_blocks.json").read_text())
+          if not functions:
+              raise SystemExit("Ghidra did not discover any functions; refusing to publish")
+          if not stats.get("instructions", 0):
+              raise SystemExit("Ghidra exported no instructions; refusing to publish")
+          if not any(block.get("execute") and block.get("initialized") for block in blocks):
+              raise SystemExit("No initialized executable memory block was imported")
+          if (out / "decompiled.c").stat().st_size == 0:
+              raise SystemExit("Ghidra decompilation output is empty")
+          for filename, key in (("instructions.jsonl", "instructions"),
+                                ("references.jsonl", "references")):
+              actual = sum(1 for line in (out / filename).open() if line.strip())
+              if actual != stats.get(key):
+                  raise SystemExit(
+                      f"{filename}: expected {stats.get(key)} records, found {actual}"
+                  )
+          print(
+              f"Validated {len(functions)} functions, "
+              f"{stats['instructions']} instructions, "
+              f"{stats['references']} references"
+          )
+          PY
 
       - name: Publish reviewed analysis data through a pull request
         env:
