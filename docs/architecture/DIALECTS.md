@@ -1,41 +1,42 @@
 # Dialects, versions, and compatibility policy
 
-- Status: **Sole supported source target: Commodore Amiga GFA BASIC interpreter 3.5.** See [ADR 0009](adr/0009-initial-source-dialect-amiga-gfa-basic-3.5.md) and product-scope clarification [ADR 0011](adr/0011-amiga-35-linux-sdl3-product-scope.md).
+- Status: **Current practical reference implementation: Commodore Amiga GFA BASIC interpreter 3.52.** The product's historical 3.5 scope and the current 3.52 working baseline are distinct. See [COMPATIBILITY-EVIDENCE.md](COMPATIBILITY-EVIDENCE.md).
 
-## Sole normative target
+## Current compatibility baseline
 
-The compiler targets **Amiga GFA BASIC interpreter 3.5 only**. This is the sole supported source dialect/version, not merely the first item in a multi-dialect roadmap. The supplied 3.5 Interpreter manual and its version-specific addenda are the primary normative sources.
+The compiler's immediate compatibility goal is to accept and implement the largest practical set of programs and language features that the available Amiga GFA BASIC 3.52 interpreter can interpret. Use the existing Amiberry workflow for repeatable reference tests.
 
-The 1989 Amiga book documents interpreter 3.0, while the 1990 German Amiga book's main command reference identifies interpreter V3.03. Treat rules found only in those earlier references as inherited candidates until their applicability to 3.5 is confirmed. The 3.5 manual's version-specific material is primary for 3.5 additions and changes.
+This is a project working assumption. It does not claim that interpreter 3.5 and 3.52 are historically identical. A direct comparison with an independently identified 3.5 interpreter is a later validation phase and must not block compiler development.
 
-Atari ST GFA BASIC V2.xx/V3.0 and Atari ST 3.5 are not supported targets and must not be implemented as alternate dialects or API profiles. Existing Atari material may remain as historical research, but it must not be used to fill gaps in Amiga evidence or expand product scope. Other Amiga interpreter/compiler releases, including 3.51/3.52, are also outside the supported source-version contract.
+## Source and version boundaries
 
-## Required identity
+Keep interpreter and compiler products/version numbers distinct. Record the exact executable identity and environment for every runtime observation. Do not infer the interpreter version from an archive label alone.
 
-Every source compilation must identify Amiga GFA BASIC interpreter 3.5 explicitly, either through a fixed product default or an explicit configuration field. Do not infer dialect/version from the output target, file extension, or source contents. There is no dialect-selection matrix because only one source dialect is in scope.
+Books and manuals are supporting evidence. They can describe older releases, omit details, or contain errors. Record exact title, edition, platform, printed page, and section. Rules found only in earlier 3.0/3.03 sources remain historical candidates unless confirmed by runtime evidence or a version-specific source.
 
-## Evidence rules
-
-- Use the applicable Amiga GFA BASIC 3.5 interpreter manual as the primary source for 3.5 behavior.
-- Record exact title, edition, version, platform, page, and section.
-- Mark rules supported only by 3.0/3.03 sources as inherited candidates until confirmed for 3.5.
-- Do not transfer rules from Atari ST or another BASIC dialect to Amiga.
-- Separate documented rules from implementation observations.
-- Mark undocumented or ambiguous constructs unresolved until evidence supports a decision.
-- Keep interpreter and compiler products/version numbers distinct.
-
-## Topics requiring a specification
-
-Encoding and line endings; identifiers and case rules; keywords; comments; statement boundaries; labels; literals; operators and precedence; type suffixes; arrays; procedures and functions; parameter passing; control flow; error behavior; built-ins; source composition; and version-specific behavior.
+Atari ST GFA BASIC V2.xx/V3.0 and Atari ST 3.5 are not supported targets. Do not use Atari evidence to fill gaps in Amiga behavior.
 
 ## Required feature record
 
-Each feature should include a stable identifier, Amiga 3.5 applicability, syntax, semantics and edge cases, source citation, evidence status, implementation status, conformance tests, and known deviations.
+Each feature should include a stable identifier, platform and interpreter version, syntax, observed semantics and edge cases, source citation, evidence status, implementation status, conformance tests, and known deviations. See [COMPATIBILITY-EVIDENCE.md](COMPATIBILITY-EVIDENCE.md).
 
-## Diagnostics
+## Evidence rules
 
-Unknown or unsupported syntax must not be skipped. Diagnostics must identify the source location and explain whether the construct is invalid, unsupported, ambiguous, or unavailable in the selected Amiga 3.5/Linux runtime contract. The structured diagnostic and support-outcome contract is defined in [DIAGNOSTICS.md](DIAGNOSTICS.md).
+- Observed behavior in the 3.52 interpreter is the primary compatibility oracle for current development.
+- Record the exact executable identity, environment, input program, and observable result for runtime tests.
+- Historical programs that run in the reference interpreter are valuable fixtures; record provenance and rights.
+- Books and manuals help discover features and investigate failures. They do not override a contrary runtime observation.
+- Disassembly/decompilation is a separate diagnostic evidence class. Record binary identity and relevant address, symbol, or context.
+- Mark claims as observed, documented, inferred, disputed, or unknown.
+- Preserve disagreements between sources. Do not silently reconcile them.
+- Do not transfer rules from Atari ST or another BASIC dialect to Amiga.
 
-Selecting Amiga GFA BASIC interpreter 3.5 establishes the normative target, not a supported language subset. Each implementation milestone must state a bounded subset and cite its evidence.
+## Diagnostics and tests
 
-Tracking: [issue #3](https://github.com/vsimko/gfabasic-rust/issues/3); [reference register](../reference-sources.md).
+Unknown or unsupported syntax must not be skipped. Diagnostics must identify the source location and explain whether the construct is invalid, unsupported, ambiguous, or unavailable in the selected runtime contract.
+
+When a compiler test fails or crashes, reduce it to a minimal reproducer, run it in the reference interpreter, compare observable behavior, consult relevant documentation, and inspect binary-analysis evidence if useful. Fix the implementation or document a justified limitation. Add a regression test for each reproducible defect.
+
+Do not claim compiler support because a manual describes a feature or because a registry entry exists. Evidence, implementation, and test status are separate.
+
+Tracking: [issue #46](https://github.com/vsimko/gfabasic-rust/issues/46), [reference validation issue #66](https://github.com/vsimko/gfabasic-rust/issues/66).
