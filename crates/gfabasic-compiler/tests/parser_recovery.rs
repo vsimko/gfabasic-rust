@@ -419,10 +419,9 @@ fn parser_rejects_arithmetic_rhs_until_expression_grammar_is_implemented() {
     assert_eq!(&source[span.start..span.end], "+");
 }
 
-
 #[test]
 fn parser_handles_the_integer_literal_i64_boundary() {
-    let valid_source = "x=9223372036854775807\\n";
+    let valid_source = "x=9223372036854775807\n";
     let mut sources = SourceMap::new();
     let source_id = sources.add_source("integer-literal-max.LST", valid_source);
     let document = parse_document(source_id, valid_source)
@@ -444,7 +443,7 @@ fn parser_handles_the_integer_literal_i64_boundary() {
         other => panic!("expected integer assignment, got {other:?}"),
     }
 
-    let overflow_source = "x=9223372036854775808\\n";
+    let overflow_source = "x=9223372036854775808\n";
     let mut sources = SourceMap::new();
     let source_id = sources.add_source("integer-literal-overflow.LST", overflow_source);
     let diagnostics = parse(source_id, overflow_source)
