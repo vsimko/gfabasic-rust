@@ -1,3 +1,8 @@
+---
+type: "Research Note"
+title: "Amiga GFA BASIC 3.5 — editor feature audit"
+---
+
 # Amiga GFA BASIC 3.5 — editor feature audit
 
 Primary source: *GFA BASIC 3.5 Interpreter*, editor update printed p. 1-25. These are editor capabilities, not BASIC runtime language declarations.

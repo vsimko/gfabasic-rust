@@ -1,3 +1,8 @@
+---
+type: "Research Note"
+title: "Systematic review of *Das große GFA-BASIC-Buch* (Atari ST)"
+---
+
 # Systematic review of *Das große GFA-BASIC-Buch* (Atari ST)
 
 - Source ID: `ATARI-GFA-BOOK-1988`

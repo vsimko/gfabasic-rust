@@ -1,3 +1,8 @@
+---
+type: "Architecture Decision Record"
+title: "ADR 0014: Repository implementation dashboard"
+---
+
 # ADR 0014: Repository implementation dashboard
 
 - Status: Accepted

@@ -1,3 +1,8 @@
+---
+type: "Architecture"
+title: "Implementation dashboard"
+---
+
 # Implementation dashboard
 
 ## Purpose

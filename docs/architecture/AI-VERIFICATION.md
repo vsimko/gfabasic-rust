@@ -1,3 +1,8 @@
+---
+type: "Architecture"
+title: "AI-assisted API verification"
+---
+
 # AI-assisted API verification
 
 ## Purpose

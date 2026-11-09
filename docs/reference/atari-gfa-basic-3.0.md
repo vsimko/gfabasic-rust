@@ -1,3 +1,8 @@
+---
+type: "Reference"
+title: "Atari ST GFA BASIC V2.xx / V3.0 — preliminary language specification"
+---
+
 # Atari ST GFA BASIC V2.xx / V3.0 — preliminary language specification
 
 - Status: **Research draft; not an accepted compiler dialect**

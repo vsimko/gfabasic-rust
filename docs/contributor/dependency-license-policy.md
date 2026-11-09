@@ -1,3 +1,8 @@
+---
+type: "Contributor Guide"
+title: "Dependency License Policy"
+---
+
 # Dependency License Policy
 
 This policy applies to third-party dependencies used by the Rust workspace and its

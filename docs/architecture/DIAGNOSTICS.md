@@ -1,3 +1,8 @@
+---
+type: "Architecture"
+title: "Diagnostics and compatibility reporting"
+---
+
 # Diagnostics and compatibility reporting
 
 - Status: **The source-map diagnostic model and deterministic human renderer are implemented and unit-tested.** The narrow FACT/PRINT frontend emits lexical, syntax, and unsupported-feature diagnostics with source spans; the prototype CLI renders these errors. Stable diagnostic-code allocation, machine-readable schema, general semantic diagnostics, and runtime reporting remain unimplemented.

@@ -1,3 +1,8 @@
+---
+type: "Research Note"
+title: "Amiga book — command-heading harvest, chapters 5–17"
+---
+
 # Amiga book — command-heading harvest, chapters 5–17
 
 Source: `Das Grosse Buch zu GFA-BASIC 3.5 Amiga.pdf`. This file records command headings surfaced by the page-level OCR pass. It is a navigation aid for subsequent verification, not a complete normalized API list. PDF page references are used.

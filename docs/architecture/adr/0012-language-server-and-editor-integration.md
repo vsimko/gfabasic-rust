@@ -1,3 +1,8 @@
+---
+type: "Architecture Decision Record"
+title: "ADR 0012: Language server and editor integration"
+---
+
 # ADR 0012: Language server and editor integration
 
 - Status: Proposed

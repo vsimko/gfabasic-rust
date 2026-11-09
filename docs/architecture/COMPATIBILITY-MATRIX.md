@@ -1,3 +1,8 @@
+---
+type: "Architecture"
+title: "Current compatibility matrix"
+---
+
 # Current compatibility matrix
 
 - Status: **The sole product target is Amiga GFA BASIC interpreter 3.5 to Linux x86-64. A narrow FACT/PRINT prototype exists; no complete dialect is implemented or conformant.**

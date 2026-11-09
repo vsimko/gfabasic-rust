@@ -1,3 +1,8 @@
+---
+type: "Architecture"
+title: "Release, artifact, and reproducible-build policy"
+---
+
 # Release, artifact, and reproducible-build policy
 
 - Status: **The compiler release policy remains proposed; no compiler build, package, installation artifact, or full release workflow exists. A narrow release-SBOM workflow is implemented for pull-request validation and is configured to attach the approved workspace SBOM to published GitHub Releases; a real release upload has not yet been exercised.**

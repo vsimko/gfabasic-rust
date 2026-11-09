@@ -1,3 +1,8 @@
+---
+type: "Research Note"
+title: "Amiga GFA BASIC 3.0 expression, intrinsic and control-flow evidence"
+---
+
 # Amiga GFA BASIC 3.0 expression, intrinsic and control-flow evidence
 
 > **Version boundary:** This document records page-reviewed facts from the 3.0 base body of the supplied *GFA BASIC 3.5 Interpreter* scan. It is not a claim that these declarations or semantics are present unchanged in interpreter 3.5. The manual identifies its base body as 3.0 and its 3.5-specific material as a separate addendum. Keep these findings as inherited candidates until independently confirmed for 3.5.

@@ -1,3 +1,8 @@
+---
+type: "Research Note"
+title: "GFA BASIC 3.0 Amiga — BOB and OBJECT API evidence"
+---
+
 # GFA BASIC 3.0 Amiga — BOB and OBJECT API evidence
 
 Source: *GFA BASIC 3.5 Interpreter*, Chapter 10, printed pp. 10-13–10-16. This is Amiga GFA BASIC 3.0 base-manual material.

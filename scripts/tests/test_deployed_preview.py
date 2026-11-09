@@ -81,6 +81,25 @@ def main():
     assert "Loading…" not in html
     assert "data/project.json" not in html, "Dashboard should be rendered into static HTML"
 
+
+    docs_url = url.rstrip("/") + "/docs/index.html"
+    docs_request = urllib.request.Request(docs_url, headers={"User-Agent": "gfabasic-preview-qa/1.0"})
+    with urllib.request.urlopen(docs_request, timeout=10) as response:
+        docs_html = response.read().decode("utf-8")
+    assert response.status == 200
+    assert "<title>Project documentation · GFA BASIC Rust documentation</title>" in docs_html
+    assert "OKF v0.2" in docs_html
+    assert 'href="architecture/index.html"' in docs_html
+
+    adr_url = url.rstrip("/") + "/docs/architecture/adr/0011-amiga-35-linux-sdl3-product-scope.html"
+    with urllib.request.urlopen(adr_url, timeout=10) as response:
+        adr_html = response.read().decode("utf-8")
+    assert response.status == 200
+    assert "Amiga 3.5 and Linux SDL3 product scope" in adr_html
+    assert "<script" not in adr_html.lower(), "Generated documentation must not execute embedded scripts"
+
+    print(f"Verified generated documentation index and ADR page: {docs_url}")
+
     print(f"Preview HTML QA passed: {url}")
     print("Verified dashboard cards, CI workflow health, scoped API and roadmap progress bars, implementation states, roadmap and API catalogue.")
 

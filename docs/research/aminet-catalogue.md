@@ -1,3 +1,8 @@
+---
+type: "Research Note"
+title: "Aminet GFA BASIC package survey"
+---
+
 # Aminet GFA BASIC package survey
 
 - **Status:** Initial catalogue from the live directory listing; one package-page false positive has been classified. Most archive contents, package readmes, source languages, and redistribution terms remain uninspected.

@@ -1,3 +1,8 @@
+---
+type: "Research Note"
+title: "Amiga GFA BASIC 3.0 control, file and data I/O evidence"
+---
+
 # Amiga GFA BASIC 3.0 control, file and data I/O evidence
 
 > **Version boundary:** This is a page-reviewed extraction from the 3.0 base body of the supplied *GFA BASIC 3.5 Interpreter* scan. The source identifies the base language as GFA BASIC 3.0 and treats the 3.5 update separately. These declarations are inherited 3.0 candidates only; this document does not assert unchanged availability or behavior in interpreter 3.5.

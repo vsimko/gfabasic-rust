@@ -1,3 +1,8 @@
+---
+type: "Architecture Decision Record"
+title: "ADR 0006: API declaration registry"
+---
+
 # ADR 0006: API declaration registry
 
 - Status: Accepted

@@ -1,3 +1,8 @@
+---
+type: "Research Note"
+title: "Amiga GFA BASIC source and topic index"
+---
+
 # Amiga GFA BASIC source and topic index
 
 **Purpose:** page-addressable navigation through the supplied Amiga references and the project's source-derived extraction notes. This is a research index, not a claim that every listed feature is implemented or runtime-tested.

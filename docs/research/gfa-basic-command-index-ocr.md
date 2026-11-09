@@ -1,3 +1,8 @@
+---
+type: "Research Note"
+title: "GFA-BASIC command index — first-pass extraction"
+---
+
 # GFA-BASIC command index — first-pass extraction
 
 Source: supplied *Das Grosse GFA-BASIC-Buch zum Amiga* PDF, Appendix D, “Verzeichnis der GFA-BASIC-Befehle”, printed pages 493–497.

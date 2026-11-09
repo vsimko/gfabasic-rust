@@ -1,3 +1,8 @@
+---
+type: "User Guide"
+title: "Understanding compiler diagnostics"
+---
+
 # Understanding compiler diagnostics
 
 - **Audience:** Users of the planned GFA BASIC compiler.

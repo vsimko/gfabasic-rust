@@ -1,3 +1,8 @@
+---
+type: "Documentation Template"
+title: "Guide title"
+---
+
 # Guide title
 
 <!-- State the intended audience and the document status. Remove this comment before publication. -->

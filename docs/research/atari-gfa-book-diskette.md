@@ -1,3 +1,8 @@
+---
+type: "Research Note"
+title: "Atari GFA BASIC book diskette — source-corpus research notes"
+---
+
 # Atari GFA BASIC book diskette — source-corpus research notes
 
 - Source ID: `ATARI-GFA-BOOK-1988`

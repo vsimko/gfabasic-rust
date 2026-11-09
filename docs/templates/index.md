@@ -1,5 +1,5 @@
-# Documentation templates
+# Templates
 
-- [Template overview](README.md) - authoring guidance
-- [Guide template](GUIDE.md) - task-oriented instructions
-- [Reference template](REFERENCE.md) - stable, source-backed technical facts
+- [GUIDE](GUIDE.md) - Documentation concepts in templates.
+- [Overview](README.md) - Documentation concepts in templates.
+- [REFERENCE](REFERENCE.md) - Documentation concepts in templates.

@@ -1,7 +1,6 @@
 ---
-type: Research Guide
-title: Research overview
-tags: [research, evidence]
+type: "Research Note"
+title: "Research materials"
 ---
 
 # Research materials

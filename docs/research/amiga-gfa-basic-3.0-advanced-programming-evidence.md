@@ -1,3 +1,8 @@
+---
+type: "Research Note"
+title: "GFA BASIC 3.0 Amiga — advanced programming evidence"
+---
+
 # GFA BASIC 3.0 Amiga — advanced programming evidence
 
 Source: *GFA-BASIC 3.0 Amiga*, Chapter 10, “Advanced programming”, printed pages 10-2–10-16 (Interpreter PDF pages 296–310). This is 3.0 base-manual material.

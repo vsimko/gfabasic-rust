@@ -1,3 +1,8 @@
+---
+type: "Architecture"
+title: "Host and target model"
+---
+
 # Host and target model
 
 - Status: **Sole supported output target: Linux x86-64, GNU ABI, ELF 64-bit.** See [ADR 0003](adr/0003-target-model.md) and [ADR 0011](adr/0011-amiga-35-linux-sdl3-product-scope.md).

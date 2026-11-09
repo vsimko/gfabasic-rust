@@ -1,3 +1,8 @@
+---
+type: "Reference"
+title: "Amiga GFA BASIC API reference — initial research inventory"
+---
+
 # Amiga GFA BASIC API reference — initial research inventory
 
 - **Status:** Research draft; not an accepted API profile or implementation contract.

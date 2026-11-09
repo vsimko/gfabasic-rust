@@ -1,3 +1,8 @@
+---
+type: "Research Note"
+title: "Amiga GFA BASIC 3.5 built-in function inventory"
+---
+
 # Amiga GFA BASIC 3.5 built-in function inventory
 
 > Source-derived inventory, not an implementation or runtime-conformance claim.

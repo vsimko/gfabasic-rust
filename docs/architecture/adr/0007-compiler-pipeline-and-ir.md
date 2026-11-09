@@ -1,3 +1,8 @@
+---
+type: "Architecture Decision Record"
+title: "ADR 0007: Compiler pipeline and typed IR boundaries"
+---
+
 # ADR 0007: Compiler pipeline and typed IR boundaries
 
 - Status: Accepted
