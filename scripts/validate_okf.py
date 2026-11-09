@@ -70,6 +70,10 @@ def _validate_metadata(path: Path, data: dict, errors: list[str]) -> None:
     for key in ("title", "description", "resource"):
         if key in data and (not isinstance(data[key], str) or not data[key].strip()):
             _error(errors, path, f"frontmatter field '{key}' must be a non-empty string")
+        if key == "resource" and isinstance(data.get(key), str) and "://" in data[key]:
+            parsed = urlsplit(data[key])
+            if not parsed.scheme or not parsed.netloc:
+                _error(errors, path, "frontmatter field 'resource' must be a syntactically valid URL or bundle path")
     if "tags" in data and (
         not isinstance(data["tags"], list)
         or any(not isinstance(tag, str) or not tag.strip() for tag in data["tags"])
@@ -89,6 +93,10 @@ def _validate_metadata(path: Path, data: dict, errors: list[str]) -> None:
                 resource = source.get("resource")
                 if not isinstance(resource, str) or not resource.strip():
                     _error(errors, path, f"{where}.resource must be a non-empty string")
+                elif "://" in resource:
+                    parsed = urlsplit(resource)
+                    if not parsed.scheme or not parsed.netloc:
+                        _error(errors, path, f"{where}.resource must be a syntactically valid URL or bundle path")
                 if "id" in source:
                     source_id = source["id"]
                     if not isinstance(source_id, str) or not source_id.strip():
@@ -156,6 +164,7 @@ def _validate_metadata(path: Path, data: dict, errors: list[str]) -> None:
 
 
 def _heading_ids(text: str) -> set[str]:
+    text = _without_code(text)
     ids = set(HTML_ID_RE.findall(text))
     used: dict[str, int] = {}
     for match in HEADING_RE.finditer(text):
