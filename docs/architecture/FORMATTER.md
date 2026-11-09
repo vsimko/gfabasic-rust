@@ -1,3 +1,8 @@
+---
+type: "Architecture"
+title: "Formatter style and current support"
+---
+
 # Formatter style and current support
 
 - Status: **Prototype style for the implemented frontend subset**.

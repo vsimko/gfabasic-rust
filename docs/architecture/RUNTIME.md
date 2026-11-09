@@ -1,3 +1,8 @@
+---
+type: "Architecture"
+title: "Runtime architecture"
+---
+
 # Runtime architecture
 
 - Status: Approved architectural baseline (2026-11-04); language-specific contracts and implementation details remain deferred to their respective issues.

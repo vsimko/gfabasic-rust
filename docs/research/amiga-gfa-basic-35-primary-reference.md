@@ -1,3 +1,8 @@
+---
+type: "Research Note"
+title: "Amiga GFA-BASIC 3.5 primary reference and target decision"
+---
+
 # Amiga GFA-BASIC 3.5 primary reference and target decision
 
 Decision: target the **Amiga GFA-BASIC 3.5 interpreter and its documented 3.5 addendum**. Do not select 3.51 or 3.52 merely from secondary catalog listings; the available 3.5 interpreter manual is the governing reference in this project.

@@ -1,3 +1,8 @@
+---
+type: "Architecture"
+title: "Project goals and compatibility objectives"
+---
+
 # Project goals and compatibility objectives
 
 - Status: **Accepted product scope**; see [ADR 0011](adr/0011-amiga-35-linux-sdl3-product-scope.md).

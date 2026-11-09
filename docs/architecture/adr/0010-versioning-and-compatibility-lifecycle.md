@@ -1,3 +1,8 @@
+---
+type: "Architecture Decision Record"
+title: "ADR 0010: Versioning and compatibility lifecycle"
+---
+
 # ADR 0010: Versioning and compatibility lifecycle
 
 - Status: Accepted

@@ -1,3 +1,8 @@
+---
+type: "Research Note"
+title: "GFA BASIC 3.0 Amiga — output, cursor, mouse and sound evidence"
+---
+
 # GFA BASIC 3.0 Amiga — output, cursor, mouse and sound evidence
 
 Source: *GFA BASIC 3.5 Interpreter*, Chapter 5, printed pp. 5-7–5-22. This is the 3.0 base-manual I/O chapter; do not treat it as automatic proof of 3.5 retention.

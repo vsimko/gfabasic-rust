@@ -1,7 +1,6 @@
 ---
-type: Technical Reference
-title: Language and API reference
-tags: [reference, language, api]
+type: "Reference"
+title: "GFA BASIC language reference notes"
 ---
 
 # GFA BASIC language reference notes

@@ -1,3 +1,8 @@
+---
+type: "Reference"
+title: "Amiga GFA BASIC interpreter 3.0 — feature inventory (working draft)"
+---
+
 # Amiga GFA BASIC interpreter 3.0 — feature inventory (working draft)
 
 - Status: Initial inventory; incomplete and not an implementation contract.

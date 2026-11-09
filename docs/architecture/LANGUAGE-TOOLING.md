@@ -1,3 +1,8 @@
+---
+type: "Architecture"
+title: "Language tooling and editor integration"
+---
+
 # Language tooling and editor integration
 
 - Status: **Accepted architecture direction**; implementation is tracked by [#209](https://github.com/vsimko/gfabasic-rust/issues/209), [#210](https://github.com/vsimko/gfabasic-rust/issues/210), and [#211](https://github.com/vsimko/gfabasic-rust/issues/211).

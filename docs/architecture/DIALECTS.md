@@ -1,3 +1,8 @@
+---
+type: "Architecture"
+title: "Dialects, versions, and compatibility policy"
+---
+
 # Dialects, versions, and compatibility policy
 
 - Status: **Sole supported source target: Commodore Amiga GFA BASIC interpreter 3.5.** See [ADR 0009](adr/0009-initial-source-dialect-amiga-gfa-basic-3.5.md) and product-scope clarification [ADR 0011](adr/0011-amiga-35-linux-sdl3-product-scope.md).

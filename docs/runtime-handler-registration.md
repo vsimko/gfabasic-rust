@@ -1,3 +1,9 @@
+---
+type: "Architecture Note"
+title: "Runtime handler registration"
+tags: [runtime, api-registry, architecture]
+---
+
 # Runtime handler registration
 
 The TOML files under `api/registry/` are the canonical source of API declaration IDs, implementation status, signatures, and `implementation.handler` mappings. The runtime crate consumes a generated Rust requirement table; regenerate it with:

@@ -1,3 +1,8 @@
+---
+type: "Research Note"
+title: "Amiga GFA BASIC 3.5 lexer evidence inventory"
+---
+
 # Amiga GFA BASIC 3.5 lexer evidence inventory
 
 Status: **research baseline; not a complete 3.5 lexical specification**  
@@ -352,20 +357,3 @@ The supplied interpreter manual describes the editor's textual program interchan
 These passages establish the intended *textual ASCII listing* format and the `.LST` interchange role. They do not specify a concrete 8-bit character mapping for values 128–255, Unicode/UTF-8 support, BOM handling, or how malformed byte sequences should be handled. The phrase “ASCII” alone must not be silently interpreted as UTF-8, ISO-8859-1, Windows-1252, or Amiga-specific character encoding. Keep the decoder contract unresolved pending stronger 3.5 evidence or reproducible tests against the original interpreter.
 
 The German book's STORE entry separately specifies CR/LF (CHR$(13)/CHR$(10)) after each serialized string-field element. That is evidence for STORE's data-file format only; it does **not** establish the line-ending convention of program `.LST` files. Do not reuse it as an LST decoder rule.
-
-## 13. Page-image verification of 3.5 matrix analysis abbreviations (2026-11-09)
-
-The following addendum pages were inspected as page images: printed pp. 13-26–13-31 (PDF pp. 456–461). Four further command-specific abbreviation rows are explicitly printed:
-
-| Printed page | Full command form | Printed abbreviation |
-|---|---|---|
-| 13-26 | MAT DET x=a([i,j])[n] | m d x=a([i,j]),[n] |
-| 13-27 | MAT QDET x=a([i,j])[n] | M qd x=a([i,j]),[n] |
-| 13-29 | MAT RANG x=a([i,j])[n] | m ra x=a([i,j]),[n] |
-| 13-30 | MAT INV b()=a() | m inv b()=a() |
-
-The capitalization of the first character in the printed `MAT QDET` abbreviation is visibly uppercase `M`; it is recorded as printed rather than silently normalized to lowercase. The source notation around optional arguments is reproduced at the level visible in the page image; the table is an evidence inventory, not a proposed grammar for the abbreviated forms.
-
-Printed pp. 13-28 and 13-31 were also checked. They continue the MAT DET/QDET and MAT INV examples/results respectively, without adding a separate abbreviation row. No abbreviation is inferred from example code alone.
-
-The page-image review now covers printed 3.5 addendum pp. 13-1–13-31 (PDF pp. 431–461). The added rows remain command-specific documentation evidence. They do not establish a general expansion algorithm, case normalization, whitespace handling, source-file acceptance, or how command abbreviations interact with identifiers and parser context. No production lexer behavior changes.

@@ -1,3 +1,8 @@
+---
+type: "Research Note"
+title: "Amiga GFA BASIC 3.0 command index — grouped cross-check"
+---
+
 # Amiga GFA BASIC 3.0 command index — grouped cross-check
 
 Source: *GFA BASIC 3.5 Interpreter*, Appendix 12, “Table of commands”, printed pp. 12-8–12-18 (PDF pp. 410–420). The manual says Chapters 2–12 are the original 3.0 baseline and Chapter 13 is the 3.5 addendum. This is a 3.0 discovery index, not a normative 3.5 declaration list.

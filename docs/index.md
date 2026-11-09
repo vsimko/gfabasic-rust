@@ -2,30 +2,32 @@
 okf_version: "0.2"
 ---
 
-# GFA BASIC project knowledge
+# Project documentation
 
-This bundle is the canonical human- and agent-readable documentation source for the gfabasic-rust project. Markdown concept bodies use OKF v0.2 YAML frontmatter; the machine-readable API registry remains separate.
+This is the canonical OKF v0.2 documentation bundle for gfabasic-rust. Markdown files in this tree are the editable source; the project website is a generated publication.
 
-## Start here
+# Documentation policy and overview
 
-- [Project overview](../README.md) - product scope, current implementation status, and limitations
-- [Documentation policy](DOCUMENTATION.md) - OKF conventions, provenance, writing, validation, and copyright rules
-- [Architecture](architecture/index.md) - system boundaries, design, implementation status, and decisions
-- [Contributor guidance](contributor/index.md) - development setup and contribution constraints
-- [Language and API reference](reference/index.md) - dialect- and platform-scoped reference material
-- [Research](research/index.md) - evidence gathering and analysis of historical GFA BASIC sources
-- [Testing](testing/index.md) - test strategy and original-interpreter reference procedures
-- [User guidance](user/index.md) - supported commands, diagnostics, and current limitations
-- [Templates](templates/index.md) - reusable documentation structures
-- [Reference source register](reference-sources.md) - source identity, provenance, applicability, and evidence status
+- [Documentation policy](DOCUMENTATION.md) - OKF v0.2 conventions, writing rules, and contributor workflow.
+- [Documentation overview](README.md) - Overview of audiences and documentation areas.
+- [Reference sources](reference-sources.md) - Bibliographic sources and provenance.
 
-## Documentation principles
+# Architecture and implementation
 
-- Keep this `docs/` tree as the only canonical documentation bundle.
-- Treat this index and nested indexes as navigation, not concept documents; reserved index files have no concept frontmatter.
-- Keep technical claims scoped to the documented dialect, platform, and version.
-- Distinguish verified source evidence from inference, proposal, and implementation status.
-- Keep API registry data in its structured source files; do not duplicate its schema in prose.
-- Publish website documentation from this source rather than maintaining duplicate website content.
+- [Architecture](architecture/) - System design, decisions, validation, and implementation status.
+- [Runtime handler registration](runtime-handler-registration.md) - Canonical API handler mapping and runtime dispatch validation.
 
-See the [Google OKF v0.2 specification](https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md).
+# Language and API reference
+
+- [Reference](reference/) - Dialect, API, and feature reference material.
+
+# Research and evidence
+
+- [Research](research/) - Source reviews, inventories, and evidence notes.
+
+# Project use and contribution
+
+- [Contributor guides](contributor/) - Development setup and contribution policies.
+- [User guides](user/) - User-facing guidance.
+- [Testing guides](testing/) - Reference interpreter and testing material.
+- [Templates](templates/) - Reusable documentation templates.

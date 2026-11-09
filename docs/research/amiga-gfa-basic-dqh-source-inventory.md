@@ -1,3 +1,8 @@
+---
+type: "Research Note"
+title: "Amiga GFA BASIC commands observed in dqh-amiga"
+---
+
 # Amiga GFA BASIC commands observed in dqh-amiga
 
 - **Status:** Source-derived inventory; not a complete language/API specification.

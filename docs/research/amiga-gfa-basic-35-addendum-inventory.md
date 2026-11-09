@@ -1,3 +1,8 @@
+---
+type: "Research Note"
+title: "Amiga GFA-BASIC 3.5 interpreter addendum — extracted feature inventory"
+---
+
 # Amiga GFA-BASIC 3.5 interpreter addendum — extracted feature inventory
 
 Primary source: the supplied `GFA_Basic_3.5_Interpreter.pdf`; independently cross-checked against `GFA-Basic 3.0 + 3.5 Upd (Amiga).pdf` (487 PDF pages). The second scan's PDF p. 3 identifies the base as `GFA BASIC 3.0 Interpreter`; p. 4 gives ©1988 GFA Systemtechnik GmbH, program author Frank Ostrowski, second edition December 1988; p. 7 explicitly instructs readers to add Chapter 13, Chapter 14, and the 3.5 editor changes to the 3.0 manual. The following references are printed addendum page numbers.

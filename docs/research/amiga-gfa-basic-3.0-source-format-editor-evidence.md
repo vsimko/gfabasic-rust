@@ -1,3 +1,8 @@
+---
+type: "Research Note"
+title: "Amiga GFA BASIC 3.0 — source composition and editor evidence"
+---
+
 # Amiga GFA BASIC 3.0 — source composition and editor evidence
 
 Source: *GFA BASIC 3.5 Interpreter*, Chapter 1, “Introduction and editor”, printed pp. 1-9–1-23, plus the explicit 3.5 editor update on printed p. 1-25. The manual's introductory note identifies Chapters 2–12 as the original 3.0 material and the later addendum as 3.5-specific. The observations below are therefore split by version and are not promoted to 3.5 lexical rules unless the addendum explicitly says so.

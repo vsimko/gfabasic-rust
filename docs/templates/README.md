@@ -1,7 +1,6 @@
 ---
-type: Documentation Template Guide
-title: Documentation templates
-tags: [documentation, templates]
+type: "Documentation Template"
+title: "Documentation templates"
 ---
 
 # Documentation templates

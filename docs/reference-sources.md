@@ -1,3 +1,8 @@
+---
+type: "Source Bibliography"
+title: "GFA BASIC reference sources"
+---
+
 # GFA BASIC reference sources
 
 This register identifies candidate sources for language and API research. A listed source is not automatically authoritative for every dialect or version. No feature should be promoted to “verified” until the relevant edition, platform, and page/section have been checked.

@@ -1,3 +1,8 @@
+---
+type: "Architecture"
+title: "Frontend fuzzing and robustness strategy"
+---
+
 # Frontend fuzzing and robustness strategy
 
 - Status: Source-loader fuzz target and bounded CI campaign are implemented; lexer/parser targets remain pending.

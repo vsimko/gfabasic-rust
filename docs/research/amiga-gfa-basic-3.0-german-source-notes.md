@@ -1,3 +1,8 @@
+---
+type: "Research Note"
+title: "German Amiga GFA BASIC 3.0 source — initial verification notes"
+---
+
 # German Amiga GFA BASIC 3.0 source — initial verification notes
 
 - **Source ID:** `AM-BOOK-DE-1989`

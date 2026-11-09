@@ -1,7 +1,6 @@
 ---
-type: Contributor Guide
-title: Contributor documentation
-tags: [contributing, development]
+type: "Contributor Guide"
+title: "Contributor documentation"
 ---
 
 # Contributor documentation
@@ -12,7 +11,7 @@ tags: [contributing, development]
 
 ## Before making a change
 
-1. Read the [project README](../../README.md) and the [architecture overview](../architecture/README.md).
+1. Read the [project documentation index](../index.md) and the [architecture overview](../architecture/README.md).
 2. Check the open [GitHub issues](https://github.com/vsimko/gfabasic-rust/issues) and pull requests to avoid duplicate work.
 3. Follow the [documentation policy](../DOCUMENTATION.md) for Markdown, evidence, citations, and copyright.
 4. For language or API research, consult the [source register](../reference-sources.md) and keep Amiga and Atari ST evidence separate.
@@ -24,7 +23,7 @@ Follow the [development setup guide](development-setup.md) for the pinned Rust t
 
 ## Current development constraints
 
-The default branch contains a Cargo workspace with compiler, runtime, and Linux platform crates. The compiler crate implements source-map and strict UTF-8 file-loading primitives plus a structured diagnostic model and human renderer. Its minimal CLI supports help/version; `build` and `check` do not compile. The lexer, parser, semantic analysis, IR, backend, project configuration, runtime behavior, and Linux platform adapter remain unimplemented. The pinned toolchain is Rust 1.99.1; LLVM and SDL3 are not required for the current workspace and remain deferred. The project source code and original project documentation are licensed under MIT; see the root [LICENSE](../../LICENSE) file and the [license section in the README](../../README.md#license).
+The default branch contains a Cargo workspace with compiler, runtime, and Linux platform crates. The compiler crate implements source-map and strict UTF-8 file-loading primitives plus a structured diagnostic model and human renderer. Its minimal CLI supports help/version; `build` and `check` do not compile. The lexer, parser, semantic analysis, IR, backend, project configuration, runtime behavior, and Linux platform adapter remain unimplemented. The pinned toolchain is Rust 1.99.1; LLVM and SDL3 are not required for the current workspace and remain deferred. The project source code and original project documentation are licensed under MIT; see the root [LICENSE](../../LICENSE) file and the [license section in the README](../../LICENSE).
 
 The MIT license does not grant redistribution rights to third-party manuals, ROMs, disk images, sample programs, or other externally sourced materials. Check their individual rights and the documentation policy before adding or redistributing them.
 
@@ -35,6 +34,10 @@ Run the same documentation checks locally from the repository root:
 ```sh
 npx --yes markdownlint-cli2@0.24.0 "**/*.md" "#node_modules"
 lychee --offline --include-fragments anchor-only --root-dir "$PWD" "**/*.md"
+python -m pip install --disable-pip-version-check PyYAML==6.0.2 markdown-it-py==3.0.0
+python scripts/validate_okf.py
+python scripts/generate_docs_site.py
+python -m unittest discover -s scripts/tests -p "test_*.py"
 ```
 
 Run the workspace checks from the repository root after installing the pinned toolchain:
@@ -48,7 +51,7 @@ cargo test --workspace --all-targets
 cargo build --workspace --all-targets
 ```
 
-The same Rust checks run in [rust.yml](../../.github/workflows/rust.yml). The documentation workflow in [docs.yml](../../.github/workflows/docs.yml) runs Markdown linting, API registry/corpus validation, validator tests, and offline local-link/anchor validation. Separate workflows provide source-loader fuzzing, RustSec audits, source-loading benchmark checks/measurements, and workspace SBOM generation/validation. These checks validate repository tooling and the current source-loading primitives only; they do not validate a GFA BASIC compiler or runtime implementation. Lexer/parser fuzz targets, compiler/runtime conformance, a stable final PR gate, branch protection, and compiler build/package/release workflows remain unimplemented. The release-SBOM upload has not yet been exercised against a real published release.
+The same Rust checks run in [rust.yml](../../.github/workflows/rust.yml). The documentation workflow in [docs.yml](../../.github/workflows/docs.yml) runs Markdown linting, OKF v0.2 bundle validation and website generation, API registry/corpus validation, validator tests, and offline local-link/anchor validation. Separate workflows provide source-loader fuzzing, RustSec audits, source-loading benchmark checks/measurements, and workspace SBOM generation/validation. These checks validate repository tooling and the current source-loading primitives only; they do not validate a GFA BASIC compiler or runtime implementation. Lexer/parser fuzz targets, compiler/runtime conformance, a stable final PR gate, branch protection, and compiler build/package/release workflows remain unimplemented. The release-SBOM upload has not yet been exercised against a real published release.
 
 ## Human blockers and AI agent workflow
 

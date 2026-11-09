@@ -1,3 +1,9 @@
+---
+type: "Research Note"
+title: "Amiga GFA BASIC 3.52 runtime baseline"
+tags: [amiga, gfa-basic, runtime, testing]
+---
+
 # Amiga GFA BASIC 3.52 runtime baseline
 
 Status: **observed for the single currently available private binary; not normative 3.5 evidence**  

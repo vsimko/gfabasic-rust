@@ -1,3 +1,8 @@
+---
+type: "Architecture Decision Record"
+title: "ADR NNNN: Title"
+---
+
 # ADR NNNN: Title
 
 - Status: Proposed | Accepted | Superseded | Rejected

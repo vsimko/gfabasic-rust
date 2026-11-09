@@ -1,3 +1,9 @@
+---
+type: "Research Note"
+title: "Amiga GFA-BASIC binary analysis"
+tags: [amiga, gfa-basic, binary-analysis, research]
+---
+
 # Amiga GFA-BASIC binary analysis
 
 The existing **Prepare Amiga reference interpreter** workflow is the single entry point for both preparing the emulator input and analyzing the interpreter. Run it through **Actions → Prepare and analyze Amiga GFA-BASIC reference interpreter → Run workflow**.

@@ -1,3 +1,8 @@
+---
+type: "Reference"
+title: "Atari ST GFA BASIC API reference — research draft"
+---
+
 # Atari ST GFA BASIC API reference — research draft
 
 - Status: **Initial API inventory; not an accepted implementation contract**

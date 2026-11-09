@@ -1,3 +1,8 @@
+---
+type: "Research Note"
+title: "GFA BASIC 3.0 Amiga — menu and event details"
+---
+
 # GFA BASIC 3.0 Amiga — menu and event details
 
 Source: *GFA BASIC 3.5 Interpreter*, Chapter 9, printed pp. 9-2–9-13. This is the 3.0 base-manual event/menu API; it is not 3.5 confirmation.

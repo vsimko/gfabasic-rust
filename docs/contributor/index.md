@@ -1,5 +1,5 @@
-# Contributor documentation
+# Contributor guidance
 
-- [Contributor overview](README.md) - contribution constraints and workflow entry point
-- [Development setup](development-setup.md) - pinned toolchain and local commands
-- [Dependency and license policy](dependency-license-policy.md) - dependency review and licensing requirements
+- [Overview](README.md) - Documentation concepts in contributor.
+- [Dependency License Policy](dependency-license-policy.md) - Documentation concepts in contributor.
+- [Development Setup](development-setup.md) - Documentation concepts in contributor.

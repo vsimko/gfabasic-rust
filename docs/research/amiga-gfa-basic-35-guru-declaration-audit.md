@@ -1,3 +1,8 @@
+---
+type: "Research Note"
+title: "Amiga GFA BASIC 3.5 — GURU declaration audit"
+---
+
 # Amiga GFA BASIC 3.5 — GURU declaration audit
 
 Primary source: *GFA BASIC 3.5 Interpreter*, Chapter 13 addendum, printed pp. 13-35–13-36. This records what the addendum says; it is not a runtime-conformance claim.

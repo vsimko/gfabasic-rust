@@ -1,3 +1,8 @@
+---
+type: "Architecture Decision Record"
+title: "ADR 0003: Host and compilation target model"
+---
+
 # ADR 0003: Host and compilation target model
 
 - Status: Accepted
