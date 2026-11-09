@@ -741,7 +741,7 @@ mod tests {
         let mut values = [0.0, 2.0, 1.0, 3.0];
         let matrix = MatrixMut::new(2, 2, &mut values).unwrap();
 
-        assert_eq!(matrix.determinant(), Ok(-6.0));
+        assert_eq!(matrix.determinant(), Ok(-2.0));
         assert_eq!(values, [0.0, 2.0, 1.0, 3.0]);
     }
 
