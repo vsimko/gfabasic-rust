@@ -1,0 +1,16 @@
+id = "amiga-3.5-mat-add"
+dialect = "GFA BASIC Amiga"
+version = "3.5"
+api_profiles = []
+kind = "semantic"
+status = "verified"
+source_key = "AM-INTERPRETER-35"
+source_pages = "printed pp. 13-16–13-17"
+evidence_status = "page-image-verified"
+expectation = "MAT ADD a()=b()+c() writes the element-wise sum of equal-order matrices b and c to a; MAT ADD a(),x adds x element-wise to a in place."
+notes = [
+  "Independently authored minimal fixture; not copied from the manual's example.",
+  "Covers the destination form and in-place scalar form documented for MAT ADD.",
+  "The 3.5 addendum documents equal-order requirements for matrix addition and scalar addition for matrices or vectors.",
+  "Verified against the supplied Amiga GFA BASIC 3.5 addendum page images; no original interpreter execution has been performed.",
+]
