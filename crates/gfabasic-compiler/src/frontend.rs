@@ -2112,4 +2112,33 @@ mod tests {
             assert_eq!(errors[0].primary_span.unwrap().start, 0);
         }
     }
+    // These delimiters are already part of the implemented token subset.
+    // This checks only that exact 3.5 special-name spellings are not split
+    // differently at those existing boundaries; it adds no lexical forms.
+    #[test]
+    fn special_names_are_separated_at_every_existing_lexer_boundary() {
+        use super::{TokenKind, lex_lossless};
+
+        let boundaries = [" ", "\\t", "\\r", "\\n", "+", "-", "#", "*", "=", "(", ")", ","];
+        for boundary in boundaries {
+            for spelling in ["_DATA", "_0", "_9"] {
+                let source_text = format!("{spelling}{boundary}");
+                let mut sources = SourceMap::new();
+                let source_id = sources.add_source("special-name-boundaries.lst", &source_text);
+                let lexed = lex_lossless(source_id, &source_text)
+                    .unwrap_or_else(|errors| panic!("{spelling:?} before {boundary:?}: {errors:?}"));
+
+                assert!(matches!(
+                    &lexed.tokens[0].kind,
+                    TokenKind::Identifier(name) if name == spelling
+                ));
+                assert_eq!(lexed.tokens[0].span, SourceSpan::new(source_id, 0, spelling.len()));
+                assert_eq!(
+                    &source_text[lexed.tokens[0].span.start..lexed.tokens[0].span.end],
+                    spelling
+                );
+            }
+        }
+    }
+
 }
