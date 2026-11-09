@@ -16,3 +16,4 @@
 - [0014 Implementation Dashboard](0014-implementation-dashboard.md) - Documentation concepts in architecture / adr.
 - [0015 Listing First Compiler Input](0015-listing-first-compiler-input.md) - Documentation concepts in architecture / adr.
 - [ADR template](TEMPLATE.md) - Documentation concepts in architecture / adr.
+- [OKF v0.2 Documentation Bundle](0016-okf-v02-documentation-bundle.md) - Adopt the canonical documentation format, validation, website generation, and deployment rules.
