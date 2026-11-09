@@ -26,7 +26,7 @@ jobs:
           set -euo pipefail
           mkdir -p analysis-input analysis-output
           test -f private-assets/GFABasic
-          printf '%s  %s\\n' 'fd80f6093e8d0163856af5849121e945e37051a2ad2a9053aa1930021783d962' private-assets/GFABasic | sha256sum --check -
+          printf '%s  %s\n' 'fd80f6093e8d0163856af5849121e945e37051a2ad2a9053aa1930021783d962' private-assets/GFABasic | sha256sum --check -
           cp private-assets/GFABasic analysis-input/gfa-basic-3.52
       - name: Install Java and analysis utilities
         run: |
@@ -73,12 +73,12 @@ jobs:
               "| File offset | Text |", "|---:|---|"
           ]
           for item in strings:
-              text = item["text"].replace("|", "\\|").replace("\\n", " ")
+              text = item["text"].replace("|", "\\|").replace("\n", " ")
               report.append(f'| 0x{item["offset"]:X} | {text} |')
           report += ["", "## Function inventory", "", "| Entry | Name | Size | Decompilation |", "|---:|---|---:|---|"]
           for item in functions:
               report.append(f'| 0x{item["entry"]:X} | `{item["name"]}` | {item["size"]} | `{item["file"]}` |')
-          (out / "REPORT.md").write_text("\\n".join(report) + "\\n")
+          (out / "REPORT.md").write_text("\n".join(report) + "\n")
           PY
       - name: Upload analysis results
         uses: actions/upload-artifact@v4
