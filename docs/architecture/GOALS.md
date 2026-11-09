@@ -1,14 +1,21 @@
 # Project goals and compatibility objectives
 
-- Status: **Accepted product scope**; see [ADR 0011](adr/0011-amiga-35-linux-sdl3-product-scope.md).
+- Status: **Accepted product direction; current behavioral baseline defined in [COMPATIBILITY-EVIDENCE.md](COMPATIBILITY-EVIDENCE.md).**
 
 ## Purpose
 
-Build a deterministic compiler and runtime in Rust for **Commodore Amiga GFA BASIC interpreter 3.5**, producing native **Linux x86-64** executables. The project is not a universal BASIC compiler and does not target multiple GFA BASIC dialects.
+Build a deterministic compiler and runtime in Rust for GFA BASIC programs accepted by the available Commodore Amiga GFA BASIC 3.52 interpreter, producing native Linux x86-64 executables.
 
-## Sole supported product target
+The immediate goal is broad practical compatibility: compile as many programs and language features as possible that the reference interpreter can interpret. This is not a claim that the current prototype implements the language or conforms to the interpreter.
 
-- Source language: Amiga GFA BASIC interpreter 3.5 only.
+## Current reference baseline and later validation
+
+Use the Amiga GFA BASIC 3.52 interpreter as the current behavioral reference. The existing Amiberry workflow provides repeatable experiments. Manuals and books are supporting sources for feature discovery and debugging; observed interpreter behavior takes priority when they disagree.
+
+An independently identified interpreter 3.5 release may be compared later by running the same regression suite against both versions. This comparison must not block current compiler development. A 3.52 observation is not proof of 3.5 behavior.
+
+## Sole planned output target
+
 - Output: Linux x86-64, GNU ABI, ELF 64-bit.
 - Native code generation: LLVM.
 - Linux graphics, windowing, and input: SDL3 behind project-owned runtime interfaces.
@@ -18,14 +25,11 @@ SDL3 is a platform adapter, not part of language semantics, the lexer, parser, o
 
 ## Compatibility dimensions
 
-Do not use an unqualified “GFA BASIC compatible” claim. Report syntax, static semantics, language runtime, Amiga API behavior, observable program behavior, and Linux binary/toolchain behavior separately. Every claim must identify Amiga GFA BASIC 3.5, evidence status, implementation status, and known deviations.
-
-The Amiga 3.5 interpreter manual is the primary normative source. Rules found only in Amiga 3.0/3.03 material are inherited candidates and must be confirmed for 3.5 before implementation or conformance claims.
+Do not use an unqualified “GFA BASIC compatible” claim. Report syntax, static semantics, language runtime, Amiga API behavior, observable program behavior, and Linux binary/toolchain behavior separately. Every claim must identify the exact reference version, evidence status, implementation status, and known deviations.
 
 ## Explicit non-goals
 
 - Atari ST GFA BASIC, including Atari ST 3.0 and 3.5.
-- Amiga GFA BASIC versions other than interpreter 3.5 as supported source dialects.
 - Other BASIC dialects.
 - Windows, macOS, BSD, other Linux architectures, non-Linux output, and cross-compilation.
 - Additional graphics or platform frameworks in place of SDL3.
@@ -34,15 +38,15 @@ The Amiga 3.5 interpreter manual is the primary normative source. Rules found on
 - Requiring an LLM or network service in the compilation path.
 - Generated Rust as the primary output.
 
-Historical manuals and Atari research may remain in the repository as archival context. They do not create support commitments or authorize implementation of another dialect/profile. Unsupported, ambiguous, or unavailable constructs must produce explicit diagnostics; they must never be silently ignored or assigned semantics from another BASIC dialect.
+Historical manuals and Atari research may remain as archival context. They do not create support commitments or authorize implementation of another dialect/profile. Unsupported, ambiguous, or unavailable constructs must produce explicit diagnostics; they must never be silently ignored or assigned semantics from another BASIC dialect.
 
 ## Architecture constraints
 
-- Keep Amiga GFA BASIC 3.5 language semantics independent of Linux and SDL3.
+- Keep language semantics independent of Linux and SDL3.
 - Keep target-independent IR free of OS, ABI, and SDL3 details.
 - Put Amiga API compatibility behavior behind project-owned runtime interfaces.
 - Put SDL3 calls only in the Linux platform adapter.
 - Select and link only runtime components required by a generated program.
 - Keep LLVM behind the backend boundary.
 
-Tracking: [issue #2](https://github.com/vsimko/gfabasic-rust/issues/2), [issue #3](https://github.com/vsimko/gfabasic-rust/issues/3), and [ADR 0011](adr/0011-amiga-35-linux-sdl3-product-scope.md).
+Tracking: [issue #2](https://github.com/vsimko/gfabasic-rust/issues/2), [issue #46](https://github.com/vsimko/gfabasic-rust/issues/46), and [COMPATIBILITY-EVIDENCE.md](COMPATIBILITY-EVIDENCE.md).
