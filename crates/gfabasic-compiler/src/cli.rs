@@ -170,6 +170,15 @@ fn run_fmt<W: Write, E: Write>(args: &[String], out: &mut W, err: &mut E) -> u8 
         return 2;
     }
 
+    if !crate::source::is_text_listing_path(&source_path) {
+        let _ = writeln!(
+            err,
+            "error: formatter accepts textual .LST source only: {}",
+            source_path.display()
+        );
+        return 2;
+    }
+
     let source = match fs::read_to_string(&source_path) {
         Ok(source) => source,
         Err(error) => {
@@ -346,6 +355,14 @@ mod tests {
         assert!(out.contains(&format!("gfabasic {}\n", env!("CARGO_PKG_VERSION"))));
         assert!(out.contains("build-id: "));
         assert!(err.is_empty());
+    }
+
+    #[test]
+    fn fmt_rejects_non_listing_extensions_before_reading() {
+        let (code, out, err) = invoke(&["fmt", "missing.GFA"]);
+        assert_eq!(code, 2);
+        assert!(out.is_empty());
+        assert!(err.contains("formatter accepts textual .LST source only"));
     }
 
     #[test]
