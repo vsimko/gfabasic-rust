@@ -244,6 +244,17 @@ fn is_identifier_continuation(byte: u8) -> bool {
     byte.is_ascii_alphanumeric() || byte == b'_'
 }
 
+/// A boundary accepted by the currently implemented, evidence-gated token
+/// subset. Requiring a known boundary prevents a documented special name from
+/// being accepted as a prefix of otherwise unsupported adjacent source text.
+fn is_supported_token_boundary(byte: u8) -> bool {
+    matches!(
+        byte,
+        b' ' | b'\\t' | b'\\r' | b'\\n' | b'+' | b'-' | b'#' | b'*' | b'='
+            | b'(' | b')' | b','
+    )
+}
+
 /// Recognizes only the underscore-prefixed names explicitly listed by the
 /// Amiga GFA BASIC 3.5 addendum: _DATA and _0 through _9. This deliberately
 /// does not define a general underscore-identifier grammar.
@@ -258,7 +269,7 @@ fn amiga_35_special_identifier_end(bytes: &[u8], start: usize) -> Option<usize> 
 
     match bytes.get(end) {
         None => Some(end),
-        Some(next) if !is_identifier_continuation(*next) => Some(end),
+        Some(next) if is_supported_token_boundary(*next) => Some(end),
         Some(_) => None,
     }
 }
@@ -1916,6 +1927,34 @@ mod tests {
             .map(|span| &source_text[span.start..span.end])
             .collect::<String>();
         assert_eq!(reconstructed, source_text);
+    }
+
+    // A documented special name must not be accepted as a prefix when
+    // followed by source text that is not a known token boundary. This is a
+    // conservative rejection, not an extension of the 3.5 identifier grammar.
+    #[test]
+    fn special_names_require_a_boundary_from_the_supported_token_subset() {
+        use super::{TokenKind, lex_lossless};
+
+        for source_text in ["_DATA.", "_DATA\\"quoted\\"", "_0:", "_9?"] {
+            let mut sources = SourceMap::new();
+            let source_id = sources.add_source("special-name-adjacency.lst", source_text);
+            let errors = lex_lossless(source_id, source_text)
+                .expect_err("unsupported adjacent text must not follow a valid special-name prefix");
+            assert_eq!(errors[0].code, "GFA-LEX-0001");
+            assert_eq!(errors[0].primary_span.unwrap().start, 0);
+        }
+
+        for source_text in ["_DATA=", "(_0)", "_9,"] {
+            let mut sources = SourceMap::new();
+            let source_id = sources.add_source("special-name-boundary.lst", source_text);
+            let lexed = lex_lossless(source_id, source_text)
+                .expect("documented names followed by supported boundaries should lex");
+            assert!(lexed.tokens.iter().any(|token| matches!(
+                &token.kind,
+                TokenKind::Identifier(name) if name == "_DATA" || name == "_0" || name == "_9"
+            )));
+        }
     }
 
     // Token-boundary coverage only; this does not claim expression grammar support.
