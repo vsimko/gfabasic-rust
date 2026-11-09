@@ -1,0 +1,7 @@
+DIM a(2),b(2,3),c(3)
+DATA 2,1,1,2,3
+MAT READ a()
+MAT READ c()
+MAT SET b()=2
+MAT MUL x=a()*b()*c()
+PRINT x
