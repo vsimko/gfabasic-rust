@@ -178,9 +178,10 @@ impl fmt::Display for MatrixShapeError {
                 formatter,
                 "matrix rank requires a square matrix, got {rows}x{columns}"
             ),
-            Self::InvalidRankTolerance => {
-                write!(formatter, "matrix rank tolerance must be finite and non-negative")
-            }
+            Self::InvalidRankTolerance => write!(
+                formatter,
+                "matrix rank tolerance must be finite and non-negative"
+            ),
             Self::IdentityRequiresSquare { rows, columns } => write!(
                 formatter,
                 "identity matrix requires a square shape, got {rows}x{columns}"
@@ -429,10 +430,7 @@ impl<'a> MatrixMut<'a> {
     ///
     /// This makes the floating-point threshold a caller-controlled Rust API
     /// choice rather than attributing one to the original interpreter.
-    pub fn rank_with_tolerance(
-        &self,
-        tolerance: f64,
-    ) -> Result<usize, MatrixShapeError> {
+    pub fn rank_with_tolerance(&self, tolerance: f64) -> Result<usize, MatrixShapeError> {
         if self.rows != self.columns {
             return Err(MatrixShapeError::RankRequiresSquare {
                 rows: self.rows,
@@ -1125,12 +1123,13 @@ mod tests {
     #[test]
     fn rank_matches_amiga_35_addendum_example() {
         let mut values = [
-            1.0, 2.0, 3.0, 4.0, 5.0,
-            3.2, 4.0, -5.0, 2.4, 5.1,
-            -2.0, 4.0, -5.0, 2.4, 5.1,
-            5.0, -2.3, 4.0, 5.6, 12.2,
-            4.1, 5.2, 16.7, 18.4, 19.1,
-        ];
+            [1.0, 2.0, 3.0, 4.0, 5.0],
+            [3.2, 4.0, -5.0, 2.4, 5.1],
+            [-2.0, 4.0, -5.0, 2.4, 5.1],
+            [5.0, -2.3, 4.0, 5.6, 12.2],
+            [4.1, 5.2, 16.7, 18.4, 19.1],
+        ]
+        .concat();
         let matrix = MatrixMut::new(5, 5, &mut values).unwrap();
 
         assert_eq!(matrix.rank(), Ok(5));
