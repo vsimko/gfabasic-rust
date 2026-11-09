@@ -12,7 +12,7 @@ The repository contains an experimental, evidence-gated frontend prototype for a
 
 The Rust workspace contains compiler, runtime, and Linux platform crates. The compiler has a narrow experimental frontend and temporary native bootstrap; the general language grammar, complete semantic model, LLVM backend, runtime, and platform adapter remain incomplete. The current prototype does not establish general GFA BASIC support or original-interpreter conformance.
 
-## Build the current prototype
+## Experimental prototype
 
 ```sh
 cargo run -p gfabasic-compiler -- build tests/corpus/amiga/3.5/combinatorics/fact-zero.lst -o ./fact
