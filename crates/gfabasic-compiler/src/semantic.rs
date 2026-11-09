@@ -283,6 +283,25 @@ mod tests {
     }
 
     #[test]
+    fn diagnoses_each_unresolved_print_reference_with_its_own_span() {
+        let source_text = "PRINT x,x\n";
+        let mut sources = SourceMap::new();
+        let source_id = sources.add_source("multiple-unresolved.bas", source_text);
+        let document = parse_document(source_id, source_text).expect("syntax is valid");
+
+        let errors =
+            resolve_prototype_symbols(&document).expect_err("both PRINT references are unresolved");
+
+        assert_eq!(errors.len(), 2);
+        let expected_starts = [6, 8];
+        for (error, expected_start) in errors.iter().zip(expected_starts) {
+            assert_eq!(error.code, "GFA-SEM-0002");
+            assert_eq!(error.span.start, expected_start);
+            assert_eq!(sources.slice(error.span), Some("x"));
+        }
+    }
+
+    #[test]
     fn diagnoses_reassignment_without_creating_a_second_symbol() {
         let source_text = "x=FACT(1)\nx=FACT(2)\nPRINT x\n";
         let mut sources = SourceMap::new();
