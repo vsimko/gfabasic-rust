@@ -1,3 +1,8 @@
+---
+type: "Architecture"
+title: "README"
+---
+
 ## Architecture documents
 
 | Topic | Scope | Document | Tracking |
