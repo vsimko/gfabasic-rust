@@ -161,6 +161,10 @@ def page_nav(source: Path, docs: list[tuple[Path, dict, str]], output_file: Path
             label, target = match.group(1), match.group(2).strip("<>")
             if is_draft_target(target, parent_index):
                 continue
+            target_path = source_path_for_target(target, parent_index)
+            target_doc = next((item for item in docs if item[0] == target_path), None)
+            if target_doc:
+                label = title_for(target_doc[0], target_doc[1], target_doc[2])
             href = rewrite_target(target, parent_index, output_file)
             links.append(
                 f'<li><a href="{html.escape(href, quote=True)}">{html.escape(label)}</a></li>'
