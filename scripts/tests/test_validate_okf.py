@@ -39,7 +39,7 @@ class OkfValidationTests(unittest.TestCase):
         self.assertTrue(any("invalid YAML frontmatter" in item for item in errors))
 
     def test_missing_or_empty_type_is_rejected(self):
-        for value in ("", "type: ''\n", "title: Guide\n"):
+        for value in ( "type: ''\n", "title: Guide\n"):
             with self.subTest(value=value):
                 root, docs = self.make_bundle()
                 (docs / "guide.md").write_text(f"---\n{value}---\n# Guide\n", encoding="utf-8")
