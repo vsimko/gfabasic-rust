@@ -8,6 +8,10 @@ A GFA BASIC compiler and runtime in Rust. The initial source dialect is Commodor
 
 The repository contains an experimental, evidence-gated frontend prototype for a narrow `FACT`, `VARIAT`, `COMBIN`, and `PRINT` subset. It is not a general GFA BASIC compiler and does not claim compatibility with the original interpreter. See the [documentation index](docs/index.md) for architecture, implementation status, language research, testing, and contributor guidance.
 
+## Current scope and limitations
+
+The Rust workspace contains compiler, runtime, and Linux platform crates. The compiler has a narrow experimental frontend and temporary native bootstrap; the general language grammar, complete semantic model, LLVM backend, runtime, and platform adapter remain incomplete. The current prototype does not establish general GFA BASIC support or original-interpreter conformance.
+
 ## Build the current prototype
 
 ```sh

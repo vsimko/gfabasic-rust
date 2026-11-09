@@ -20,7 +20,7 @@ LINK_RE = re.compile(r"!?(?:\[[^\]]*\])\(\s*(<[^>]+>|[^)\s]+)(?:\s+[^)]*)?\)")
 REFERENCE_RE = re.compile(r"^\s*\[[^\]]+\]:\s*(\S+)", re.MULTILINE)
 HEADING_RE = re.compile(r"^(#{1,6})\s+(.+?)\s*#*\s*$", re.MULTILINE)
 HTML_ID_RE = re.compile(r"""\b(?:id|name)\s*=\s*["']([^"']+)["']""", re.IGNORECASE)
-DATE_HEADING_RE = re.compile(r"^## (\d{4}-\d{2}-\d{2})\s*$")
+DATE_HEADING_RE = re.compile(r"^## (\d{4}-\d{2}-\d{2})\s*$", re.MULTILINE)
 
 
 def _error(errors: list[str], path: Path, message: str) -> None:
@@ -173,7 +173,7 @@ def _heading_ids(text: str) -> set[str]:
         if explicit:
             slug = explicit.group(1)
         else:
-            slug = re.sub(r"[^\\w -]", "", heading.lower(), flags=re.UNICODE)
+            slug = re.sub(r"[^\w -]", "", heading.lower(), flags=re.UNICODE)
             slug = re.sub(r"\s+", "-", slug.strip())
         count = used.get(slug, 0)
         used[slug] = count + 1
