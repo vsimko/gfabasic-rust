@@ -18,9 +18,10 @@ pub enum StringError {
 impl fmt::Display for StringError {
     fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            Self::RepeatCountOutOfRange { count } => {
-                write!(formatter, "STRING$ repeat count {count} is outside 0..=32767")
-            }
+            Self::RepeatCountOutOfRange { count } => write!(
+                formatter,
+                "STRING$ repeat count {count} is outside 0..=32767"
+            ),
             Self::LengthOverflow => write!(formatter, "requested string length overflows usize"),
             Self::AllocationFailed => write!(formatter, "could not allocate requested string"),
         }
@@ -167,8 +168,8 @@ pub fn upper(input: &[u8]) -> Vec<u8> {
 #[cfg(test)]
 mod tests {
     use super::{
-        asc, chr, instr, left, len, mid, pred, right, rinstr, spaces, string_repeat,
-        string_repeat_code, succ, trim, upper, StringError,
+        StringError, asc, chr, instr, left, len, mid, pred, right, rinstr, spaces, string_repeat,
+        string_repeat_code, succ, trim, upper,
     };
 
     #[test]
