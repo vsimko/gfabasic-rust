@@ -1,3 +1,8 @@
+---
+type: "Architecture"
+title: "Website previews for pull requests"
+---
+
 # Website previews for pull requests
 
 The Pages site uses the `gh-pages` branch as its publishing source. The production workflow updates the site at the branch root while preserving `pr-preview/`. The PR preview workflow publishes each same-repository pull request below:
