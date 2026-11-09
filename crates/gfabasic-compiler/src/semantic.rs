@@ -227,7 +227,7 @@ mod tests {
 
     #[test]
     fn resolves_let_assignment_declaration_and_print_reference() {
-        let source_text = "LET x=FACT(1)\\nPRINT x\\n";
+        let source_text = "LET x=FACT(1)\nPRINT x\n";
         let mut sources = SourceMap::new();
         let source_id = sources.add_source("let-symbols.bas", source_text);
         let document = parse_document(source_id, source_text).expect("LET syntax is valid");
