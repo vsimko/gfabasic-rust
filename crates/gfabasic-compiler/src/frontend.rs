@@ -208,6 +208,8 @@ pub struct Token {
 pub enum TriviaKind {
     /// Horizontal ASCII spaces and tabs. Their spelling remains in the source span.
     HorizontalWhitespace,
+    /// A GFA BASIC inline comment beginning with ! and ending before the line break.
+    Comment,
 }
 
 /// A lossless span of source trivia.
@@ -247,8 +249,7 @@ fn is_identifier_continuation(byte: u8) -> bool {
 /// A boundary accepted by the currently implemented, evidence-gated token
 /// subset. Requiring a known boundary prevents a documented special name from
 /// being accepted as a prefix of otherwise unsupported adjacent source text.
-fn is_supported_token_boundary(byte: u8) -> bool {
-    matches!(
+fn is_supported_token_boundary(byte: u8) -> bool {    matches!(
         byte,
         b' ' | b'\t' | b'\r' | b'\n' | b'+' | b'-' | b'#' | b'*' | b'=' | b'(' | b')' | b','
     )
@@ -289,6 +290,19 @@ pub fn lex_lossless(source_id: SourceId, source: &str) -> Result<LexedSource, Ve
 
     while offset < bytes.len() {
         match bytes[offset] {
+            b'!' => {
+                let start = offset;
+                while bytes
+                    .get(offset)
+                    .is_some_and(|byte| !matches!(byte, b'\r' | b'\n'))
+                {
+                    offset += 1;
+                }
+                trivia.push(Trivia {
+                    kind: TriviaKind::Comment,
+                    span: SourceSpan::new(source_id, start, offset),
+                });
+            }
             b' ' | b'\t' => {
                 let start = offset;
                 while bytes
@@ -497,8 +511,7 @@ impl Parser {
     fn advance_required(&mut self, description: &str) -> Result<Token, Box<Diagnostic>> {
         let token = self.current().clone();
         if matches!(token.kind, TokenKind::Newline | TokenKind::End) {
-            Err(self.syntax_error(format!("expected {description}"), token.span))
-        } else {
+            Err(self.syntax_error(format!("expected {description}"), token.span))        } else {
             Ok(self.advance())
         }
     }
@@ -747,8 +760,7 @@ impl Parser {
                                 .get(self.cursor + 1)
                                 .is_some_and(|next| matches!(&next.kind, TokenKind::LeftParen)) =>
                     {
-                        let (matrix, _) = self.parse_matrix_reference()?;
-                        (None, MatArithmeticOperand::Matrix(matrix))
+                        let (matrix, _) = self.parse_matrix_reference()?;                        (None, MatArithmeticOperand::Matrix(matrix))
                     }
                     TokenKind::Identifier(name) => {
                         let scalar = name.clone();
@@ -997,8 +1009,7 @@ impl Parser {
             "INPUT" => self.parse_mat_input(start),
             "CPY" => self.parse_mat_copy(start, MatCopyOperation::Copy),
             "XCPY" => self.parse_mat_copy(start, MatCopyOperation::TransposedCopy),
-            "DET" => self.parse_mat_analysis(start, MatAnalysisOperation::Det),
-            "QDET" => self.parse_mat_analysis(start, MatAnalysisOperation::QDet),
+            "DET" => self.parse_mat_analysis(start, MatAnalysisOperation::Det),            "QDET" => self.parse_mat_analysis(start, MatAnalysisOperation::QDet),
             "RANG" => self.parse_mat_analysis(start, MatAnalysisOperation::Rang),
             "MUL" => self.parse_mat_mul(start),
             "ADD" => self.parse_mat_arithmetic(start, MatArithmeticOperation::Add),
@@ -1247,8 +1258,7 @@ mod tests {
         assert!(matches!(
             &program.statements[0],
             Statement::DimMatrix {
-                name,
-                rows: 5,
+                name,                rows: 5,
                 columns: None,
                 ..
             } if name == "a"
@@ -1497,8 +1507,7 @@ mod tests {
                 ..
             } if destination == "a" && source == "b"
         ));
-        assert!(matches!(
-            &program.statements[3],
+        assert!(matches!(            &program.statements[3],
             Statement::MatCopy {
                 operation: MatCopyOperation::TransposedCopy,
                 destination,
@@ -1747,8 +1756,7 @@ mod tests {
                 assert!(
                     parse(source_id, source_text).is_err(),
                     "accepted malformed matrix statement: {source_text:?}"
-                );
-            }
+                );            }
         }
     }
 
@@ -1997,8 +2005,7 @@ mod tests {
         assert_eq!(lexed.tokens[1].span.end, 6);
         assert!(matches!(lexed.tokens[2].kind, TokenKind::Integer(42)));
         assert_eq!(lexed.tokens[2].span.start, 6);
-        assert_eq!(lexed.tokens[2].span.end, 8);
-    }
+        assert_eq!(lexed.tokens[2].span.end, 8);    }
     #[test]
     fn special_names_are_recognized_at_eof_and_before_existing_delimiters() {
         use super::{TokenKind, lex_lossless};

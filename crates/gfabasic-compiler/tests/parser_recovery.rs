@@ -232,3 +232,44 @@ fn parser_recovery_handles_classic_cr_line_endings() {
         Some((2, 1))
     );
 }
+
+#[test]
+fn parser_ignores_and_preserves_inline_comments() {
+    use gfabasic_compiler::frontend::{TriviaKind, parse_document};
+
+    let source = "! leading comment\r\nx=FACT(0) ! inline comment\r\nPRINT x! adjacent comment";
+    let mut sources = SourceMap::new();
+    let source_id = sources.add_source("inline-comments.LST", source);
+
+    let document = parse_document(source_id, source)
+        .expect("verified inline comments must not affect supported statements");
+
+    assert_eq!(document.program.statements.len(), 2);
+    let comments: Vec<_> = document
+        .syntax
+        .trivia
+        .iter()
+        .filter(|trivia| trivia.kind == TriviaKind::Comment)
+        .map(|trivia| &source[trivia.span.start..trivia.span.end])
+        .collect();
+    assert_eq!(
+        comments,
+        ["! leading comment", "! inline comment", "! adjacent comment"]
+    );
+
+    let mut spans: Vec<_> = document
+        .syntax
+        .tokens
+        .iter()
+        .filter(|token| !matches!(&token.kind, TokenKind::End))
+        .map(|token| token.span)
+        .chain(document.syntax.trivia.iter().map(|trivia| trivia.span))
+        .collect();
+    spans.sort_by_key(|span| span.start);
+
+    let reconstructed = spans
+        .into_iter()
+        .map(|span| &source[span.start..span.end])
+        .collect::<String>();
+    assert_eq!(reconstructed, source);
+}
