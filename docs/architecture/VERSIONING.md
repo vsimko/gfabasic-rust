@@ -1,3 +1,8 @@
+---
+type: "Architecture"
+title: "Versioning and compatibility lifecycle"
+---
+
 # Versioning and compatibility lifecycle
 
 - Status: **Policy accepted by [ADR 0010](adr/0010-versioning-and-compatibility-lifecycle.md). The CLI exposes minimal package-version/build-ID output; project/schema/runtime-ABI mechanisms remain unimplemented.**
