@@ -1,3 +1,8 @@
+---
+type: "Architecture Decision Record"
+title: "ADR 0001: Documentation and architecture decision records"
+---
+
 # ADR 0001: Documentation and architecture decision records
 
 - Status: Accepted
