@@ -31,6 +31,22 @@ pub enum MatrixShapeError {
         expected: usize,
         actual: usize,
     },
+    /// MAT INV is defined by the source for square matrices only.
+    InverseRequiresSquare {
+        rows: usize,
+        columns: usize,
+    },
+    /// MAT INV destination must have the same shape as its source.
+    InverseDestinationShapeMismatch {
+        destination_rows: usize,
+        destination_columns: usize,
+        source_rows: usize,
+        source_columns: usize,
+    },
+    /// The source matrix is singular at the reported pivot.
+    SingularMatrix {
+        pivot: usize,
+    },
     /// MAT DET is defined by the source for square matrices only.
     DeterminantRequiresSquare {
         rows: usize,
@@ -121,6 +137,22 @@ impl fmt::Display for MatrixShapeError {
                 formatter,
                 "matrix requires {expected} elements, but storage has {actual}"
             ),
+            Self::InverseRequiresSquare { rows, columns } => write!(
+                formatter,
+                "matrix inverse requires a square source, got {rows}x{columns}"
+            ),
+            Self::InverseDestinationShapeMismatch {
+                destination_rows,
+                destination_columns,
+                source_rows,
+                source_columns,
+            } => write!(
+                formatter,
+                "matrix inverse destination must be {source_rows}x{source_columns}, got {destination_rows}x{destination_columns}"
+            ),
+            Self::SingularMatrix { pivot } => {
+                write!(formatter, "matrix is singular at pivot {pivot}")
+            }
             Self::DeterminantRequiresSquare { rows, columns } => write!(
                 formatter,
                 "determinant requires a square matrix, got {rows}x{columns}"
@@ -273,6 +305,93 @@ impl<'a> MatrixMut<'a> {
         for diagonal in 0..self.rows {
             self.elements[diagonal * self.columns + diagonal] = 1.0;
         }
+        Ok(())
+    }
+
+    /// Write the inverse of a square source matrix (Amiga 3.5 `MAT INV destination()=source()`).
+    ///
+    /// The destination must have the same shape as the source. Gauss–Jordan
+    /// elimination with partial pivoting is performed on private copies, and
+    /// the destination is updated only after a complete inverse is available.
+    /// An exactly zero pivot reports a singular matrix. Numerical algorithm
+    /// and singularity handling are Rust implementation choices.
+    pub fn inverse_from(
+        &mut self,
+        source: &[f64],
+        source_rows: usize,
+        source_columns: usize,
+    ) -> Result<(), MatrixShapeError> {
+        let expected_source_len = source_rows
+            .checked_mul(source_columns)
+            .ok_or(MatrixShapeError::DimensionOverflow)?;
+        if source.len() != expected_source_len {
+            return Err(MatrixShapeError::SourceElementCountMismatch {
+                expected: expected_source_len,
+                actual: source.len(),
+            });
+        }
+        if source_rows != source_columns {
+            return Err(MatrixShapeError::InverseRequiresSquare {
+                rows: source_rows,
+                columns: source_columns,
+            });
+        }
+        if self.rows != source_rows || self.columns != source_columns {
+            return Err(MatrixShapeError::InverseDestinationShapeMismatch {
+                destination_rows: self.rows,
+                destination_columns: self.columns,
+                source_rows,
+                source_columns,
+            });
+        }
+
+        let size = source_rows;
+        let mut work = source.to_vec();
+        let mut inverse = vec![0.0; expected_source_len];
+        for diagonal in 0..size {
+            inverse[diagonal * size + diagonal] = 1.0;
+        }
+
+        for pivot_column in 0..size {
+            let pivot_row = (pivot_column..size)
+                .max_by(|left, right| {
+                    work[*left * size + pivot_column]
+                        .abs()
+                        .total_cmp(&work[*right * size + pivot_column].abs())
+                })
+                .expect("a pivot row exists for each non-empty square matrix");
+            let pivot = work[pivot_row * size + pivot_column];
+            if pivot == 0.0 {
+                return Err(MatrixShapeError::SingularMatrix {
+                    pivot: pivot_column,
+                });
+            }
+            if pivot_row != pivot_column {
+                for column in 0..size {
+                    work.swap(pivot_column * size + column, pivot_row * size + column);
+                    inverse.swap(pivot_column * size + column, pivot_row * size + column);
+                }
+            }
+
+            let pivot_value = work[pivot_column * size + pivot_column];
+            for column in 0..size {
+                work[pivot_column * size + column] /= pivot_value;
+                inverse[pivot_column * size + column] /= pivot_value;
+            }
+
+            for row in 0..size {
+                if row == pivot_column {
+                    continue;
+                }
+                let factor = work[row * size + pivot_column];
+                for column in 0..size {
+                    work[row * size + column] -= factor * work[pivot_column * size + column];
+                    inverse[row * size + column] -= factor * inverse[pivot_column * size + column];
+                }
+            }
+        }
+
+        self.elements.copy_from_slice(&inverse);
         Ok(())
     }
 
@@ -788,6 +907,50 @@ mod tests {
             MatrixMut::new(usize::MAX, 2, &mut values).err(),
             Some(MatrixShapeError::DimensionOverflow)
         );
+    }
+
+    #[test]
+    fn inverse_from_calculates_inverse_with_pivoting() {
+        let source = [0.0, 2.0, 1.0, 3.0];
+        let mut destination = [0.0; 4];
+        let mut matrix = MatrixMut::new(2, 2, &mut destination).unwrap();
+
+        matrix.inverse_from(&source, 2, 2).unwrap();
+
+        let expected = [-1.5, 1.0, 0.5, 0.0];
+        for (actual, expected) in destination.iter().zip(expected) {
+            assert!((actual - expected).abs() < 1e-12);
+        }
+        assert_eq!(source, [0.0, 2.0, 1.0, 3.0]);
+    }
+
+    #[test]
+    fn inverse_from_rejects_singular_matrix_without_mutation() {
+        let source = [1.0, 2.0, 2.0, 4.0];
+        let mut destination = [9.0; 4];
+        let mut matrix = MatrixMut::new(2, 2, &mut destination).unwrap();
+
+        assert_eq!(
+            matrix.inverse_from(&source, 2, 2),
+            Err(MatrixShapeError::SingularMatrix { pivot: 1 })
+        );
+        assert_eq!(destination, [9.0; 4]);
+    }
+
+    #[test]
+    fn inverse_from_rejects_non_square_source() {
+        let source = [1.0, 2.0, 3.0, 4.0, 5.0, 6.0];
+        let mut destination = [9.0; 6];
+        let mut matrix = MatrixMut::new(2, 3, &mut destination).unwrap();
+
+        assert_eq!(
+            matrix.inverse_from(&source, 2, 3),
+            Err(MatrixShapeError::InverseRequiresSquare {
+                rows: 2,
+                columns: 3,
+            })
+        );
+        assert_eq!(destination, [9.0; 6]);
     }
 
     #[test]
