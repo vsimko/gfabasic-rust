@@ -191,7 +191,7 @@ The German 1990 book says Amiga GFA-BASIC permits command names as variable name
 ## 7. Next extraction and verification steps
 
 - [x] Inspect page images for primary 3.5 addendum pp. 13-33–13-36; base manual pp. 2-2–2-3, 2-16, 3-2, 3-13–3-16, 5-15–5-16, 7-35–7-36; and German 1990 pp. 35, 56–58, 57, 167–170. Keep all 3.0/V3.03 observations provisional.
-- [ ] Inspect remaining page images for base manual operator details not covered by the selected hierarchy/comparison pages and German 1990 pp. 166; resolve remaining OCR glyphs.
+- [x] Inspect the remaining base-manual operator page images pp. 3-1–3-12 and German 1990 p. 166; resolve the operator/comment OCR glyphs. All base operator pages pp. 3-1–3-16 are now image-checked, but remain 3.0-only candidates.
 - [ ] Search the 3.5 addendum and all supplied 3.5-specific pages for any explicit confirmation or change to base lexical rules.
 - [ ] Obtain a lawful, reproducible Amiga GFA BASIC 3.5 interpreter probe environment or recorded observations for unresolved cases.
 - [ ] Determine source encoding and line-ending behavior independently of the Rust transport loader.
@@ -322,3 +322,20 @@ The supplied German 1990 book's printed p. 166 was inspected against its page im
 This confirms the OCR reading and page reference for the book's V3.03 comment description. It is supplementary evidence only; it does not promote `!` to a normative Amiga GFA BASIC 3.5 comment delimiter. The 3.5 lexer must continue to treat inline-comment recognition and DATA context as unresolved until the 3.5 interpreter manual or a reproducible 3.5 observation confirms them.
 
 The page also contains SELECT/CASE range examples, but these are control-flow syntax rather than new lexical-contract evidence and are not used to change lexer acceptance.
+
+
+## 15. Page-image audit of the base-manual operator chapter (2026-11-09)
+
+The page images for the previously uncovered operator pages, printed pp. 3-1–3-12 (PDF pp. 79–90), were checked. The chapter title page (p. 3-1) contains no operator syntax. The content pages visibly identify themselves as **GFA-BASIC 3.0 Amiga**, so all observations below remain inherited candidates and are not promoted to Amiga 3.5 behavior.
+
+The page-image pass confirms the following source descriptions:
+
+- **p. 3-3:** the logical-operator overview names `AND`, `OR`, `XOR`, `NOT`, `IMP`, and `EQV`.
+- **pp. 3-4–3-9:** the individual headings and forms are `NOT x`, `x AND y`, `x OR y`, `x XOR y`, `x IMP y`, and `x EQV y`.
+- **p. 3-10:** `+` and `-` are described for arithmetic addition/subtraction; both can also be prefixes. The same page explicitly permits `+` for string concatenation and says string subtraction is not possible.
+- **p. 3-11:** `=` is described as equality comparison for numeric or string expressions.
+- **p. 3-12:** the same `=` glyph is described as assignment when a variable is on the left and an expression on the right. This is a context distinction in the base manual, not a separate token spelling.
+
+The p. 3-10–3-12 page images were inspected at 180 dpi to resolve the OCR-sensitive `+`, `-`, and `=` forms; pp. 3-3–3-9 were reviewed together at 120 dpi. Combined with the previously recorded image checks of p. 3-2 and pp. 3-13–3-16, the full printed operator chapter pp. 3-1–3-16 has now been image-reviewed. The comparison glyphs and alternate forms remain as recorded in the earlier inventory; this pass adds no 3.5-specific rule.
+
+**Implementation gate:** do not enable these operators in the Amiga 3.5 production lexer solely on this evidence. The manual labels the chapter GFA-BASIC 3.0. The operator inventory, precedence, contextual use of `=`, and string concatenation must remain inherited candidates until confirmed by an explicit 3.5 passage or reproducible 3.5 interpreter observation.
