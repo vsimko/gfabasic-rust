@@ -1,10 +1,9 @@
 DIM a(3, 3)
 DIM b(3, 3)
-DIM c(3, 3)
-MAT SET b() = 5
-MAT SET c() = 3
-MAT SUB a() = b() - c()
+x = 1
+MAT SET a() = 5
+MAT SET b() = 3
+MAT SUB a() = a() - b()
 MAT PRINT a()
-MAT SET a() = 6
-MAT SUB a(), 5
-MAT PRINT a()
+MAT SUB b(), x
+MAT PRINT b()
