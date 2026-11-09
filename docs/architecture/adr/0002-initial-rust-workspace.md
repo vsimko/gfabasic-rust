@@ -1,3 +1,8 @@
+---
+type: "Architecture Decision Record"
+title: "ADR 0002: Initial Rust workspace crate boundaries"
+---
+
 # ADR 0002: Initial Rust workspace crate boundaries
 
 - Status: Accepted
