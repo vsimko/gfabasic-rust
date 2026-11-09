@@ -2127,7 +2127,8 @@ mod tests {
             for spelling in ["_DATA", "_0", "_9"] {
                 let source_text = format!("{spelling}{boundary}");
                 let mut sources = SourceMap::new();
-                let source_id = sources.add_source("special-name-boundaries.lst", source_text.as_str());
+                let source_id =
+                    sources.add_source("special-name-boundaries.lst", source_text.as_str());
                 let lexed = lex_lossless(source_id, &source_text).unwrap_or_else(|errors| {
                     panic!("{spelling:?} before {boundary:?}: {errors:?}")
                 });
