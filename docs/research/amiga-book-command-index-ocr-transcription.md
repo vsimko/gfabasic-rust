@@ -1,3 +1,8 @@
+---
+type: "Research Note"
+title: "Appendix D — OCR transcription of the command index"
+---
+
 # Appendix D — OCR transcription of the command index
 
 Source: `Das Grosse Buch zu GFA-BASIC 3.5 Amiga.pdf`, Appendix D, PDF pages 493–497 (printed pages 493–497).
