@@ -1,6 +1,6 @@
 # API registry
 
-Canonical declarations use TOML. The planned registry namespaces are `language-core/`, `amiga/`, and `atari-st/`; this describes the intended layout, not the current set of populated directories.
+Canonical declarations use TOML in the `language-core/`, `amiga/`, and `atari-st/` namespaces.
 
 ## Current inventory
 
@@ -9,7 +9,6 @@ Canonical declarations use TOML. The planned registry namespaces are `language-c
 - `language-core/matrix-operations.toml`: matrix/vector DATA and file I/O, copy/transpose, arithmetic, determinant, rank, and inverse operations.
 - `language-core/special-variables-and-data-pointers.toml`: `_DATA`, `_DATA=`, and `_0`…`_9`.
 - `amiga/special-and-platform-commands.toml`: `PCOLOR`, the negative-screen-number `OPENW` variant, and the `GURU` command/function forms.
-- `language-core/`: no declarations yet.
 
 The language-core catalogue currently contains 24 declarations, and the Amiga platform profile contains four declarations. All are limited to features explicitly identified in the supplied 3.5 interpreter addendum. Neither catalogue claims completeness. The addendum's Chapter 13/14 page references and known source limitations are documented in [the extracted feature inventory](../../docs/research/amiga-gfa-basic-35-addendum-inventory.md).
 
@@ -17,8 +16,8 @@ The language-core catalogue currently contains 24 declarations, and the Amiga pl
 
 - The normative Amiga source is `AM-INTERPRETER-35`. Base-manual 3.0 features and the 1990 German book are not silently promoted to 3.5 declarations.
 - `book-documented` means the source documents the feature; per-declaration notes identify page-image checks and unresolved limits.
-- Evidence, implementation, target support, and conformance are independent. The Amiga declarations currently have unknown Linux support and untested conformance.
-- The experimental compiler prototype supports only a restricted literal subset of the three combinatorics intrinsics. That subset is recorded as an implementation note, not misrepresented as a complete runtime implementation or a registry-linked handler.
+- Evidence, implementation, target support, and conformance are independent. The three combinatorics declarations are marked partial and have stable runtime handler IDs; all other declarations remain not implemented. Every declaration still has unknown Linux support and untested conformance.
+- The runtime has partial typed handlers for FACT, VARIAT, and COMBIN, and the compiler's narrow literal IR lowering resolves them through the canonical registry. Their implementation status remains partial because the compiler subset and original-interpreter overflow/error behavior are not fully established.
 - Existing 3.5 matrix fixtures are research fixtures in a `research_only` corpus. They are not executable conformance tests and are therefore not linked as passing tests.
 - The `MAT INV` operand direction is represented as a disputed declaration with both source variants; it is not a settled syntax or implementation contract.
 
@@ -64,3 +63,14 @@ Run `python3 scripts/generate_api_catalogue.py` to regenerate the payloads and `
 The maintainer dashboard exposes an interim **Implemented 3.5 addendum API** metric. Its denominator is generated from declarations whose availability is the Amiga GFA BASIC interpreter 3.5 and whose evidence source-scope is exactly `amiga-3.5-addendum`. It currently covers 24 language-core declarations and four Amiga platform declarations (28 total). The numerator counts only declarations with implementation status exactly `implemented`; prototype, partial, planned, research, and blocked statuses do not count.
 
 This is deliberately not labelled as the total Amiga GFA BASIC 3.5 API. It excludes inherited 3.0 base-manual declarations that have not been individually reconciled for 3.5, editor-only changes, compiler-only features, and Atari ST declarations. The complete language-wide denominator remains blocked on declaration-level 3.5 reconciliation or controlled interpreter observations tracked by issue #307. Evidence, implementation, Linux target support, and conformance remain separate dimensions.
+
+
+## Runtime handler integration
+
+`scripts/generate_runtime_handler_requirements.py` generates the Rust declaration
+requirements from all TOML registry files. The runtime crate validates this
+generated table against its explicit typed handler registrations. CI checks
+that the generated file is current and Rust tests validate the complete
+registry, rejecting missing, duplicate, stale, profile-mismatched, and
+signature-mismatched registrations. The compiler's current combinatorics
+lowering resolves the same stable IDs through the runtime API resolver.
