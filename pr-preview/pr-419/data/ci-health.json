@@ -1,6 +1,6 @@
 {
   "repository": "vsimko/gfabasic-rust",
-  "generated_at": "2026-11-09T18:54:00.850584Z",
+  "generated_at": "2026-11-09T18:54:44.336914Z",
   "freshness_threshold_hours": 168,
   "workflows": [
     {
@@ -41,14 +41,14 @@
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/rust.yml",
       "state": "in_progress",
       "latest": {
-        "id": 42678148630,
+        "id": 42678258586,
         "name": "Rust checks",
         "status": "in_progress",
         "event": "pull_request",
         "branch": "parser/inline-comment-trivia",
-        "created_at": "2026-11-09T18:53:53Z",
-        "updated_at": "2026-11-09T18:53:57Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42678148630",
+        "created_at": "2026-11-09T18:54:35Z",
+        "updated_at": "2026-11-09T18:54:39Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42678258586",
         "age_hours": 0,
         "freshness": "fresh"
       },
@@ -165,26 +165,26 @@
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/release-sbom.yml",
       "state": "in_progress",
       "latest": {
-        "id": 42678148914,
+        "id": 42678259289,
         "name": "Release SBOM",
         "status": "in_progress",
         "event": "pull_request",
         "branch": "parser/inline-comment-trivia",
-        "created_at": "2026-11-09T18:53:53Z",
-        "updated_at": "2026-11-09T18:53:58Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42678148914",
+        "created_at": "2026-11-09T18:54:35Z",
+        "updated_at": "2026-11-09T18:54:40Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42678259289",
         "age_hours": 0,
         "freshness": "fresh"
       },
       "last_success": {
-        "id": 42678070818,
+        "id": 42678148914,
         "name": "Release SBOM",
         "status": "success",
         "event": "pull_request",
         "branch": "parser/inline-comment-trivia",
-        "created_at": "2026-11-09T18:53:23Z",
-        "updated_at": "2026-11-09T18:53:36Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42678070818",
+        "created_at": "2026-11-09T18:53:53Z",
+        "updated_at": "2026-11-09T18:54:13Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42678148914",
         "age_hours": 0,
         "freshness": "fresh"
       }
@@ -227,26 +227,26 @@
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/pr-preview.yml",
       "state": "in_progress",
       "latest": {
-        "id": 42678148532,
+        "id": 42678258464,
         "name": "Pull request website preview",
         "status": "in_progress",
         "event": "pull_request",
         "branch": "parser/inline-comment-trivia",
-        "created_at": "2026-11-09T18:53:53Z",
-        "updated_at": "2026-11-09T18:53:56Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42678148532",
+        "created_at": "2026-11-09T18:54:35Z",
+        "updated_at": "2026-11-09T18:54:39Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42678258464",
         "age_hours": 0,
         "freshness": "fresh"
       },
       "last_success": {
-        "id": 42678071203,
+        "id": 42678148532,
         "name": "Pull request website preview",
         "status": "success",
         "event": "pull_request",
         "branch": "parser/inline-comment-trivia",
-        "created_at": "2026-11-09T18:53:23Z",
-        "updated_at": "2026-11-09T18:53:50Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42678071203",
+        "created_at": "2026-11-09T18:53:53Z",
+        "updated_at": "2026-11-09T18:54:13Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42678148532",
         "age_hours": 0,
         "freshness": "fresh"
       }
