@@ -838,7 +838,7 @@ mod tests {
     fn vector_matrix_vector_product_computes_documented_scalar_form() {
         let left = [1.0, 2.0];
         let matrix = [1.0; 6];
-        let right = [3.0, 4.0, 5.0];
+        let right = [-3.0, 4.0, 5.0];
 
         assert_eq!(
             vector_matrix_vector_product(&left, &matrix, 2, 3, &right),
