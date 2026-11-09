@@ -154,8 +154,8 @@ def collect(root, token, now=None):
             item.update({"state": "unknown", "error": api_failure, "latest": None, "last_success": None})
         elif not workflow:
             item.update({"state": "unknown", "error": "Workflow file exists but GitHub did not return it.", "latest": None, "last_success": None})
-        elif runs_failure:
-            item.update({"state": "unknown", "error": runs_failure, "latest": None, "last_success": None})
+        elif workflow["id"] in runs_errors:
+            item.update({"state": "unknown", "error": runs_errors[workflow["id"]], "latest": None, "last_success": None})
         else:
             runs = runs_by_workflow.get(workflow["id"], [])
             runs.sort(key=lambda run: run.get("created_at") or "", reverse=True)
