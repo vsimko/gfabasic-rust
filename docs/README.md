@@ -1,6 +1,12 @@
-# Documentation index
+---
+type: Documentation Overview
+title: Documentation map
+tags: [documentation, navigation]
+---
 
-This index is the entry point for project documentation. It separates user guidance, contributor guidance, architecture decisions, language/API references, and research material.
+# Documentation overview
+
+The canonical bundle entry point is [index.md](index.md). This page provides an expanded documentation map and contributor navigation. It separates user guidance, contributor guidance, architecture decisions, language/API references, and research material.
 
 > **Project status:** The repository has an accepted architecture and a three-crate Rust workspace. The compiler contains source-map/loading primitives, structured diagnostics, an experimental evidence-gated Amiga GFA BASIC 3.5 frontend, and a formatter library/CLI for the narrow verified FACT/VARIAT/COMBIN, PRINT, and selected DIM/MAT syntax subset. The `gfabasic` CLI supports help/version, `fmt`, and a restricted `build` command for the combinatorics/PRINT subset; build uses a temporary C/`cc` bridge to produce a native host executable. This is not general GFA BASIC support or original-interpreter conformance. General lexical/grammar coverage, semantic analysis, project-owned typed IR, the planned LLVM backend, project configuration, runtime behavior, and platform integration remain unimplemented. Documentation checks, fast Rust workspace checks, source-loader fuzzing, RustSec dependency auditing, source-loading benchmark validation/measurement, and SPDX 2.3 workspace SBOM generation/validation are available. Prototype tests cover only the narrow subset and do not establish full dialect conformance. The release-SBOM workflow is configured to attach an SBOM to a published GitHub Release, but that release event has not yet been exercised. No packaging, installation, or full release workflow exists. A module placeholder does not mean that the corresponding feature is available.
 

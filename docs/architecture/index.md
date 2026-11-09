@@ -1,0 +1,27 @@
+# Architecture
+
+- [Architecture overview](README.md) - accepted baseline, system boundaries, and architecture map
+- [Goals and constraints](GOALS.md) - product goals and non-goals
+- [Dialect policy](DIALECTS.md) - source dialect and version boundaries
+- [Compatibility matrix](COMPATIBILITY-MATRIX.md) - implementation and evidence status by feature
+- [Compiler pipeline and IR](PIPELINE-AND-IR.md) - compilation stages and intermediate representation
+- [API profiles](API-PROFILES.md) - platform API profile model
+- [API registry](API-REGISTRY.md) - structured API registry and validation
+- [CLI and configuration](CLI-AND-CONFIG.md) - command-line and project configuration design
+- [Runtime](RUNTIME.md) - generated-program runtime boundaries
+- [Targets](TARGETS.md) - supported and planned output targets
+- [Diagnostics](DIAGNOSTICS.md) - diagnostic model
+- [Formatter](FORMATTER.md) - formatter scope and behavior
+- [Testing](TESTING.md) - test strategy
+- [Validation](VALIDATION.md) - repository consistency checks
+- [CI](CI.md) - continuous integration design
+- [Fuzzing](FUZZING.md) - fuzz strategy
+- [Security](SECURITY.md) - security boundaries
+- [Language tooling](LANGUAGE-TOOLING.md) - language server and editor integration
+- [Memory model](MEMORY.md) - memory architecture
+- [Benchmarking](BENCHMARKING.md) - performance measurement
+- [Versioning](VERSIONING.md) - version and compatibility lifecycle
+- [Releases](RELEASES.md) - release process
+- [Website previews](WEBSITE_PREVIEWS.md) - preview lifecycle
+- [Implementation dashboard](IMPLEMENTATION-DASHBOARD.md) - status data and dashboard generation
+- [Architecture decision records](adr/index.md) - accepted decisions and their rationale

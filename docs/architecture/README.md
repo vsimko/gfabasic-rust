@@ -1,3 +1,9 @@
+---
+type: Architecture Overview
+title: Architecture overview
+tags: [architecture, design]
+---
+
 ## Architecture documents
 
 | Topic | Scope | Document | Tracking |

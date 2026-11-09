@@ -1,3 +1,9 @@
+---
+type: Documentation Template Guide
+title: Documentation templates
+tags: [documentation, templates]
+---
+
 # Documentation templates
 
 Use these templates as starting points for new pages:

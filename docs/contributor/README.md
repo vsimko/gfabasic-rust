@@ -1,3 +1,9 @@
+---
+type: Contributor Guide
+title: Contributor documentation
+tags: [contributing, development]
+---
+
 # Contributor documentation
 
 **Audience:** People who want to review, research, or contribute to this repository.

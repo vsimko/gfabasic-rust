@@ -1,3 +1,9 @@
+---
+type: Technical Reference
+title: Language and API reference
+tags: [reference, language, api]
+---
+
 # GFA BASIC language reference notes
 
 This directory contains original research notes and technical summaries. These documents are version- and platform-scoped. They are not interchangeable specifications.
