@@ -28,6 +28,7 @@ on:
       - "scripts/**"
       - "site/**"
       - "tests/corpus/**"
+      - "docs/**"
 
 permissions:
   contents: read
