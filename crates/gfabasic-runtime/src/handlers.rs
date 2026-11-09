@@ -253,7 +253,7 @@ mod tests {
         req.id = "gfa.amiga.math.fact";
         assert_eq!(
             registry().resolve(req).unwrap_err(),
-            RegistryError::Missing("gfa.amiga.math.fact".into())
+            RegistryError::InvalidIdNamespace("gfa.amiga.math.fact".into())
         );
         req.id = "fact";
         assert_eq!(
