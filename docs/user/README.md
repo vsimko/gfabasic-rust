@@ -1,3 +1,8 @@
+---
+type: "User Guide"
+title: "User documentation"
+---
+
 # User documentation
 
 **Audience:** People evaluating or using the planned GFA BASIC compiler.
