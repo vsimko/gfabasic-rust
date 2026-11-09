@@ -193,6 +193,19 @@ pub fn resolve_prototype_symbols(
     }
 }
 
+/// Resolve a built-in API call through the canonical registry and runtime table.
+///
+/// The declaration ID comes from the API registry; source spelling is never
+/// used as a fallback lookup key.
+pub fn resolve_api_handler(
+    declaration_id: &str,
+) -> Result<
+    gfabasic_runtime::handlers::ResolvedHandler,
+    gfabasic_runtime::handlers::RegistryError,
+> {
+    gfabasic_runtime::handlers::resolve_builtin_handler(declaration_id)
+}
+
 #[cfg(test)]
 mod tests {
     use super::{SymbolId, resolve_prototype_symbols};
@@ -249,4 +262,36 @@ mod tests {
         assert_eq!(errors[0].code, "GFA-SEM-0001");
         assert_eq!(errors[0].span.start, source_text.find('x').unwrap() + 10);
     }
+    #[test]
+    fn api_dispatch_resolves_partial_handlers_by_stable_registry_id() {
+        match super::resolve_api_handler("gfa.language.math.fact").unwrap() {
+            gfabasic_runtime::handlers::ResolvedHandler::IntegerToUnsigned(handler) => {
+                assert_eq!(handler(5), Some(120));
+            }
+            gfabasic_runtime::handlers::ResolvedHandler::TwoIntegersToUnsigned(_) => {
+                panic!("FACT must resolve to its unary signature");
+            }
+        }
+
+        match super::resolve_api_handler("gfa.language.math.variat").unwrap() {
+            gfabasic_runtime::handlers::ResolvedHandler::TwoIntegersToUnsigned(handler) => {
+                assert_eq!(handler(5, 2), Some(20));
+            }
+            gfabasic_runtime::handlers::ResolvedHandler::IntegerToUnsigned(_) => {
+                panic!("VARIAT must resolve to its binary signature");
+            }
+        }
+    }
+
+    #[test]
+    fn api_dispatch_rejects_declarations_without_runtime_implementation() {
+        assert_eq!(
+            super::resolve_api_handler("gfa.language.matrix.mat-one").unwrap_err(),
+            gfabasic_runtime::handlers::RegistryError::UnsupportedDeclaration(
+                "gfa.language.matrix.mat-one".to_owned()
+            )
+        );
+    }
+
+
 }
