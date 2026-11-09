@@ -44,9 +44,10 @@ impl fmt::Display for MatrixIndexBaseError {
             Self::IndexBelowBase { index, base } => {
                 write!(formatter, "matrix index {index} is below MAT BASE {base}")
             }
-            Self::IndexOverflow { offset, base } => {
-                write!(formatter, "matrix offset {offset} overflows with MAT BASE {base}")
-            }
+            Self::IndexOverflow { offset, base } => write!(
+                formatter,
+                "matrix offset {offset} overflows with MAT BASE {base}"
+            ),
         }
     }
 }
