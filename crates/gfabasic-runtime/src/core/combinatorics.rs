@@ -82,7 +82,7 @@ mod tests {
 
     #[test]
     fn factorial_reports_unrepresentable_results() {
-        assert_eq!(factorial(34), Some(29_524_705_817_674_071_672_750_720_000_000_000));
+        assert_eq!(factorial(34), Some(295_232_799_039_604_140_847_618_609_643_520_000_000));
         assert_eq!(factorial(35), None);
     }
 
