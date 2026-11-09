@@ -2,15 +2,6 @@ name: Amiga GFA-BASIC binary analysis
 
 on:
   workflow_dispatch:
-    inputs:
-      binary_url:
-        description: HTTPS URL of the legally obtained Amiga GFA-BASIC executable (not stored in this repository)
-        required: true
-        type: string
-      sha256:
-        description: Expected SHA-256 of the executable
-        required: true
-        type: string
 
 permissions:
   contents: read
@@ -21,17 +12,22 @@ jobs:
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
-      - name: Validate inputs and download executable
-        env:
-          BINARY_URL: ${{ inputs.binary_url }}
-          EXPECTED_SHA256: ${{ inputs.sha256 }}
+      - name: Checkout private GFA BASIC assets
+        uses: actions/checkout@v4
+        with:
+          repository: vsimko/gfabasic-private-assets
+          ref: main
+          token: ${{ secrets.GFABASIC_PRIVATE_ASSETS_TOKEN }}
+          path: private-assets
+          persist-credentials: false
+
+      - name: Verify and stage Amiga GFA BASIC 3.52 executable
         run: |
           set -euo pipefail
-          [[ "$BINARY_URL" == https://* ]] || { echo "binary_url must use HTTPS"; exit 1; }
-          [[ "$EXPECTED_SHA256" =~ ^[a-fA-F0-9]{64}$ ]] || { echo "sha256 must contain 64 hexadecimal characters"; exit 1; }
           mkdir -p analysis-input analysis-output
-          curl --fail --location --silent --show-error --proto '=https' --tlsv1.2 "$BINARY_URL" -o analysis-input/gfa-basic.bin
-          printf '%s  %s\n' "$EXPECTED_SHA256" analysis-input/gfa-basic.bin | sha256sum --check -
+          test -f private-assets/GFABasic
+          printf '%s  %s\\n' 'fd80f6093e8d0163856af5849121e945e37051a2ad2a9053aa1930021783d962' private-assets/GFABasic | sha256sum --check -
+          cp private-assets/GFABasic analysis-input/gfa-basic-3.52
       - name: Install Java and analysis utilities
         run: |
           sudo apt-get update
@@ -47,7 +43,7 @@ jobs:
           unzip -q /tmp/ghidra.zip -d /opt/ghidra
           echo "GHIDRA_HOME=$(find /opt/ghidra -mindepth 1 -maxdepth 1 -type d | head -n 1)" >> "$GITHUB_ENV"
       - name: Extract printable strings and offsets
-        run: python3 scripts/amiga_binary_strings.py analysis-input/gfa-basic.bin analysis-output/strings.json
+        run: python3 scripts/amiga_binary_strings.py analysis-input/gfa-basic-3.52 analysis-output/strings.json
       - name: Import and decompile with Ghidra (Motorola 68000)
         run: |
           set -euo pipefail
