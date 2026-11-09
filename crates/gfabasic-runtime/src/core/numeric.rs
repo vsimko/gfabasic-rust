@@ -31,6 +31,112 @@ impl fmt::Display for RadixFormatError {
 
 impl Error for RadixFormatError {}
 
+/// Parse the numeric prefix of a byte string (Amiga GFA BASIC VAL).
+///
+/// Decimal input is read until the first byte that cannot continue a number.
+/// The Amiga reference also specifies &H hexadecimal, &X binary, and &O octal
+/// prefixes. If no numeric prefix is present, zero is returned.
+pub fn val(input: &[u8]) -> f64 {
+    let mut start = input
+        .iter()
+        .position(|byte| !byte.is_ascii_whitespace())
+        .unwrap_or(input.len());
+    if start == input.len() {
+        return 0.0;
+    }
+
+    let sign = match input[start] {
+        b'-' => {
+            start += 1;
+            -1.0
+        }
+        b'+' => {
+            start += 1;
+            1.0
+        }
+        _ => 1.0,
+    };
+    if start >= input.len() {
+        return 0.0;
+    }
+
+    if input[start] == b'&' && start + 1 < input.len() {
+        let radix = match input[start + 1].to_ascii_uppercase() {
+            b'H' => 16_u32,
+            b'X' => 2_u32,
+            b'O' => 8_u32,
+            _ => 0,
+        };
+        if radix != 0 {
+            let mut index = start + 2;
+            let mut value = 0.0;
+            let mut digits = 0;
+            while index < input.len() {
+                let Some(digit) = digit_value(input[index]) else {
+                    break;
+                };
+                if digit >= radix {
+                    break;
+                }
+                value = value * f64::from(radix) + f64::from(digit);
+                digits += 1;
+                index += 1;
+            }
+            return if digits == 0 { 0.0 } else { sign * value };
+        }
+    }
+
+    let number_start = start;
+    let mut index = start;
+    let mut digits = 0;
+    while index < input.len() && input[index].is_ascii_digit() {
+        digits += 1;
+        index += 1;
+    }
+    if index < input.len() && input[index] == b'.' {
+        index += 1;
+        while index < input.len() && input[index].is_ascii_digit() {
+            digits += 1;
+            index += 1;
+        }
+    }
+    if digits == 0 {
+        return 0.0;
+    }
+
+    let mantissa_end = index;
+    if index < input.len() && matches!(input[index], b'e' | b'E') {
+        let mut exponent_end = index + 1;
+        if exponent_end < input.len() && matches!(input[exponent_end], b'+' | b'-') {
+            exponent_end += 1;
+        }
+        let exponent_start = exponent_end;
+        while exponent_end < input.len() && input[exponent_end].is_ascii_digit() {
+            exponent_end += 1;
+        }
+        if exponent_end > exponent_start {
+            index = exponent_end;
+        } else {
+            index = mantissa_end;
+        }
+    }
+
+    let token = &input[number_start..index];
+    std::str::from_utf8(token)
+        .ok()
+        .and_then(|number| number.parse::<f64>().ok())
+        .map_or(0.0, |value| sign * value)
+}
+
+fn digit_value(byte: u8) -> Option<u32> {
+    match byte {
+        b'0'..=b'9' => Some(u32::from(byte - b'0')),
+        b'a'..=b'f' => Some(u32::from(byte - b'a' + 10)),
+        b'A'..=b'F' => Some(u32::from(byte - b'A' + 10)),
+        _ => None,
+    }
+}
+
 /// Convert an integer expression to binary (Amiga GFA BASIC BIN$).
 ///
 /// An optional width pads the result with leading zeroes and must be 1..=32.
@@ -68,7 +174,31 @@ pub fn hex(value: i32, width: Option<usize>) -> String {
 
 #[cfg(test)]
 mod tests {
-    use super::{RadixFormatError, bin, hex, oct};
+    use super::{RadixFormatError, bin, hex, oct, val};
+
+    #[test]
+    fn val_parses_decimal_prefix_and_stops_at_first_invalid_byte() {
+        assert_eq!(val(b"123abc"), 123.0);
+        assert_eq!(val(b"  -12.5xyz"), -12.5);
+        assert_eq!(val(b".75tail"), 0.75);
+        assert_eq!(val(b"1.25e2rest"), 125.0);
+        assert_eq!(val(b"1e+"), 1.0);
+    }
+
+    #[test]
+    fn val_parses_documented_hex_binary_and_octal_prefixes() {
+        assert_eq!(val(b"&HFFtail"), 255.0);
+        assert_eq!(val(b"&x101"), 5.0);
+        assert_eq!(val(b"-&O17rest"), -15.0);
+    }
+
+    #[test]
+    fn val_returns_zero_when_no_numeric_prefix_exists() {
+        assert_eq!(val(b""), 0.0);
+        assert_eq!(val(b"  "), 0.0);
+        assert_eq!(val(b"word123"), 0.0);
+        assert_eq!(val(b"&H"), 0.0);
+    }
 
     #[test]
     fn radix_conversions_match_reference_examples() {
