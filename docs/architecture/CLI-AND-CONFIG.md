@@ -1,3 +1,8 @@
+---
+type: "Architecture"
+title: "CLI, configuration, and build artifacts"
+---
+
 # CLI, configuration, and build artifacts
 
 - Status: **Accepted by [ADR 0005](adr/0005-cli-and-project-configuration.md).** A minimal `gfabasic` executable implements help and version output. Project loading, configuration validation, source checking/compilation, and artifact writing are not implemented.
