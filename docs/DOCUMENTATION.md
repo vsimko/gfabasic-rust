@@ -20,6 +20,19 @@ OKF does not define a fixed taxonomy, schema registry, required toolchain, or we
 
 This policy applies to the canonical documentation bundle in `docs/`. Keep its editable source in Git. The website is a generated publication of selected canonical concepts, not a second authoring location. Do not create a parallel top-level `knowledge/` tree or hand-maintained duplicate website content.
 
+## OKF bundle conventions
+
+- The root `docs/index.md` is the OKF v0.2 bundle entry point. It contains only the permitted root `okf_version: "0.2"` metadata and navigation body.
+- Every other `index.md` is a reserved navigation file and has no concept frontmatter. A future `log.md`, if introduced, must follow the OKF update-log structure.
+- Every other Markdown file under `docs/` is a concept. It must start with YAML frontmatter containing a non-empty `type`. Use `title` and `description` where they improve discovery; use `tags` for useful cross-cutting navigation.
+- Use `sources` for material a concept derives from. Source entries must identify the source resource; add stable `id` values when body claims use source footnotes. Do not claim human verification unless a person actually reviewed the claim against the cited source.
+- Use `generated` only when the content is generated and the producer and timestamp are known. Use `verified` only for actual verification events. These fields are independent.
+- Use `status: draft` for incomplete or not-yet-reviewed concepts and `status: deprecated` for retained obsolete concepts. Omitted status means stable under OKF v0.2.
+- Keep paths and internal links valid. OKF itself tolerates broken links, but this repository's link checker is expected to reject broken local navigation.
+- Do not add project-specific required metadata beyond OKF's required `type` field. Project conventions may recommend additional fields without making them format requirements.
+
+The migration is incremental. The new root and nested indexes establish navigation, and the policy/entry-point concepts have OKF frontmatter. Legacy concept files remain to be migrated; therefore the bundle is **not yet fully conformant**. The automated validator and website generator are also outstanding requirements tracked by issue #14.
+
 ## Source format
 
 - Encode text as UTF-8.
