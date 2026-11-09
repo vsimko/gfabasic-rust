@@ -10,6 +10,8 @@ fixtures = [
   "amiga/3.5/matrix/mat-set-scalar",
   "amiga/3.5/matrix/mat-base-transpose",
   "amiga/3.5/matrix/mat-norm-row",
+  "amiga/3.5/matrix/mat-add",
+  "amiga/3.5/matrix/mat-sub",
   "amiga/3.5/combinatorics/fact-zero",
   "amiga/3.5/combinatorics/three-intrinsics",
 ]
