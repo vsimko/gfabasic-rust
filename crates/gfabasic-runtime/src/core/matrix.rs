@@ -640,6 +640,38 @@ impl<'a> MatrixMut<'a> {
         Ok(submatrix)
     }
 
+    /// Calculate a square matrix determinant with a speed-oriented pivot strategy
+    /// (Amiga 3.5 MAT QDET).
+    ///
+    /// Unlike determinant, this method uses the first non-zero pivot rather
+    /// than selecting the largest-magnitude pivot. It swaps rows only when
+    /// the current pivot is exactly zero. This reduces pivot-search work but
+    /// can lose accuracy for ill-conditioned matrices; use determinant for
+    /// numerically critical inputs.
+    pub fn quick_determinant(&self) -> Result<f64, MatrixShapeError> {
+        if self.rows != self.columns {
+            return Err(MatrixShapeError::DeterminantRequiresSquare {
+                rows: self.rows,
+                columns: self.columns,
+            });
+        }
+        Ok(quick_determinant_of_square(self.elements, self.rows))
+    }
+
+    /// Calculate a square part-matrix determinant using the speed-oriented
+    /// MAT QDET strategy.
+    ///
+    /// Offsets are zero-based relative to this Rust matrix view.
+    pub fn quick_determinant_submatrix(
+        &self,
+        start_row: usize,
+        start_column: usize,
+        size: usize,
+    ) -> Result<f64, MatrixShapeError> {
+        let submatrix = self.copy_square_submatrix(start_row, start_column, size)?;
+        Ok(quick_determinant_of_square(&submatrix, size))
+    }
+
     /// Calculate the determinant of a square field (Amiga 3.5 `MAT DET x=a()`).
     ///
     /// Uses Gaussian elimination with partial pivoting on a private copy, so
@@ -1168,6 +1200,41 @@ fn rank_of_square(elements: &[f64], size: usize, tolerance: f64) -> usize {
     pivot_row
 }
 
+fn quick_determinant_of_square(elements: &[f64], size: usize) -> f64 {
+    let mut work = elements.to_vec();
+    let mut determinant = 1.0;
+
+    for pivot_column in 0..size {
+        let mut pivot_row = pivot_column;
+        if work[pivot_row * size + pivot_column] == 0.0 {
+            let Some(nonzero_row) =
+                ((pivot_column + 1)..size).find(|row| work[*row * size + pivot_column] != 0.0)
+            else {
+                return 0.0;
+            };
+            pivot_row = nonzero_row;
+        }
+
+        if pivot_row != pivot_column {
+            for column in 0..size {
+                work.swap(pivot_column * size + column, pivot_row * size + column);
+            }
+            determinant = -determinant;
+        }
+
+        let pivot = work[pivot_column * size + pivot_column];
+        determinant *= pivot;
+        for row in (pivot_column + 1)..size {
+            let factor = work[row * size + pivot_column] / pivot;
+            for column in (pivot_column + 1)..size {
+                work[row * size + column] -= factor * work[pivot_column * size + column];
+            }
+            work[row * size + pivot_column] = 0.0;
+        }
+    }
+    determinant
+}
+
 fn determinant_of_square(elements: &[f64], size: usize) -> f64 {
     let mut work = elements.to_vec();
     let mut determinant = 1.0;
@@ -1446,6 +1513,31 @@ mod tests {
             matrix.rank_with_tolerance(-1.0),
             Err(MatrixShapeError::InvalidRankTolerance)
         );
+    }
+
+    #[test]
+    fn quick_determinant_matches_regular_result_for_well_scaled_matrix() {
+        let mut values = [4.0, 7.0, 2.0, 6.0];
+        let matrix = MatrixMut::new(2, 2, &mut values).unwrap();
+
+        assert_eq!(matrix.quick_determinant(), Ok(10.0));
+        assert_eq!(matrix.determinant(), Ok(10.0));
+    }
+
+    #[test]
+    fn quick_determinant_swaps_rows_when_pivot_is_zero() {
+        let mut values = [0.0, 2.0, 1.0, 3.0];
+        let matrix = MatrixMut::new(2, 2, &mut values).unwrap();
+
+        assert_eq!(matrix.quick_determinant(), Ok(-2.0));
+    }
+
+    #[test]
+    fn quick_determinant_supports_square_submatrices() {
+        let mut values = [1.0, 2.0, 3.0, 0.0, 4.0, 5.0, 1.0, 0.0, 6.0];
+        let matrix = MatrixMut::new(3, 3, &mut values).unwrap();
+
+        assert_eq!(matrix.quick_determinant_submatrix(1, 1, 2), Ok(24.0));
     }
 
     #[test]
