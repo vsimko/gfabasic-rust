@@ -7,6 +7,7 @@ license.workspace = true
 
 [dependencies]
 unicode-width = { version = "=0.2.2", default-features = false }
+gfabasic-runtime = { path = "../gfabasic-runtime" }
 
 [lib]
 path = "src/lib.rs"
