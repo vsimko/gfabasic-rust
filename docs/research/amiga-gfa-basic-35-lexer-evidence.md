@@ -239,3 +239,25 @@ The sweep adds one useful qualification to the earlier abbreviation assessment:
 **Evidence matrix correction:** command abbreviations now have a narrow verified 3.5 subset (the explicit MAT abbreviations above), while the full abbreviation mechanism and reserved-word policy remain unresolved. This does not justify enabling abbreviations in the production lexer: abbreviation expansion is likely a command/parser/editor concern and needs a verified source-file rule.
 
 The OCR extraction is not a substitute for page-image inspection. Do not use OCR-normalized punctuation or damaged examples (including apparent decimal/comma substitutions) as lexical fixtures without checking the corresponding printed page image.
+
+
+## 10. Page-image verification of 3.5 matrix abbreviations (2026-11-09)
+
+The supplied 469-page interpreter manual's printed 3.5 addendum pages 13-1–13-5 (PDF pages 431–435) were visually inspected. This verifies the abbreviation spellings discovered in the Chapter 13 text sweep and fixes OCR-sensitive spacing/punctuation. The abbreviations are printed as short command forms with spaces; they are not evidence for a general lexer-level abbreviation rule.
+
+| Printed page | Full command form | Printed abbreviation | Evidence scope |
+|---|---|---|---|
+| 13-1 | MAT BASE 0 / MAT BASE 1 | m b 0 / m b 1 | Explicit 3.5 command abbreviation |
+| 13-2 | MAT CLR a() | m cl a() | Explicit 3.5 command abbreviation |
+| 13-2 | MAT SET a()=x | m se a()=x | Explicit 3.5 command abbreviation |
+| 13-2 | MAT ONE a() | m o a() | Explicit 3.5 command abbreviation |
+| 13-4 | MAT READ a() | m r a() | Explicit 3.5 command abbreviation |
+| 13-4 | MAT PRINT [#i,]a()[,g,n] | m p [#i]a()[g,n] or m ? [#i,]a()[g,n] | Explicit 3.5 alternatives; punctuation/optional-argument notation must be preserved as printed |
+| 13-5 | MAT INPUT #i,a() | m i #i,a() | Explicit 3.5 command abbreviation |
+| 13-5 | MAT CPY a(...)=b(...)[,h,w] | m c a(i,j)=b(k,l),h,w | Explicit 3.5 command abbreviation |
+| 13-5 | MAT XCPY a(...)=b(...)[,h,w] | m x a(i,j)=b(k,l),h,w | Explicit 3.5 command abbreviation |
+| 13-5 | MAT TRANS a()[=b()] | m t a()=b() | Explicit 3.5 command abbreviation |
+
+The page images confirm the OCR text for these forms on pp. 13-1–13-5. They do not establish whether abbreviations are accepted in merged .LST source, whether matching is case-insensitive, how whitespace is tokenized, how abbreviations interact with identifiers, or how ambiguous prefixes are resolved. The examples are command-specific and remain a parser/editor concern until source-file acceptance is demonstrated. Do not add generic abbreviation expansion to the lexer from this evidence alone.
+
+The image review is limited to pp. 13-1–13-5; later matrix-command abbreviation entries in Chapter 13 still require their own page-image checks before their exact punctuation is promoted to regression fixtures.
