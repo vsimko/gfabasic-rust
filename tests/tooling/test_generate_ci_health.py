@@ -43,6 +43,20 @@ class CiHealthGeneratorTests(unittest.TestCase):
         self.assertEqual(docs["last_success"]["id"], 1)
         self.assertEqual(docs["last_success"]["status"], "success")
 
+    def test_configured_workflow_without_runs_is_unknown(self):
+        temporary, root = self.make_root()
+        self.addCleanup(temporary.cleanup)
+        responses = [
+            {"workflows": [{"id": 11, "path": ".github/workflows/docs.yml"}]},
+            {"workflow_runs": []},
+        ]
+        with patch("scripts.generate_ci_health.api_json", side_effect=responses):
+            snapshot = collect(root, "test-token", NOW)
+        docs = next(item for item in snapshot["workflows"] if item["file"] == "docs.yml")
+        self.assertEqual(docs["state"], "unknown")
+        self.assertIsNone(docs["latest"])
+        self.assertTrue(docs["workflow_url"])
+
     def test_old_success_is_marked_stale(self):
         run = {
             "status": "completed", "conclusion": "success",
