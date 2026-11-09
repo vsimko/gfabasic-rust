@@ -1,0 +1,162 @@
+{
+  "id": "gfa.language.matrix.mat-mul",
+  "name": "MAT MUL",
+  "kind": "statement",
+  "namespace": "language-core",
+  "category": "matrix-operations",
+  "availability": [
+    {
+      "dialect": "amiga-gfa-basic-interpreter",
+      "versions": [
+        "3.5"
+      ]
+    }
+  ],
+  "syntax": [
+    {
+      "form": "MAT MUL destination()=left()*right()",
+      "contexts": [
+        "statement"
+      ],
+      "arguments": [
+        {
+          "name": "destination",
+          "type": "floating-point matrix or vector field",
+          "required": true,
+          "passing": "array"
+        },
+        {
+          "name": "left",
+          "type": "floating-point matrix or vector field",
+          "required": true,
+          "passing": "array"
+        },
+        {
+          "name": "right",
+          "type": "floating-point matrix or vector field",
+          "required": true,
+          "passing": "array"
+        }
+      ]
+    },
+    {
+      "form": "MAT MUL scalar-result=left()*right()",
+      "contexts": [
+        "statement"
+      ],
+      "arguments": [
+        {
+          "name": "scalar-result",
+          "type": "numeric scalar lvalue",
+          "required": true,
+          "passing": "var"
+        },
+        {
+          "name": "left",
+          "type": "floating-point vector",
+          "required": true,
+          "passing": "array"
+        },
+        {
+          "name": "right",
+          "type": "floating-point vector",
+          "required": true,
+          "passing": "array"
+        }
+      ]
+    },
+    {
+      "form": "MAT MUL scalar-result=left()*matrix()*right()",
+      "contexts": [
+        "statement"
+      ],
+      "arguments": [
+        {
+          "name": "scalar-result",
+          "type": "numeric scalar lvalue",
+          "required": true,
+          "passing": "var"
+        },
+        {
+          "name": "left",
+          "type": "compatible floating-point row vector",
+          "required": true,
+          "passing": "array"
+        },
+        {
+          "name": "matrix",
+          "type": "compatible floating-point matrix",
+          "required": true,
+          "passing": "array"
+        },
+        {
+          "name": "right",
+          "type": "compatible floating-point column vector",
+          "required": true,
+          "passing": "array"
+        }
+      ]
+    },
+    {
+      "form": "MAT MUL array(),scalar",
+      "contexts": [
+        "statement"
+      ],
+      "arguments": [
+        {
+          "name": "array",
+          "type": "floating-point matrix or vector field",
+          "required": true,
+          "passing": "array"
+        },
+        {
+          "name": "scalar",
+          "type": "numeric scalar expression",
+          "required": true
+        }
+      ]
+    }
+  ],
+  "signature": {
+    "type": "no return value"
+  },
+  "semantics": {
+    "summary": "Multiplies compatible matrices row-by-column, forms an outer product for two vectors, computes a vector dot product or compatible row-vector/matrix/column-vector scalar product, or multiplies every field element by a scalar in place.",
+    "side-effects": [
+      "Matrix/vector destination forms write a result field; scalar form mutates the supplied field."
+    ],
+    "errors": []
+  },
+  "evidence": {
+    "source-scope": "amiga-3.5-addendum",
+    "status": "book-documented",
+    "sources": [
+      "AM-INTERPRETER-35"
+    ],
+    "printed-pages": [
+      "Chapter 13, printed pp. 13-20–13-31"
+    ],
+    "notes": [
+      "The page-image-reviewed addendum specifies matrix dimension compatibility, outer product, dot product, row-vector/matrix/column-vector scalar product, and scalar multiplication.",
+      "Do not collapse these forms into a single generic host matrix operation without preserving their source-language dimension rules."
+    ]
+  },
+  "implementation": {
+    "status": "not-implemented"
+  },
+  "support": [
+    {
+      "target": "x86_64-unknown-linux-gnu",
+      "classification": "unknown",
+      "conformance": "not-tested",
+      "tests": [],
+      "pending-reason": "No matrix multiplication implementation or executable reference-interpreter conformance tests are registered."
+    }
+  ],
+  "docs": {
+    "path": "docs/research/amiga-gfa-basic-35-addendum-inventory.md",
+    "anchors": [
+      "3-linear-operations-on-numeric-fields"
+    ]
+  }
+}
