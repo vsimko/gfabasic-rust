@@ -367,7 +367,7 @@ fn parser_rejects_let_assignment_to_variables_outside_the_mvp() {
 
 #[test]
 fn parser_rejects_let_rhs_outside_the_supported_intrinsic_subset() {
-    let source = "LET x=RND(1)\\n";
+    let source = "LET x=RND(1)\n";
     let mut sources = SourceMap::new();
     let source_id = sources.add_source("let-unsupported-intrinsic.LST", source);
 
