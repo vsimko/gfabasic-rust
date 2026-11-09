@@ -1,0 +1,32 @@
+name: Temporary lockfile refresh
+
+on:
+  push:
+    branches:
+      - integration/pr-385-okf-v02
+
+permissions:
+  contents: read
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install pinned Rust
+        run: |
+          rustup toolchain install 1.99.1 --profile minimal
+      - name: Regenerate isolated lockfiles
+        run: |
+          cargo +1.99.1 generate-lockfile --manifest-path bench/Cargo.toml
+          cargo +1.99.1 generate-lockfile --manifest-path fuzz/Cargo.toml
+      - name: Print lockfiles for transfer
+        run: |
+          echo BENCH_LOCK_BEGIN
+          base64 -w0 bench/Cargo.lock
+          echo
+          echo BENCH_LOCK_END
+          echo FUZZ_LOCK_BEGIN
+          base64 -w0 fuzz/Cargo.lock
+          echo
+          echo FUZZ_LOCK_END
