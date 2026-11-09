@@ -4,6 +4,85 @@
 //! on byte slices rather than Rust UTF-8 character boundaries. String positions
 //! accepted by GFA BASIC functions are one-based.
 
+use std::error::Error;
+use std::fmt;
+
+/// Errors while constructing repeated GFA BASIC strings.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum StringError {
+    RepeatCountOutOfRange { count: usize },
+    LengthOverflow,
+    AllocationFailed,
+}
+
+impl fmt::Display for StringError {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Self::RepeatCountOutOfRange { count } => {
+                write!(formatter, "STRING$ repeat count {count} is outside 0..=32767")
+            }
+            Self::LengthOverflow => write!(formatter, "requested string length overflows usize"),
+            Self::AllocationFailed => write!(formatter, "could not allocate requested string"),
+        }
+    }
+}
+
+impl Error for StringError {}
+
+/// Repeat a byte string (Amiga GFA BASIC STRING$(count, expression$)).
+pub fn string_repeat(input: &[u8], count: usize) -> Result<Vec<u8>, StringError> {
+    if count > 32_767 {
+        return Err(StringError::RepeatCountOutOfRange { count });
+    }
+    let length = input
+        .len()
+        .checked_mul(count)
+        .ok_or(StringError::LengthOverflow)?;
+    let mut output = Vec::new();
+    output
+        .try_reserve_exact(length)
+        .map_err(|_| StringError::AllocationFailed)?;
+    for _ in 0..count {
+        output.extend_from_slice(input);
+    }
+    Ok(output)
+}
+
+/// Repeat the low byte of an integer expression (STRING$(count, code)).
+pub fn string_repeat_code(code: i64, count: usize) -> Result<Vec<u8>, StringError> {
+    string_repeat(&[code as u8], count)
+}
+
+/// Create a string containing count ASCII spaces (Amiga GFA BASIC SPACE$).
+pub fn spaces(count: usize) -> Result<Vec<u8>, StringError> {
+    let mut output = Vec::new();
+    output
+        .try_reserve_exact(count)
+        .map_err(|_| StringError::AllocationFailed)?;
+    output.resize(count, b' ');
+    Ok(output)
+}
+
+/// Return the ASCII value of the first byte, or zero for an empty string.
+pub fn asc(input: &[u8]) -> u8 {
+    input.first().copied().unwrap_or(0)
+}
+
+/// Return the low byte of an integer expression (Amiga GFA BASIC CHR$).
+pub fn chr(code: i64) -> u8 {
+    code as u8
+}
+
+/// Return the preceding ASCII byte of the first character, when representable.
+pub fn pred(input: &[u8]) -> Option<u8> {
+    input.first().and_then(|character| character.checked_sub(1))
+}
+
+/// Return the succeeding ASCII byte of the first character, when representable.
+pub fn succ(input: &[u8]) -> Option<u8> {
+    input.first().and_then(|character| character.checked_add(1))
+}
+
 /// Return the leftmost count bytes, or the first byte when count is omitted.
 pub fn left(input: &[u8], count: Option<usize>) -> &[u8] {
     let length = count.unwrap_or(1).min(input.len());
@@ -87,7 +166,45 @@ pub fn upper(input: &[u8]) -> Vec<u8> {
 
 #[cfg(test)]
 mod tests {
-    use super::{instr, left, len, mid, right, rinstr, trim, upper};
+    use super::{
+        asc, chr, instr, left, len, mid, pred, right, rinstr, spaces, string_repeat,
+        string_repeat_code, succ, trim, upper, StringError,
+    };
+
+    #[test]
+    fn asc_and_chr_use_first_byte_and_low_byte_conversion() {
+        assert_eq!(asc(b"Amiga"), b'A');
+        assert_eq!(asc(b""), 0);
+        assert_eq!(chr(65), b'A');
+        assert_eq!(chr(256), 0);
+        assert_eq!(chr(-1), 255);
+    }
+
+    #[test]
+    fn pred_and_succ_change_only_the_first_byte() {
+        assert_eq!(pred(b"Basic"), Some(b'A'));
+        assert_eq!(succ(b"Basic"), Some(b'C'));
+        assert_eq!(pred(b""), None);
+        assert_eq!(pred(&[0]), None);
+        assert_eq!(succ(&[255]), None);
+    }
+
+    #[test]
+    fn string_repeat_and_spaces_construct_expected_bytes() {
+        assert_eq!(string_repeat(b"ab", 3), Ok(b"ababab".to_vec()));
+        assert_eq!(string_repeat_code(65, 3), Ok(b"AAA".to_vec()));
+        assert_eq!(string_repeat(b"x", 0), Ok(Vec::new()));
+        assert_eq!(spaces(3), Ok(b"   ".to_vec()));
+        assert_eq!(spaces(0), Ok(Vec::new()));
+    }
+
+    #[test]
+    fn string_repeat_rejects_counts_above_documented_limit() {
+        assert_eq!(
+            string_repeat(b"x", 32_768),
+            Err(StringError::RepeatCountOutOfRange { count: 32_768 })
+        );
+    }
 
     #[test]
     fn left_and_right_use_first_or_last_byte_when_count_is_omitted() {
