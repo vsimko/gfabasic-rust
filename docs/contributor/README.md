@@ -34,6 +34,10 @@ Run the same documentation checks locally from the repository root:
 ```sh
 npx --yes markdownlint-cli2@0.24.0 "**/*.md" "#node_modules"
 lychee --offline --include-fragments anchor-only --root-dir "$PWD" "**/*.md"
+python -m pip install --disable-pip-version-check PyYAML==6.0.2 markdown-it-py==3.0.0
+python scripts/validate_okf.py
+python scripts/generate_docs_site.py
+python -m unittest discover -s scripts/tests -p "test_*.py"
 ```
 
 Run the workspace checks from the repository root after installing the pinned toolchain:
