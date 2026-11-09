@@ -48,6 +48,13 @@ pub enum MatrixShapeError {
         source_rows: usize,
         source_columns: usize,
     },
+    /// The vector–matrix–vector product requires matching vector/matrix axes.
+    BilinearShapeMismatch {
+        left_vector_length: usize,
+        matrix_rows: usize,
+        matrix_columns: usize,
+        right_vector_length: usize,
+    },
     /// Vector dot products require vectors with equal element counts.
     VectorLengthMismatch {
         left: usize,
@@ -117,6 +124,15 @@ impl fmt::Display for MatrixShapeError {
             } => write!(
                 formatter,
                 "element-wise operation requires {destination_rows}x{destination_columns} source, got {source_rows}x{source_columns}"
+            ),
+            Self::BilinearShapeMismatch {
+                left_vector_length,
+                matrix_rows,
+                matrix_columns,
+                right_vector_length,
+            } => write!(
+                formatter,
+                "vector-matrix-vector product requires vector lengths {matrix_rows} and {matrix_columns}, got {left_vector_length} and {right_vector_length}"
             ),
             Self::VectorLengthMismatch { left, right } => write!(
                 formatter,
@@ -522,6 +538,46 @@ impl<'a> MatrixMut<'a> {
     }
 }
 
+/// Calculate the vector–matrix–vector scalar product
+/// (Amiga 3.5 `MAT MUL x=a()*b()*c()`).
+///
+/// The left vector length must equal the matrix row count and the right vector
+/// length must equal its column count. The matrix storage length and both
+/// vector dimensions are checked before calculation.
+pub fn vector_matrix_vector_product(
+    left: &[f64],
+    matrix: &[f64],
+    matrix_rows: usize,
+    matrix_columns: usize,
+    right: &[f64],
+) -> Result<f64, MatrixShapeError> {
+    let expected_matrix_len = matrix_rows
+        .checked_mul(matrix_columns)
+        .ok_or(MatrixShapeError::DimensionOverflow)?;
+    if matrix.len() != expected_matrix_len {
+        return Err(MatrixShapeError::SourceElementCountMismatch {
+            expected: expected_matrix_len,
+            actual: matrix.len(),
+        });
+    }
+    if left.len() != matrix_rows || right.len() != matrix_columns {
+        return Err(MatrixShapeError::BilinearShapeMismatch {
+            left_vector_length: left.len(),
+            matrix_rows,
+            matrix_columns,
+            right_vector_length: right.len(),
+        });
+    }
+
+    let mut result = 0.0;
+    for (row, left_value) in left.iter().enumerate() {
+        for (column, right_value) in right.iter().enumerate() {
+            result += left_value * matrix[row * matrix_columns + column] * right_value;
+        }
+    }
+    Ok(result)
+}
+
 /// Calculate the scalar (dot) product of two equal-length vectors
 /// (Amiga 3.5 `MAT MUL x=a()*b()`).
 ///
@@ -538,7 +594,7 @@ pub fn dot_product(left: &[f64], right: &[f64]) -> Result<f64, MatrixShapeError>
 
 #[cfg(test)]
 mod tests {
-    use super::{MatrixMut, MatrixShapeError, dot_product};
+    use super::{MatrixMut, MatrixShapeError, dot_product, vector_matrix_vector_product};
 
     #[test]
     fn clear_zeros_a_row_vector() {
@@ -775,6 +831,35 @@ mod tests {
         assert_eq!(
             dot_product(&[1.0, 2.0], &[3.0]),
             Err(MatrixShapeError::VectorLengthMismatch { left: 2, right: 1 })
+        );
+    }
+
+    #[test]
+    fn vector_matrix_vector_product_computes_documented_scalar_form() {
+        let left = [1.0, 2.0];
+        let matrix = [1.0; 6];
+        let right = [-3.0, 4.0, 5.0];
+
+        assert_eq!(
+            vector_matrix_vector_product(&left, &matrix, 2, 3, &right),
+            Ok(18.0)
+        );
+    }
+
+    #[test]
+    fn vector_matrix_vector_product_rejects_incompatible_vectors() {
+        let left = [1.0];
+        let matrix = [1.0; 6];
+        let right = [3.0, 4.0, 5.0];
+
+        assert_eq!(
+            vector_matrix_vector_product(&left, &matrix, 2, 3, &right),
+            Err(MatrixShapeError::BilinearShapeMismatch {
+                left_vector_length: 1,
+                matrix_rows: 2,
+                matrix_columns: 3,
+                right_vector_length: 3,
+            })
         );
     }
 
