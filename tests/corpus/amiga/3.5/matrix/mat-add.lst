@@ -1,0 +1,9 @@
+DIM a(3, 3)
+DIM b(3, 3)
+DIM c(3, 3)
+MAT SET b() = 3
+MAT SET c() = 4
+MAT ADD a() = b() + c()
+MAT PRINT a()
+MAT ADD a(), 2
+MAT PRINT a()
