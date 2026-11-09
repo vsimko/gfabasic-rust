@@ -35,6 +35,36 @@ fn parser_reports_independent_line_errors_after_synchronizing() {
 }
 
 #[test]
+fn parser_recovery_keeps_the_next_line_after_missing_print_operand() {
+    let source = "PRINT\nLET x=1\n";
+    let mut sources = SourceMap::new();
+    let source_id = sources.add_source("missing-print-operand.LST", source);
+
+    let diagnostics = parse(source_id, source)
+        .expect_err("both the malformed PRINT and unsupported next statement are errors");
+
+    assert_eq!(diagnostics.len(), 2);
+    assert_eq!(diagnostics[0].code, "GFA-PARSE-0001");
+    assert_eq!(
+        diagnostics[0]
+            .primary_span
+            .expect("syntax error has a span")
+            .start,
+        5,
+        "missing PRINT operand is reported at the line boundary"
+    );
+    assert_eq!(diagnostics[1].code, "GFA-SUPPORT-0001");
+    assert_eq!(
+        diagnostics[1]
+            .primary_span
+            .expect("unsupported statement has a span")
+            .start,
+        6,
+        "the next statement must still be visited after recovery"
+    );
+}
+
+#[test]
 fn parser_preserves_statement_spans_in_the_original_listing() {
     let source = "x=FACT(0)\nPRINT x\n";
     let mut sources = SourceMap::new();

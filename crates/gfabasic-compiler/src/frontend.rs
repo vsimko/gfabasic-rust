@@ -522,6 +522,15 @@ impl Parser {
     }
 
     fn parse_variable(&mut self) -> Result<(String, SourceSpan), Box<Diagnostic>> {
+        // A missing variable at a line boundary must not consume the newline:
+        // `synchronize` owns that token and uses it to resume at the next line.
+        // Consuming it here would make recovery skip the following statement.
+        if matches!(self.current().kind, TokenKind::Newline | TokenKind::End) {
+            return Err(self.syntax_error(
+                "expected one of the variables x, y, or z",
+                self.current().span,
+            ));
+        }
         let token = self.advance();
         match token.kind {
             TokenKind::Identifier(name) if matches!(name.as_str(), "x" | "y" | "z") => {
