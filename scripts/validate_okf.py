@@ -173,7 +173,7 @@ def _heading_ids(text: str) -> set[str]:
         if explicit:
             slug = explicit.group(1)
         else:
-            slug = re.sub(r"[^w -]", "", heading.lower(), flags=re.UNICODE)
+            slug = re.sub(r"[^\\w -]", "", heading.lower(), flags=re.UNICODE)
             slug = re.sub(r"\s+", "-", slug.strip())
         count = used.get(slug, 0)
         used[slug] = count + 1
