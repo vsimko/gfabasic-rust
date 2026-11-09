@@ -145,10 +145,7 @@ mod tests {
 
         matrix.identity().unwrap();
 
-        assert_eq!(
-            values,
-            [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0]
-        );
+        assert_eq!(values, [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0]);
     }
 
     #[test]
