@@ -11,6 +11,7 @@ on:
       - .github/workflows/amiga-reference.yml
       - scripts/amiga_binary_strings.py
       - scripts/build_amiga_analysis_report.py
+      - scripts/publish_private_amiga_analysis.sh
       - scripts/ghidra/**
   workflow_dispatch:
 
@@ -163,6 +164,11 @@ jobs:
               f"{stats['references']} references"
           )
           PY
+
+      - name: Publish complete analysis to private assets repository
+        env:
+          GFA_ASSETS_TOKEN: ${{ secrets.GFA_ASSETS_TOKEN }}
+        run: bash scripts/publish_private_amiga_analysis.sh
 
       - name: Publish reviewed analysis data through a pull request
         env:
