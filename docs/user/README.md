@@ -18,6 +18,6 @@ The [language and API reference notes](../reference/README.md) record source-bac
 
 ## Planned user guides
 
-The documentation index records where future guides belong and which implementation prerequisites they require: [planned user and contributor pages](../README.md#documentation-map).
+The documentation index records where future guides belong and which implementation prerequisites they require: [planned user and contributor pages](../README.md#start-here).
 
 Installation, quick-start, CLI, and troubleshooting instructions will be added only after they can be verified against a reproducible build. See [the project documentation index](../README.md).
