@@ -1,4 +1,4 @@
-use gfabasic_compiler::frontend::{parse, parse_document, Statement, TokenKind};
+use gfabasic_compiler::frontend::{Statement, TokenKind, parse, parse_document};
 use gfabasic_compiler::source::SourceMap;
 
 #[test]
