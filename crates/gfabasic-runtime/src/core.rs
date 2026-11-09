@@ -5,4 +5,5 @@
 
 pub mod combinatorics;
 pub mod matrix;
+pub mod numeric;
 pub mod strings;
