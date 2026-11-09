@@ -40,8 +40,10 @@ for block in memory.getBlocks():
     })
 
 instructions_path = os.path.join(out_dir, "instructions.jsonl")
+unclaimed_path = os.path.join(out_dir, "unclaimed_instructions.jsonl")
 references_path = os.path.join(out_dir, "references.jsonl")
-with open(instructions_path, "w") as instruction_file, open(references_path, "w") as reference_file:
+unclaimed_count = 0
+with open(instructions_path, "w") as instruction_file, open(unclaimed_path, "w") as unclaimed_file, open(references_path, "w") as reference_file:
     for block in memory.getBlocks():
         if not block.isInitialized() or not block.isExecute():
             continue
@@ -62,6 +64,14 @@ with open(instructions_path, "w") as instruction_file, open(references_path, "w"
                 "length": instruction.getLength(),
             }) + "\n")
             instruction_count += 1
+            if function_manager.getFunctionContaining(address) is None:
+                unclaimed_file.write(json.dumps({
+                    "address": address.getOffset(),
+                    "mnemonic": instruction.getMnemonicString(),
+                    "operands": operands,
+                    "length": instruction.getLength(),
+                }) + "\n")
+                unclaimed_count += 1
             for ref in reference_manager.getReferencesFrom(address):
                 reference_file.write(json.dumps({
                     "from": address.getOffset(),
@@ -144,6 +154,7 @@ with open(os.path.join(out_dir, "analysis_stats.json"), "w") as handle:
         "instructions": instruction_count,
         "references": reference_count,
         "string_xrefs": string_xref_count,
+        "unclaimed_instructions": unclaimed_count,
         "strings_with_xrefs": strings_with_xrefs,
         "executable_blocks": sum(1 for block in blocks if block["execute"]),
     }, handle, indent=2)
