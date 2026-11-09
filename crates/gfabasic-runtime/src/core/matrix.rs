@@ -3,7 +3,8 @@
 //! The addendum documents MAT CLR and MAT SET for previously dimensioned
 //! one- or two-dimensional floating-point fields, MAT ONE for square
 //! floating-point matrices (printed pp. 13-2–13-3), and MAT ADD/MAT SUB/MAT MUL
-//! scalar forms for element-wise arithmetic (printed pp. 13-15–13-27).
+//! scalar forms for element-wise arithmetic (printed pp. 13-15–13-27), and
+//! row-/column-wise normalization (printed pp. 13-31–13-33).
 //!
 //! This module provides the storage-independent operation semantics. It does
 //! not define the original interpreter's array layout, numeric representation,
@@ -25,17 +26,40 @@ pub enum MatrixShapeError {
     /// The requested row/column product cannot be represented by `usize`.
     DimensionOverflow,
     /// The backing slice does not contain exactly rows × columns elements.
-    ElementCountMismatch { expected: usize, actual: usize },
+    ElementCountMismatch {
+        expected: usize,
+        actual: usize,
+    },
     /// MAT ONE is defined by the source for square matrices only.
-    IdentityRequiresSquare { rows: usize, columns: usize },
+    IdentityRequiresSquare {
+        rows: usize,
+        columns: usize,
+    },
     /// The source storage does not match its declared shape.
-    SourceElementCountMismatch { expected: usize, actual: usize },
+    SourceElementCountMismatch {
+        expected: usize,
+        actual: usize,
+    },
     /// Element-wise arithmetic requires identical source and destination shapes.
     ElementwiseShapeMismatch {
         destination_rows: usize,
         destination_columns: usize,
         source_rows: usize,
         source_columns: usize,
+    },
+    /// MAT NORM cannot normalize a zero-length row or column.
+    ZeroNormRow {
+        row: usize,
+    },
+    ZeroNormColumn {
+        column: usize,
+    },
+    /// MAT NORM requires finite row/column norms in this Rust implementation.
+    NonFiniteNormRow {
+        row: usize,
+    },
+    NonFiniteNormColumn {
+        column: usize,
     },
     /// MAT TRANS requires destination dimensions to reverse the source shape.
     TransposeShapeMismatch {
@@ -45,7 +69,10 @@ pub enum MatrixShapeError {
         source_columns: usize,
     },
     /// The in-place form of MAT TRANS requires a square matrix.
-    TransposeRequiresSquare { rows: usize, columns: usize },
+    TransposeRequiresSquare {
+        rows: usize,
+        columns: usize,
+    },
 }
 
 impl fmt::Display for MatrixShapeError {
@@ -73,6 +100,16 @@ impl fmt::Display for MatrixShapeError {
                 formatter,
                 "element-wise operation requires {destination_rows}x{destination_columns} source, got {source_rows}x{source_columns}"
             ),
+            Self::ZeroNormRow { row } => write!(formatter, "cannot normalize zero-norm row {row}"),
+            Self::ZeroNormColumn { column } => {
+                write!(formatter, "cannot normalize zero-norm column {column}")
+            }
+            Self::NonFiniteNormRow { row } => {
+                write!(formatter, "row {row} has a non-finite norm")
+            }
+            Self::NonFiniteNormColumn { column } => {
+                write!(formatter, "column {column} has a non-finite norm")
+            }
             Self::TransposeShapeMismatch {
                 destination_rows,
                 destination_columns,
@@ -236,6 +273,64 @@ impl<'a> MatrixMut<'a> {
 
         for (destination, source) in self.elements.iter_mut().zip(source) {
             *destination = operation(*destination, *source);
+        }
+        Ok(())
+    }
+
+    /// Normalize each row to unit Euclidean length (Amiga 3.5 `MAT NORM a(),0`).
+    ///
+    /// Norms are checked before mutation. A zero or non-finite norm is reported
+    /// as a Rust-side validation error; the original interpreter's edge-case
+    /// behavior is not specified by the cited addendum.
+    pub fn normalize_rows(&mut self) -> Result<(), MatrixShapeError> {
+        let mut norms = Vec::with_capacity(self.rows);
+        for row in 0..self.rows {
+            let start = row * self.columns;
+            let norm = self.elements[start..start + self.columns]
+                .iter()
+                .fold(0.0_f64, |acc, value| acc.hypot(*value));
+            if !norm.is_finite() {
+                return Err(MatrixShapeError::NonFiniteNormRow { row });
+            }
+            if norm == 0.0 {
+                return Err(MatrixShapeError::ZeroNormRow { row });
+            }
+            norms.push(norm);
+        }
+
+        for (row, norm) in norms.into_iter().enumerate() {
+            let start = row * self.columns;
+            for element in &mut self.elements[start..start + self.columns] {
+                *element /= norm;
+            }
+        }
+        Ok(())
+    }
+
+    /// Normalize each column to unit Euclidean length (Amiga 3.5 `MAT NORM a(),1`).
+    ///
+    /// Norms are checked before mutation. A zero or non-finite norm is reported
+    /// as a Rust-side validation error; the original interpreter's edge-case
+    /// behavior is not specified by the cited addendum.
+    pub fn normalize_columns(&mut self) -> Result<(), MatrixShapeError> {
+        let mut norms = Vec::with_capacity(self.columns);
+        for column in 0..self.columns {
+            let norm = (0..self.rows).fold(0.0_f64, |acc, row| {
+                acc.hypot(self.elements[row * self.columns + column])
+            });
+            if !norm.is_finite() {
+                return Err(MatrixShapeError::NonFiniteNormColumn { column });
+            }
+            if norm == 0.0 {
+                return Err(MatrixShapeError::ZeroNormColumn { column });
+            }
+            norms.push(norm);
+        }
+
+        for (column, norm) in norms.into_iter().enumerate() {
+            for row in 0..self.rows {
+                self.elements[row * self.columns + column] /= norm;
+            }
         }
         Ok(())
     }
@@ -447,6 +542,50 @@ mod tests {
         matrix.multiply_scalar(3.0);
 
         assert_eq!(values, [6.0, 9.0, 12.0]);
+    }
+
+    #[test]
+    fn normalize_rows_scales_each_row_to_unit_length() {
+        let mut values = [3.0, 4.0, 0.0, 2.0];
+        let mut matrix = MatrixMut::new(2, 2, &mut values).unwrap();
+
+        matrix.normalize_rows().unwrap();
+
+        assert_eq!(values, [0.6, 0.8, 0.0, 1.0]);
+    }
+
+    #[test]
+    fn normalize_columns_scales_each_column_to_unit_length() {
+        let mut values = [3.0, 0.0, 4.0, 5.0];
+        let mut matrix = MatrixMut::new(2, 2, &mut values).unwrap();
+
+        matrix.normalize_columns().unwrap();
+
+        assert_eq!(values, [0.6, 0.0, 0.8, 1.0]);
+    }
+
+    #[test]
+    fn normalize_rows_rejects_zero_norm_without_partial_mutation() {
+        let mut values = [3.0, 4.0, 0.0, 0.0];
+        let mut matrix = MatrixMut::new(2, 2, &mut values).unwrap();
+
+        assert_eq!(
+            matrix.normalize_rows(),
+            Err(MatrixShapeError::ZeroNormRow { row: 1 })
+        );
+        assert_eq!(values, [3.0, 4.0, 0.0, 0.0]);
+    }
+
+    #[test]
+    fn normalize_columns_rejects_zero_norm_without_partial_mutation() {
+        let mut values = [3.0, 0.0, 4.0, 0.0];
+        let mut matrix = MatrixMut::new(2, 2, &mut values).unwrap();
+
+        assert_eq!(
+            matrix.normalize_columns(),
+            Err(MatrixShapeError::ZeroNormColumn { column: 1 })
+        );
+        assert_eq!(values, [3.0, 0.0, 4.0, 0.0]);
     }
 
     #[test]
