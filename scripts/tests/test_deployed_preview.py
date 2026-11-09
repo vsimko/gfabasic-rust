@@ -54,6 +54,8 @@ def main():
         "dashboard-progress-fill",
         "dashboard-component",
         "roadmap-phase",
+        "ci-health-grid",
+        "ci-health-card",
     }
     missing_classes = required_classes - inspector.classes
     assert not missing_classes, f"Missing generated dashboard/roadmap HTML: {sorted(missing_classes)}"
