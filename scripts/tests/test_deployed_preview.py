@@ -34,7 +34,7 @@ def main():
     request = urllib.request.Request(url, headers={"User-Agent": "gfabasic-preview-qa/1.0"})
     html = None
     last_error = None
-    for attempt in range(6):
+    for attempt in range(18):
         try:
             with urllib.request.urlopen(request, timeout=10) as response:
                 if response.status != 200:
@@ -43,11 +43,11 @@ def main():
             break
         except (urllib.error.URLError, TimeoutError) as error:
             last_error = error
-            if attempt < 5:
-                print(f"Preview is not ready yet (attempt {attempt + 1}/6); retrying in 10 seconds.")
+            if attempt < 17:
+                print(f"Preview is not ready yet (attempt {attempt + 1}/18); retrying in 10 seconds.")
                 time.sleep(10)
     if html is None:
-        raise SystemExit(f"Could not load deployed preview {url} after 6 attempts: {last_error}") from last_error
+        raise SystemExit(f"Could not load deployed preview {url} after 18 attempts: {last_error}") from last_error
 
     inspector = PageInspector()
     inspector.feed(html)
