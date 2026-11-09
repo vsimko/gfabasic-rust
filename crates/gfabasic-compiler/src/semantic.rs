@@ -298,6 +298,14 @@ mod tests {
         assert_eq!(symbols.symbols[1].id, SymbolId(1));
         assert_eq!(symbols.symbols[1].name, "y");
         assert_eq!(sources.slice(symbols.symbols[1].declaration), Some("y"));
+        assert_eq!(
+            symbols.get(SymbolId(0)).map(|symbol| symbol.name.as_str()),
+            Some("x")
+        );
+        assert_eq!(
+            symbols.get(SymbolId(1)).map(|symbol| symbol.name.as_str()),
+            Some("y")
+        );
 
         let references: Vec<_> = symbols.references.iter().collect();
         assert_eq!(references.len(), 3);
