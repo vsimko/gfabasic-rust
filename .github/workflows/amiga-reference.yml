@@ -202,10 +202,12 @@ jobs:
           git push --force origin "$ANALYSIS_BRANCH"
           EXISTING_PR="$(gh pr list --repo "$GITHUB_REPOSITORY" --head "$ANALYSIS_BRANCH" --state open --json url --jq '.[0].url // empty')"
           if [ -z "$EXISTING_PR" ]; then
-            gh pr create --repo "$GITHUB_REPOSITORY" \
+            if ! gh pr create --repo "$GITHUB_REPOSITORY" \
               --base main --head "$ANALYSIS_BRANCH" \
               --title "Update generated Amiga GFA BASIC 3.52 analysis" \
-              --body "Automated output from the Amiga GFA-BASIC reference workflow. Binary-derived findings are labelled 3.52 and must not be treated as a verified 3.5 specification."
+              --body "Automated output from the Amiga GFA-BASIC reference workflow. Binary-derived findings are labelled 3.52 and must not be treated as a verified 3.5 specification."; then
+              echo "::warning::Analysis branch was pushed, but GitHub Actions is not allowed to create pull requests. Create one from https://github.com/$GITHUB_REPOSITORY/pull/new/$ANALYSIS_BRANCH"
+            fi
           else
             echo "Updated existing analysis PR: $EXISTING_PR"
           fi
