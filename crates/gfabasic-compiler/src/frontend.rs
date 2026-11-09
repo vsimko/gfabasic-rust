@@ -263,7 +263,8 @@ fn is_data_instruction_line(bytes: &[u8], offset: usize) -> bool {
             .is_none_or(|byte| matches!(byte, b' ' | b'\t' | b','))
 }
 
-/// Returns whether ! begins an inline comment after a command on this line.
+/// Returns whether a whitespace-separated ! begins an inline comment after a command.
+/// Requiring whitespace avoids confusing comments with identifier suffixes.
 fn is_inline_comment_marker(bytes: &[u8], offset: usize) -> bool {
     let line_start = bytes[..offset]
         .iter()
