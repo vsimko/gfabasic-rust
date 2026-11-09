@@ -261,3 +261,24 @@ The supplied 469-page interpreter manual's printed 3.5 addendum pages 13-1–13-
 The page images confirm the OCR text for these forms on pp. 13-1–13-5. They do not establish whether abbreviations are accepted in merged .LST source, whether matching is case-insensitive, how whitespace is tokenized, how abbreviations interact with identifiers, or how ambiguous prefixes are resolved. The examples are command-specific and remain a parser/editor concern until source-file acceptance is demonstrated. Do not add generic abbreviation expansion to the lexer from this evidence alone.
 
 The image review is limited to pp. 13-1–13-5; later matrix-command abbreviation entries in Chapter 13 still require their own page-image checks before their exact punctuation is promoted to regression fixtures.
+
+
+## 11. Page-image verification of later matrix abbreviations (2026-11-09)
+
+The next addendum page images were inspected in the supplied interpreter PDF: printed pp. 13-6–13-15 (PDF pp. 436–445). These pages contain additional explicit abbreviation rows. The following spellings are legible in the page images:
+
+| Printed page | Full command form | Printed abbreviation | Evidence scope |
+|---|---|---|---|
+| 13-6 | MAT COPY a()=b() | m c a()=b() | Explicit 3.5 command abbreviation; full-matrix copy |
+| 13-7 | MAT COPY a(i,j)=b() | m c a(i,j)=b() | Explicit 3.5 command abbreviation; destination offset |
+| 13-8 | MAT COPY a()=b(i,j) | m c a()=b(i,j) | Explicit 3.5 command abbreviation; source offset |
+| 13-9 | MAT COPY a(i,j)=b(k,l) | m c a(i,j)=b(k,l) | Explicit 3.5 command abbreviation; source and destination offsets |
+| 13-10 | MAT COPY a()=b(),h,w | m c a()=b() | Explicit 3.5 command abbreviation; optional dimensions are described in the command syntax |
+| 13-11 | MAT XCPY a(i,j)=b(k,l)[,h,w] | m x a(i,j)=b(k,l),h,w | Explicit 3.5 command abbreviation; transposing copy |
+| 13-15 | MAT TRANS a() | m t a() | Explicit 3.5 command abbreviation; in-place transpose |
+
+Printed pp. 13-12–13-14 were also checked. They continue the MAT CPY/XCPY/TRANS explanations and examples but do not add another distinct abbreviation row. Page 13-15 repeats the in-place MAT TRANS form and explicitly prints its abbreviation.
+
+The command-specific forms above expand the verified 3.5 abbreviation inventory; they do not establish a general abbreviation algorithm, a minimum prefix length, case-insensitive matching, acceptance in .LST files, or identifier-boundary/ambiguity behavior. In particular, the printed abbreviation m c is reused for several MAT COPY forms with different argument patterns. That is evidence for command-specific syntax, not evidence that the lexer can safely expand m c without parser context.
+
+**Correction to section 10:** the statement that later matrix-command abbreviation entries still require page-image checks is now superseded for the entries on printed pp. 13-6–13-11 and 13-15. The image review now covers the contiguous addendum range pp. 13-1–13-15 (PDF pp. 431–445). No production lexer behavior changes.
