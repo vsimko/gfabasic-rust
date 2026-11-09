@@ -1,3 +1,8 @@
+---
+type: "Research Note"
+title: "GFA BASIC 3.0 Amiga — screen and window command details"
+---
+
 # GFA BASIC 3.0 Amiga — screen and window command details
 
 Source: *GFA BASIC 3.5 Interpreter*, Chapter 9, printed pp. 9-15–9-36. These pages document the 3.0 base-manual Amiga screen/window API. The 3.5 addendum separately lists a negative-screen-number `OPENW` variant; that single variant must not promote the entire 3.0 chapter to 3.5.
