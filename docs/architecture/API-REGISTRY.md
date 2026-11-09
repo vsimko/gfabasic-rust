@@ -1,3 +1,8 @@
+---
+type: "Architecture"
+title: "API registry and declaration source of truth"
+---
+
 # API registry and declaration source of truth
 
 - Status: **Accepted by [ADR 0006](adr/0006-api-registry.md).** The v1 JSON Schema, Python validator, validator unit tests, and documentation CI check are implemented. The registry currently contains one unsupported Atari ST TIMER research declaration and an 28-entry Amiga GFA BASIC 3.5 addendum catalogue. The Amiga entries are book-documented, not implemented as complete runtime features, and have unknown Linux support. Runtime handler resolution is tracked separately in #115; no documentation generator is implemented yet.
