@@ -1,23 +1,36 @@
 # Runtime handler registration
 
-Runtime handler IDs are stable API declaration IDs, not Rust symbol names.
-Language-core IDs use `gfa.language.<category>.<name>`; Amiga-profile IDs
-use `gfa.amiga.<category>.<name>`. IDs are case-sensitive and must match the
-registry declaration exactly.
+The TOML files under `api/registry/` are the canonical source of API declaration IDs, implementation status, signatures, and `implementation.handler` mappings. The runtime crate consumes a generated Rust requirement table; regenerate it with:
 
-Each registration carries an explicit API profile and a typed Rust function
+```sh
+python3 scripts/generate_runtime_handler_requirements.py
+python3 scripts/generate_runtime_handler_requirements.py --check
+```
+
+Language-core IDs use `gfa.language.<category>.<name>`; Amiga IDs use
+`gfa.amiga.<category>.<name>`; Atari ST IDs use `gfa.atari-st.<category>.<name>`.
+IDs are case-sensitive. Handler IDs are explicit registry values and are not
+Rust symbol names.
+
+Each runtime registration carries an API profile and a typed Rust function
 signature. Resolution requires exactly one registration with the expected
 profile and signature. Missing, duplicate, stale, wrong-namespace, wrong-profile,
 and wrong-signature mappings are errors; there is no generic fallback handler.
 
-Only declarations whose implementation status is `implemented` or `partial`
-may be resolved. Planned, research-only, and not-implemented declarations are
-rejected even if a function with the same ID happens to be registered.
+CI checks that every declaration marked `implemented` or `partial` has a
+supported typed signature and exactly one registered runtime handler. It also
+rejects handler IDs on non-callable declarations and registrations that are not
+referenced by the canonical registry. The runtime crate tests the complete
+generated declaration set, including unsupported declarations, without SDL3.
 
-The runtime crate exposes this validation contract in
-`gfabasic_runtime::handlers`. It is intentionally independent of SDL3.
-Registry evidence, Linux target support, and conformance remain separate
-requirements: adding a Rust registration does not promote any declaration to
-supported or conformant. The current Amiga 3.5 catalogue marks the initial
-combinatorics declarations as not implemented, so this change does not register
-them as callable runtime features.
+The compiler's semantic API resolver uses the same runtime lookup by stable
+declaration ID. The narrow combinatorics IR lowering now dispatches FACT,
+VARIAT, and COMBIN through those typed registrations rather than maintaining
+duplicate arithmetic implementations.
+
+The three combinatorics declarations are marked `partial`, not complete:
+the helpers use u32 inputs and u128 results, while the original interpreter's
+overflow/error behavior remains unverified and the compiler frontend remains
+restricted to its documented literal subset. Their Linux support remains
+`unknown` and conformance remains `not-tested`. A Rust registration does not
+promote evidence, target support, or historical conformance.
