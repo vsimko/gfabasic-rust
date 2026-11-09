@@ -299,8 +299,8 @@ mod tests {
     #[test]
     fn verified_amiga_35_fixtures_are_idempotent_and_semantics_preserving() {
         let fixtures = [
-            include_str!("../../../tests/corpus/amiga/3.5/combinatorics/fact-zero.bas"),
-            include_str!("../../../tests/corpus/amiga/3.5/combinatorics/three-intrinsics.bas"),
+            include_str!("../../../tests/corpus/amiga/3.5/combinatorics/fact-zero.lst"),
+            include_str!("../../../tests/corpus/amiga/3.5/combinatorics/three-intrinsics.lst"),
         ];
 
         for source in fixtures {
@@ -544,11 +544,11 @@ mod tests {
     #[test]
     fn verified_amiga_35_matrix_fixtures_are_idempotent_and_semantics_preserving() {
         let fixtures = [
-            include_str!("../../../tests/corpus/amiga/3.5/matrix/mat-one-identity.bas"),
-            include_str!("../../../tests/corpus/amiga/3.5/matrix/mat-clear-zero.bas"),
-            include_str!("../../../tests/corpus/amiga/3.5/matrix/mat-set-scalar.bas"),
-            include_str!("../../../tests/corpus/amiga/3.5/matrix/mat-base-transpose.bas"),
-            include_str!("../../../tests/corpus/amiga/3.5/matrix/mat-norm-row.bas"),
+            include_str!("../../../tests/corpus/amiga/3.5/matrix/mat-one-identity.lst"),
+            include_str!("../../../tests/corpus/amiga/3.5/matrix/mat-clear-zero.lst"),
+            include_str!("../../../tests/corpus/amiga/3.5/matrix/mat-set-scalar.lst"),
+            include_str!("../../../tests/corpus/amiga/3.5/matrix/mat-base-transpose.lst"),
+            include_str!("../../../tests/corpus/amiga/3.5/matrix/mat-norm-row.lst"),
         ];
 
         for source in fixtures {
