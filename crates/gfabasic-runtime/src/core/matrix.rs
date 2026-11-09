@@ -289,10 +289,7 @@ impl<'a> MatrixMut<'a> {
             }
             if pivot_row != pivot_column {
                 for column in 0..size {
-                    work.swap(
-                        pivot_column * size + column,
-                        pivot_row * size + column,
-                    );
+                    work.swap(pivot_column * size + column, pivot_row * size + column);
                 }
                 determinant = -determinant;
             }
@@ -302,8 +299,7 @@ impl<'a> MatrixMut<'a> {
             for row in (pivot_column + 1)..size {
                 let factor = work[row * size + pivot_column] / pivot;
                 for column in (pivot_column + 1)..size {
-                    work[row * size + column] -=
-                        factor * work[pivot_column * size + column];
+                    work[row * size + column] -= factor * work[pivot_column * size + column];
                 }
                 work[row * size + pivot_column] = 0.0;
             }
