@@ -59,7 +59,7 @@ with open(instructions_path, "w") as instruction_file, open(references_path, "w"
                 "mnemonic": instruction.getMnemonicString(),
                 "operands": operands,
                 "length": instruction.getLength(),
-            }) + "\\n")
+            }) + "\n")
             instruction_count += 1
             for ref in reference_manager.getReferencesFrom(address):
                 reference_file.write(json.dumps({
@@ -67,7 +67,7 @@ with open(instructions_path, "w") as instruction_file, open(references_path, "w"
                     "to": ref.getToAddress().getOffset(),
                     "type": ref.getReferenceType().getName(),
                     "operand": ref.getOperandIndex(),
-                }) + "\\n")
+                }) + "\n")
                 reference_count += 1
 
 c_path = os.path.join(out_dir, "decompiled.c")
@@ -92,7 +92,7 @@ with open(c_path, "w") as c_file:
             "file": file_name,
             "decompiled": bool(c_text),
         })
-        c_file.write("\\n/* 0x%08X %s */\\n%s\\n" % (entry, func.getName(), c_text))
+        c_file.write("\n/* 0x%08X %s */\n%s\n" % (entry, func.getName(), c_text))
 
 decomp.dispose()
 functions.sort(key=lambda item: item["entry"])
