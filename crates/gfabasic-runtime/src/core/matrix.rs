@@ -160,6 +160,8 @@ impl<'a> MatrixMut<'a> {
 
     /// Add a same-shaped floating-point field element-wise (Amiga 3.5 `MAT ADD a(),b()`).
     ///
+    /// The receiver is the destination and is updated in place.
+    ///
     /// The source shape and storage length are validated before any element changes.
     pub fn add_from(
         &mut self,
@@ -173,6 +175,8 @@ impl<'a> MatrixMut<'a> {
     }
 
     /// Subtract a same-shaped floating-point field element-wise (Amiga 3.5 `MAT SUB a(),b()`).
+    ///
+    /// The receiver is the destination and is updated in place.
     pub fn subtract_from(
         &mut self,
         source: &[f64],
