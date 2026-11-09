@@ -58,9 +58,10 @@
     ]
   },
   "implementation": {
-    "status": "not-implemented",
+    "status": "partial",
+    "handler": "gfa.language.math.combin",
     "notes": [
-      "A restricted compile-time literal prototype exists in crates/gfabasic-compiler/src/prototype.rs; it is not a complete runtime implementation or a registry-linked handler."
+      "The runtime exposes a typed exact-arithmetic helper for this operation. The helper is partial: it returns no value outside the u32 input/u128 result domain, while the original interpreter's overflow and error behavior remains unverified. The compiler prototype still restricts source expressions to its documented literal subset."
     ]
   },
   "support": [

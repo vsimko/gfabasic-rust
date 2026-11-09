@@ -1,6 +1,6 @@
 {
   "repository": "vsimko/gfabasic-rust",
-  "generated_at": "2026-11-09T15:13:09.947658Z",
+  "generated_at": "2026-11-09T16:33:26.743347Z",
   "freshness_threshold_hours": 168,
   "workflows": [
     {
@@ -8,28 +8,28 @@
       "file": "docs.yml",
       "note": "Markdown, JavaScript, API registry, corpus metadata and local-link validation.",
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/docs.yml",
-      "state": "success",
+      "state": "queued",
       "latest": {
-        "id": 42642352699,
+        "id": 42655946402,
         "name": "Documentation checks",
-        "status": "success",
+        "status": "queued",
         "event": "pull_request",
         "branch": "fix/115-runtime-handler-registry",
-        "created_at": "2026-11-09T15:12:47Z",
-        "updated_at": "2026-11-09T15:13:03Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42642352699",
+        "created_at": "2026-11-09T16:33:18Z",
+        "updated_at": "2026-11-09T16:33:18Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42655946402",
         "age_hours": 0,
         "freshness": "fresh"
       },
       "last_success": {
-        "id": 42642352699,
+        "id": 42655647747,
         "name": "Documentation checks",
         "status": "success",
         "event": "pull_request",
-        "branch": "fix/115-runtime-handler-registry",
-        "created_at": "2026-11-09T15:12:47Z",
-        "updated_at": "2026-11-09T15:13:03Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42642352699",
+        "branch": "docs/corpus-count-sync-42",
+        "created_at": "2026-11-09T16:31:32Z",
+        "updated_at": "2026-11-09T16:31:55Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42655647747",
         "age_hours": 0,
         "freshness": "fresh"
       }
@@ -39,28 +39,28 @@
       "file": "rust.yml",
       "note": "Formatting, Clippy, workspace tests/build and formatter fixtures.",
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/rust.yml",
-      "state": "success",
+      "state": "in_progress",
       "latest": {
-        "id": 42642352965,
+        "id": 42655946154,
         "name": "Rust checks",
-        "status": "success",
+        "status": "in_progress",
         "event": "pull_request",
         "branch": "fix/115-runtime-handler-registry",
-        "created_at": "2026-11-09T15:12:47Z",
-        "updated_at": "2026-11-09T15:13:06Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42642352965",
+        "created_at": "2026-11-09T16:33:18Z",
+        "updated_at": "2026-11-09T16:33:22Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42655946154",
         "age_hours": 0,
         "freshness": "fresh"
       },
       "last_success": {
-        "id": 42642352965,
+        "id": 42650177428,
         "name": "Rust checks",
         "status": "success",
-        "event": "pull_request",
-        "branch": "fix/115-runtime-handler-registry",
-        "created_at": "2026-11-09T15:12:47Z",
-        "updated_at": "2026-11-09T15:13:06Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42642352965",
+        "event": "push",
+        "branch": "main",
+        "created_at": "2026-11-09T15:59:29Z",
+        "updated_at": "2026-11-09T15:59:47Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42650177428",
         "age_hours": 0,
         "freshness": "fresh"
       }
@@ -80,7 +80,7 @@
         "created_at": "2026-11-09T14:41:30Z",
         "updated_at": "2026-11-09T14:41:53Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42637148655",
-        "age_hours": 0,
+        "age_hours": 1,
         "freshness": "fresh"
       },
       "last_success": {
@@ -92,7 +92,7 @@
         "created_at": "2026-11-09T14:41:30Z",
         "updated_at": "2026-11-09T14:41:53Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42637148655",
-        "age_hours": 0,
+        "age_hours": 1,
         "freshness": "fresh"
       }
     },
@@ -111,7 +111,7 @@
         "created_at": "2026-11-09T12:51:23Z",
         "updated_at": "2026-11-09T13:02:24Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42620471061",
-        "age_hours": 2,
+        "age_hours": 3,
         "freshness": "fresh"
       },
       "last_success": {
@@ -123,7 +123,7 @@
         "created_at": "2026-11-09T12:51:23Z",
         "updated_at": "2026-11-09T13:02:24Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42620471061",
-        "age_hours": 2,
+        "age_hours": 3,
         "freshness": "fresh"
       }
     },
@@ -142,7 +142,7 @@
         "created_at": "2026-11-09T14:15:17Z",
         "updated_at": "2026-11-09T14:16:05Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42632866070",
-        "age_hours": 0,
+        "age_hours": 2,
         "freshness": "fresh"
       },
       "last_success": {
@@ -154,7 +154,7 @@
         "created_at": "2026-11-09T14:15:17Z",
         "updated_at": "2026-11-09T14:16:05Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42632866070",
-        "age_hours": 0,
+        "age_hours": 2,
         "freshness": "fresh"
       }
     },
@@ -163,16 +163,16 @@
       "file": "release-sbom.yml",
       "note": "Validates PR SBOMs and uploads on published releases; release attachment is unproven until a release runs.",
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/release-sbom.yml",
-      "state": "success",
+      "state": "in_progress",
       "latest": {
-        "id": 42642352653,
+        "id": 42655946136,
         "name": "Release SBOM",
-        "status": "success",
+        "status": "in_progress",
         "event": "pull_request",
         "branch": "fix/115-runtime-handler-registry",
-        "created_at": "2026-11-09T15:12:46Z",
-        "updated_at": "2026-11-09T15:13:06Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42642352653",
+        "created_at": "2026-11-09T16:33:18Z",
+        "updated_at": "2026-11-09T16:33:22Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42655946136",
         "age_hours": 0,
         "freshness": "fresh"
       },
@@ -185,7 +185,7 @@
         "created_at": "2026-11-09T15:12:46Z",
         "updated_at": "2026-11-09T15:13:06Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42642352653",
-        "age_hours": 0,
+        "age_hours": 1,
         "freshness": "fresh"
       }
     },
@@ -204,7 +204,7 @@
         "created_at": "2026-11-09T14:25:56Z",
         "updated_at": "2026-11-09T14:26:09Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42634608522",
-        "age_hours": 0,
+        "age_hours": 2,
         "freshness": "fresh"
       },
       "last_success": {
@@ -216,7 +216,7 @@
         "created_at": "2026-11-09T14:25:56Z",
         "updated_at": "2026-11-09T14:26:09Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42634608522",
-        "age_hours": 0,
+        "age_hours": 2,
         "freshness": "fresh"
       }
     },
@@ -227,26 +227,26 @@
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/pr-preview.yml",
       "state": "in_progress",
       "latest": {
-        "id": 42642352591,
+        "id": 42655946205,
         "name": "Pull request website preview",
         "status": "in_progress",
         "event": "pull_request",
         "branch": "fix/115-runtime-handler-registry",
-        "created_at": "2026-11-09T15:12:46Z",
-        "updated_at": "2026-11-09T15:13:06Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42642352591",
+        "created_at": "2026-11-09T16:33:18Z",
+        "updated_at": "2026-11-09T16:33:22Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42655946205",
         "age_hours": 0,
         "freshness": "fresh"
       },
       "last_success": {
-        "id": 42641045436,
+        "id": 42650180492,
         "name": "Pull request website preview",
         "status": "success",
         "event": "pull_request",
-        "branch": "test/corpus-matrix-add-sub",
-        "created_at": "2026-11-09T15:05:14Z",
-        "updated_at": "2026-11-09T15:05:31Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42641045436",
+        "branch": "test/corpus-mat-mul-dot",
+        "created_at": "2026-11-09T15:59:31Z",
+        "updated_at": "2026-11-09T15:59:46Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42650180492",
         "age_hours": 0,
         "freshness": "fresh"
       }
