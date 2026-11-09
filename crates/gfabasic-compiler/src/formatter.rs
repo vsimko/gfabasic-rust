@@ -1,49 +1,52 @@
 //! Conservative, lossless-source-aware formatter for the supported frontend subset.
 //!
 //! Formatting is intentionally limited to syntax accepted by `parse_document`.
-//! Token spellings are copied from their original source spans; the formatter
-//! never case-folds or rewrites identifiers or numeric literal text.
+//! Token spellings and inline-comment text are copied from their original source spans;
+//! the formatter never case-folds or rewrites identifiers or numeric literal text.
 
-use crate::diagnostics::{Diagnostic, DiagnosticCategory, DiagnosticSeverity};
+use crate::diagnostics::Diagnostic;
 use crate::frontend::{TokenKind, TriviaKind, parse_document};
 use crate::source::SourceId;
 
 /// Format the currently supported Amiga GFA BASIC 3.5 source subset.
 ///
 /// The formatter validates the complete input with the lossless parser before
-/// producing output. Unsupported syntax (including comments and string/DATA
-/// payloads until their lexical rules are verified) returns diagnostics and
-/// never yields partially formatted text.
+/// producing output. Inline comments are retained verbatim; unsupported
+/// string/DATA payloads return diagnostics instead of partially formatted text.
 ///
 /// The canonical prototype layout uses one space around assignment, one space
 /// after commas, no spaces inside intrinsic-call parentheses, LF line endings,
-/// one statement per line, and exactly one final newline. Original token text
-/// is retained verbatim, including identifier spelling and numeric literal
-/// spelling. This is a project style policy for the implemented subset, not a
-/// claim about historical interpreter formatting.
+/// one statement per line, and exactly one final newline. Original token and
+/// comment text is retained verbatim. This is a project style policy for the
+/// implemented subset, not a claim about historical interpreter formatting.
 pub fn format_source(source_id: SourceId, source: &str) -> Result<String, Vec<Diagnostic>> {
     let document = parse_document(source_id, source)?;
-    if let Some(comment) = document
-        .syntax
-        .trivia
-        .iter()
-        .find(|trivia| trivia.kind == TriviaKind::Comment)
-    {
-        return Err(vec![
-            Diagnostic::new(
-                "GFA-SUPPORT-0001",
-                DiagnosticSeverity::Error,
-                DiagnosticCategory::Unsupported,
-                "formatter does not yet preserve inline comments",
-            )
-            .with_primary_span(comment.span),
-        ]);
-    }
     let mut output = String::with_capacity(source.len() + 1);
     let mut previous: Option<&TokenKind> = None;
     let mut line_has_tokens = false;
+    let mut comments = document
+        .syntax
+        .trivia
+        .iter()
+        .filter(|trivia| trivia.kind == TriviaKind::Comment)
+        .peekable();
 
     for token in &document.syntax.tokens {
+        while comments
+            .peek()
+            .is_some_and(|comment| comment.span.start < token.span.start)
+        {
+            let comment = comments.next().expect("peeked comment exists");
+            if line_has_tokens {
+                output.push(' ');
+            }
+            output.push_str(
+                source
+                    .get(comment.span.start..comment.span.end)
+                    .expect("comment trivia span is a valid source range"),
+            );
+        }
+
         match &token.kind {
             TokenKind::End => break,
             TokenKind::Newline => {
@@ -591,7 +594,6 @@ mod tests {
             "PRINT \"not supported yet\"\n",
             "REM comment\n",
             "' apostrophe comment\n",
-            "x=FACT(1) ! trailing comment\n",
             "DATA 1,2,3\n",
         ];
 
@@ -606,6 +608,30 @@ mod tests {
                 "source unexpectedly accepted: {source:?}"
             );
         }
+    }
+
+    #[test]
+    fn inline_comments_are_preserved_and_formatting_is_idempotent() {
+        let source = "x=FACT(1)  ! keep  exact text\r\nPRINT x ! second comment\n";
+        let formatted = format(source);
+
+        assert_eq!(
+            formatted,
+            "x = FACT(1) ! keep  exact text\nPRINT x ! second comment\n"
+        );
+        assert_eq!(format(&formatted), formatted);
+
+        let mut sources = SourceMap::new();
+        let source_id = sources.add_source("inline-comments.bas", formatted.as_str());
+        let document = parse_document(source_id, &formatted).expect("formatted comments parse");
+        let comments: Vec<_> = document
+            .syntax
+            .trivia
+            .iter()
+            .filter(|trivia| trivia.kind == crate::frontend::TriviaKind::Comment)
+            .map(|trivia| &formatted[trivia.span.start..trivia.span.end])
+            .collect();
+        assert_eq!(comments, ["! keep  exact text", "! second comment"]);
     }
 
     #[test]
