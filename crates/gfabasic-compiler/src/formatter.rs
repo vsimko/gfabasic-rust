@@ -11,16 +11,14 @@ use crate::source::SourceId;
 /// Format the currently supported Amiga GFA BASIC 3.5 source subset.
 ///
 /// The formatter validates the complete input with the lossless parser before
-/// producing output. Unsupported syntax (including comments and string/DATA
-/// payloads until their lexical rules are verified) returns diagnostics and
-/// never yields partially formatted text.
+/// producing output. Inline comments are retained verbatim; unsupported
+/// string/DATA payloads return diagnostics instead of partially formatted text.
 ///
 /// The canonical prototype layout uses one space around assignment, one space
 /// after commas, no spaces inside intrinsic-call parentheses, LF line endings,
-/// one statement per line, and exactly one final newline. Original token text
-/// is retained verbatim, including identifier spelling and numeric literal
-/// spelling. This is a project style policy for the implemented subset, not a
-/// claim about historical interpreter formatting.
+/// one statement per line, and exactly one final newline. Original token and
+/// comment text is retained verbatim. This is a project style policy for the
+/// implemented subset, not a claim about historical interpreter formatting.
 pub fn format_source(source_id: SourceId, source: &str) -> Result<String, Vec<Diagnostic>> {
     let document = parse_document(source_id, source)?;
     let mut output = String::with_capacity(source.len() + 1);
@@ -614,12 +612,12 @@ mod tests {
 
     #[test]
     fn inline_comments_are_preserved_and_formatting_is_idempotent() {
-        let source = "x=FACT(1)  ! keep  exact text\\r\\nPRINT x ! second comment\\n";
+        let source = "x=FACT(1)  ! keep  exact text\r\nPRINT x ! second comment\n";
         let formatted = format(source);
 
         assert_eq!(
             formatted,
-            "x = FACT(1) ! keep  exact text\\nPRINT x ! second comment\\n"
+            "x = FACT(1) ! keep  exact text\nPRINT x ! second comment\n"
         );
         assert_eq!(format(&formatted), formatted);
 
