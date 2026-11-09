@@ -2,15 +2,17 @@
 
 ## Decision and scope
 
-**Decision (2026-11-03):** Use UTF-8 Markdown as the canonical source format for human-readable project documentation. Use GitHub-flavoured Markdown (GFM) features only where GitHub renders them consistently. Keep all documentation in this repository.
+**Decision (2026-11-09):** Use **Google Open Knowledge Format (OKF) v0.2** as the canonical structure and metadata convention for the human-readable documentation bundle rooted at `docs/`. The authoritative specification is [Google's Open Knowledge Format v0.2 specification](https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md).
 
-Issue #14 refers to an “OKF format”, but the issue does not identify an expanded name, publisher, specification, version, or conformance profile. The repository contains no evidence that “OKF” names a specific documentation format. This is an unresolved requirement, not a format that can be implemented or validated as written.
+OKF v0.2 is identifiable and specified. It is a deliberately minimal, human- and agent-readable knowledge-bundle format: a directory hierarchy of UTF-8 Markdown concept files with YAML frontmatter. Each non-reserved concept file requires a non-empty `type` field. `index.md` and `log.md` are reserved filenames with their own structures; a bundle-root `index.md` may declare `okf_version: "0.2"`. The specification defines optional provenance, trust, lifecycle, and attestation metadata while allowing producer-defined types and extension fields.
 
-Do not describe Markdown as “OKF”, and do not claim compliance with an unidentified specification. If the requester supplies the intended expansion or a specification, review it in a separate decision before changing the canonical format.
+The repository's issue [#14](https://github.com/vsimko/gfabasic-rust/issues/14) explicitly selects Google OKF v0.2 and defines the migration, validation, website-generation, and CI requirements. The earlier statement that OKF could not be identified was incorrect and is superseded by this decision.
 
-Markdown is the practical choice for the current project because it is plain text, open, readable in GitHub, accessible to contributors without a special authoring tool, and suitable for normal Git diffs and reviews. This decision does not prevent the project from generating other formats from the Markdown source in the future.
+Markdown remains the human-readable body syntax, but Markdown alone is not the complete bundle convention: OKF adds required concept frontmatter, reserved index/log semantics, and defined metadata conventions. Do not claim that the repository is fully OKF-conformant until the complete bundle has been migrated and validated against the v0.2 conformance requirements.
 
-This policy applies to human-readable project documentation. Machine-readable API declarations and configuration data must use separately defined, validated formats. They must not be maintained by scraping explanatory Markdown.
+OKF does not define a fixed taxonomy, schema registry, required toolchain, or website generator. It does not replace domain-specific machine-readable schemas such as the project's API registry. Keep API declarations and configuration data in their existing structured source formats; document or link to them from OKF concepts rather than duplicating their schemas as prose.
+
+This policy applies to the canonical documentation bundle in `docs/`. Keep its editable source in Git. The website is a generated publication of selected canonical concepts, not a second authoring location. Do not create a parallel top-level `knowledge/` tree or hand-maintained duplicate website content.
 
 ## Source format
 
