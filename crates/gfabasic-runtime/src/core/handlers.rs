@@ -53,12 +53,11 @@ impl CoreHandler {
         let result = match self {
             Self::Factorial => combinatorics::factorial(n),
             Self::Variations | Self::Combinations => {
-                let k = u32::try_from(arguments[1]).map_err(|_| {
-                    InvokeError::IntegerOutOfRange {
+                let k =
+                    u32::try_from(arguments[1]).map_err(|_| InvokeError::IntegerOutOfRange {
                         argument: 1,
                         value: arguments[1],
-                    }
-                })?;
+                    })?;
                 match self {
                     Self::Variations => combinatorics::variat(n, k),
                     Self::Combinations => combinatorics::combin(n, k),
@@ -73,8 +72,14 @@ impl CoreHandler {
 /// Invocation failures at the Rust runtime boundary.
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum InvokeError {
-    WrongArity { expected: usize, actual: usize },
-    IntegerOutOfRange { argument: usize, value: i64 },
+    WrongArity {
+        expected: usize,
+        actual: usize,
+    },
+    IntegerOutOfRange {
+        argument: usize,
+        value: i64,
+    },
     /// The mathematical domain is invalid or the exact result exceeds u128.
     DomainOrOverflow,
 }
@@ -211,13 +216,17 @@ pub fn validate_handler_registry(
     }
     for entry in registrations {
         if !entry.id.starts_with("gfa.runtime.core.") {
-            errors.push(RegistryError::InvalidHandlerNamespace { handler_id: entry.id });
+            errors.push(RegistryError::InvalidHandlerNamespace {
+                handler_id: entry.id,
+            });
         }
         if !declarations
             .iter()
             .any(|declaration| declaration.handler_id == Some(entry.id))
         {
-            errors.push(RegistryError::StaleHandler { handler_id: entry.id });
+            errors.push(RegistryError::StaleHandler {
+                handler_id: entry.id,
+            });
         }
     }
     if errors.is_empty() {
