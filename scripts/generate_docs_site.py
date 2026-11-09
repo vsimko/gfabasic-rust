@@ -61,6 +61,10 @@ def is_draft_target(target: str, source: Path) -> bool:
     resolved = source_path_for_target(target, source)
     if resolved is None or resolved.name in {"index.md", "log.md"} or resolved.suffix.lower() != ".md":
         return False
+    try:
+        resolved.resolve().relative_to(BUNDLE.resolve())
+    except ValueError:
+        return False
     if not resolved.is_file():
         return False
     data, _ = read_document(resolved)
