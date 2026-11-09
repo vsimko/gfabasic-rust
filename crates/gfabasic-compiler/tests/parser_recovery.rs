@@ -11,7 +11,7 @@ fn parser_reports_independent_line_errors_after_synchronizing() {
         .expect_err("malformed and unsupported statements must remain errors");
 
     assert_eq!(diagnostics.len(), 2);
-    assert_eq!(diagnostics[0].code, "GFA-PARSE-0001");
+    assert_eq!(diagnostics[0].code, "GFA-SUPPORT-0001");
     assert_eq!(diagnostics[0].category.as_str(), "syntax");
     assert_eq!(
         diagnostics[0]
@@ -377,5 +377,5 @@ fn parser_rejects_let_rhs_outside_the_supported_intrinsic_subset() {
     let span = diagnostics[0]
         .primary_span
         .expect("unsupported LET expression has a syntax span");
-    assert_eq!(&source[span.start..span.end], "1");
+    assert_eq!(&source[span.start..span.end], "RND");
 }
