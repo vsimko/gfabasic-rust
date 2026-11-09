@@ -306,3 +306,21 @@ The page images show the spaces in the short forms as printed. The `MAT ADD` and
 Printed pp. 13-24–13-25 were also checked. They continue matrix-operation examples (including MAT CPY/XCPY and matrix multiplication) but add no separate `Abbreviation:` row. No abbreviation was inferred from example code alone.
 
 Together with sections 10–11, the page-image review now covers printed 3.5 addendum pp. 13-1–13-25 (PDF pp. 431–455). The inventory is still limited to explicitly printed command-specific forms. It does not establish a general expansion algorithm, minimum prefix length, case folding, whitespace normalization, token boundaries, ambiguity resolution, or acceptance in `.LST` source. No production lexer behavior changes.
+
+
+## 13. Page-image verification of 3.5 matrix analysis abbreviations (2026-11-09)
+
+The following addendum pages were inspected as page images: printed pp. 13-26–13-31 (PDF pp. 456–461). Four further command-specific abbreviation rows are explicitly printed:
+
+| Printed page | Full command form | Printed abbreviation |
+|---|---|---|
+| 13-26 | MAT DET x=a([i,j])[n] | m d x=a([i,j]),[n] |
+| 13-27 | MAT QDET x=a([i,j])[n] | M qd x=a([i,j]),[n] |
+| 13-29 | MAT RANG x=a([i,j])[n] | m ra x=a([i,j]),[n] |
+| 13-30 | MAT INV b()=a() | m inv b()=a() |
+
+The capitalization of the first character in the printed `MAT QDET` abbreviation is visibly uppercase `M`; it is recorded as printed rather than silently normalized to lowercase. The source notation around optional arguments is reproduced at the level visible in the page image; the table is an evidence inventory, not a proposed grammar for the abbreviated forms.
+
+Printed pp. 13-28 and 13-31 were also checked. They continue the MAT DET/QDET and MAT INV examples/results respectively, without adding a separate abbreviation row. No abbreviation is inferred from example code alone.
+
+The page-image review now covers printed 3.5 addendum pp. 13-1–13-31 (PDF pp. 431–461). The added rows remain command-specific documentation evidence. They do not establish a general expansion algorithm, case normalization, whitespace handling, source-file acceptance, or how command abbreviations interact with identifiers and parser context. No production lexer behavior changes.
