@@ -1142,12 +1142,20 @@ mod tests {
                 columns: 3,
             })
         );
+    }
+
+    #[test]
+    fn rank_rejects_invalid_explicit_tolerance() {
+        let mut values = [1.0, 0.0, 0.0, 1.0];
+        let matrix = MatrixMut::new(2, 2, &mut values).unwrap();
+
         assert_eq!(
             matrix.rank_with_tolerance(f64::NAN),
-            Err(MatrixShapeError::RankRequiresSquare {
-                rows: 2,
-                columns: 3,
-            })
+            Err(MatrixShapeError::InvalidRankTolerance)
+        );
+        assert_eq!(
+            matrix.rank_with_tolerance(-1.0),
+            Err(MatrixShapeError::InvalidRankTolerance)
         );
     }
 
