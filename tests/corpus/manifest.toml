@@ -6,6 +6,7 @@ fixtures = [
   "amiga/3.0/control-flow/nested-loop-close-order",
   "amiga/3.0/bit-operations/bset-btst-basic",
   "amiga/3.5/matrix/mat-one-identity",
+  "amiga/3.5/matrix/mat-cpy-submatrix",
   "amiga/3.5/matrix/mat-clear-zero",
   "amiga/3.5/matrix/mat-set-scalar",
   "amiga/3.5/matrix/mat-base-transpose",
@@ -14,7 +15,7 @@ fixtures = [
   "amiga/3.5/matrix/mat-sub",
   "amiga/3.5/matrix/mat-mul-dot",
   "amiga/3.5/data/mat-read-data",
-  "amiga/3.5/data/mat-mul-triple",
   "amiga/3.5/combinatorics/fact-zero",
   "amiga/3.5/combinatorics/three-intrinsics",
+  "amiga/3.5/data/mat-mul-triple",
 ]
