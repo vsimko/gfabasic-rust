@@ -12,5 +12,6 @@ notes = [
   "Independently authored minimal fixture; it uses different dimensions, values, and a smaller copied region than the manual's illustrative program.",
   "The Amiga 3.5 addendum documents MAT CPY a(i,j)=b(k,l),h,w as copying h rows with w elements from the source offsets into the destination offsets; the special case without offsets copies a complete same-order matrix.",
   "The selected source and destination offsets are both (2,2), avoiding ambiguity in the addendum's prose ordering of the source indices.",
-  "Verified against the supplied 3.5 addendum page images; no original interpreter execution has been performed."
+  "Verified against the supplied 3.5 addendum page images; no original interpreter execution has been performed.",
+  "Stored under research because MAT CPY is not part of the formatter's currently accepted statement subset."
 ]
