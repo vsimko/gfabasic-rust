@@ -269,9 +269,11 @@ fn is_inline_comment_marker(bytes: &[u8], offset: usize) -> bool {
         .iter()
         .rposition(|byte| matches!(byte, b'\r' | b'\n'))
         .map_or(0, |index| index + 1);
-    bytes[line_start..offset]
-        .iter()
-        .any(|byte| !matches!(byte, b' ' | b'\t'))
+    bytes.get(offset.wrapping_sub(1))
+        .is_some_and(|byte| matches!(byte, b' ' | b'\t'))
+        && bytes[line_start..offset]
+            .iter()
+            .any(|byte| !matches!(byte, b' ' | b'\t'))
         && !is_data_instruction_line(bytes, offset)
 }
 

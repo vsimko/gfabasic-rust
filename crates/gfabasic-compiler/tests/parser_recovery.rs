@@ -237,7 +237,7 @@ fn parser_recovery_handles_classic_cr_line_endings() {
 fn parser_ignores_and_preserves_inline_comments() {
     use gfabasic_compiler::frontend::{TriviaKind, parse_document};
 
-    let source = "x=FACT(0) ! inline comment\r\nPRINT x! adjacent comment";
+    let source = "x=FACT(0) ! inline comment\r\nPRINT x ! adjacent comment";
     let mut sources = SourceMap::new();
     let source_id = sources.add_source("inline-comments.LST", source);
 
@@ -285,5 +285,22 @@ fn exclamation_mark_in_data_line_is_not_an_inline_comment() {
     let span = diagnostics[0]
         .primary_span
         .expect("unsupported DATA text has a lexical span");
+    assert_eq!(&source[span.start..span.end], "!");
+}
+
+#[test]
+fn exclamation_mark_attached_to_identifier_is_not_a_comment() {
+    use gfabasic_compiler::frontend::lex_lossless;
+
+    let source = "line!=TRUE";
+    let mut sources = SourceMap::new();
+    let source_id = sources.add_source("boolean-suffix.LST", source);
+
+    let diagnostics = lex_lossless(source_id, source)
+        .expect_err("the unsupported boolean suffix must not be reinterpreted as a comment");
+    assert_eq!(diagnostics[0].code, "GFA-LEX-0001");
+    let span = diagnostics[0]
+        .primary_span
+        .expect("unsupported suffix has a lexical span");
     assert_eq!(&source[span.start..span.end], "!");
 }
