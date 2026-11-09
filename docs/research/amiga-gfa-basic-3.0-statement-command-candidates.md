@@ -1,3 +1,8 @@
+---
+type: "Research Note"
+title: "Amiga GFA BASIC 3.0 statement and command candidate catalogue"
+---
+
 # Amiga GFA BASIC 3.0 statement and command candidate catalogue
 
 Source: *GFA BASIC 3.5 Interpreter*, Appendix 12 BASIC command index, printed pp. 12-8–12-18, cross-checked against the detailed chapter evidence files. The index is in the 3.0 base-manual portion of the book. Every row below is therefore a **3.0 candidate**, not an assertion of Amiga GFA BASIC 3.5 availability.
