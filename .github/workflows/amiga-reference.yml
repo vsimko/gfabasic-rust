@@ -129,6 +129,7 @@ jobs:
           cp analysis/amiga-3.52/* /tmp/published-analysis/
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          rm -rf analysis/amiga-3.52
           git fetch origin "$ANALYSIS_BRANCH" || true
           if git ls-remote --exit-code --heads origin "$ANALYSIS_BRANCH" >/dev/null 2>&1; then
             git checkout -B "$ANALYSIS_BRANCH" "origin/$ANALYSIS_BRANCH"
