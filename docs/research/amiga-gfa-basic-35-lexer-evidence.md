@@ -339,3 +339,16 @@ The page-image pass confirms the following source descriptions:
 The p. 3-10–3-12 page images were inspected at 180 dpi to resolve the OCR-sensitive `+`, `-`, and `=` forms; pp. 3-3–3-9 were reviewed together at 120 dpi. Combined with the previously recorded image checks of p. 3-2 and pp. 3-13–3-16, the full printed operator chapter pp. 3-1–3-16 has now been image-reviewed. The comparison glyphs and alternate forms remain as recorded in the earlier inventory; this pass adds no 3.5-specific rule.
 
 **Implementation gate:** do not enable these operators in the Amiga 3.5 production lexer solely on this evidence. The manual labels the chapter GFA-BASIC 3.0. The operator inventory, precedence, contextual use of `=`, and string concatenation must remain inherited candidates until confirmed by an explicit 3.5 passage or reproducible 3.5 interpreter observation.
+
+
+## 6. Textual listing format and encoding limits
+
+The supplied interpreter manual describes the editor's textual program interchange format:
+
+- **AM-INTERPRETER-35, printed p. 1-14:** the Merge (F2) command merges data “in ASCII format” from a `.LST` file into the current program. Save,A (Shift+F2) writes the current program in ASCII format for later Merge; the extension is `.LST`.
+- **AM-INTERPRETER-35, printed p. 7-41:** LIST writes program data in ASCII format and explicitly says data intended for later Merge must be saved with LIST or SAVE,A in ASCII format; `.LST` is the default extension.
+- **AM-BOOK-DE-1990, section describing ASCII files (PDF page 100; printed page number not legible in the supplied OCR):** defines an ASCII file as writing each text and control character in occurrence order as its corresponding value from 0 to 255. It contrasts these files with token-coded `.GFA` files. This is supplementary V3.03 book evidence, not a complete 3.5 byte-encoding specification.
+
+These passages establish the intended *textual ASCII listing* format and the `.LST` interchange role. They do not specify a concrete 8-bit character mapping for values 128–255, Unicode/UTF-8 support, BOM handling, or how malformed byte sequences should be handled. The phrase “ASCII” alone must not be silently interpreted as UTF-8, ISO-8859-1, Windows-1252, or Amiga-specific character encoding. Keep the decoder contract unresolved pending stronger 3.5 evidence or reproducible tests against the original interpreter.
+
+The German book's STORE entry separately specifies CR/LF (CHR$(13)/CHR$(10)) after each serialized string-field element. That is evidence for STORE's data-file format only; it does **not** establish the line-ending convention of program `.LST` files. Do not reuse it as an LST decoder rule.
