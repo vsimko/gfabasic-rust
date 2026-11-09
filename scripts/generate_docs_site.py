@@ -44,21 +44,36 @@ def slugify(value: str) -> str:
     return re.sub(r"\s+", "-", re.sub(r"[^\w -]", "", value.lower()).strip())
 
 
-def rewrite_target(target: str, source: Path, output_file: Path) -> str:
+def source_path_for_target(target: str, source: Path) -> Path | None:
     parsed = urlsplit(target)
-    if parsed.scheme or target.startswith("//"):
-        return target
-    if not parsed.path:
-        return target
+    if parsed.scheme or target.startswith("//") or not parsed.path:
+        return None
     raw_path = unquote(parsed.path)
-    if raw_path.startswith("/"):
-        resolved = BUNDLE / raw_path.lstrip("/")
-    else:
-        resolved = source.parent / raw_path
+    resolved = BUNDLE / raw_path.lstrip("/") if raw_path.startswith("/") else source.parent / raw_path
     if resolved.is_dir() or raw_path.endswith("/"):
         resolved = resolved / "index.md"
     elif not resolved.suffix and resolved.with_suffix(".md").is_file():
         resolved = resolved.with_suffix(".md")
+    return resolved
+
+
+def is_draft_target(target: str, source: Path) -> bool:
+    resolved = source_path_for_target(target, source)
+    if resolved is None or resolved.name in {"index.md", "log.md"} or resolved.suffix.lower() != ".md":
+        return False
+    if not resolved.is_file():
+        return False
+    data, _ = read_document(resolved)
+    return data.get("status", "stable") == "draft"
+
+
+def rewrite_target(target: str, source: Path, output_file: Path) -> str:
+    parsed = urlsplit(target)
+    if parsed.scheme or target.startswith("//") or not parsed.path:
+        return target
+    resolved = source_path_for_target(target, source)
+    if resolved is None:
+        return target
     try:
         relative = resolved.resolve().relative_to(BUNDLE.resolve())
     except ValueError:
@@ -86,15 +101,25 @@ def render_body(body: str, source: Path, output_file: Path) -> str:
                 used[slug] = count + 1
                 token.attrSet("id", slug if count == 0 else f"{slug}-{count}")
         if token.type == "inline" and token.children:
+            children = []
+            skip_link_close = False
             for child in token.children:
                 if child.type == "link_open":
                     href = child.attrGet("href")
+                    if href and is_draft_target(href, source):
+                        skip_link_close = True
+                        continue
                     if href:
                         child.attrSet("href", rewrite_target(href, source, output_file))
+                elif child.type == "link_close" and skip_link_close:
+                    skip_link_close = False
+                    continue
                 elif child.type == "image":
                     src = child.attrGet("src")
                     if src:
                         child.attrSet("src", rewrite_target(src, source, output_file))
+                children.append(child)
+            token.children = children
     return MARKDOWN.renderer.render(tokens, MARKDOWN.options, {})
 
 
@@ -117,6 +142,8 @@ def page_nav(source: Path, docs: list[tuple[Path, dict, str]], output_file: Path
     if index_entry:
         for match in LINK_RE.finditer(index_entry[2]):
             label, target = match.group(1), match.group(2).strip("<>")
+            if is_draft_target(target, parent_index):
+                continue
             href = rewrite_target(target, parent_index, output_file)
             links.append(
                 f'<li><a href="{html.escape(href, quote=True)}">{html.escape(label)}</a></li>'
@@ -142,6 +169,8 @@ def render_page(source: Path, data: dict, body: str, docs: list[tuple[Path, dict
     metadata = ""
     if data.get("type"):
         metadata = f'<p class="docs-meta"><span>{html.escape(str(data["type"]))}</span></p>'
+    if data.get("status") == "deprecated":
+        metadata += '<p class="docs-deprecated" role="note">Deprecated concept — retained for historical links; do not use as current guidance.</p>'
     return f"""<!doctype html>
 <html lang="en">
 <head>
@@ -177,7 +206,8 @@ def build(check: bool = False) -> list[Path]:
     docs = []
     for path in sources:
         data, body = read_document(path)
-        docs.append((path, data, body))
+        if path.name == "index.md" or data.get("status", "stable") != "draft":
+            docs.append((path, data, body))
     generated = {}
     for path, data, body in docs:
         output_file = (OUTPUT / path.relative_to(BUNDLE)).with_suffix(".html")
