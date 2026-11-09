@@ -233,13 +233,12 @@ fn parser_recovery_handles_classic_cr_line_endings() {
     );
 }
 
-
 #[test]
 fn parser_rejects_same_line_statements_and_recovers_at_the_next_line() {
     // The current MVP parser deliberately accepts one statement per source
     // line. This guards that implementation boundary; it does not assert
     // that the original Amiga 3.5 interpreter forbids same-line statements.
-    let source = "x=FACT(0) y=FACT(1)\\nz=FACT(2)\\n";
+    let source = "x=FACT(0) y=FACT(1)\nz=FACT(2)\n";
     let mut sources = SourceMap::new();
     let source_id = sources.add_source("same-line-statements.LST", source);
 
