@@ -216,7 +216,7 @@ mod tests {
 
     #[test]
     fn reports_matrix_semantics_as_not_implemented() {
-        let source = include_str!("../../../tests/corpus/amiga/3.5/matrix/mat-one-identity.bas");
+        let source = include_str!("../../../tests/corpus/amiga/3.5/matrix/mat-one-identity.lst");
         let mut sources = SourceMap::new();
         let source_id = sources.add_source("matrix.bas", source);
         let document = parse_document(source_id, source).expect("matrix fixture syntax parses");
