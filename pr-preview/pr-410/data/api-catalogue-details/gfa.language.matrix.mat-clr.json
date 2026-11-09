@@ -1,0 +1,73 @@
+{
+  "id": "gfa.language.matrix.mat-clr",
+  "name": "MAT CLR",
+  "kind": "statement",
+  "namespace": "language-core",
+  "category": "math-and-matrix",
+  "availability": [
+    {
+      "dialect": "amiga-gfa-basic-interpreter",
+      "versions": [
+        "3.5"
+      ]
+    }
+  ],
+  "syntax": [
+    {
+      "form": "MAT CLR array()",
+      "contexts": [
+        "statement"
+      ],
+      "arguments": [
+        {
+          "name": "array",
+          "type": "previously dimensioned one- or two-dimensional floating-point field",
+          "required": true,
+          "passing": "array"
+        }
+      ]
+    }
+  ],
+  "signature": {
+    "type": "no return value"
+  },
+  "semantics": {
+    "summary": "Sets every element of the specified vector or matrix to zero.",
+    "side-effects": [
+      "Mutates every element of the supplied floating-point field."
+    ],
+    "errors": []
+  },
+  "evidence": {
+    "source-scope": "amiga-3.5-addendum",
+    "status": "book-documented",
+    "sources": [
+      "AM-INTERPRETER-35"
+    ],
+    "printed-pages": [
+      "Chapter 13, printed pp. 13-2–13-3"
+    ],
+    "notes": [
+      "Chapter 13 restricts these operations to one- and/or two-dimensional fields with floating-point variables.",
+      "The addendum equates MAT CLR with ARRAYFILL array(),0."
+    ]
+  },
+  "implementation": {
+    "status": "not-implemented"
+  },
+  "support": [
+    {
+      "target": "x86_64-unknown-linux-gnu",
+      "classification": "unknown",
+      "conformance": "not-tested",
+      "tests": [],
+      "pending-reason": "The repository has a research fixture, but no registered executable conformance test or matrix runtime implementation."
+    }
+  ],
+  "docs": {
+    "path": "docs/research/amiga-gfa-basic-35-addendum-inventory.md",
+    "anchors": [
+      "3-linear-operations-on-numeric-fields"
+    ]
+  }
+}
