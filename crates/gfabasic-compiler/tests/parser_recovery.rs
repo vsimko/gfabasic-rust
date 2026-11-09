@@ -11,7 +11,7 @@ fn parser_reports_independent_line_errors_after_synchronizing() {
         .expect_err("malformed and unsupported statements must remain errors");
 
     assert_eq!(diagnostics.len(), 2);
-    assert_eq!(diagnostics[0].code, "GFA-SUPPORT-0001");
+    assert_eq!(diagnostics[0].code, "GFA-PARSE-0001");
     assert_eq!(diagnostics[0].category.as_str(), "syntax");
     assert_eq!(
         diagnostics[0]
@@ -367,15 +367,15 @@ fn parser_rejects_let_assignment_to_variables_outside_the_mvp() {
 
 #[test]
 fn parser_rejects_let_rhs_outside_the_supported_intrinsic_subset() {
-    let source = "FOO x=1\n";
+    let source = "LET x=RND(1)\\n";
     let mut sources = SourceMap::new();
-    let source_id = sources.add_source("let-literal-expression.LST", source);
+    let source_id = sources.add_source("let-unsupported-intrinsic.LST", source);
 
     let diagnostics = parse(source_id, source)
         .expect_err("the current subset accepts only the documented intrinsic-call RHS");
-    assert_eq!(diagnostics[0].code, "GFA-PARSE-0001");
+    assert_eq!(diagnostics[0].code, "GFA-SUPPORT-0001");
     let span = diagnostics[0]
         .primary_span
-        .expect("unsupported LET expression has a syntax span");
+        .expect("unsupported LET intrinsic has a source span");
     assert_eq!(&source[span.start..span.end], "RND");
 }
