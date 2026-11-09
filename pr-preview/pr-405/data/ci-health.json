@@ -1,0 +1,263 @@
+{
+  "repository": "vsimko/gfabasic-rust",
+  "generated_at": "2026-11-09T14:37:00.181534Z",
+  "freshness_threshold_hours": 168,
+  "workflows": [
+    {
+      "name": "Documentation checks",
+      "file": "docs.yml",
+      "note": "Markdown, JavaScript, API registry, corpus metadata and local-link validation.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/docs.yml",
+      "state": "success",
+      "latest": {
+        "id": 42636078533,
+        "name": "Documentation checks",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "test/corpus-matrix-add-sub",
+        "created_at": "2026-11-09T14:34:56Z",
+        "updated_at": "2026-11-09T14:35:15Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42636078533",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 42636078533,
+        "name": "Documentation checks",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "test/corpus-matrix-add-sub",
+        "created_at": "2026-11-09T14:34:56Z",
+        "updated_at": "2026-11-09T14:35:15Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42636078533",
+        "age_hours": 0,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Rust checks",
+      "file": "rust.yml",
+      "note": "Formatting, Clippy, workspace tests/build and formatter fixtures.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/rust.yml",
+      "state": "in_progress",
+      "latest": {
+        "id": 42636403411,
+        "name": "Rust checks",
+        "status": "in_progress",
+        "event": "pull_request",
+        "branch": "fix/parser-preserve-boundaries-across-grammar",
+        "created_at": "2026-11-09T14:36:52Z",
+        "updated_at": "2026-11-09T14:36:57Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42636403411",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 42636213091,
+        "name": "Rust checks",
+        "status": "success",
+        "event": "push",
+        "branch": "main",
+        "created_at": "2026-11-09T14:35:43Z",
+        "updated_at": "2026-11-09T14:36:07Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42636213091",
+        "age_hours": 0,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Security audit",
+      "file": "security-audit.yml",
+      "note": "RustSec audits for workspace, fuzz and benchmark lockfiles.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/security-audit.yml",
+      "state": "success",
+      "latest": {
+        "id": 42594914102,
+        "name": "Security audit",
+        "status": "success",
+        "event": "push",
+        "branch": "main",
+        "created_at": "2026-11-09T09:38:02Z",
+        "updated_at": "2026-11-09T09:38:29Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42594914102",
+        "age_hours": 4,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 42594914102,
+        "name": "Security audit",
+        "status": "success",
+        "event": "push",
+        "branch": "main",
+        "created_at": "2026-11-09T09:38:02Z",
+        "updated_at": "2026-11-09T09:38:29Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42594914102",
+        "age_hours": 4,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Source-loader fuzzing",
+      "file": "fuzz.yml",
+      "note": "Fuzzes the source loader only; lexer/parser fuzzing is not configured.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/fuzz.yml",
+      "state": "success",
+      "latest": {
+        "id": 42620471061,
+        "name": "Fuzzing",
+        "status": "success",
+        "event": "schedule",
+        "branch": "main",
+        "created_at": "2026-11-09T12:51:23Z",
+        "updated_at": "2026-11-09T13:02:24Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42620471061",
+        "age_hours": 1,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 42620471061,
+        "name": "Fuzzing",
+        "status": "success",
+        "event": "schedule",
+        "branch": "main",
+        "created_at": "2026-11-09T12:51:23Z",
+        "updated_at": "2026-11-09T13:02:24Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42620471061",
+        "age_hours": 1,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Benchmarks",
+      "file": "benchmarks.yml",
+      "note": "Source-loading benchmark; pull requests validate compilation without recording measurements.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/benchmarks.yml",
+      "state": "success",
+      "latest": {
+        "id": 42632866070,
+        "name": "Benchmarks",
+        "status": "success",
+        "event": "schedule",
+        "branch": "main",
+        "created_at": "2026-11-09T14:15:17Z",
+        "updated_at": "2026-11-09T14:16:05Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42632866070",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 42632866070,
+        "name": "Benchmarks",
+        "status": "success",
+        "event": "schedule",
+        "branch": "main",
+        "created_at": "2026-11-09T14:15:17Z",
+        "updated_at": "2026-11-09T14:16:05Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42632866070",
+        "age_hours": 0,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Release SBOM",
+      "file": "release-sbom.yml",
+      "note": "Validates PR SBOMs and uploads on published releases; release attachment is unproven until a release runs.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/release-sbom.yml",
+      "state": "in_progress",
+      "latest": {
+        "id": 42636403468,
+        "name": "Release SBOM",
+        "status": "in_progress",
+        "event": "pull_request",
+        "branch": "fix/parser-preserve-boundaries-across-grammar",
+        "created_at": "2026-11-09T14:36:52Z",
+        "updated_at": "2026-11-09T14:36:57Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42636403468",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 42635933995,
+        "name": "Release SBOM",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "fix/parser-recovery-at-line-boundary",
+        "created_at": "2026-11-09T14:34:01Z",
+        "updated_at": "2026-11-09T14:34:28Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42635933995",
+        "age_hours": 0,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "GitHub Pages",
+      "file": "pages.yml",
+      "note": "Builds and publishes the static production website.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/pages.yml",
+      "state": "success",
+      "latest": {
+        "id": 42634608522,
+        "name": "Deploy GitHub Pages",
+        "status": "success",
+        "event": "push",
+        "branch": "main",
+        "created_at": "2026-11-09T14:25:56Z",
+        "updated_at": "2026-11-09T14:26:09Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42634608522",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 42634608522,
+        "name": "Deploy GitHub Pages",
+        "status": "success",
+        "event": "push",
+        "branch": "main",
+        "created_at": "2026-11-09T14:25:56Z",
+        "updated_at": "2026-11-09T14:26:09Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42634608522",
+        "age_hours": 0,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Pull request preview",
+      "file": "pr-preview.yml",
+      "note": "Builds and smoke-tests same-repository pull request previews.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/pr-preview.yml",
+      "state": "in_progress",
+      "latest": {
+        "id": 42636403382,
+        "name": "Pull request website preview",
+        "status": "in_progress",
+        "event": "pull_request",
+        "branch": "fix/parser-preserve-boundaries-across-grammar",
+        "created_at": "2026-11-09T14:36:52Z",
+        "updated_at": "2026-11-09T14:36:56Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42636403382",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 42636217458,
+        "name": "Pull request website preview",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "fix/parser-recovery-at-line-boundary",
+        "created_at": "2026-11-09T14:35:44Z",
+        "updated_at": "2026-11-09T14:36:01Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42636217458",
+        "age_hours": 0,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Conformance suite",
+      "file": "conformance.yml",
+      "note": "No dedicated compiler conformance workflow is configured.",
+      "state": "not-configured",
+      "latest": null,
+      "last_success": null
+    }
+  ]
+}
