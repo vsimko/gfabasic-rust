@@ -109,33 +109,63 @@ def collect(root, token, now=None):
             workflow_index = {}
             api_failure = str(error)
 
+    workflow_data = {}
     for name, filename, note, file_exists in configured:
         item = {"name": name, "file": filename, "note": note}
         if file_exists:
             item["workflow_url"] = f"https://github.com/{REPOSITORY}/blob/main/.github/workflows/{filename}"
+        workflow = workflow_index.get(filename) if file_exists else None
+        workflow_data[filename] = {"item": item, "workflow": workflow, "file_exists": file_exists}
+
+    runs_by_workflow = {}
+    runs_failure = None
+    workflow_ids = {
+        entry["workflow"]["id"]
+        for entry in workflow_data.values()
+        if entry["file_exists"] and entry["workflow"]
+    }
+    if token and not api_failure and workflow_ids:
+        try:
+            for page in range(1, 11):
+                query = urllib.parse.urlencode({"per_page": 100, "page": page})
+                response = api_json(f"{API_ROOT}/actions/runs?{query}", token)
+                page_runs = response.get("workflow_runs", [])
+                for run in page_runs:
+                    workflow_id = run.get("workflow_id")
+                    if workflow_id in workflow_ids:
+                        runs_by_workflow.setdefault(workflow_id, []).append(run)
+                found_success = {
+                    workflow_id
+                    for workflow_id, runs in runs_by_workflow.items()
+                    if any(run.get("status") == "completed" and run.get("conclusion") == "success" for run in runs)
+                }
+                if not page_runs or workflow_ids.issubset(found_success):
+                    break
+        except (ApiError, RuntimeError) as error:
+            runs_failure = str(error)
+
+    for name, filename, note, file_exists in configured:
+        entry = workflow_data[filename]
+        item = entry["item"]
+        workflow = entry["workflow"]
         if not file_exists:
             item.update({"state": "not-configured", "latest": None, "last_success": None})
         elif api_failure:
             item.update({"state": "unknown", "error": api_failure, "latest": None, "last_success": None})
+        elif not workflow:
+            item.update({"state": "unknown", "error": "Workflow file exists but GitHub did not return it.", "latest": None, "last_success": None})
+        elif runs_failure:
+            item.update({"state": "unknown", "error": runs_failure, "latest": None, "last_success": None})
         else:
-            workflow = workflow_index.get(filename)
-            if not workflow:
-                item.update({"state": "unknown", "error": "Workflow file exists but GitHub did not return it.", "latest": None, "last_success": None})
-            else:
-                try:
-                    query = urllib.parse.urlencode({"per_page": 100})
-                    response = api_json(f"{API_ROOT}/actions/workflows/{workflow['id']}/runs?{query}", token)
-                    runs = response.get("workflow_runs", [])
-                    runs.sort(key=lambda run: run.get("created_at") or "", reverse=True)
-                    latest = summarize_run(runs[0], now) if runs else None
-                    successful = next((run for run in runs if run.get("status") == "completed" and run.get("conclusion") == "success"), None)
-                    last_success = summarize_run(successful, now) if successful else None
-                    state = latest["status"] if latest else "unknown"
-                    if latest and latest["freshness"] == "stale" and state == "success":
-                        state = "stale"
-                    item.update({"state": state, "latest": latest, "last_success": last_success})
-                except (ApiError, RuntimeError) as error:
-                    item.update({"state": "unknown", "error": str(error), "latest": None, "last_success": None})
+            runs = runs_by_workflow.get(workflow["id"], [])
+            runs.sort(key=lambda run: run.get("created_at") or "", reverse=True)
+            latest = summarize_run(runs[0], now) if runs else None
+            successful = next((run for run in runs if run.get("status") == "completed" and run.get("conclusion") == "success"), None)
+            last_success = summarize_run(successful, now) if successful else None
+            state = latest["status"] if latest else "unknown"
+            if latest and latest["freshness"] == "stale" and state == "success":
+                state = "stale"
+            item.update({"state": state, "latest": latest, "last_success": last_success})
         snapshot["workflows"].append(item)
     return snapshot
 
