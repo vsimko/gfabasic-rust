@@ -538,7 +538,7 @@ pub fn dot_product(left: &[f64], right: &[f64]) -> Result<f64, MatrixShapeError>
 
 #[cfg(test)]
 mod tests {
-    use super::{dot_product, MatrixMut, MatrixShapeError};
+    use super::{MatrixMut, MatrixShapeError, dot_product};
 
     #[test]
     fn clear_zeros_a_row_vector() {
