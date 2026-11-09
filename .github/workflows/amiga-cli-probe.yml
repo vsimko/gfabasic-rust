@@ -232,9 +232,9 @@ jobs:
               printf "SEND_MOUSE\\t60\\t-112\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}" >>"$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/save-menu-move-test.txt" || true
               sleep 0.1
             done
-            # The prior click landed on Save,A (ASCII .LST). The tokenized
-            # Save item is to its left: move from (~183,68) to (~130,68).
-            printf "SEND_MOUSE\\t-68\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}" >>"$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/save-menu-move-test.txt" || true
+            # The previous calibration screenshot ended at (~105,52);
+            # move onto the tokenized Save label at (~130,68).
+            printf "SEND_MOUSE\\t32\\t30\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}" >>"$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/save-menu-move-test.txt" || true
             sleep 0.5
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/save-menu-pointer.png" | timeout 5s nc -U -N "${ipc_socket_path:-}" || true
             printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}" || true
