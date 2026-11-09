@@ -213,9 +213,8 @@ pub fn upper(input: &[u8]) -> Vec<u8> {
 #[cfg(test)]
 mod tests {
     use super::{
-        StringError, asc, chr, instr, left, len, lset, mid, mid_assign, pred, right, rinstr,
-        rset, spaces, string_repeat,
-        string_repeat_code, succ, trim, upper,
+        StringError, asc, chr, instr, left, len, lset, mid, mid_assign, pred, right, rinstr, rset,
+        spaces, string_repeat, string_repeat_code, succ, trim, upper,
     };
 
     #[test]
