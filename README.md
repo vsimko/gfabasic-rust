@@ -1,16 +1,22 @@
 # gfabasic-rust
 
-A GFA BASIC compiler and runtime implemented in Rust, targeting Amiga GFA BASIC interpreter 3.5 and native Linux x86-64 executables.
+A GFA BASIC compiler and runtime implemented in Rust, targeting programs accepted by the Commodore Amiga GFA BASIC 3.52 interpreter and native Linux x86-64 executables.
 
-**[Project website](https://vsimko.github.io/gfabasic-rust/)** · [Documentation](docs/README.md) · [Roadmap](ROADMAP.md)
+**[Project website](https://vsimko.github.io/gfabasic-rust/)** · [Documentation](docs/README.md) · [Roadmap](ROADMAP.md) · [Open issues](https://github.com/vsimko/gfabasic-rust/issues)
 
-> **Project status:** The workspace contains an experimental, evidence-gated Amiga GFA BASIC 3.5 frontend for literal `FACT`, `VARIAT`, and `COMBIN` assignments followed by `PRINT`. The current prototype bounds intrinsic arguments to `0 <= k <= n <= 20` (or `FACT(n)` with `0 <= n <= 20`) and restricts variables to `x`, `y`, and `z`. Compilation now follows AST → typed project IR → IR verification → temporary C/`cc` bootstrap. This is not general GFA BASIC support and does not claim conformance with the original interpreter. General language semantics and the planned LLVM backend remain unimplemented.
+> **Project status:** The workspace contains an experimental, evidence-gated frontend for a narrow set of GFA BASIC constructs. The current prototype supports selected `FACT`, `VARIAT`, and `COMBIN` assignments followed by `PRINT`, with documented argument and variable limits. Compilation follows AST → typed project IR → IR verification → temporary C/`cc` bootstrap. This is not general GFA BASIC support and does not claim full compatibility with the reference interpreter. General language semantics and the planned LLVM backend remain unimplemented. See the [roadmap](ROADMAP.md) for the current implementation state.
 
 ## Project direction
 
-The sole supported source dialect is Commodore Amiga GFA BASIC interpreter 3.5. The sole planned output target is Linux x86-64 (ELF, GNU ABI), with LLVM as the native code-generation infrastructure. SDL3 is the Linux platform integration layer for graphics, windows, and input. Atari ST, other GFA BASIC versions, other output targets, and cross-compilation are out of scope. See [ADR 0011](docs/architecture/adr/0011-amiga-35-linux-sdl3-product-scope.md).
+The practical compatibility baseline is the **Commodore Amiga GFA BASIC 3.52 interpreter**. Our goal is to compile the largest practical set of programs and features that this interpreter can interpret. The existing Amiberry workflow is used for repeatable reference tests.
 
-Compilation must be deterministic and must not require an LLM. An LLM may assist external migration or analysis workflows, but it is not part of the compiler execution path.
+Books and manuals are supporting research sources. They help discover features and investigate failures, but they may describe another release or contain errors. Observed interpreter behavior takes priority when sources disagree. Binary disassembly/decompilation is a separate diagnostic source and must retain its provenance.
+
+A comparison with an independently identified GFA BASIC 3.5 interpreter is a later validation phase. It must not block current compiler development. Do not treat a 3.52 test result as proof of 3.5 behavior.
+
+The sole planned output target remains Linux x86-64 (ELF, GNU ABI), with LLVM as the intended native code-generation infrastructure. SDL3 is the Linux platform integration layer for graphics, windows, and input. See [ADR 0011](docs/architecture/adr/0011-amiga-35-linux-sdl3-product-scope.md) and the [compatibility evidence policy](docs/architecture/COMPATIBILITY-EVIDENCE.md).
+
+Compilation must be deterministic and must not require an LLM. An LLM may assist repository research and development workflows, but it is not part of the compiler execution path.
 
 ## Experimental prototype
 
@@ -25,29 +31,36 @@ The prototype prints the numeric values in order. Its current C bridge separates
 
 The prototype rejects constructs outside its documented subset. It currently uses textual `.LST` input through the current strict UTF-8 transport loader and the host `cc` executable; neither establishes the historical source encoding nor selects the production compiler backend.
 
-## Documentation
+## Documentation and agent entry point
 
-Start with the [documentation index](docs/README.md). The [project roadmap](ROADMAP.md) describes delivery phases, dependencies, and current maturity. The documentation separates user guidance, contributor guidance, architecture decisions, language/API research, and reusable page templates.
+When entering the repository without prior context:
+
+1. Read this README.
+2. Read [AGENTS.md](AGENTS.md) for mandatory agent and issue-tracking rules.
+3. Read the [documentation index](docs/README.md) and [roadmap](ROADMAP.md).
+4. Read [compatibility evidence and agent workflow](docs/architecture/COMPATIBILITY-EVIDENCE.md).
+5. Inspect open GitHub issues and pull requests. Select work from an issue and follow its linked canonical specification.
 
 Key documents:
 
 - [Project roadmap](ROADMAP.md)
+- [Compatibility evidence and agent workflow](docs/architecture/COMPATIBILITY-EVIDENCE.md)
 - [Architecture overview](docs/architecture/README.md)
 - [Project goals and compatibility](docs/architecture/GOALS.md)
-- [Product scope decision (ADR 0011)](docs/architecture/adr/0011-amiga-35-linux-sdl3-product-scope.md)
 - [Dialect and version policy](docs/architecture/DIALECTS.md)
 - [Documentation policy](docs/DOCUMENTATION.md)
 - [GFA BASIC reference sources](docs/reference-sources.md)
 - [Language reference notes](docs/reference/README.md)
+- [Research procedures and historical evidence](docs/research/README.md)
 - [Conformance test corpus](tests/corpus/README.md)
 - [Frontend fuzzing strategy](docs/architecture/FUZZING.md)
 - [Open project work](https://github.com/vsimko/gfabasic-rust/issues)
 
 ## Current scope and limitations
 
-The Rust workspace contains three architectural crates: compiler, generated-program runtime, and Linux platform adapter. The compiler crate includes source-map and strict UTF-8 file-loading primitives, structured diagnostics, the evidence-gated FACT/PRINT frontend subset, and a temporary native-executable bootstrap path. The general lexer/parser grammar, complete semantic model and general-purpose IR, LLVM backend, project configuration, core runtime, and Linux platform adapter remain unimplemented. The pinned Rust toolchain and fast workspace checks are defined in CI. No complete Amiga GFA BASIC 3.5 dialect or Amiga API profile is implemented or conformant. The only product target is Amiga GFA BASIC 3.5 to Linux x86-64; this scope decision is not an implementation or compatibility claim.
+The Rust workspace contains compiler, generated-program runtime, Linux platform, and language-server crates. The compiler includes source-map and strict UTF-8 file-loading primitives, structured diagnostics, a narrow evidence-gated frontend subset, and a temporary native-executable bootstrap path. The general lexer/parser grammar, complete semantic model and general-purpose IR, LLVM backend, project configuration, core runtime, and Linux platform adapter remain unimplemented. The pinned Rust toolchain and fast workspace checks are defined in CI.
 
-See the roadmap and architecture documents for decisions, assumptions, dependencies, and unresolved questions.
+The 3.52 compatibility baseline is a development oracle, not a claim that the compiler already implements the interpreter. Every feature must have separate evidence, implementation, and test status. See the roadmap and architecture documents for current maturity and unresolved questions.
 
 ## License
 
