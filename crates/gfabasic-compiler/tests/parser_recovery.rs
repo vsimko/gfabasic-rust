@@ -88,7 +88,10 @@ fn parser_recovery_preserves_line_boundaries_for_missing_grammar_tokens() {
             boundary,
             "missing grammar token is reported at the line boundary: {source:?}"
         );
-        assert_eq!(diagnostics[1].code, "GFA-SUPPORT-0001", "source: {source:?}");
+        assert_eq!(
+            diagnostics[1].code, "GFA-SUPPORT-0001",
+            "source: {source:?}"
+        );
         assert_eq!(
             diagnostics[1]
                 .primary_span
