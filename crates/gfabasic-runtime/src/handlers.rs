@@ -70,7 +70,7 @@ pub struct HandlerRequirement<'a> {
 }
 
 /// A successful resolution contains the concrete typed function pointer.
-#[derive(Clone, Copy)]
+#[derive(Debug, Clone, Copy)]
 pub enum ResolvedHandler {
     IntegerToUnsigned(fn(u32) -> Option<u128>),
     TwoIntegersToUnsigned(fn(u32, u32) -> Option<u128>),
