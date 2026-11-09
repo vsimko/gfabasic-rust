@@ -73,7 +73,7 @@ jobs:
 
       - name: Check verified Amiga 3.5 formatter fixtures
         run: |
-          for source in tests/corpus/amiga/3.5/combinatorics/*.bas tests/corpus/amiga/3.5/matrix/*.bas; do
+          for source in tests/corpus/amiga/3.5/combinatorics/*.lst tests/corpus/amiga/3.5/matrix/*.lst; do
             cargo run --quiet -p gfabasic-compiler -- fmt --check "$source"
           done
 

@@ -1244,9 +1244,9 @@ mod tests {
     #[test]
     fn parses_verified_amiga_35_matrix_fixtures() {
         let fixtures = [
-            include_str!("../../../tests/corpus/amiga/3.5/matrix/mat-one-identity.bas"),
-            include_str!("../../../tests/corpus/amiga/3.5/matrix/mat-clear-zero.bas"),
-            include_str!("../../../tests/corpus/amiga/3.5/matrix/mat-set-scalar.bas"),
+            include_str!("../../../tests/corpus/amiga/3.5/matrix/mat-one-identity.lst"),
+            include_str!("../../../tests/corpus/amiga/3.5/matrix/mat-clear-zero.lst"),
+            include_str!("../../../tests/corpus/amiga/3.5/matrix/mat-set-scalar.lst"),
         ];
 
         for source_text in fixtures {
@@ -1304,7 +1304,7 @@ mod tests {
                 if destination == "a" && source == "b"
         ));
 
-        let fixture = include_str!("../../../tests/corpus/amiga/3.5/matrix/mat-base-transpose.bas");
+        let fixture = include_str!("../../../tests/corpus/amiga/3.5/matrix/mat-base-transpose.lst");
         let mut fixture_sources = SourceMap::new();
         let fixture_id = fixture_sources.add_source("mat-base-transpose.bas", fixture);
         let fixture_program = parse(fixture_id, fixture).unwrap();
@@ -1317,7 +1317,7 @@ mod tests {
 
     #[test]
     fn parses_verified_mat_norm_row_fixture_and_column_mode() {
-        let source = include_str!("../../../tests/corpus/amiga/3.5/matrix/mat-norm-row.bas");
+        let source = include_str!("../../../tests/corpus/amiga/3.5/matrix/mat-norm-row.lst");
         let mut sources = SourceMap::new();
         let source_id = sources.add_source("mat-norm-row.bas", source);
         let program = parse(source_id, source).unwrap();

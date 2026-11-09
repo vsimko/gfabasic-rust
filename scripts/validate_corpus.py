@@ -218,7 +218,7 @@ def validate_corpus(root: Path = ROOT) -> list[str]:
             continue
         seen_stems.add(stem)
 
-        source_path = corpus_root / fixture_relative.with_suffix(".bas")
+        source_path = corpus_root / fixture_relative.with_suffix(".lst")
         metadata_path = corpus_root / fixture_relative.with_suffix(".toml")
         if has_symlink_component(source_path, corpus_root):
             errors.append(
@@ -252,7 +252,7 @@ def validate_corpus(root: Path = ROOT) -> list[str]:
         if metadata_path not in referenced_metadata:
             error(errors, metadata_path, "metadata file is not listed in manifest.toml", corpus_root)
 
-    for source_path in sorted(corpus_root.rglob("*.bas")):
+    for source_path in sorted(corpus_root.rglob("*.lst")):
         metadata_path = source_path.with_suffix(".toml")
         if metadata_path not in referenced_metadata:
             error(errors, source_path, "source file is not listed in manifest.toml", corpus_root)

@@ -20,7 +20,7 @@ class CorpusValidationTests(unittest.TestCase):
             'description = "Test corpus."\n'
             'fixtures = ["amiga/3.0/control-flow/fixture-one"]\n'
         )
-        (corpus / "fixture-one.bas").write_text("PRINT 1\n")
+        (corpus / "fixture-one.lst").write_text("PRINT 1\n")
         (corpus / "fixture-one.toml").write_text(
             'id = "fixture-one"\n'
             'dialect = "GFA BASIC Amiga"\nversion = "3.0"\napi_profiles = []\n'
@@ -87,14 +87,14 @@ class CorpusValidationTests(unittest.TestCase):
     def test_missing_companion_file_fails(self):
         temp, root = self.make_root()
         self.addCleanup(temp.cleanup)
-        (root / "tests/corpus/amiga/3.0/control-flow/fixture-one.bas").unlink()
+        (root / "tests/corpus/amiga/3.0/control-flow/fixture-one.lst").unlink()
         self.assertTrue(any("missing source file" in item for item in validate_corpus(root)))
 
     def test_symlinked_source_is_rejected(self):
         temp, root = self.make_root()
         self.addCleanup(temp.cleanup)
-        source = root / "tests/corpus/amiga/3.0/control-flow/fixture-one.bas"
-        outside = root / "outside.bas"
+        source = root / "tests/corpus/amiga/3.0/control-flow/fixture-one.lst"
+        outside = root / "outside.lst"
         outside.write_text("PRINT 99\\n")
         source.unlink()
         self.make_symlink(source, outside)
@@ -156,9 +156,9 @@ class CorpusValidationTests(unittest.TestCase):
     def test_broken_source_symlink_is_rejected(self):
         temp, root = self.make_root()
         self.addCleanup(temp.cleanup)
-        source = root / "tests/corpus/amiga/3.0/control-flow/fixture-one.bas"
+        source = root / "tests/corpus/amiga/3.0/control-flow/fixture-one.lst"
         source.unlink()
-        self.make_symlink(source, root / "missing.bas")
+        self.make_symlink(source, root / "missing.lst")
 
         errors = validate_corpus(root)
         self.assertTrue(any("source path must not traverse symlinks" in item for item in errors))
@@ -174,7 +174,7 @@ class CorpusValidationTests(unittest.TestCase):
             )
         )
         fixture = root / "tests/corpus/amiga/3.0/control-flow"
-        (fixture / "fixture-two.bas").write_text("PRINT 2\n")
+        (fixture / "fixture-two.lst").write_text("PRINT 2\n")
         (fixture / "fixture-two.toml").write_text((fixture / "fixture-one.toml").read_text())
         self.assertTrue(any("duplicate id" in item for item in validate_corpus(root)))
 
@@ -234,7 +234,7 @@ class CorpusValidationTests(unittest.TestCase):
         temp, root = self.make_root()
         self.addCleanup(temp.cleanup)
         fixture = root / "tests/corpus/amiga/3.0/control-flow"
-        (fixture / "unlisted.bas").write_text("PRINT 3\n")
+        (fixture / "unlisted.lst").write_text("PRINT 3\n")
         self.assertTrue(any("not listed" in item for item in validate_corpus(root)))
 
 

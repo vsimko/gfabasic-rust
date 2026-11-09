@@ -156,7 +156,7 @@ mod tests {
 
     static NEXT_TEST: AtomicUsize = AtomicUsize::new(0);
     const FACT_FIXTURE: &str =
-        include_str!("../../../tests/corpus/amiga/3.5/combinatorics/fact-zero.bas");
+        include_str!("../../../tests/corpus/amiga/3.5/combinatorics/fact-zero.lst");
 
     #[test]
     fn lowers_the_frontend_ast_for_the_verified_fact_fixture() {
@@ -222,7 +222,7 @@ mod tests {
         let output = directory.join("combinatorics");
         fs::write(
             &input,
-            include_str!("../../../tests/corpus/amiga/3.5/combinatorics/three-intrinsics.bas"),
+            include_str!("../../../tests/corpus/amiga/3.5/combinatorics/three-intrinsics.lst"),
         )
         .unwrap();
 

@@ -17,13 +17,13 @@ Compilation must be deterministic and must not require an LLM. An LLM may assist
 Build the current narrow fixture subset with:
 
 ```sh
-cargo run -p gfabasic-compiler -- build tests/corpus/amiga/3.5/combinatorics/fact-zero.bas -o ./fact
+cargo run -p gfabasic-compiler -- build tests/corpus/amiga/3.5/combinatorics/fact-zero.lst -o ./fact
 ./fact
 ```
 
 The prototype prints the numeric values in order. Its current C bridge separates them with spaces, but that formatting is not asserted as historical interpreter behavior.
 
-The prototype rejects constructs outside its documented subset. It currently uses strict UTF-8 transport input and the host `cc` executable; neither establishes the historical source encoding nor selects the production compiler backend.
+The prototype rejects constructs outside its documented subset. It currently uses textual `.LST` input through the current strict UTF-8 transport loader and the host `cc` executable; neither establishes the historical source encoding nor selects the production compiler backend.
 
 ## Documentation
 

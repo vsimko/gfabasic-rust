@@ -12,8 +12,8 @@ Usage:
   gfabasic [--version] [--verbose]
   gfabasic help
   gfabasic version [--verbose]
-  gfabasic fmt <source.bas> [--check] [-o <path> | --in-place]
-  gfabasic build <source.bas> -o <output>
+  gfabasic fmt <source.LST> [--check] [-o <path> | --in-place]
+  gfabasic build <source.LST> -o <output>
 
 Commands currently available:
   help       Show this help
@@ -102,7 +102,7 @@ where
         [command, ..] if command == "build" => {
             let _ = writeln!(
                 err,
-                "error: expected 'gfabasic build <source.bas> -o <output>'"
+                "error: expected 'gfabasic build <source.LST> -o <output>'"
             );
             2
         }
@@ -153,7 +153,7 @@ fn run_fmt<W: Write, E: Write>(args: &[String], out: &mut W, err: &mut E) -> u8 
     let Some(source_path) = source_path else {
         let _ = writeln!(
             err,
-            "error: expected 'gfabasic fmt <source.bas> [--check] [-o <path> | --in-place]'"
+            "error: expected 'gfabasic fmt <source.LST> [--check] [-o <path> | --in-place]'"
         );
         return 2;
     };
@@ -327,7 +327,7 @@ mod tests {
         let (code, out, err) = invoke(&["--help"]);
         assert_eq!(code, 0);
         assert!(out.starts_with("gfabasic - GFA BASIC compiler"));
-        assert!(out.contains("fmt <source.bas>"));
+        assert!(out.contains("fmt <source.LST>"));
         assert!(err.is_empty());
     }
 
@@ -351,7 +351,7 @@ mod tests {
     #[test]
     fn fmt_writes_canonical_text_to_stdout() {
         let directory = test_directory();
-        let input = directory.join("source.bas");
+        let input = directory.join("source.LST");
         fs::write(&input, "x=FACT(1)\r\nPRINT   x").unwrap();
 
         let (code, out, err) = invoke(&["fmt", input.to_str().unwrap()]);
@@ -365,7 +365,7 @@ mod tests {
     #[test]
     fn fmt_check_reports_difference_and_does_not_write() {
         let directory = test_directory();
-        let input = directory.join("source.bas");
+        let input = directory.join("source.LST");
         let original = "x=FACT(1)\n";
         fs::write(&input, original).unwrap();
 
@@ -381,7 +381,7 @@ mod tests {
     #[test]
     fn fmt_check_succeeds_for_canonical_source() {
         let directory = test_directory();
-        let input = directory.join("source.bas");
+        let input = directory.join("source.LST");
         fs::write(&input, "x = FACT(1)\nPRINT x\n").unwrap();
 
         let (code, out, err) = invoke(&["fmt", input.to_str().unwrap(), "--check"]);
@@ -395,7 +395,7 @@ mod tests {
     #[test]
     fn fmt_in_place_replaces_source_atomically() {
         let directory = test_directory();
-        let input = directory.join("source.bas");
+        let input = directory.join("source.LST");
         fs::write(&input, "x=FACT(1)\n").unwrap();
 
         let (code, out, err) = invoke(&["fmt", "--in-place", input.to_str().unwrap()]);
@@ -410,8 +410,8 @@ mod tests {
     #[test]
     fn fmt_output_path_is_written_atomically() {
         let directory = test_directory();
-        let input = directory.join("source.bas");
-        let output = directory.join("formatted.bas");
+        let input = directory.join("source.LST");
+        let output = directory.join("formatted.LST");
         fs::write(&input, "x=FACT(1)\n").unwrap();
 
         let (code, out, err) = invoke(&[
@@ -431,7 +431,7 @@ mod tests {
     #[test]
     fn invalid_source_is_never_overwritten() {
         let directory = test_directory();
-        let input = directory.join("source.bas");
+        let input = directory.join("source.LST");
         let original = "PRINT \"unsupported\"\n";
         fs::write(&input, original).unwrap();
 
@@ -447,7 +447,7 @@ mod tests {
     #[test]
     fn atomic_write_replaces_existing_file() {
         let directory = test_directory();
-        let path = directory.join("target.bas");
+        let path = directory.join("target.LST");
         fs::write(&path, "old").unwrap();
 
         atomic_write(&path, b"new complete contents").unwrap();
@@ -476,7 +476,7 @@ mod tests {
         );
 
         let directory = test_directory();
-        let input = directory.join("fact.bas");
+        let input = directory.join("fact.LST");
         let output = directory.join("fact");
         fs::write(&input, "x=FACT(0)\ny=FACT(1)\nz=FACT(2)\nPRINT x,y,z\n").unwrap();
 
