@@ -40,7 +40,11 @@ pub fn bin(value: i32, width: Option<usize>) -> Result<String, RadixFormatError>
             return Err(RadixFormatError::BinaryWidthOutOfRange { width });
         }
     }
-    Ok(format!("{:0width$b}", value as u32, width = width.unwrap_or(0)))
+    Ok(format!(
+        "{:0width$b}",
+        value as u32,
+        width = width.unwrap_or(0)
+    ))
 }
 
 /// Convert an integer expression to octal (Amiga GFA BASIC OCT$).
@@ -52,7 +56,11 @@ pub fn oct(value: i32, width: Option<usize>) -> Result<String, RadixFormatError>
             return Err(RadixFormatError::OctalWidthOutOfRange { width });
         }
     }
-    Ok(format!("{:0width$o}", value as u32, width = width.unwrap_or(0)))
+    Ok(format!(
+        "{:0width$o}",
+        value as u32,
+        width = width.unwrap_or(0)
+    ))
 }
 
 /// Convert an integer expression to uppercase hexadecimal (Amiga GFA BASIC HEX$).
@@ -64,7 +72,7 @@ pub fn hex(value: i32, width: Option<usize>) -> String {
 
 #[cfg(test)]
 mod tests {
-    use super::{bin, hex, oct, RadixFormatError};
+    use super::{RadixFormatError, bin, hex, oct};
 
     #[test]
     fn radix_conversions_match_reference_examples() {
