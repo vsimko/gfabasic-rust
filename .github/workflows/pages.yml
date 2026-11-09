@@ -13,6 +13,7 @@ on:
   workflow_dispatch:
 
 permissions:
+  actions: read
   contents: write
 
 concurrency:
@@ -33,6 +34,7 @@ jobs:
             python3 scripts/generate_project_data.py
           fi
           python3 scripts/generate_api_catalogue.py
+          GH_TOKEN="${{ github.token }}" python3 scripts/generate_ci_health.py
 
       - name: Validate repository consistency
         run: |
@@ -47,6 +49,8 @@ jobs:
           test -s site/styles.css
           test -s site/script.js
           test -s site/data/api-catalogue.json
+          test -s site/data/ci-health.json
+          grep -q 'id="ci-health"' site/index.html
           test -d site/data/api-catalogue-details
           python3 scripts/generate_api_catalogue.py --check
           node --check site/script.js
