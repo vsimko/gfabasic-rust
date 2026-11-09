@@ -49,3 +49,18 @@ git config user.name "github-actions[bot]"
 git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 git commit -m "Update generated GFA BASIC 3.52 reverse-engineering data"
 git -c "http.extraheader=AUTHORIZATION: basic $auth" push origin HEAD:main
+
+# Keep an immutable, downloadable snapshot alongside the editable Git sources.
+release_tag="amiga-gfa-basic-3.52-analysis-${GITHUB_RUN_ID:-manual}"
+archive="$work_dir/gfa-basic-3.52-analysis.tar.gz"
+tar -czf "$archive" -C "$work_dir/repo" analysis/amiga-3.52
+export GH_TOKEN="$GFA_ASSETS_TOKEN"
+if gh release view "$release_tag" --repo vsimko/gfabasic-private-assets >/dev/null 2>&1; then
+  gh release upload "$release_tag" "$archive" --repo vsimko/gfabasic-private-assets --clobber
+else
+  gh release create "$release_tag" "$archive" \
+    --repo vsimko/gfabasic-private-assets \
+    --title "GFA BASIC 3.52 analysis (run ${GITHUB_RUN_ID:-manual})" \
+    --notes "Generated Ghidra analysis snapshot. Version 3.52 evidence; not a verified GFA BASIC 3.5 specification." \
+    --target main
+fi
