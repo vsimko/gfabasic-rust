@@ -13,6 +13,7 @@ fixtures = [
   "amiga/3.5/matrix/mat-add",
   "amiga/3.5/matrix/mat-sub",
   "amiga/3.5/matrix/mat-mul-dot",
+  "amiga/3.5/matrix/mat-read-data",
   "amiga/3.5/combinatorics/fact-zero",
   "amiga/3.5/combinatorics/three-intrinsics",
 ]
