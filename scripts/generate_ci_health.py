@@ -2,6 +2,7 @@
 """Generate a static, build-time snapshot of GitHub Actions health."""
 
 import argparse
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
 import html
 import json
@@ -118,31 +119,30 @@ def collect(root, token, now=None):
         workflow_data[filename] = {"item": item, "workflow": workflow, "file_exists": file_exists}
 
     runs_by_workflow = {}
-    runs_failure = None
+    runs_errors = {}
     workflow_ids = {
         entry["workflow"]["id"]
         for entry in workflow_data.values()
         if entry["file_exists"] and entry["workflow"]
     }
-    if token and not api_failure and workflow_ids:
+
+    def fetch_workflow_runs(workflow_id):
+        query = urllib.parse.urlencode({"per_page": 100})
         try:
-            for page in range(1, 11):
-                query = urllib.parse.urlencode({"per_page": 100, "page": page})
-                response = api_json(f"{API_ROOT}/actions/runs?{query}", token)
-                page_runs = response.get("workflow_runs", [])
-                for run in page_runs:
-                    workflow_id = run.get("workflow_id")
-                    if workflow_id in workflow_ids:
-                        runs_by_workflow.setdefault(workflow_id, []).append(run)
-                found_success = {
-                    workflow_id
-                    for workflow_id, runs in runs_by_workflow.items()
-                    if any(run.get("status") == "completed" and run.get("conclusion") == "success" for run in runs)
-                }
-                if not page_runs or workflow_ids.issubset(found_success):
-                    break
+            response = api_json(f"{API_ROOT}/actions/workflows/{workflow_id}/runs?{query}", token)
+            return workflow_id, response.get("workflow_runs", []), None
         except (ApiError, RuntimeError) as error:
-            runs_failure = str(error)
+            return workflow_id, [], str(error)
+
+    if token and not api_failure and workflow_ids:
+        with ThreadPoolExecutor(max_workers=min(8, len(workflow_ids))) as executor:
+            futures = [executor.submit(fetch_workflow_runs, workflow_id) for workflow_id in workflow_ids]
+            for future in as_completed(futures):
+                workflow_id, runs, error = future.result()
+                if error:
+                    runs_errors[workflow_id] = error
+                else:
+                    runs_by_workflow[workflow_id] = runs
 
     for name, filename, note, file_exists in configured:
         entry = workflow_data[filename]
