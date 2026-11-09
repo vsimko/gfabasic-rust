@@ -340,7 +340,7 @@ impl<'a> MatrixMut<'a> {
     /// and the exact element count is checked before the field is modified.
     pub fn parse_ascii_into(&mut self, input: &str) -> Result<(), MatrixShapeError> {
         let tokens: Vec<&str> = input
-            .split(|character| character == ',' || character == '\\r' || character == '\\n')
+            .split(|character| character == ',' || character == '\r' || character == '\n')
             .map(str::trim)
             .filter(|token| !token.is_empty())
             .collect();
@@ -381,7 +381,7 @@ impl<'a> MatrixMut<'a> {
         let mut output = String::new();
         for row in 0..self.rows {
             if row > 0 {
-                output.push('\\n');
+                output.push('\n');
             }
             let start = row * self.columns;
             let end = start + self.columns;
@@ -394,7 +394,7 @@ impl<'a> MatrixMut<'a> {
             );
         }
         if self.rows > 0 {
-            output.push('\\n');
+            output.push('\n');
         }
         output
     }
@@ -1509,7 +1509,7 @@ mod tests {
         let mut source = [1.0, 2.0, 3.0, 4.0];
         let matrix = MatrixMut::new(2, 2, &mut source).unwrap();
         let encoded = matrix.to_ascii();
-        assert_eq!(encoded, "1,2\\n3,4\\n");
+        assert_eq!(encoded, "1,2\n3,4\n");
 
         let mut destination = [9.0; 4];
         let mut matrix = MatrixMut::new(2, 2, &mut destination).unwrap();
@@ -1525,7 +1525,7 @@ mod tests {
 
         let mut destination = [0.0; 3];
         let mut matrix = MatrixMut::new(3, 1, &mut destination).unwrap();
-        matrix.parse_ascii_into("1, 2\\r\\n3,").unwrap();
+        matrix.parse_ascii_into("1, 2\r\n3,").unwrap();
         assert_eq!(destination, [1.0, 2.0, 3.0]);
     }
 
