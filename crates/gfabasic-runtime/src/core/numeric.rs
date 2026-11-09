@@ -104,7 +104,6 @@ pub fn val(input: &[u8]) -> f64 {
         return 0.0;
     }
 
-    let mantissa_end = index;
     if index < input.len() && matches!(input[index], b'e' | b'E') {
         let mut exponent_end = index + 1;
         if exponent_end < input.len() && matches!(input[exponent_end], b'+' | b'-') {
