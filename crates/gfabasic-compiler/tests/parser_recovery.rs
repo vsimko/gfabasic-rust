@@ -165,3 +165,36 @@ fn parser_recovery_keeps_the_next_line_after_trailing_print_comma() {
         "recovery must resume at the following source line"
     );
 }
+
+#[test]
+fn frontend_diagnostics_resolve_to_original_source_locations() {
+    let source = "PRINT x,\nLET y=1\n";
+    let mut sources = SourceMap::new();
+    let source_id = sources.add_source("diagnostic-locations.LST", source);
+
+    let diagnostics = parse(source_id, source)
+        .expect_err("the incomplete PRINT and following unsupported statement are errors");
+
+    let syntax_span = diagnostics[0]
+        .primary_span
+        .expect("syntax diagnostic retains its original source span");
+    let syntax_file = sources
+        .get(syntax_span.source)
+        .expect("syntax diagnostic source remains in the source map");
+    assert_eq!(syntax_file.name(), "diagnostic-locations.LST");
+    assert_eq!(syntax_file.line_column(syntax_span.start), Some((1, 9)));
+    assert_eq!(sources.slice(syntax_span), Some("\n"));
+
+    let unsupported_span = diagnostics[1]
+        .primary_span
+        .expect("unsupported diagnostic retains its original source span");
+    let unsupported_file = sources
+        .get(unsupported_span.source)
+        .expect("unsupported diagnostic source remains in the source map");
+    assert_eq!(unsupported_file.name(), "diagnostic-locations.LST");
+    assert_eq!(
+        unsupported_file.line_column(unsupported_span.start),
+        Some((2, 1))
+    );
+    assert_eq!(sources.slice(unsupported_span), Some("LET"));
+}
