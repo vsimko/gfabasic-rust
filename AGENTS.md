@@ -1,6 +1,6 @@
 # AI agent and human-blocker policy
 
-This file is the repository-wide instruction entry point for AI coding agents. Read it before taking project-management or implementation actions.
+This file is the repository-wide instruction entry point for AI coding agents. Read it before taking project-management or implementation actions. The canonical documentation bundle is [`docs/index.md`](docs/index.md); follow its OKF v0.2 conventions for all documentation changes.
 
 ## Human actions are tracked as issues
 
