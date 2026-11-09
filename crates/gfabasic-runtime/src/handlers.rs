@@ -271,7 +271,9 @@ mod tests {
             handler: RuntimeHandler::IntegerToUnsigned(unary),
         });
         assert_eq!(
-            registry.resolve(requirement(ImplementationStatus::Implemented)).unwrap_err(),
+            registry
+                .resolve(requirement(ImplementationStatus::Implemented))
+                .unwrap_err(),
             RegistryError::ProfileMismatch("gfa.language.math.fact".into())
         );
     }
