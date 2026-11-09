@@ -1,3 +1,8 @@
+---
+type: "Contributor Guide"
+title: "Development setup"
+---
+
 # Development setup
 
 ## Scope
