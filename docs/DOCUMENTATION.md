@@ -1,3 +1,8 @@
+---
+type: "Documentation Policy"
+title: "Documentation policy"
+---
+
 # Documentation policy
 
 ## Decision and scope
