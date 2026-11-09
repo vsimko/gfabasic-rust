@@ -2,7 +2,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from scripts.validate_okf import validate_bundle
+from scripts.validate_okf import _heading_ids, validate_bundle
 
 
 class OkfValidationTests(unittest.TestCase):
@@ -78,6 +78,9 @@ class OkfValidationTests(unittest.TestCase):
         root, docs = self.make_bundle("[Missing](missing.md)\n")
         errors = validate_bundle(root)
         self.assertTrue(any("broken local link" in item for item in errors))
+
+    def test_heading_ids_preserve_ascii_letters(self):
+        self.assertIn("contributing-and-licensing", _heading_ids("# Contributing and licensing"))
 
     def test_broken_anchor_is_rejected(self):
         root, docs = self.make_bundle("[Missing heading](#missing-heading)\n")
