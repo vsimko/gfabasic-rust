@@ -58,6 +58,15 @@ class RuntimeHandlerRequirementsTests(unittest.TestCase):
         with self.assertRaisesRegex(GenerationError, "has no handler ID"):
             generate_source(root)
 
+    def test_callable_declaration_rejects_wrong_handler_namespace(self):
+        root = self.make_root(
+            "partial",
+            "gfa.amiga.math.example",
+            '[{ name = "n", type = "integer expression", required = true }]',
+        )
+        with self.assertRaisesRegex(GenerationError, "handler ID namespace"):
+            generate_source(root)
+
     def test_callable_declaration_rejects_unmapped_signature(self):
         root = self.make_root(
             "implemented",
