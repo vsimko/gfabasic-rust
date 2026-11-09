@@ -29,13 +29,15 @@ pub fn format_source(source_id: SourceId, source: &str) -> Result<String, Vec<Di
         .iter()
         .find(|trivia| trivia.kind == TriviaKind::Comment)
     {
-        return Err(vec![Diagnostic::new(
-            "GFA-SUPPORT-0001",
-            DiagnosticSeverity::Error,
-            DiagnosticCategory::Unsupported,
-            "formatter does not yet preserve inline comments",
-        )
-        .with_primary_span(comment.span)]);
+        return Err(vec![
+            Diagnostic::new(
+                "GFA-SUPPORT-0001",
+                DiagnosticSeverity::Error,
+                DiagnosticCategory::Unsupported,
+                "formatter does not yet preserve inline comments",
+            )
+            .with_primary_span(comment.span),
+        ]);
     }
     let mut output = String::with_capacity(source.len() + 1);
     let mut previous: Option<&TokenKind> = None;
