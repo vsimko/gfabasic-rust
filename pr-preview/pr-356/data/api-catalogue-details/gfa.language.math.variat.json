@@ -54,13 +54,14 @@
     "notes": [
       "The 3.5 addendum page images were checked. Both arguments are documented as integer expressions.",
       "The companion German book explicitly places VARIAT among the 3.5 additions and states the domain condition n >= k; it defines permutations without repetition (printed p. 478).",
-      "The existing prototype evaluates only a restricted literal subset; it has no stable registry handler mapping and is not a complete implementation."
+      "The compiler prototype evaluates only a restricted literal subset. Partial typed runtime helpers are mapped by stable registry handler IDs, but their overflow/error behavior is not yet conformant or verified."
     ]
   },
   "implementation": {
-    "status": "not-implemented",
+    "status": "partial",
+    "handler": "gfa.language.math.variat",
     "notes": [
-      "A restricted compile-time literal prototype exists in crates/gfabasic-compiler/src/prototype.rs; it is not a complete runtime implementation or a registry-linked handler."
+      "The runtime exposes a typed exact-arithmetic helper for this operation. The helper is partial: it returns no value outside the u32 input/u128 result domain, while the original interpreter's overflow and error behavior remains unverified. The compiler prototype still restricts source expressions to its documented literal subset."
     ]
   },
   "support": [
