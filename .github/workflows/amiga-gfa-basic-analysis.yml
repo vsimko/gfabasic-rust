@@ -1,0 +1,93 @@
+name: Amiga GFA-BASIC binary analysis
+
+on:
+  workflow_dispatch:
+    inputs:
+      binary_url:
+        description: HTTPS URL of the legally obtained Amiga GFA-BASIC executable (not stored in this repository)
+        required: true
+        type: string
+      sha256:
+        description: Expected SHA-256 of the executable
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate inputs and download executable
+        env:
+          BINARY_URL: ${{ inputs.binary_url }}
+          EXPECTED_SHA256: ${{ inputs.sha256 }}
+        run: |
+          set -euo pipefail
+          [[ "$BINARY_URL" == https://* ]] || { echo "binary_url must use HTTPS"; exit 1; }
+          [[ "$EXPECTED_SHA256" =~ ^[a-fA-F0-9]{64}$ ]] || { echo "sha256 must contain 64 hexadecimal characters"; exit 1; }
+          mkdir -p analysis-input analysis-output
+          curl --fail --location --silent --show-error --proto '=https' --tlsv1.2 "$BINARY_URL" -o analysis-input/gfa-basic.bin
+          printf '%s  %s\n' "$EXPECTED_SHA256" analysis-input/gfa-basic.bin | sha256sum --check -
+      - name: Install Java and analysis utilities
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes openjdk-21-jdk unzip jq python3
+          java -version
+      - name: Download latest Ghidra release
+        run: |
+          set -euo pipefail
+          URL="$(curl --fail --silent --show-error https://api.github.com/repos/NationalSecurityAgency/ghidra/releases/latest | jq -r '.assets[] | select(.name | test("^ghidra_.*PUBLIC.*\\.zip$")) | .browser_download_url' | head -n 1)"
+          test -n "$URL"
+          curl --fail --location --silent --show-error "$URL" -o /tmp/ghidra.zip
+          mkdir -p /opt/ghidra
+          unzip -q /tmp/ghidra.zip -d /opt/ghidra
+          echo "GHIDRA_HOME=$(find /opt/ghidra -mindepth 1 -maxdepth 1 -type d | head -n 1)" >> "$GITHUB_ENV"
+      - name: Extract printable strings and offsets
+        run: python3 scripts/amiga_binary_strings.py analysis-input/gfa-basic.bin analysis-output/strings.json
+      - name: Import and decompile with Ghidra (Motorola 68000)
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/ghidra-project
+          "$GHIDRA_HOME/support/analyzeHeadless" /tmp/ghidra-project GfaBasic35 \
+            -import analysis-input/gfa-basic.bin \
+            -processor "68000:BE:32:default" \
+            -scriptPath scripts/ghidra \
+            -postScript ExportGfaAnalysis.py "$GITHUB_WORKSPACE/analysis-output" \
+            -deleteProject
+      - name: Build analysis index
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          out = Path("analysis-output")
+          strings = json.loads((out / "strings.json").read_text())
+          functions = json.loads((out / "functions.json").read_text())
+          report = [
+              "# Amiga GFA-BASIC binary analysis", "",
+              "Reverse-engineering evidence only; not a verified language specification.",
+              "A string is not automatically a BASIC command. Command names, aliases, token IDs, parser rules, and argument syntax require cross-checking against the 3.5 manual and interpreter behavior.", "",
+              f"- Printable strings: {len(strings)}",
+              f"- Analyzed functions: {len(functions)}",
+              "- Architecture requested: Motorola 68000, big-endian", "",
+              "## Printable strings (candidate evidence)", "",
+              "| File offset | Text |", "|---:|---|"
+          ]
+          for item in strings:
+              text = item["text"].replace("|", "\\|").replace("\\n", " ")
+              report.append(f'| 0x{item["offset"]:X} | {text} |')
+          report += ["", "## Function inventory", "", "| Entry | Name | Size | Decompilation |", "|---:|---|---:|---|"]
+          for item in functions:
+              report.append(f'| 0x{item["entry"]:X} | `{item["name"]}` | {item["size"]} | `{item["file"]}` |')
+          (out / "REPORT.md").write_text("\\n".join(report) + "\\n")
+          PY
+      - name: Upload analysis results
+        uses: actions/upload-artifact@v4
+        with:
+          name: amiga-gfa-basic-analysis
+          path: analysis-output/
+          if-no-files-found: error
+          retention-days: 30
