@@ -1,3 +1,8 @@
+---
+type: "Documentation Overview"
+title: "Documentation index"
+---
+
 # Documentation index
 
 This index is the entry point for project documentation. It separates user guidance, contributor guidance, architecture decisions, language/API references, and research material.
