@@ -483,9 +483,12 @@ fn parser_preserves_ast_spans_across_crlf_line_endings() {
     assert_eq!((second_span.start, second_span.end), (11, 18));
     assert_eq!(sources.slice(second_span), Some("PRINT x"));
 
-    let print_token = document.syntax.tokens.iter().find(|token| {
-        matches!(&token.kind, TokenKind::Identifier(name) if name == "PRINT")
-    }).expect("PRINT token is retained in the lossless syntax");
+    let print_token = document
+        .syntax
+        .tokens
+        .iter()
+        .find(|token| matches!(&token.kind, TokenKind::Identifier(name) if name == "PRINT"))
+        .expect("PRINT token is retained in the lossless syntax");
     assert_eq!((print_token.span.start, print_token.span.end), (11, 16));
     assert_eq!(sources.slice(print_token.span), Some("PRINT"));
 }
