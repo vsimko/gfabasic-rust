@@ -247,7 +247,8 @@ fn is_identifier_continuation(byte: u8) -> bool {
 }
 
 /// A boundary accepted by the currently implemented, evidence-gated token
-/// subset. Requiring a known boundary prevents a documented special name from/// being accepted as a prefix of otherwise unsupported adjacent source text.
+/// subset. Requiring a known boundary prevents a documented special name from
+/// being accepted as a prefix of otherwise unsupported adjacent source text.
 fn is_supported_token_boundary(byte: u8) -> bool {
     matches!(
         byte,
@@ -498,6 +499,7 @@ impl Parser {
     fn current(&self) -> &Token {
         &self.tokens[self.cursor]
     }
+
     fn advance(&mut self) -> Token {
         let token = self.tokens[self.cursor].clone();
         if !matches!(token.kind, TokenKind::End) {
@@ -747,7 +749,8 @@ impl Parser {
                         operator.span,
                     ));
                 }
-                let (right, _) = self.parse_matrix_reference()?;                (Some(left), MatArithmeticOperand::Matrix(right))
+                let (right, _) = self.parse_matrix_reference()?;
+                (Some(left), MatArithmeticOperand::Matrix(right))
             } else {
                 self.expect(TokenKind::Comma, "',' in in-place MAT arithmetic")?;
                 let token = self.current().clone();
@@ -997,7 +1000,8 @@ impl Parser {
                     return Err(self.unsupported_error(
                         "MAT BASE supports only the documented index offsets 0 and 1",
                         self.tokens[self.cursor - 1].span,
-                    ));                }
+                    ));
+                }
                 let end = self.tokens[self.cursor - 1].span;
                 Ok(Statement::MatBase {
                     index,
@@ -1247,6 +1251,7 @@ mod tests {
             Statement::AssignCombin { name, n: 5, k: 2, .. } if name == "z"
         ));
     }
+
     #[test]
     fn parses_one_and_two_dimensional_matrix_declarations() {
         let source = "DIM a(5)\nDIM b(1,5)\nDIM b(5,1)\n";
@@ -1497,7 +1502,8 @@ mod tests {
                 extent: Some((5, 6)),
                 ..
             }
-        ));        assert!(matches!(
+        ));
+        assert!(matches!(
             &program.statements[2],
             Statement::MatCopy {
                 operation: MatCopyOperation::TransposedCopy,
@@ -1747,7 +1753,8 @@ mod tests {
         ] {
             let mut sources = SourceMap::new();
             let source_id = sources.add_source("malformed-matrix.bas", source_text);
-            if source_text.starts_with("DIM ") {                assert!(
+            if source_text.starts_with("DIM ") {
+                assert!(
                     parse(source_id, source_text).is_ok(),
                     "verified vector declaration was rejected: {source_text:?}"
                 );
@@ -1997,7 +2004,8 @@ mod tests {
         let source_id = sources.add_source("data-pointer-setter.bas", source_text);
         let lexed = lex_lossless(source_id, source_text).expect("documented 3.5 form should lex");
 
-        assert!(matches!(&lexed.tokens[0].kind, TokenKind::Identifier(name) if name == "_DATA"));        assert_eq!(lexed.tokens[0].span.start, 0);
+        assert!(matches!(&lexed.tokens[0].kind, TokenKind::Identifier(name) if name == "_DATA"));
+        assert_eq!(lexed.tokens[0].span.start, 0);
         assert_eq!(lexed.tokens[0].span.end, 5);
         assert!(matches!(lexed.tokens[1].kind, TokenKind::Equals));
         assert_eq!(lexed.tokens[1].span.start, 5);
