@@ -208,6 +208,8 @@ pub struct Token {
 pub enum TriviaKind {
     /// Horizontal ASCII spaces and tabs. Their spelling remains in the source span.
     HorizontalWhitespace,
+    /// A GFA BASIC inline comment beginning with ! and ending before the line break.
+    Comment,
 }
 
 /// A lossless span of source trivia.
@@ -238,6 +240,43 @@ fn diagnostic(
     span: SourceSpan,
 ) -> Diagnostic {
     Diagnostic::new(code, DiagnosticSeverity::Error, category, message).with_primary_span(span)
+}
+
+/// The exclamation mark is DATA text when the physical line begins with DATA.
+/// This deliberately recognizes only the documented keyword at the start of a line.
+fn is_data_instruction_line(bytes: &[u8], offset: usize) -> bool {
+    let line_start = bytes[..offset]
+        .iter()
+        .rposition(|byte| matches!(byte, b'\r' | b'\n'))
+        .map_or(0, |index| index + 1);
+    let prefix = &bytes[line_start..offset];
+    let keyword_start = prefix.iter().position(|byte| !matches!(byte, b' ' | b'\t'));
+    let Some(keyword_start) = keyword_start else {
+        return false;
+    };
+    let keyword_end = keyword_start + 4;
+    prefix
+        .get(keyword_start..keyword_end)
+        .is_some_and(|word| word.eq_ignore_ascii_case(b"DATA"))
+        && prefix
+            .get(keyword_end)
+            .is_none_or(|byte| matches!(byte, b' ' | b'\t' | b','))
+}
+
+/// Returns whether a whitespace-separated ! begins an inline comment after a command.
+/// Requiring whitespace avoids confusing comments with identifier suffixes.
+fn is_inline_comment_marker(bytes: &[u8], offset: usize) -> bool {
+    let line_start = bytes[..offset]
+        .iter()
+        .rposition(|byte| matches!(byte, b'\r' | b'\n'))
+        .map_or(0, |index| index + 1);
+    bytes
+        .get(offset.wrapping_sub(1))
+        .is_some_and(|byte| matches!(byte, b' ' | b'\t'))
+        && bytes[line_start..offset]
+            .iter()
+            .any(|byte| !matches!(byte, b' ' | b'\t'))
+        && !is_data_instruction_line(bytes, offset)
 }
 
 fn is_identifier_continuation(byte: u8) -> bool {
@@ -289,6 +328,19 @@ pub fn lex_lossless(source_id: SourceId, source: &str) -> Result<LexedSource, Ve
 
     while offset < bytes.len() {
         match bytes[offset] {
+            b'!' if is_inline_comment_marker(bytes, offset) => {
+                let start = offset;
+                while bytes
+                    .get(offset)
+                    .is_some_and(|byte| !matches!(byte, b'\r' | b'\n'))
+                {
+                    offset += 1;
+                }
+                trivia.push(Trivia {
+                    kind: TriviaKind::Comment,
+                    span: SourceSpan::new(source_id, start, offset),
+                });
+            }
             b' ' | b'\t' => {
                 let start = offset;
                 while bytes

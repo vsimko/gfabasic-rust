@@ -4,8 +4,8 @@
 //! Token spellings are copied from their original source spans; the formatter
 //! never case-folds or rewrites identifiers or numeric literal text.
 
-use crate::diagnostics::Diagnostic;
-use crate::frontend::{TokenKind, parse_document};
+use crate::diagnostics::{Diagnostic, DiagnosticCategory, DiagnosticSeverity};
+use crate::frontend::{TokenKind, TriviaKind, parse_document};
 use crate::source::SourceId;
 
 /// Format the currently supported Amiga GFA BASIC 3.5 source subset.
@@ -23,6 +23,22 @@ use crate::source::SourceId;
 /// claim about historical interpreter formatting.
 pub fn format_source(source_id: SourceId, source: &str) -> Result<String, Vec<Diagnostic>> {
     let document = parse_document(source_id, source)?;
+    if let Some(comment) = document
+        .syntax
+        .trivia
+        .iter()
+        .find(|trivia| trivia.kind == TriviaKind::Comment)
+    {
+        return Err(vec![
+            Diagnostic::new(
+                "GFA-SUPPORT-0001",
+                DiagnosticSeverity::Error,
+                DiagnosticCategory::Unsupported,
+                "formatter does not yet preserve inline comments",
+            )
+            .with_primary_span(comment.span),
+        ]);
+    }
     let mut output = String::with_capacity(source.len() + 1);
     let mut previous: Option<&TokenKind> = None;
     let mut line_has_tokens = false;
