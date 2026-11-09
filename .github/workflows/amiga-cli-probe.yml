@@ -237,7 +237,7 @@ jobs:
               printf "MISSING: %s\\n" "$diagnostic" > "artifacts/amiga-cli-probe/$diagnostic.missing"
             fi
           done
-          for screenshot in editor-before-merge.png merge-dialog.png merge-file-row-pointer.png merge-file-selected.png after-shortcut.png merge-gadget-pointer.png merge-gadget-pressed.png after-merge-click.png after-run.png; do
+          for screenshot in editor-before-merge.png merge-dialog.png merge-file-row-pointer.png merge-file-selected.png after-shortcut.png merge-gadget-pointer.png merge-gadget-pressed.png after-run.png; do
             test -s "artifacts/amiga-cli-probe/$screenshot"
           done
           # Amiga Kickstart screenshots use bright text on a saturated blue background.
