@@ -1401,7 +1401,10 @@ pub fn dot_product(left: &[f64], right: &[f64]) -> Result<f64, MatrixShapeError>
 
 #[cfg(test)]
 mod tests {
-    use super::{MatrixMut, MatrixShapeError, dot_product, vector_matrix_vector_product};
+    use super::{
+        MatrixIndexBase, MatrixIndexBaseError, MatrixMut, MatrixShapeError, dot_product,
+        vector_matrix_vector_product,
+    };
 
     #[test]
     fn clear_zeros_a_row_vector() {
