@@ -158,6 +158,7 @@ mod tests {
     use crate::frontend::parse;
     use crate::source::SourceMap;
     use std::fs;
+    use std::path::Path;
     use std::process::Command;
     use std::sync::atomic::{AtomicUsize, Ordering};
 
