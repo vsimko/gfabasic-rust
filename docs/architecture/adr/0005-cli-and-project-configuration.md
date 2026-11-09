@@ -1,3 +1,8 @@
+---
+type: "Architecture Decision Record"
+title: "ADR 0005: CLI and project configuration"
+---
+
 # ADR 0005: CLI and project configuration
 
 - Status: Accepted
