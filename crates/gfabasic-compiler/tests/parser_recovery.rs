@@ -329,3 +329,38 @@ fn exclamation_mark_attached_to_identifier_is_not_a_comment() {
         .expect("unsupported suffix has a lexical span");
     assert_eq!(&source[span.start..span.end], "!");
 }
+
+#[test]
+fn parser_accepts_let_prefix_for_supported_intrinsic_assignments() {
+    let source = "LET x=FACT(0)\nLET y=VARIAT(5,2)\nLET z=COMBIN(5,2)\n";
+    let mut sources = SourceMap::new();
+    let source_id = sources.add_source("let-assignments.LST", source);
+
+    let document = parse_document(source_id, source).expect("documented LET forms should parse");
+    assert_eq!(document.program.statements.len(), 3);
+
+    let expected = ["LET x=FACT(0)", "LET y=VARIAT(5,2)", "LET z=COMBIN(5,2)"];
+    for (statement, expected_text) in document.program.statements.iter().zip(expected) {
+        let span = match statement {
+            Statement::AssignFact { span, .. }
+            | Statement::AssignVariat { span, .. }
+            | Statement::AssignCombin { span, .. } => *span,
+            other => panic!("unexpected LET statement shape: {other:?}"),
+        };
+        assert_eq!(&source[span.start..span.end], expected_text);
+    }
+}
+
+#[test]
+fn parser_rejects_let_assignment_to_variables_outside_the_mvp() {
+    let source = "LET count=FACT(0)\n";
+    let mut sources = SourceMap::new();
+    let source_id = sources.add_source("let-unsupported-variable.LST", source);
+
+    let diagnostics = parse(source_id, source).expect_err("only x, y, and z are supported targets");
+    assert_eq!(diagnostics[0].code, "GFA-SUPPORT-0001");
+    let span = diagnostics[0]
+        .primary_span
+        .expect("unsupported variable has a source span");
+    assert_eq!(&source[span.start..span.end], "count");
+}

@@ -1141,6 +1141,13 @@ impl Parser {
         let first = self.advance();
         match first.kind {
             TokenKind::Identifier(name) if name == "PRINT" => self.parse_print(first.span),
+            TokenKind::Identifier(name) if name == "LET" => {
+                // LET is an optional, documented prefix for assignments. Keep
+                // the statement span anchored at LET while limiting the target
+                // variable and right-hand side to the currently supported subset.
+                let (variable, _) = self.parse_variable()?;
+                self.parse_assignment(variable, first.span)
+            }
             TokenKind::Identifier(name) if name == "DIM" => self.parse_dim_matrix(first.span),
             TokenKind::Identifier(name) if name == "MAT" => self.parse_mat_statement(first.span),
             TokenKind::Identifier(name) if matches!(name.as_str(), "x" | "y" | "z") => {
@@ -1151,7 +1158,7 @@ impl Parser {
                 first.span,
             )),
             _ => Err(self.syntax_error(
-                "expected an assignment, PRINT, DIM, or MAT statement",
+                "expected an assignment, LET assignment, PRINT, DIM, or MAT statement",
                 first.span,
             )),
         }
