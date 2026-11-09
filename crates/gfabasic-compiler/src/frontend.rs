@@ -2247,7 +2247,7 @@ mod tests {
     fn parses_statements_separated_by_bare_cr_and_without_final_newline() {
         // CR is accepted as a transport-level separator by the lexer. This
         // checks parser behavior without asserting historical Amiga behavior.
-        let source_text = "x=42\\rPRINT x";
+        let source_text = "x=42\rPRINT x";
         let mut sources = SourceMap::new();
         let source_id = sources.add_source("bare-cr-no-final-newline.lst", source_text);
 
@@ -2272,8 +2272,7 @@ mod tests {
 
         assert!(document.syntax.tokens.iter().any(|token| {
             matches!(token.kind, super::TokenKind::Newline)
-                && &source_text[token.span.start..token.span.end] == "\\r"
+                && &source_text[token.span.start..token.span.end] == "\r"
         }));
     }
-
 }
