@@ -111,3 +111,8 @@ jobs:
           rm -rf "$staging_dir"
           echo "Could not publish production site after 5 attempts."
           exit 1
+
+      - name: Smoke-test deployed production documentation
+        env:
+          DOCS_URL: https://vsimko.github.io/gfabasic-rust/docs/index.html
+        run: python scripts/tests/test_production_docs.py
