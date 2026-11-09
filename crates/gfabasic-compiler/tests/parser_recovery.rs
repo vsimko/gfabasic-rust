@@ -257,3 +257,75 @@ fn parser_rejects_same_line_statements_and_recovers_at_the_next_line() {
     assert_eq!(&source[span.start..span.end], "y");
     assert_eq!(sources.slice(span), Some("y"));
 }
+
+#[test]
+fn parser_ignores_and_preserves_inline_comments() {
+    use gfabasic_compiler::frontend::{TriviaKind, parse_document};
+
+    let source = "x=FACT(0) ! inline comment\r\nPRINT x ! adjacent comment";
+    let mut sources = SourceMap::new();
+    let source_id = sources.add_source("inline-comments.LST", source);
+
+    let document = parse_document(source_id, source)
+        .expect("verified inline comments must not affect supported statements");
+
+    assert_eq!(document.program.statements.len(), 2);
+    let comments: Vec<_> = document
+        .syntax
+        .trivia
+        .iter()
+        .filter(|trivia| trivia.kind == TriviaKind::Comment)
+        .map(|trivia| &source[trivia.span.start..trivia.span.end])
+        .collect();
+    assert_eq!(comments, ["! inline comment", "! adjacent comment"]);
+
+    let mut spans: Vec<_> = document
+        .syntax
+        .tokens
+        .iter()
+        .filter(|token| !matches!(&token.kind, TokenKind::End))
+        .map(|token| token.span)
+        .chain(document.syntax.trivia.iter().map(|trivia| trivia.span))
+        .collect();
+    spans.sort_by_key(|span| span.start);
+
+    let reconstructed = spans
+        .into_iter()
+        .map(|span| &source[span.start..span.end])
+        .collect::<String>();
+    assert_eq!(reconstructed, source);
+}
+
+#[test]
+fn exclamation_mark_in_data_line_is_not_an_inline_comment() {
+    use gfabasic_compiler::frontend::lex_lossless;
+
+    let source = "DATA 1,2,3 ! this remains DATA text";
+    let mut sources = SourceMap::new();
+    let source_id = sources.add_source("data-comment-marker.LST", source);
+
+    let diagnostics = lex_lossless(source_id, source)
+        .expect_err("the current subset must reject DATA syntax, not reinterpret ! as trivia");
+    assert_eq!(diagnostics[0].code, "GFA-LEX-0001");
+    let span = diagnostics[0]
+        .primary_span
+        .expect("unsupported DATA text has a lexical span");
+    assert_eq!(&source[span.start..span.end], "!");
+}
+
+#[test]
+fn exclamation_mark_attached_to_identifier_is_not_a_comment() {
+    use gfabasic_compiler::frontend::lex_lossless;
+
+    let source = "line!=TRUE";
+    let mut sources = SourceMap::new();
+    let source_id = sources.add_source("boolean-suffix.LST", source);
+
+    let diagnostics = lex_lossless(source_id, source)
+        .expect_err("the unsupported boolean suffix must not be reinterpreted as a comment");
+    assert_eq!(diagnostics[0].code, "GFA-LEX-0001");
+    let span = diagnostics[0]
+        .primary_span
+        .expect("unsupported suffix has a lexical span");
+    assert_eq!(&source[span.start..span.end], "!");
+}
