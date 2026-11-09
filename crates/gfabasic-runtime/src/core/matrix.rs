@@ -167,7 +167,7 @@ impl<'a> MatrixMut<'a> {
         source_rows: usize,
         source_columns: usize,
     ) -> Result<(), MatrixShapeError> {
-        self.apply_elementwise(source, source_rows, source_columns, f64::add)
+        self.apply_elementwise(source, source_rows, source_columns, |left, right| left + right)
     }
 
     /// Subtract a same-shaped floating-point field element-wise (Amiga 3.5 `MAT SUB a(),b()`).
@@ -177,7 +177,7 @@ impl<'a> MatrixMut<'a> {
         source_rows: usize,
         source_columns: usize,
     ) -> Result<(), MatrixShapeError> {
-        self.apply_elementwise(source, source_rows, source_columns, f64::sub)
+        self.apply_elementwise(source, source_rows, source_columns, |left, right| left - right)
     }
 
     /// Add a scalar to every element (Amiga 3.5 `MAT ADD a(),x`).
