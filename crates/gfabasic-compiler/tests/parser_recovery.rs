@@ -237,7 +237,7 @@ fn parser_recovery_handles_classic_cr_line_endings() {
 fn parser_ignores_and_preserves_inline_comments() {
     use gfabasic_compiler::frontend::{TriviaKind, parse_document};
 
-    let source = "! leading comment\r\nx=FACT(0) ! inline comment\r\nPRINT x! adjacent comment";
+    let source = "x=FACT(0) ! inline comment\r\nPRINT x! adjacent comment";
     let mut sources = SourceMap::new();
     let source_id = sources.add_source("inline-comments.LST", source);
 
@@ -254,7 +254,7 @@ fn parser_ignores_and_preserves_inline_comments() {
         .collect();
     assert_eq!(
         comments,
-        ["! leading comment", "! inline comment", "! adjacent comment"]
+        ["! inline comment", "! adjacent comment"]
     );
 
     let mut spans: Vec<_> = document
@@ -272,4 +272,21 @@ fn parser_ignores_and_preserves_inline_comments() {
         .map(|span| &source[span.start..span.end])
         .collect::<String>();
     assert_eq!(reconstructed, source);
+}
+
+#[test]
+fn exclamation_mark_in_data_line_is_not_an_inline_comment() {
+    use gfabasic_compiler::frontend::lex_lossless;
+
+    let source = "DATA 1,2,3 ! this remains DATA text";
+    let mut sources = SourceMap::new();
+    let source_id = sources.add_source("data-comment-marker.LST", source);
+
+    let diagnostics = lex_lossless(source_id, source)
+        .expect_err("the current subset must reject DATA syntax, not reinterpret ! as trivia");
+    assert_eq!(diagnostics[0].code, "GFA-LEX-0001");
+    let span = diagnostics[0]
+        .primary_span
+        .expect("unsupported DATA text has a lexical span");
+    assert_eq!(&source[span.start..span.end], "!");
 }
