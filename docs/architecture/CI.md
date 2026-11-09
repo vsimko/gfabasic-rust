@@ -5,7 +5,7 @@ title: "GitHub Actions workflow architecture"
 
 # GitHub Actions workflow architecture
 
-- Status: Proposed full CI architecture. Implemented workflows cover documentation checks, fast Rust workspace checks, source-loader fuzzing, RustSec audits, source-loading benchmark validation/measurement, and SPDX 2.3 workspace SBOM generation/validation with a configured GitHub Release attachment. Lexer/parser fuzzing, compiler/runtime/conformance integration, a stable final PR gate, branch protection, and compiler build/package/release workflows remain unimplemented. The SBOM attachment has not yet been exercised on a published release.
+- Status: Proposed full CI architecture. Implemented workflows cover OKF documentation validation and generation, Markdown/link checks, website preview and production publication, fast Rust workspace checks, source-loader fuzzing, RustSec audits, source-loading benchmark validation/measurement, and SPDX 2.3 workspace SBOM generation/validation with a configured GitHub Release attachment. Lexer/parser fuzzing, compiler/runtime/conformance integration, a stable final PR gate, branch protection, and compiler build/package/release workflows remain unimplemented. The SBOM attachment has not yet been exercised on a published release.
 - Tracking: [issue #27](https://github.com/vsimko/gfabasic-rust/issues/27).
 
 ## Goals
