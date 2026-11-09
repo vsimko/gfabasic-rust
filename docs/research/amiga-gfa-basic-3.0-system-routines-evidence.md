@@ -1,3 +1,8 @@
+---
+type: "Research Note"
+title: "GFA BASIC 3.0 Amiga — operating-system routine evidence"
+---
+
 # GFA BASIC 3.0 Amiga — operating-system routine evidence
 
 Source: *GFA-BASIC 3.0 Amiga*, Chapter 11, “System routines”, printed pages 11-2–11-92 (Interpreter PDF pages 312–402). The chapter introduces direct operating-system calls and says its descriptions are reduced to the most important aspects. It notes that the interpreter intercepts invalid input but leaves error handling to the operating system (GURU). (11-2)
