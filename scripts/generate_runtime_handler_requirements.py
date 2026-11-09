@@ -108,12 +108,16 @@ def generate_source(root: Path = ROOT) -> str:
     ]
     for declaration_id, handler_id, profile, status, signature in requirements:
         handler = "None" if handler_id is None else f"Some({rust_string(handler_id)})"
-        lines.append(
-            "    HandlerRequirement { "
-            f"id: {rust_string(declaration_id)}, handler_id: {handler}, "
-            f"profile: ApiProfile::{profile}, status: ImplementationStatus::{status}, "
-            f"signature: HandlerSignature::{signature} "
-            "},"
+        lines.extend(
+            [
+                "    HandlerRequirement {",
+                f"        id: {rust_string(declaration_id)},",
+                f"        handler_id: {handler},",
+                f"        profile: ApiProfile::{profile},",
+                f"        status: ImplementationStatus::{status},",
+                f"        signature: HandlerSignature::{signature},",
+                "    },",
+            ]
         )
     lines.extend(["];", ""])
     return "\n".join(lines)
