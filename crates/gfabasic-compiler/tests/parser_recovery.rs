@@ -1,11 +1,11 @@
-use gfabasic_compiler::frontend::parse;
+use gfabasic_compiler::frontend::{parse, parse_document, Statement};
 use gfabasic_compiler::source::SourceMap;
 
 #[test]
 fn parser_reports_independent_line_errors_after_synchronizing() {
     let source = "x=FACT(0\nLET x=1\nz=FACT(2)\n";
     let mut sources = SourceMap::new();
-    let source_id = sources.add_source("parser-recovery.bas", source);
+    let source_id = sources.add_source("parser-recovery.LST", source);
 
     let diagnostics = parse(source_id, source)
         .expect_err("malformed and unsupported statements must remain errors");
@@ -32,4 +32,35 @@ fn parser_reports_independent_line_errors_after_synchronizing() {
         9,
         "parser recovery must continue at the next source line"
     );
+}
+
+#[test]
+fn parser_preserves_statement_spans_in_the_original_listing() {
+    let source = "x=FACT(0)\nPRINT x\n";
+    let mut sources = SourceMap::new();
+    let source_id = sources.add_source("statement-spans.LST", source);
+
+    let document = parse_document(source_id, source).expect("supported listing should parse");
+    assert_eq!(document.program.statements.len(), 2);
+
+    let first = &document.program.statements[0];
+    let first_span = match first {
+        Statement::AssignFact { span, .. } => *span,
+        other => panic!("expected FACT assignment, got {other:?}"),
+    };
+    assert_eq!((first_span.start, first_span.end), (0, 9));
+    assert_eq!(sources.slice(first_span), Some("x=FACT(0)"));
+
+    let second = &document.program.statements[1];
+    let second_span = match second {
+        Statement::PrintVariables { span, .. } => *span,
+        other => panic!("expected PRINT statement, got {other:?}"),
+    };
+    assert_eq!((second_span.start, second_span.end), (10, 17));
+    assert_eq!(sources.slice(second_span), Some("PRINT x"));
+
+    // The lossless syntax remains tied to the same original byte offsets.
+    assert!(document.syntax.tokens.iter().any(|token| {
+        token.span.start == first_span.start && token.span.end == first_span.end - 8
+    }));
 }
