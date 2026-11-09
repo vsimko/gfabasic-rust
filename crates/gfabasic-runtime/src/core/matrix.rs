@@ -607,6 +607,9 @@ impl<'a> MatrixMut<'a> {
         let columns_to_copy = width
             .min(self.columns.saturating_sub(destination_column))
             .min(source_columns.saturating_sub(source_column));
+        if rows_to_copy == 0 || columns_to_copy == 0 {
+            return Ok(());
+        }
 
         for row in 0..rows_to_copy {
             let source_start = (source_row + row) * source_columns + source_column;
