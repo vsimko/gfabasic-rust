@@ -111,6 +111,8 @@ def collect(root, token, now=None):
 
     for name, filename, note, file_exists in configured:
         item = {"name": name, "file": filename, "note": note}
+        if file_exists:
+            item["workflow_url"] = f"https://github.com/{REPOSITORY}/blob/main/.github/workflows/{filename}"
         if not file_exists:
             item.update({"state": "not-configured", "latest": None, "last_success": None})
         elif api_failure:
@@ -151,11 +153,15 @@ def render(snapshot):
             f'{esc(latest.get("branch") or "branch unknown")}'
         )
         if latest and latest.get("age_hours") is not None:
-            latest_text += f' · {latest["age_hours"]}h ago'
-        latest_link = f'<a href="{esc(latest["url"])}">Open latest run ↗</a>' if latest and latest.get("url") else ""
+            latest_text += f' · {latest["age_hours"]}h ago · {latest["freshness"]}'
+        latest_link = f'<a href="{esc(item["workflow_url"])}">Workflow definition ↗</a>' if item.get("workflow_url") else ""
+        if latest and latest.get("url"):
+            latest_link += f' <a href="{esc(latest["url"])}">Latest run ↗</a>'
         success_text = "No successful run recorded"
         if success:
             success_text = f'Last success: {esc(success.get("updated_at") or success.get("created_at") or "time unknown")}'
+            if success.get("age_hours") is not None:
+                success_text += f' · {success["age_hours"]}h ago'
             if success.get("url"):
                 success_text += f' · <a href="{esc(success["url"])}">Open successful run ↗</a>'
         error = f'<p class="ci-health-error">{esc(item["error"])}</p>' if item.get("error") else ""
