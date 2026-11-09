@@ -1,3 +1,9 @@
+---
+type: "Research Note"
+title: "Amiga GFA BASIC 3.5 interpreter probes from text listings"
+tags: [amiga, gfa-basic, interpreter, testing]
+---
+
 # Amiga GFA BASIC 3.5 interpreter probes from text listings
 
 - Tracking: [issue #66](https://github.com/vsimko/gfabasic-rust/issues/66).

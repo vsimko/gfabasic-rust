@@ -15,6 +15,7 @@ This is the canonical OKF v0.2 documentation bundle for gfabasic-rust. Markdown 
 # Architecture and implementation
 
 - [Architecture](architecture/) - System design, decisions, validation, and implementation status.
+- [Runtime handler registration](runtime-handler-registration.md) - Canonical API handler mapping and runtime dispatch validation.
 
 # Language and API reference
 

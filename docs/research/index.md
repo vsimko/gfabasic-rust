@@ -44,3 +44,6 @@
 - [GFA Basic Command Index OCR](gfa-basic-command-index-ocr.md) - Documentation concepts in research.
 - [Gfalist Build AND Fixture Validation](gfalist-build-and-fixture-validation.md) - Documentation concepts in research.
 - [Gfalist Format VS RUST Frontend](gfalist-format-vs-rust-frontend.md) - Documentation concepts in research.
+- [Amiga GFA BASIC 3.5 interpreter probes](amiga-gfa-basic-35-lst-probes.md) - Manual-driven textual listing probe procedure.
+- [Amiga GFA BASIC 3.52 runtime baseline](amiga-gfa-basic-352-runtime-baseline.md) - Version-scoped runtime observation record.
+- [Amiga GFA-BASIC binary analysis](amiga-gfa-basic-binary-analysis.md) - Reproducible analysis workflow and provenance.
