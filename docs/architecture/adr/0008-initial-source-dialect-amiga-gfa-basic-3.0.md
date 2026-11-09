@@ -1,3 +1,8 @@
+---
+type: "Architecture Decision Record"
+title: "ADR 0008: Initial source dialect — Amiga GFA BASIC interpreter 3.0"
+---
+
 # ADR 0008: Initial source dialect — Amiga GFA BASIC interpreter 3.0
 
 - Status: Superseded
