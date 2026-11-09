@@ -1,3 +1,8 @@
+---
+type: "Architecture"
+title: "First compiler vertical slice — proposed boundary"
+---
+
 # First compiler vertical slice — proposed boundary
 
 **Status:** partially implemented as an experimental FACT/PRINT frontend and native bootstrap prototype; not a complete compiler feature or conformance claim.
