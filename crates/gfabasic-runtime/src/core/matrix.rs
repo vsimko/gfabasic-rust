@@ -113,8 +113,22 @@ impl fmt::Display for MatrixShapeError {
                 formatter,
                 "element-wise operation requires {destination_rows}x{destination_columns} source, got {source_rows}x{source_columns}"
             ),
-            Self::ProductInnerDimensionMismatch { left_columns, right_rows } => write!(formatter, "matrix product inner dimensions differ: {left_columns} and {right_rows}"),
-            Self::ProductDestinationShapeMismatch { destination_rows, destination_columns, expected_rows, expected_columns } => write!(formatter, "matrix product destination must be {expected_rows}x{expected_columns}, got {destination_rows}x{destination_columns}"),
+            Self::ProductInnerDimensionMismatch {
+                left_columns,
+                right_rows,
+            } => write!(
+                formatter,
+                "matrix product inner dimensions differ: {left_columns} and {right_rows}"
+            ),
+            Self::ProductDestinationShapeMismatch {
+                destination_rows,
+                destination_columns,
+                expected_rows,
+                expected_columns,
+            } => write!(
+                formatter,
+                "matrix product destination must be {expected_rows}x{expected_columns}, got {destination_rows}x{destination_columns}"
+            ),
             Self::ZeroNormRow { row } => write!(formatter, "cannot normalize zero-norm row {row}"),
             Self::ZeroNormColumn { column } => {
                 write!(formatter, "cannot normalize zero-norm column {column}")
@@ -345,8 +359,7 @@ impl<'a> MatrixMut<'a> {
             for column in 0..right_columns {
                 let mut sum = 0.0;
                 for inner in 0..left_columns {
-                    sum += left[row * left_columns + inner]
-                        * right[inner * right_columns + column];
+                    sum += left[row * left_columns + inner] * right[inner * right_columns + column];
                 }
                 result[row * right_columns + column] = sum;
             }
