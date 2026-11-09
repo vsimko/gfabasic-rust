@@ -1,5 +1,6 @@
 import os
 import sys
+import time
 import urllib.error
 import urllib.request
 from html.parser import HTMLParser
@@ -31,13 +32,22 @@ def main():
         raise SystemExit("PREVIEW_URL is required")
 
     request = urllib.request.Request(url, headers={"User-Agent": "gfabasic-preview-qa/1.0"})
-    try:
-        with urllib.request.urlopen(request, timeout=30) as response:
-            if response.status != 200:
-                raise AssertionError(f"Preview returned HTTP {response.status}")
-            html = response.read().decode("utf-8")
-    except (urllib.error.URLError, TimeoutError) as error:
-        raise SystemExit(f"Could not load deployed preview {url}: {error}") from error
+    html = None
+    last_error = None
+    for attempt in range(6):
+        try:
+            with urllib.request.urlopen(request, timeout=10) as response:
+                if response.status != 200:
+                    raise urllib.error.URLError(f"Preview returned HTTP {response.status}")
+                html = response.read().decode("utf-8")
+            break
+        except (urllib.error.URLError, TimeoutError) as error:
+            last_error = error
+            if attempt < 5:
+                print(f"Preview is not ready yet (attempt {attempt + 1}/6); retrying in 10 seconds.")
+                time.sleep(10)
+    if html is None:
+        raise SystemExit(f"Could not load deployed preview {url} after 6 attempts: {last_error}") from last_error
 
     inspector = PageInspector()
     inspector.feed(html)
