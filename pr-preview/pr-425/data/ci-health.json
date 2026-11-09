@@ -1,6 +1,6 @@
 {
   "repository": "vsimko/gfabasic-rust",
-  "generated_at": "2026-11-09T19:05:35.844752Z",
+  "generated_at": "2026-11-09T19:06:08.588503Z",
   "freshness_threshold_hours": 168,
   "workflows": [
     {
@@ -41,14 +41,14 @@
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/rust.yml",
       "state": "in_progress",
       "latest": {
-        "id": 42679978801,
+        "id": 42680067961,
         "name": "Rust checks",
         "status": "in_progress",
         "event": "pull_request",
         "branch": "parser/let-assignment-prefix",
-        "created_at": "2026-11-09T19:05:26Z",
-        "updated_at": "2026-11-09T19:05:30Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42679978801",
+        "created_at": "2026-11-09T19:05:59Z",
+        "updated_at": "2026-11-09T19:06:03Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42680067961",
         "age_hours": 0,
         "freshness": "fresh"
       },
@@ -165,26 +165,26 @@
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/release-sbom.yml",
       "state": "in_progress",
       "latest": {
-        "id": 42679978763,
+        "id": 42680067914,
         "name": "Release SBOM",
         "status": "in_progress",
         "event": "pull_request",
         "branch": "parser/let-assignment-prefix",
-        "created_at": "2026-11-09T19:05:26Z",
-        "updated_at": "2026-11-09T19:05:31Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42679978763",
+        "created_at": "2026-11-09T19:05:59Z",
+        "updated_at": "2026-11-09T19:06:04Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42680067914",
         "age_hours": 0,
         "freshness": "fresh"
       },
       "last_success": {
-        "id": 42679866591,
+        "id": 42680025168,
         "name": "Release SBOM",
         "status": "success",
         "event": "pull_request",
         "branch": "parser/let-assignment-prefix",
-        "created_at": "2026-11-09T19:04:46Z",
-        "updated_at": "2026-11-09T19:05:04Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42679866591",
+        "created_at": "2026-11-09T19:05:43Z",
+        "updated_at": "2026-11-09T19:05:58Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42680025168",
         "age_hours": 0,
         "freshness": "fresh"
       }
@@ -227,14 +227,14 @@
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/pr-preview.yml",
       "state": "in_progress",
       "latest": {
-        "id": 42679978687,
+        "id": 42680067594,
         "name": "Pull request website preview",
         "status": "in_progress",
         "event": "pull_request",
         "branch": "parser/let-assignment-prefix",
-        "created_at": "2026-11-09T19:05:26Z",
-        "updated_at": "2026-11-09T19:05:30Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42679978687",
+        "created_at": "2026-11-09T19:05:59Z",
+        "updated_at": "2026-11-09T19:06:05Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42680067594",
         "age_hours": 0,
         "freshness": "fresh"
       },
