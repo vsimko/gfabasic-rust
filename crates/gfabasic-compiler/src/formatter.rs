@@ -612,9 +612,9 @@ mod tests {
 
     #[test]
     fn let_assignment_prefix_is_preserved_by_formatting() {
-        let source = "LET x=FACT(1)\\n";
+        let source = "LET x=FACT(1)\n";
         let formatted = format(source);
-        assert_eq!(formatted, "LET x = FACT(1)\\n");
+        assert_eq!(formatted, "LET x = FACT(1)\n");
 
         let mut before_sources = SourceMap::new();
         let before_id = before_sources.add_source("before-let.bas", source);
