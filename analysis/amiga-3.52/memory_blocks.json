@@ -1,0 +1,12 @@
+[
+  {
+    "name": "ram",
+    "start": 0,
+    "end": 136547,
+    "size": 136548,
+    "initialized": true,
+    "execute": true,
+    "read": true,
+    "write": true
+  }
+]
