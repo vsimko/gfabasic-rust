@@ -1826,9 +1826,9 @@ mod tests {
     #[test]
     fn rejects_unsupported_statement_instead_of_ignoring_it() {
         let mut sources = SourceMap::new();
-        let source_id = sources.add_source("unsupported.bas", "LET x=1\n");
+        let source_id = sources.add_source("unsupported.bas", "CLEAR\n");
 
-        let errors = parse(source_id, "LET x=1\n").expect_err("LET is outside the MVP");
+        let errors = parse(source_id, "CLEAR\n").expect_err("CLEAR is outside the MVP");
         assert_eq!(errors[0].code, "GFA-SUPPORT-0001");
         assert_eq!(errors[0].category, DiagnosticCategory::Unsupported);
         assert!(errors[0].message.contains("not supported"));

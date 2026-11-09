@@ -364,3 +364,18 @@ fn parser_rejects_let_assignment_to_variables_outside_the_mvp() {
         .expect("unsupported variable has a source span");
     assert_eq!(&source[span.start..span.end], "count");
 }
+
+#[test]
+fn parser_rejects_let_rhs_outside_the_supported_intrinsic_subset() {
+    let source = "LET x=1\n";
+    let mut sources = SourceMap::new();
+    let source_id = sources.add_source("let-literal-expression.LST", source);
+
+    let diagnostics = parse(source_id, source)
+        .expect_err("the current subset accepts only the documented intrinsic-call RHS");
+    assert_eq!(diagnostics[0].code, "GFA-PARSE-0001");
+    let span = diagnostics[0]
+        .primary_span
+        .expect("unsupported LET expression has a syntax span");
+    assert_eq!(&source[span.start..span.end], "1");
+}
