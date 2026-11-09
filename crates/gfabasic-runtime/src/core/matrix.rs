@@ -1123,6 +1123,22 @@ mod tests {
     }
 
     #[test]
+    fn rank_matches_amiga_35_addendum_example() {
+        let mut values = [
+            1.0, 2.0, 3.0, 4.0, 5.0,
+            3.2, 4.0, -5.0, 2.4, 5.1,
+            -2.0, 4.0, -5.0, 2.4, 5.1,
+            5.0, -2.3, 4.0, 5.6, 12.2,
+            4.1, 5.2, 16.7, 18.4, 19.1,
+        ];
+        let matrix = MatrixMut::new(5, 5, &mut values).unwrap();
+
+        assert_eq!(matrix.rank(), Ok(5));
+        // The manual's MAT BASE 1 offset (1,2) maps to Rust offset (0,1).
+        assert_eq!(matrix.rank_submatrix(0, 1, 3), Ok(2));
+    }
+
+    #[test]
     fn rank_submatrix_calculates_selected_square_region() {
         let mut values = [1.0, 2.0, 3.0, 0.0, 4.0, 5.0, 1.0, 0.0, 6.0];
         let matrix = MatrixMut::new(3, 3, &mut values).unwrap();
