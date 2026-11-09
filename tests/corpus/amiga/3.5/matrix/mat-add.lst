@@ -1,9 +1,6 @@
 DIM a(3, 3)
 DIM b(3, 3)
-x = 2
 MAT SET a() = 3
 MAT SET b() = 4
 MAT ADD b() = a() + b()
 MAT PRINT b()
-MAT ADD a(), x
-MAT PRINT a()
