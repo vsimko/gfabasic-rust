@@ -1,8 +1,9 @@
 //! Checked floating-point field operations from the Amiga GFA BASIC 3.5 addendum.
 //!
 //! The addendum documents MAT CLR and MAT SET for previously dimensioned
-//! one- or two-dimensional floating-point fields, and MAT ONE for square
-//! floating-point matrices (Chapter 13, printed pp. 13-2–13-3).
+//! one- or two-dimensional floating-point fields, MAT ONE for square
+//! floating-point matrices (printed pp. 13-2–13-3), and MAT ADD/MAT SUB/MAT MUL
+//! scalar forms for element-wise arithmetic (printed pp. 13-15–13-27).
 //!
 //! This module provides the storage-independent operation semantics. It does
 //! not define the original interpreter's array layout, numeric representation,
@@ -29,6 +30,13 @@ pub enum MatrixShapeError {
     IdentityRequiresSquare { rows: usize, columns: usize },
     /// The source storage does not match its declared shape.
     SourceElementCountMismatch { expected: usize, actual: usize },
+    /// Element-wise arithmetic requires identical source and destination shapes.
+    ElementwiseShapeMismatch {
+        destination_rows: usize,
+        destination_columns: usize,
+        source_rows: usize,
+        source_columns: usize,
+    },
     /// MAT TRANS requires destination dimensions to reverse the source shape.
     TransposeShapeMismatch {
         destination_rows: usize,
@@ -54,7 +62,16 @@ impl fmt::Display for MatrixShapeError {
             ),
             Self::SourceElementCountMismatch { expected, actual } => write!(
                 formatter,
-                "transpose source requires {expected} elements, but storage has {actual}"
+                "matrix source requires {expected} elements, but storage has {actual}"
+            ),
+            Self::ElementwiseShapeMismatch {
+                destination_rows,
+                destination_columns,
+                source_rows,
+                source_columns,
+            } => write!(
+                formatter,
+                "element-wise operation requires {destination_rows}x{destination_columns} source, got {source_rows}x{source_columns}"
             ),
             Self::TransposeShapeMismatch {
                 destination_rows,
@@ -137,6 +154,74 @@ impl<'a> MatrixMut<'a> {
         self.elements.fill(0.0);
         for diagonal in 0..self.rows {
             self.elements[diagonal * self.columns + diagonal] = 1.0;
+        }
+        Ok(())
+    }
+
+    /// Add a same-shaped floating-point field element-wise (Amiga 3.5 `MAT ADD a(),b()`).
+    ///
+    /// The source shape and storage length are validated before any element changes.
+    pub fn add_from(
+        &mut self,
+        source: &[f64],
+        source_rows: usize,
+        source_columns: usize,
+    ) -> Result<(), MatrixShapeError> {
+        self.apply_elementwise(source, source_rows, source_columns, f64::add)
+    }
+
+    /// Subtract a same-shaped floating-point field element-wise (Amiga 3.5 `MAT SUB a(),b()`).
+    pub fn subtract_from(
+        &mut self,
+        source: &[f64],
+        source_rows: usize,
+        source_columns: usize,
+    ) -> Result<(), MatrixShapeError> {
+        self.apply_elementwise(source, source_rows, source_columns, f64::sub)
+    }
+
+    /// Add a scalar to every element (Amiga 3.5 `MAT ADD a(),x`).
+    pub fn add_scalar(&mut self, value: f64) {
+        self.elements.iter_mut().for_each(|element| *element += value);
+    }
+
+    /// Subtract a scalar from every element (Amiga 3.5 `MAT SUB a(),x`).
+    pub fn subtract_scalar(&mut self, value: f64) {
+        self.elements.iter_mut().for_each(|element| *element -= value);
+    }
+
+    /// Multiply every element by a scalar (Amiga 3.5 `MAT MUL a(),x`).
+    pub fn multiply_scalar(&mut self, value: f64) {
+        self.elements.iter_mut().for_each(|element| *element *= value);
+    }
+
+    fn apply_elementwise(
+        &mut self,
+        source: &[f64],
+        source_rows: usize,
+        source_columns: usize,
+        operation: fn(f64, f64) -> f64,
+    ) -> Result<(), MatrixShapeError> {
+        let expected_source_len = source_rows
+            .checked_mul(source_columns)
+            .ok_or(MatrixShapeError::DimensionOverflow)?;
+        if source.len() != expected_source_len {
+            return Err(MatrixShapeError::SourceElementCountMismatch {
+                expected: expected_source_len,
+                actual: source.len(),
+            });
+        }
+        if self.rows != source_rows || self.columns != source_columns {
+            return Err(MatrixShapeError::ElementwiseShapeMismatch {
+                destination_rows: self.rows,
+                destination_columns: self.columns,
+                source_rows,
+                source_columns,
+            });
+        }
+
+        for (destination, source) in self.elements.iter_mut().zip(source) {
+            *destination = operation(*destination, *source);
         }
         Ok(())
     }
@@ -280,6 +365,74 @@ mod tests {
             MatrixMut::new(usize::MAX, 2, &mut values).err(),
             Some(MatrixShapeError::DimensionOverflow)
         );
+    }
+
+    #[test]
+    fn add_from_combines_same_shaped_fields_element_wise() {
+        let source = [10.0, 20.0, 30.0, 40.0];
+        let mut destination = [1.0, 2.0, 3.0, 4.0];
+        let mut matrix = MatrixMut::new(2, 2, &mut destination).unwrap();
+
+        matrix.add_from(&source, 2, 2).unwrap();
+
+        assert_eq!(destination, [11.0, 22.0, 33.0, 44.0]);
+    }
+
+    #[test]
+    fn subtract_from_combines_same_shaped_fields_element_wise() {
+        let source = [10.0, 20.0, 30.0, 40.0];
+        let mut destination = [11.0, 22.0, 33.0, 44.0];
+        let mut matrix = MatrixMut::new(2, 2, &mut destination).unwrap();
+
+        matrix.subtract_from(&source, 2, 2).unwrap();
+
+        assert_eq!(destination, [1.0, 2.0, 3.0, 4.0]);
+    }
+
+    #[test]
+    fn elementwise_operations_reject_shape_mismatch_without_mutation() {
+        let source = [1.0, 2.0, 3.0, 4.0, 5.0, 6.0];
+        let mut destination = [9.0; 6];
+        let mut matrix = MatrixMut::new(2, 3, &mut destination).unwrap();
+
+        assert_eq!(
+            matrix.add_from(&source, 3, 2),
+            Err(MatrixShapeError::ElementwiseShapeMismatch {
+                destination_rows: 2,
+                destination_columns: 3,
+                source_rows: 3,
+                source_columns: 2,
+            })
+        );
+        assert_eq!(destination, [9.0; 6]);
+    }
+
+    #[test]
+    fn elementwise_operations_reject_wrong_source_length_without_mutation() {
+        let source = [1.0, 2.0, 3.0];
+        let mut destination = [9.0; 4];
+        let mut matrix = MatrixMut::new(2, 2, &mut destination).unwrap();
+
+        assert_eq!(
+            matrix.subtract_from(&source, 2, 2),
+            Err(MatrixShapeError::SourceElementCountMismatch {
+                expected: 4,
+                actual: 3,
+            })
+        );
+        assert_eq!(destination, [9.0; 4]);
+    }
+
+    #[test]
+    fn scalar_arithmetic_updates_every_element() {
+        let mut values = [1.0, 2.0, 3.0];
+        let mut matrix = MatrixMut::new(1, 3, &mut values).unwrap();
+
+        matrix.add_scalar(2.0);
+        matrix.subtract_scalar(1.0);
+        matrix.multiply_scalar(3.0);
+
+        assert_eq!(values, [6.0, 9.0, 12.0]);
     }
 
     #[test]
