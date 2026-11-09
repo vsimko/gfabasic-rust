@@ -2120,7 +2120,7 @@ mod tests {
         use super::{TokenKind, lex_lossless};
         use crate::source::SourceSpan;
 
-        let boundaries = [" ", "\\t", "\\r", "\\n", "+", "-", "#", "*", "=", "(", ")", ","];
+        let boundaries = [" ", "\t", "\r", "\n", "+", "-", "#", "*", "=", "(", ")", ","];
         for boundary in boundaries {
             for spelling in ["_DATA", "_0", "_9"] {
                 let source_text = format!("{spelling}{boundary}");
@@ -2141,5 +2141,4 @@ mod tests {
             }
         }
     }
-
 }
