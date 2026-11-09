@@ -291,7 +291,6 @@ mod tests {
         );
     }
 
-
     #[test]
     fn resolves_each_repeated_print_occurrence_to_the_same_symbol() {
         let source_text = "x=FACT(1)\nPRINT x,x,x\n";
