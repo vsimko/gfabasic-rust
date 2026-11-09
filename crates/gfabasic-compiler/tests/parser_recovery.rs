@@ -138,7 +138,7 @@ fn parser_preserves_statement_spans_in_the_original_listing() {
 
 #[test]
 fn parser_recovery_keeps_the_next_line_after_trailing_print_comma() {
-    let source = "PRINT x,\\nLET y=1\\n";
+    let source = "PRINT x,\nLET y=1\n";
     let mut sources = SourceMap::new();
     let source_id = sources.add_source("trailing-print-comma.LST", source);
 
