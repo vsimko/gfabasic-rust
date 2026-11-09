@@ -41,7 +41,7 @@ jobs:
           cd dist/amiga/gfa-basic-3.52
           echo "fd80f6093e8d0163856af5849121e945e37051a2ad2a9053aa1930021783d962  GFABasic" | sha256sum --check
           test "$(wc -c < GFABasic)" -eq 136548
-          printf '\\x00\\x00\\x03\\xf3' | cmp -n 4 - GFABasic
+          printf '\x00\x00\x03\xf3' | cmp -n 4 - GFABasic
           file GFABasic || true
           cp GFABasic "$GITHUB_WORKSPACE/analysis-input/GFABasic"
 
@@ -78,7 +78,7 @@ jobs:
         run: |
           set -euo pipefail
           URL="$(curl --fail --silent --show-error https://api.github.com/repos/NationalSecurityAgency/ghidra/releases/latest |
-            jq -r '.assets[] | select(.name | test("^ghidra_.*PUBLIC.*\\\\.zip$")) | .browser_download_url' | head -n 1)"
+            jq -r '.assets[] | select(.name | test("^ghidra_.*PUBLIC.*\\.zip$")) | .browser_download_url' | head -n 1)"
           test -n "$URL"
           curl --fail --location --silent --show-error "$URL" -o /tmp/ghidra.zip
           mkdir -p /opt/ghidra
