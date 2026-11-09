@@ -31,6 +31,11 @@ pub enum MatrixShapeError {
         expected: usize,
         actual: usize,
     },
+    /// MAT DET is defined by the source for square matrices only.
+    DeterminantRequiresSquare {
+        rows: usize,
+        columns: usize,
+    },
     /// MAT ONE is defined by the source for square matrices only.
     IdentityRequiresSquare {
         rows: usize,
@@ -107,6 +112,10 @@ impl fmt::Display for MatrixShapeError {
             Self::ElementCountMismatch { expected, actual } => write!(
                 formatter,
                 "matrix requires {expected} elements, but storage has {actual}"
+            ),
+            Self::DeterminantRequiresSquare { rows, columns } => write!(
+                formatter,
+                "determinant requires a square matrix, got {rows}x{columns}"
             ),
             Self::IdentityRequiresSquare { rows, columns } => write!(
                 formatter,
@@ -247,6 +256,59 @@ impl<'a> MatrixMut<'a> {
             self.elements[diagonal * self.columns + diagonal] = 1.0;
         }
         Ok(())
+    }
+
+    /// Calculate the determinant of a square field (Amiga 3.5 `MAT DET x=a()`).
+    ///
+    /// Uses Gaussian elimination with partial pivoting on a private copy, so
+    /// the matrix storage is never modified. A zero pivot yields determinant
+    /// zero. Floating-point rounding and singular-edge behavior are Rust
+    /// implementation details, not claims about the original interpreter.
+    pub fn determinant(&self) -> Result<f64, MatrixShapeError> {
+        if self.rows != self.columns {
+            return Err(MatrixShapeError::DeterminantRequiresSquare {
+                rows: self.rows,
+                columns: self.columns,
+            });
+        }
+
+        let size = self.rows;
+        let mut work = self.elements.to_vec();
+        let mut determinant = 1.0;
+        for pivot_column in 0..size {
+            let pivot_row = (pivot_column..size)
+                .max_by(|left, right| {
+                    work[*left * size + pivot_column]
+                        .abs()
+                        .total_cmp(&work[*right * size + pivot_column].abs())
+                })
+                .expect("a pivot row exists for each non-empty square matrix");
+            let pivot = work[pivot_row * size + pivot_column];
+            if pivot == 0.0 {
+                return Ok(0.0);
+            }
+            if pivot_row != pivot_column {
+                for column in 0..size {
+                    work.swap(
+                        pivot_column * size + column,
+                        pivot_row * size + column,
+                    );
+                }
+                determinant = -determinant;
+            }
+            let pivot = work[pivot_column * size + pivot_column];
+            determinant *= pivot;
+
+            for row in (pivot_column + 1)..size {
+                let factor = work[row * size + pivot_column] / pivot;
+                for column in (pivot_column + 1)..size {
+                    work[row * size + column] -=
+                        factor * work[pivot_column * size + column];
+                }
+                work[row * size + pivot_column] = 0.0;
+            }
+        }
+        Ok(determinant)
     }
 
     /// Add a same-shaped floating-point field element-wise (Amiga 3.5 `MAT ADD a(),b()`).
@@ -671,6 +733,37 @@ mod tests {
         assert_eq!(
             MatrixMut::new(usize::MAX, 2, &mut values).err(),
             Some(MatrixShapeError::DimensionOverflow)
+        );
+    }
+
+    #[test]
+    fn determinant_calculates_square_matrix_with_row_swapping() {
+        let mut values = [0.0, 2.0, 1.0, 3.0];
+        let matrix = MatrixMut::new(2, 2, &mut values).unwrap();
+
+        assert_eq!(matrix.determinant(), Ok(-6.0));
+        assert_eq!(values, [0.0, 2.0, 1.0, 3.0]);
+    }
+
+    #[test]
+    fn determinant_returns_zero_for_singular_matrix() {
+        let mut values = [1.0, 2.0, 2.0, 4.0];
+        let matrix = MatrixMut::new(2, 2, &mut values).unwrap();
+
+        assert_eq!(matrix.determinant(), Ok(0.0));
+    }
+
+    #[test]
+    fn determinant_rejects_non_square_matrix() {
+        let mut values = [1.0, 2.0, 3.0, 4.0, 5.0, 6.0];
+        let matrix = MatrixMut::new(2, 3, &mut values).unwrap();
+
+        assert_eq!(
+            matrix.determinant(),
+            Err(MatrixShapeError::DeterminantRequiresSquare {
+                rows: 2,
+                columns: 3,
+            })
         );
     }
 
