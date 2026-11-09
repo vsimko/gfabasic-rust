@@ -14,6 +14,7 @@ fixtures = [
   "amiga/3.5/matrix/mat-sub",
   "amiga/3.5/matrix/mat-mul-dot",
   "amiga/3.5/data/mat-read-data",
+  "amiga/3.5/data/mat-mul-triple",
   "amiga/3.5/combinatorics/fact-zero",
   "amiga/3.5/combinatorics/three-intrinsics",
 ]
