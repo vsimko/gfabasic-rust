@@ -283,6 +283,36 @@ mod tests {
     }
 
     #[test]
+    fn resolves_multiple_symbols_and_references_by_declaration_identity() {
+        let source_text = "LET x=FACT(1)\nLET y=VARIAT(5,2)\nPRINT y,x,y\n";
+        let mut sources = SourceMap::new();
+        let source_id = sources.add_source("multiple-symbols.LST", source_text);
+        let document = parse_document(source_id, source_text).expect("supported source parses");
+        let symbols =
+            resolve_prototype_symbols(&document).expect("all references resolve to declarations");
+
+        assert_eq!(symbols.symbols.len(), 2);
+        assert_eq!(symbols.symbols[0].id, SymbolId(0));
+        assert_eq!(symbols.symbols[0].name, "x");
+        assert_eq!(sources.slice(symbols.symbols[0].declaration), Some("x"));
+        assert_eq!(symbols.symbols[1].id, SymbolId(1));
+        assert_eq!(symbols.symbols[1].name, "y");
+        assert_eq!(sources.slice(symbols.symbols[1].declaration), Some("y"));
+
+        let references: Vec<_> = symbols.references.iter().collect();
+        assert_eq!(references.len(), 3);
+        let expected = [(SymbolId(1), "y"), (SymbolId(0), "x"), (SymbolId(1), "y")];
+        for (reference, (expected_symbol, expected_name)) in references.iter().zip(expected) {
+            assert_eq!(reference.symbol, expected_symbol);
+            assert_eq!(sources.slice(reference.span), Some(expected_name));
+        }
+
+        assert_eq!(symbols.references_to(SymbolId(0)).count(), 1);
+        assert_eq!(symbols.references_to(SymbolId(1)).count(), 2);
+        assert!(symbols.get(SymbolId(2)).is_none());
+    }
+
+    #[test]
     fn diagnoses_each_unresolved_print_reference_with_its_own_span() {
         let source_text = "PRINT x,x\n";
         let mut sources = SourceMap::new();
