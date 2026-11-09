@@ -290,7 +290,6 @@ mod tests {
             )
         );
     }
-}
 
 
     #[test]
@@ -299,8 +298,7 @@ mod tests {
         let mut sources = SourceMap::new();
         let source_id = sources.add_source("repeated-references.LST", source_text);
         let document = parse_document(source_id, source_text).expect("syntax is valid");
-        let symbols =
-            resolve_prototype_symbols(&document).expect("all PRINT references resolve");
+        let symbols = resolve_prototype_symbols(&document).expect("all PRINT references resolve");
 
         let references: Vec<_> = symbols.references_to(SymbolId(0)).collect();
         assert_eq!(references.len(), 3);
@@ -310,10 +308,8 @@ mod tests {
         for (reference, expected_start) in references.iter().zip(expected_starts) {
             assert_eq!(reference.symbol, SymbolId(0));
             assert_eq!(reference.span.start, expected_start);
-            assert_eq!(
-                &source_text[reference.span.start..reference.span.end],
-                "x"
-            );
+            assert_eq!(&source_text[reference.span.start..reference.span.end], "x");
             assert_eq!(sources.slice(reference.span), Some("x"));
         }
     }
+}
