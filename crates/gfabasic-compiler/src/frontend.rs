@@ -247,9 +247,9 @@ fn is_identifier_continuation(byte: u8) -> bool {
 }
 
 /// A boundary accepted by the currently implemented, evidence-gated token
-/// subset. Requiring a known boundary prevents a documented special name from
-/// being accepted as a prefix of otherwise unsupported adjacent source text.
-fn is_supported_token_boundary(byte: u8) -> bool {    matches!(
+/// subset. Requiring a known boundary prevents a documented special name from/// being accepted as a prefix of otherwise unsupported adjacent source text.
+fn is_supported_token_boundary(byte: u8) -> bool {
+    matches!(
         byte,
         b' ' | b'\t' | b'\r' | b'\n' | b'+' | b'-' | b'#' | b'*' | b'=' | b'(' | b')' | b','
     )
@@ -498,7 +498,6 @@ impl Parser {
     fn current(&self) -> &Token {
         &self.tokens[self.cursor]
     }
-
     fn advance(&mut self) -> Token {
         let token = self.tokens[self.cursor].clone();
         if !matches!(token.kind, TokenKind::End) {
@@ -511,7 +510,8 @@ impl Parser {
     fn advance_required(&mut self, description: &str) -> Result<Token, Box<Diagnostic>> {
         let token = self.current().clone();
         if matches!(token.kind, TokenKind::Newline | TokenKind::End) {
-            Err(self.syntax_error(format!("expected {description}"), token.span))        } else {
+            Err(self.syntax_error(format!("expected {description}"), token.span))
+        } else {
             Ok(self.advance())
         }
     }
@@ -747,8 +747,7 @@ impl Parser {
                         operator.span,
                     ));
                 }
-                let (right, _) = self.parse_matrix_reference()?;
-                (Some(left), MatArithmeticOperand::Matrix(right))
+                let (right, _) = self.parse_matrix_reference()?;                (Some(left), MatArithmeticOperand::Matrix(right))
             } else {
                 self.expect(TokenKind::Comma, "',' in in-place MAT arithmetic")?;
                 let token = self.current().clone();
@@ -760,7 +759,8 @@ impl Parser {
                                 .get(self.cursor + 1)
                                 .is_some_and(|next| matches!(&next.kind, TokenKind::LeftParen)) =>
                     {
-                        let (matrix, _) = self.parse_matrix_reference()?;                        (None, MatArithmeticOperand::Matrix(matrix))
+                        let (matrix, _) = self.parse_matrix_reference()?;
+                        (None, MatArithmeticOperand::Matrix(matrix))
                     }
                     TokenKind::Identifier(name) => {
                         let scalar = name.clone();
@@ -997,8 +997,7 @@ impl Parser {
                     return Err(self.unsupported_error(
                         "MAT BASE supports only the documented index offsets 0 and 1",
                         self.tokens[self.cursor - 1].span,
-                    ));
-                }
+                    ));                }
                 let end = self.tokens[self.cursor - 1].span;
                 Ok(Statement::MatBase {
                     index,
@@ -1009,7 +1008,8 @@ impl Parser {
             "INPUT" => self.parse_mat_input(start),
             "CPY" => self.parse_mat_copy(start, MatCopyOperation::Copy),
             "XCPY" => self.parse_mat_copy(start, MatCopyOperation::TransposedCopy),
-            "DET" => self.parse_mat_analysis(start, MatAnalysisOperation::Det),            "QDET" => self.parse_mat_analysis(start, MatAnalysisOperation::QDet),
+            "DET" => self.parse_mat_analysis(start, MatAnalysisOperation::Det),
+            "QDET" => self.parse_mat_analysis(start, MatAnalysisOperation::QDet),
             "RANG" => self.parse_mat_analysis(start, MatAnalysisOperation::Rang),
             "MUL" => self.parse_mat_mul(start),
             "ADD" => self.parse_mat_arithmetic(start, MatArithmeticOperation::Add),
@@ -1247,7 +1247,6 @@ mod tests {
             Statement::AssignCombin { name, n: 5, k: 2, .. } if name == "z"
         ));
     }
-
     #[test]
     fn parses_one_and_two_dimensional_matrix_declarations() {
         let source = "DIM a(5)\nDIM b(1,5)\nDIM b(5,1)\n";
@@ -1258,7 +1257,8 @@ mod tests {
         assert!(matches!(
             &program.statements[0],
             Statement::DimMatrix {
-                name,                rows: 5,
+                name,
+                rows: 5,
                 columns: None,
                 ..
             } if name == "a"
@@ -1497,8 +1497,7 @@ mod tests {
                 extent: Some((5, 6)),
                 ..
             }
-        ));
-        assert!(matches!(
+        ));        assert!(matches!(
             &program.statements[2],
             Statement::MatCopy {
                 operation: MatCopyOperation::TransposedCopy,
@@ -1507,7 +1506,8 @@ mod tests {
                 ..
             } if destination == "a" && source == "b"
         ));
-        assert!(matches!(            &program.statements[3],
+        assert!(matches!(
+            &program.statements[3],
             Statement::MatCopy {
                 operation: MatCopyOperation::TransposedCopy,
                 destination,
@@ -1747,8 +1747,7 @@ mod tests {
         ] {
             let mut sources = SourceMap::new();
             let source_id = sources.add_source("malformed-matrix.bas", source_text);
-            if source_text.starts_with("DIM ") {
-                assert!(
+            if source_text.starts_with("DIM ") {                assert!(
                     parse(source_id, source_text).is_ok(),
                     "verified vector declaration was rejected: {source_text:?}"
                 );
@@ -1756,7 +1755,8 @@ mod tests {
                 assert!(
                     parse(source_id, source_text).is_err(),
                     "accepted malformed matrix statement: {source_text:?}"
-                );            }
+                );
+            }
         }
     }
 
@@ -1997,15 +1997,15 @@ mod tests {
         let source_id = sources.add_source("data-pointer-setter.bas", source_text);
         let lexed = lex_lossless(source_id, source_text).expect("documented 3.5 form should lex");
 
-        assert!(matches!(&lexed.tokens[0].kind, TokenKind::Identifier(name) if name == "_DATA"));
-        assert_eq!(lexed.tokens[0].span.start, 0);
+        assert!(matches!(&lexed.tokens[0].kind, TokenKind::Identifier(name) if name == "_DATA"));        assert_eq!(lexed.tokens[0].span.start, 0);
         assert_eq!(lexed.tokens[0].span.end, 5);
         assert!(matches!(lexed.tokens[1].kind, TokenKind::Equals));
         assert_eq!(lexed.tokens[1].span.start, 5);
         assert_eq!(lexed.tokens[1].span.end, 6);
         assert!(matches!(lexed.tokens[2].kind, TokenKind::Integer(42)));
         assert_eq!(lexed.tokens[2].span.start, 6);
-        assert_eq!(lexed.tokens[2].span.end, 8);    }
+        assert_eq!(lexed.tokens[2].span.end, 8);
+    }
     #[test]
     fn special_names_are_recognized_at_eof_and_before_existing_delimiters() {
         use super::{TokenKind, lex_lossless};
