@@ -1,6 +1,6 @@
 {
   "repository": "vsimko/gfabasic-rust",
-  "generated_at": "2026-11-09T18:57:22.482858Z",
+  "generated_at": "2026-11-09T18:57:55.409195Z",
   "freshness_threshold_hours": 168,
   "workflows": [
     {
@@ -8,28 +8,28 @@
       "file": "docs.yml",
       "note": "Markdown, JavaScript, API registry, corpus metadata and local-link validation.",
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/docs.yml",
-      "state": "in_progress",
+      "state": "success",
       "latest": {
         "id": 42678672677,
         "name": "Documentation checks",
-        "status": "in_progress",
+        "status": "success",
         "event": "pull_request",
         "branch": "research/verify-amiga35-matrix-analysis-abbreviations",
         "created_at": "2026-11-09T18:57:14Z",
-        "updated_at": "2026-11-09T18:57:19Z",
+        "updated_at": "2026-11-09T18:57:31Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42678672677",
         "age_hours": 0,
         "freshness": "fresh"
       },
       "last_success": {
-        "id": 42677525121,
+        "id": 42678672677,
         "name": "Documentation checks",
         "status": "success",
-        "event": "push",
-        "branch": "main",
-        "created_at": "2026-11-09T18:49:51Z",
-        "updated_at": "2026-11-09T18:50:07Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42677525121",
+        "event": "pull_request",
+        "branch": "research/verify-amiga35-matrix-analysis-abbreviations",
+        "created_at": "2026-11-09T18:57:14Z",
+        "updated_at": "2026-11-09T18:57:31Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42678672677",
         "age_hours": 0,
         "freshness": "fresh"
       }
@@ -233,7 +233,7 @@
         "event": "pull_request",
         "branch": "research/verify-amiga35-matrix-analysis-abbreviations",
         "created_at": "2026-11-09T18:57:14Z",
-        "updated_at": "2026-11-09T18:57:18Z",
+        "updated_at": "2026-11-09T18:57:52Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42678672293",
         "age_hours": 0,
         "freshness": "fresh"
