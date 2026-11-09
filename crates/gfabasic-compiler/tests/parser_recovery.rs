@@ -252,10 +252,7 @@ fn parser_ignores_and_preserves_inline_comments() {
         .filter(|trivia| trivia.kind == TriviaKind::Comment)
         .map(|trivia| &source[trivia.span.start..trivia.span.end])
         .collect();
-    assert_eq!(
-        comments,
-        ["! inline comment", "! adjacent comment"]
-    );
+    assert_eq!(comments, ["! inline comment", "! adjacent comment"]);
 
     let mut spans: Vec<_> = document
         .syntax
