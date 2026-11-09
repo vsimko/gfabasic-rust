@@ -126,10 +126,27 @@ def render_body(body: str, source: Path, output_file: Path) -> str:
 def title_for(path: Path, data: dict, body: str) -> str:
     if isinstance(data.get("title"), str) and data["title"].strip():
         return data["title"].strip()
-    heading = re.search(r"^#\s+(.+)$", body, re.MULTILINE)
+    heading = re.search(r"^#{1,6}\s+(.+)$", body, re.MULTILINE)
     if heading:
         return heading.group(1).strip()
     return path.parent.name.replace("-", " ").title() or "Documentation"
+
+
+def summary_for(data: dict, body: str) -> str:
+    description = data.get("description")
+    if isinstance(description, str) and description.strip():
+        return description.strip()
+    paragraphs = re.split(r"\n\s*\n", body)
+    for paragraph in paragraphs:
+        value = paragraph.strip()
+        if not value or value.startswith(("#", chr(96) * 3, "~~~", "|", ">", "<!--")) or value.startswith(("- ", "* ", "+ ")):
+            continue
+        value = re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", value)
+        value = re.sub(r"[\x60*_~]", "", value)
+        value = re.sub(r"\s+", " ", value).strip()
+        if value:
+            return value[:217] + ("…" if len(value) > 220 else "")
+    return "Project documentation for the GFA BASIC Rust compiler and runtime."
 
 
 def page_nav(source: Path, docs: list[tuple[Path, dict, str]], output_file: Path) -> str:
@@ -159,9 +176,7 @@ def render_page(source: Path, data: dict, body: str, docs: list[tuple[Path, dict
     output_file = (OUTPUT / source.relative_to(BUNDLE)).with_suffix(".html")
     output_file.parent.mkdir(parents=True, exist_ok=True)
     title = title_for(source, data, body)
-    description = data.get("description", "")
-    if not isinstance(description, str):
-        description = ""
+    description = summary_for(data, body)
     stylesheet = Path(__import__("os").path.relpath(ROOT / "site" / "styles.css", output_file.parent)).as_posix()
     site_home = Path(__import__("os").path.relpath(ROOT / "site" / "index.html", output_file.parent)).as_posix()
     content = render_body(body, source, output_file)
