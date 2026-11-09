@@ -89,7 +89,7 @@ class CiHealthGeneratorTests(unittest.TestCase):
             "workflows": [
                 {"name": "Documentation checks", "state": "failure", "note": "Docs",
                  "latest": {"status": "failure", "event": "push", "branch": "main",
-                            "age_hours": 1, "url": "https://example.test/latest"},
+                            "age_hours": 1, "freshness": "fresh", "url": "https://example.test/latest"},
                  "last_success": {"updated_at": "2026-11-08T12:00:00Z",
                                   "url": "https://example.test/success"}},
                 {"name": "Conformance suite", "state": "not-configured",
