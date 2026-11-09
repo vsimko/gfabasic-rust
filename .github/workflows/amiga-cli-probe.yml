@@ -15,7 +15,8 @@ permissions:
   contents: read
 
 concurrency:
-  group: amiga-cli-probe-${{ github.event.pull_request.number || github.ref }}
+  # Keep this emulator session isolated from the repo's preview/smoke workflows.
+  group: amiga-lst-to-gfa-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
