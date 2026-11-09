@@ -86,6 +86,6 @@ GitHub Issues are the source of truth for work, acceptance criteria, blockers, a
 
 Do not treat chat history, commit messages, generated dashboards, or an agent's private notes as the source of truth. If project context is missing, reconstruct it from the README, AGENTS.md, documentation indexes, GitHub issues, and linked canonical documents.
 
-## Relationship to the documentation format
+## Relationship to the knowledge format
 
-The canonical documentation format and writing rules are defined in [DOCUMENTATION.md](../DOCUMENTATION.md). This policy uses plain UTF-8 Markdown and relative links. Do not claim conformance to an external “Open Knowledge Format” specification unless the project identifies the exact publisher, specification, version, and required profile.
+The agent-facing knowledge map follows Google's [Open Knowledge Format (OKF) v0.2](https://github.com/GoogleCloudPlatform/open-knowledge-format). Start at the repository [knowledge bundle](../../knowledge/index.md). Use its concept metadata and directory indexes for progressive discovery. This document remains the detailed technical policy; the bundle links here instead of duplicating the rules.
