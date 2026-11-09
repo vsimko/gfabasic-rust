@@ -204,6 +204,17 @@ jobs:
             sleep 3
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-merge.png" | timeout 5s nc -U -N "${ipc_socket_path:-}" || true
 
+            # Native editor Run shortcut: Shift+F10 (Amiga raw keycodes).
+            printf "SEND_KEY\\t96\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+            sleep 0.2
+            printf "SEND_KEY\\t89\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+            sleep 0.2
+            printf "SEND_KEY\\t89\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+            sleep 0.2
+            printf "SEND_KEY\\t96\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+            sleep 5
+            printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-run.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+
             kill -0 "$emulator_pid"
             printf "QUIT\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}" || true
           '
@@ -214,7 +225,7 @@ jobs:
               printf "MISSING: %s\\n" "$diagnostic" > "artifacts/amiga-cli-probe/$diagnostic.missing"
             fi
           done
-          for screenshot in editor-before-merge.png merge-dialog.png merge-file-row-pointer.png merge-file-selected.png after-shortcut.png merge-gadget-pointer.png after-merge.png; do
+          for screenshot in editor-before-merge.png merge-dialog.png merge-file-row-pointer.png merge-file-selected.png after-shortcut.png merge-gadget-pointer.png after-merge.png after-run.png; do
             test -s "artifacts/amiga-cli-probe/$screenshot"
           done
           # Amiga Kickstart screenshots use bright text on a saturated blue background.
@@ -232,6 +243,22 @@ jobs:
           else
             echo "EDITOR_MERGE_LST_CONTENT_VISIBLE=no" | tee artifacts/amiga-cli-probe/result.txt
             echo "::error::The editor screenshot does not show the merged LST source."
+            exit 1
+          fi
+
+          # Assert the visible result independently of the Merge screenshot.
+          python3 - <<'PY'
+          from PIL import Image, ImageOps, ImageEnhance
+          image = Image.open("artifacts/amiga-cli-probe/after-run.png").convert("L")
+          image = ImageOps.invert(image).resize((image.width * 3, image.height * 3))
+          image = ImageEnhance.Contrast(image).enhance(3)
+          image.save("artifacts/amiga-cli-probe/after-run-ocr-input.png")
+          PY
+          tesseract artifacts/amiga-cli-probe/after-run-ocr-input.png stdout --psm 6 2>/dev/null | tee artifacts/amiga-cli-probe/after-run-ocr.txt
+          if grep -Eq '1[[:space:]]+1[[:space:]]+2' artifacts/amiga-cli-probe/after-run-ocr.txt; then
+            echo "FACT_PROGRAM_OUTPUT=1 1 2" | tee -a artifacts/amiga-cli-probe/result.txt
+          else
+            echo "::error::The post-run screen does not show the expected FACT output (1 1 2)."
             exit 1
           fi
 
