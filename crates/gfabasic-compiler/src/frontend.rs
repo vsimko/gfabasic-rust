@@ -1996,6 +1996,36 @@ mod tests {
         assert_eq!(reconstructed, source_text);
     }
 
+    #[test]
+    fn unsupported_unicode_characters_keep_exact_utf8_byte_spans() {
+        use super::lex_lossless;
+
+        // Non-ASCII identifiers are not accepted without a verified 3.5 rule.
+        // Their original UTF-8 spelling must nevertheless remain addressable
+        // through byte-based diagnostics for editor/source-map consumers.
+        let source_text = "PRINT ž漢\n";
+        let mut sources = SourceMap::new();
+        let source_id = sources.add_source("unicode-diagnostic.lst", source_text);
+        let errors = lex_lossless(source_id, source_text)
+            .expect_err("unverified non-ASCII identifier characters stay unsupported");
+
+        assert_eq!(errors.len(), 2);
+        let spans: Vec<_> = errors
+            .iter()
+            .map(|error| error.primary_span.expect("lexical error has a span"))
+            .collect();
+        assert_eq!(
+            spans
+                .iter()
+                .map(|span| &source_text[span.start..span.end])
+                .collect::<Vec<_>>(),
+            ["ž", "漢"]
+        );
+        assert_eq!(spans[0].end - spans[0].start, "ž".len());
+        assert_eq!(spans[1].end - spans[1].start, "漢".len());
+        assert_eq!(spans[1].start, spans[0].end);
+    }
+
     // Negative boundary cases: the 3.5 addendum lists only `_DATA` and `_0`…`_9`;
     // it does not authorize a general underscore-initial identifier rule.
     #[test]
