@@ -134,7 +134,7 @@ jobs:
           required = (
               "REPORT.md", "strings.json", "functions.json",
               "memory_blocks.json", "analysis_stats.json",
-              "instructions.jsonl", "references.jsonl", "decompiled.c",
+              "instructions.jsonl", "references.jsonl", "string_xrefs.jsonl", "decompiled.c",
           )
           missing = [name for name in required if not (out / name).is_file()]
           if missing:
@@ -180,7 +180,7 @@ jobs:
           cp analysis-output/REPORT.md analysis-output/strings.json \
             analysis-output/functions.json analysis-output/memory_blocks.json \
             analysis-output/analysis_stats.json analysis-output/instructions.jsonl \
-            analysis-output/references.jsonl analysis/amiga-3.52/
+            analysis-output/references.jsonl analysis-output/string_xrefs.jsonl analysis/amiga-3.52/
           cat > analysis/amiga-3.52/README.md <<'EOF'
           # GFA BASIC 3.52 Amiga binary analysis
 
