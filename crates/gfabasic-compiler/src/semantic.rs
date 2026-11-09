@@ -87,7 +87,7 @@ pub fn resolve_prototype_symbols(
             | Statement::AssignVariat { name, span, .. }
             | Statement::AssignCombin { name, span, .. } => {
                 let declaration = document.syntax.tokens.iter().find_map(|token| {
-                    if token.span.start != span.start {
+                    if token.span.start < span.start || token.span.end > span.end {
                         return None;
                     }
                     match &token.kind {
@@ -222,6 +222,22 @@ mod tests {
         assert_eq!(symbols.symbols.len(), 1);
         assert_eq!(symbols.symbols[0].id, SymbolId(0));
         assert_eq!(symbols.symbols[0].name, "x");
+        assert_eq!(symbols.references_to(SymbolId(0)).count(), 1);
+    }
+
+    #[test]
+    fn resolves_let_assignment_declaration_and_print_reference() {
+        let source_text = "LET x=FACT(1)\\nPRINT x\\n";
+        let mut sources = SourceMap::new();
+        let source_id = sources.add_source("let-symbols.bas", source_text);
+        let document = parse_document(source_id, source_text).expect("LET syntax is valid");
+        let symbols = resolve_prototype_symbols(&document)
+            .expect("LET assignment should declare x for the following PRINT");
+
+        assert_eq!(symbols.symbols.len(), 1);
+        assert_eq!(symbols.symbols[0].name, "x");
+        let declaration = symbols.symbols[0].declaration;
+        assert_eq!(&source_text[declaration.start..declaration.end], "x");
         assert_eq!(symbols.references_to(SymbolId(0)).count(), 1);
     }
 
