@@ -65,6 +65,42 @@ fn parser_recovery_keeps_the_next_line_after_missing_print_operand() {
 }
 
 #[test]
+fn parser_recovery_preserves_line_boundaries_for_missing_grammar_tokens() {
+    let cases = [
+        ("x=\nLET x=1\n", 2),
+        ("DIM\nLET x=1\n", 3),
+        ("MAT\nLET x=1\n", 3),
+    ];
+
+    for (source, boundary) in cases {
+        let mut sources = SourceMap::new();
+        let source_id = sources.add_source("missing-grammar-token.LST", source);
+        let diagnostics = parse(source_id, source)
+            .expect_err("malformed and unsupported statements must remain errors");
+
+        assert_eq!(diagnostics.len(), 2, "source: {source:?}");
+        assert_eq!(diagnostics[0].code, "GFA-PARSE-0001", "source: {source:?}");
+        assert_eq!(
+            diagnostics[0]
+                .primary_span
+                .expect("syntax error has a span")
+                .start,
+            boundary,
+            "missing grammar token is reported at the line boundary: {source:?}"
+        );
+        assert_eq!(diagnostics[1].code, "GFA-SUPPORT-0001", "source: {source:?}");
+        assert_eq!(
+            diagnostics[1]
+                .primary_span
+                .expect("unsupported statement has a span")
+                .start,
+            source.find("LET").expect("second statement exists"),
+            "the next statement must still be visited: {source:?}"
+        );
+    }
+}
+
+#[test]
 fn parser_preserves_statement_spans_in_the_original_listing() {
     let source = "x=FACT(0)\nPRINT x\n";
     let mut sources = SourceMap::new();
