@@ -333,10 +333,11 @@ mod tests {
         );
 
         req = requirement(ImplementationStatus::Implemented);
+        req.id = "gfa.amiga.math.fact";
         req.profile = ApiProfile::Amiga;
         assert_eq!(
             registry().resolve(req).unwrap_err(),
-            RegistryError::InvalidIdNamespace("gfa.language.math.fact".into())
+            RegistryError::ProfileMismatch("gfa.amiga.math.fact".into())
         );
 
         req = requirement(ImplementationStatus::Implemented);
