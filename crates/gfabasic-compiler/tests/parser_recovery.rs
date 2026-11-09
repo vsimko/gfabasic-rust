@@ -458,3 +458,34 @@ fn parser_handles_the_integer_literal_i64_boundary() {
         "9223372036854775808"
     );
 }
+
+#[test]
+fn parser_preserves_ast_spans_across_crlf_line_endings() {
+    let source = "x=FACT(0)\r\nPRINT x\r\n";
+    let mut sources = SourceMap::new();
+    let source_id = sources.add_source("statement-spans-crlf.LST", source);
+
+    let document =
+        parse_document(source_id, source).expect("supported statements parse with CRLF separators");
+    assert_eq!(document.program.statements.len(), 2);
+
+    let first_span = match &document.program.statements[0] {
+        Statement::AssignFact { span, .. } => *span,
+        other => panic!("expected FACT assignment, got {other:?}"),
+    };
+    assert_eq!((first_span.start, first_span.end), (0, 9));
+    assert_eq!(sources.slice(first_span), Some("x=FACT(0)"));
+
+    let second_span = match &document.program.statements[1] {
+        Statement::PrintVariables { span, .. } => *span,
+        other => panic!("expected PRINT statement, got {other:?}"),
+    };
+    assert_eq!((second_span.start, second_span.end), (11, 18));
+    assert_eq!(sources.slice(second_span), Some("PRINT x"));
+
+    let print_token = document.syntax.tokens.iter().find(|token| {
+        matches!(&token.kind, TokenKind::Identifier(name) if name == "PRINT")
+    }).expect("PRINT token is retained in the lossless syntax");
+    assert_eq!((print_token.span.start, print_token.span.end), (11, 16));
+    assert_eq!(sources.slice(print_token.span), Some("PRINT"));
+}
