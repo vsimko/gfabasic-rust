@@ -47,6 +47,8 @@ with open(instructions_path, "w") as instruction_file, open(references_path, "w"
         iterator = listing.getInstructions(block.getStart(), True)
         while iterator.hasNext():
             instruction = iterator.next()
+            if instruction.getAddress().compareTo(block.getEnd()) > 0:
+                break
             address = instruction.getAddress()
             operands = [
                 instruction.getDefaultOperandRepresentation(index)
