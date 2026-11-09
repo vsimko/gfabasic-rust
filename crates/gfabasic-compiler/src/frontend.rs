@@ -493,6 +493,16 @@ impl Parser {
         token
     }
 
+    /// Consume a grammar token without stealing a line boundary from recovery.
+    fn advance_required(&mut self, description: &str) -> Result<Token, Box<Diagnostic>> {
+        let token = self.current().clone();
+        if matches!(token.kind, TokenKind::Newline | TokenKind::End) {
+            Err(self.syntax_error(format!("expected {description}"), token.span))
+        } else {
+            Ok(self.advance())
+        }
+    }
+
     fn at_end(&self) -> bool {
         matches!(self.current().kind, TokenKind::End)
     }
@@ -559,7 +569,7 @@ impl Parser {
         start: SourceSpan,
     ) -> Result<Statement, Box<Diagnostic>> {
         self.expect(TokenKind::Equals, "'='")?;
-        let function = self.advance();
+        let function = self.advance_required("a supported intrinsic after assignment")?;
         let function_name = match function.kind {
             TokenKind::Identifier(name) => name,
             _ => {
@@ -578,7 +588,7 @@ impl Parser {
         }
 
         self.expect(TokenKind::LeftParen, &format!("'(' after {function_name}"))?;
-        let first = self.advance();
+        let first = self.advance_required("an intrinsic argument")?;
         let first_value = match first.kind {
             TokenKind::Integer(value) => value,
             _ => {
@@ -600,7 +610,7 @@ impl Parser {
         }
 
         self.expect(TokenKind::Comma, "',' between intrinsic arguments")?;
-        let second = self.advance();
+        let second = self.advance_required("an intrinsic argument")?;
         let second_value = match second.kind {
             TokenKind::Integer(value) => value,
             _ => {
@@ -648,7 +658,7 @@ impl Parser {
     }
 
     fn parse_matrix_name(&mut self) -> Result<(String, SourceSpan), Box<Diagnostic>> {
-        let token = self.advance();
+        let token = self.advance_required("matrix name 'a' or 'b'")?;
         match token.kind {
             TokenKind::Identifier(name) if matches!(name.as_str(), "a" | "b") => Ok((name, token.span)),
             TokenKind::Identifier(name) => Err(self.unsupported_error(
@@ -669,7 +679,7 @@ impl Parser {
     }
 
     fn parse_nonnegative_matrix_integer(&mut self) -> Result<i64, Box<Diagnostic>> {
-        let token = self.advance();
+        let token = self.advance_required("a non-negative integer literal")?;
         match token.kind {
             TokenKind::Integer(value) => Ok(value),
             _ => Err(self.syntax_error(
@@ -710,7 +720,7 @@ impl Parser {
             if matches!(self.current().kind, TokenKind::Equals) {
                 self.advance();
                 let (left, _) = self.parse_matrix_reference()?;
-                let operator = self.advance();
+                let operator = self.advance_required("an operator in MAT arithmetic")?;
                 let expected = match operation {
                     MatArithmeticOperation::Add => TokenKind::Plus,
                     MatArithmeticOperation::Sub => TokenKind::Minus,
@@ -787,7 +797,8 @@ impl Parser {
                 })
             } else {
                 self.expect(TokenKind::Comma, "',' in in-place MAT MUL")?;
-                let scalar_token = self.advance();
+                let scalar_token =
+                    self.advance_required("a scalar variable after MAT MUL destination comma")?;
                 let scalar = match scalar_token.kind {
                     TokenKind::Identifier(name) => name,
                     _ => {
@@ -805,7 +816,8 @@ impl Parser {
                 })
             }
         } else {
-            let destination_token = self.advance();
+            let destination_token =
+                self.advance_required("a scalar or matrix destination in MAT MUL")?;
             let destination = match destination_token.kind {
                 TokenKind::Identifier(name) => name,
                 _ => {
@@ -839,7 +851,8 @@ impl Parser {
         start: SourceSpan,
         operation: MatAnalysisOperation,
     ) -> Result<Statement, Box<Diagnostic>> {
-        let destination_token = self.advance();
+        let destination_token =
+            self.advance_required("a scalar destination in MAT matrix analysis")?;
         let destination = match destination_token.kind {
             TokenKind::Identifier(name) => name,
             _ => {
@@ -955,7 +968,7 @@ impl Parser {
     }
 
     fn parse_mat_statement(&mut self, start: SourceSpan) -> Result<Statement, Box<Diagnostic>> {
-        let operation = self.advance();
+        let operation = self.advance_required("a MAT operation name")?;
         let operation_name = match operation.kind {
             TokenKind::Identifier(name) => name,
             _ => {
