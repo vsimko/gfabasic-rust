@@ -225,3 +225,10 @@
   .docs-sidebar { position: static; max-height: none; }
   .docs-content { padding: 1.35rem; }
 }
+
+.docs-deprecated {
+  padding: 0.85rem 1rem;
+  border-left: 3px solid #9a6a1f;
+  background: #fff7e8;
+  color: #684714;
+}
