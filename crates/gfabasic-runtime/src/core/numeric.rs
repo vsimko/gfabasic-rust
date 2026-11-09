@@ -116,8 +116,6 @@ pub fn val(input: &[u8]) -> f64 {
         }
         if exponent_end > exponent_start {
             index = exponent_end;
-        } else {
-            index = mantissa_end;
         }
     }
 
