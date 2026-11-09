@@ -42,13 +42,12 @@ fi
 git add analysis/amiga-3.52
 if git diff --cached --quiet; then
   echo "Private analysis repository already contains the current generated output."
-  exit 0
+else
+  git config user.name "github-actions[bot]"
+  git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+  git commit -m "Update generated GFA BASIC 3.52 reverse-engineering data"
+  git -c "http.extraheader=AUTHORIZATION: basic $auth" push origin HEAD:main
 fi
-
-git config user.name "github-actions[bot]"
-git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-git commit -m "Update generated GFA BASIC 3.52 reverse-engineering data"
-git -c "http.extraheader=AUTHORIZATION: basic $auth" push origin HEAD:main
 
 # Keep an immutable, downloadable snapshot alongside the editable Git sources.
 release_tag="amiga-gfa-basic-3.52-analysis-${GITHUB_RUN_ID:-manual}"
