@@ -27,6 +27,11 @@ pub struct ParsedDocument {
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum Statement {
+    AssignInteger {
+        name: String,
+        value: i64,
+        span: SourceSpan,
+    },
     AssignFact {
         name: String,
         argument: i64,
@@ -621,12 +626,19 @@ impl Parser {
         start: SourceSpan,
     ) -> Result<Statement, Box<Diagnostic>> {
         self.expect(TokenKind::Equals, "'='")?;
-        let function = self.advance_required("a supported intrinsic after assignment")?;
+        let function = self.advance_required("a supported assignment value")?;
         let function_name = match function.kind {
+            TokenKind::Integer(value) => {
+                return Ok(Statement::AssignInteger {
+                    name,
+                    value,
+                    span: SourceSpan::new(self.source_id, start.start, function.span.end),
+                });
+            }
             TokenKind::Identifier(name) => name,
             _ => {
                 return Err(self.syntax_error(
-                    "expected a supported intrinsic after assignment",
+                    "expected an integer literal or supported intrinsic after assignment",
                     function.span,
                 ));
             }

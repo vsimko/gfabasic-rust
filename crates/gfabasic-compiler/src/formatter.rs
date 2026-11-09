@@ -109,6 +109,7 @@ mod tests {
 
     #[derive(Debug, PartialEq)]
     enum Meaning {
+        Integer(String, i64),
         Fact(String, i64),
         Variat(String, i64, i64),
         Combin(String, i64, i64),
@@ -143,6 +144,9 @@ mod tests {
             .statements
             .iter()
             .map(|statement| match statement {
+                Statement::AssignInteger { name, value, .. } => {
+                    Meaning::Integer(name.clone(), *value)
+                }
                 Statement::AssignFact { name, argument, .. } => {
                     Meaning::Fact(name.clone(), *argument)
                 }

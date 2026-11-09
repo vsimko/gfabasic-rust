@@ -379,3 +379,42 @@ fn parser_rejects_let_rhs_outside_the_supported_intrinsic_subset() {
         .expect("unsupported LET intrinsic has a source span");
     assert_eq!(&source[span.start..span.end], "RND");
 }
+
+#[test]
+fn parser_accepts_integer_literal_assignments_with_or_without_let() {
+    let source = "x=42\\nLET y=7\\nPRINT x,y\\n";
+    let mut sources = SourceMap::new();
+    let source_id = sources.add_source("integer-assignments.LST", source);
+
+    let document = parse_document(source_id, source)
+        .expect("documented integer assignments should parse");
+    assert_eq!(document.program.statements.len(), 3);
+
+    let expected = [("x", 42, "x=42"), ("y", 7, "LET y=7")];
+    for (statement, (expected_name, expected_value, expected_text)) in
+        document.program.statements.iter().zip(expected)
+    {
+        let (name, value, span) = match statement {
+            Statement::AssignInteger { name, value, span } => (name, value, *span),
+            other => panic!("expected integer assignment, got {other:?}"),
+        };
+        assert_eq!(name, expected_name);
+        assert_eq!(*value, expected_value);
+        assert_eq!(&source[span.start..span.end], expected_text);
+    }
+}
+
+#[test]
+fn parser_rejects_arithmetic_rhs_until_expression_grammar_is_implemented() {
+    let source = "x=1+2\\n";
+    let mut sources = SourceMap::new();
+    let source_id = sources.add_source("integer-expression.LST", source);
+
+    let diagnostics = parse(source_id, source)
+        .expect_err("the integer-literal subset must not accept an incomplete expression grammar");
+    assert_eq!(diagnostics[0].code, "GFA-PARSE-0001");
+    let span = diagnostics[0]
+        .primary_span
+        .expect("unsupported arithmetic tail has a syntax span");
+    assert_eq!(&source[span.start..span.end], "+");
+}

@@ -114,6 +114,17 @@ pub fn lower(program: &Program) -> Result<Module, Vec<IrError>> {
 
     for statement in &program.statements {
         match statement {
+            Statement::AssignInteger { name, value, span } => {
+                lower_assignment(
+                    name,
+                    Some(*value),
+                    *span,
+                    &mut variables,
+                    &mut module,
+                    &mut next_value,
+                    &mut errors,
+                );
+            }
             Statement::AssignFact {
                 name,
                 argument,
@@ -351,6 +362,28 @@ mod tests {
         ));
         assert_eq!(value_type(&ir, ValueId(0)), Some(ValueType::I64));
         verify(&ir).unwrap();
+    }
+
+    #[test]
+    fn lowers_integer_literal_assignments_to_constant_values() {
+        let source = "x=42\\nLET y=7\\nPRINT x,y\\n";
+        let mut sources = SourceMap::new();
+        let source_id = sources.add_source("integer-assignments.bas", source);
+        let program = crate::frontend::parse(source_id, source).expect("syntax is supported");
+        let module = lower(&program).expect("integer assignments lower to constants");
+
+        assert!(matches!(
+            module.instructions[0],
+            Instruction::ConstI64 { value: 42, .. }
+        ));
+        assert!(matches!(
+            module.instructions[1],
+            Instruction::ConstI64 { value: 7, .. }
+        ));
+        assert!(matches!(
+            &module.instructions[2],
+            Instruction::Print { values, .. } if values.len() == 2
+        ));
     }
 
     #[test]

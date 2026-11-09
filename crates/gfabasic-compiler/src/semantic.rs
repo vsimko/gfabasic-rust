@@ -83,7 +83,8 @@ pub fn resolve_prototype_symbols(
 
     for statement in &document.program.statements {
         match statement {
-            Statement::AssignFact { name, span, .. }
+            Statement::AssignInteger { name, span, .. }
+            | Statement::AssignFact { name, span, .. }
             | Statement::AssignVariat { name, span, .. }
             | Statement::AssignCombin { name, span, .. } => {
                 let declaration = document.syntax.tokens.iter().find_map(|token| {
@@ -233,6 +234,22 @@ mod tests {
         let document = parse_document(source_id, source_text).expect("LET syntax is valid");
         let symbols = resolve_prototype_symbols(&document)
             .expect("LET assignment should declare x for the following PRINT");
+
+        assert_eq!(symbols.symbols.len(), 1);
+        assert_eq!(symbols.symbols[0].name, "x");
+        let declaration = symbols.symbols[0].declaration;
+        assert_eq!(&source_text[declaration.start..declaration.end], "x");
+        assert_eq!(symbols.references_to(SymbolId(0)).count(), 1);
+    }
+
+    #[test]
+    fn resolves_integer_assignment_as_a_symbol_declaration() {
+        let source_text = "LET x=42\\nPRINT x\\n";
+        let mut sources = SourceMap::new();
+        let source_id = sources.add_source("integer-symbols.bas", source_text);
+        let document = parse_document(source_id, source_text).expect("integer assignment parses");
+        let symbols = resolve_prototype_symbols(&document)
+            .expect("integer assignment should declare x for PRINT");
 
         assert_eq!(symbols.symbols.len(), 1);
         assert_eq!(symbols.symbols[0].name, "x");
