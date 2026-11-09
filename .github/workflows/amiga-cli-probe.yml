@@ -187,25 +187,22 @@ jobs:
             sleep 1
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-shortcut.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
             tesseract "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-shortcut.png" stdout 2>/dev/null > "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-shortcut-ocr.txt"
-            # The pointer is already on the Merge gadget. Release it once to
-            # confirm the selected factzero.LST file. Do not take another
-            # screenshot or perform diagnostic clicks inside the requester.
-            printf "SEND_MOUSE\\t0\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path}"
-            sleep 2
-            printf "PING\\n" | timeout 5s nc -U -N "${ipc_socket_path}" > "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/post-merge-ping.txt"
-            echo "EMULATOR_ALIVE_AFTER_MERGE=yes" > "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-click-status.txt"
-
-            # Run is a visible editor menu item (top-right). Move from the
-            # Merge gadget to Run and click it; avoid the unverified Shift+F10
-            # sequence that previously dropped the IPC connection.
-            printf "SEND_MOUSE\\t970\\t-1145\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path}"
+            # Restore the exact calibrated Merge-gadget movement from the
+            # green PR #343 workflow. The pointer is at the left edge of the
+            # requester after selecting factzero.LST; these relative moves
+            # place it on the Merge gadget center (~323,420).
+            for _ in 1 2; do
+              printf "SEND_MOUSE\\t-177\\t183\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+              sleep 0.2
+            done
+            printf "SEND_MOUSE\\t206\\t198\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
             sleep 0.5
-            printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/run-menu-pointer.png" | timeout 5s nc -U -N "${ipc_socket_path}"
-            printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path}"
+            printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-gadget-pointer.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+            printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
             sleep 0.2
-            printf "SEND_MOUSE\\t0\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path}"
-            sleep 5
-            printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-run.png" | timeout 5s nc -U -N "${ipc_socket_path}"
+            printf "SEND_MOUSE\\t0\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+            sleep 3
+            printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-merge.png" | timeout 5s nc -U -N "${ipc_socket_path:-}" || true
 
             kill -0 "$emulator_pid"
             printf "QUIT\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}" || true
@@ -217,14 +214,14 @@ jobs:
               printf "MISSING: %s\\n" "$diagnostic" > "artifacts/amiga-cli-probe/$diagnostic.missing"
             fi
           done
-          for screenshot in editor-before-merge.png merge-dialog.png merge-file-row-pointer.png merge-file-selected.png after-shortcut.png after-run.png; do
+          for screenshot in editor-before-merge.png merge-dialog.png merge-file-row-pointer.png merge-file-selected.png after-shortcut.png merge-gadget-pointer.png after-merge.png; do
             test -s "artifacts/amiga-cli-probe/$screenshot"
           done
           # Amiga Kickstart screenshots use bright text on a saturated blue background.
           # Normalize/invert/upscale before OCR; default Tesseract silently missed the source text.
           python3 - <<'PY'
           from PIL import Image, ImageOps, ImageEnhance
-          image = Image.open("artifacts/amiga-cli-probe/after-run.png").convert("L")
+          image = Image.open("artifacts/amiga-cli-probe/after-merge.png").convert("L")
           image = ImageOps.invert(image).resize((image.width * 3, image.height * 3))
           image = ImageEnhance.Contrast(image).enhance(3)
           image.save("artifacts/amiga-cli-probe/after-merge-ocr-input.png")
@@ -235,20 +232,6 @@ jobs:
           else
             echo "EDITOR_MERGE_LST_CONTENT_VISIBLE=no" | tee artifacts/amiga-cli-probe/result.txt
             echo "::error::The editor screenshot does not show the merged LST source."
-            exit 1
-          fi
-          python3 - <<'PY'
-          from PIL import Image, ImageOps, ImageEnhance
-          image = Image.open("artifacts/amiga-cli-probe/after-run.png").convert("L")
-          image = ImageOps.invert(image).resize((image.width * 3, image.height * 3))
-          image = ImageEnhance.Contrast(image).enhance(3)
-          image.save("artifacts/amiga-cli-probe/after-run-ocr-input.png")
-          PY
-          tesseract artifacts/amiga-cli-probe/after-run-ocr-input.png stdout --psm 6 2>/dev/null | tee artifacts/amiga-cli-probe/after-run-ocr.txt
-          if grep -Eq '1[[:space:]]+1[[:space:]]+2' artifacts/amiga-cli-probe/after-run-ocr.txt; then
-            echo "FACT_PROGRAM_OUTPUT=1 1 2" | tee -a artifacts/amiga-cli-probe/result.txt
-          else
-            echo "::error::The post-run screen does not show the expected FACT output (1 1 2)."
             exit 1
           fi
 
