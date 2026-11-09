@@ -7,15 +7,27 @@ title: "Documentation policy"
 
 ## Decision and scope
 
-**Decision (2026-11-03):** Use UTF-8 Markdown as the canonical source format for human-readable project documentation. Use GitHub-flavoured Markdown (GFM) features only where GitHub renders them consistently. Keep all documentation in this repository.
+**Decision (2026-11-09):** Use Google's [Open Knowledge Format (OKF) v0.2](https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md) for the canonical documentation bundle rooted at `docs/`. Markdown remains the human-readable source format; each non-reserved Markdown concept has YAML frontmatter with a non-empty `type`. The root `docs/index.md` declares `okf_version: "0.2"`.
 
-Issue #14 refers to an “OKF format”, but the issue does not identify an expanded name, publisher, specification, version, or conformance profile. The repository contains no evidence that “OKF” names a specific documentation format. This is an unresolved requirement, not a format that can be implemented or validated as written.
+OKF v0.2 is intentionally permissive. Its conformance floor is parseable YAML frontmatter and a non-empty `type` for every concept, plus the prescribed structures for reserved `index.md` and `log.md` files. Unknown types and extension fields remain valid. This repository adds stricter project quality gates (navigation, links, metadata shapes where used, and deterministic website output) without misrepresenting those checks as requirements imposed by OKF itself.
 
-Do not describe Markdown as “OKF”, and do not claim compliance with an unidentified specification. If the requester supplies the intended expansion or a specification, review it in a separate decision before changing the canonical format.
+The `docs/` tree is the only canonical human-readable documentation bundle. Do not create a parallel `knowledge/` directory or duplicate source content in website files. Keep the machine-readable API registry and generated API catalogue in their existing structured pipeline; OKF does not replace domain-specific schemas.
 
-Markdown is the practical choice for the current project because it is plain text, open, readable in GitHub, accessible to contributors without a special authoring tool, and suitable for normal Git diffs and reviews. This decision does not prevent the project from generating other formats from the Markdown source in the future.
+The project uses UTF-8 Markdown and GitHub-flavoured Markdown (GFM) features only where GitHub renders them consistently. Source files remain readable and useful without the generated website. The website is a generated publication of selected concepts, never an authoring location.
 
 This policy applies to human-readable project documentation. Machine-readable API declarations and configuration data must use separately defined, validated formats. They must not be maintained by scraping explanatory Markdown.
+
+## OKF v0.2 bundle
+
+- `docs/index.md` is the bundle entry point and declares exactly `okf_version: "0.2"`. It is the only `index.md` allowed to contain frontmatter.
+- `index.md` files are reserved directory listings and have no ordinary concept metadata. Keep their body as headings followed by links to direct concepts or subdirectories.
+- `log.md` is reserved for a chronological update log with newest-first `## YYYY-MM-DD` headings. Do not use either reserved filename for a concept.
+- Every other `.md` file under `docs/` is a concept with parseable YAML frontmatter and a non-empty string `type`. `title` is used for display; optional OKF metadata is added only when supported by evidence.
+- Use descriptive, project-owned type names (for example `Architecture`, `Architecture Decision Record`, `Research Note`, `Reference`, `User Guide`, and `Contributor Guide`). Unknown types and additional metadata keys remain valid under OKF.
+- Do not add `verified` or source-provenance claims without evidence. A manual citation does not prove interpreter execution; keep dialect/version and verification boundaries in the concept body.
+- Use nested `index.md` files to provide progressive disclosure. Each index lists its directory's direct concepts and child directories; it does not copy concept content.
+- Preserve useful paths and existing concept bodies. Prefer adding metadata and navigation over gratuitous renames. When concepts overlap, retain one canonical source and link to it rather than duplicating content.
+- Keep `README.md` and `AGENTS.md` as short repository entry points that direct readers and agents to `docs/index.md`.
 
 ## Source format
 
@@ -29,7 +41,7 @@ This policy applies to human-readable project documentation. Machine-readable AP
 
 ## Generated website data
 
-The website may consume generated JSON summaries for its static dashboard. Generated data is not a canonical source of project status. Every generated value must be traceable to its canonical source, and the generation process must be deterministic and validated. Keep generated output separate from editable source data. Do not hand-edit generated files, scrape explanatory Markdown as a data source, or add credentials to browser code. Missing or stale values must remain explicit; never replace unknown values with zero or a guessed status. See [the implementation dashboard guide](architecture/IMPLEMENTATION-DASHBOARD.md) and [ADR 0014](architecture/adr/0014-implementation-dashboard.md).
+The website may consume generated JSON summaries for its static dashboard. Selected documentation pages must be rendered from the canonical OKF concepts in `docs/` rather than maintained as a second copy. Generated data is not a canonical source of project status. Every generated value must be traceable to its canonical source, and the generation process must be deterministic and validated. Keep generated output separate from editable source data. Do not hand-edit generated files, scrape explanatory Markdown as a data source, or add credentials to browser code. Missing or stale values must remain explicit; never replace unknown values with zero or a guessed status. See [the implementation dashboard guide](architecture/IMPLEMENTATION-DASHBOARD.md) and [ADR 0014](architecture/adr/0014-implementation-dashboard.md).
 
 ## Writing rules
 
