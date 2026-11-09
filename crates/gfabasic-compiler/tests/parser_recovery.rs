@@ -435,10 +435,7 @@ fn parser_handles_the_integer_literal_i64_boundary() {
     match statement {
         Statement::AssignInteger { value, span, .. } => {
             assert_eq!(*value, i64::MAX);
-            assert_eq!(
-                &valid_source[span.start..span.end],
-                "x=9223372036854775807"
-            );
+            assert_eq!(&valid_source[span.start..span.end], "x=9223372036854775807");
         }
         other => panic!("expected integer assignment, got {other:?}"),
     }
@@ -456,5 +453,8 @@ fn parser_handles_the_integer_literal_i64_boundary() {
         .primary_span
         .expect("integer range diagnostic retains its source span");
     assert_eq!((span.start, span.end), (2, 21));
-    assert_eq!(&overflow_source[span.start..span.end], "9223372036854775808");
+    assert_eq!(
+        &overflow_source[span.start..span.end],
+        "9223372036854775808"
+    );
 }
