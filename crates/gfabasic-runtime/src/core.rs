@@ -4,3 +4,4 @@
 //! is supported by primary-source evidence.
 
 pub mod combinatorics;
+pub mod matrix;
