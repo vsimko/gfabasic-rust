@@ -242,6 +242,19 @@ jobs:
             printf "SEND_MOUSE\\t0\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}" || true
             sleep 2
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/save-dialog.png" | timeout 5s nc -U -N "${ipc_socket_path:-}" || true
+            # Save dialog defaults to GFABASIC:FACTZERO. The manual states
+            # that Save (not Save,A) appends .GFA automatically.
+            for _ in 1 2 3 4 5 6; do
+              printf "SEND_MOUSE\\t40\\t110\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}" || true
+              sleep 0.1
+            done
+            sleep 0.5
+            printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/save-button-pointer.png" | timeout 5s nc -U -N "${ipc_socket_path:-}" || true
+            printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}" || true
+            sleep 0.2
+            printf "SEND_MOUSE\\t0\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}" || true
+            sleep 2
+            printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-save.png" | timeout 5s nc -U -N "${ipc_socket_path:-}" || true
             kill -0 "$emulator_pid"
             printf "QUIT\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}" || true
           '
@@ -252,7 +265,7 @@ jobs:
               printf "MISSING: %s\\n" "$diagnostic" > "artifacts/amiga-cli-probe/$diagnostic.missing"
             fi
           done
-          for screenshot in editor-before-merge.png merge-dialog.png merge-file-row-pointer.png merge-file-selected.png after-shortcut.png merge-gadget-pointer.png after-merge.png save-menu-pointer.png save-dialog.png; do
+          for screenshot in editor-before-merge.png merge-dialog.png merge-file-row-pointer.png merge-file-selected.png after-shortcut.png merge-gadget-pointer.png after-merge.png save-menu-pointer.png save-dialog.png save-button-pointer.png after-save.png; do
             test -s "artifacts/amiga-cli-probe/$screenshot"
           done
           # Amiga Kickstart screenshots use bright text on a saturated blue background.
@@ -272,6 +285,19 @@ jobs:
             echo "::error::The editor screenshot does not show the merged LST source."
             exit 1
           fi
+
+          # Verify the Editor's tokenized Save created a non-empty .GFA on the ADF.
+          xdftool artifacts/amiga-cli-probe/factzero.adf list / all > artifacts/amiga-cli-probe/adf-after-save-list.txt
+          grep -Eiq 'factzero[.]GFA' artifacts/amiga-cli-probe/adf-after-save-list.txt
+          xdftool artifacts/amiga-cli-probe/factzero.adf read factzero.GFA artifacts/amiga-cli-probe/factzero.GFA
+          test -s artifacts/amiga-cli-probe/factzero.GFA
+          if cmp -s artifacts/amiga-cli-probe/factzero.LST artifacts/amiga-cli-probe/factzero.GFA; then
+            echo "::error::The saved .GFA is byte-identical to the ASCII .LST."
+            exit 1
+          fi
+          file artifacts/amiga-cli-probe/factzero.GFA | tee artifacts/amiga-cli-probe/gfa-file-info.txt
+          sha256sum artifacts/amiga-cli-probe/factzero.GFA > artifacts/amiga-cli-probe/gfa-sha256.txt
+          echo "TOKENIZED_GFA_SAVED=yes" | tee artifacts/amiga-cli-probe/save-result.txt
 
 
       - name: Upload diagnostic evidence (never upload commercial binary)
