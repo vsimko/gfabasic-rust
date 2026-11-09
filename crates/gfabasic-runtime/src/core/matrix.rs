@@ -26,11 +26,20 @@ pub enum MatrixShapeError {
     /// The requested row/column product cannot be represented by `usize`.
     DimensionOverflow,
     /// The backing slice does not contain exactly rows × columns elements.
-    ElementCountMismatch { expected: usize, actual: usize },
+    ElementCountMismatch {
+        expected: usize,
+        actual: usize,
+    },
     /// MAT ONE is defined by the source for square matrices only.
-    IdentityRequiresSquare { rows: usize, columns: usize },
+    IdentityRequiresSquare {
+        rows: usize,
+        columns: usize,
+    },
     /// The source storage does not match its declared shape.
-    SourceElementCountMismatch { expected: usize, actual: usize },
+    SourceElementCountMismatch {
+        expected: usize,
+        actual: usize,
+    },
     /// Element-wise arithmetic requires identical source and destination shapes.
     ElementwiseShapeMismatch {
         destination_rows: usize,
@@ -39,11 +48,19 @@ pub enum MatrixShapeError {
         source_columns: usize,
     },
     /// MAT NORM cannot normalize a zero-length row or column.
-    ZeroNormRow { row: usize },
-    ZeroNormColumn { column: usize },
+    ZeroNormRow {
+        row: usize,
+    },
+    ZeroNormColumn {
+        column: usize,
+    },
     /// MAT NORM requires finite row/column norms in this Rust implementation.
-    NonFiniteNormRow { row: usize },
-    NonFiniteNormColumn { column: usize },
+    NonFiniteNormRow {
+        row: usize,
+    },
+    NonFiniteNormColumn {
+        column: usize,
+    },
     /// MAT TRANS requires destination dimensions to reverse the source shape.
     TransposeShapeMismatch {
         destination_rows: usize,
@@ -52,7 +69,10 @@ pub enum MatrixShapeError {
         source_columns: usize,
     },
     /// The in-place form of MAT TRANS requires a square matrix.
-    TransposeRequiresSquare { rows: usize, columns: usize },
+    TransposeRequiresSquare {
+        rows: usize,
+        columns: usize,
+    },
 }
 
 impl fmt::Display for MatrixShapeError {
