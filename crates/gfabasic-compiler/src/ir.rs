@@ -344,7 +344,7 @@ mod tests {
 
     #[test]
     fn prototype_range_is_result_based_not_a_fixed_n_limit() {
-        let source = "x=COMBIN(21,10)\\nPRINT x\\n";
+        let source = "x=COMBIN(21,10)\nPRINT x\n";
         let mut sources = SourceMap::new();
         let id = sources.add_source("larger-n.bas", source);
         let ast = parse(id, source).unwrap();
@@ -355,7 +355,7 @@ mod tests {
             Instruction::ConstI64 { value: 352716, .. }
         ));
 
-        let source = "x=FACT(21)\\nPRINT x\\n";
+        let source = "x=FACT(21)\nPRINT x\n";
         let mut sources = SourceMap::new();
         let id = sources.add_source("large-result.bas", source);
         let ast = parse(id, source).unwrap();
