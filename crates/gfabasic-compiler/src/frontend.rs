@@ -2003,7 +2003,7 @@ mod tests {
         // Non-ASCII identifiers are not accepted without a verified 3.5 rule.
         // Their original UTF-8 spelling must nevertheless remain addressable
         // through byte-based diagnostics for editor/source-map consumers.
-        let source_text = "PRINT ž漢\\n";
+        let source_text = "PRINT ž漢\n";
         let mut sources = SourceMap::new();
         let source_id = sources.add_source("unicode-diagnostic.lst", source_text);
         let errors = lex_lossless(source_id, source_text)
