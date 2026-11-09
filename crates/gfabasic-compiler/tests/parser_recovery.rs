@@ -198,3 +198,37 @@ fn frontend_diagnostics_resolve_to_original_source_locations() {
     );
     assert_eq!(sources.slice(unsupported_span), Some("LET"));
 }
+
+#[test]
+fn parser_recovery_handles_classic_cr_line_endings() {
+    // CR is a complete line ending here, not the CR half of a CRLF pair.
+    let source = "x=FACT(0\rLET x=1\rz=FACT(2)\r";
+    let mut sources = SourceMap::new();
+    let source_id = sources.add_source("parser-recovery-cr.LST", source);
+
+    let diagnostics = parse(source_id, source)
+        .expect_err("malformed and unsupported statements must remain errors");
+
+    assert_eq!(diagnostics.len(), 2);
+    assert_eq!(diagnostics[0].code, "GFA-PARSE-0001");
+    let syntax_span = diagnostics[0]
+        .primary_span
+        .expect("syntax diagnostic has a source span");
+    assert_eq!((syntax_span.start, syntax_span.end), (8, 9));
+    assert_eq!(sources.slice(syntax_span), Some("\r"));
+
+    assert_eq!(diagnostics[1].code, "GFA-SUPPORT-0001");
+    let unsupported_span = diagnostics[1]
+        .primary_span
+        .expect("unsupported diagnostic has a source span");
+    assert_eq!(unsupported_span.start, 9);
+    assert_eq!(sources.slice(unsupported_span), Some("LET"));
+
+    let source_file = sources
+        .get(unsupported_span.source)
+        .expect("diagnostic source remains registered");
+    assert_eq!(
+        source_file.line_column(unsupported_span.start),
+        Some((2, 1))
+    );
+}
