@@ -205,6 +205,18 @@ jobs:
             printf "SEND_MOUSE\\t0\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
             sleep 3
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-merge.png" | timeout 5s nc -U -N "${ipc_socket_path:-}" || true
+            sleep 1
+            if kill -0 "$emulator_pid" 2>/dev/null; then
+              echo "EMULATOR_ALIVE_AFTER_MERGE=yes"
+            else
+              echo "EMULATOR_ALIVE_AFTER_MERGE=no"
+            fi
+            if test -S "${ipc_socket_path:-}"; then
+              echo "IPC_SOCKET_PRESENT_AFTER_MERGE=yes"
+            else
+              echo "IPC_SOCKET_PRESENT_AFTER_MERGE=no"
+            fi
+            printf "LIST_FLOPPIES\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}" >"$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/post-merge-ipc.txt" || true
 
             # Open the Editor's Save requester by clicking its menu label.
             # After the Merge gadget click the pointer is around (323,420);
