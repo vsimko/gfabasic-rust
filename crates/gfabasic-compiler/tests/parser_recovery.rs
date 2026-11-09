@@ -46,13 +46,19 @@ fn parser_recovery_keeps_the_next_line_after_missing_print_operand() {
     assert_eq!(diagnostics.len(), 2);
     assert_eq!(diagnostics[0].code, "GFA-PARSE-0001");
     assert_eq!(
-        diagnostics[0].primary_span.expect("syntax error has a span").start,
+        diagnostics[0]
+            .primary_span
+            .expect("syntax error has a span")
+            .start,
         5,
         "missing PRINT operand is reported at the line boundary"
     );
     assert_eq!(diagnostics[1].code, "GFA-SUPPORT-0001");
     assert_eq!(
-        diagnostics[1].primary_span.expect("unsupported statement has a span").start,
+        diagnostics[1]
+            .primary_span
+            .expect("unsupported statement has a span")
+            .start,
         6,
         "the next statement must still be visited after recovery"
     );
