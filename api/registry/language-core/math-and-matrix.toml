@@ -34,15 +34,16 @@ printed-pages = ["Chapter 13, printed pp. 13-33–13-34 (same feature: combined 
 notes = ["The 3.5 addendum page images were checked. The source describes an integer-expression argument and explicitly defines 0! = 1.", "The companion German book explicitly places FACT among the 3.5 additions and says the function is defined only for integer values; it reports calculation through n=421 (printed pp. 477–478). Its FACT(421) example is printed in scientific notation, so the exact numeric representation and overflow boundary remain unresolved.", "The existing prototype evaluates only a restricted literal subset; it has no stable registry handler mapping and is not a complete implementation."]
 
 [declarations.implementation]
-status = "not-implemented"
-notes = ["A restricted compile-time literal prototype exists in crates/gfabasic-compiler/src/prototype.rs; it is not a complete runtime implementation or a registry-linked handler."]
+status = "partial"
+handler = "gfa.runtime.core.math.fact"
+notes = ["A typed Rust runtime handler is registered. Checked u32 inputs, u128 results, and Rust errors for invalid domain or overflow are implementation-boundary choices, not original-interpreter conformance claims."]
 
 [[declarations.support]]
 target = "x86_64-unknown-linux-gnu"
-classification = "unknown"
+classification = "partial"
 conformance = "not-tested"
 tests = []
-pending-reason = "No complete implementation or executable reference-interpreter conformance suite is registered."
+pending-reason = "Original numeric range/representation and reference-interpreter overflow/error behavior remain unverified."
 
 [declarations.docs]
 path = "docs/research/amiga-gfa-basic-35-addendum-inventory.md"
@@ -81,15 +82,16 @@ printed-pages = ["Chapter 13, printed pp. 13-33–13-34 (same feature: combined 
 notes = ["The 3.5 addendum page images were checked. Both arguments are documented as integer expressions.", "The companion German book explicitly places VARIAT among the 3.5 additions and states the domain condition n >= k; it defines permutations without repetition (printed p. 478).", "The existing prototype evaluates only a restricted literal subset; it has no stable registry handler mapping and is not a complete implementation."]
 
 [declarations.implementation]
-status = "not-implemented"
-notes = ["A restricted compile-time literal prototype exists in crates/gfabasic-compiler/src/prototype.rs; it is not a complete runtime implementation or a registry-linked handler."]
+status = "partial"
+handler = "gfa.runtime.core.math.variat"
+notes = ["A typed Rust runtime handler is registered. Checked u32 inputs, u128 results, and Rust errors for invalid domain or overflow are implementation-boundary choices, not original-interpreter conformance claims."]
 
 [[declarations.support]]
 target = "x86_64-unknown-linux-gnu"
-classification = "unknown"
+classification = "partial"
 conformance = "not-tested"
 tests = []
-pending-reason = "No complete implementation or executable reference-interpreter conformance suite is registered."
+pending-reason = "Original numeric range/representation and reference-interpreter overflow/error behavior remain unverified."
 
 [declarations.docs]
 path = "docs/research/amiga-gfa-basic-35-addendum-inventory.md"
@@ -128,15 +130,16 @@ printed-pages = ["Chapter 13, printed pp. 13-33–13-34 (same feature: combined 
 notes = ["The 3.5 addendum page images were checked. Both arguments are documented as integer expressions.", "The companion German book explicitly places COMBIN among the 3.5 additions and states the domain condition n >= k (printed p. 479).", "The existing prototype evaluates only a restricted literal subset; it has no stable registry handler mapping and is not a complete implementation."]
 
 [declarations.implementation]
-status = "not-implemented"
-notes = ["A restricted compile-time literal prototype exists in crates/gfabasic-compiler/src/prototype.rs; it is not a complete runtime implementation or a registry-linked handler."]
+status = "partial"
+handler = "gfa.runtime.core.math.combin"
+notes = ["A typed Rust runtime handler is registered. Checked u32 inputs, u128 results, and Rust errors for invalid domain or overflow are implementation-boundary choices, not original-interpreter conformance claims."]
 
 [[declarations.support]]
 target = "x86_64-unknown-linux-gnu"
-classification = "unknown"
+classification = "partial"
 conformance = "not-tested"
 tests = []
-pending-reason = "No complete implementation or executable reference-interpreter conformance suite is registered."
+pending-reason = "Original numeric range/representation and reference-interpreter overflow/error behavior remain unverified."
 
 [declarations.docs]
 path = "docs/research/amiga-gfa-basic-35-addendum-inventory.md"
