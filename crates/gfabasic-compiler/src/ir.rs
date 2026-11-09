@@ -197,7 +197,7 @@ fn lower_assignment(
     }
     let Some(value) = value else {
         errors.push(IrError::at(
-            "intrinsic arguments are outside the supported prototype range (0 <= k <= n <= 20)",
+            "intrinsic arguments or result are outside the supported i64 prototype range",
             span,
         ));
         return;
@@ -340,6 +340,29 @@ mod tests {
             ir.instructions[2],
             Instruction::ConstI64 { value: 184756, .. }
         ));
+    }
+
+    #[test]
+    fn prototype_range_is_result_based_not_a_fixed_n_limit() {
+        let source = "x=COMBIN(21,10)\\nPRINT x\\n";
+        let mut sources = SourceMap::new();
+        let id = sources.add_source("larger-n.bas", source);
+        let ast = parse(id, source).unwrap();
+        let ir = lower(&ast).unwrap();
+
+        assert!(matches!(
+            ir.instructions[0],
+            Instruction::ConstI64 { value: 352716, .. }
+        ));
+
+        let source = "x=FACT(21)\\nPRINT x\\n";
+        let mut sources = SourceMap::new();
+        let id = sources.add_source("large-result.bas", source);
+        let ast = parse(id, source).unwrap();
+        let errors = lower(&ast).expect_err("FACT(21) does not fit the i64 prototype IR");
+        assert!(errors.iter().any(|error| {
+            error.message.contains("outside the supported i64 prototype range")
+        }));
     }
 
     #[test]
