@@ -27,6 +27,17 @@ pub enum MatrixShapeError {
     ElementCountMismatch { expected: usize, actual: usize },
     /// MAT ONE is defined by the source for square matrices only.
     IdentityRequiresSquare { rows: usize, columns: usize },
+    /// The source storage does not match its declared shape.
+    SourceElementCountMismatch { expected: usize, actual: usize },
+    /// MAT TRANS requires destination dimensions to reverse the source shape.
+    TransposeShapeMismatch {
+        destination_rows: usize,
+        destination_columns: usize,
+        source_rows: usize,
+        source_columns: usize,
+    },
+    /// The in-place form of MAT TRANS requires a square matrix.
+    TransposeRequiresSquare { rows: usize, columns: usize },
 }
 
 impl fmt::Display for MatrixShapeError {
@@ -40,6 +51,23 @@ impl fmt::Display for MatrixShapeError {
             Self::IdentityRequiresSquare { rows, columns } => write!(
                 formatter,
                 "identity matrix requires a square shape, got {rows}x{columns}"
+            ),
+            Self::SourceElementCountMismatch { expected, actual } => write!(
+                formatter,
+                "transpose source requires {expected} elements, but storage has {actual}"
+            ),
+            Self::TransposeShapeMismatch {
+                destination_rows,
+                destination_columns,
+                source_rows,
+                source_columns,
+            } => write!(
+                formatter,
+                "transpose destination must be {source_columns}x{source_rows}, got {destination_rows}x{destination_columns}"
+            ),
+            Self::TransposeRequiresSquare { rows, columns } => write!(
+                formatter,
+                "in-place transpose requires a square shape, got {rows}x{columns}"
             ),
         }
     }
@@ -109,6 +137,66 @@ impl<'a> MatrixMut<'a> {
         self.elements.fill(0.0);
         for diagonal in 0..self.rows {
             self.elements[diagonal * self.columns + diagonal] = 1.0;
+        }
+        Ok(())
+    }
+
+    /// Copy the transpose of a separate row-major source field into this field
+    /// (Amiga 3.5 `MAT TRANS destination()=source()`).
+    ///
+    /// If the source is `m × n`, this destination must be `n × m`.
+    /// Source shape and destination shape are checked before any write occurs.
+    pub fn transpose_from(
+        &mut self,
+        source: &[f64],
+        source_rows: usize,
+        source_columns: usize,
+    ) -> Result<(), MatrixShapeError> {
+        let expected_source_len = source_rows
+            .checked_mul(source_columns)
+            .ok_or(MatrixShapeError::DimensionOverflow)?;
+        if source.len() != expected_source_len {
+            return Err(MatrixShapeError::SourceElementCountMismatch {
+                expected: expected_source_len,
+                actual: source.len(),
+            });
+        }
+        if self.rows != source_columns || self.columns != source_rows {
+            return Err(MatrixShapeError::TransposeShapeMismatch {
+                destination_rows: self.rows,
+                destination_columns: self.columns,
+                source_rows,
+                source_columns,
+            });
+        }
+
+        for destination_row in 0..self.rows {
+            for destination_column in 0..self.columns {
+                self.elements[destination_row * self.columns + destination_column] =
+                    source[destination_column * source_columns + destination_row];
+            }
+        }
+        Ok(())
+    }
+
+    /// Transpose a square field in place (Amiga 3.5 `MAT TRANS matrix()`).
+    ///
+    /// Non-square shapes are rejected before any element is modified.
+    pub fn transpose_in_place(&mut self) -> Result<(), MatrixShapeError> {
+        if self.rows != self.columns {
+            return Err(MatrixShapeError::TransposeRequiresSquare {
+                rows: self.rows,
+                columns: self.columns,
+            });
+        }
+
+        for row in 0..self.rows {
+            for column in (row + 1)..self.columns {
+                self.elements.swap(
+                    row * self.columns + column,
+                    column * self.columns + row,
+                );
+            }
         }
         Ok(())
     }
@@ -194,6 +282,76 @@ mod tests {
             MatrixMut::new(usize::MAX, 2, &mut values).err(),
             Some(MatrixShapeError::DimensionOverflow)
         );
+    }
+
+    #[test]
+    fn transpose_copies_a_rectangular_source_into_reversed_shape() {
+        let source = [1.0, 2.0, 3.0, 4.0, 5.0, 6.0];
+        let mut destination = [0.0; 6];
+        let mut matrix = MatrixMut::new(3, 2, &mut destination).unwrap();
+
+        matrix.transpose_from(&source, 2, 3).unwrap();
+
+        assert_eq!(destination, [1.0, 4.0, 2.0, 5.0, 3.0, 6.0]);
+    }
+
+    #[test]
+    fn transpose_rejects_incompatible_destination_without_mutation() {
+        let source = [1.0, 2.0, 3.0, 4.0, 5.0, 6.0];
+        let mut destination = [9.0; 6];
+        let mut matrix = MatrixMut::new(2, 3, &mut destination).unwrap();
+
+        assert_eq!(
+            matrix.transpose_from(&source, 2, 3),
+            Err(MatrixShapeError::TransposeShapeMismatch {
+                destination_rows: 2,
+                destination_columns: 3,
+                source_rows: 2,
+                source_columns: 3,
+            })
+        );
+        assert_eq!(destination, [9.0; 6]);
+    }
+
+    #[test]
+    fn transpose_rejects_incorrect_source_storage_length() {
+        let source = [1.0, 2.0, 3.0, 4.0, 5.0];
+        let mut destination = [0.0; 6];
+        let mut matrix = MatrixMut::new(3, 2, &mut destination).unwrap();
+
+        assert_eq!(
+            matrix.transpose_from(&source, 2, 3),
+            Err(MatrixShapeError::SourceElementCountMismatch {
+                expected: 6,
+                actual: 5,
+            })
+        );
+        assert_eq!(destination, [0.0; 6]);
+    }
+
+    #[test]
+    fn transpose_in_place_swaps_only_off_diagonal_elements() {
+        let mut values = [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0];
+        let mut matrix = MatrixMut::new(3, 3, &mut values).unwrap();
+
+        matrix.transpose_in_place().unwrap();
+
+        assert_eq!(values, [1.0, 4.0, 7.0, 2.0, 5.0, 8.0, 3.0, 6.0, 9.0]);
+    }
+
+    #[test]
+    fn transpose_in_place_rejects_non_square_shape_without_mutation() {
+        let mut values = [1.0, 2.0, 3.0, 4.0, 5.0, 6.0];
+        let mut matrix = MatrixMut::new(2, 3, &mut values).unwrap();
+
+        assert_eq!(
+            matrix.transpose_in_place(),
+            Err(MatrixShapeError::TransposeRequiresSquare {
+                rows: 2,
+                columns: 3,
+            })
+        );
+        assert_eq!(values, [1.0, 2.0, 3.0, 4.0, 5.0, 6.0]);
     }
 
     #[test]
