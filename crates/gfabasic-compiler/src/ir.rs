@@ -91,9 +91,7 @@ fn binary_intrinsic(declaration_id: &str, left: i64, right: i64) -> Result<Optio
         .map_err(|_| format!("integer argument for {declaration_id} is outside the runtime ABI"))?;
     let right = u32::try_from(right)
         .map_err(|_| format!("integer argument for {declaration_id} is outside the runtime ABI"))?;
-    match crate::semantic::resolve_api_handler(declaration_id)
-        .map_err(|error| error.to_string())?
-    {
+    match crate::semantic::resolve_api_handler(declaration_id).map_err(|error| error.to_string())? {
         gfabasic_runtime::handlers::ResolvedHandler::TwoIntegersToUnsigned(handler) => {
             Ok(handler(left, right).and_then(|value| i64::try_from(value).ok()))
         }
