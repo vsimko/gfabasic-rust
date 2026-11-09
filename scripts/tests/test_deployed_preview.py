@@ -95,7 +95,7 @@ def main():
     with urllib.request.urlopen(adr_url, timeout=10) as response:
         adr_html = response.read().decode("utf-8")
     assert response.status == 200
-    assert "Amiga 3.5 and Linux SDL3 product scope" in adr_html
+    assert "ADR 0011: Product scope — Amiga GFA BASIC 3.5 to Linux x86-64 with SDL3" in adr_html
     assert "<script" not in adr_html.lower(), "Generated documentation must not execute embedded scripts"
 
     print(f"Verified generated documentation index and ADR page: {docs_url}")
