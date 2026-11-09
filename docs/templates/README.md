@@ -1,3 +1,8 @@
+---
+type: "Documentation Template"
+title: "Documentation templates"
+---
+
 # Documentation templates
 
 Use these templates as starting points for new pages:
