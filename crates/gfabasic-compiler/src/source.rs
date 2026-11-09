@@ -9,6 +9,15 @@ use std::fs;
 use std::path::{Path, PathBuf};
 use std::sync::Arc;
 
+/// Returns whether a path names the textual listing format accepted by the compiler.
+///
+/// The extension is a CLI/file-selection convention; it does not define source encoding.
+pub fn is_text_listing_path(path: &Path) -> bool {
+    path.extension()
+        .and_then(|extension| extension.to_str())
+        .is_some_and(|extension| extension.eq_ignore_ascii_case("LST"))
+}
+
 /// Identifies a source file within one source map.
 ///
 /// IDs are stable for the lifetime of the map. They are allocated in insertion
@@ -295,6 +304,19 @@ impl SourceMap {
 #[cfg(test)]
 mod tests {
     use super::{SourceMap, SourceSpan};
+
+    #[test]
+    fn listing_path_detection_accepts_only_lst_extensions() {
+        use super::is_text_listing_path;
+        use std::path::Path;
+
+        for path in ["program.LST", "program.lst", "nested/program.LsT"] {
+            assert!(is_text_listing_path(Path::new(path)), "rejected {path}");
+        }
+        for path in ["program.GFA", "program.BAS", "program.txt", "program"] {
+            assert!(!is_text_listing_path(Path::new(path)), "accepted {path}");
+        }
+    }
 
     #[test]
     fn source_ids_are_stable_and_files_are_retrievable() {

@@ -21,6 +21,13 @@ static NEXT_TEMP: AtomicUsize = AtomicUsize::new(0);
 /// Compile the current evidence-backed Amiga GFA BASIC 3.5 subset to a native
 /// host executable using the temporary C/`cc` bootstrap bridge.
 pub fn compile_file(input: &Path, output: &Path) -> Result<(), String> {
+    if !crate::source::is_text_listing_path(input) {
+        return Err(format!(
+            "compiler accepts textual .LST source only: {}",
+            input.display()
+        ));
+    }
+
     let mut sources = SourceMap::new();
     let source_id = sources
         .load_utf8(input)
@@ -151,6 +158,7 @@ mod tests {
     use crate::frontend::parse;
     use crate::source::SourceMap;
     use std::fs;
+    use std::path::Path;
     use std::process::Command;
     use std::sync::atomic::{AtomicUsize, Ordering};
 
@@ -205,6 +213,18 @@ mod tests {
     }
 
     #[test]
+    fn rejects_non_listing_inputs_before_attempting_to_read_them() {
+        for input in ["missing.GFA", "missing.BAS", "missing.txt", "missing"] {
+            let error = compile_file(Path::new(input), Path::new("unused-output"))
+                .expect_err("only textual .LST input is supported");
+            assert!(
+                error.contains("compiler accepts textual .LST source only"),
+                "unexpected error for {input}: {error}"
+            );
+        }
+    }
+
+    #[test]
     fn compiles_and_runs_the_amiga_35_combinatorics_fixture() {
         let cc_version = Command::new("cc")
             .arg("--version")
@@ -218,7 +238,7 @@ mod tests {
             std::process::id()
         ));
         fs::create_dir_all(&directory).unwrap();
-        let input = directory.join("combinatorics.bas");
+        let input = directory.join("combinatorics.LST");
         let output = directory.join("combinatorics");
         fs::write(
             &input,
@@ -257,7 +277,7 @@ mod tests {
             std::process::id()
         ));
         fs::create_dir_all(&directory).unwrap();
-        let input = directory.join("fact.bas");
+        let input = directory.join("fact.LST");
         let output = directory.join("fact");
         fs::write(&input, FACT_FIXTURE).unwrap();
 
