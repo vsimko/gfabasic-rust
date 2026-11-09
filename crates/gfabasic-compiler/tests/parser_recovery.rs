@@ -386,8 +386,8 @@ fn parser_accepts_integer_literal_assignments_with_or_without_let() {
     let mut sources = SourceMap::new();
     let source_id = sources.add_source("integer-assignments.LST", source);
 
-    let document = parse_document(source_id, source)
-        .expect("documented integer assignments should parse");
+    let document =
+        parse_document(source_id, source).expect("documented integer assignments should parse");
     assert_eq!(document.program.statements.len(), 3);
 
     let expected = [("x", 42, "x=42"), ("y", 7, "LET y=7")];
