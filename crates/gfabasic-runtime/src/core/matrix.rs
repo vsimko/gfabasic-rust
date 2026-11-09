@@ -167,7 +167,9 @@ impl<'a> MatrixMut<'a> {
         source_rows: usize,
         source_columns: usize,
     ) -> Result<(), MatrixShapeError> {
-        self.apply_elementwise(source, source_rows, source_columns, |left, right| left + right)
+        self.apply_elementwise(source, source_rows, source_columns, |left, right| {
+            left + right
+        })
     }
 
     /// Subtract a same-shaped floating-point field element-wise (Amiga 3.5 `MAT SUB a(),b()`).
@@ -177,22 +179,30 @@ impl<'a> MatrixMut<'a> {
         source_rows: usize,
         source_columns: usize,
     ) -> Result<(), MatrixShapeError> {
-        self.apply_elementwise(source, source_rows, source_columns, |left, right| left - right)
+        self.apply_elementwise(source, source_rows, source_columns, |left, right| {
+            left - right
+        })
     }
 
     /// Add a scalar to every element (Amiga 3.5 `MAT ADD a(),x`).
     pub fn add_scalar(&mut self, value: f64) {
-        self.elements.iter_mut().for_each(|element| *element += value);
+        self.elements
+            .iter_mut()
+            .for_each(|element| *element += value);
     }
 
     /// Subtract a scalar from every element (Amiga 3.5 `MAT SUB a(),x`).
     pub fn subtract_scalar(&mut self, value: f64) {
-        self.elements.iter_mut().for_each(|element| *element -= value);
+        self.elements
+            .iter_mut()
+            .for_each(|element| *element -= value);
     }
 
     /// Multiply every element by a scalar (Amiga 3.5 `MAT MUL a(),x`).
     pub fn multiply_scalar(&mut self, value: f64) {
-        self.elements.iter_mut().for_each(|element| *element *= value);
+        self.elements
+            .iter_mut()
+            .for_each(|element| *element *= value);
     }
 
     fn apply_elementwise(
