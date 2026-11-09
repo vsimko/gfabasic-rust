@@ -616,9 +616,9 @@ mod tests {
 
     #[test]
     fn integer_literal_assignments_are_formatted_idempotently() {
-        let source = "x=42\\nLET y=7\\n";
+        let source = "x=42\nLET y=7\n";
         let formatted = format(source);
-        assert_eq!(formatted, "x = 42\\nLET y = 7\\n");
+        assert_eq!(formatted, "x = 42\nLET y = 7\n");
         assert_eq!(format(&formatted), formatted);
     }
 
