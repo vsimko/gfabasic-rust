@@ -83,7 +83,7 @@ This project has not established a licensed ASD-STE100 dictionary or an automate
 
 ## Validation
 
-For every documentation change, review:
+Run the OKF validator and generate the website pages locally before review:\n\n```sh\npython -m pip install PyYAML==6.0.2 markdown-it-py==3.0.0\npython scripts/validate_okf.py\npython scripts/generate_docs_site.py\n```\n\nThe validator checks frontmatter, reserved files, supported metadata shapes, local links and anchors, complete directory indexes, and reachability from the root index. The generator writes build-only HTML pages to `site/docs/`; do not edit those generated files.\n\nFor every documentation change, review:
 
 1. Markdown rendering on GitHub.
 2. Local links and referenced file paths.
