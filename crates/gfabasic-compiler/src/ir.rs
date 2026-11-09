@@ -87,7 +87,7 @@ fn binary_intrinsic(
     declaration_id: &str,
     left: i64,
     right: i64,
- ) -> Result<Option<i64>, String> {
+) -> Result<Option<i64>, String> {
     // Preserve the compiler prototype's existing literal bound. This is not
     // promoted to a historical GFA BASIC language limit.
     if !(0..=20).contains(&left) || !(0..=left).contains(&right) {
