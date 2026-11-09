@@ -192,6 +192,9 @@ fn frontend_diagnostics_resolve_to_original_source_locations() {
         .get(unsupported_span.source)
         .expect("unsupported diagnostic source remains in the source map");
     assert_eq!(unsupported_file.name(), "diagnostic-locations.LST");
-    assert_eq!(unsupported_file.line_column(unsupported_span.start), Some((2, 1)));
+    assert_eq!(
+        unsupported_file.line_column(unsupported_span.start),
+        Some((2, 1))
+    );
     assert_eq!(sources.slice(unsupported_span), Some("LET"));
 }
