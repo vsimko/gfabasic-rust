@@ -31,7 +31,7 @@ source-scope = "amiga-3.5-addendum"
 status = "book-documented"
 sources = ["AM-INTERPRETER-35", "AM-BOOK-DE-1990"]
 printed-pages = ["Chapter 13, printed pp. 13-33–13-34 (same feature: combined update scan pp. 14-1–14-2)", "Chapter 19.1, printed pp. 477–478 (explicit 3.5 additions)"]
-notes = ["The 3.5 addendum page images were checked. The source describes an integer-expression argument and explicitly defines 0! = 1.", "The companion German book explicitly places FACT among the 3.5 additions and says the function is defined only for integer values; it reports calculation through n=421 (printed pp. 477–478). Its FACT(421) example is printed in scientific notation, so the exact numeric representation and overflow boundary remain unresolved.", "The existing prototype evaluates only a restricted literal subset; it has no stable registry handler mapping and is not a complete implementation."]
+notes = ["The 3.5 addendum page images were checked. The source describes an integer-expression argument and explicitly defines 0! = 1.", "The companion German book explicitly places FACT among the 3.5 additions and says the function is defined only for integer values; it reports calculation through n=421 (printed pp. 477–478). Its FACT(421) example is printed in scientific notation, so the exact numeric representation and overflow boundary remain unresolved.", "The compiler prototype evaluates only a restricted literal subset. Partial typed runtime helpers are mapped by stable registry handler IDs, but their overflow/error behavior is not yet conformant or verified."]
 
 [declarations.implementation]
 status = "partial"
@@ -79,7 +79,7 @@ source-scope = "amiga-3.5-addendum"
 status = "book-documented"
 sources = ["AM-INTERPRETER-35", "AM-BOOK-DE-1990"]
 printed-pages = ["Chapter 13, printed pp. 13-33–13-34 (same feature: combined update scan pp. 14-1–14-2)", "Chapter 19.1, printed pp. 478–479 (explicit 3.5 additions)"]
-notes = ["The 3.5 addendum page images were checked. Both arguments are documented as integer expressions.", "The companion German book explicitly places VARIAT among the 3.5 additions and states the domain condition n >= k; it defines permutations without repetition (printed p. 478).", "The existing prototype evaluates only a restricted literal subset; it has no stable registry handler mapping and is not a complete implementation."]
+notes = ["The 3.5 addendum page images were checked. Both arguments are documented as integer expressions.", "The companion German book explicitly places VARIAT among the 3.5 additions and states the domain condition n >= k; it defines permutations without repetition (printed p. 478).", "The compiler prototype evaluates only a restricted literal subset. Partial typed runtime helpers are mapped by stable registry handler IDs, but their overflow/error behavior is not yet conformant or verified."]
 
 [declarations.implementation]
 status = "partial"
@@ -127,7 +127,7 @@ source-scope = "amiga-3.5-addendum"
 status = "book-documented"
 sources = ["AM-INTERPRETER-35", "AM-BOOK-DE-1990"]
 printed-pages = ["Chapter 13, printed pp. 13-33–13-34 (same feature: combined update scan pp. 14-1–14-2)", "Chapter 19.1, printed p. 479 (explicit 3.5 additions)"]
-notes = ["The 3.5 addendum page images were checked. Both arguments are documented as integer expressions.", "The companion German book explicitly places COMBIN among the 3.5 additions and states the domain condition n >= k (printed p. 479).", "The existing prototype evaluates only a restricted literal subset; it has no stable registry handler mapping and is not a complete implementation."]
+notes = ["The 3.5 addendum page images were checked. Both arguments are documented as integer expressions.", "The companion German book explicitly places COMBIN among the 3.5 additions and states the domain condition n >= k (printed p. 479).", "The compiler prototype evaluates only a restricted literal subset. Partial typed runtime helpers are mapped by stable registry handler IDs, but their overflow/error behavior is not yet conformant or verified."]
 
 [declarations.implementation]
 status = "partial"
