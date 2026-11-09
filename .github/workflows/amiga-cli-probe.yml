@@ -235,7 +235,10 @@ jobs:
             send_shifted_quote
             for key in 35 32 51 20 49 18 19 24 57 36 35 32; do send_key "$key"; done
             send_shifted_quote
+            # Try both main Return (0x44) and keypad Enter (0x43); the latter
+            # is the Enter key recognized by some Amiga console configurations.
             send_key 68
+            send_key 67
             sleep 2
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/direct-mode-after-save.png" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
             kill -0 "$emulator_pid"
