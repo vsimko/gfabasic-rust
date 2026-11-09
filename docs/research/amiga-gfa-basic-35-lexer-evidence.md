@@ -282,3 +282,27 @@ Printed pp. 13-12–13-14 were also checked. They continue the MAT CPY/XCPY/TRAN
 The command-specific forms above expand the verified 3.5 abbreviation inventory; they do not establish a general abbreviation algorithm, a minimum prefix length, case-insensitive matching, acceptance in .LST files, or identifier-boundary/ambiguity behavior. In particular, the printed abbreviation m c is reused for several MAT COPY forms with different argument patterns. That is evidence for command-specific syntax, not evidence that the lexer can safely expand m c without parser context.
 
 **Correction to section 10:** the statement that later matrix-command abbreviation entries still require page-image checks is now superseded for the entries on printed pp. 13-6–13-11 and 13-15. The image review now covers the contiguous addendum range pp. 13-1–13-15 (PDF pp. 431–445). No production lexer behavior changes.
+
+
+## 12. Page-image verification of 3.5 matrix operation abbreviations (2026-11-09)
+
+The next contiguous addendum range, printed pp. 13-16–13-25 (PDF pp. 446–455), was checked against page images. Pages 13-16–13-23 print the following additional command-specific abbreviation forms:
+
+| Printed page | Full command form | Printed abbreviation |
+|---|---|---|
+| 13-16 | MAT ADD a()=b()+c() | m a()=b()+c() |
+| 13-17 | MAT ADD a(),b() | m a a(),b() |
+| 13-18 | MAT ADD a(),x | m a a(),x |
+| 13-18 | MAT SUB a()=b()-c() | m a()=b()-c() |
+| 13-19 | MAT SUB a(),b() | m s a(),b() |
+| 13-20 | MAT SUB a(),x | m s a(),x |
+| 13-20 | MAT MUL a()=b()*c() | m a()=b()*c() |
+| 13-22 | MAT MUL x=a()*b() | m x=a()*b() |
+| 13-22 | MAT MUL x=a()*b()*c() | m x=a()*b()*c() |
+| 13-23 | MAT NORM a(),0 / MAT NORM a(),1 | m no a(),0 / m no a(),1 |
+
+The page images show the spaces in the short forms as printed. The `MAT ADD` and `MAT SUB` families use different one-letter forms depending on the operand pattern (`m a` versus `m s`), while the matrix-product forms use `m` followed by the expression-shaped abbreviation. `MAT NORM` explicitly gives both alternatives and labels them with the German `bzw.` (“respectively/or”). These are documentation spellings only; they do not specify how a source lexer or editor recognizes them.
+
+Printed pp. 13-24–13-25 were also checked. They continue matrix-operation examples (including MAT CPY/XCPY and matrix multiplication) but add no separate `Abbreviation:` row. No abbreviation was inferred from example code alone.
+
+Together with sections 10–11, the page-image review now covers printed 3.5 addendum pp. 13-1–13-25 (PDF pp. 431–455). The inventory is still limited to explicitly printed command-specific forms. It does not establish a general expansion algorithm, minimum prefix length, case folding, whitespace normalization, token boundaries, ambiguity resolution, or acceptance in `.LST` source. No production lexer behavior changes.
