@@ -418,3 +418,44 @@ fn parser_rejects_arithmetic_rhs_until_expression_grammar_is_implemented() {
         .expect("unsupported arithmetic tail has a syntax span");
     assert_eq!(&source[span.start..span.end], "+");
 }
+
+
+#[test]
+fn parser_handles_the_integer_literal_i64_boundary() {
+    let valid_source = "x=9223372036854775807\\n";
+    let mut sources = SourceMap::new();
+    let source_id = sources.add_source("integer-literal-max.LST", valid_source);
+    let document = parse_document(source_id, valid_source)
+        .expect("the largest supported signed integer literal should parse");
+
+    let statement = document
+        .program
+        .statements
+        .first()
+        .expect("one integer assignment is parsed");
+    match statement {
+        Statement::AssignInteger { value, span, .. } => {
+            assert_eq!(*value, i64::MAX);
+            assert_eq!(
+                &valid_source[span.start..span.end],
+                "x=9223372036854775807"
+            );
+        }
+        other => panic!("expected integer assignment, got {other:?}"),
+    }
+
+    let overflow_source = "x=9223372036854775808\\n";
+    let mut sources = SourceMap::new();
+    let source_id = sources.add_source("integer-literal-overflow.LST", overflow_source);
+    let diagnostics = parse(source_id, overflow_source)
+        .expect_err("an integer outside the frontend's i64 representation must be rejected");
+
+    assert_eq!(diagnostics.len(), 1);
+    assert_eq!(diagnostics[0].code, "GFA-LEX-0002");
+    assert_eq!(diagnostics[0].category.as_str(), "lexical");
+    let span = diagnostics[0]
+        .primary_span
+        .expect("integer range diagnostic retains its source span");
+    assert_eq!((span.start, span.end), (2, 21));
+    assert_eq!(&overflow_source[span.start..span.end], "9223372036854775808");
+}
