@@ -37,13 +37,27 @@ impl Error for RadixFormatError {}
 /// The Amiga reference also specifies &H hexadecimal, &X binary, and &O octal
 /// prefixes. If no numeric prefix is present, zero is returned.
 pub fn val(input: &[u8]) -> f64 {
+    val_with_length(input).0
+}
+
+/// Return the number of bytes consumed by VAL (Amiga GFA BASIC VAL?).
+///
+/// Leading ASCII whitespace is skipped but not counted. The returned length
+/// includes an optional sign or radix prefix and the parsed numeric digits.
+pub fn val_length(input: &[u8]) -> usize {
+    val_with_length(input).1
+}
+
+/// Parse a numeric prefix and return its value and consumed byte length.
+pub fn val_with_length(input: &[u8]) -> (f64, usize) {
     let mut start = input
         .iter()
         .position(|byte| !byte.is_ascii_whitespace())
         .unwrap_or(input.len());
     if start == input.len() {
-        return 0.0;
+        return (0.0, 0);
     }
+    let token_start = start;
 
     let sign = match input[start] {
         b'-' => {
@@ -57,7 +71,7 @@ pub fn val(input: &[u8]) -> f64 {
         _ => 1.0,
     };
     if start >= input.len() {
-        return 0.0;
+        return (0.0, 0);
     }
 
     if input[start] == b'&' && start + 1 < input.len() {
@@ -82,7 +96,11 @@ pub fn val(input: &[u8]) -> f64 {
                 digits += 1;
                 index += 1;
             }
-            return if digits == 0 { 0.0 } else { sign * value };
+            return if digits == 0 {
+                (0.0, 0)
+            } else {
+                (sign * value, index - token_start)
+            };
         }
     }
 
@@ -101,7 +119,7 @@ pub fn val(input: &[u8]) -> f64 {
         }
     }
     if digits == 0 {
-        return 0.0;
+        return (0.0, 0);
     }
 
     if index < input.len() && matches!(input[index], b'e' | b'E') {
@@ -119,10 +137,11 @@ pub fn val(input: &[u8]) -> f64 {
     }
 
     let token = &input[number_start..index];
-    std::str::from_utf8(token)
+    let value = std::str::from_utf8(token)
         .ok()
         .and_then(|number| number.parse::<f64>().ok())
-        .map_or(0.0, |value| sign * value)
+        .map_or(0.0, |value| sign * value);
+    (value, index - token_start)
 }
 
 fn digit_value(byte: u8) -> Option<u32> {
@@ -171,7 +190,7 @@ pub fn hex(value: i32, width: Option<usize>) -> String {
 
 #[cfg(test)]
 mod tests {
-    use super::{RadixFormatError, bin, hex, oct, val};
+    use super::{RadixFormatError, bin, hex, oct, val, val_length, val_with_length};
 
     #[test]
     fn val_parses_decimal_prefix_and_stops_at_first_invalid_byte() {
@@ -187,6 +206,15 @@ mod tests {
         assert_eq!(val(b"&HFFtail"), 255.0);
         assert_eq!(val(b"&x101"), 5.0);
         assert_eq!(val(b"-&O17rest"), -15.0);
+    }
+
+    #[test]
+    fn val_question_reports_consumed_numeric_prefix_length() {
+        assert_eq!(val_length(b"3.00 dollars"), 4);
+        assert_eq!(val_length(b"  -12.5xyz"), 5);
+        assert_eq!(val_length(b"&HFFtail"), 4);
+        assert_eq!(val_length(b"word123"), 0);
+        assert_eq!(val_with_length(b"3.00 dollars"), (3.0, 4));
     }
 
     #[test]
