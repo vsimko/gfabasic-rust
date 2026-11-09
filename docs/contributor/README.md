@@ -11,7 +11,7 @@ title: "Contributor documentation"
 
 ## Before making a change
 
-1. Read the [project README](../../README.md) and the [architecture overview](../architecture/README.md).
+1. Read the [project documentation index](../index.md) and the [architecture overview](../architecture/README.md).
 2. Check the open [GitHub issues](https://github.com/vsimko/gfabasic-rust/issues) and pull requests to avoid duplicate work.
 3. Follow the [documentation policy](../DOCUMENTATION.md) for Markdown, evidence, citations, and copyright.
 4. For language or API research, consult the [source register](../reference-sources.md) and keep Amiga and Atari ST evidence separate.
