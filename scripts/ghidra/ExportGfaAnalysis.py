@@ -60,7 +60,7 @@ with open(instructions_path, "w") as instruction_file, open(references_path, "w"
                 "mnemonic": instruction.getMnemonicString(),
                 "operands": operands,
                 "length": instruction.getLength(),
-            }) + "\\n")
+            }) + "\n")
             instruction_count += 1
             for ref in reference_manager.getReferencesFrom(address):
                 reference_file.write(json.dumps({
@@ -68,7 +68,7 @@ with open(instructions_path, "w") as instruction_file, open(references_path, "w"
                     "to": ref.getToAddress().getOffset(),
                     "type": ref.getReferenceType().getName(),
                     "operand": ref.getOperandIndex(),
-                }) + "\\n")
+                }) + "\n")
                 reference_count += 1
 
 # The Amiga Hunk header is 40 bytes for this verified input. Ghidra's imported
@@ -80,6 +80,7 @@ with open(strings_path, "r") as strings_file:
     strings = json.load(strings_file)
 address_space = program.getAddressFactory().getDefaultAddressSpace()
 string_xref_count = 0
+strings_with_xrefs = 0
 with open(string_xrefs_path, "w") as xref_file:
     for item in strings:
         ghidra_offset = item["offset"] - 40
@@ -103,7 +104,9 @@ with open(string_xrefs_path, "w") as xref_file:
                         "type": ref.getReferenceType().getName(),
                     })
         string_xref_count += len(record["references"])
-        xref_file.write(json.dumps(record, ensure_ascii=True) + "\\n")
+        if record["references"]:
+            strings_with_xrefs += 1
+        xref_file.write(json.dumps(record, ensure_ascii=True) + "\n")
 
 c_path = os.path.join(out_dir, "decompiled.c")
 with open(c_path, "w") as c_file:
@@ -127,7 +130,7 @@ with open(c_path, "w") as c_file:
             "file": file_name,
             "decompiled": bool(c_text),
         })
-        c_file.write("\\n/* 0x%08X %s */\\n%s\\n" % (entry, func.getName(), c_text))
+        c_file.write("\n/* 0x%08X %s */\n%s\n" % (entry, func.getName(), c_text))
 
 decomp.dispose()
 functions.sort(key=lambda item: item["entry"])
@@ -141,7 +144,7 @@ with open(os.path.join(out_dir, "analysis_stats.json"), "w") as handle:
         "instructions": instruction_count,
         "references": reference_count,
         "string_xrefs": string_xref_count,
-        "strings_with_xrefs": sum(1 for item in strings if item),
+        "strings_with_xrefs": strings_with_xrefs,
         "executable_blocks": sum(1 for block in blocks if block["execute"]),
     }, handle, indent=2)
 print("Exported %d functions, %d instructions, %d references, and %d string xrefs" %
