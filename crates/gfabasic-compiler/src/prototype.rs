@@ -18,26 +18,15 @@ use crate::source::{SourceMap, SourceSpan};
 
 static NEXT_TEMP: AtomicUsize = AtomicUsize::new(0);
 
-fn require_listing_extension(input: &Path) -> Result<(), String> {
-    let is_listing = input
-        .extension()
-        .and_then(|extension| extension.to_str())
-        .is_some_and(|extension| extension.eq_ignore_ascii_case("LST"));
-
-    if is_listing {
-        Ok(())
-    } else {
-        Err(format!(
-            "compiler accepts textual .LST source only: {}",
-            input.display()
-        ))
-    }
-}
-
 /// Compile the current evidence-backed Amiga GFA BASIC 3.5 subset to a native
 /// host executable using the temporary C/`cc` bootstrap bridge.
 pub fn compile_file(input: &Path, output: &Path) -> Result<(), String> {
-    require_listing_extension(input)?;
+    if !crate::source::is_text_listing_path(input) {
+        return Err(format!(
+            "compiler accepts textual .LST source only: {}",
+            input.display()
+        ));
+    }
 
     let mut sources = SourceMap::new();
     let source_id = sources
