@@ -306,3 +306,10 @@ The page images show the spaces in the short forms as printed. The `MAT ADD` and
 Printed pp. 13-24–13-25 were also checked. They continue matrix-operation examples (including MAT CPY/XCPY and matrix multiplication) but add no separate `Abbreviation:` row. No abbreviation was inferred from example code alone.
 
 Together with sections 10–11, the page-image review now covers printed 3.5 addendum pp. 13-1–13-25 (PDF pp. 431–455). The inventory is still limited to explicitly printed command-specific forms. It does not establish a general expansion algorithm, minimum prefix length, case folding, whitespace normalization, token boundaries, ambiguity resolution, or acceptance in `.LST` source. No production lexer behavior changes.
+
+
+## 13. Page-image check of the intervening addendum page (2026-11-09)
+
+The supplied interpreter PDF page image for printed p. 13-32 (PDF page 462) was inspected at 180 dpi. It is intentionally blank apart from the running header and footer; it contains no body text, command signature, abbreviation row, or lexical example. The OCR/text extraction likewise yields only the addendum header and page footer. No abbreviation or lexer rule is inferred from this page.
+
+This closes the page-image gap between the already reviewed printed pp. 13-1–13-31 and the separately checked pp. 13-33–13-36. It does not expand the verified lexical contract. The remaining open research work concerns confirmation of inherited 3.0 candidates and reproducible interpreter observations, not an unreviewed page in this addendum sequence.
