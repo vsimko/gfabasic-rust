@@ -560,6 +560,146 @@ impl<'a> MatrixMut<'a> {
         Ok(determinant_of_square(&submatrix, size))
     }
 
+    /// Copy a rectangular region from a source field (Amiga 3.5 MAT CPY).
+    ///
+    /// Source and destination offsets are zero-based. The requested rectangle
+    /// is clipped to the elements available in both fields, matching the
+    /// addendum's rule that only corresponding valid indices are copied.
+    /// The source remains unchanged.
+    #[allow(clippy::too_many_arguments)]
+    pub fn copy_region_from(
+        &mut self,
+        source: &[f64],
+        source_rows: usize,
+        source_columns: usize,
+        destination_row: usize,
+        destination_column: usize,
+        source_row: usize,
+        source_column: usize,
+        height: usize,
+        width: usize,
+    ) -> Result<(), MatrixShapeError> {
+        let expected_source_len = source_rows
+            .checked_mul(source_columns)
+            .ok_or(MatrixShapeError::DimensionOverflow)?;
+        if source.len() != expected_source_len {
+            return Err(MatrixShapeError::SourceElementCountMismatch {
+                expected: expected_source_len,
+                actual: source.len(),
+            });
+        }
+        destination_row
+            .checked_add(height)
+            .ok_or(MatrixShapeError::DimensionOverflow)?;
+        destination_column
+            .checked_add(width)
+            .ok_or(MatrixShapeError::DimensionOverflow)?;
+        source_row
+            .checked_add(height)
+            .ok_or(MatrixShapeError::DimensionOverflow)?;
+        source_column
+            .checked_add(width)
+            .ok_or(MatrixShapeError::DimensionOverflow)?;
+
+        let rows_to_copy = height
+            .min(self.rows.saturating_sub(destination_row))
+            .min(source_rows.saturating_sub(source_row));
+        let columns_to_copy = width
+            .min(self.columns.saturating_sub(destination_column))
+            .min(source_columns.saturating_sub(source_column));
+        if rows_to_copy == 0 || columns_to_copy == 0 {
+            return Ok(());
+        }
+
+        for row in 0..rows_to_copy {
+            let source_start = (source_row + row) * source_columns + source_column;
+            let destination_start = (destination_row + row) * self.columns + destination_column;
+            self.elements[destination_start..destination_start + columns_to_copy]
+                .copy_from_slice(&source[source_start..source_start + columns_to_copy]);
+        }
+        Ok(())
+    }
+
+    /// Copy a source rectangle while transposing its rows and columns (Amiga 3.5 MAT XCPY).
+    ///
+    /// The source rectangle has height × width elements; the destination
+    /// receives the transposed width × height region. Out-of-range portions
+    /// are clipped to corresponding valid indices. The source remains unchanged.
+    #[allow(clippy::too_many_arguments)]
+    pub fn transpose_copy_region_from(
+        &mut self,
+        source: &[f64],
+        source_rows: usize,
+        source_columns: usize,
+        destination_row: usize,
+        destination_column: usize,
+        source_row: usize,
+        source_column: usize,
+        height: usize,
+        width: usize,
+    ) -> Result<(), MatrixShapeError> {
+        let expected_source_len = source_rows
+            .checked_mul(source_columns)
+            .ok_or(MatrixShapeError::DimensionOverflow)?;
+        if source.len() != expected_source_len {
+            return Err(MatrixShapeError::SourceElementCountMismatch {
+                expected: expected_source_len,
+                actual: source.len(),
+            });
+        }
+        destination_row
+            .checked_add(width)
+            .ok_or(MatrixShapeError::DimensionOverflow)?;
+        destination_column
+            .checked_add(height)
+            .ok_or(MatrixShapeError::DimensionOverflow)?;
+        source_row
+            .checked_add(height)
+            .ok_or(MatrixShapeError::DimensionOverflow)?;
+        source_column
+            .checked_add(width)
+            .ok_or(MatrixShapeError::DimensionOverflow)?;
+
+        let rows_to_copy = height
+            .min(source_rows.saturating_sub(source_row))
+            .min(self.columns.saturating_sub(destination_column));
+        let columns_to_copy = width
+            .min(source_columns.saturating_sub(source_column))
+            .min(self.rows.saturating_sub(destination_row));
+
+        for row in 0..rows_to_copy {
+            for column in 0..columns_to_copy {
+                let source_index = (source_row + row) * source_columns + source_column + column;
+                let destination_index =
+                    (destination_row + column) * self.columns + destination_column + row;
+                self.elements[destination_index] = source[source_index];
+            }
+        }
+        Ok(())
+    }
+
+    /// Copy all corresponding indices from a source field (Amiga 3.5 MAT CPY).
+    ///
+    /// When shapes differ, only their common top-left rectangle is copied.
+    pub fn copy_overlapping_from(
+        &mut self,
+        source: &[f64],
+        source_rows: usize,
+        source_columns: usize,
+    ) -> Result<(), MatrixShapeError> {
+        self.copy_region_from(
+            source,
+            source_rows,
+            source_columns,
+            0,
+            0,
+            0,
+            0,
+            self.rows.min(source_rows),
+            self.columns.min(source_columns),
+        )
+    }
+
     /// Add a same-shaped floating-point field element-wise (Amiga 3.5 `MAT ADD a(),b()`).
     ///
     /// The receiver is the destination and is updated in place.
@@ -1228,6 +1368,54 @@ mod tests {
                 columns: 3,
             })
         );
+    }
+
+    #[test]
+    fn copy_region_copies_requested_rectangle_between_offsets() {
+        let source = [
+            [1.0, 2.0, 3.0, 4.0],
+            [2.0, 3.0, 4.0, 5.0],
+            [3.0, 4.0, 5.0, 6.0],
+            [4.0, 5.0, 6.0, 7.0],
+        ]
+        .concat();
+        let mut destination = [1.0; 25];
+        let mut matrix = MatrixMut::new(5, 5, &mut destination).unwrap();
+
+        matrix
+            .copy_region_from(&source, 4, 4, 1, 1, 1, 1, 3, 3)
+            .unwrap();
+
+        assert_eq!(&destination[0..5], &[1.0; 5]);
+        assert_eq!(&destination[5..10], &[1.0, 3.0, 4.0, 5.0, 1.0]);
+        assert_eq!(&destination[10..15], &[1.0, 4.0, 5.0, 6.0, 1.0]);
+        assert_eq!(&destination[15..20], &[1.0, 5.0, 6.0, 7.0, 1.0]);
+        assert_eq!(&destination[20..25], &[1.0; 5]);
+    }
+
+    #[test]
+    fn copy_overlapping_copies_common_indices_only() {
+        let source = [1.0, 2.0, 3.0, 4.0, 5.0, 6.0];
+        let mut destination = [9.0; 6];
+        let mut matrix = MatrixMut::new(3, 2, &mut destination).unwrap();
+
+        matrix.copy_overlapping_from(&source, 2, 3).unwrap();
+
+        assert_eq!(destination, [1.0, 2.0, 4.0, 5.0, 9.0, 9.0]);
+    }
+
+    #[test]
+    fn transpose_copy_region_copies_transposed_rectangle() {
+        let source = [1.0, 2.0, 3.0, 4.0, 5.0, 6.0];
+        let mut destination = [9.0; 9];
+        let mut matrix = MatrixMut::new(3, 3, &mut destination).unwrap();
+
+        matrix
+            .transpose_copy_region_from(&source, 2, 3, 0, 0, 0, 0, 2, 3)
+            .unwrap();
+
+        assert_eq!(destination, [1.0, 4.0, 9.0, 2.0, 5.0, 9.0, 3.0, 6.0, 9.0]);
+        assert_eq!(source, [1.0, 2.0, 3.0, 4.0, 5.0, 6.0]);
     }
 
     #[test]
