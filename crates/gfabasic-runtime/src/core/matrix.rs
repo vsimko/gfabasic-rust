@@ -26,6 +26,16 @@ pub struct MatrixMut<'a> {
 pub enum MatrixShapeError {
     /// The requested row/column product cannot be represented by `usize`.
     DimensionOverflow,
+    /// A MAT READ cursor points beyond the available DATA values.
+    DataCursorOutOfBounds {
+        cursor: usize,
+        data_length: usize,
+    },
+    /// MAT READ needs more DATA values than remain in the source.
+    DataExhausted {
+        needed: usize,
+        available: usize,
+    },
     /// The backing slice does not contain exactly rows × columns elements.
     ElementCountMismatch {
         expected: usize,
@@ -140,6 +150,17 @@ impl fmt::Display for MatrixShapeError {
     fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             Self::DimensionOverflow => write!(formatter, "matrix dimensions overflow usize"),
+            Self::DataCursorOutOfBounds {
+                cursor,
+                data_length,
+            } => write!(
+                formatter,
+                "DATA cursor {cursor} exceeds source length {data_length}"
+            ),
+            Self::DataExhausted { needed, available } => write!(
+                formatter,
+                "MAT READ needs {needed} DATA values, but only {available} remain"
+            ),
             Self::ElementCountMismatch { expected, actual } => write!(
                 formatter,
                 "matrix requires {expected} elements, but storage has {actual}"
@@ -293,6 +314,36 @@ impl<'a> MatrixMut<'a> {
     /// Number of columns in the view.
     pub fn columns(&self) -> usize {
         self.columns
+    }
+
+    /// Read this previously dimensioned field from sequential DATA values
+    /// (Amiga 3.5 `MAT READ a()`).
+    ///
+    /// Values are consumed in the matrix view's row-major order. The cursor
+    /// advances only when the complete field can be read; insufficient input
+    /// leaves both the field and cursor unchanged.
+    pub fn read_from_data(
+        &mut self,
+        data: &[f64],
+        cursor: &mut usize,
+    ) -> Result<(), MatrixShapeError> {
+        if *cursor > data.len() {
+            return Err(MatrixShapeError::DataCursorOutOfBounds {
+                cursor: *cursor,
+                data_length: data.len(),
+            });
+        }
+        let needed = self.elements.len();
+        let available = data.len() - *cursor;
+        if available < needed {
+            return Err(MatrixShapeError::DataExhausted { needed, available });
+        }
+        let end = cursor
+            .checked_add(needed)
+            .ok_or(MatrixShapeError::DimensionOverflow)?;
+        self.elements.copy_from_slice(&data[*cursor..end]);
+        *cursor = end;
+        Ok(())
     }
 
     /// Set every element to zero (Amiga 3.5 `MAT CLR`).
@@ -1368,6 +1419,55 @@ mod tests {
                 columns: 3,
             })
         );
+    }
+
+    #[test]
+    fn read_from_data_fills_field_and_advances_cursor() {
+        let data = [99.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 100.0];
+        let mut cursor = 1;
+        let mut destination = [0.0; 6];
+        let mut matrix = MatrixMut::new(2, 3, &mut destination).unwrap();
+
+        matrix.read_from_data(&data, &mut cursor).unwrap();
+
+        assert_eq!(destination, [1.0, 2.0, 3.0, 4.0, 5.0, 6.0]);
+        assert_eq!(cursor, 7);
+    }
+
+    #[test]
+    fn read_from_data_is_atomic_when_data_is_exhausted() {
+        let data = [1.0, 2.0, 3.0];
+        let mut cursor = 1;
+        let mut destination = [9.0; 4];
+        let mut matrix = MatrixMut::new(2, 2, &mut destination).unwrap();
+
+        assert_eq!(
+            matrix.read_from_data(&data, &mut cursor),
+            Err(MatrixShapeError::DataExhausted {
+                needed: 4,
+                available: 2,
+            })
+        );
+        assert_eq!(destination, [9.0; 4]);
+        assert_eq!(cursor, 1);
+    }
+
+    #[test]
+    fn read_from_data_rejects_cursor_past_data_end() {
+        let data = [1.0, 2.0];
+        let mut cursor = 3;
+        let mut destination = [9.0; 1];
+        let mut matrix = MatrixMut::new(1, 1, &mut destination).unwrap();
+
+        assert_eq!(
+            matrix.read_from_data(&data, &mut cursor),
+            Err(MatrixShapeError::DataCursorOutOfBounds {
+                cursor: 3,
+                data_length: 2,
+            })
+        );
+        assert_eq!(destination, [9.0]);
+        assert_eq!(cursor, 3);
     }
 
     #[test]
