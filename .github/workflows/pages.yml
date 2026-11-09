@@ -66,19 +66,33 @@ jobs:
           cp -a site/. "$staging_dir/"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git fetch origin gh-pages || true
-          if git show-ref --verify --quiet refs/remotes/origin/gh-pages; then
-            git checkout -f -B gh-pages origin/gh-pages
-          else
-            git checkout --orphan gh-pages
-            git rm -rf . >/dev/null 2>&1 || true
-          fi
-          rsync -a --delete --exclude='.git/' --exclude='pr-preview/' "$staging_dir/" ./
+
+          for attempt in 1 2 3 4 5; do
+            git fetch origin gh-pages || true
+            if git show-ref --verify --quiet refs/remotes/origin/gh-pages; then
+              git checkout -f -B gh-pages origin/gh-pages
+            else
+              git checkout --orphan gh-pages
+              git rm -rf . >/dev/null 2>&1 || true
+            fi
+
+            rsync -a --delete --exclude='.git/' --exclude='pr-preview/' "$staging_dir/" ./
+            git add -f -A
+            if git diff --cached --quiet; then
+              echo "Production site is already up to date."
+              rm -rf "$staging_dir"
+              exit 0
+            fi
+
+            git commit -m "Deploy production site from ${GITHUB_SHA}"
+            if git push origin gh-pages; then
+              rm -rf "$staging_dir"
+              exit 0
+            fi
+            echo "gh-pages changed during deployment; retrying push (attempt $attempt/5)."
+            sleep 2
+          done
+
           rm -rf "$staging_dir"
-          git add -f -A
-          if git diff --cached --quiet; then
-            echo "Production site is already up to date."
-            exit 0
-          fi
-          git commit -m "Deploy production site from ${GITHUB_SHA}"
-          git push origin gh-pages
+          echo "Could not publish production site after 5 attempts."
+          exit 1
