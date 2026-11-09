@@ -2,7 +2,7 @@
 
 A GFA BASIC compiler and runtime implemented in Rust, targeting programs accepted by the Commodore Amiga GFA BASIC 3.52 interpreter and native Linux x86-64 executables.
 
-**[Project website](https://vsimko.github.io/gfabasic-rust/)** · [Documentation](docs/README.md) · [Roadmap](ROADMAP.md) · [Open issues](https://github.com/vsimko/gfabasic-rust/issues)
+**[Project website](https://vsimko.github.io/gfabasic-rust/)** · [OKF knowledge bundle](knowledge/index.md) · [Documentation](docs/README.md) · [Roadmap](ROADMAP.md) · [Open issues](https://github.com/vsimko/gfabasic-rust/issues)
 
 > **Project status:** The workspace contains an experimental, evidence-gated frontend for a narrow set of GFA BASIC constructs. The current prototype supports selected `FACT`, `VARIAT`, and `COMBIN` assignments followed by `PRINT`, with documented argument and variable limits. Compilation follows AST → typed project IR → IR verification → temporary C/`cc` bootstrap. This is not general GFA BASIC support and does not claim full compatibility with the reference interpreter. General language semantics and the planned LLVM backend remain unimplemented. See the [roadmap](ROADMAP.md) for the current implementation state.
 
@@ -36,25 +36,12 @@ The prototype rejects constructs outside its documented subset. It currently use
 When entering the repository without prior context:
 
 1. Read this README.
-2. Read [AGENTS.md](AGENTS.md) for mandatory agent and issue-tracking rules.
-3. Read the [documentation index](docs/README.md) and [roadmap](ROADMAP.md).
-4. Read [compatibility evidence and agent workflow](docs/architecture/COMPATIBILITY-EVIDENCE.md).
+2. Read [AGENTS.md](AGENTS.md) for mandatory repository and issue-tracking rules.
+3. Read the [OKF knowledge bundle](knowledge/index.md). Follow its indexes to the relevant concepts.
+4. Read [ROADMAP.md](ROADMAP.md) to understand current maturity and delivery order.
 5. Inspect open GitHub issues and pull requests. Select work from an issue and follow its linked canonical specification.
 
-Key documents:
-
-- [Project roadmap](ROADMAP.md)
-- [Compatibility evidence and agent workflow](docs/architecture/COMPATIBILITY-EVIDENCE.md)
-- [Architecture overview](docs/architecture/README.md)
-- [Project goals and compatibility](docs/architecture/GOALS.md)
-- [Dialect and version policy](docs/architecture/DIALECTS.md)
-- [Documentation policy](docs/DOCUMENTATION.md)
-- [GFA BASIC reference sources](docs/reference-sources.md)
-- [Language reference notes](docs/reference/README.md)
-- [Research procedures and historical evidence](docs/research/README.md)
-- [Conformance test corpus](tests/corpus/README.md)
-- [Frontend fuzzing strategy](docs/architecture/FUZZING.md)
-- [Open project work](https://github.com/vsimko/gfabasic-rust/issues)
+The OKF bundle is the progressive-disclosure map for project knowledge. Detailed technical documents, source code, tests, and GitHub issues remain the canonical sources for their respective content.
 
 ## Current scope and limitations
 
