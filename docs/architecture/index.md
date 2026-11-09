@@ -1,0 +1,30 @@
+# Architecture and engineering
+
+- [AI VERIFICATION](AI-VERIFICATION.md) - Documentation concepts in architecture.
+- [API PROFILES](API-PROFILES.md) - Documentation concepts in architecture.
+- [API REGISTRY](API-REGISTRY.md) - Documentation concepts in architecture.
+- [BENCHMARKING](BENCHMARKING.md) - Documentation concepts in architecture.
+- [CI](CI.md) - Documentation concepts in architecture.
+- [CLI AND CONFIG](CLI-AND-CONFIG.md) - Documentation concepts in architecture.
+- [COMPATIBILITY MATRIX](COMPATIBILITY-MATRIX.md) - Documentation concepts in architecture.
+- [DIAGNOSTICS](DIAGNOSTICS.md) - Documentation concepts in architecture.
+- [DIALECTS](DIALECTS.md) - Documentation concepts in architecture.
+- [FORMATTER](FORMATTER.md) - Documentation concepts in architecture.
+- [FUZZING](FUZZING.md) - Documentation concepts in architecture.
+- [GOALS](GOALS.md) - Documentation concepts in architecture.
+- [IMPLEMENTATION DASHBOARD](IMPLEMENTATION-DASHBOARD.md) - Documentation concepts in architecture.
+- [LANGUAGE TOOLING](LANGUAGE-TOOLING.md) - Documentation concepts in architecture.
+- [MEMORY](MEMORY.md) - Documentation concepts in architecture.
+- [MVP Vertical Slice](MVP-vertical-slice.md) - Documentation concepts in architecture.
+- [PIPELINE AND IR](PIPELINE-AND-IR.md) - Documentation concepts in architecture.
+- [Overview](README.md) - Documentation concepts in architecture.
+- [RELEASES](RELEASES.md) - Documentation concepts in architecture.
+- [RUNTIME](RUNTIME.md) - Documentation concepts in architecture.
+- [SECURITY](SECURITY.md) - Documentation concepts in architecture.
+- [TARGETS](TARGETS.md) - Documentation concepts in architecture.
+- [TESTING](TESTING.md) - Documentation concepts in architecture.
+- [VALIDATION](VALIDATION.md) - Documentation concepts in architecture.
+- [VERSIONING](VERSIONING.md) - Documentation concepts in architecture.
+- [WEBSITE PREVIEWS](WEBSITE_PREVIEWS.md) - Documentation concepts in architecture.
+- [WORKSPACE](WORKSPACE.md) - Documentation concepts in architecture.
+- [ADR](adr/) - Related documentation concepts.
