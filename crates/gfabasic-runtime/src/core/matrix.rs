@@ -26,6 +26,15 @@ pub struct MatrixMut<'a> {
 pub enum MatrixShapeError {
     /// The requested row/column product cannot be represented by `usize`.
     DimensionOverflow,
+    /// MAT INPUT contains a token that is not a floating-point number.
+    InvalidAsciiNumber {
+        token_index: usize,
+    },
+    /// MAT INPUT token count does not match the dimensioned field.
+    AsciiElementCountMismatch {
+        expected: usize,
+        actual: usize,
+    },
     /// A MAT READ cursor points beyond the available DATA values.
     DataCursorOutOfBounds {
         cursor: usize,
@@ -150,6 +159,14 @@ impl fmt::Display for MatrixShapeError {
     fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             Self::DimensionOverflow => write!(formatter, "matrix dimensions overflow usize"),
+            Self::InvalidAsciiNumber { token_index } => write!(
+                formatter,
+                "MAT INPUT token {token_index} is not a valid floating-point number"
+            ),
+            Self::AsciiElementCountMismatch { expected, actual } => write!(
+                formatter,
+                "MAT INPUT requires {expected} values, but input contains {actual}"
+            ),
             Self::DataCursorOutOfBounds {
                 cursor,
                 data_length,
@@ -314,6 +331,72 @@ impl<'a> MatrixMut<'a> {
     /// Number of columns in the view.
     pub fn columns(&self) -> usize {
         self.columns
+    }
+
+    /// Parse ASCII matrix/vector data into this field (Amiga 3.5 `MAT INPUT`).
+    ///
+    /// Commas and CR/LF row separators are accepted interchangeably; surrounding
+    /// whitespace and empty separator fields are ignored. All values are parsed
+    /// and the exact element count is checked before the field is modified.
+    pub fn parse_ascii_into(&mut self, input: &str) -> Result<(), MatrixShapeError> {
+        let tokens: Vec<&str> = input
+            .split(|character| character == ',' || character == '\\r' || character == '\\n')
+            .map(str::trim)
+            .filter(|token| !token.is_empty())
+            .collect();
+        if tokens.len() != self.elements.len() {
+            return Err(MatrixShapeError::AsciiElementCountMismatch {
+                expected: self.elements.len(),
+                actual: tokens.len(),
+            });
+        }
+
+        let mut values = Vec::with_capacity(tokens.len());
+        for (token_index, token) in tokens.iter().enumerate() {
+            let value = token
+                .parse::<f64>()
+                .map_err(|_| MatrixShapeError::InvalidAsciiNumber { token_index })?;
+            values.push(value);
+        }
+        self.elements.copy_from_slice(&values);
+        Ok(())
+    }
+
+    /// Format this field as comma-separated ASCII (Amiga 3.5 `MAT PRINT`).
+    ///
+    /// Vectors are emitted on one row. Matrices use one comma-separated row
+    /// per line and include a rowfeed after each row. This is the default
+    /// numeric representation; the original command's optional width/precision
+    /// formatting arguments are intentionally left to the interpreter adapter.
+    pub fn to_ascii(&self) -> String {
+        if self.rows == 1 || self.columns == 1 {
+            return self
+                .elements
+                .iter()
+                .map(f64::to_string)
+                .collect::<Vec<_>>()
+                .join(",");
+        }
+
+        let mut output = String::new();
+        for row in 0..self.rows {
+            if row > 0 {
+                output.push('\\n');
+            }
+            let start = row * self.columns;
+            let end = start + self.columns;
+            output.push_str(
+                &self.elements[start..end]
+                    .iter()
+                    .map(f64::to_string)
+                    .collect::<Vec<_>>()
+                    .join(","),
+            );
+        }
+        if self.rows > 0 {
+            output.push('\\n');
+        }
+        output
     }
 
     /// Read this previously dimensioned field from sequential DATA values
@@ -1419,6 +1502,52 @@ mod tests {
                 columns: 3,
             })
         );
+    }
+
+    #[test]
+    fn ascii_matrix_print_and_input_round_trip() {
+        let mut source = [1.0, 2.0, 3.0, 4.0];
+        let matrix = MatrixMut::new(2, 2, &mut source).unwrap();
+        let encoded = matrix.to_ascii();
+        assert_eq!(encoded, "1,2\\n3,4\\n");
+
+        let mut destination = [9.0; 4];
+        let mut matrix = MatrixMut::new(2, 2, &mut destination).unwrap();
+        matrix.parse_ascii_into(&encoded).unwrap();
+        assert_eq!(destination, [1.0, 2.0, 3.0, 4.0]);
+    }
+
+    #[test]
+    fn ascii_vector_is_printed_on_one_row_and_accepts_varied_separators() {
+        let mut source = [1.0, 2.0, 3.0];
+        let matrix = MatrixMut::new(3, 1, &mut source).unwrap();
+        assert_eq!(matrix.to_ascii(), "1,2,3");
+
+        let mut destination = [0.0; 3];
+        let mut matrix = MatrixMut::new(3, 1, &mut destination).unwrap();
+        matrix.parse_ascii_into("1, 2\\r\\n3,").unwrap();
+        assert_eq!(destination, [1.0, 2.0, 3.0]);
+    }
+
+    #[test]
+    fn ascii_input_rejects_bad_tokens_and_wrong_count_atomically() {
+        let mut destination = [9.0; 2];
+        let mut matrix = MatrixMut::new(1, 2, &mut destination).unwrap();
+
+        assert_eq!(
+            matrix.parse_ascii_into("1,nope"),
+            Err(MatrixShapeError::InvalidAsciiNumber { token_index: 1 })
+        );
+        assert_eq!(destination, [9.0; 2]);
+
+        assert_eq!(
+            matrix.parse_ascii_into("1"),
+            Err(MatrixShapeError::AsciiElementCountMismatch {
+                expected: 2,
+                actual: 1,
+            })
+        );
+        assert_eq!(destination, [9.0; 2]);
     }
 
     #[test]
