@@ -2120,20 +2120,26 @@ mod tests {
         use super::{TokenKind, lex_lossless};
         use crate::source::SourceSpan;
 
-        let boundaries = [" ", "\t", "\r", "\n", "+", "-", "#", "*", "=", "(", ")", ","];
+        let boundaries = [
+            " ", "\t", "\r", "\n", "+", "-", "#", "*", "=", "(", ")", ",",
+        ];
         for boundary in boundaries {
             for spelling in ["_DATA", "_0", "_9"] {
                 let source_text = format!("{spelling}{boundary}");
                 let mut sources = SourceMap::new();
                 let source_id = sources.add_source("special-name-boundaries.lst", &source_text);
-                let lexed = lex_lossless(source_id, &source_text)
-                    .unwrap_or_else(|errors| panic!("{spelling:?} before {boundary:?}: {errors:?}"));
+                let lexed = lex_lossless(source_id, &source_text).unwrap_or_else(|errors| {
+                    panic!("{spelling:?} before {boundary:?}: {errors:?}")
+                });
 
                 assert!(matches!(
                     &lexed.tokens[0].kind,
                     TokenKind::Identifier(name) if name == spelling
                 ));
-                assert_eq!(lexed.tokens[0].span, SourceSpan::new(source_id, 0, spelling.len()));
+                assert_eq!(
+                    lexed.tokens[0].span,
+                    SourceSpan::new(source_id, 0, spelling.len())
+                );
                 assert_eq!(
                     &source_text[lexed.tokens[0].span.start..lexed.tokens[0].span.end],
                     spelling
