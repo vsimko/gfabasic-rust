@@ -4,7 +4,7 @@ okf_version: "0.2"
 
 # Project documentation
 
-This is the canonical documentation bundle for gfabasic-rust. Markdown files in this tree are the editable source; the project website is a generated publication.
+This is the canonical OKF v0.2 documentation bundle for gfabasic-rust. Markdown files in this tree are the editable source; the project website is a generated publication.
 
 # Documentation policy and overview
 
