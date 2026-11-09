@@ -158,5 +158,5 @@ with open(os.path.join(out_dir, "analysis_stats.json"), "w") as handle:
         "strings_with_xrefs": strings_with_xrefs,
         "executable_blocks": sum(1 for block in blocks if block["execute"]),
     }, handle, indent=2)
-print("Exported %d functions, %d instructions, %d references, and %d string xrefs" %
-      (len(functions), instruction_count, reference_count, string_xref_count))
+print("Exported %d functions, %d instructions, %d references, %d string xrefs, and %d unclaimed instructions" %
+      (len(functions), instruction_count, reference_count, string_xref_count, unclaimed_count))
