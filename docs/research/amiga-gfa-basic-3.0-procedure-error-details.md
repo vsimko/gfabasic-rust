@@ -1,3 +1,8 @@
+---
+type: "Research Note"
+title: "GFA BASIC 3.0 Amiga — procedures, functions and error-flow evidence"
+---
+
 # GFA BASIC 3.0 Amiga — procedures, functions and error-flow evidence
 
 Source: *GFA BASIC 3.5 Interpreter*, Chapter 7, printed pp. 7-21–7-34. This is the 3.0 base-manual program-handling chapter.
