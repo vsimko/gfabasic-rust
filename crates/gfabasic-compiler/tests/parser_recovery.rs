@@ -245,7 +245,11 @@ fn parser_rejects_same_line_statements_and_recovers_at_the_next_line() {
     let diagnostics = parse(source_id, source)
         .expect_err("a second statement on the same line is outside the current MVP");
 
-    assert_eq!(diagnostics.len(), 1, "the following line should still parse");
+    assert_eq!(
+        diagnostics.len(),
+        1,
+        "the following line should still parse"
+    );
     assert_eq!(diagnostics[0].code, "GFA-PARSE-0001");
     let span = diagnostics[0]
         .primary_span
