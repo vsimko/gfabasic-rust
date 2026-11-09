@@ -21,6 +21,81 @@ pub struct MatrixMut<'a> {
     elements: &'a mut [f64],
 }
 
+/// GFA BASIC matrix index base used by MAT BASE 0 / MAT BASE 1.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct MatrixIndexBase {
+    base: usize,
+}
+
+/// Errors while translating GFA BASIC matrix indices to Rust offsets.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum MatrixIndexBaseError {
+    UnsupportedBase { value: usize },
+    IndexBelowBase { index: usize, base: usize },
+    IndexOverflow { offset: usize, base: usize },
+}
+
+impl fmt::Display for MatrixIndexBaseError {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Self::UnsupportedBase { value } => {
+                write!(formatter, "MAT BASE must be 0 or 1, got {value}")
+            }
+            Self::IndexBelowBase { index, base } => {
+                write!(formatter, "matrix index {index} is below MAT BASE {base}")
+            }
+            Self::IndexOverflow { offset, base } => write!(
+                formatter,
+                "matrix offset {offset} overflows with MAT BASE {base}"
+            ),
+        }
+    }
+}
+
+impl Error for MatrixIndexBaseError {}
+
+impl MatrixIndexBase {
+    /// Construct a matrix index base accepted by GFA BASIC 3.5.
+    pub fn new(base: usize) -> Result<Self, MatrixIndexBaseError> {
+        if base > 1 {
+            return Err(MatrixIndexBaseError::UnsupportedBase { value: base });
+        }
+        Ok(Self { base })
+    }
+
+    /// Current MAT BASE value.
+    pub fn value(self) -> usize {
+        self.base
+    }
+
+    /// Convert a GFA BASIC matrix index into a zero-based Rust offset.
+    pub fn to_offset(self, index: usize) -> Result<usize, MatrixIndexBaseError> {
+        index
+            .checked_sub(self.base)
+            .ok_or(MatrixIndexBaseError::IndexBelowBase {
+                index,
+                base: self.base,
+            })
+    }
+
+    /// Convert a zero-based Rust offset into a GFA BASIC matrix index.
+    pub fn to_index(self, offset: usize) -> Result<usize, MatrixIndexBaseError> {
+        offset
+            .checked_add(self.base)
+            .ok_or(MatrixIndexBaseError::IndexOverflow {
+                offset,
+                base: self.base,
+            })
+    }
+}
+
+impl Default for MatrixIndexBase {
+    /// GFA BASIC 3.5 defaults MAT BASE to 1.
+    fn default() -> Self {
+        Self { base: 1 }
+    }
+}
+
 /// Errors detected while constructing or operating on a matrix view.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum MatrixShapeError {
@@ -1326,7 +1401,10 @@ pub fn dot_product(left: &[f64], right: &[f64]) -> Result<f64, MatrixShapeError>
 
 #[cfg(test)]
 mod tests {
-    use super::{MatrixMut, MatrixShapeError, dot_product, vector_matrix_vector_product};
+    use super::{
+        MatrixIndexBase, MatrixIndexBaseError, MatrixMut, MatrixShapeError, dot_product,
+        vector_matrix_vector_product,
+    };
 
     #[test]
     fn clear_zeros_a_row_vector() {
@@ -1644,6 +1722,44 @@ mod tests {
             );
         }
         assert_eq!(destination, [9.0; 2]);
+    }
+
+    #[test]
+    fn matrix_index_base_defaults_to_one_and_maps_indices() {
+        let base = MatrixIndexBase::default();
+
+        assert_eq!(base.value(), 1);
+        assert_eq!(base.to_offset(1), Ok(0));
+        assert_eq!(base.to_offset(5), Ok(4));
+        assert_eq!(base.to_index(4), Ok(5));
+    }
+
+    #[test]
+    fn matrix_index_base_zero_maps_indices_without_adjustment() {
+        let base = MatrixIndexBase::new(0).unwrap();
+
+        assert_eq!(base.to_offset(0), Ok(0));
+        assert_eq!(base.to_offset(5), Ok(5));
+        assert_eq!(base.to_index(5), Ok(5));
+    }
+
+    #[test]
+    fn matrix_index_base_rejects_invalid_values_and_overflow() {
+        assert_eq!(
+            MatrixIndexBase::new(2),
+            Err(MatrixIndexBaseError::UnsupportedBase { value: 2 })
+        );
+        assert_eq!(
+            MatrixIndexBase::default().to_offset(0),
+            Err(MatrixIndexBaseError::IndexBelowBase { index: 0, base: 1 })
+        );
+        assert_eq!(
+            MatrixIndexBase::default().to_index(usize::MAX),
+            Err(MatrixIndexBaseError::IndexOverflow {
+                offset: usize::MAX,
+                base: 1,
+            })
+        );
     }
 
     #[test]
