@@ -284,7 +284,7 @@ mod tests {
 
     #[test]
     fn diagnoses_each_unresolved_print_reference_with_its_own_span() {
-        let source_text = "PRINT x,x\\n";
+        let source_text = "PRINT x,x\n";
         let mut sources = SourceMap::new();
         let source_id = sources.add_source("multiple-unresolved.bas", source_text);
         let document = parse_document(source_id, source_text).expect("syntax is valid");
