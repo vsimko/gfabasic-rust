@@ -1,3 +1,8 @@
+---
+type: "Research Note"
+title: "Research materials"
+---
+
 # Research materials
 
 This directory contains research procedures and analysis of historical material. It is not a normative language specification and does not define implementation support.
