@@ -34,7 +34,7 @@ report = [
     "|---:|---:|---|",
 ]
 for item in strings:
-    text = item["text"].replace("|", r"\\|").replace("\\n", " ")
+    text = item["text"].replace("|", r"\|").replace("\n", " ")
     report.append(f'| 0x{item["offset"]:X} | {item["length"]} | {text} |')
 
 report += [
@@ -54,7 +54,7 @@ for item in string_xrefs:
         for ref in item["references"]
     ))
     sources = ", ".join(f'0x{ref["from"]:X}' for ref in item["references"])
-    text = item["text"].replace("|", r"\\|").replace("\\n", " ")
+    text = item["text"].replace("|", r"\|").replace("\n", " ")
     report.append(
         f'| {text} | 0x{item["file_offset"]:X} | {", ".join(names)} | {sources} |'
     )
@@ -75,4 +75,4 @@ for item in functions:
         f'| 0x{item["entry"]:X} | `{item["name"]}` | {item["size"]} | `{item["file"]}` |'
     )
 
-(out / "REPORT.md").write_text("\\n".join(report) + "\\n", encoding="utf-8")
+(out / "REPORT.md").write_text("\n".join(report) + "\n", encoding="utf-8")
