@@ -1,0 +1,82 @@
+{
+  "id": "gfa.language.math.combin",
+  "name": "COMBIN",
+  "kind": "function",
+  "namespace": "language-core",
+  "category": "math-and-matrix",
+  "availability": [
+    {
+      "dialect": "amiga-gfa-basic-interpreter",
+      "versions": [
+        "3.5"
+      ]
+    }
+  ],
+  "syntax": [
+    {
+      "form": "COMBIN(integer-expression, integer-expression)",
+      "contexts": [
+        "expression"
+      ],
+      "arguments": [
+        {
+          "name": "n",
+          "type": "integer expression",
+          "required": true
+        },
+        {
+          "name": "k",
+          "type": "integer expression",
+          "required": true
+        }
+      ]
+    }
+  ],
+  "signature": {
+    "returns": "arithmetic expression"
+  },
+  "semantics": {
+    "summary": "Returns the number of k-combinations of n elements without repetition: n!/((n-k)!*k!).",
+    "errors": [],
+    "side-effects": []
+  },
+  "evidence": {
+    "source-scope": "amiga-3.5-addendum",
+    "status": "book-documented",
+    "sources": [
+      "AM-INTERPRETER-35",
+      "AM-BOOK-DE-1990"
+    ],
+    "printed-pages": [
+      "Chapter 13, printed pp. 13-33–13-34 (same feature: combined update scan pp. 14-1–14-2)",
+      "Chapter 19.1, printed p. 479 (explicit 3.5 additions)"
+    ],
+    "notes": [
+      "The 3.5 addendum page images were checked. Both arguments are documented as integer expressions.",
+      "The companion German book explicitly places COMBIN among the 3.5 additions and states the domain condition n >= k (printed p. 479).",
+      "The existing prototype evaluates only a restricted literal subset; it has no stable registry handler mapping and is not a complete implementation."
+    ]
+  },
+  "implementation": {
+    "status": "partial",
+    "handler": "gfa.runtime.core.math.combin",
+    "notes": [
+      "A typed Rust runtime handler is registered. Checked u32 inputs, u128 results, and Rust errors for invalid domain or overflow are implementation-boundary choices, not original-interpreter conformance claims."
+    ]
+  },
+  "support": [
+    {
+      "target": "x86_64-unknown-linux-gnu",
+      "classification": "partial",
+      "conformance": "not-tested",
+      "tests": [],
+      "pending-reason": "Original numeric range/representation and reference-interpreter overflow/error behavior remain unverified."
+    }
+  ],
+  "docs": {
+    "path": "docs/research/amiga-gfa-basic-35-addendum-inventory.md",
+    "anchors": [
+      "4-additional-commands-in-version-35-combined-scan-chapter-14-printed-pp-14-1-14-7"
+    ]
+  }
+}
