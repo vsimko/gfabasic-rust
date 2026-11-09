@@ -1,0 +1,123 @@
+{
+  "id": "gfa.language.matrix.mat-add",
+  "name": "MAT ADD",
+  "kind": "statement",
+  "namespace": "language-core",
+  "category": "matrix-operations",
+  "availability": [
+    {
+      "dialect": "amiga-gfa-basic-interpreter",
+      "versions": [
+        "3.5"
+      ]
+    }
+  ],
+  "syntax": [
+    {
+      "form": "MAT ADD destination()=left()+right()",
+      "contexts": [
+        "statement"
+      ],
+      "arguments": [
+        {
+          "name": "destination",
+          "type": "floating-point matrix or vector",
+          "required": true,
+          "passing": "array"
+        },
+        {
+          "name": "left",
+          "type": "floating-point matrix or vector",
+          "required": true,
+          "passing": "array"
+        },
+        {
+          "name": "right",
+          "type": "floating-point matrix or vector",
+          "required": true,
+          "passing": "array"
+        }
+      ]
+    },
+    {
+      "form": "MAT ADD destination(),source()",
+      "contexts": [
+        "statement"
+      ],
+      "arguments": [
+        {
+          "name": "destination",
+          "type": "floating-point matrix or vector",
+          "required": true,
+          "passing": "array"
+        },
+        {
+          "name": "source",
+          "type": "floating-point matrix or vector",
+          "required": true,
+          "passing": "array"
+        }
+      ]
+    },
+    {
+      "form": "MAT ADD destination(),scalar",
+      "contexts": [
+        "statement"
+      ],
+      "arguments": [
+        {
+          "name": "destination",
+          "type": "floating-point matrix or vector",
+          "required": true,
+          "passing": "array"
+        },
+        {
+          "name": "scalar",
+          "type": "numeric scalar expression",
+          "required": true
+        }
+      ]
+    }
+  ],
+  "signature": {
+    "type": "no return value"
+  },
+  "semantics": {
+    "summary": "Adds matrices/vectors element by element, or adds a scalar to every element. The three-field form writes the result to a destination; the two-argument forms mutate the destination in place. Array operands in the element-wise forms must have the same order.",
+    "side-effects": [
+      "The in-place forms replace the original destination values."
+    ],
+    "errors": []
+  },
+  "evidence": {
+    "source-scope": "amiga-3.5-addendum",
+    "status": "book-documented",
+    "sources": [
+      "AM-INTERPRETER-35"
+    ],
+    "printed-pages": [
+      "Chapter 13, printed pp. 13-16–13-18"
+    ],
+    "notes": [
+      "The page-image-reviewed addendum documents all three forms, equal-order requirements, and in-place mutation."
+    ]
+  },
+  "implementation": {
+    "status": "not-implemented"
+  },
+  "support": [
+    {
+      "target": "x86_64-unknown-linux-gnu",
+      "classification": "unknown",
+      "conformance": "not-tested",
+      "tests": [],
+      "pending-reason": "No matrix addition implementation or executable reference-interpreter conformance tests are registered."
+    }
+  ],
+  "docs": {
+    "path": "docs/research/amiga-gfa-basic-35-addendum-inventory.md",
+    "anchors": [
+      "3-linear-operations-on-numeric-fields"
+    ]
+  }
+}
