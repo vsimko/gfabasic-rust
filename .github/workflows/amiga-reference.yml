@@ -1,21 +1,37 @@
-name: Prepare Amiga reference interpreter
+name: Prepare and analyze Amiga GFA-BASIC reference interpreter
 
 on:
+  # Analyze automatically when the interpreter-analysis pipeline or its scripts change.
+  # This also runs for pushes to the active development branch, so no UI dispatch is needed.
+  push:
+    branches:
+      - main
+      - research/amiga-command-syntax-workflow
+    paths:
+      - .github/workflows/amiga-reference.yml
+      - scripts/amiga_binary_strings.py
+      - scripts/build_amiga_analysis_report.py
+      - scripts/publish_private_amiga_analysis.sh
+      - scripts/ghidra/**
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
+  pull-requests: write
 
 concurrency:
   group: amiga-reference-assets
   cancel-in-progress: false
 
 jobs:
-  prepare:
-    name: Fetch and verify GFA BASIC 3.52
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
+  prepare-and-analyze:
+    name: Fetch, verify, and analyze GFA BASIC 3.52
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
     steps:
+      - name: Check out analysis scripts
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+
       - name: Download private interpreter binary
         env:
           GFA_ASSETS_TOKEN: ${{ secrets.GFA_ASSETS_TOKEN }}
@@ -25,7 +41,7 @@ jobs:
             echo "::error::GFA_ASSETS_TOKEN is not configured."
             exit 1
           }
-          mkdir -p dist/amiga/gfa-basic-3.52
+          mkdir -p dist/amiga/gfa-basic-3.52 analysis-input analysis-output
           curl --fail --silent --show-error --location --retry 3 \
             --header "Authorization: Bearer $GFA_ASSETS_TOKEN" \
             --header "Accept: application/vnd.github.raw" \
@@ -40,6 +56,7 @@ jobs:
           test "$(wc -c < GFABasic)" -eq 136548
           printf '\x00\x00\x03\xf3' | cmp -n 4 - GFABasic
           file GFABasic || true
+          cp GFABasic "$GITHUB_WORKSPACE/analysis-input/GFABasic"
 
       - name: Package emulator input
         run: |
@@ -62,3 +79,149 @@ jobs:
           path: dist/gfa-basic-3.52-amiga.tar.gz
           if-no-files-found: error
           retention-days: 7
+
+      - name: Install Java and analysis utilities
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install --yes openjdk-21-jdk unzip jq python3
+          java -version
+
+      - name: Download Ghidra
+        run: |
+          set -euo pipefail
+          URL="$(curl --fail --silent --show-error https://api.github.com/repos/NationalSecurityAgency/ghidra/releases/latest |
+            jq -r '.assets[] | select(.name | test("^ghidra_.*PUBLIC.*\\.zip$")) | .browser_download_url' | head -n 1)"
+          test -n "$URL"
+          curl --fail --location --silent --show-error --retry 5 --retry-all-errors --retry-delay 5 --connect-timeout 30 --max-time 900 "$URL" -o /tmp/ghidra.zip
+          mkdir -p /opt/ghidra
+          unzip -q /tmp/ghidra.zip -d /opt/ghidra
+          echo "GHIDRA_HOME=$(find /opt/ghidra -mindepth 1 -maxdepth 1 -type d | head -n 1)" >> "$GITHUB_ENV"
+
+      - name: Extract printable strings with file offsets
+        run: python3 scripts/amiga_binary_strings.py analysis-input/GFABasic analysis-output/strings.json
+
+      - name: Import and analyze Amiga executable with Ghidra
+        run: |
+          set -euo pipefail
+          # Ghidra 12 removed the bundled Jython runtime. Launch headless mode
+          # through PyGhidra so the existing CPython exporter is available.
+          python3 -m venv /tmp/pyghidra-venv
+          /tmp/pyghidra-venv/bin/python -m pip install --no-index \
+            --find-links "$GHIDRA_HOME/Ghidra/Features/PyGhidra/pypkg/dist" pyghidra
+          mkdir -p /tmp/ghidra-project
+          /tmp/pyghidra-venv/bin/python -m pyghidra.ghidra_launch \
+            --install-dir "$GHIDRA_HOME" \
+            ghidra.app.util.headless.AnalyzeHeadless \
+            /tmp/ghidra-project GfaBasic352 \
+            -import analysis-input/GFABasic \
+            -processor "68000:BE:32:default" \
+            -scriptPath scripts/ghidra \
+            -postScript ExportGfaAnalysis.py "$GITHUB_WORKSPACE/analysis-output" \
+            -deleteProject
+
+      - name: Build analysis index
+        run: python3 scripts/build_amiga_analysis_report.py analysis-output
+
+      - name: Validate Ghidra analysis outputs
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+
+          out = Path("analysis-output")
+          required = (
+              "REPORT.md", "strings.json", "functions.json",
+              "memory_blocks.json", "analysis_stats.json",
+              "instructions.jsonl", "references.jsonl", "decompiled.c",
+          )
+          missing = [name for name in required if not (out / name).is_file()]
+          if missing:
+              raise SystemExit(f"Missing analysis outputs: {', '.join(missing)}")
+
+          stats = json.loads((out / "analysis_stats.json").read_text())
+          functions = json.loads((out / "functions.json").read_text())
+          blocks = json.loads((out / "memory_blocks.json").read_text())
+          if not functions:
+              raise SystemExit("Ghidra did not discover any functions; refusing to publish")
+          if not stats.get("instructions", 0):
+              raise SystemExit("Ghidra exported no instructions; refusing to publish")
+          if not any(block.get("execute") and block.get("initialized") for block in blocks):
+              raise SystemExit("No initialized executable memory block was imported")
+          if (out / "decompiled.c").stat().st_size == 0:
+              raise SystemExit("Ghidra decompilation output is empty")
+          for filename, key in (("instructions.jsonl", "instructions"),
+                                ("references.jsonl", "references")):
+              actual = sum(1 for line in (out / filename).open() if line.strip())
+              if actual != stats.get(key):
+                  raise SystemExit(
+                      f"{filename}: expected {stats.get(key)} records, found {actual}"
+                  )
+          print(
+              f"Validated {len(functions)} functions, "
+              f"{stats['instructions']} instructions, "
+              f"{stats['references']} references"
+          )
+          PY
+
+      - name: Publish complete analysis to private assets repository
+        env:
+          GFA_ASSETS_TOKEN: ${{ secrets.GFA_ASSETS_TOKEN }}
+        run: bash scripts/publish_private_amiga_analysis.sh
+
+      - name: Publish reviewed analysis data through a pull request
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          ANALYSIS_BRANCH="amiga-analysis/3.52"
+          mkdir -p analysis/amiga-3.52
+          cp analysis-output/REPORT.md analysis-output/strings.json \
+            analysis-output/functions.json analysis-output/memory_blocks.json \
+            analysis-output/analysis_stats.json analysis-output/instructions.jsonl \
+            analysis-output/references.jsonl analysis/amiga-3.52/
+          cat > analysis/amiga-3.52/README.md <<'EOF'
+          # GFA BASIC 3.52 Amiga binary analysis
+
+          Generated by the `amiga-reference.yml` workflow from the privately
+          held GFA BASIC 3.52 executable. This is reverse-engineering evidence
+          for 3.52, not a verified specification for GFA BASIC 3.5.
+          Decompiled C files and the original executable are intentionally
+          excluded from this public analysis branch.
+          EOF
+
+          mkdir -p /tmp/published-analysis
+          cp analysis/amiga-3.52/* /tmp/published-analysis/
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch origin main
+          git checkout -B "$ANALYSIS_BRANCH" origin/main
+          mkdir -p analysis/amiga-3.52
+          cp /tmp/published-analysis/* analysis/amiga-3.52/
+          git add analysis/amiga-3.52
+          if git diff --cached --quiet; then
+            echo "Analysis branch already contains the current results."
+            exit 0
+          fi
+          git commit -m "Update generated GFA BASIC 3.52 analysis"
+          git push --force origin "$ANALYSIS_BRANCH"
+          EXISTING_PR="$(gh pr list --repo "$GITHUB_REPOSITORY" --head "$ANALYSIS_BRANCH" --state open --json url --jq '.[0].url // empty')"
+          if [ -z "$EXISTING_PR" ]; then
+            if ! gh pr create --repo "$GITHUB_REPOSITORY" \
+              --base main --head "$ANALYSIS_BRANCH" \
+              --title "Update generated Amiga GFA BASIC 3.52 analysis" \
+              --body "Automated output from the Amiga GFA-BASIC reference workflow. Binary-derived findings are labelled 3.52 and must not be treated as a verified 3.5 specification."; then
+              echo "::warning::Analysis branch was pushed, but GitHub Actions is not allowed to create pull requests. Create one from https://github.com/$GITHUB_REPOSITORY/pull/new/$ANALYSIS_BRANCH"
+            fi
+          else
+            echo "Updated existing analysis PR: $EXISTING_PR"
+          fi
+
+      - name: Upload reverse-engineering results
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: amiga-gfa-basic-analysis
+          path: analysis-output/
+          if-no-files-found: error
+          retention-days: 30
