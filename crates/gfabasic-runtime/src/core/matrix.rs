@@ -1207,8 +1207,8 @@ fn quick_determinant_of_square(elements: &[f64], size: usize) -> f64 {
     for pivot_column in 0..size {
         let mut pivot_row = pivot_column;
         if work[pivot_row * size + pivot_column] == 0.0 {
-            let Some(nonzero_row) = ((pivot_column + 1)..size)
-                .find(|row| work[*row * size + pivot_column] != 0.0)
+            let Some(nonzero_row) =
+                ((pivot_column + 1)..size).find(|row| work[*row * size + pivot_column] != 0.0)
             else {
                 return 0.0;
             };
