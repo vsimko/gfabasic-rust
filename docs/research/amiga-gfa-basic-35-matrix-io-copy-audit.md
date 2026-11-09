@@ -1,3 +1,8 @@
+---
+type: "Research Note"
+title: "Amiga GFA BASIC 3.5 — matrix I/O and copy declaration audit"
+---
+
 # Amiga GFA BASIC 3.5 — matrix I/O and copy declaration audit
 
 Primary source: *GFA BASIC 3.5 Interpreter*, Chapter 13 addendum, printed pp. 13-3–13-20. The statements below are explicitly part of the Amiga interpreter 3.5 addendum. The documented matrix operations are restricted to one- and/or two-dimensional fields with floating-point variables (p. 13-1). These source facts do not establish runtime conformance of the Rust implementation.
