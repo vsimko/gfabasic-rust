@@ -1,0 +1,16 @@
+id = "amiga-3.5-mat-sub"
+dialect = "GFA BASIC Amiga"
+version = "3.5"
+api_profiles = []
+kind = "semantic"
+status = "verified"
+source_key = "AM-INTERPRETER-35"
+source_pages = "printed pp. 13-18–13-19"
+evidence_status = "page-image-verified"
+expectation = "MAT SUB a()=b()-c() writes the element-wise difference of equal-order matrices b and c to a; MAT SUB a(),x subtracts x element-wise from a in place."
+notes = [
+  "Independently authored minimal fixture; not copied from the manual's example.",
+  "Covers the destination form and in-place scalar form documented for MAT SUB.",
+  "The 3.5 addendum documents equal-order requirements for matrix subtraction and scalar subtraction for matrices or vectors.",
+  "Verified against the supplied Amiga GFA BASIC 3.5 addendum page images; no original interpreter execution has been performed.",
+]
