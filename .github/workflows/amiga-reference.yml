@@ -125,6 +125,8 @@ jobs:
           excluded from this public analysis branch.
           EOF
 
+          mkdir -p /tmp/published-analysis
+          cp analysis/amiga-3.52/* /tmp/published-analysis/
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git fetch origin "$ANALYSIS_BRANCH" || true
@@ -136,7 +138,7 @@ jobs:
             git rm -rf . >/dev/null 2>&1 || true
           fi
           mkdir -p analysis/amiga-3.52
-          cp "$GITHUB_WORKSPACE"/analysis/amiga-3.52/* analysis/amiga-3.52/
+          cp /tmp/published-analysis/* analysis/amiga-3.52/
           git add analysis/amiga-3.52
           if git diff --cached --quiet; then
             echo "Analysis branch already contains the current results."
