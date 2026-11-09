@@ -135,3 +135,33 @@ fn parser_preserves_statement_spans_in_the_original_listing() {
             && token.span.end == 1
     }));
 }
+
+#[test]
+fn parser_recovery_keeps_the_next_line_after_trailing_print_comma() {
+    let source = "PRINT x,\\nLET y=1\\n";
+    let mut sources = SourceMap::new();
+    let source_id = sources.add_source("trailing-print-comma.LST", source);
+
+    let diagnostics = parse(source_id, source)
+        .expect_err("a trailing comma must not turn an incomplete PRINT into a valid statement");
+
+    assert_eq!(diagnostics.len(), 2);
+    assert_eq!(diagnostics[0].code, "GFA-PARSE-0001");
+    assert_eq!(
+        diagnostics[0]
+            .primary_span
+            .expect("syntax error has a span")
+            .start,
+        8,
+        "missing PRINT operand is reported at the line boundary"
+    );
+    assert_eq!(diagnostics[1].code, "GFA-SUPPORT-0001");
+    assert_eq!(
+        diagnostics[1]
+            .primary_span
+            .expect("unsupported statement has a span")
+            .start,
+        9,
+        "recovery must resume at the following source line"
+    );
+}
