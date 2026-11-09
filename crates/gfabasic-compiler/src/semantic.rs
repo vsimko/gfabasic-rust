@@ -294,24 +294,14 @@ mod tests {
         assert_eq!(symbols.symbols.len(), 2);
         assert_eq!(symbols.symbols[0].id, SymbolId(0));
         assert_eq!(symbols.symbols[0].name, "x");
-        assert_eq!(
-            sources.slice(symbols.symbols[0].declaration),
-            Some("x")
-        );
+        assert_eq!(sources.slice(symbols.symbols[0].declaration), Some("x"));
         assert_eq!(symbols.symbols[1].id, SymbolId(1));
         assert_eq!(symbols.symbols[1].name, "y");
-        assert_eq!(
-            sources.slice(symbols.symbols[1].declaration),
-            Some("y")
-        );
+        assert_eq!(sources.slice(symbols.symbols[1].declaration), Some("y"));
 
         let references: Vec<_> = symbols.references.iter().collect();
         assert_eq!(references.len(), 3);
-        let expected = [
-            (SymbolId(1), "y"),
-            (SymbolId(0), "x"),
-            (SymbolId(1), "y"),
-        ];
+        let expected = [(SymbolId(1), "y"), (SymbolId(0), "x"), (SymbolId(1), "y")];
         for (reference, (expected_symbol, expected_name)) in references.iter().zip(expected) {
             assert_eq!(reference.symbol, expected_symbol);
             assert_eq!(sources.slice(reference.span), Some(expected_name));
