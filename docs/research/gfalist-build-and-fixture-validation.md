@@ -1,3 +1,8 @@
+---
+type: "Research Note"
+title: "gfalist build and fixture validation"
+---
+
 # gfalist build and fixture validation
 
 ## Scope
