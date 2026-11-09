@@ -109,6 +109,7 @@ mod tests {
 
     #[derive(Debug, PartialEq)]
     enum Meaning {
+        Integer(String, i64),
         Fact(String, i64),
         Variat(String, i64, i64),
         Combin(String, i64, i64),
@@ -143,6 +144,9 @@ mod tests {
             .statements
             .iter()
             .map(|statement| match statement {
+                Statement::AssignInteger { name, value, .. } => {
+                    Meaning::Integer(name.clone(), *value)
+                }
                 Statement::AssignFact { name, argument, .. } => {
                     Meaning::Fact(name.clone(), *argument)
                 }
@@ -608,6 +612,14 @@ mod tests {
                 "source unexpectedly accepted: {source:?}"
             );
         }
+    }
+
+    #[test]
+    fn integer_literal_assignments_are_formatted_idempotently() {
+        let source = "x=42\nLET y=7\n";
+        let formatted = format(source);
+        assert_eq!(formatted, "x = 42\nLET y = 7\n");
+        assert_eq!(format(&formatted), formatted);
     }
 
     #[test]
