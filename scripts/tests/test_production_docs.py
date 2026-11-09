@@ -37,7 +37,7 @@ def main() -> None:
     assert "Amiga 3.5 and Linux SDL3 product scope" in adr_html
     assert "<script" not in adr_html.lower()
 
-    css_href = 'href="../../../../styles.css"'
+    css_href = 'href="../../../styles.css"'
     assert css_href in adr_html
     css_url = adr_url.rsplit("/", 4)[0] + "/styles.css"
     fetch(css_url)
