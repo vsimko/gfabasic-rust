@@ -35,10 +35,8 @@ impl Error for RadixFormatError {}
 ///
 /// An optional width pads the result with leading zeroes and must be 1..=32.
 pub fn bin(value: i32, width: Option<usize>) -> Result<String, RadixFormatError> {
-    if let Some(width) = width {
-        if !(1..=32).contains(&width) {
-            return Err(RadixFormatError::BinaryWidthOutOfRange { width });
-        }
+    if let Some(width) = width.filter(|width| !(1..=32).contains(width)) {
+        return Err(RadixFormatError::BinaryWidthOutOfRange { width });
     }
     Ok(format!(
         "{:0width$b}",
@@ -51,10 +49,8 @@ pub fn bin(value: i32, width: Option<usize>) -> Result<String, RadixFormatError>
 ///
 /// An optional width pads the result with leading zeroes and must be 0..=11.
 pub fn oct(value: i32, width: Option<usize>) -> Result<String, RadixFormatError> {
-    if let Some(width) = width {
-        if width > 11 {
-            return Err(RadixFormatError::OctalWidthOutOfRange { width });
-        }
+    if let Some(width) = width.filter(|width| *width > 11) {
+        return Err(RadixFormatError::OctalWidthOutOfRange { width });
     }
     Ok(format!(
         "{:0width$o}",
