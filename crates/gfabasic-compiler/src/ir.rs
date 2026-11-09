@@ -8,6 +8,7 @@ use std::collections::{BTreeMap, BTreeSet};
 
 use crate::frontend::{Program, Statement};
 use crate::source::SourceSpan;
+use gfabasic_runtime::core::handlers::resolve_handler;
 
 /// Stable identity of a value within one IR module.
 #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
@@ -63,31 +64,10 @@ impl IrError {
     }
 }
 
-fn factorial(n: i64) -> Option<i64> {
-    if !(0..=20).contains(&n) {
-        return None;
-    }
-    (1..=n).try_fold(1_i64, |acc, x| acc.checked_mul(x))
-}
-
-fn variat(n: i64, k: i64) -> Option<i64> {
-    if !(0..=20).contains(&n) || !(0..=n).contains(&k) {
-        return None;
-    }
-    ((n - k + 1)..=n).try_fold(1_i64, |acc, x| acc.checked_mul(x))
-}
-
-fn combin(n: i64, k: i64) -> Option<i64> {
-    if !(0..=20).contains(&n) || !(0..=n).contains(&k) {
-        return None;
-    }
-    let k = k.min(n - k);
-    let mut value = 1_i64;
-    for i in 1..=k {
-        value = value.checked_mul(n - k + i)?;
-        value /= i;
-    }
-    Some(value)
+fn invoke_intrinsic(handler_id: &str, arguments: &[i64]) -> Option<i64> {
+    let handler = resolve_handler(handler_id)?;
+    let result = handler.handler.invoke(arguments).ok()?;
+    i64::try_from(result).ok()
 }
 
 /// Lower the current frontend AST to typed, constant-valued IR.
@@ -108,7 +88,7 @@ pub fn lower(program: &Program) -> Result<Module, Vec<IrError>> {
                 argument,
                 span,
             } => {
-                let value = factorial(*argument);
+                let value = invoke_intrinsic("gfa.runtime.core.math.fact", &[*argument]);
                 lower_assignment(
                     name,
                     value,
@@ -120,7 +100,7 @@ pub fn lower(program: &Program) -> Result<Module, Vec<IrError>> {
                 );
             }
             Statement::AssignVariat { name, n, k, span } => {
-                let value = variat(*n, *k);
+                let value = invoke_intrinsic("gfa.runtime.core.math.variat", &[*n, *k]);
                 lower_assignment(
                     name,
                     value,
@@ -132,7 +112,7 @@ pub fn lower(program: &Program) -> Result<Module, Vec<IrError>> {
                 );
             }
             Statement::AssignCombin { name, n, k, span } => {
-                let value = combin(*n, *k);
+                let value = invoke_intrinsic("gfa.runtime.core.math.combin", &[*n, *k]);
                 lower_assignment(
                     name,
                     value,
