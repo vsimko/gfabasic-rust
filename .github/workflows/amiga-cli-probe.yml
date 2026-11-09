@@ -190,12 +190,14 @@ jobs:
             tesseract "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-shortcut.png" stdout 2>/dev/null > "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-shortcut-ocr.txt"
             # OCR can misread the requester title ("Merge File" as "Merge Abbruch"),
             # so do not gate the fallback click on exact title recognition.
-            # Pointer is over the selected row (~382,238); Merge gadget center is (~323,420).
-            # With calibrated scaling, two (-177,+183) relative steps reach the gadget.
+            # The first calibrated move landed at (~260,360), on the left
+            # edge of the requester. From there the Merge gadget center is
+            # (~323,420); measured scale is ~0.34 screen px per IPC unit.
             for _ in 1 2; do
               printf "SEND_MOUSE\\t-177\\t183\\t0\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
               sleep 0.2
             done
+            printf "SEND_MOUSE\\t206\\t198\\t0\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
             sleep 0.5
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-gadget-pointer.png" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
             printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${IPC_SOCKET_PATH}"
