@@ -142,6 +142,51 @@ pub fn rinstr(input: &[u8], needle: &[u8], start: Option<usize>) -> usize {
         .map_or(0, |position| position + 1)
 }
 
+/// Left-justify source bytes in a fixed-length destination (GFA BASIC LSET).
+///
+/// The destination length is preserved. Remaining bytes are padded with spaces;
+/// source bytes beyond the destination length are truncated.
+pub fn lset(destination: &mut [u8], source: &[u8]) {
+    destination.fill(b' ');
+    let length = destination.len().min(source.len());
+    destination[..length].copy_from_slice(&source[..length]);
+}
+
+/// Right-justify source bytes in a fixed-length destination (GFA BASIC RSET).
+///
+/// The destination length is preserved. Leading bytes are padded with spaces;
+/// if the source is too long, its rightmost bytes are retained.
+pub fn rset(destination: &mut [u8], source: &[u8]) {
+    destination.fill(b' ');
+    let length = destination.len().min(source.len());
+    let destination_start = destination.len() - length;
+    let source_start = source.len() - length;
+    destination[destination_start..].copy_from_slice(&source[source_start..]);
+}
+
+/// Overwrite part of a fixed-length string (GFA BASIC MID$ as a command).
+///
+/// start is one-based. The destination length never changes, and the operation
+/// stops at the end of either the source or destination. An optional count
+/// limits the number of source bytes written. Returns the number of bytes copied.
+pub fn mid_assign(
+    destination: &mut [u8],
+    start: usize,
+    count: Option<usize>,
+    source: &[u8],
+) -> usize {
+    if start == 0 || start > destination.len() {
+        return 0;
+    }
+    let offset = start - 1;
+    let length = count
+        .unwrap_or(source.len())
+        .min(source.len())
+        .min(destination.len() - offset);
+    destination[offset..offset + length].copy_from_slice(&source[..length]);
+    length
+}
+
 /// Return the number of bytes in a GFA BASIC byte string.
 pub fn len(input: &[u8]) -> usize {
     input.len()
@@ -168,8 +213,8 @@ pub fn upper(input: &[u8]) -> Vec<u8> {
 #[cfg(test)]
 mod tests {
     use super::{
-        StringError, asc, chr, instr, left, len, mid, pred, right, rinstr, spaces, string_repeat,
-        string_repeat_code, succ, trim, upper,
+        StringError, asc, chr, instr, left, len, lset, mid, mid_assign, pred, right, rinstr, rset,
+        spaces, string_repeat, string_repeat_code, succ, trim, upper,
     };
 
     #[test]
@@ -245,6 +290,47 @@ mod tests {
         assert_eq!(rinstr(b"a/b/c", b"/", None), 4);
         assert_eq!(rinstr(b"a/b/c", b"/", Some(3)), 2);
         assert_eq!(rinstr(b"a/b/c", b"z", None), 0);
+    }
+
+    #[test]
+    fn lset_and_rset_preserve_destination_length_and_pad() {
+        let mut left = *b"........";
+        lset(&mut left, b"abc");
+        assert_eq!(&left, b"abc     ");
+
+        let mut right = *b"........";
+        rset(&mut right, b"abc");
+        assert_eq!(&right, b"     abc");
+    }
+
+    #[test]
+    fn lset_and_rset_truncate_overlong_sources_from_expected_side() {
+        let mut left = *b"....";
+        lset(&mut left, b"abcdef");
+        assert_eq!(&left, b"abcd");
+
+        let mut right = *b"....";
+        rset(&mut right, b"abcdef");
+        assert_eq!(&right, b"cdef");
+    }
+
+    #[test]
+    fn mid_assign_overwrites_without_changing_destination_length() {
+        let mut destination = *b"abcdefgh";
+        let copied = mid_assign(&mut destination, 3, Some(3), b"XYZ123");
+
+        assert_eq!(copied, 3);
+        assert_eq!(&destination, b"abXYZfgh");
+    }
+
+    #[test]
+    fn mid_assign_clips_at_destination_and_handles_invalid_positions() {
+        let mut destination = *b"abcd";
+        assert_eq!(mid_assign(&mut destination, 3, None, b"WXYZ"), 2);
+        assert_eq!(&destination, b"abWX");
+        assert_eq!(mid_assign(&mut destination, 0, None, b"x"), 0);
+        assert_eq!(mid_assign(&mut destination, 9, None, b"x"), 0);
+        assert_eq!(mid_assign(&mut destination, 2, Some(0), b"x"), 0);
     }
 
     #[test]
