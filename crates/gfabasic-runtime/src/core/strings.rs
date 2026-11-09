@@ -25,7 +25,9 @@ pub fn mid(input: &[u8], start: usize, count: Option<usize>) -> &[u8] {
         return &input[input.len()..];
     }
     let offset = start - 1;
-    let length = count.unwrap_or(input.len() - offset).min(input.len() - offset);
+    let length = count
+        .unwrap_or(input.len() - offset)
+        .min(input.len() - offset);
     &input[offset..offset + length]
 }
 
@@ -67,7 +69,10 @@ pub fn len(input: &[u8]) -> usize {
 
 /// Remove ASCII space bytes from both ends of a string.
 pub fn trim(input: &[u8]) -> &[u8] {
-    let start = input.iter().position(|byte| *byte != b' ').unwrap_or(input.len());
+    let start = input
+        .iter()
+        .position(|byte| *byte != b' ')
+        .unwrap_or(input.len());
     let end = input
         .iter()
         .rposition(|byte| *byte != b' ')
