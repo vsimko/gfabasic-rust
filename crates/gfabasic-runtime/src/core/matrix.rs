@@ -36,6 +36,14 @@ pub enum MatrixShapeError {
         rows: usize,
         columns: usize,
     },
+    /// A requested square submatrix lies outside the matrix field.
+    SubmatrixOutOfBounds {
+        start_row: usize,
+        start_column: usize,
+        size: usize,
+        rows: usize,
+        columns: usize,
+    },
     /// MAT ONE is defined by the source for square matrices only.
     IdentityRequiresSquare {
         rows: usize,
@@ -116,6 +124,16 @@ impl fmt::Display for MatrixShapeError {
             Self::DeterminantRequiresSquare { rows, columns } => write!(
                 formatter,
                 "determinant requires a square matrix, got {rows}x{columns}"
+            ),
+            Self::SubmatrixOutOfBounds {
+                start_row,
+                start_column,
+                size,
+                rows,
+                columns,
+            } => write!(
+                formatter,
+                "submatrix at ({start_row}, {start_column}) with size {size} exceeds {rows}x{columns} matrix"
             ),
             Self::IdentityRequiresSquare { rows, columns } => write!(
                 formatter,
@@ -272,39 +290,44 @@ impl<'a> MatrixMut<'a> {
             });
         }
 
-        let size = self.rows;
-        let mut work = self.elements.to_vec();
-        let mut determinant = 1.0;
-        for pivot_column in 0..size {
-            let pivot_row = (pivot_column..size)
-                .max_by(|left, right| {
-                    work[*left * size + pivot_column]
-                        .abs()
-                        .total_cmp(&work[*right * size + pivot_column].abs())
-                })
-                .expect("a pivot row exists for each non-empty square matrix");
-            let pivot = work[pivot_row * size + pivot_column];
-            if pivot == 0.0 {
-                return Ok(0.0);
-            }
-            if pivot_row != pivot_column {
-                for column in 0..size {
-                    work.swap(pivot_column * size + column, pivot_row * size + column);
-                }
-                determinant = -determinant;
-            }
-            let pivot = work[pivot_column * size + pivot_column];
-            determinant *= pivot;
+        Ok(determinant_of_square(self.elements, self.rows))
+    }
 
-            for row in (pivot_column + 1)..size {
-                let factor = work[row * size + pivot_column] / pivot;
-                for column in (pivot_column + 1)..size {
-                    work[row * size + column] -= factor * work[pivot_column * size + column];
-                }
-                work[row * size + pivot_column] = 0.0;
-            }
+    /// Calculate a square submatrix determinant (Amiga 3.5 `MAT DET x=a([i,j]),n`).
+    ///
+    /// Offsets are zero-based relative to this Rust matrix view. Both offsets
+    /// and the requested square extent are checked before reading any elements.
+    pub fn determinant_submatrix(
+        &self,
+        start_row: usize,
+        start_column: usize,
+        size: usize,
+    ) -> Result<f64, MatrixShapeError> {
+        let end_row = start_row
+            .checked_add(size)
+            .ok_or(MatrixShapeError::DimensionOverflow)?;
+        let end_column = start_column
+            .checked_add(size)
+            .ok_or(MatrixShapeError::DimensionOverflow)?;
+        if end_row > self.rows || end_column > self.columns {
+            return Err(MatrixShapeError::SubmatrixOutOfBounds {
+                start_row,
+                start_column,
+                size,
+                rows: self.rows,
+                columns: self.columns,
+            });
         }
-        Ok(determinant)
+
+        let mut submatrix = Vec::with_capacity(
+            size.checked_mul(size)
+                .ok_or(MatrixShapeError::DimensionOverflow)?,
+        );
+        for row in start_row..end_row {
+            let start = row * self.columns + start_column;
+            submatrix.extend_from_slice(&self.elements[start..start + size]);
+        }
+        Ok(determinant_of_square(&submatrix, size))
     }
 
     /// Add a same-shaped floating-point field element-wise (Amiga 3.5 `MAT ADD a(),b()`).
@@ -596,6 +619,41 @@ impl<'a> MatrixMut<'a> {
     }
 }
 
+fn determinant_of_square(elements: &[f64], size: usize) -> f64 {
+    let mut work = elements.to_vec();
+    let mut determinant = 1.0;
+    for pivot_column in 0..size {
+        let pivot_row = (pivot_column..size)
+            .max_by(|left, right| {
+                work[*left * size + pivot_column]
+                    .abs()
+                    .total_cmp(&work[*right * size + pivot_column].abs())
+            })
+            .expect("a pivot row exists for each non-empty square matrix");
+        let pivot = work[pivot_row * size + pivot_column];
+        if pivot == 0.0 {
+            return 0.0;
+        }
+        if pivot_row != pivot_column {
+            for column in 0..size {
+                work.swap(pivot_column * size + column, pivot_row * size + column);
+            }
+            determinant = -determinant;
+        }
+        let pivot = work[pivot_column * size + pivot_column];
+        determinant *= pivot;
+
+        for row in (pivot_column + 1)..size {
+            let factor = work[row * size + pivot_column] / pivot;
+            for column in (pivot_column + 1)..size {
+                work[row * size + column] -= factor * work[pivot_column * size + column];
+            }
+            work[row * size + pivot_column] = 0.0;
+        }
+    }
+    determinant
+}
+
 /// Calculate the vector–matrix–vector scalar product
 /// (Amiga 3.5 `MAT MUL x=a()*b()*c()`).
 ///
@@ -739,6 +797,31 @@ mod tests {
 
         assert_eq!(matrix.determinant(), Ok(-2.0));
         assert_eq!(values, [0.0, 2.0, 1.0, 3.0]);
+    }
+
+    #[test]
+    fn determinant_submatrix_calculates_selected_square_region() {
+        let mut values = [1.0, 2.0, 3.0, 0.0, 4.0, 5.0, 1.0, 0.0, 6.0];
+        let matrix = MatrixMut::new(3, 3, &mut values).unwrap();
+
+        assert_eq!(matrix.determinant_submatrix(1, 1, 2), Ok(24.0));
+    }
+
+    #[test]
+    fn determinant_submatrix_rejects_out_of_bounds_region() {
+        let mut values = [1.0, 2.0, 3.0, 4.0];
+        let matrix = MatrixMut::new(2, 2, &mut values).unwrap();
+
+        assert_eq!(
+            matrix.determinant_submatrix(1, 1, 2),
+            Err(MatrixShapeError::SubmatrixOutOfBounds {
+                start_row: 1,
+                start_column: 1,
+                size: 2,
+                rows: 2,
+                columns: 2,
+            })
+        );
     }
 
     #[test]
