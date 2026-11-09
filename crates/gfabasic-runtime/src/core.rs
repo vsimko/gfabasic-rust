@@ -5,3 +5,4 @@
 
 pub mod combinatorics;
 pub mod matrix;
+pub mod strings;
