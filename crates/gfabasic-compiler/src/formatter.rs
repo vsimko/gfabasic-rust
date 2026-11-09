@@ -611,6 +611,22 @@ mod tests {
     }
 
     #[test]
+    fn let_assignment_prefix_is_preserved_by_formatting() {
+        let source = "LET x=FACT(1)\n";
+        let formatted = format(source);
+        assert_eq!(formatted, "LET x = FACT(1)\n");
+
+        let mut before_sources = SourceMap::new();
+        let before_id = before_sources.add_source("before-let.bas", source);
+        let before = parse_document(before_id, source).unwrap();
+        let mut after_sources = SourceMap::new();
+        let after_id = after_sources.add_source("after-let.bas", formatted.as_str());
+        let after = parse_document(after_id, &formatted).unwrap();
+        assert_eq!(meanings(&before.program), meanings(&after.program));
+        assert_eq!(format(&formatted), formatted);
+    }
+
+    #[test]
     fn inline_comments_are_preserved_and_formatting_is_idempotent() {
         let source = "x=FACT(1)  ! keep  exact text\r\nPRINT x ! second comment\n";
         let formatted = format(source);
