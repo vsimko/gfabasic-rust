@@ -54,7 +54,7 @@
     "notes": [
       "The 3.5 addendum page images were checked. Both arguments are documented as integer expressions.",
       "The companion German book explicitly places COMBIN among the 3.5 additions and states the domain condition n >= k (printed p. 479).",
-      "The existing prototype evaluates only a restricted literal subset; it has no stable registry handler mapping and is not a complete implementation."
+      "The checked runtime handler mapping is documented in docs/architecture/RUNTIME.md. Reference-interpreter conformance and original numeric representation remain unresolved."
     ]
   },
   "implementation": {
@@ -67,7 +67,7 @@
   "support": [
     {
       "target": "x86_64-unknown-linux-gnu",
-      "classification": "partial",
+      "classification": "unknown",
       "conformance": "not-tested",
       "tests": [],
       "pending-reason": "Original numeric range/representation and reference-interpreter overflow/error behavior remain unverified."
