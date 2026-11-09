@@ -76,7 +76,7 @@ jobs:
           curl -fsSL https://packages.amiberry.com/gpg.key | sudo tee /usr/share/keyrings/amiberry-archive-keyring.gpg >/dev/null
           echo "deb [arch=amd64 signed-by=/usr/share/keyrings/amiberry-archive-keyring.gpg] https://packages.amiberry.com/apt noble main" | sudo tee /etc/apt/sources.list.d/amiberry.list >/dev/null
           sudo apt-get update
-          sudo apt-get install -y --no-install-recommends amiberry xvfb netcat-openbsd tesseract-ocr python3-pip
+          sudo apt-get install -y --no-install-recommends amiberry xvfb netcat-openbsd tesseract-ocr python3-pip python3-pil
           python3 -m pip install --break-system-packages amitools
           command -v xdftool
           amiberry --version | tee artifacts/amiga-cli-probe/amiberry-version.txt
@@ -218,8 +218,17 @@ jobs:
           for screenshot in editor-before-merge.png merge-dialog.png merge-file-row-pointer.png merge-file-selected.png after-shortcut.png merge-gadget-pointer.png after-merge.png; do
             test -s "artifacts/amiga-cli-probe/$screenshot"
           done
-          tesseract artifacts/amiga-cli-probe/after-merge.png stdout 2>/dev/null | tee artifacts/amiga-cli-probe/after-merge-ocr.txt
-          if ! grep -Fqi 'Merge File' artifacts/amiga-cli-probe/after-merge-ocr.txt && grep -Eiq 'PRINT|^[[:space:]]*[xyz][[:space:]]*=' artifacts/amiga-cli-probe/after-merge-ocr.txt; then
+          # Amiga Kickstart screenshots use bright text on a saturated blue background.
+          # Normalize/invert/upscale before OCR; default Tesseract silently missed the source text.
+          python3 - <<'PY'
+          from PIL import Image, ImageOps, ImageEnhance
+          image = Image.open("artifacts/amiga-cli-probe/after-merge.png").convert("L")
+          image = ImageOps.invert(image).resize((image.width * 3, image.height * 3))
+          image = ImageEnhance.Contrast(image).enhance(3)
+          image.save("artifacts/amiga-cli-probe/after-merge-ocr-input.png")
+          PY
+          tesseract artifacts/amiga-cli-probe/after-merge-ocr-input.png stdout --psm 6 2>/dev/null | tee artifacts/amiga-cli-probe/after-merge-ocr.txt
+          if ! grep -Fqi 'Merge File' artifacts/amiga-cli-probe/after-merge-ocr.txt && grep -Eiq 'FACT\(1\)|FACT\(2\)' artifacts/amiga-cli-probe/after-merge-ocr.txt && grep -Eiq 'PRINT[[:space:]]+x,y,z' artifacts/amiga-cli-probe/after-merge-ocr.txt; then
             echo "EDITOR_MERGE_LST_CONTENT_VISIBLE=yes" | tee artifacts/amiga-cli-probe/result.txt
           else
             echo "EDITOR_MERGE_LST_CONTENT_VISIBLE=no" | tee artifacts/amiga-cli-probe/result.txt
