@@ -2118,6 +2118,7 @@ mod tests {
     #[test]
     fn special_names_are_separated_at_every_existing_lexer_boundary() {
         use super::{TokenKind, lex_lossless};
+        use crate::source::SourceSpan;
 
         let boundaries = [" ", "\\t", "\\r", "\\n", "+", "-", "#", "*", "=", "(", ")", ","];
         for boundary in boundaries {
