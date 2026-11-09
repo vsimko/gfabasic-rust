@@ -192,10 +192,8 @@ impl<'a> MatrixMut<'a> {
 
         for row in 0..self.rows {
             for column in (row + 1)..self.columns {
-                self.elements.swap(
-                    row * self.columns + column,
-                    column * self.columns + row,
-                );
+                self.elements
+                    .swap(row * self.columns + column, column * self.columns + row);
             }
         }
         Ok(())
