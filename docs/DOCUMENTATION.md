@@ -1,3 +1,9 @@
+---
+type: Documentation Policy
+title: Documentation policy
+tags: [documentation, okf, writing, provenance]
+---
+
 # Documentation policy
 
 ## Decision and scope
