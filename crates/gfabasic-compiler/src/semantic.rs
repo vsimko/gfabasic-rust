@@ -289,8 +289,8 @@ mod tests {
         let source_id = sources.add_source("multiple-unresolved.bas", source_text);
         let document = parse_document(source_id, source_text).expect("syntax is valid");
 
-        let errors = resolve_prototype_symbols(&document)
-            .expect_err("both PRINT references are unresolved");
+        let errors =
+            resolve_prototype_symbols(&document).expect_err("both PRINT references are unresolved");
 
         assert_eq!(errors.len(), 2);
         let expected_starts = [6, 8];
