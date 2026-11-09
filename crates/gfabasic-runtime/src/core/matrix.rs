@@ -340,7 +340,7 @@ impl<'a> MatrixMut<'a> {
     /// and the exact element count is checked before the field is modified.
     pub fn parse_ascii_into(&mut self, input: &str) -> Result<(), MatrixShapeError> {
         let tokens: Vec<&str> = input
-            .split(|character| character == ',' || character == '\r' || character == '\n')
+            .split([',', '\r', '\n'])
             .map(str::trim)
             .filter(|token| !token.is_empty())
             .collect();
@@ -1532,21 +1532,25 @@ mod tests {
     #[test]
     fn ascii_input_rejects_bad_tokens_and_wrong_count_atomically() {
         let mut destination = [9.0; 2];
-        let mut matrix = MatrixMut::new(1, 2, &mut destination).unwrap();
-
-        assert_eq!(
-            matrix.parse_ascii_into("1,nope"),
-            Err(MatrixShapeError::InvalidAsciiNumber { token_index: 1 })
-        );
+        {
+            let mut matrix = MatrixMut::new(1, 2, &mut destination).unwrap();
+            assert_eq!(
+                matrix.parse_ascii_into("1,nope"),
+                Err(MatrixShapeError::InvalidAsciiNumber { token_index: 1 })
+            );
+        }
         assert_eq!(destination, [9.0; 2]);
 
-        assert_eq!(
-            matrix.parse_ascii_into("1"),
-            Err(MatrixShapeError::AsciiElementCountMismatch {
-                expected: 2,
-                actual: 1,
-            })
-        );
+        {
+            let mut matrix = MatrixMut::new(1, 2, &mut destination).unwrap();
+            assert_eq!(
+                matrix.parse_ascii_into("1"),
+                Err(MatrixShapeError::AsciiElementCountMismatch {
+                    expected: 2,
+                    actual: 1,
+                })
+            );
+        }
         assert_eq!(destination, [9.0; 2]);
     }
 
