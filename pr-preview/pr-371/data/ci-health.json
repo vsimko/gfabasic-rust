@@ -1,6 +1,6 @@
 {
   "repository": "vsimko/gfabasic-rust",
-  "generated_at": "2026-11-09T11:38:17.321791Z",
+  "generated_at": "2026-11-09T11:38:54.274707Z",
   "freshness_threshold_hours": 168,
   "workflows": [
     {
@@ -8,16 +8,16 @@
       "file": "docs.yml",
       "note": "Markdown, JavaScript, API registry, corpus metadata and local-link validation.",
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/docs.yml",
-      "state": "in_progress",
+      "state": "queued",
       "latest": {
-        "id": 42610598952,
+        "id": 42610674110,
         "name": "Documentation checks",
-        "status": "in_progress",
+        "status": "queued",
         "event": "pull_request",
         "branch": "docs/agent-discovery-compatibility-policy",
-        "created_at": "2026-11-09T11:38:07Z",
-        "updated_at": "2026-11-09T11:38:12Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42610598952",
+        "created_at": "2026-11-09T11:38:44Z",
+        "updated_at": "2026-11-09T11:38:48Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42610674110",
         "age_hours": 0,
         "freshness": "fresh"
       },
@@ -80,7 +80,7 @@
         "created_at": "2026-11-09T09:38:02Z",
         "updated_at": "2026-11-09T09:38:29Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42594914102",
-        "age_hours": 1,
+        "age_hours": 2,
         "freshness": "fresh"
       },
       "last_success": {
@@ -92,7 +92,7 @@
         "created_at": "2026-11-09T09:38:02Z",
         "updated_at": "2026-11-09T09:38:29Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42594914102",
-        "age_hours": 1,
+        "age_hours": 2,
         "freshness": "fresh"
       }
     },
@@ -227,26 +227,26 @@
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/pr-preview.yml",
       "state": "in_progress",
       "latest": {
-        "id": 42610599192,
+        "id": 42610674153,
         "name": "Pull request website preview",
         "status": "in_progress",
         "event": "pull_request",
         "branch": "docs/agent-discovery-compatibility-policy",
-        "created_at": "2026-11-09T11:38:07Z",
-        "updated_at": "2026-11-09T11:38:14Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42610599192",
+        "created_at": "2026-11-09T11:38:44Z",
+        "updated_at": "2026-11-09T11:38:49Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42610674153",
         "age_hours": 0,
         "freshness": "fresh"
       },
       "last_success": {
-        "id": 42610315985,
+        "id": 42610599192,
         "name": "Pull request website preview",
         "status": "success",
         "event": "pull_request",
-        "branch": "docs/corpus-verified-fixture-count",
-        "created_at": "2026-11-09T11:35:56Z",
-        "updated_at": "2026-11-09T11:36:11Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42610315985",
+        "branch": "docs/agent-discovery-compatibility-policy",
+        "created_at": "2026-11-09T11:38:07Z",
+        "updated_at": "2026-11-09T11:38:28Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42610599192",
         "age_hours": 0,
         "freshness": "fresh"
       }
