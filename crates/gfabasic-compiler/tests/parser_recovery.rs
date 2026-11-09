@@ -201,6 +201,7 @@ fn frontend_diagnostics_resolve_to_original_source_locations() {
 
 #[test]
 fn parser_recovery_handles_classic_cr_line_endings() {
+    // CR is a complete line ending here, not the CR half of a CRLF pair.
     let source = "x=FACT(0\rLET x=1\rz=FACT(2)\r";
     let mut sources = SourceMap::new();
     let source_id = sources.add_source("parser-recovery-cr.LST", source);
