@@ -1,0 +1,247 @@
+name: Amiga GFA BASIC CLI/stdin probe
+
+on:
+  push:
+    branches:
+      - "experiment/amiga-cli-stdin-probe"
+    paths:
+      - ".github/workflows/amiga-cli-probe.yml"
+  pull_request:
+    paths:
+      - ".github/workflows/amiga-cli-probe.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: amiga-cli-probe-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  cli-probe:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+
+      - name: Download and verify private GFA BASIC interpreter
+        env:
+          GFA_ASSETS_TOKEN: ${{ secrets.GFA_ASSETS_TOKEN }}
+        run: |
+          set -euo pipefail
+          test -n "$GFA_ASSETS_TOKEN"
+          mkdir -p amiga-volume/S artifacts/amiga-cli-probe
+          curl --fail --silent --show-error --location --retry 3 \
+            --header "Authorization: Bearer $GFA_ASSETS_TOKEN" \
+            --header "Accept: application/vnd.github.raw" \
+            "https://api.github.com/repos/vsimko/gfabasic-private-assets/contents/GFABasic?ref=main" \
+            --output amiga-volume/GFABasic
+          echo "fd80f6093e8d0163856af5849121e945e37051a2ad2a9053aa1930021783d962  amiga-volume/GFABasic" | sha256sum --check
+          test "$(wc -c < amiga-volume/GFABasic)" -eq 136548
+          printf '\x00\x00\x03\xf3' | cmp -n 4 - amiga-volume/GFABasic
+          file amiga-volume/GFABasic | tee artifacts/amiga-cli-probe/binary-info.txt
+          strings -a amiga-volume/GFABasic | grep -i -E 'MERGE|SAVE|LIST|DOSCMD|GFA.BASIC' | head -80 > artifacts/amiga-cli-probe/binary-strings.txt || true
+
+      - name: Download original Amiga Kickstart ROM
+        env:
+          GFA_ASSETS_TOKEN: ${{ secrets.GFA_ASSETS_TOKEN }}
+        run: |
+          set -euo pipefail
+          mkdir -p private-kickstart artifacts/amiga-cli-probe
+          curl --fail --silent --show-error --location \
+            --header "Authorization: Bearer $GFA_ASSETS_TOKEN" \
+            --header "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/vsimko/gfabasic-private-assets/contents?ref=main" \
+            --output "$RUNNER_TEMP/private-assets-index.json"
+          jq -r '.[] | select(.type == "file") | [.name, (.size|tostring)] | @tsv' \
+            "$RUNNER_TEMP/private-assets-index.json" > artifacts/amiga-cli-probe/private-assets-index.txt
+          ROM_NAME="$(jq -r '[.[] | select(.type == "file" and .size == 524288 and (.name|test("(?i)kickstart.*v?1[.]3.*34[.]5"))) ] | .[0].name // empty' "$RUNNER_TEMP/private-assets-index.json")"
+          test -n "$ROM_NAME" || { echo "No 512 KiB Kickstart 1.3 rev 34.5 ROM found in private assets"; exit 1; }
+          ROM_PATH_ENCODED="$(jq -rn --arg path "$ROM_NAME" '$path | @uri')"
+          curl --fail --silent --show-error --location \
+            --header "Authorization: Bearer $GFA_ASSETS_TOKEN" \
+            --header "Accept: application/vnd.github.raw" \
+            "https://api.github.com/repos/vsimko/gfabasic-private-assets/contents/$ROM_PATH_ENCODED?ref=main" \
+            --output "private-kickstart/kick.rom"
+          ROM_SIZE="$(wc -c < private-kickstart/kick.rom)"
+          test "$ROM_SIZE" -eq 524288
+          sha256sum private-kickstart/kick.rom > artifacts/amiga-cli-probe/kickstart-sha256.txt
+          printf 'Kickstart candidate: %s (%s bytes)\n' "$ROM_NAME" "$ROM_SIZE" > artifacts/amiga-cli-probe/kickstart-info.txt
+          printf 'KICKSTART_ROM_PATH=%s/private-kickstart/kick.rom\n' "$GITHUB_WORKSPACE" >> "$GITHUB_ENV"
+
+      - name: Install emulator and OCR
+        run: |
+          sudo install -d -m 0755 /usr/share/keyrings
+          curl -fsSL https://packages.amiberry.com/gpg.key | sudo tee /usr/share/keyrings/amiberry-archive-keyring.gpg >/dev/null
+          echo "deb [arch=amd64 signed-by=/usr/share/keyrings/amiberry-archive-keyring.gpg] https://packages.amiberry.com/apt noble main" | sudo tee /etc/apt/sources.list.d/amiberry.list >/dev/null
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends amiberry xvfb netcat-openbsd tesseract-ocr python3-pip python3-pil
+          python3 -m pip install --break-system-packages amitools
+          command -v xdftool
+          amiberry --version | tee artifacts/amiga-cli-probe/amiberry-version.txt
+
+      - name: Prepare CLI input and boot volume
+        run: |
+          cat > amiga-volume/factzero.LST <<'EOF'
+          x = FACT(0)
+          y = FACT(1)
+          z = FACT(2)
+          PRINT x, y, z
+          EOF
+          # If the process attaches its standard input to a command console,
+          # this direct-mode command should create an ASCII listing on GFAVol.
+          printf 'LIST "Work:stdin-save.LST"\n' > amiga-volume/cli-input.txt
+          # Build a bootable AmigaDOS 1.x OFS floppy. Kickstart 1.3 has no
+          # built-in Workbench/CLI disk, so the boot block and Startup-Sequence
+          # must live on the same disk as the interpreter and textual listing.
+          mkdir -p amiga-volume/S
+          cp amiga-volume/GFABasic amiga-volume/GFABasic.bin
+          cat > amiga-volume/S/Startup-Sequence <<'EOF'
+          GFABasic
+          EOF
+          xdftool artifacts/amiga-cli-probe/factzero.adf create + format GFABASIC ofs + write amiga-volume/factzero.LST + write amiga-volume/GFABasic + write amiga-volume/S
+          xdftool artifacts/amiga-cli-probe/factzero.adf boot install boot1x
+          xdftool artifacts/amiga-cli-probe/factzero.adf info > artifacts/amiga-cli-probe/factzero-adf-info.txt
+          xdftool artifacts/amiga-cli-probe/factzero.adf list / all > artifacts/amiga-cli-probe/factzero-adf-list.txt
+          xdftool artifacts/amiga-cli-probe/factzero.adf boot show > artifacts/amiga-cli-probe/factzero-adf-boot.txt
+          cp amiga-volume/factzero.LST artifacts/amiga-cli-probe/factzero.LST
+          cp amiga-volume/cli-input.txt artifacts/amiga-cli-probe/cli-input.txt
+          cp amiga-volume/S/Startup-Sequence artifacts/amiga-cli-probe/Startup-Sequence.txt
+          cat > "$RUNNER_TEMP/amiga-cli-probe.uae" <<EOF
+          use_gui=no
+          cpu_type=68000
+          chipset=ocs
+          kickstart_rom_file=$KICKSTART_ROM_PATH
+          chipmem_size=2
+          fastmem_size=8
+          bogomem_size=0
+          gfx_width=640
+          gfx_height=512
+          gfx_fullscreen=false
+          sound_output=0
+          floppy0=$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/factzero.adf
+          EOF
+
+      - name: Merge textual LST in the GFA BASIC editor
+        run: |
+          set -euo pipefail
+          export AMIBERRY_LOG="$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/amiberry.log"
+          export SDL_AUDIODRIVER=dummy
+          env -u SHELLOPTS xvfb-run -a -s "-screen 0 1024x768x24 +extension GLX" bash -c '
+            set +u
+            set -eo pipefail
+            amiberry -G -f "$RUNNER_TEMP/amiga-cli-probe.uae" -0 "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/factzero.adf" --log >"$AMIBERRY_LOG" 2>&1 &
+            emulator_pid=$!
+            cleanup() { kill "$emulator_pid" 2>/dev/null || true; wait "$emulator_pid" 2>/dev/null || true; }
+            trap cleanup EXIT
+            ipc_socket_path=""
+            for attempt in $(seq 1 45); do
+              ipc_socket_path="$(find /run/user -type s -name amiberry.sock -print -quit 2>/dev/null || true)"
+              if [ -n "$ipc_socket_path" ]; then break; fi
+              sleep 1
+            done
+            test -n "$ipc_socket_path" || { cat "$AMIBERRY_LOG"; exit 1; }
+            sleep 35
+            # Insert and verify the test ADF through Amiberry IPC.
+            printf "INSERTFLOPPY\\t%s\\t0\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/factzero.adf" | timeout 5s nc -U -N "${ipc_socket_path:-}" >"$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/insert-floppy-ipc.txt"
+            printf "LIST_FLOPPIES\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}" >"$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/list-floppies-ipc.txt"
+            printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/editor-before-merge.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+
+            # Amiga raw keycode 0x51 (decimal 81) is F2, the Editor Merge command.
+            printf "SEND_KEY\\t81\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+            sleep 0.3
+            printf "SEND_KEY\\t81\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+            sleep 3
+            printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-dialog.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+
+            # SEND_MOUSE uses relative dx/dy and the observed cursor scaling is
+            # about +61 screen px for dx=380 and +35 px for dy=70.
+            # Run #117 ended at (260,145), short of the factzero.LST row center
+            # (335,238). Two bounded (230,93) steps should cover the remaining
+            # (+75,+93); verify the pointer screenshot before clicking.
+            for _ in 1 2 3; do
+              printf "SEND_MOUSE\\t380\\t70\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+              sleep 0.2
+            done
+            for _ in 1 2; do
+              printf "SEND_MOUSE\\t230\\t93\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+              sleep 0.2
+            done
+            sleep 0.5
+            printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-file-row-pointer.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+            printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}" || true
+            sleep 0.2
+            printf "SEND_MOUSE\\t0\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}" || true
+            sleep 0.5
+            printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-file-selected.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+
+            # AmigaOS requester shortcut: Left-Amiga-V activates the left gadget (Merge).
+            printf "SEND_KEY\\t102\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+            sleep 0.2
+            printf "SEND_KEY\\t52\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+            sleep 0.2
+            printf "SEND_KEY\\t52\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+            sleep 0.2
+            printf "SEND_KEY\\t102\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+            sleep 1
+            printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-shortcut.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+            tesseract "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-shortcut.png" stdout 2>/dev/null > "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-shortcut-ocr.txt"
+            # OCR can misread the requester title ("Merge File" as "Merge Abbruch"),
+            # so do not gate the fallback click on exact title recognition.
+            # The first calibrated move landed at (~260,360), on the left
+            # edge of the requester. From there the Merge gadget center is
+            # (~323,420); measured scale is ~0.34 screen px per IPC unit.
+            for _ in 1 2; do
+              printf "SEND_MOUSE\\t-177\\t183\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+              sleep 0.2
+            done
+            printf "SEND_MOUSE\\t206\\t198\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+            sleep 0.5
+            printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-gadget-pointer.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+            printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+            sleep 0.2
+            printf "SEND_MOUSE\\t0\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+            sleep 3
+            printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-merge.png" | timeout 5s nc -U -N "${ipc_socket_path:-}" || true
+
+            kill -0 "$emulator_pid"
+            printf "QUIT\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}" || true
+          '
+          for diagnostic in insert-floppy-ipc.txt list-floppies-ipc.txt stdin-save.LST; do
+            if test -f "amiga-volume/$diagnostic"; then
+              cp "amiga-volume/$diagnostic" "artifacts/amiga-cli-probe/$diagnostic"
+            else
+              printf "MISSING: %s\\n" "$diagnostic" > "artifacts/amiga-cli-probe/$diagnostic.missing"
+            fi
+          done
+          for screenshot in editor-before-merge.png merge-dialog.png merge-file-row-pointer.png merge-file-selected.png after-shortcut.png merge-gadget-pointer.png after-merge.png; do
+            test -s "artifacts/amiga-cli-probe/$screenshot"
+          done
+          # Amiga Kickstart screenshots use bright text on a saturated blue background.
+          # Normalize/invert/upscale before OCR; default Tesseract silently missed the source text.
+          python3 - <<'PY'
+          from PIL import Image, ImageOps, ImageEnhance
+          image = Image.open("artifacts/amiga-cli-probe/after-merge.png").convert("L")
+          image = ImageOps.invert(image).resize((image.width * 3, image.height * 3))
+          image = ImageEnhance.Contrast(image).enhance(3)
+          image.save("artifacts/amiga-cli-probe/after-merge-ocr-input.png")
+          PY
+          tesseract artifacts/amiga-cli-probe/after-merge-ocr-input.png stdout --psm 6 2>/dev/null | tee artifacts/amiga-cli-probe/after-merge-ocr.txt
+          if ! grep -Fqi 'Merge File' artifacts/amiga-cli-probe/after-merge-ocr.txt && grep -Eiq 'FACT\(1\)|FACT\(2\)' artifacts/amiga-cli-probe/after-merge-ocr.txt && grep -Eiq 'PRINT[[:space:]]+x,y,z' artifacts/amiga-cli-probe/after-merge-ocr.txt; then
+            echo "EDITOR_MERGE_LST_CONTENT_VISIBLE=yes" | tee artifacts/amiga-cli-probe/result.txt
+          else
+            echo "EDITOR_MERGE_LST_CONTENT_VISIBLE=no" | tee artifacts/amiga-cli-probe/result.txt
+            echo "::error::The editor screenshot does not show the merged LST source."
+            exit 1
+          fi
+
+
+      - name: Upload diagnostic evidence (never upload commercial binary)
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: amiga-gfa-basic-cli-stdin-probe
+          path: artifacts/amiga-cli-probe/
+          if-no-files-found: warn
+          retention-days: 7
