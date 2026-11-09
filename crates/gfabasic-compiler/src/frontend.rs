@@ -2256,7 +2256,11 @@ mod tests {
 
         assert_eq!(document.program.statements.len(), 2);
         match &document.program.statements[0] {
-            Statement::AssignInteger { name, value: 42, span } => {
+            Statement::AssignInteger {
+                name,
+                value: 42,
+                span,
+            } => {
                 assert_eq!(name, "x");
                 assert_eq!(&source_text[span.start..span.end], "x=42");
             }
