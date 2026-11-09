@@ -5,7 +5,7 @@ title: "ADR 0001: Documentation and architecture decision records"
 
 # ADR 0001: Documentation and architecture decision records
 
-- Status: Accepted
+- Status: Accepted; superseded in part by [ADR 0016](0016-okf-v02-documentation-bundle.md)
 - Date: 2026-11-03
 
 ## Context
@@ -19,7 +19,7 @@ The project needs a discoverable architecture entry point and a traceable proces
 - Record consequential decisions in numbered ADR Markdown files.
 - Use the status vocabulary defined in the architecture index.
 - Keep source provenance for GFA BASIC language and API claims in `docs/reference-sources.md`.
-- Treat Markdown as the current human-readable documentation format. The “OKF” requirement remains unresolved until the exact specification is identified.
+- Keep Markdown as the human-readable source format and adopt Google's OKF v0.2 bundle conventions as specified by [ADR 0016](0016-okf-v02-documentation-bundle.md).
 
 ## Alternatives considered
 
@@ -31,5 +31,5 @@ The project needs a discoverable architecture entry point and a traceable proces
 
 - Documentation changes are reviewable in Git.
 - Decisions can be linked from issues and implementation changes.
-- The project must not claim formal OKF compliance or formal ASD-STE100 certification without identifying and validating the applicable standard/tooling.
+- Claim only the OKF v0.2 structure and checks actually enforced by the repository validator; do not claim ASD-STE100 certification without identifying and validating the applicable standard/tooling.
 - Subsequent ADRs may supersede this decision, but must preserve its historical record.
