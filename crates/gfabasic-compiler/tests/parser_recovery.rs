@@ -3,7 +3,7 @@ use gfabasic_compiler::source::SourceMap;
 
 #[test]
 fn parser_reports_independent_line_errors_after_synchronizing() {
-    let source = "x=FACT(0\nLET x=1\nz=FACT(2)\n";
+    let source = "x=FACT(0\nFOO x=1\nz=FACT(2)\n";
     let mut sources = SourceMap::new();
     let source_id = sources.add_source("parser-recovery.LST", source);
 
@@ -36,7 +36,7 @@ fn parser_reports_independent_line_errors_after_synchronizing() {
 
 #[test]
 fn parser_recovery_keeps_the_next_line_after_missing_print_operand() {
-    let source = "PRINT\nLET x=1\n";
+    let source = "PRINT\nFOO x=1\n";
     let mut sources = SourceMap::new();
     let source_id = sources.add_source("missing-print-operand.LST", source);
 
@@ -67,9 +67,9 @@ fn parser_recovery_keeps_the_next_line_after_missing_print_operand() {
 #[test]
 fn parser_recovery_preserves_line_boundaries_for_missing_grammar_tokens() {
     let cases = [
-        ("x=\nLET x=1\n", 2),
-        ("DIM\nLET x=1\n", 3),
-        ("MAT\nLET x=1\n", 3),
+        ("x=\nFOO x=1\n", 2),
+        ("DIM\nFOO x=1\n", 3),
+        ("MAT\nFOO x=1\n", 3),
     ];
 
     for (source, boundary) in cases {
@@ -97,7 +97,7 @@ fn parser_recovery_preserves_line_boundaries_for_missing_grammar_tokens() {
                 .primary_span
                 .expect("unsupported statement has a span")
                 .start,
-            source.find("LET").expect("second statement exists"),
+            source.find("FOO").expect("second statement exists"),
             "the next statement must still be visited: {source:?}"
         );
     }
@@ -138,7 +138,7 @@ fn parser_preserves_statement_spans_in_the_original_listing() {
 
 #[test]
 fn parser_recovery_keeps_the_next_line_after_trailing_print_comma() {
-    let source = "PRINT x,\nLET y=1\n";
+    let source = "PRINT x,\nFOO y=1\n";
     let mut sources = SourceMap::new();
     let source_id = sources.add_source("trailing-print-comma.LST", source);
 
@@ -168,7 +168,7 @@ fn parser_recovery_keeps_the_next_line_after_trailing_print_comma() {
 
 #[test]
 fn frontend_diagnostics_resolve_to_original_source_locations() {
-    let source = "PRINT x,\nLET y=1\n";
+    let source = "PRINT x,\nFOO y=1\n";
     let mut sources = SourceMap::new();
     let source_id = sources.add_source("diagnostic-locations.LST", source);
 
@@ -196,13 +196,13 @@ fn frontend_diagnostics_resolve_to_original_source_locations() {
         unsupported_file.line_column(unsupported_span.start),
         Some((2, 1))
     );
-    assert_eq!(sources.slice(unsupported_span), Some("LET"));
+    assert_eq!(sources.slice(unsupported_span), Some("FOO"));
 }
 
 #[test]
 fn parser_recovery_handles_classic_cr_line_endings() {
     // CR is a complete line ending here, not the CR half of a CRLF pair.
-    let source = "x=FACT(0\rLET x=1\rz=FACT(2)\r";
+    let source = "x=FACT(0\rFOO x=1\rz=FACT(2)\r";
     let mut sources = SourceMap::new();
     let source_id = sources.add_source("parser-recovery-cr.LST", source);
 
@@ -222,7 +222,7 @@ fn parser_recovery_handles_classic_cr_line_endings() {
         .primary_span
         .expect("unsupported diagnostic has a source span");
     assert_eq!(unsupported_span.start, 9);
-    assert_eq!(sources.slice(unsupported_span), Some("LET"));
+    assert_eq!(sources.slice(unsupported_span), Some("FOO"));
 
     let source_file = sources
         .get(unsupported_span.source)
@@ -328,4 +328,54 @@ fn exclamation_mark_attached_to_identifier_is_not_a_comment() {
         .primary_span
         .expect("unsupported suffix has a lexical span");
     assert_eq!(&source[span.start..span.end], "!");
+}
+
+#[test]
+fn parser_accepts_let_prefix_for_supported_intrinsic_assignments() {
+    let source = "LET x=FACT(0)\nLET y=VARIAT(5,2)\nLET z=COMBIN(5,2)\n";
+    let mut sources = SourceMap::new();
+    let source_id = sources.add_source("let-assignments.LST", source);
+
+    let document = parse_document(source_id, source).expect("documented LET forms should parse");
+    assert_eq!(document.program.statements.len(), 3);
+
+    let expected = ["LET x=FACT(0)", "LET y=VARIAT(5,2)", "LET z=COMBIN(5,2)"];
+    for (statement, expected_text) in document.program.statements.iter().zip(expected) {
+        let span = match statement {
+            Statement::AssignFact { span, .. }
+            | Statement::AssignVariat { span, .. }
+            | Statement::AssignCombin { span, .. } => *span,
+            other => panic!("unexpected LET statement shape: {other:?}"),
+        };
+        assert_eq!(&source[span.start..span.end], expected_text);
+    }
+}
+
+#[test]
+fn parser_rejects_let_assignment_to_variables_outside_the_mvp() {
+    let source = "LET count=FACT(0)\n";
+    let mut sources = SourceMap::new();
+    let source_id = sources.add_source("let-unsupported-variable.LST", source);
+
+    let diagnostics = parse(source_id, source).expect_err("only x, y, and z are supported targets");
+    assert_eq!(diagnostics[0].code, "GFA-SUPPORT-0001");
+    let span = diagnostics[0]
+        .primary_span
+        .expect("unsupported variable has a source span");
+    assert_eq!(&source[span.start..span.end], "count");
+}
+
+#[test]
+fn parser_rejects_let_rhs_outside_the_supported_intrinsic_subset() {
+    let source = "LET x=RND(1)\n";
+    let mut sources = SourceMap::new();
+    let source_id = sources.add_source("let-unsupported-intrinsic.LST", source);
+
+    let diagnostics = parse(source_id, source)
+        .expect_err("the current subset accepts only the documented intrinsic-call RHS");
+    assert_eq!(diagnostics[0].code, "GFA-SUPPORT-0001");
+    let span = diagnostics[0]
+        .primary_span
+        .expect("unsupported LET intrinsic has a source span");
+    assert_eq!(&source[span.start..span.end], "RND");
 }
