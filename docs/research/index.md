@@ -1,0 +1,46 @@
+# Research and evidence
+
+- [Overview](README.md) - Documentation concepts in research.
+- [Amiga BOOK 515 PAGE Extraction Audit](amiga-book-515-page-extraction-audit.md) - Documentation concepts in research.
+- [Amiga BOOK Chapters05 17 Heading Harvest](amiga-book-chapters05-17-heading-harvest.md) - Documentation concepts in research.
+- [Amiga BOOK Command Index OCR Transcription](amiga-book-command-index-ocr-transcription.md) - Documentation concepts in research.
+- [Amiga BOOK Gfa35 Chapter18 19 Extraction](amiga-book-gfa35-chapter18-19-extraction.md) - Documentation concepts in research.
+- [Amiga Emulator LAB](amiga-emulator-lab.md) - Documentation concepts in research.
+- [Amiga GFA Basic 3.0 Advanced Programming Evidence](amiga-gfa-basic-3.0-advanced-programming-evidence.md) - Documentation concepts in research.
+- [Amiga GFA Basic 3.0 Appendix Index Evidence](amiga-gfa-basic-3.0-appendix-index-evidence.md) - Documentation concepts in research.
+- [Amiga GFA Basic 3.0 BASE Inventory](amiga-gfa-basic-3.0-base-inventory.md) - Documentation concepts in research.
+- [Amiga GFA Basic 3.0 BOB Object Details](amiga-gfa-basic-3.0-bob-object-details.md) - Documentation concepts in research.
+- [Amiga GFA Basic 3.0 Command Index](amiga-gfa-basic-3.0-command-index.md) - Documentation concepts in research.
+- [Amiga GFA Basic 3.0 Control FILE DATA IO](amiga-gfa-basic-3.0-control-file-data-io.md) - Documentation concepts in research.
+- [Amiga GFA Basic 3.0 Events Windows Evidence](amiga-gfa-basic-3.0-events-windows-evidence.md) - Documentation concepts in research.
+- [Amiga GFA Basic 3.0 Expressions Builtins Control FLOW](amiga-gfa-basic-3.0-expressions-builtins-control-flow.md) - Documentation concepts in research.
+- [Amiga GFA Basic 3.0 German Source Notes](amiga-gfa-basic-3.0-german-source-notes.md) - Documentation concepts in research.
+- [Amiga GFA Basic 3.0 Graphics Evidence](amiga-gfa-basic-3.0-graphics-evidence.md) - Documentation concepts in research.
+- [Amiga GFA Basic 3.0 MENU Event Details](amiga-gfa-basic-3.0-menu-event-details.md) - Documentation concepts in research.
+- [Amiga GFA Basic 3.0 Output Device Details](amiga-gfa-basic-3.0-output-device-details.md) - Documentation concepts in research.
+- [Amiga GFA Basic 3.0 Procedure Error Details](amiga-gfa-basic-3.0-procedure-error-details.md) - Documentation concepts in research.
+- [Amiga GFA Basic 3.0 Screen Window Details](amiga-gfa-basic-3.0-screen-window-details.md) - Documentation concepts in research.
+- [Amiga GFA Basic 3.0 Source Format Editor Evidence](amiga-gfa-basic-3.0-source-format-editor-evidence.md) - Documentation concepts in research.
+- [Amiga GFA Basic 3.0 Statement Command Candidates](amiga-gfa-basic-3.0-statement-command-candidates.md) - Documentation concepts in research.
+- [Amiga GFA Basic 3.0 System Routines Evidence](amiga-gfa-basic-3.0-system-routines-evidence.md) - Documentation concepts in research.
+- [Amiga GFA Basic 3.03 OCR Index](amiga-gfa-basic-3.03-ocr-index.md) - Documentation concepts in research.
+- [Amiga GFA Basic 35 Addendum Inventory](amiga-gfa-basic-35-addendum-inventory.md) - Documentation concepts in research.
+- [Amiga GFA Basic 35 Editor Feature Audit](amiga-gfa-basic-35-editor-feature-audit.md) - Documentation concepts in research.
+- [Amiga GFA Basic 35 FIVE Declaration Audit](amiga-gfa-basic-35-five-declaration-audit.md) - Documentation concepts in research.
+- [Amiga GFA Basic 35 FIVE MORE Declaration Audit](amiga-gfa-basic-35-five-more-declaration-audit.md) - Documentation concepts in research.
+- [Amiga GFA Basic 35 GURU Declaration Audit](amiga-gfa-basic-35-guru-declaration-audit.md) - Documentation concepts in research.
+- [Amiga GFA Basic 35 Lexer Evidence](amiga-gfa-basic-35-lexer-evidence.md) - Documentation concepts in research.
+- [Amiga GFA Basic 35 Matrix Arithmetic Analysis Audit](amiga-gfa-basic-35-matrix-arithmetic-analysis-audit.md) - Documentation concepts in research.
+- [Amiga GFA Basic 35 Matrix IO COPY Audit](amiga-gfa-basic-35-matrix-io-copy-audit.md) - Documentation concepts in research.
+- [Amiga GFA Basic 35 Primary Reference](amiga-gfa-basic-35-primary-reference.md) - Documentation concepts in research.
+- [Amiga GFA Basic Candidate Report](amiga-gfa-basic-candidate-report.md) - Documentation concepts in research.
+- [Amiga GFA Basic DQH Source Inventory](amiga-gfa-basic-dqh-source-inventory.md) - Documentation concepts in research.
+- [Amiga GFA Basic Function Inventory](amiga-gfa-basic-function-inventory.md) - Documentation concepts in research.
+- [Amiga GFA Basic German BOOK Command API Extraction](amiga-gfa-basic-german-book-command-api-extraction.md) - Documentation concepts in research.
+- [Amiga GFA Basic Source Topic Index](amiga-gfa-basic-source-topic-index.md) - Documentation concepts in research.
+- [Aminet Catalogue](aminet-catalogue.md) - Documentation concepts in research.
+- [Atari GFA BOOK Diskette](atari-gfa-book-diskette.md) - Documentation concepts in research.
+- [Atari GFA BOOK Systematic Review](atari-gfa-book-systematic-review.md) - Documentation concepts in research.
+- [GFA Basic Command Index OCR](gfa-basic-command-index-ocr.md) - Documentation concepts in research.
+- [Gfalist Build AND Fixture Validation](gfalist-build-and-fixture-validation.md) - Documentation concepts in research.
+- [Gfalist Format VS RUST Frontend](gfalist-format-vs-rust-frontend.md) - Documentation concepts in research.
