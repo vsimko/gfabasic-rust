@@ -2148,4 +2148,28 @@ mod tests {
             }
         }
     }
+    // Matrix AST spans must continue to identify the exact original source
+    // text, independently of the lossless token/trivia stream.
+    #[test]
+    fn matrix_statements_preserve_exact_source_spans() {
+        let source_text = "DIM a(2,3)\\nMAT ONE a()\\nMAT PRINT #1,a(),7,3\\n";
+        let mut sources = SourceMap::new();
+        let source_id = sources.add_source("matrix-source-spans.lst", source_text);
+        let document =
+            parse_document(source_id, source_text).expect("supported matrix statements should parse");
+
+        let expected = ["DIM a(2,3)", "MAT ONE a()", "MAT PRINT #1,a(),7,3"];
+        assert_eq!(document.program.statements.len(), expected.len());
+
+        for (statement, expected_text) in document.program.statements.iter().zip(expected) {
+            let span = match statement {
+                Statement::DimMatrix { span, .. }
+                | Statement::MatOne { span, .. }
+                | Statement::MatPrint { span, .. } => span,
+                other => panic!("unexpected statement in matrix span fixture: {other:?}"),
+            };
+            assert_eq!(&source_text[span.start..span.end], expected_text);
+        }
+    }
+
 }
