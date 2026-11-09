@@ -346,4 +346,15 @@ mod tests {
         assert_eq!(upper(b"GFA-Basic 3.5!"), b"GFA-BASIC 3.5!");
         assert_eq!(upper(&[b'a', 0xe4, b'z']), [b'A', 0xe4, b'Z']);
     }
+
+    #[test]
+    fn search_functions_handle_overlapping_matches_and_exact_boundaries() {
+        assert_eq!(instr(b"aaaa", b"aa", None), 1);
+        assert_eq!(instr(b"aaaa", b"aa", Some(2)), 2);
+        assert_eq!(instr(b"aaaa", b"aa", Some(4)), 0);
+
+        assert_eq!(rinstr(b"aaaa", b"aa", None), 3);
+        assert_eq!(rinstr(b"aaaa", b"aa", Some(3)), 2);
+        assert_eq!(rinstr(b"aaaa", b"aa", Some(1)), 0);
+    }
 }
