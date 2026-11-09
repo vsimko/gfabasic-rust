@@ -27,9 +27,7 @@ pub fn variat(n: u32, k: u32) -> Option<u128> {
         return Some(1);
     }
 
-    ((n - k + 1)..=n).try_fold(1_u128, |acc, value| {
-        acc.checked_mul(u128::from(value))
-    })
+    ((n - k + 1)..=n).try_fold(1_u128, |acc, value| acc.checked_mul(u128::from(value)))
 }
 
 /// Return the number of k-combinations of n elements without repetition.
@@ -82,7 +80,10 @@ mod tests {
 
     #[test]
     fn factorial_reports_unrepresentable_results() {
-        assert_eq!(factorial(34), Some(295_232_799_039_604_140_847_618_609_643_520_000_000));
+        assert_eq!(
+            factorial(34),
+            Some(295_232_799_039_604_140_847_618_609_643_520_000_000)
+        );
         assert_eq!(factorial(35), None);
     }
 
@@ -107,7 +108,10 @@ mod tests {
 
     #[test]
     fn combin_reduces_intermediate_products() {
-        assert_eq!(combin(100, 50), Some(100_891_344_545_564_193_334_812_497_256));
+        assert_eq!(
+            combin(100, 50),
+            Some(100_891_344_545_564_193_334_812_497_256)
+        );
     }
 
     #[test]
