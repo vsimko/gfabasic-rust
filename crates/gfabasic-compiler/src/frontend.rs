@@ -797,7 +797,8 @@ impl Parser {
                 })
             } else {
                 self.expect(TokenKind::Comma, "',' in in-place MAT MUL")?;
-                let scalar_token = self.advance_required("a scalar variable after MAT MUL destination comma")?;
+                let scalar_token =
+                    self.advance_required("a scalar variable after MAT MUL destination comma")?;
                 let scalar = match scalar_token.kind {
                     TokenKind::Identifier(name) => name,
                     _ => {
@@ -815,7 +816,8 @@ impl Parser {
                 })
             }
         } else {
-            let destination_token = self.advance_required("a scalar or matrix destination in MAT MUL")?;
+            let destination_token =
+                self.advance_required("a scalar or matrix destination in MAT MUL")?;
             let destination = match destination_token.kind {
                 TokenKind::Identifier(name) => name,
                 _ => {
@@ -849,7 +851,8 @@ impl Parser {
         start: SourceSpan,
         operation: MatAnalysisOperation,
     ) -> Result<Statement, Box<Diagnostic>> {
-        let destination_token = self.advance_required("a scalar destination in MAT matrix analysis")?;
+        let destination_token =
+            self.advance_required("a scalar destination in MAT matrix analysis")?;
         let destination = match destination_token.kind {
             TokenKind::Identifier(name) => name,
             _ => {
