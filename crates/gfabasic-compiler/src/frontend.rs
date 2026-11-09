@@ -250,7 +250,7 @@ fn is_identifier_continuation(byte: u8) -> bool {
 fn is_supported_token_boundary(byte: u8) -> bool {
     matches!(
         byte,
-        b' ' | b'\\t' | b'\\r' | b'\\n' | b'+' | b'-' | b'#' | b'*' | b'='
+        b' ' | b'\t' | b'\r' | b'\n' | b'+' | b'-' | b'#' | b'*' | b'='
             | b'(' | b')' | b','
     )
 }
