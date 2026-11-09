@@ -1386,17 +1386,11 @@ mod tests {
             .copy_region_from(&source, 4, 4, 1, 1, 1, 1, 3, 3)
             .unwrap();
 
-        assert_eq!(
-            destination,
-            [
-                [1.0, 1.0, 1.0, 1.0, 1.0],
-                [1.0, 3.0, 4.0, 5.0, 1.0],
-                [1.0, 4.0, 5.0, 6.0, 1.0],
-                [1.0, 5.0, 6.0, 7.0, 1.0],
-                [1.0, 1.0, 1.0, 1.0, 1.0],
-            ]
-            .concat()
-        );
+        assert_eq!(&destination[0..5], &[1.0; 5]);
+        assert_eq!(&destination[5..10], &[1.0, 3.0, 4.0, 5.0, 1.0]);
+        assert_eq!(&destination[10..15], &[1.0, 4.0, 5.0, 6.0, 1.0]);
+        assert_eq!(&destination[15..20], &[1.0, 5.0, 6.0, 7.0, 1.0]);
+        assert_eq!(&destination[20..25], &[1.0; 5]);
     }
 
     #[test]
