@@ -6,7 +6,7 @@
 //! These tests protect the byte-based diagnostic spans without choosing a
 //! language-level encoding rule.
 
-use gfabasic_compiler::frontend::lex_lossless;
+use gfabasic_compiler::frontend::{TokenKind, lex_lossless};
 use gfabasic_compiler::source::SourceMap;
 
 #[test]
@@ -62,4 +62,34 @@ fn unsupported_unicode_is_not_replaced_or_case_normalized() {
         .expect("lexical diagnostic should have a primary span");
     assert_eq!(sources.slice(span), Some("Ž"));
     assert!(diagnostics[0].message.contains("Ž"));
+}
+
+#[test]
+fn recognized_tokens_and_trivia_cover_the_original_source_without_gaps() {
+    // CR, CRLF, and LF are exercised as the prototype's transport separators;
+    // this test does not define the Amiga 3.5 .LST line-ending contract.
+    let source_text = "x = 1\t+\r\n_DATA=2\rPRINT x";
+    let mut sources = SourceMap::new();
+    let source_id = sources.add_source("lossless.lst", source_text);
+
+    let lexed = lex_lossless(source_id, source_text)
+        .expect("all characters belong to the currently supported token/trivia subset");
+
+    let mut spans = lexed
+        .tokens
+        .iter()
+        .filter(|token| !matches!(token.kind, TokenKind::End))
+        .map(|token| token.span)
+        .chain(lexed.trivia.iter().map(|trivia| trivia.span))
+        .map(|span| (span.start, span.end))
+        .collect::<Vec<_>>();
+    spans.sort_unstable();
+
+    let mut covered_until = 0;
+    for (start, end) in spans {
+        assert_eq!(start, covered_until, "gap or overlap before byte {start}");
+        assert!(end > start, "empty non-EOF span at byte {start}");
+        covered_until = end;
+    }
+    assert_eq!(covered_until, source_text.len());
 }
