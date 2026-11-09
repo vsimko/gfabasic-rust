@@ -1,3 +1,8 @@
+---
+type: "Contributor Guide"
+title: "Contributor documentation"
+---
+
 # Contributor documentation
 
 **Audience:** People who want to review, research, or contribute to this repository.
