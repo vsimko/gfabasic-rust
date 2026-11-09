@@ -11,6 +11,7 @@ on:
       - "tests/corpus/amiga/3.5/combinatorics/**"
       - "tests/corpus/amiga/3.5/matrix/**"
       - "tests/corpus/amiga/3.5/data/**"
+      - "tests/corpus/amiga/3.5/data/**"
       - ".github/workflows/rust.yml"
   push:
     branches:
@@ -23,6 +24,7 @@ on:
       - "api/**"
       - "tests/corpus/amiga/3.5/combinatorics/**"
       - "tests/corpus/amiga/3.5/matrix/**"
+      - "tests/corpus/amiga/3.5/data/**"
       - ".github/workflows/rust.yml"
 
 permissions:
