@@ -8,10 +8,10 @@ The binary is maintained in the private repository [vsimko/gfabasic-private-asse
 
 The workflow reuses the existing `GFA_ASSETS_TOKEN` Actions secret. It must be a token with read-only Contents access to `vsimko/gfabasic-private-assets`; no second secret or second workflow is needed.
 
-The run produces two artifacts:
+The run produces two artifacts and publishes a reviewed repository update:
 
 - `gfa-basic-3.52-amiga`: verified interpreter executable plus a provenance note, retained for 7 days.
-- `amiga-gfa-basic-analysis`: printable strings with file offsets, Ghidra function inventory, per-function C-like decompilation, and `REPORT.md`, retained for 30 days.
+- `amiga-gfa-basic-analysis`: complete output including decompilation, retained for 30 days.\n\nThe workflow also updates the dedicated `amiga-analysis/3.52` branch with the durable report and machine-readable indexes under `analysis/amiga-3.52/`, then opens or updates a pull request against `main`. The public branch excludes the original executable and C-like decompilation files; those remain in the temporary Actions artifact. Each update is reviewable before it reaches `main`.
 
 The executable is staged under the exact same path used by the Ghidra import step. It is not committed to the public repository. The analysis runs with a Motorola 68000 big-endian processor definition.
 
