@@ -1,3 +1,8 @@
+---
+type: "Architecture Decision Record"
+title: "ADR 0013: Repository consistency validation"
+---
+
 # ADR 0013: Repository consistency validation
 
 - Status: Accepted
