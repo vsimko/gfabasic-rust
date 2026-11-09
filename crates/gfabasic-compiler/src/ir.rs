@@ -71,23 +71,17 @@ fn unary_intrinsic(declaration_id: &str, argument: i64) -> Result<Option<i64>, S
     }
     let argument = u32::try_from(argument)
         .map_err(|_| format!("integer argument for {declaration_id} is outside the runtime ABI"))?;
-    match crate::semantic::resolve_api_handler(declaration_id)
-        .map_err(|error| error.to_string())?
-    {
+    match crate::semantic::resolve_api_handler(declaration_id).map_err(|error| error.to_string())? {
         gfabasic_runtime::handlers::ResolvedHandler::IntegerToUnsigned(handler) => {
             Ok(handler(argument).and_then(|value| i64::try_from(value).ok()))
         }
-        gfabasic_runtime::handlers::ResolvedHandler::TwoIntegersToUnsigned(_) => {
-            Err(format!("runtime handler signature mismatch for {declaration_id}"))
-        }
+        gfabasic_runtime::handlers::ResolvedHandler::TwoIntegersToUnsigned(_) => Err(format!(
+            "runtime handler signature mismatch for {declaration_id}"
+        )),
     }
 }
 
-fn binary_intrinsic(
-    declaration_id: &str,
-    left: i64,
-    right: i64,
-) -> Result<Option<i64>, String> {
+fn binary_intrinsic(declaration_id: &str, left: i64, right: i64) -> Result<Option<i64>, String> {
     // Preserve the compiler prototype's existing literal bound. This is not
     // promoted to a historical GFA BASIC language limit.
     if !(0..=20).contains(&left) || !(0..=left).contains(&right) {
@@ -103,9 +97,9 @@ fn binary_intrinsic(
         gfabasic_runtime::handlers::ResolvedHandler::TwoIntegersToUnsigned(handler) => {
             Ok(handler(left, right).and_then(|value| i64::try_from(value).ok()))
         }
-        gfabasic_runtime::handlers::ResolvedHandler::IntegerToUnsigned(_) => {
-            Err(format!("runtime handler signature mismatch for {declaration_id}"))
-        }
+        gfabasic_runtime::handlers::ResolvedHandler::IntegerToUnsigned(_) => Err(format!(
+            "runtime handler signature mismatch for {declaration_id}"
+        )),
     }
 }
 
