@@ -1,10 +1,10 @@
 //! Conservative, lossless-source-aware formatter for the supported frontend subset.
 //!
 //! Formatting is intentionally limited to syntax accepted by `parse_document`.
-//! Token spellings are copied from their original source spans; the formatter
-//! never case-folds or rewrites identifiers or numeric literal text.
+//! Token spellings and inline-comment text are copied from their original source spans;
+//! the formatter never case-folds or rewrites identifiers or numeric literal text.
 
-use crate::diagnostics::{Diagnostic, DiagnosticCategory, DiagnosticSeverity};
+use crate::diagnostics::Diagnostic;
 use crate::frontend::{TokenKind, TriviaKind, parse_document};
 use crate::source::SourceId;
 
