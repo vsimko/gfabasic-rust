@@ -212,7 +212,6 @@ jobs:
               exit 1
             fi
             printf "PING\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}" > "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/post-merge-ping.txt"
-            printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-merge-click.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
             echo "EMULATOR_ALIVE_AFTER_MERGE_CLICK=yes" > "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-click-status.txt"
             # Run only after confirming the editor/emulator survived the click.
             # GFA BASIC's Run command is Shift+F10. Amiga raw keycodes:
