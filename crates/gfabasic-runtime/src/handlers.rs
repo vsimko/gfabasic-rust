@@ -82,6 +82,7 @@ pub enum RegistryError {
     InvalidIdNamespace(String),
     Missing(String),
     Duplicate(String),
+    Stale(String),
     ProfileMismatch(String),
     SignatureMismatch(String),
 }
@@ -150,8 +151,15 @@ impl HandlerRegistry {
         &self,
         requirements: impl IntoIterator<Item = HandlerRequirement<'a>>,
     ) -> Result<(), RegistryError> {
-        for requirement in requirements {
-            self.resolve(requirement)?;
+        let requirements: Vec<_> = requirements.into_iter().collect();
+        for requirement in &requirements {
+            self.resolve(*requirement)?;
+        }
+
+        for id in self.registrations.keys() {
+            if !requirements.iter().any(|requirement| requirement.id == id) {
+                return Err(RegistryError::Stale(id.clone()));
+            }
         }
         Ok(())
     }
@@ -222,6 +230,20 @@ mod tests {
                 .resolve(requirement(ImplementationStatus::Implemented))
                 .unwrap_err(),
             RegistryError::Duplicate("gfa.language.math.fact".into())
+        );
+    }
+
+    #[test]
+    fn validation_rejects_unreferenced_stale_registrations() {
+        let mut registry = registry();
+        registry.register(HandlerRegistration {
+            id: "gfa.language.math.old_fact",
+            profile: ApiProfile::LanguageCore,
+            handler: RuntimeHandler::IntegerToUnsigned(unary),
+        });
+        assert_eq!(
+            registry.validate([requirement(ImplementationStatus::Implemented)]),
+            Err(RegistryError::Stale("gfa.language.math.old_fact".into()))
         );
     }
 
