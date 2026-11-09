@@ -63,31 +63,40 @@ impl IrError {
     }
 }
 
-fn factorial(n: i64) -> Option<i64> {
-    if !(0..=20).contains(&n) {
-        return None;
+fn unary_intrinsic(declaration_id: &str, argument: i64) -> Result<Option<i64>, String> {
+    let argument = u32::try_from(argument)
+        .map_err(|_| format!("integer argument for {declaration_id} is outside the runtime ABI"))?;
+    match crate::semantic::resolve_api_handler(declaration_id)
+        .map_err(|error| error.to_string())?
+    {
+        gfabasic_runtime::handlers::ResolvedHandler::IntegerToUnsigned(handler) => {
+            Ok(handler(argument).and_then(|value| i64::try_from(value).ok()))
+        }
+        gfabasic_runtime::handlers::ResolvedHandler::TwoIntegersToUnsigned(_) => {
+            Err(format!("runtime handler signature mismatch for {declaration_id}"))
+        }
     }
-    (1..=n).try_fold(1_i64, |acc, x| acc.checked_mul(x))
 }
 
-fn variat(n: i64, k: i64) -> Option<i64> {
-    if !(0..=20).contains(&n) || !(0..=n).contains(&k) {
-        return None;
+fn binary_intrinsic(
+    declaration_id: &str,
+    left: i64,
+    right: i64,
+) -> Result<Option<i64>, String> {
+    let left = u32::try_from(left)
+        .map_err(|_| format!("integer argument for {declaration_id} is outside the runtime ABI"))?;
+    let right = u32::try_from(right)
+        .map_err(|_| format!("integer argument for {declaration_id} is outside the runtime ABI"))?;
+    match crate::semantic::resolve_api_handler(declaration_id)
+        .map_err(|error| error.to_string())?
+    {
+        gfabasic_runtime::handlers::ResolvedHandler::TwoIntegersToUnsigned(handler) => {
+            Ok(handler(left, right).and_then(|value| i64::try_from(value).ok()))
+        }
+        gfabasic_runtime::handlers::ResolvedHandler::IntegerToUnsigned(_) => {
+            Err(format!("runtime handler signature mismatch for {declaration_id}"))
+        }
     }
-    ((n - k + 1)..=n).try_fold(1_i64, |acc, x| acc.checked_mul(x))
-}
-
-fn combin(n: i64, k: i64) -> Option<i64> {
-    if !(0..=20).contains(&n) || !(0..=n).contains(&k) {
-        return None;
-    }
-    let k = k.min(n - k);
-    let mut value = 1_i64;
-    for i in 1..=k {
-        value = value.checked_mul(n - k + i)?;
-        value /= i;
-    }
-    Some(value)
 }
 
 /// Lower the current frontend AST to typed, constant-valued IR.
@@ -108,7 +117,13 @@ pub fn lower(program: &Program) -> Result<Module, Vec<IrError>> {
                 argument,
                 span,
             } => {
-                let value = factorial(*argument);
+                let value = match unary_intrinsic("gfa.language.math.fact", *argument) {
+                    Ok(value) => value,
+                    Err(message) => {
+                        errors.push(IrError::at(message, *span));
+                        continue;
+                    }
+                };
                 lower_assignment(
                     name,
                     value,
@@ -120,7 +135,13 @@ pub fn lower(program: &Program) -> Result<Module, Vec<IrError>> {
                 );
             }
             Statement::AssignVariat { name, n, k, span } => {
-                let value = variat(*n, *k);
+                let value = match binary_intrinsic("gfa.language.math.variat", *n, *k) {
+                    Ok(value) => value,
+                    Err(message) => {
+                        errors.push(IrError::at(message, *span));
+                        continue;
+                    }
+                };
                 lower_assignment(
                     name,
                     value,
@@ -132,7 +153,13 @@ pub fn lower(program: &Program) -> Result<Module, Vec<IrError>> {
                 );
             }
             Statement::AssignCombin { name, n, k, span } => {
-                let value = combin(*n, *k);
+                let value = match binary_intrinsic("gfa.language.math.combin", *n, *k) {
+                    Ok(value) => value,
+                    Err(message) => {
+                        errors.push(IrError::at(message, *span));
+                        continue;
+                    }
+                };
                 lower_assignment(
                     name,
                     value,
