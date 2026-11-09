@@ -326,7 +326,7 @@ mod tests {
 
     #[test]
     fn rejects_matrix_statements_from_the_executable_build_subset() {
-        let source = include_str!("../../../tests/corpus/amiga/3.5/matrix/mat-one-identity.bas");
+        let source = include_str!("../../../tests/corpus/amiga/3.5/matrix/mat-one-identity.lst");
         let mut sources = SourceMap::new();
         let id = sources.add_source("matrix.bas", source);
         let ast = parse(id, source).unwrap();
