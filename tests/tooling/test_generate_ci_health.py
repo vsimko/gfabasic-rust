@@ -85,7 +85,7 @@ class CiHealthGeneratorTests(unittest.TestCase):
         output = render(snapshot)
         self.assertIn("Latest: failure", output)
         self.assertIn("Last success:", output)
-        self.assertIn("CONFORMANCE SUITE", output)
+        self.assertIn("Conformance suite", output)
         self.assertIn("NOT CONFIGURED", output)
         self.assertIn("https://example.test/latest", output)
         self.assertIn("https://example.test/success", output)
