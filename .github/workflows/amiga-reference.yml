@@ -1,4 +1,4 @@
-name: Prepare Amiga reference interpreter
+name: Prepare and analyze Amiga GFA-BASIC reference interpreter
 
 on:
   workflow_dispatch:
@@ -11,11 +11,14 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  prepare:
-    name: Fetch and verify GFA BASIC 3.52
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
+  prepare-and-analyze:
+    name: Fetch, verify, and analyze GFA BASIC 3.52
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
     steps:
+      - name: Check out analysis scripts
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+
       - name: Download private interpreter binary
         env:
           GFA_ASSETS_TOKEN: ${{ secrets.GFA_ASSETS_TOKEN }}
@@ -25,7 +28,7 @@ jobs:
             echo "::error::GFA_ASSETS_TOKEN is not configured."
             exit 1
           }
-          mkdir -p dist/amiga/gfa-basic-3.52
+          mkdir -p dist/amiga/gfa-basic-3.52 analysis-input analysis-output
           curl --fail --silent --show-error --location --retry 3 \
             --header "Authorization: Bearer $GFA_ASSETS_TOKEN" \
             --header "Accept: application/vnd.github.raw" \
@@ -38,8 +41,9 @@ jobs:
           cd dist/amiga/gfa-basic-3.52
           echo "fd80f6093e8d0163856af5849121e945e37051a2ad2a9053aa1930021783d962  GFABasic" | sha256sum --check
           test "$(wc -c < GFABasic)" -eq 136548
-          printf '\x00\x00\x03\xf3' | cmp -n 4 - GFABasic
+          printf '\\x00\\x00\\x03\\xf3' | cmp -n 4 - GFABasic
           file GFABasic || true
+          cp GFABasic "$GITHUB_WORKSPACE/analysis-input/GFABasic"
 
       - name: Package emulator input
         run: |
@@ -62,3 +66,46 @@ jobs:
           path: dist/gfa-basic-3.52-amiga.tar.gz
           if-no-files-found: error
           retention-days: 7
+
+      - name: Install Java and analysis utilities
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install --yes openjdk-21-jdk unzip jq python3
+          java -version
+
+      - name: Download Ghidra
+        run: |
+          set -euo pipefail
+          URL="$(curl --fail --silent --show-error https://api.github.com/repos/NationalSecurityAgency/ghidra/releases/latest |
+            jq -r '.assets[] | select(.name | test("^ghidra_.*PUBLIC.*\\\\.zip$")) | .browser_download_url' | head -n 1)"
+          test -n "$URL"
+          curl --fail --location --silent --show-error "$URL" -o /tmp/ghidra.zip
+          mkdir -p /opt/ghidra
+          unzip -q /tmp/ghidra.zip -d /opt/ghidra
+          echo "GHIDRA_HOME=$(find /opt/ghidra -mindepth 1 -maxdepth 1 -type d | head -n 1)" >> "$GITHUB_ENV"
+
+      - name: Extract printable strings with file offsets
+        run: python3 scripts/amiga_binary_strings.py analysis-input/GFABasic analysis-output/strings.json
+
+      - name: Import and analyze Amiga executable with Ghidra
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/ghidra-project
+          "$GHIDRA_HOME/support/analyzeHeadless" /tmp/ghidra-project GfaBasic352 \
+            -import analysis-input/GFABasic \
+            -processor "68000:BE:32:default" \
+            -scriptPath scripts/ghidra \
+            -postScript ExportGfaAnalysis.py "$GITHUB_WORKSPACE/analysis-output" \
+            -deleteProject
+
+      - name: Build analysis index
+        run: python3 scripts/build_amiga_analysis_report.py analysis-output
+
+      - name: Upload reverse-engineering results
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: amiga-gfa-basic-analysis
+          path: analysis-output/
+          if-no-files-found: error
+          retention-days: 30
