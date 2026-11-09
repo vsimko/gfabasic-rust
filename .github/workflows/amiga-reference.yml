@@ -1,6 +1,17 @@
 name: Prepare and analyze Amiga GFA-BASIC reference interpreter
 
 on:
+  # Analyze automatically when the interpreter-analysis pipeline or its scripts change.
+  # This also runs for pushes to the active development branch, so no UI dispatch is needed.
+  push:
+    branches:
+      - main
+      - research/amiga-command-syntax-workflow
+    paths:
+      - .github/workflows/amiga-reference.yml
+      - scripts/amiga_binary_strings.py
+      - scripts/build_amiga_analysis_report.py
+      - scripts/ghidra/**
   workflow_dispatch:
 
 permissions:
