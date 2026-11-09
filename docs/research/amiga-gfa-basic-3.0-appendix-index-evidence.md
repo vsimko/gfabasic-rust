@@ -1,3 +1,8 @@
+---
+type: "Research Note"
+title: "GFA BASIC 3.0 Amiga — appendix and command-index evidence"
+---
+
 # GFA BASIC 3.0 Amiga — appendix and command-index evidence
 
 Source: *GFA-BASIC 3.0 Amiga*, Chapter 12, “Appendices”, printed pages 12-2–12-19 (Interpreter PDF pages 404 onward). This is supporting index/reference material for the 3.0 baseline.
