@@ -64,6 +64,11 @@ impl IrError {
 }
 
 fn unary_intrinsic(declaration_id: &str, argument: i64) -> Result<Option<i64>, String> {
+    // Preserve the compiler prototype's existing literal bound. This is not
+    // promoted to a historical GFA BASIC language limit.
+    if !(0..=20).contains(&argument) {
+        return Ok(None);
+    }
     let argument = u32::try_from(argument)
         .map_err(|_| format!("integer argument for {declaration_id} is outside the runtime ABI"))?;
     match crate::semantic::resolve_api_handler(declaration_id)
@@ -82,7 +87,12 @@ fn binary_intrinsic(
     declaration_id: &str,
     left: i64,
     right: i64,
-) -> Result<Option<i64>, String> {
+ ) -> Result<Option<i64>, String> {
+    // Preserve the compiler prototype's existing literal bound. This is not
+    // promoted to a historical GFA BASIC language limit.
+    if !(0..=20).contains(&left) || !(0..=left).contains(&right) {
+        return Ok(None);
+    }
     let left = u32::try_from(left)
         .map_err(|_| format!("integer argument for {declaration_id} is outside the runtime ABI"))?;
     let right = u32::try_from(right)
