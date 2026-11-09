@@ -60,6 +60,13 @@ pub enum MatrixShapeError {
         rows: usize,
         columns: usize,
     },
+    /// MAT RANG is defined by the source for square matrices only.
+    RankRequiresSquare {
+        rows: usize,
+        columns: usize,
+    },
+    /// The requested rank tolerance must be finite and non-negative.
+    InvalidRankTolerance,
     /// MAT ONE is defined by the source for square matrices only.
     IdentityRequiresSquare {
         rows: usize,
@@ -167,6 +174,13 @@ impl fmt::Display for MatrixShapeError {
                 formatter,
                 "submatrix at ({start_row}, {start_column}) with size {size} exceeds {rows}x{columns} matrix"
             ),
+            Self::RankRequiresSquare { rows, columns } => write!(
+                formatter,
+                "matrix rank requires a square matrix, got {rows}x{columns}"
+            ),
+            Self::InvalidRankTolerance => {
+                write!(formatter, "matrix rank tolerance must be finite and non-negative")
+            }
             Self::IdentityRequiresSquare { rows, columns } => write!(
                 formatter,
                 "identity matrix requires a square shape, got {rows}x{columns}"
@@ -393,6 +407,105 @@ impl<'a> MatrixMut<'a> {
 
         self.elements.copy_from_slice(&inverse);
         Ok(())
+    }
+
+    /// Calculate the rank of a square matrix (Amiga 3.5 `MAT RANG x=a()`).
+    ///
+    /// The default absolute pivot tolerance is f64::EPSILON × n × max_abs,
+    /// where n is the matrix order and max_abs is its largest absolute
+    /// element. Use rank_with_tolerance when a caller needs another policy.
+    pub fn rank(&self) -> Result<usize, MatrixShapeError> {
+        if self.rows != self.columns {
+            return Err(MatrixShapeError::RankRequiresSquare {
+                rows: self.rows,
+                columns: self.columns,
+            });
+        }
+        let tolerance = rank_default_tolerance(self.elements, self.rows);
+        Ok(rank_of_square(self.elements, self.rows, tolerance))
+    }
+
+    /// Calculate matrix rank using an explicit absolute pivot tolerance.
+    ///
+    /// This makes the floating-point threshold a caller-controlled Rust API
+    /// choice rather than attributing one to the original interpreter.
+    pub fn rank_with_tolerance(
+        &self,
+        tolerance: f64,
+    ) -> Result<usize, MatrixShapeError> {
+        if self.rows != self.columns {
+            return Err(MatrixShapeError::RankRequiresSquare {
+                rows: self.rows,
+                columns: self.columns,
+            });
+        }
+        if !tolerance.is_finite() || tolerance < 0.0 {
+            return Err(MatrixShapeError::InvalidRankTolerance);
+        }
+        Ok(rank_of_square(self.elements, self.rows, tolerance))
+    }
+
+    /// Calculate the rank of a square part matrix (Amiga 3.5 `MAT RANG x=a([i,j]),n`).
+    ///
+    /// The starting offsets are zero-based relative to this Rust matrix view.
+    /// The same scale-relative default tolerance as rank is used.
+    pub fn rank_submatrix(
+        &self,
+        start_row: usize,
+        start_column: usize,
+        size: usize,
+    ) -> Result<usize, MatrixShapeError> {
+        let submatrix = self.copy_square_submatrix(start_row, start_column, size)?;
+        let tolerance = rank_default_tolerance(&submatrix, size);
+        Ok(rank_of_square(&submatrix, size, tolerance))
+    }
+
+    /// Calculate a square part-matrix rank using an explicit absolute tolerance.
+    pub fn rank_submatrix_with_tolerance(
+        &self,
+        start_row: usize,
+        start_column: usize,
+        size: usize,
+        tolerance: f64,
+    ) -> Result<usize, MatrixShapeError> {
+        if !tolerance.is_finite() || tolerance < 0.0 {
+            return Err(MatrixShapeError::InvalidRankTolerance);
+        }
+        let submatrix = self.copy_square_submatrix(start_row, start_column, size)?;
+        Ok(rank_of_square(&submatrix, size, tolerance))
+    }
+
+    fn copy_square_submatrix(
+        &self,
+        start_row: usize,
+        start_column: usize,
+        size: usize,
+    ) -> Result<Vec<f64>, MatrixShapeError> {
+        let end_row = start_row
+            .checked_add(size)
+            .ok_or(MatrixShapeError::DimensionOverflow)?;
+        let end_column = start_column
+            .checked_add(size)
+            .ok_or(MatrixShapeError::DimensionOverflow)?;
+        if end_row > self.rows || end_column > self.columns {
+            return Err(MatrixShapeError::SubmatrixOutOfBounds {
+                start_row,
+                start_column,
+                size,
+                rows: self.rows,
+                columns: self.columns,
+            });
+        }
+
+        let capacity = size
+            .checked_mul(size)
+            .ok_or(MatrixShapeError::DimensionOverflow)?;
+        let mut submatrix = Vec::with_capacity(capacity);
+        for row in start_row..end_row {
+            let start = row * self.columns + start_column;
+            submatrix.extend_from_slice(&self.elements[start..start + size]);
+        }
+        Ok(submatrix)
     }
 
     /// Calculate the determinant of a square field (Amiga 3.5 `MAT DET x=a()`).
@@ -738,6 +851,51 @@ impl<'a> MatrixMut<'a> {
     }
 }
 
+fn rank_default_tolerance(elements: &[f64], size: usize) -> f64 {
+    let max_abs = elements
+        .iter()
+        .fold(0.0_f64, |maximum, value| maximum.max(value.abs()));
+    f64::EPSILON * size as f64 * max_abs
+}
+
+fn rank_of_square(elements: &[f64], size: usize, tolerance: f64) -> usize {
+    let mut work = elements.to_vec();
+    let mut pivot_row = 0;
+
+    for pivot_column in 0..size {
+        if pivot_row == size {
+            break;
+        }
+        let best_row = (pivot_row..size)
+            .max_by(|left, right| {
+                work[*left * size + pivot_column]
+                    .abs()
+                    .total_cmp(&work[*right * size + pivot_column].abs())
+            })
+            .expect("a candidate pivot row exists while rows remain");
+        let pivot_magnitude = work[best_row * size + pivot_column].abs();
+        if pivot_magnitude <= tolerance {
+            continue;
+        }
+        if best_row != pivot_row {
+            for column in 0..size {
+                work.swap(pivot_row * size + column, best_row * size + column);
+            }
+        }
+
+        let pivot = work[pivot_row * size + pivot_column];
+        for row in (pivot_row + 1)..size {
+            let factor = work[row * size + pivot_column] / pivot;
+            for column in (pivot_column + 1)..size {
+                work[row * size + column] -= factor * work[pivot_row * size + column];
+            }
+            work[row * size + pivot_column] = 0.0;
+        }
+        pivot_row += 1;
+    }
+    pivot_row
+}
+
 fn determinant_of_square(elements: &[f64], size: usize) -> f64 {
     let mut work = elements.to_vec();
     let mut determinant = 1.0;
@@ -951,6 +1109,46 @@ mod tests {
             })
         );
         assert_eq!(destination, [9.0; 6]);
+    }
+
+    #[test]
+    fn rank_calculates_full_and_deficient_matrix_rank() {
+        let mut full_rank = [1.0, 2.0, 3.0, 4.0];
+        let matrix = MatrixMut::new(2, 2, &mut full_rank).unwrap();
+        assert_eq!(matrix.rank(), Ok(2));
+
+        let mut deficient = [1.0, 2.0, 2.0, 4.0];
+        let matrix = MatrixMut::new(2, 2, &mut deficient).unwrap();
+        assert_eq!(matrix.rank(), Ok(1));
+    }
+
+    #[test]
+    fn rank_submatrix_calculates_selected_square_region() {
+        let mut values = [1.0, 2.0, 3.0, 0.0, 4.0, 5.0, 1.0, 0.0, 6.0];
+        let matrix = MatrixMut::new(3, 3, &mut values).unwrap();
+
+        assert_eq!(matrix.rank_submatrix(1, 1, 2), Ok(2));
+    }
+
+    #[test]
+    fn rank_rejects_non_square_matrix_and_invalid_tolerance() {
+        let mut values = [1.0, 2.0, 3.0, 4.0, 5.0, 6.0];
+        let matrix = MatrixMut::new(2, 3, &mut values).unwrap();
+
+        assert_eq!(
+            matrix.rank(),
+            Err(MatrixShapeError::RankRequiresSquare {
+                rows: 2,
+                columns: 3,
+            })
+        );
+        assert_eq!(
+            matrix.rank_with_tolerance(f64::NAN),
+            Err(MatrixShapeError::RankRequiresSquare {
+                rows: 2,
+                columns: 3,
+            })
+        );
     }
 
     #[test]
