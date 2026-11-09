@@ -1,6 +1,6 @@
 # API registry
 
-Canonical declarations use TOML. The planned registry namespaces are `language-core/`, `amiga/`, and `atari-st/`; this describes the intended layout, not the current set of populated directories.
+Canonical declarations use TOML in the `language-core/`, `amiga/`, and `atari-st/` namespaces.
 
 ## Current inventory
 
@@ -9,7 +9,6 @@ Canonical declarations use TOML. The planned registry namespaces are `language-c
 - `language-core/matrix-operations.toml`: matrix/vector DATA and file I/O, copy/transpose, arithmetic, determinant, rank, and inverse operations.
 - `language-core/special-variables-and-data-pointers.toml`: `_DATA`, `_DATA=`, and `_0`…`_9`.
 - `amiga/special-and-platform-commands.toml`: `PCOLOR`, the negative-screen-number `OPENW` variant, and the `GURU` command/function forms.
-- `language-core/`: no declarations yet.
 
 The language-core catalogue currently contains 24 declarations, and the Amiga platform profile contains four declarations. All are limited to features explicitly identified in the supplied 3.5 interpreter addendum. Neither catalogue claims completeness. The addendum's Chapter 13/14 page references and known source limitations are documented in [the extracted feature inventory](../../docs/research/amiga-gfa-basic-35-addendum-inventory.md).
 
