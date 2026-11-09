@@ -180,6 +180,9 @@ impl HandlerRegistry {
         let handler_id = requirement
             .handler_id
             .ok_or_else(|| RegistryError::Missing(requirement.id.to_owned()))?;
+        if !handler_id.starts_with(expected_prefix) {
+            return Err(RegistryError::InvalidIdNamespace(handler_id.to_owned()));
+        }
         let matches = self
             .registrations
             .get(handler_id)
@@ -343,9 +346,16 @@ mod tests {
 
         req = requirement(ImplementationStatus::Implemented);
         req.id = "gfa.amiga.math.fact";
+        req.handler_id = Some("gfa.amiga.math.fact");
         req.profile = ApiProfile::Amiga;
+        let mut wrong_profile = HandlerRegistry::new();
+        wrong_profile.register(HandlerRegistration {
+            id: "gfa.amiga.math.fact",
+            profile: ApiProfile::LanguageCore,
+            handler: RuntimeHandler::IntegerToUnsigned(unary),
+        });
         assert_eq!(
-            registry().resolve(req).unwrap_err(),
+            wrong_profile.resolve(req).unwrap_err(),
             RegistryError::ProfileMismatch("gfa.amiga.math.fact".into())
         );
 
