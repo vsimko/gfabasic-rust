@@ -250,8 +250,7 @@ fn is_identifier_continuation(byte: u8) -> bool {
 fn is_supported_token_boundary(byte: u8) -> bool {
     matches!(
         byte,
-        b' ' | b'\t' | b'\r' | b'\n' | b'+' | b'-' | b'#' | b'*' | b'='
-            | b'(' | b')' | b','
+        b' ' | b'\t' | b'\r' | b'\n' | b'+' | b'-' | b'#' | b'*' | b'=' | b'(' | b')' | b','
     )
 }
 
@@ -1939,8 +1938,9 @@ mod tests {
         for source_text in ["_DATA.", "_DATA\"quoted\"", "_0:", "_9?"] {
             let mut sources = SourceMap::new();
             let source_id = sources.add_source("special-name-adjacency.lst", source_text);
-            let errors = lex_lossless(source_id, source_text)
-                .expect_err("unsupported adjacent text must not follow a valid special-name prefix");
+            let errors = lex_lossless(source_id, source_text).expect_err(
+                "unsupported adjacent text must not follow a valid special-name prefix",
+            );
             assert_eq!(errors[0].code, "GFA-LEX-0001");
             assert_eq!(errors[0].primary_span.unwrap().start, 0);
         }
