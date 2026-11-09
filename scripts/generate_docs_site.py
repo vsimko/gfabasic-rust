@@ -5,7 +5,6 @@ from __future__ import annotations
 
 import argparse
 import html
-import json
 import re
 import shutil
 from pathlib import Path
@@ -18,6 +17,7 @@ from markdown_it import MarkdownIt
 ROOT = Path(__file__).resolve().parents[1]
 BUNDLE = ROOT / "docs"
 OUTPUT = ROOT / "site" / "docs"
+LINK_RE = re.compile(r"\[([^\]]+)\]\((<[^>]+>|[^)\s]+)(?:\s+[^)]*)?\)")
 REPO_URL = "https://github.com/vsimko/gfabasic-rust"
 MARKDOWN = MarkdownIt("commonmark", {"html": False, "linkify": False, "typographer": False}).enable(
     ["table", "strikethrough"]
@@ -110,22 +110,23 @@ def title_for(path: Path, data: dict, body: str) -> str:
 def page_nav(source: Path, docs: list[tuple[Path, dict, str]], output_file: Path) -> str:
     parent = source.parent
     parent_index = parent / "index.md"
+    index_entry = next((item for item in docs if item[0] == parent_index), None)
     index_out = (OUTPUT / parent_index.relative_to(BUNDLE)).with_suffix(".html")
     parent_link = Path(__import__("os").path.relpath(index_out, output_file.parent)).as_posix()
     links = []
-    for path, data, body in docs:
-        if path.parent != parent or path.name == "index.md":
-            continue
-        label = title_for(path, data, body)
-        href = Path(__import__("os").path.relpath((OUTPUT / path.relative_to(BUNDLE)).with_suffix(".html"), output_file.parent)).as_posix()
-        links.append(f'<li><a href="{html.escape(href, quote=True)}">{html.escape(label)}</a></li>')
+    if index_entry:
+        for match in LINK_RE.finditer(index_entry[2]):
+            label, target = match.group(1), match.group(2).strip("<>")
+            href = rewrite_target(target, parent_index, output_file)
+            links.append(
+                f'<li><a href="{html.escape(href, quote=True)}">{html.escape(label)}</a></li>'
+            )
     return (
         '<nav class="docs-sidebar" aria-label="Documentation navigation">'
         f'<a class="docs-home" href="{html.escape(parent_link, quote=True)}">Section index</a>'
         + ("<ul>" + "".join(links) + "</ul>" if links else "")
         + "</nav>"
     )
-
 
 def render_page(source: Path, data: dict, body: str, docs: list[tuple[Path, dict, str]]) -> str:
     output_file = (OUTPUT / source.relative_to(BUNDLE)).with_suffix(".html")
