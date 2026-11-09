@@ -244,7 +244,7 @@ mod tests {
 
     #[test]
     fn resolves_integer_assignment_as_a_symbol_declaration() {
-        let source_text = "LET x=42\\nPRINT x\\n";
+        let source_text = "LET x=42\nPRINT x\n";
         let mut sources = SourceMap::new();
         let source_id = sources.add_source("integer-symbols.bas", source_text);
         let document = parse_document(source_id, source_text).expect("integer assignment parses");

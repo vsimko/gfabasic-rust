@@ -382,7 +382,7 @@ fn parser_rejects_let_rhs_outside_the_supported_intrinsic_subset() {
 
 #[test]
 fn parser_accepts_integer_literal_assignments_with_or_without_let() {
-    let source = "x=42\\nLET y=7\\nPRINT x,y\\n";
+    let source = "x=42\nLET y=7\nPRINT x,y\n";
     let mut sources = SourceMap::new();
     let source_id = sources.add_source("integer-assignments.LST", source);
 
@@ -406,7 +406,7 @@ fn parser_accepts_integer_literal_assignments_with_or_without_let() {
 
 #[test]
 fn parser_rejects_arithmetic_rhs_until_expression_grammar_is_implemented() {
-    let source = "x=1+2\\n";
+    let source = "x=1+2\n";
     let mut sources = SourceMap::new();
     let source_id = sources.add_source("integer-expression.LST", source);
 

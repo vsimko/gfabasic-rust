@@ -366,7 +366,7 @@ mod tests {
 
     #[test]
     fn lowers_integer_literal_assignments_to_constant_values() {
-        let source = "x=42\\nLET y=7\\nPRINT x,y\\n";
+        let source = "x=42\nLET y=7\nPRINT x,y\n";
         let mut sources = SourceMap::new();
         let source_id = sources.add_source("integer-assignments.bas", source);
         let program = crate::frontend::parse(source_id, source).expect("syntax is supported");
