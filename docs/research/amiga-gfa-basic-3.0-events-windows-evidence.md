@@ -1,3 +1,8 @@
+---
+type: "Research Note"
+title: "GFA BASIC 3.0 Amiga — event, menu, screen and window evidence"
+---
+
 # GFA BASIC 3.0 Amiga — event, menu, screen and window evidence
 
 Source: *GFA-BASIC 3.0 Amiga*, Chapter 9, “Event-, menu-, screen- and window handling”, printed pages 9-2–9-39 (approximately Interpreter PDF pages 256–293). The chapter is part of the 3.0 base manual, not the separate 3.5 addendum.
