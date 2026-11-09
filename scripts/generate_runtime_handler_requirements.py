@@ -86,6 +86,13 @@ def generate_source(root: Path = ROOT) -> str:
             if raw_status in {"implemented", "partial"}:
                 if not isinstance(handler_id, str) or not handler_id:
                     raise GenerationError(f"{path}: callable declaration {declaration_id} has no handler ID")
+                expected_prefix = {
+                    "language-core": "gfa.language.",
+                    "amiga": "gfa.amiga.",
+                    "atari-st": "gfa.atari-st.",
+                }[namespace]
+                if not declaration_id.startswith(expected_prefix) or not handler_id.startswith(expected_prefix):
+                    raise GenerationError(f"{path}: handler ID namespace does not match {namespace!r}")
                 if handler_id in seen_handlers:
                     raise GenerationError(f"{path}: duplicate handler ID {handler_id!r}")
                 seen_handlers.add(handler_id)
