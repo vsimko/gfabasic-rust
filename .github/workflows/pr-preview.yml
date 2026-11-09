@@ -5,6 +5,7 @@ on:
     types: [opened, reopened, synchronize, closed]
 
 permissions:
+  actions: read
   contents: write
   issues: write
   pull-requests: write
@@ -24,11 +25,14 @@ jobs:
 
       - name: Build website
         if: github.event.action != 'closed'
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           if [ -f scripts/generate_project_data.py ]; then
             python3 scripts/generate_project_data.py
           fi
           python3 scripts/generate_api_catalogue.py
+          python3 scripts/generate_ci_health.py
           if [ -f scripts/validate_repository.py ]; then
             python3 scripts/validate_repository.py
             python3 -m unittest discover -s tests/tooling
@@ -37,6 +41,8 @@ jobs:
           test -s site/styles.css
           test -s site/script.js
           test -s site/data/api-catalogue.json
+          test -s site/data/ci-health.json
+          grep -q 'id="ci-health"' site/index.html
           test -d site/data/api-catalogue-details
           python3 scripts/generate_api_catalogue.py --check
           node --check site/script.js
