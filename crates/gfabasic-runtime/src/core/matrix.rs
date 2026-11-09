@@ -3,8 +3,9 @@
 //! The addendum documents MAT CLR and MAT SET for previously dimensioned
 //! one- or two-dimensional floating-point fields, MAT ONE for square
 //! floating-point matrices (printed pp. 13-2–13-3), and MAT ADD/MAT SUB/MAT MUL
-//! scalar forms for element-wise arithmetic (printed pp. 13-15–13-27), and
-//! row-/column-wise normalization (printed pp. 13-31–13-33).
+//! scalar forms for element-wise arithmetic and matrix multiplication
+//! (printed pp. 13-15–13-22), and row-/column-wise normalization
+//! (printed pp. 13-31–13-33).
 //!
 //! This module provides the storage-independent operation semantics. It does
 //! not define the original interpreter's array layout, numeric representation,
@@ -46,6 +47,18 @@ pub enum MatrixShapeError {
         destination_columns: usize,
         source_rows: usize,
         source_columns: usize,
+    },
+    /// Matrix multiplication requires the left column count to equal right row count.
+    ProductInnerDimensionMismatch {
+        left_columns: usize,
+        right_rows: usize,
+    },
+    /// Matrix multiplication destination must have the product's shape.
+    ProductDestinationShapeMismatch {
+        destination_rows: usize,
+        destination_columns: usize,
+        expected_rows: usize,
+        expected_columns: usize,
     },
     /// MAT NORM cannot normalize a zero-length row or column.
     ZeroNormRow {
@@ -100,6 +113,8 @@ impl fmt::Display for MatrixShapeError {
                 formatter,
                 "element-wise operation requires {destination_rows}x{destination_columns} source, got {source_rows}x{source_columns}"
             ),
+            Self::ProductInnerDimensionMismatch { left_columns, right_rows } => write!(formatter, "matrix product inner dimensions differ: {left_columns} and {right_rows}"),
+            Self::ProductDestinationShapeMismatch { destination_rows, destination_columns, expected_rows, expected_columns } => write!(formatter, "matrix product destination must be {expected_rows}x{expected_columns}, got {destination_rows}x{destination_columns}"),
             Self::ZeroNormRow { row } => write!(formatter, "cannot normalize zero-norm row {row}"),
             Self::ZeroNormColumn { column } => {
                 write!(formatter, "cannot normalize zero-norm column {column}")
@@ -274,6 +289,69 @@ impl<'a> MatrixMut<'a> {
         for (destination, source) in self.elements.iter_mut().zip(source) {
             *destination = operation(*destination, *source);
         }
+        Ok(())
+    }
+
+    /// Multiply two matrices using row-by-column products (Amiga 3.5 `MAT MUL a()=b()*c()`).
+    ///
+    /// The left matrix is `left_rows × left_columns`, the right matrix is
+    /// `right_rows × right_columns`, and the receiver must be
+    /// `left_rows × right_columns`. All shapes and source lengths are checked
+    /// before the destination is modified.
+    pub fn multiply_from(
+        &mut self,
+        left: &[f64],
+        left_rows: usize,
+        left_columns: usize,
+        right: &[f64],
+        right_rows: usize,
+        right_columns: usize,
+    ) -> Result<(), MatrixShapeError> {
+        let expected_left = left_rows
+            .checked_mul(left_columns)
+            .ok_or(MatrixShapeError::DimensionOverflow)?;
+        if left.len() != expected_left {
+            return Err(MatrixShapeError::SourceElementCountMismatch {
+                expected: expected_left,
+                actual: left.len(),
+            });
+        }
+        let expected_right = right_rows
+            .checked_mul(right_columns)
+            .ok_or(MatrixShapeError::DimensionOverflow)?;
+        if right.len() != expected_right {
+            return Err(MatrixShapeError::SourceElementCountMismatch {
+                expected: expected_right,
+                actual: right.len(),
+            });
+        }
+        if left_columns != right_rows {
+            return Err(MatrixShapeError::ProductInnerDimensionMismatch {
+                left_columns,
+                right_rows,
+            });
+        }
+        if self.rows != left_rows || self.columns != right_columns {
+            return Err(MatrixShapeError::ProductDestinationShapeMismatch {
+                destination_rows: self.rows,
+                destination_columns: self.columns,
+                expected_rows: left_rows,
+                expected_columns: right_columns,
+            });
+        }
+
+        let mut result = vec![0.0; self.elements.len()];
+        for row in 0..left_rows {
+            for column in 0..right_columns {
+                let mut sum = 0.0;
+                for inner in 0..left_columns {
+                    sum += left[row * left_columns + inner]
+                        * right[inner * right_columns + column];
+                }
+                result[row * right_columns + column] = sum;
+            }
+        }
+        self.elements.copy_from_slice(&result);
         Ok(())
     }
 
@@ -542,6 +620,54 @@ mod tests {
         matrix.multiply_scalar(3.0);
 
         assert_eq!(values, [6.0, 9.0, 12.0]);
+    }
+
+    #[test]
+    fn multiply_from_computes_rectangular_row_by_column_product() {
+        let left = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0];
+        let right = [1.0, 2.0, -3.0, 4.0, 5.0, -1.0];
+        let mut destination = [0.0; 4];
+        let mut matrix = MatrixMut::new(2, 2, &mut destination).unwrap();
+
+        matrix.multiply_from(&left, 2, 3, &right, 3, 2).unwrap();
+
+        assert_eq!(destination, [3.0, 5.0, 3.0, 5.0]);
+    }
+
+    #[test]
+    fn multiply_from_rejects_incompatible_inner_dimensions_without_mutation() {
+        let left = [1.0; 6];
+        let right = [1.0; 4];
+        let mut destination = [9.0; 4];
+        let mut matrix = MatrixMut::new(2, 2, &mut destination).unwrap();
+
+        assert_eq!(
+            matrix.multiply_from(&left, 2, 3, &right, 2, 2),
+            Err(MatrixShapeError::ProductInnerDimensionMismatch {
+                left_columns: 3,
+                right_rows: 2,
+            })
+        );
+        assert_eq!(destination, [9.0; 4]);
+    }
+
+    #[test]
+    fn multiply_from_rejects_wrong_destination_shape_without_mutation() {
+        let left = [1.0; 6];
+        let right = [1.0; 6];
+        let mut destination = [9.0; 6];
+        let mut matrix = MatrixMut::new(2, 3, &mut destination).unwrap();
+
+        assert_eq!(
+            matrix.multiply_from(&left, 2, 3, &right, 3, 2),
+            Err(MatrixShapeError::ProductDestinationShapeMismatch {
+                destination_rows: 2,
+                destination_columns: 3,
+                expected_rows: 2,
+                expected_columns: 2,
+            })
+        );
+        assert_eq!(destination, [9.0; 6]);
     }
 
     #[test]
