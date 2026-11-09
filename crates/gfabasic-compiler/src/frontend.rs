@@ -1936,7 +1936,7 @@ mod tests {
     fn special_names_require_a_boundary_from_the_supported_token_subset() {
         use super::{TokenKind, lex_lossless};
 
-        for source_text in ["_DATA.", "_DATA\\"quoted\\"", "_0:", "_9?"] {
+        for source_text in ["_DATA.", "_DATA\"quoted\"", "_0:", "_9?"] {
             let mut sources = SourceMap::new();
             let source_id = sources.add_source("special-name-adjacency.lst", source_text);
             let errors = lex_lossless(source_id, source_text)
