@@ -103,8 +103,16 @@ jobs:
       - name: Import and analyze Amiga executable with Ghidra
         run: |
           set -euo pipefail
+          # Ghidra 12 removed the bundled Jython runtime. Launch headless mode
+          # through PyGhidra so the existing CPython exporter is available.
+          python3 -m venv /tmp/pyghidra-venv
+          /tmp/pyghidra-venv/bin/python -m pip install --no-index \
+            --find-links "$GHIDRA_HOME/Ghidra/Features/PyGhidra/pypkg/dist" pyghidra
           mkdir -p /tmp/ghidra-project
-          "$GHIDRA_HOME/support/analyzeHeadless" /tmp/ghidra-project GfaBasic352 \
+          /tmp/pyghidra-venv/bin/python -m pyghidra.ghidra_launch \
+            --install-dir "$GHIDRA_HOME" \
+            ghidra.app.util.headless.AnalyzeHeadless \
+            /tmp/ghidra-project GfaBasic352 \
             -import analysis-input/GFABasic \
             -processor "68000:BE:32:default" \
             -scriptPath scripts/ghidra \
