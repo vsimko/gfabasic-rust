@@ -1,0 +1,22 @@
+name: Temporary documentation report refresh
+
+on:
+  push:
+    branches:
+      - integration/pr-385-okf-final
+
+permissions:
+  contents: read
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Regenerate candidate report
+        run: |
+          python3 scripts/generate_amiga_candidate_report.py
+          echo REPORT_BEGIN
+          base64 -w0 docs/research/amiga-gfa-basic-candidate-report.md
+          echo
+          echo REPORT_END
