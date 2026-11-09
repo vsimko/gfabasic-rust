@@ -5,10 +5,10 @@ on:
     branches:
       - "experiment/amiga-cli-stdin-probe"
     paths:
-      - ".github/workflows/amiga-cli-probe.yml"
+      - ".github/workflows/amiga-native-merge-run.yml"
   pull_request:
     paths:
-      - ".github/workflows/amiga-cli-probe.yml"
+      - ".github/workflows/amiga-native-merge-run.yml"
   workflow_dispatch:
 
 permissions:
