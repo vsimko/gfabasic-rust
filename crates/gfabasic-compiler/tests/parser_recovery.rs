@@ -1,4 +1,4 @@
-use gfabasic_compiler::frontend::{parse, parse_document, Statement};
+use gfabasic_compiler::frontend::{parse, parse_document, Statement, TokenKind};
 use gfabasic_compiler::source::SourceMap;
 
 #[test]
@@ -59,8 +59,10 @@ fn parser_preserves_statement_spans_in_the_original_listing() {
     assert_eq!((second_span.start, second_span.end), (10, 17));
     assert_eq!(sources.slice(second_span), Some("PRINT x"));
 
-    // The lossless syntax remains tied to the same original byte offsets.
+    // The lossless syntax retains token spans in the original source.
     assert!(document.syntax.tokens.iter().any(|token| {
-        token.span.start == first_span.start && token.span.end == first_span.end - 8
+        matches!(&token.kind, TokenKind::Identifier(name) if name == "x")
+            && token.span.start == 0
+            && token.span.end == 1
     }));
 }
