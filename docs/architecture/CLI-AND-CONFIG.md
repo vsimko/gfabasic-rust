@@ -5,6 +5,8 @@
 
 ## Command model
 
+Compiler source paths refer to textual `.LST` listings. `.BAS` is not the compiler input extension; native tokenized `.GFA` input is deferred by [ADR 0015](adr/0015-listing-first-compiler-input.md). The extension does not establish an encoding or BOM policy.
+
 The executable name is \`gfabasic\`. The initial command surface is deliberately small:
 
 | Command | Purpose | Output |
@@ -28,7 +30,7 @@ schema-version = 1
 
 [project]
 name = "example"
-entry = "main.gfa"
+entry = "main.LST"
 
 [source]
 dialect = "<explicit-dialect-id>"
