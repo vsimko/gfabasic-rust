@@ -48,6 +48,11 @@ pub enum MatrixShapeError {
         source_rows: usize,
         source_columns: usize,
     },
+    /// Vector dot products require vectors with equal element counts.
+    VectorLengthMismatch {
+        left: usize,
+        right: usize,
+    },
     /// Matrix multiplication requires the left column count to equal right row count.
     ProductInnerDimensionMismatch {
         left_columns: usize,
@@ -112,6 +117,10 @@ impl fmt::Display for MatrixShapeError {
             } => write!(
                 formatter,
                 "element-wise operation requires {destination_rows}x{destination_columns} source, got {source_rows}x{source_columns}"
+            ),
+            Self::VectorLengthMismatch { left, right } => write!(
+                formatter,
+                "vector dot product requires equal lengths, got {left} and {right}"
             ),
             Self::ProductInnerDimensionMismatch {
                 left_columns,
@@ -368,6 +377,34 @@ impl<'a> MatrixMut<'a> {
         Ok(())
     }
 
+    /// Write the dyadic (outer) product of two vectors (Amiga 3.5 `MAT MUL a()=b()*c()`).
+    ///
+    /// A vector of length m multiplied dyadically by a vector of length n
+    /// produces an m × n matrix. Destination shape is checked before writing.
+    pub fn outer_product_from(
+        &mut self,
+        left: &[f64],
+        right: &[f64],
+    ) -> Result<(), MatrixShapeError> {
+        let expected_rows = left.len();
+        let expected_columns = right.len();
+        if self.rows != expected_rows || self.columns != expected_columns {
+            return Err(MatrixShapeError::ProductDestinationShapeMismatch {
+                destination_rows: self.rows,
+                destination_columns: self.columns,
+                expected_rows,
+                expected_columns,
+            });
+        }
+
+        for (row, left_value) in left.iter().enumerate() {
+            for (column, right_value) in right.iter().enumerate() {
+                self.elements[row * self.columns + column] = left_value * right_value;
+            }
+        }
+        Ok(())
+    }
+
     /// Normalize each row to unit Euclidean length (Amiga 3.5 `MAT NORM a(),0`).
     ///
     /// Norms are checked before mutation. A zero or non-finite norm is reported
@@ -485,9 +522,23 @@ impl<'a> MatrixMut<'a> {
     }
 }
 
+/// Calculate the scalar (dot) product of two equal-length vectors
+/// (Amiga 3.5 `MAT MUL x=a()*b()`).
+///
+/// A length mismatch is reported as a Rust API validation error.
+pub fn dot_product(left: &[f64], right: &[f64]) -> Result<f64, MatrixShapeError> {
+    if left.len() != right.len() {
+        return Err(MatrixShapeError::VectorLengthMismatch {
+            left: left.len(),
+            right: right.len(),
+        });
+    }
+    Ok(left.iter().zip(right).map(|(a, b)| a * b).sum())
+}
+
 #[cfg(test)]
 mod tests {
-    use super::{MatrixMut, MatrixShapeError};
+    use super::{MatrixMut, MatrixShapeError, dot_product};
 
     #[test]
     fn clear_zeros_a_row_vector() {
@@ -681,6 +732,50 @@ mod tests {
             })
         );
         assert_eq!(destination, [9.0; 6]);
+    }
+
+    #[test]
+    fn outer_product_computes_vector_dyadic_product() {
+        let left = [1.0, 2.0, -3.0];
+        let right = [4.0, 5.0];
+        let mut destination = [0.0; 6];
+        let mut matrix = MatrixMut::new(3, 2, &mut destination).unwrap();
+
+        matrix.outer_product_from(&left, &right).unwrap();
+
+        assert_eq!(destination, [4.0, 5.0, 8.0, 10.0, -12.0, -15.0]);
+    }
+
+    #[test]
+    fn outer_product_rejects_wrong_destination_shape_without_mutation() {
+        let left = [1.0, 2.0];
+        let right = [3.0, 4.0, 5.0];
+        let mut destination = [9.0; 4];
+        let mut matrix = MatrixMut::new(2, 2, &mut destination).unwrap();
+
+        assert_eq!(
+            matrix.outer_product_from(&left, &right),
+            Err(MatrixShapeError::ProductDestinationShapeMismatch {
+                destination_rows: 2,
+                destination_columns: 2,
+                expected_rows: 2,
+                expected_columns: 3,
+            })
+        );
+        assert_eq!(destination, [9.0; 4]);
+    }
+
+    #[test]
+    fn dot_product_computes_scalar_product_of_equal_length_vectors() {
+        assert_eq!(dot_product(&[1.0, 2.0, -3.0], &[4.0, 5.0, -1.0]), Ok(17.0));
+    }
+
+    #[test]
+    fn dot_product_rejects_different_vector_lengths() {
+        assert_eq!(
+            dot_product(&[1.0, 2.0], &[3.0]),
+            Err(MatrixShapeError::VectorLengthMismatch { left: 2, right: 1 })
+        );
     }
 
     #[test]
