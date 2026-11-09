@@ -1,0 +1,16 @@
+id = "amiga-3.5-mat-read-data"
+dialect = "GFA BASIC Amiga"
+version = "3.5"
+api_profiles = []
+kind = "semantic"
+status = "verified"
+source_key = "AM-INTERPRETER-30-35-UPDATE-SCAN"
+source_pages = "printed p. 13-4"
+evidence_status = "page-image-verified"
+expectation = "MAT READ fills the previously dimensioned 2-by-3 matrix from DATA in row order; PRINT a(2, 2) outputs 50."
+notes = [
+  "Independently authored fixture; it varies the dimensions and values from the manual's illustrative example.",
+  "The manual states that MAT READ reads a previously dimensioned matrix or vector from DATA rows. Its example demonstrates row-major assignment by reading ten sequential values into a(2,5) and obtaining 9 from a(2,4).",
+  "The expected value 50 follows the same documented row-major mapping for this independently authored 2-by-3 input.",
+  "Verified against the supplied 3.5 addendum page image; no original interpreter execution has been performed.",
+]
