@@ -250,9 +250,7 @@ fn is_data_instruction_line(bytes: &[u8], offset: usize) -> bool {
         .rposition(|byte| matches!(byte, b'\r' | b'\n'))
         .map_or(0, |index| index + 1);
     let prefix = &bytes[line_start..offset];
-    let keyword_start = prefix
-        .iter()
-        .position(|byte| !matches!(byte, b' ' | b'\t'));
+    let keyword_start = prefix.iter().position(|byte| !matches!(byte, b' ' | b'\t'));
     let Some(keyword_start) = keyword_start else {
         return false;
     };
