@@ -1,3 +1,8 @@
+---
+type: "Architecture"
+title: "Repository consistency validation"
+---
+
 # Repository consistency validation
 
 See [ADR 0013](adr/0013-repository-consistency-validation.md).
