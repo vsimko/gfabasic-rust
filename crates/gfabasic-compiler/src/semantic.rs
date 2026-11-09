@@ -284,7 +284,7 @@ mod tests {
 
     #[test]
     fn resolves_multiple_symbols_and_references_by_declaration_identity() {
-        let source_text = "LET x=FACT(1)\\nLET y=VARIAT(5,2)\\nPRINT y,x,y\\n";
+        let source_text = "LET x=FACT(1)\nLET y=VARIAT(5,2)\nPRINT y,x,y\n";
         let mut sources = SourceMap::new();
         let source_id = sources.add_source("multiple-symbols.LST", source_text);
         let document = parse_document(source_id, source_text).expect("supported source parses");
