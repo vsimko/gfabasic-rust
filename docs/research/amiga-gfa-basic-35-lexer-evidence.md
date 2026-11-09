@@ -1,3 +1,8 @@
+---
+type: "Research Note"
+title: "Amiga GFA BASIC 3.5 lexer evidence inventory"
+---
+
 # Amiga GFA BASIC 3.5 lexer evidence inventory
 
 Status: **research baseline; not a complete 3.5 lexical specification**  
