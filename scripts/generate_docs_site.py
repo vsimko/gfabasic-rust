@@ -26,7 +26,7 @@ MARKDOWN = MarkdownIt("commonmark", {"html": False, "linkify": False, "typograph
 
 def read_document(path: Path) -> tuple[dict, str]:
     text = path.read_text(encoding="utf-8")
-    if path.name == "index.md" and not text.startswith("---\n"):
+    if path.name in {"index.md", "log.md"} and not text.startswith("---\n"):
         return {}, text
     if not text.startswith("---\n"):
         raise ValueError(f"{path.relative_to(ROOT)}: missing OKF frontmatter")
