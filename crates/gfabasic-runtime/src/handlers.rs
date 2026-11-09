@@ -100,12 +100,16 @@ impl std::fmt::Display for RegistryError {
             Self::UnsupportedDeclaration(id) => {
                 write!(formatter, "API declaration '{id}' is not callable")
             }
-            Self::InvalidIdNamespace(id) => write!(formatter, "invalid API ID namespace for '{id}'"),
+            Self::InvalidIdNamespace(id) => {
+                write!(formatter, "invalid API ID namespace for '{id}'")
+            }
             Self::Missing(id) => write!(formatter, "missing runtime handler for '{id}'"),
             Self::Duplicate(id) => write!(formatter, "duplicate runtime handler for '{id}'"),
             Self::Stale(id) => write!(formatter, "stale runtime handler registration '{id}'"),
             Self::ProfileMismatch(id) => write!(formatter, "API profile mismatch for '{id}'"),
-            Self::SignatureMismatch(id) => write!(formatter, "handler signature mismatch for '{id}'"),
+            Self::SignatureMismatch(id) => {
+                write!(formatter, "handler signature mismatch for '{id}'")
+            }
         }
     }
 }
@@ -292,7 +296,10 @@ mod tests {
         let mut req = requirement(ImplementationStatus::Implemented);
         req.handler_id = Some("gfa.language.math.fact");
         let error = HandlerRegistry::new().resolve(req).unwrap_err();
-        assert_eq!(error, RegistryError::Missing("gfa.language.math.fact".into()));
+        assert_eq!(
+            error,
+            RegistryError::Missing("gfa.language.math.fact".into())
+        );
     }
 
     #[test]
@@ -304,7 +311,9 @@ mod tests {
             handler: RuntimeHandler::IntegerToUnsigned(unary),
         });
         assert_eq!(
-            registry.resolve(requirement(ImplementationStatus::Implemented)).unwrap_err(),
+            registry
+                .resolve(requirement(ImplementationStatus::Implemented))
+                .unwrap_err(),
             RegistryError::Duplicate("gfa.language.math.fact".into())
         );
     }
@@ -351,11 +360,15 @@ mod tests {
     #[test]
     fn unsupported_declarations_cannot_use_a_fallback_handler() {
         assert_eq!(
-            registry().resolve(requirement(ImplementationStatus::NotImplemented)).unwrap_err(),
+            registry()
+                .resolve(requirement(ImplementationStatus::NotImplemented))
+                .unwrap_err(),
             RegistryError::UnsupportedDeclaration("gfa.language.math.fact".into())
         );
         assert_eq!(
-            registry().resolve(requirement(ImplementationStatus::UnsafeDisabled)).unwrap_err(),
+            registry()
+                .resolve(requirement(ImplementationStatus::UnsafeDisabled))
+                .unwrap_err(),
             RegistryError::UnsupportedDeclaration("gfa.language.math.fact".into())
         );
     }
@@ -368,13 +381,15 @@ mod tests {
             profile: ApiProfile::LanguageCore,
             handler: RuntimeHandler::TwoIntegersToUnsigned(binary),
         });
-        let resolved = registry.resolve(HandlerRequirement {
-            id: "gfa.language.math.variat",
-            handler_id: Some("gfa.language.math.variat"),
-            profile: ApiProfile::LanguageCore,
-            status: ImplementationStatus::Partial,
-            signature: HandlerSignature::TwoIntegersToUnsigned,
-        }).unwrap();
+        let resolved = registry
+            .resolve(HandlerRequirement {
+                id: "gfa.language.math.variat",
+                handler_id: Some("gfa.language.math.variat"),
+                profile: ApiProfile::LanguageCore,
+                status: ImplementationStatus::Partial,
+                signature: HandlerSignature::TwoIntegersToUnsigned,
+            })
+            .unwrap();
         match resolved {
             ResolvedHandler::TwoIntegersToUnsigned(handler) => assert_eq!(handler(2, 3), Some(5)),
             ResolvedHandler::IntegerToUnsigned(_) => panic!("wrong handler type"),
