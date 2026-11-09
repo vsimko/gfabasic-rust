@@ -1,6 +1,6 @@
 {
   "repository": "vsimko/gfabasic-rust",
-  "generated_at": "2026-11-09T09:55:40.408203Z",
+  "generated_at": "2026-11-09T11:38:17.321791Z",
   "freshness_threshold_hours": 168,
   "workflows": [
     {
@@ -10,26 +10,26 @@
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/docs.yml",
       "state": "in_progress",
       "latest": {
-        "id": 42597068595,
+        "id": 42610598952,
         "name": "Documentation checks",
         "status": "in_progress",
         "event": "pull_request",
         "branch": "docs/agent-discovery-compatibility-policy",
-        "created_at": "2026-11-09T09:55:28Z",
-        "updated_at": "2026-11-09T09:55:34Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42597068595",
+        "created_at": "2026-11-09T11:38:07Z",
+        "updated_at": "2026-11-09T11:38:12Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42610598952",
         "age_hours": 0,
         "freshness": "fresh"
       },
       "last_success": {
-        "id": 42596550361,
+        "id": 42610313815,
         "name": "Documentation checks",
         "status": "success",
-        "event": "pull_request",
-        "branch": "docs/audit-amiga35-addendum-page-13-32",
-        "created_at": "2026-11-09T09:51:11Z",
-        "updated_at": "2026-11-09T09:51:27Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42596550361",
+        "event": "push",
+        "branch": "main",
+        "created_at": "2026-11-09T11:35:55Z",
+        "updated_at": "2026-11-09T11:36:09Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42610313815",
         "age_hours": 0,
         "freshness": "fresh"
       }
@@ -39,28 +39,28 @@
       "file": "rust.yml",
       "note": "Formatting, Clippy, workspace tests/build and formatter fixtures.",
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/rust.yml",
-      "state": "failure",
+      "state": "success",
       "latest": {
-        "id": 42595784664,
-        "name": "Rust checks",
-        "status": "failure",
-        "event": "pull_request",
-        "branch": "feat/issue-51-combinatorics-runtime",
-        "created_at": "2026-11-09T09:45:05Z",
-        "updated_at": "2026-11-09T09:45:17Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42595784664",
-        "age_hours": 0,
-        "freshness": "fresh"
-      },
-      "last_success": {
-        "id": 42594914090,
+        "id": 42605394608,
         "name": "Rust checks",
         "status": "success",
         "event": "push",
         "branch": "main",
-        "created_at": "2026-11-09T09:38:02Z",
-        "updated_at": "2026-11-09T09:38:23Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42594914090",
+        "created_at": "2026-11-09T10:59:54Z",
+        "updated_at": "2026-11-09T11:00:09Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42605394608",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 42605394608,
+        "name": "Rust checks",
+        "status": "success",
+        "event": "push",
+        "branch": "main",
+        "created_at": "2026-11-09T10:59:54Z",
+        "updated_at": "2026-11-09T11:00:09Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42605394608",
         "age_hours": 0,
         "freshness": "fresh"
       }
@@ -80,7 +80,7 @@
         "created_at": "2026-11-09T09:38:02Z",
         "updated_at": "2026-11-09T09:38:29Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42594914102",
-        "age_hours": 0,
+        "age_hours": 1,
         "freshness": "fresh"
       },
       "last_success": {
@@ -92,7 +92,7 @@
         "created_at": "2026-11-09T09:38:02Z",
         "updated_at": "2026-11-09T09:38:29Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42594914102",
-        "age_hours": 0,
+        "age_hours": 1,
         "freshness": "fresh"
       }
     },
@@ -111,7 +111,7 @@
         "created_at": "2026-11-09T09:37:08Z",
         "updated_at": "2026-11-09T09:39:03Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42594810535",
-        "age_hours": 0,
+        "age_hours": 1,
         "freshness": "fresh"
       },
       "last_success": {
@@ -123,7 +123,7 @@
         "created_at": "2026-11-09T09:37:08Z",
         "updated_at": "2026-11-09T09:39:03Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42594810535",
-        "age_hours": 0,
+        "age_hours": 1,
         "freshness": "fresh"
       }
     },
@@ -142,7 +142,7 @@
         "created_at": "2026-11-09T09:38:02Z",
         "updated_at": "2026-11-09T09:38:58Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42594914122",
-        "age_hours": 0,
+        "age_hours": 1,
         "freshness": "fresh"
       },
       "last_success": {
@@ -154,7 +154,7 @@
         "created_at": "2026-11-09T09:38:02Z",
         "updated_at": "2026-11-09T09:38:58Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42594914122",
-        "age_hours": 0,
+        "age_hours": 1,
         "freshness": "fresh"
       }
     },
@@ -165,26 +165,26 @@
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/release-sbom.yml",
       "state": "success",
       "latest": {
-        "id": 42595784787,
+        "id": 42605142342,
         "name": "Release SBOM",
         "status": "success",
         "event": "pull_request",
-        "branch": "feat/issue-51-combinatorics-runtime",
-        "created_at": "2026-11-09T09:45:05Z",
-        "updated_at": "2026-11-09T09:46:07Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42595784787",
+        "branch": "feat/issue-51-matrix-subdeterminant-runtime",
+        "created_at": "2026-11-09T10:57:54Z",
+        "updated_at": "2026-11-09T10:59:02Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42605142342",
         "age_hours": 0,
         "freshness": "fresh"
       },
       "last_success": {
-        "id": 42595784787,
+        "id": 42605142342,
         "name": "Release SBOM",
         "status": "success",
         "event": "pull_request",
-        "branch": "feat/issue-51-combinatorics-runtime",
-        "created_at": "2026-11-09T09:45:05Z",
-        "updated_at": "2026-11-09T09:46:07Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42595784787",
+        "branch": "feat/issue-51-matrix-subdeterminant-runtime",
+        "created_at": "2026-11-09T10:57:54Z",
+        "updated_at": "2026-11-09T10:59:02Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42605142342",
         "age_hours": 0,
         "freshness": "fresh"
       }
@@ -204,7 +204,7 @@
         "created_at": "2026-11-09T09:41:28Z",
         "updated_at": "2026-11-09T09:41:40Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42595339724",
-        "age_hours": 0,
+        "age_hours": 1,
         "freshness": "fresh"
       },
       "last_success": {
@@ -216,7 +216,7 @@
         "created_at": "2026-11-09T09:41:28Z",
         "updated_at": "2026-11-09T09:41:40Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42595339724",
-        "age_hours": 0,
+        "age_hours": 1,
         "freshness": "fresh"
       }
     },
@@ -227,26 +227,26 @@
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/pr-preview.yml",
       "state": "in_progress",
       "latest": {
-        "id": 42597068627,
+        "id": 42610599192,
         "name": "Pull request website preview",
         "status": "in_progress",
         "event": "pull_request",
         "branch": "docs/agent-discovery-compatibility-policy",
-        "created_at": "2026-11-09T09:55:28Z",
-        "updated_at": "2026-11-09T09:55:35Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42597068627",
+        "created_at": "2026-11-09T11:38:07Z",
+        "updated_at": "2026-11-09T11:38:14Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42610599192",
         "age_hours": 0,
         "freshness": "fresh"
       },
       "last_success": {
-        "id": 42596550910,
+        "id": 42610315985,
         "name": "Pull request website preview",
         "status": "success",
         "event": "pull_request",
-        "branch": "docs/audit-amiga35-addendum-page-13-32",
-        "created_at": "2026-11-09T09:51:11Z",
-        "updated_at": "2026-11-09T09:52:08Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42596550910",
+        "branch": "docs/corpus-verified-fixture-count",
+        "created_at": "2026-11-09T11:35:56Z",
+        "updated_at": "2026-11-09T11:36:11Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42610315985",
         "age_hours": 0,
         "freshness": "fresh"
       }
