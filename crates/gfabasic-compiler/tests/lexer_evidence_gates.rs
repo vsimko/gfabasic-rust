@@ -26,8 +26,8 @@ fn unsupported_multibyte_character_has_exact_utf8_byte_span() {
 }
 
 #[test]
-fn unsupported_multibyte_character_does_not_shift_later_byte_offsets() {
-    let source_text = "x=1\né=2\ny=3";
+fn unsupported_multibyte_characters_keep_subsequent_diagnostic_offsets() {
+    let source_text = "x=1\né=2\nø=3";
     let mut sources = SourceMap::new();
     let source_id = sources.add_source("mixed-language.lst", source_text);
 
@@ -39,7 +39,13 @@ fn unsupported_multibyte_character_does_not_shift_later_byte_offsets() {
         .expect("lexical diagnostic should have a primary span");
     assert_eq!((span.start, span.end), (4, 6));
     assert_eq!(sources.slice(span), Some("é"));
-    assert_eq!(&source_text[span.end..], "=2\ny=3");
+
+    let later_span = diagnostics[1]
+        .primary_span
+        .expect("later lexical diagnostic should have a primary span");
+    assert_eq!((later_span.start, later_span.end), (9, 11));
+    assert_eq!(sources.slice(later_span), Some("ø"));
+    assert!(diagnostics[1].message.contains("ø"));
 }
 
 #[test]
