@@ -121,7 +121,10 @@ def _validate_metadata(path: Path, data: dict, errors: list[str]) -> None:
                 _error(errors, path, f"verified[{index}] must be a mapping with non-empty 'by'")
             elif not _timestamp(event.get("at")):
                 _error(errors, path, f"verified[{index}].at must be an ISO 8601 datetime with offset")
-    if "status" in data and data["status"] not in {"draft", "stable", "deprecated"}:
+    if "status" in data and (
+        not isinstance(data["status"], str)
+        or data["status"] not in {"draft", "stable", "deprecated"}
+    ):
         _error(errors, path, "frontmatter field 'status' must be draft, stable, or deprecated")
     if "stale_after" in data and not _timestamp(data["stale_after"]):
         _error(errors, path, "frontmatter field 'stale_after' must be an ISO 8601 datetime with offset")
@@ -169,7 +172,27 @@ def _heading_ids(text: str) -> set[str]:
     return ids
 
 
+def _without_code(text: str) -> str:
+    lines = []
+    fence_char = None
+    fence_size = 0
+    for line in text.splitlines():
+        marker = re.match(r"^ {0,3}([~\x60]{3,})", line)
+        if fence_char is None and marker:
+            fence_char, fence_size = marker.group(1)[0], len(marker.group(1))
+            continue
+        if fence_char is not None:
+            closing = re.match(r"^ {0,3}([~\x60]+)\s*$", line)
+            if closing and closing.group(1)[0] == fence_char and len(closing.group(1)) >= fence_size:
+                fence_char = None
+                fence_size = 0
+            continue
+        lines.append(line)
+    return re.sub(r"[\x60]+[^\x60]*[\x60]+", "", "\n".join(lines))
+
+
 def _markdown_links(text: str) -> list[str]:
+    text = _without_code(text)
     links = [m.group(1).strip("<>") for m in LINK_RE.finditer(text)]
     links.extend(REFERENCE_RE.findall(text))
     return links
@@ -233,6 +256,13 @@ def validate_bundle(root: Path = ROOT) -> list[str]:
     if not markdown:
         return ["docs/: no Markdown documents found"]
     concept_paths = {path for path in markdown if path.name not in RESERVED}
+    canonical_ids = {}
+    for path in concept_paths:
+        concept_id = path.relative_to(bundle).with_suffix("").as_posix().casefold()
+        if concept_id in canonical_ids:
+            _error(errors, path, f"duplicate canonical concept path (case-insensitive): {canonical_ids[concept_id]}")
+        else:
+            canonical_ids[concept_id] = path
     bodies: dict[Path, str] = {}
     for path in markdown:
         relative = path.relative_to(root)
