@@ -199,10 +199,8 @@ pub fn resolve_prototype_symbols(
 /// used as a fallback lookup key.
 pub fn resolve_api_handler(
     declaration_id: &str,
-) -> Result<
-    gfabasic_runtime::handlers::ResolvedHandler,
-    gfabasic_runtime::handlers::RegistryError,
-> {
+) -> Result<gfabasic_runtime::handlers::ResolvedHandler, gfabasic_runtime::handlers::RegistryError>
+{
     gfabasic_runtime::handlers::resolve_builtin_handler(declaration_id)
 }
 
@@ -292,6 +290,4 @@ mod tests {
             )
         );
     }
-
-
 }
