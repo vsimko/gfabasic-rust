@@ -7,6 +7,7 @@ from pathlib import Path
 out = Path(sys.argv[1])
 strings = json.loads((out / "strings.json").read_text(encoding="utf-8"))
 functions = json.loads((out / "functions.json").read_text(encoding="utf-8"))
+stats = json.loads((out / "analysis_stats.json").read_text(encoding="utf-8"))
 
 report = [
     "# Amiga GFA-BASIC binary analysis",
@@ -17,6 +18,9 @@ report = [
     f"- Printable strings: {len(strings)}",
     f"- Analyzed functions: {len(functions)}",
     "- Architecture: Motorola 68000, big-endian",
+    f"- Instructions exported: {stats["instructions"]}",
+    f"- References exported: {stats["references"]}",
+    f"- Executable memory blocks: {stats["executable_blocks"]}",
     "",
     "## Printable strings (candidate evidence)",
     "",
@@ -28,6 +32,10 @@ for item in strings:
     report.append(f'| 0x{item["offset"]:X} | {item["length"]} | {text} |')
 
 report += [
+    "",
+    "## Instruction and reference indexes",
+    "",
+    "`instructions.jsonl` contains decoded instructions from executable memory blocks; `references.jsonl` records Ghidra references originating at those instructions. Addresses are Ghidra address-space offsets, not guaranteed file offsets.",
     "",
     "## Function inventory",
     "",
