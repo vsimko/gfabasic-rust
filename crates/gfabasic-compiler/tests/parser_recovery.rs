@@ -183,7 +183,7 @@ fn frontend_diagnostics_resolve_to_original_source_locations() {
         .expect("syntax diagnostic source remains in the source map");
     assert_eq!(syntax_file.name(), "diagnostic-locations.LST");
     assert_eq!(syntax_file.line_column(syntax_span.start), Some((1, 9)));
-    assert_eq!(sources.slice(syntax_span), Some(""));
+    assert_eq!(sources.slice(syntax_span), Some("\n"));
 
     let unsupported_span = diagnostics[1]
         .primary_span
