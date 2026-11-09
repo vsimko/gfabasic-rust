@@ -218,12 +218,15 @@ jobs:
             fi
             printf "LIST_FLOPPIES\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}" >"$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/post-merge-ipc.txt" || true
 
-            # Probe one small negative Y movement before calibrating the
-            # Save menu path; large negative deltas previously ended the session.
-            printf "PING\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}" >"$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/post-merge-ping-before.txt" || true
-            printf "SEND_MOUSE\\t0\\t-50\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}" >"$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/save-menu-move-test.txt" || true
+            # Small relative steps are accepted and do not terminate Amiberry.
+            # From the last screenshot (~315,388), ten (-50,-50) steps and
+            # one (-100,0) step should place the pointer near Save (~130,68).
+            for _ in 1 2 3 4 5 6 7 8 9 10; do
+              printf "SEND_MOUSE\\t-50\\t-50\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}" >>"$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/save-menu-move-test.txt" || true
+              sleep 0.1
+            done
+            printf "SEND_MOUSE\\t-100\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}" >>"$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/save-menu-move-test.txt" || true
             sleep 0.5
-            printf "PING\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}" >"$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/post-merge-ping-after.txt" || true
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/save-menu-pointer.png" | timeout 5s nc -U -N "${ipc_socket_path:-}" || true
             kill -0 "$emulator_pid"
             printf "QUIT\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}" || true
