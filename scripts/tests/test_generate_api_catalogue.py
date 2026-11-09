@@ -58,7 +58,13 @@ conformance = "not-tested"
         self.assertEqual(data["counts"]["by_namespace"]["language-core"], 24)
         self.assertEqual(data["counts"]["by_namespace"]["amiga"], 4)
         self.assertEqual(data["counts"]["by_namespace"]["atari-st"], 1)
-        self.assertEqual(data["counts"]["by_evidence_status"]["disputed"], 1)
+        self.assertEqual(data["counts"]["by_evidence_status"].get("disputed", 0), 0)
+
+        _, details = render_index(ROOT)
+        inverse = json.loads(details["gfa.language.matrix.mat-inv.json"])
+        self.assertEqual([syntax["form"] for syntax in inverse["syntax"]], ["MAT INV destination()=source()"])
+        self.assertEqual(inverse["evidence"]["status"], "book-documented")
+        self.assertTrue(any("source typo" in note for note in inverse["evidence"]["notes"]))
 
     def test_empty_and_partial_registries(self):
         with tempfile.TemporaryDirectory() as temp:

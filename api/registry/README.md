@@ -19,7 +19,7 @@ The language-core catalogue currently contains 24 declarations, and the Amiga pl
 - Evidence, implementation, target support, and conformance are independent. The three combinatorics declarations are marked partial and have stable runtime handler IDs; all other declarations remain not implemented. Every declaration still has unknown Linux support and untested conformance.
 - The runtime has partial typed handlers for FACT, VARIAT, and COMBIN, and the compiler's narrow literal IR lowering resolves them through the canonical registry. Their implementation status remains partial because the compiler subset and original-interpreter overflow/error behavior are not fully established.
 - Existing 3.5 matrix fixtures are research fixtures in a `research_only` corpus. They are not executable conformance tests and are therefore not linked as passing tests.
-- The `MAT INV` operand direction is represented as a disputed declaration with both source variants; it is not a settled syntax or implementation contract.
+- `MAT INV` uses the destination-first form documented by the detailed 3.5 definition/example and corroborated by the German companion book; the reversed command-summary notation is retained as a source discrepancy note. Runtime implementation and conformance remain untested.
 
 ## Editing rules
 
