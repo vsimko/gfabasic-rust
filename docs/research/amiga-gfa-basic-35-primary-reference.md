@@ -26,7 +26,7 @@ The separate 1989 first edition, ISBN 3-89011-276-5, explicitly documents Amiga 
 ## Compatibility evidence rules
 
 1. Use the 3.5 Interpreter manual and its Chapter 13 addendum as the normative reference for the selected 3.5 interpreter.
-2. Use the 1990 German Amiga book for Amiga-specific environment, APIs, examples, and compiler coverage, while preserving its explicit 3.0 scope for the main command reference.
+2. Use the 1990 German Amiga book for Amiga-specific environment, APIs, examples, and compiler coverage; preserve its 3.0/3.03 scope for the main command reference, but use its explicitly 3.5-labelled Chapters 18–19 as secondary corroboration for the additions listed in the [German-book 3.5 cross-check](amiga-gfa-basic-35-german-book-crosscheck.md).
 3. Use the 1989 German book as an earlier 3.0 cross-check.
 4. Mark any 3.0-documented behavior not explicitly reconfirmed in the 3.5 manual as inherited-from-3.0 / confirmation-needed, rather than assuming it changed or remained unchanged.
 5. Keep interpreter and compiler behavior separate. The compiler is described in the German Amiga book; do not infer interpreter equivalence for compiler-only behavior.

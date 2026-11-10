@@ -53,6 +53,7 @@
 ## 3.5 focused audits
 
 - [3.5 primary reference](amiga-gfa-basic-35-primary-reference.md) - Primary manual and version scope.
+- [3.5 German-book cross-check](amiga-gfa-basic-35-german-book-crosscheck.md) - Independent evidence from explicitly 3.5-labelled Chapters 18–19 of the 1990 German Amiga book.
 - [3.5 Chapter 18–19 extraction](amiga-book-gfa35-chapter18-19-extraction.md) - Dedicated 3.5 chapter extraction.
 - [3.5 editor feature audit](amiga-gfa-basic-35-editor-feature-audit.md) - Editor-specific additions.
 - [3.5 lexer evidence](amiga-gfa-basic-35-lexer-evidence.md) - Lexical evidence.
