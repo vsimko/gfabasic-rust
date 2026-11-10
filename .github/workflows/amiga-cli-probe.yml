@@ -204,6 +204,22 @@ jobs:
             sleep 3
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-merge.png" | timeout 5s nc -U -N "${ipc_socket_path:-}" || true
 
+            # Screenshot capture can recreate Amiberry IPC state on some builds.
+            # Re-discover the live socket before sending the run shortcut rather
+            # than passing an empty/stale path to nc (the previous CI failure).
+            if ! kill -0 "$emulator_pid" 2>/dev/null; then
+              echo "Amiberry exited after the Merge screenshot" >&2
+              cat "$AMIBERRY_LOG" >&2
+              exit 1
+            fi
+            ipc_socket_path=""
+            for attempt in $(seq 1 10); do
+              ipc_socket_path="$(find /run/user -type s -name amiberry.sock -print -quit 2>/dev/null || true)"
+              if [ -n "$ipc_socket_path" ]; then break; fi
+              sleep 1
+            done
+            test -n "$ipc_socket_path" || { echo "Amiberry IPC socket disappeared after Merge" >&2; cat "$AMIBERRY_LOG" >&2; exit 1; }
+
             # Execute the merged regression listing (Shift+F10), then dismiss
             # the interpreter's return/stop dialog with F10.
             printf "SEND_KEY\\t96\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
