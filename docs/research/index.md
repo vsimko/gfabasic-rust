@@ -32,6 +32,7 @@
 - [Amiga GFA-BASIC binary analysis](amiga-gfa-basic-binary-analysis.md) - Reproducible binary analysis workflow.
 
 ## Base-manual topic research
+- [GFA BASIC 3.0 variable, array, and conversion functions](amiga-base-manual-variable-array-conversion-functions.md) - Chapter 2 function forms, signatures, semantics, and unresolved evidence boundaries.
 
 - [GFA BASIC 3.0 command index](amiga-gfa-basic-3.0-command-index.md) - Thematic command index derived from the base manual.
 - [GFA BASIC 3.0 statement candidates](amiga-gfa-basic-3.0-statement-command-candidates.md) - Statement-family candidates requiring version reconciliation.
