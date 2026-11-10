@@ -492,3 +492,24 @@ fn parser_preserves_ast_spans_across_crlf_line_endings() {
     assert_eq!((print_token.span.start, print_token.span.end), (11, 16));
     assert_eq!(sources.slice(print_token.span), Some("PRINT"));
 }
+
+#[test]
+fn parser_rejects_signed_integer_rhs_and_recovers_at_the_next_line() {
+    // The current MVP accepts only unsigned decimal integer tokens as direct
+    // assignment values. This guards the implementation boundary; it does not
+    // claim that signed literals are invalid in the Amiga dialect.
+    let source = "x=-1\nz=42\n";
+    let mut sources = SourceMap::new();
+    let source_id = sources.add_source("signed-integer-rhs.LST", source);
+
+    let diagnostics = parse(source_id, source)
+        .expect_err("a signed expression is outside the current integer-literal subset");
+
+    assert_eq!(diagnostics.len(), 1);
+    assert_eq!(diagnostics[0].code, "GFA-PARSE-0001");
+    let span = diagnostics[0]
+        .primary_span
+        .expect("unsupported signed RHS has a source span");
+    assert_eq!(&source[span.start..span.end], "-");
+    assert_eq!(sources.slice(span), Some("-"));
+}
