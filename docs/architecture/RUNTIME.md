@@ -6,9 +6,9 @@ title: "Runtime architecture"
 # Runtime architecture
 
 - Status: Approved architectural baseline (2026-11-04); language-specific contracts and implementation details remain deferred to their respective issues.
-- Implementation status: no generated-program runtime behavior or runtime ABI is implemented.
+- Implementation status: no stable generated-program runtime ABI, general core runtime, or Amiga/Linux platform runtime is implemented. The runtime crate does contain partial typed handlers for FACT, VARIAT, and COMBIN, used by the compiler's literal combinatorics prototype; these are not a complete generated-program runtime.
 
-This document defines the approved boundaries and minimum interface properties. It does not define GFA BASIC semantics, source data layouts, or a stable ABI. The project maintainer approved the layering, project-owned generated-code/runtime boundary, opaque-handle/resource lifecycle principles, and SDL3-as-Linux-adapter boundary on 2026-11-04.
+This document defines the approved boundaries and minimum interface properties. It does not define GFA BASIC semantics, source data layouts, or a stable ABI. Partial combinatorics handler functions and their registry dispatch do not constitute the generated-program ABI described here. The project maintainer approved the layering, project-owned generated-code/runtime boundary, opaque-handle/resource lifecycle principles, and SDL3-as-Linux-adapter boundary on 2026-11-04.
 
 ## Layers and dependency direction
 
