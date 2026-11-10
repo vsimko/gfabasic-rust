@@ -1,6 +1,6 @@
 {
   "repository": "vsimko/gfabasic-rust",
-  "generated_at": "2026-11-10T17:08:18.602360Z",
+  "generated_at": "2026-11-10T17:08:38.303088Z",
   "freshness_threshold_hours": 168,
   "workflows": [
     {
@@ -8,16 +8,16 @@
       "file": "docs.yml",
       "note": "Markdown, JavaScript, API registry, corpus metadata and local-link validation.",
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/docs.yml",
-      "state": "queued",
+      "state": "in_progress",
       "latest": {
-        "id": 42861781854,
+        "id": 42861797495,
         "name": "Documentation checks",
-        "status": "queued",
+        "status": "in_progress",
         "event": "push",
         "branch": "main",
-        "created_at": "2026-11-10T17:08:16Z",
-        "updated_at": "2026-11-10T17:08:18Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42861781854",
+        "created_at": "2026-11-10T17:08:22Z",
+        "updated_at": "2026-11-10T17:08:26Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42861797495",
         "age_hours": 0,
         "freshness": "fresh"
       },
@@ -194,16 +194,16 @@
       "file": "pages.yml",
       "note": "Builds and publishes the static production website.",
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/pages.yml",
-      "state": "pending",
+      "state": "in_progress",
       "latest": {
-        "id": 42861781879,
+        "id": 42861797382,
         "name": "Deploy GitHub Pages",
-        "status": "pending",
+        "status": "in_progress",
         "event": "push",
         "branch": "main",
-        "created_at": "2026-11-10T17:08:16Z",
-        "updated_at": "2026-11-10T17:08:17Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42861781879",
+        "created_at": "2026-11-10T17:08:22Z",
+        "updated_at": "2026-11-10T17:08:30Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42861797382",
         "age_hours": 0,
         "freshness": "fresh"
       },

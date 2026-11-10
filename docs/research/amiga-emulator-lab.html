@@ -22,7 +22,7 @@
         <h1 id="amiga-emulator-experiment-lab">Amiga emulator experiment lab</h1>
 <ul>
 <li>Tracking: <a href="https://github.com/vsimko/gfabasic-rust/issues/66">issue #66</a>.</li>
-<li>Status: <strong>proposed procedure; not yet executed with a GFA BASIC image</strong>.</li>
+<li>Status: <strong>procedure implemented and exercised against GFA BASIC 3.52; exact 3.5 interpreter validation remains blocked</strong>.</li>
 <li>Purpose: define a repeatable and evidence-safe way to compare Amiga GFA BASIC interpreter/compiler behavior with the applicable manuals.</li>
 <li>Non-goal: this document does not establish that an archive-labelled release is a particular interpreter or compiler version.</li>
 </ul>
@@ -119,15 +119,16 @@ limitations:
 </ul>
 <p>An “observed” result is not automatically a normative language rule. Keep the source citation and the experiment record side by side.</p>
 <h2 id="6-initial-status-and-blockers">6. Initial status and blockers</h2>
-<p>As of 2026-11-03:</p>
+<p>Historical initial status (2026-11-03): no GFA BASIC disk image had been obtained or executed at that point. This status was superseded by the automated workflow integration on <code>main</code> (2026-11-09).</p>
+<p>Current status (2026-11-10):</p>
 <ul>
-<li>FS-UAE and its Linux distribution path are identified.</li>
-<li>A documented route to licensed Kickstart ROMs is identified, subject to the applicable EULA.</li>
-<li>No GFA BASIC disk image has been obtained or executed in this research run.</li>
-<li>The two catalogue entries labelled Amiga GFA BASIC 3.52 remain unverified at the component level.</li>
-<li>No interpreter/compiler version string or runtime observation is claimed.</li>
+<li>The native Amiberry Merge + Run workflow is integrated on <code>main</code> through PR #382.</li>
+<li>A private, version-identified GFA BASIC 3.52 interpreter and licensed Kickstart asset are provisioned at workflow runtime; the executable and ROM are not committed or uploaded.</li>
+<li>The <code>FACT(0..2)</code> native editor Merge + Run probe passed and produced <code>1 1 2</code>; see the <a href="amiga-gfa-basic-352-runtime-baseline.html">3.52 runtime baseline</a> and <a href="https://github.com/vsimko/gfabasic-rust/issues/66">issue #66</a>.</li>
+<li>These observations are specific to 3.52 and do not establish behavior for the selected 3.5 target.</li>
+<li>Exact 3.5 interpreter media/build remains the blocker for normative 3.5 runtime observations.</li>
 </ul>
-<p>The next experiment is blocked until a legally usable GFA BASIC disk set is available and its interpreter/compiler components can be identified. Once that prerequisite is met, start with a small probe that resolves one open manual ambiguity and add its source and observation record separately.</p>
+<p>Continue with isolated probes against 3.52 only when clearly labelled, and add a separate 3.5 observation record if lawful access to the exact 3.5 interpreter becomes available.</p>
 
       </article>
     </main>
