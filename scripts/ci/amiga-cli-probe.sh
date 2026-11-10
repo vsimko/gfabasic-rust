@@ -130,7 +130,8 @@ printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/save-di
 printf "SEND_KEY\\t68\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 sleep 0.2
 printf "SEND_KEY\\t68\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-sleep 3
+# Allow GFA BASIC and AmigaDOS to flush the tokenized file to the floppy.
+sleep 12
 printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-first-save.png" | timeout 5s nc -U -N "${ipc_socket_path:-}" || true
 
 kill -0 "$emulator_pid"
