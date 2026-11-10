@@ -9,9 +9,9 @@ class FunctionInventoryTests(unittest.TestCase):
     def test_repository_inventory_counts(self):
         root = Path(__file__).resolve().parents[2]
         result = validate(root / "docs/research/amiga-gfa-basic-functions.toml")
-        self.assertEqual(result["all-identifiers"], 116)
-        self.assertEqual(result["interpreter-identifiers-including-disputed-slot"], 114)
-        self.assertEqual(result["unambiguous-interpreter-identifiers"], 112)
+        self.assertEqual(result["all-identifiers"], 117)
+        self.assertEqual(result["interpreter-identifiers-including-disputed-slot"], 115)
+        self.assertEqual(result["unambiguous-interpreter-identifiers"], 113)
         self.assertEqual(result["disputed-name-slots"], 2)
 
     def test_duplicate_names_are_rejected(self):

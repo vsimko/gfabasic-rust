@@ -12,11 +12,11 @@ ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_MANIFEST = Path("docs/research/amiga-gfa-basic-functions.toml")
 
 EXPECTED = {
-    "all-identifiers": 116,
-    "interpreter-identifiers-including-disputed-slot": 114,
-    "unambiguous-interpreter-identifiers": 112,
+    "all-identifiers": 117,
+    "interpreter-identifiers-including-disputed-slot": 115,
+    "unambiguous-interpreter-identifiers": 113,
     "compiler-only-identifiers": 2,
-    "base-manual-identifiers": 112,
+    "base-manual-identifiers": 113,
     "explicit-3.5-addendum-identifiers": 4,
     "disputed-name-slots": 2,
 }
