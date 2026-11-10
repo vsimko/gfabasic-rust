@@ -122,12 +122,14 @@ An “observed” result is not automatically a normative language rule. Keep th
 
 ## 6. Initial status and blockers
 
-As of 2026-11-03:
+Historical initial status (2026-11-03): no GFA BASIC disk image had been obtained or executed at that point. This status was superseded by the automated workflow integration on `main` (2026-11-09).
 
-- FS-UAE and its Linux distribution path are identified.
-- A documented route to licensed Kickstart ROMs is identified, subject to the applicable EULA.
-- No GFA BASIC disk image has been obtained or executed in this research run.
-- The two catalogue entries labelled Amiga GFA BASIC 3.52 remain unverified at the component level.
-- No interpreter/compiler version string or runtime observation is claimed.
+Current status (2026-11-10):
 
-The next experiment is blocked until a legally usable GFA BASIC disk set is available and its interpreter/compiler components can be identified. Once that prerequisite is met, start with a small probe that resolves one open manual ambiguity and add its source and observation record separately.
+- The native Amiberry Merge + Run workflow is integrated on `main` through PR #382.
+- A private, version-identified GFA BASIC 3.52 interpreter and licensed Kickstart asset are provisioned at workflow runtime; the executable and ROM are not committed or uploaded.
+- The `FACT(0..2)` native editor Merge + Run probe passed and produced `1 1 2`; see the [3.52 runtime baseline](amiga-gfa-basic-352-runtime-baseline.md) and [issue #66](https://github.com/vsimko/gfabasic-rust/issues/66).
+- These observations are specific to 3.52 and do not establish behavior for the selected 3.5 target.
+- Exact 3.5 interpreter media/build remains the blocker for normative 3.5 runtime observations.
+
+Continue with isolated probes against 3.52 only when clearly labelled, and add a separate 3.5 observation record if lawful access to the exact 3.5 interpreter becomes available.
