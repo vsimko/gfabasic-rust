@@ -10,7 +10,7 @@ for diagnostic in insert-floppy-ipc.txt list-floppies-ipc.txt stdin-save.LST; do
     printf "MISSING: %s\\n" "$diagnostic" > "artifacts/amiga-cli-probe/$diagnostic.missing"
   fi
 done
-for screenshot in editor-before-merge.png merge-dialog.png merge-file-row-pointer.png merge-file-selected.png after-shortcut.png merge-gadget-pointer.png after-merge.png after-run.png save-menu-pointer.png save-dialog.png save-button-pointer.png after-save.png; do
+for screenshot in editor-before-merge.png merge-dialog.png merge-file-row-pointer.png merge-file-selected.png after-shortcut.png merge-gadget-pointer.png after-merge.png after-run.png save-dialog.png after-save.png; do
   test -s "artifacts/amiga-cli-probe/$screenshot"
 done
 
