@@ -21,12 +21,43 @@
         <p class="docs-meta"><span>Architecture</span></p>
         <h1 id="cli-configuration-and-build-artifacts">CLI, configuration, and build artifacts</h1>
 <ul>
-<li>Status: <strong>Accepted by <a href="adr/0005-cli-and-project-configuration.html">ADR 0005</a>.</strong> A minimal <code>gfabasic</code> executable implements help and version output. Project loading, configuration validation, source checking/compilation, and artifact writing are not implemented.</li>
+<li>Status: <strong>Accepted by <a href="adr/0005-cli-and-project-configuration.html">ADR 0005</a>.</strong> The executable implements help/version, a narrow <code>fmt</code> command, and a restricted <code>build</code> prototype using the host C compiler. Project-file loading/configuration and general source checking/compilation remain unimplemented.</li>
 <li>Tracking: <a href="https://github.com/vsimko/gfabasic-rust/issues/9">issue #9</a>.</li>
 </ul>
 <h2 id="command-model">Command model</h2>
 <p>Compiler source paths refer to textual <code>.LST</code> listings. <code>.BAS</code> is not the compiler input extension; native tokenized <code>.GFA</code> input is deferred by <a href="adr/0015-listing-first-compiler-input.html">ADR 0015</a>. The extension does not establish an encoding or BOM policy.</p>
-<p>The executable name is `gfabasic`. The initial command surface is deliberately small:</p>
+<p>The executable name is <code>gfabasic</code>. The accepted product interface is broader than the currently implemented subset. Current behavior is:</p>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Current implementation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>help</code>, <code>--help</code>, <code>version</code>, <code>--version</code></td>
+<td>Implemented</td>
+</tr>
+<tr>
+<td><code>fmt &lt;source.LST&gt;</code></td>
+<td>Implemented for the documented FACT/VARIAT/COMBIN/PRINT and selected DIM/MAT syntax; parser/formatter only, not matrix evaluation</td>
+</tr>
+<tr>
+<td><code>build &lt;source.LST&gt; -o &lt;output&gt;</code></td>
+<td>Experimental literal combinatorics/PRINT subset; temporary C/<code>cc</code> bootstrap, not LLVM</td>
+</tr>
+<tr>
+<td><code>check</code></td>
+<td>Explicitly unavailable; returns an unimplemented diagnostic</td>
+</tr>
+<tr>
+<td>Project-file discovery/configuration</td>
+<td>Not implemented</td>
+</tr>
+</tbody>
+</table>
+<p>The following table describes the intended command model, not a claim that each command is available:</p>
 <table>
 <thead>
 <tr>
@@ -219,7 +250,7 @@ emit = [&quot;executable&quot;]
 <li>Keep machine-readable diagnostics/report schemas independently versioned.</li>
 </ul>
 <h2 id="deferred-implementation">Deferred implementation</h2>
-<p>The current CLI executable implements only help and version output. The TOML parser/schema validator, project discovery, source composition, CLI diagnostic integration, compatibility report, native output, and artifact manifest are not implemented. The <code>build</code> and <code>check</code> commands explicitly fail with an unimplemented message; only help and version commands are currently usable. This specification accepts the interface model, not project loading or compilation.</p>
+<p>The current CLI implements help/version, the bounded <code>fmt</code> command, and an experimental <code>build</code> path for literal FACT/VARIAT/COMBIN assignments followed by PRINT. <code>build</code> uses a temporary C/<code>cc</code> bootstrap and does not provide a general compiler or LLVM backend. <code>check</code> explicitly reports that it is not implemented. TOML project parsing/schema validation, project discovery, source composition, compatibility reports, and artifact manifests remain unimplemented. The formatter accepts selected MAT forms, but the executable IR does not evaluate those statements. This specification accepts the interface model, not project loading or compilation.</p>
 
       </article>
     </main>

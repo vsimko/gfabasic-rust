@@ -55,7 +55,7 @@
 <li>The project-file schema must be independently versioned and validated.</li>
 <li>Source dialect/version selection is mandatory and explicit.</li>
 <li>The initial target has a documented default, but cross-compilation is not implied.</li>
-<li>The accepted interface is only partially implemented: the workspace includes a minimal executable with help/version output. Project loading, configuration validation, parser integration, source diagnostics, build/check execution, and artifact writing remain future work.</li>
+<li>The interface remains partially implemented. The executable provides help/version, a bounded formatter for the verified source subset, and an experimental build path for literal FACT/VARIAT/COMBIN assignments followed by PRINT using a temporary C/<code>cc</code> bootstrap. The <code>check</code> command explicitly remains unavailable. Project loading, TOML configuration validation, project discovery, general parser/semantic integration, LLVM code generation, compatibility reports, and artifact manifests remain future work. The prototype does not imply general GFA BASIC support or interpreter conformance.</li>
 </ul>
 <h2 id="references">References</h2>
 <ul>
