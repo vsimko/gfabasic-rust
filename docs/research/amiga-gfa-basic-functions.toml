@@ -178,7 +178,7 @@ origin = "base-manual-3.0"
 applicability = "interpreter"
 evidence-status = "disputed-name"
 printed-pages = ["2-18"]
-notes = "The appendix table lists CVD(); the Chapter 2-18 prose says CVF and its signature list omits CVD/CVF. Counted as one unresolved CVx function slot, not as two confirmed names."
+notes = "The printed source itself is inconsistent: the command index points to CVD (printed p. 2-18); the p. 2-18 prose names CVF; the following application list names CVS. The function signature block lists CVI/CVL but no floating-point CVx spelling. Retain one unresolved CVx slot; do not treat CVD, CVF, and CVS as three confirmed identifiers. This is a source discrepancy, not merely OCR uncertainty."
 
 [[functions]]
 name = "CVI"
@@ -484,9 +484,17 @@ printed-pages = ["4-16"]
 name = "MKD$"
 origin = "base-manual-3.0"
 applicability = "interpreter"
+evidence-status = "base-manual-entry"
+printed-pages = ["2-18", "2-19"]
+notes = "MKD$ appears in both the printed p. 2-18 signature block and the p. 2-19 prose list; its identifier is not the disputed MKx spelling."
+
+[[functions]]
+name = "MKF$"
+origin = "base-manual-3.0"
+applicability = "interpreter"
 evidence-status = "disputed-name"
 printed-pages = ["2-18", "2-19"]
-notes = "The command table and signature list name MKD$; the Chapter 2-19 prose also mentions MKF$. Counted as one unresolved MKx function slot, not as two confirmed names."
+notes = "The p. 2-18 signature block lists MKS$ and MKD$, while the p. 2-19 prose additionally lists MKF$. Retain MKF$ as one unresolved MKx spelling slot; do not assume it is an alias or a confirmed additional identifier without runtime/edition evidence."
 
 [[functions]]
 name = "MKI$"
