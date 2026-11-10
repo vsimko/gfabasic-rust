@@ -21,7 +21,7 @@ This directory contains original research notes and technical summaries. These d
 | [German Amiga GFA BASIC book OCR index](../research/amiga-gfa-basic-3.03-ocr-index.md) | Amiga, German 1990 edition | OCR-derived chapter map; version applicability disputed between 3.0 and 3.03; not normative yet |
 | [Amiga API reference](amiga-gfa-api.md) | Amiga, interpreter 3.0 | Historical 3.0 API evidence; not the selected 3.5 API contract; signatures and applicability require review |
 | [Atari book diskette corpus](../research/atari-gfa-book-diskette.md) | Atari ST, examples accompanying the 1988 book | Static corpus analysis; examples are not normative specifications |
-| [Amiga emulator experiment lab](../research/amiga-emulator-lab.md) | Amiga, emulator-based research procedure | Proposed procedure; no GFA BASIC image executed |
+| [Amiga emulator experiment lab](../research/amiga-emulator-lab.md) | Amiga, emulator-based research procedure | Native Amiberry Merge + Run workflow integrated on `main`; one 3.52 FACT probe passed. Exact 3.5 validation remains blocked; see the [3.52 runtime baseline](../research/amiga-gfa-basic-352-runtime-baseline.md) |
 
 ## Rules for using these notes
 
