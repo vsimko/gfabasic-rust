@@ -38,13 +38,20 @@ as a short-lived workflow artifact.</p>
 <p>The workflow is deliberately <code>workflow_dispatch</code> only. It does not run for
 pull requests or ordinary pushes, and it never copies the binary into this
 public repository.</p>
-<h2 id="run-it">Run it</h2>
-<ol>
-<li>Open the <a href="https://github.com/vsimko/gfabasic-rust/actions">Actions tab</a>.</li>
-<li>Select <strong>Prepare Amiga reference interpreter</strong>.</li>
-<li>Select <strong>Run workflow</strong> on the <code>main</code> branch (or the branch containing the workflow).</li>
-<li>Download the <code>gfa-basic-3.52-amiga</code> artifact from the successful run.</li>
-</ol>
+<h2 id="prepare-and-run-it">Prepare and run it</h2>
+<p>The <strong>Prepare Amiga reference interpreter</strong> workflow only fetches, verifies,
+and packages the executable. It does not execute it.</p>
+<p>The separate <strong>Amiga GFA BASIC 3.52 native Merge and Run</strong> workflow boots
+Amiberry with the private interpreter and licensed Kickstart ROM, merges an
+ASCII listing through the native editor, and runs it. Its current regression
+batch writes diagnostic output to <code>FACT.OUT</code> and terminal fixture records to
+<code>GFATEST.OUT</code>. The host validates the exact requested fixture IDs with
+<code>scripts/validate_gfatest_results.py</code>; it does not manufacture PASS records.</p>
+<p>The native workflow can be run from <strong>Actions</strong> with <strong>Run workflow</strong>. Pull
+requests that change the workflow also exercise it. It requires the
+<code>GFA_ASSETS_TOKEN</code> secret and the licensed private assets described above.
+Download the <code>amiga-gfa-basic-3.52-native-merge-run</code> artifact to inspect the
+raw result file, emulator diagnostics, and screenshots.</p>
 <h2 id="emulator-prerequisites-and-limits">Emulator prerequisites and limits</h2>
 <p>The artifact contains only the <code>GFABasic</code> executable. It does not contain an
 Amiga Kickstart ROM, Workbench disk, or full disk image. A separately licensed
