@@ -79,7 +79,7 @@ def validate_result_bytes(expected_ids: list[str], raw: bytes) -> Validation:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--expected-ids", required=True, type=Path,
-                        help="UTF-8 text file with one requested fixture ID per line")
+                        help="ASCII text file with one requested fixture ID per line")
     parser.add_argument("--results", required=True, type=Path,
                         help="raw Amiga GFATEST result file")
     args = parser.parse_args()
