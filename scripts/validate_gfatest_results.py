@@ -9,8 +9,8 @@ import sys
 from dataclasses import dataclass
 from pathlib import Path
 
-FIXTURE_ID = re.compile(r"[A-Za-z0-9][A-Za-z0-9._-]*\\Z")
-RECORD = re.compile(r"GFATEST:([A-Za-z0-9][A-Za-z0-9._-]*):(PASS|FAIL)\\Z")
+FIXTURE_ID = re.compile(r"[A-Za-z0-9][A-Za-z0-9._-]*\Z")
+RECORD = re.compile(r"GFATEST:([A-Za-z0-9][A-Za-z0-9._-]*):(PASS|FAIL)\Z")
 
 
 @dataclass(frozen=True)
