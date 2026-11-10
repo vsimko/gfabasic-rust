@@ -1,6 +1,6 @@
 {
   "repository": "vsimko/gfabasic-rust",
-  "generated_at": "2026-11-10T19:17:40.584963Z",
+  "generated_at": "2026-11-10T19:36:44.615547Z",
   "freshness_threshold_hours": 168,
   "workflows": [
     {
@@ -8,28 +8,28 @@
       "file": "docs.yml",
       "note": "Markdown, JavaScript, API registry, corpus metadata and local-link validation.",
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/docs.yml",
-      "state": "in_progress",
+      "state": "success",
       "latest": {
-        "id": 42883751498,
+        "id": 42886955255,
         "name": "Documentation checks",
-        "status": "in_progress",
+        "status": "success",
         "event": "pull_request",
         "branch": "research/amiga-35-german-book-crosscheck",
-        "created_at": "2026-11-10T19:17:23Z",
-        "updated_at": "2026-11-10T19:17:37Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42883751498",
+        "created_at": "2026-11-10T19:36:26Z",
+        "updated_at": "2026-11-10T19:36:44Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42886955255",
         "age_hours": 0,
         "freshness": "fresh"
       },
       "last_success": {
-        "id": 42875123450,
+        "id": 42886955255,
         "name": "Documentation checks",
         "status": "success",
-        "event": "push",
-        "branch": "main",
-        "created_at": "2026-11-10T18:25:56Z",
-        "updated_at": "2026-11-10T18:26:14Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42875123450",
+        "event": "pull_request",
+        "branch": "research/amiga-35-german-book-crosscheck",
+        "created_at": "2026-11-10T19:36:26Z",
+        "updated_at": "2026-11-10T19:36:44Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42886955255",
         "age_hours": 0,
         "freshness": "fresh"
       }
@@ -204,7 +204,7 @@
         "created_at": "2026-11-10T18:25:56Z",
         "updated_at": "2026-11-10T18:26:21Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42875123841",
-        "age_hours": 0,
+        "age_hours": 1,
         "freshness": "fresh"
       },
       "last_success": {
@@ -216,7 +216,7 @@
         "created_at": "2026-11-10T18:25:56Z",
         "updated_at": "2026-11-10T18:26:21Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42875123841",
-        "age_hours": 0,
+        "age_hours": 1,
         "freshness": "fresh"
       }
     },
@@ -227,26 +227,26 @@
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/pr-preview.yml",
       "state": "in_progress",
       "latest": {
-        "id": 42883751726,
+        "id": 42886955599,
         "name": "Pull request website preview",
         "status": "in_progress",
         "event": "pull_request",
         "branch": "research/amiga-35-german-book-crosscheck",
-        "created_at": "2026-11-10T19:17:23Z",
-        "updated_at": "2026-11-10T19:17:28Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42883751726",
+        "created_at": "2026-11-10T19:36:26Z",
+        "updated_at": "2026-11-10T19:36:30Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42886955599",
         "age_hours": 0,
         "freshness": "fresh"
       },
       "last_success": {
-        "id": 42875127947,
+        "id": 42883751726,
         "name": "Pull request website preview",
         "status": "success",
         "event": "pull_request",
-        "branch": "docs/reconcile-mat-mul-candidate-report",
-        "created_at": "2026-11-10T18:25:58Z",
-        "updated_at": "2026-11-10T18:26:14Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42875127947",
+        "branch": "research/amiga-35-german-book-crosscheck",
+        "created_at": "2026-11-10T19:17:23Z",
+        "updated_at": "2026-11-10T19:19:04Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42883751726",
         "age_hours": 0,
         "freshness": "fresh"
       }
