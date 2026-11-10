@@ -1,3 +1,8 @@
+---
+type: "Research Note"
+title: "Amiga GFA BASIC base-manual variable, array, and conversion functions"
+---
+
 # GFA BASIC 3.0 base-manual function extraction: variables, arrays, and conversions
 
 ## Evidence boundary
