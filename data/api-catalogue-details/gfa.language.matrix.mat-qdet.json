@@ -63,10 +63,11 @@
     "source-scope": "amiga-3.5-addendum",
     "status": "book-documented",
     "sources": [
-      "AM-INTERPRETER-35"
+      "AM-INTERPRETER-35",
+      "AM-INTERPRETER-30-35-UPDATE-SCAN"
     ],
     "printed-pages": [
-      "Chapter 13, printed pp. 13-27–13-28"
+      "Supplied 469-page manual, Chapter 13, printed pp. 13-27–13-28; combined update scan, printed pp. 13-36–13-37"
     ],
     "notes": [
       "The page-image-reviewed addendum warns to use MAT DET for critical matrices whose determinant is close to zero."

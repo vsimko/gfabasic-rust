@@ -63,10 +63,11 @@
     "source-scope": "amiga-3.5-addendum",
     "status": "book-documented",
     "sources": [
-      "AM-INTERPRETER-35"
+      "AM-INTERPRETER-35",
+      "AM-INTERPRETER-30-35-UPDATE-SCAN"
     ],
     "printed-pages": [
-      "Chapter 13, printed p. 13-26"
+      "Supplied 469-page manual, Chapter 13, printed p. 13-26; combined update scan, printed pp. 13-34–13-36"
     ],
     "notes": [
       "The determinant and square-submatrix selection rules were checked against the addendum page images."
