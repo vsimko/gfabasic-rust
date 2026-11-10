@@ -42,7 +42,7 @@ The detailed policy is maintained in [CLI-AND-CONFIG.md](../CLI-AND-CONFIG.md). 
 - The project-file schema must be independently versioned and validated.
 - Source dialect/version selection is mandatory and explicit.
 - The initial target has a documented default, but cross-compilation is not implied.
-- The accepted interface is only partially implemented: the workspace includes a minimal executable with help/version output. Project loading, configuration validation, parser integration, source diagnostics, build/check execution, and artifact writing remain future work.
+- The interface remains partially implemented. The executable provides help/version, a bounded formatter for the verified source subset, and an experimental build path for literal FACT/VARIAT/COMBIN assignments followed by PRINT using a temporary C/`cc` bootstrap. The `check` command explicitly remains unavailable. Project loading, TOML configuration validation, project discovery, general parser/semantic integration, LLVM code generation, compatibility reports, and artifact manifests remain future work. The prototype does not imply general GFA BASIC support or interpreter conformance.
 
 ## References
 
