@@ -46,7 +46,7 @@ Primary source: *GFA BASIC 3.5 Interpreter*, Chapter 13 addendum, printed pp. 13
 - **MAT QDET form:** `MAT QDET x=a([i,j])[,n]`; same determinant purpose and submatrix selection, optimized for speed rather than accuracy. The manual recommends MAT DET for critical matrices whose determinant is near zero (printed pp. 13-27–13-28).
 - **MAT RANG form:** `MAT RANG x=a([i,j])[,n]`; calculates rank of a square matrix; optional offsets select the starting row/column and `n` selects an n×n submatrix (printed p. 13-29).
 - **MAT INV form:** `MAT INV destination()=source()`; writes the inverse of square source matrix to destination, which must have the same type/dimensions. The detailed definition and worked example (printed p. 13-30) establish destination-first order; the command summary (printed p. 13-16) reverses the operands and is treated as a source typo.
-- **Version/source:** 3.5 addendum, printed pp. 13-26–13-30. MAT INV direction also independently corroborated by the 1990 German Amiga book, p. 475.
+- **Version/source:** supplied 469-page 3.5 manual, printed pp. 13-26–13-30; combined update scan, pp. 13-34–13-39. MAT INV direction is independently corroborated by the 1990 German Amiga book, p. 475.
 - **Unspecified:** singular-matrix behavior, numerical tolerances, rank threshold, invalid offsets/submatrix sizes, destination initialization, and exact runtime errors.
 
 ## Compatibility boundary
