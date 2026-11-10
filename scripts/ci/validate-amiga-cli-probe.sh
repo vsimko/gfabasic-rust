@@ -10,7 +10,7 @@ for diagnostic in insert-floppy-ipc.txt list-floppies-ipc.txt stdin-save.LST; do
     printf "MISSING: %s\\n" "$diagnostic" > "artifacts/amiga-cli-probe/$diagnostic.missing"
   fi
 done
-for screenshot in editor-before-merge.png merge-dialog.png merge-file-row-pointer.png merge-file-selected.png after-shortcut.png merge-gadget-pointer.png after-merge.png after-run.png save-dialog.png after-first-save.png; do
+for screenshot in editor-before-merge.png merge-dialog.png merge-file-row-pointer.png merge-file-selected.png after-shortcut.png merge-gadget-pointer.png after-merge.png after-run.png save-dialog.png after-first-save.png direct-mode-prompt.png after-direct-mode-save.png; do
   test -s "artifacts/amiga-cli-probe/$screenshot"
 done
 
@@ -56,3 +56,18 @@ fi
 file artifacts/amiga-cli-probe/factzero.GFA | tee artifacts/amiga-cli-probe/gfa-file-info.txt
 sha256sum artifacts/amiga-cli-probe/factzero.GFA > artifacts/amiga-cli-probe/gfa-sha256.txt
 echo "TOKENIZED_GFA_SAVED=yes" | tee artifacts/amiga-cli-probe/save-result.txt
+
+# Direct Mode SAVE is an independent experiment: report its result without
+# making the already-established editor-save assertion depend on it.
+if grep -Eiq 'directmode[.]GFA' artifacts/amiga-cli-probe/adf-after-save-list.txt; then
+  xdftool artifacts/amiga-cli-probe/factzero.adf read directmode.GFA artifacts/amiga-cli-probe/directmode.GFA
+  if test -s artifacts/amiga-cli-probe/directmode.GFA; then
+    file artifacts/amiga-cli-probe/directmode.GFA | tee artifacts/amiga-cli-probe/directmode-file-info.txt
+    sha256sum artifacts/amiga-cli-probe/directmode.GFA > artifacts/amiga-cli-probe/directmode-sha256.txt
+    echo "DIRECT_MODE_SAVE=nonempty" | tee artifacts/amiga-cli-probe/directmode-save-result.txt
+  else
+    echo "DIRECT_MODE_SAVE=empty" | tee artifacts/amiga-cli-probe/directmode-save-result.txt
+  fi
+else
+  echo "DIRECT_MODE_SAVE=not-created" | tee artifacts/amiga-cli-probe/directmode-save-result.txt
+fi
