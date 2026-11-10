@@ -1,0 +1,174 @@
+name: Amiga GFA BASIC regression and tokenized Save
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/amiga-cli-probe.yml"
+      - "scripts/ci/**"
+      - "tests/interpreter-probes/amiga-3.5/regression-suite.LST"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  # Keep this emulator session isolated from the repo's preview/smoke workflows.
+  group: amiga-lst-to-gfa-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  cli-probe:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+
+      - name: Check shell script syntax
+        run: bash -n scripts/ci/amiga-cli-probe.sh && bash -n scripts/ci/validate-amiga-cli-probe.sh
+
+      - name: Download and verify private GFA BASIC interpreter
+        env:
+          GFA_ASSETS_TOKEN: ${{ secrets.GFA_ASSETS_TOKEN }}
+        run: |
+          set -euo pipefail
+          test -n "$GFA_ASSETS_TOKEN"
+          mkdir -p amiga-volume/S artifacts/amiga-cli-probe
+          printf 'GFA BASIC 3.52 (private CI runtime; see docs/research/amiga-gfa-basic-352-runtime-baseline.md)\\n' > artifacts/amiga-cli-probe/interpreter-version.txt
+          curl --fail --silent --show-error --location --retry 3 \
+            --header "Authorization: Bearer $GFA_ASSETS_TOKEN" \
+            --header "Accept: application/vnd.github.raw" \
+            "https://api.github.com/repos/vsimko/gfabasic-private-assets/contents/GFABasic?ref=main" \
+            --output amiga-volume/GFABasic
+          echo "fd80f6093e8d0163856af5849121e945e37051a2ad2a9053aa1930021783d962  amiga-volume/GFABasic" | sha256sum --check
+          test "$(wc -c < amiga-volume/GFABasic)" -eq 136548
+          printf '\x00\x00\x03\xf3' | cmp -n 4 - amiga-volume/GFABasic
+          file amiga-volume/GFABasic | tee artifacts/amiga-cli-probe/binary-info.txt
+          strings -a amiga-volume/GFABasic | grep -i -E 'MERGE|SAVE|LIST|DOSCMD|GFA.BASIC' | head -80 > artifacts/amiga-cli-probe/binary-strings.txt || true
+
+      - name: Download original Amiga Kickstart ROM
+        env:
+          GFA_ASSETS_TOKEN: ${{ secrets.GFA_ASSETS_TOKEN }}
+        run: |
+          set -euo pipefail
+          mkdir -p private-kickstart artifacts/amiga-cli-probe
+          curl --fail --silent --show-error --location \
+            --header "Authorization: Bearer $GFA_ASSETS_TOKEN" \
+            --header "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/vsimko/gfabasic-private-assets/contents?ref=main" \
+            --output "$RUNNER_TEMP/private-assets-index.json"
+          jq -r '.[] | select(.type == "file") | [.name, (.size|tostring)] | @tsv' \
+            "$RUNNER_TEMP/private-assets-index.json" > artifacts/amiga-cli-probe/private-assets-index.txt
+          ROM_NAME="$(jq -r '[.[] | select(.type == "file" and .size == 524288 and (.name|test("(?i)kickstart.*v?1[.]3.*34[.]5"))) ] | .[0].name // empty' "$RUNNER_TEMP/private-assets-index.json")"
+          test -n "$ROM_NAME" || { echo "No 512 KiB Kickstart 1.3 rev 34.5 ROM found in private assets"; exit 1; }
+          ROM_PATH_ENCODED="$(jq -rn --arg path "$ROM_NAME" '$path | @uri')"
+          curl --fail --silent --show-error --location \
+            --header "Authorization: Bearer $GFA_ASSETS_TOKEN" \
+            --header "Accept: application/vnd.github.raw" \
+            "https://api.github.com/repos/vsimko/gfabasic-private-assets/contents/$ROM_PATH_ENCODED?ref=main" \
+            --output "private-kickstart/kick.rom"
+          ROM_SIZE="$(wc -c < private-kickstart/kick.rom)"
+          test "$ROM_SIZE" -eq 524288
+          sha256sum private-kickstart/kick.rom > artifacts/amiga-cli-probe/kickstart-sha256.txt
+          printf 'Kickstart candidate: %s (%s bytes)\n' "$ROM_NAME" "$ROM_SIZE" > artifacts/amiga-cli-probe/kickstart-info.txt
+          printf 'KICKSTART_ROM_PATH=%s/private-kickstart/kick.rom\n' "$GITHUB_WORKSPACE" >> "$GITHUB_ENV"
+
+      - name: Prepare package cache directories
+        run: |
+          sudo install -d -m 0755 /var/cache/apt/archives /var/lib/apt/lists
+          sudo chown -R "$USER":"$USER" /var/cache/apt/archives /var/lib/apt/lists
+          mkdir -p .cache/amitools-wheelhouse
+
+      - name: Cache refresh date
+        id: cache-date
+        run: echo "day=$(date -u +%Y%m%d)" >> "$GITHUB_OUTPUT"
+
+      - name: Cache APT indexes, package archives, and pip wheels
+        id: package-cache
+        uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57
+        with:
+          path: |
+            /var/cache/apt/archives
+            /var/lib/apt/lists
+            .cache/amitools-wheelhouse
+          key: amiga-cli-packages-${{ runner.os }}-ubuntu24-amiberry-v2-${{ steps.cache-date.outputs.day }}
+          restore-keys: |
+            amiga-cli-packages-${{ runner.os }}-ubuntu24-amiberry-v2-
+          save-always: true
+
+      - name: Install emulator and OCR
+        run: |
+          # GitHub-hosted Ubuntu images enable docker-clean, which removes downloaded
+          # .deb files after each APT operation and defeats the package archive cache.
+          sudo rm -f /etc/apt/apt.conf.d/docker-clean
+          sudo install -d -m 0755 /usr/share/keyrings
+          curl -fsSL https://packages.amiberry.com/gpg.key | sudo tee /usr/share/keyrings/amiberry-archive-keyring.gpg >/dev/null
+          echo "deb [arch=amd64 signed-by=/usr/share/keyrings/amiberry-archive-keyring.gpg] https://packages.amiberry.com/apt noble main" | sudo tee /etc/apt/sources.list.d/amiberry.list >/dev/null
+          # Recreate APT's unprivileged download directory after cache restore.
+          sudo install -d -o _apt -g root -m 0700 /var/lib/apt/lists/partial
+          sudo apt-get -o Acquire::Languages=none update
+          sudo apt-get install -y --no-install-recommends amiberry xvfb netcat-openbsd tesseract-ocr python3-pip python3-pil
+          # Build the wheelhouse only on a cache miss. Cache hits install fully
+          # offline, avoiding repeated PyPI index and package downloads.
+          if ! compgen -G '.cache/amitools-wheelhouse/*.whl' > /dev/null; then
+            python3 -m pip wheel --wheel-dir .cache/amitools-wheelhouse amitools
+          fi
+          python3 -m pip install --break-system-packages --no-index --find-links .cache/amitools-wheelhouse amitools
+          command -v xdftool
+          amiberry --version | tee artifacts/amiga-cli-probe/amiberry-version.txt
+
+      - name: Prepare CLI input and boot volume
+        run: |
+          cp tests/interpreter-probes/amiga-3.5/regression-suite.LST amiga-volume/factzero.LST
+          # If the process attaches its standard input to a command console,
+          # this direct-mode command should create an ASCII listing on GFAVol.
+          printf 'LIST "Work:stdin-save.LST"\n' > amiga-volume/cli-input.txt
+          # Build a bootable AmigaDOS 1.x OFS floppy. Kickstart 1.3 has no
+          # built-in Workbench/CLI disk, so the boot block and Startup-Sequence
+          # must live on the same disk as the interpreter and textual listing.
+          mkdir -p amiga-volume/S
+          cp amiga-volume/GFABasic amiga-volume/GFABasic.bin
+          cat > amiga-volume/S/Startup-Sequence <<'EOF'
+          GFABasic
+          EOF
+          xdftool artifacts/amiga-cli-probe/factzero.adf create + format GFABASIC ofs + write amiga-volume/factzero.LST + write amiga-volume/GFABasic + write amiga-volume/S
+          xdftool artifacts/amiga-cli-probe/factzero.adf boot install boot1x
+          xdftool artifacts/amiga-cli-probe/factzero.adf info > artifacts/amiga-cli-probe/factzero-adf-info.txt
+          xdftool artifacts/amiga-cli-probe/factzero.adf list / all > artifacts/amiga-cli-probe/factzero-adf-list.txt
+          xdftool artifacts/amiga-cli-probe/factzero.adf boot show > artifacts/amiga-cli-probe/factzero-adf-boot.txt
+          cp amiga-volume/factzero.LST artifacts/amiga-cli-probe/factzero.LST
+          cp amiga-volume/cli-input.txt artifacts/amiga-cli-probe/cli-input.txt
+          cp amiga-volume/S/Startup-Sequence artifacts/amiga-cli-probe/Startup-Sequence.txt
+          cat > "$RUNNER_TEMP/amiga-cli-probe.uae" <<EOF
+          use_gui=no
+          cpu_type=68000
+          chipset=ocs
+          kickstart_rom_file=$KICKSTART_ROM_PATH
+          chipmem_size=2
+          fastmem_size=8
+          bogomem_size=0
+          gfx_width=640
+          gfx_height=512
+          gfx_fullscreen=false
+          sound_output=0
+          floppy0=$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/factzero.adf
+          EOF
+
+      - name: Merge textual LST in the GFA BASIC editor
+        run: |
+          set -euo pipefail
+          export AMIBERRY_LOG="$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/amiberry.log"
+          export SDL_AUDIODRIVER=dummy
+          xvfb-run -a -s "-screen 0 1024x768x24 +extension GLX" bash scripts/ci/amiga-cli-probe.sh
+
+      - name: Validate emulator evidence
+        run: bash scripts/ci/validate-amiga-cli-probe.sh
+
+
+      - name: Upload diagnostic evidence (never upload commercial binary)
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: amiga-gfa-basic-regression-and-tokenized-save
+          path: artifacts/amiga-cli-probe/
+          if-no-files-found: warn
+          retention-days: 7
