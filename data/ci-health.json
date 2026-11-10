@@ -1,6 +1,6 @@
 {
   "repository": "vsimko/gfabasic-rust",
-  "generated_at": "2026-11-10T16:29:47.512384Z",
+  "generated_at": "2026-11-10T16:30:08.762992Z",
   "freshness_threshold_hours": 168,
   "workflows": [
     {
@@ -8,28 +8,28 @@
       "file": "docs.yml",
       "note": "Markdown, JavaScript, API registry, corpus metadata and local-link validation.",
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/docs.yml",
-      "state": "in_progress",
+      "state": "success",
       "latest": {
-        "id": 42855059339,
-        "name": "Documentation checks",
-        "status": "in_progress",
-        "event": "push",
-        "branch": "main",
-        "created_at": "2026-11-10T16:29:35Z",
-        "updated_at": "2026-11-10T16:29:39Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42855059339",
-        "age_hours": 0,
-        "freshness": "fresh"
-      },
-      "last_success": {
-        "id": 42854912522,
+        "id": 42855097212,
         "name": "Documentation checks",
         "status": "success",
         "event": "push",
         "branch": "main",
-        "created_at": "2026-11-10T16:28:42Z",
-        "updated_at": "2026-11-10T16:28:57Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42854912522",
+        "created_at": "2026-11-10T16:29:49Z",
+        "updated_at": "2026-11-10T16:30:09Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42855097212",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 42855097212,
+        "name": "Documentation checks",
+        "status": "success",
+        "event": "push",
+        "branch": "main",
+        "created_at": "2026-11-10T16:29:49Z",
+        "updated_at": "2026-11-10T16:30:09Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42855097212",
         "age_hours": 0,
         "freshness": "fresh"
       }
@@ -196,14 +196,14 @@
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/pages.yml",
       "state": "in_progress",
       "latest": {
-        "id": 42855059245,
+        "id": 42855097355,
         "name": "Deploy GitHub Pages",
         "status": "in_progress",
         "event": "push",
         "branch": "main",
-        "created_at": "2026-11-10T16:29:35Z",
-        "updated_at": "2026-11-10T16:29:38Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42855059245",
+        "created_at": "2026-11-10T16:29:49Z",
+        "updated_at": "2026-11-10T16:30:00Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42855097355",
         "age_hours": 0,
         "freshness": "fresh"
       },
