@@ -25,12 +25,12 @@ The chapter's extracted command descriptions additionally cover the matrix famil
 | Declaration family | German-book pages | Cross-check status |
 |---|---:|---|
 | `MAT BASE`, `MAT CLR`, `MAT SET`, `MAT ONE` | 454–456 | Chapter 18; p. 454 image checked |
-| `MAT READ`, `MAT PRINT`, `MAT INPUT` | 456–458 | OCR extraction; page-image pass pending |
-| `MAT CPY`, `MAT XCPY`, `MAT TRANS` | 466–470 | OCR extraction; page-image pass pending |
-| `MAT ADD`, `MAT SUB`, `MAT MUL` | 470–473 | OCR extraction; page-image pass pending |
-| `MAT NORM`, `MAT DET`, `MAT QDET`, `MAT RANG`, `MAT INV` | 473–476 | OCR extraction; page-image pass pending |
+| `MAT READ`, `MAT PRINT`, `MAT INPUT` | 456–458 | Page images checked; all three command headings and descriptions visible |
+| `MAT CPY`, `MAT XCPY`, `MAT TRANS` | 459–464 | Page images checked; command headings and worked examples visible |
+| `MAT ADD`, `MAT SUB`, `MAT MUL` | 465–470 | Page images checked; command headings and worked examples visible |
+| `MAT NORM`, `MAT DET`, `MAT QDET`, `MAT RANG`, `MAT INV` | 472–475 | Page images checked; command headings and definitions visible |
 
-This is corroboration of the 3.5 declaration families already present in the primary addendum inventory; it does not create additional registry entries. The detailed English-manual audit remains authoritative for exact syntax where this extraction has not yet been page-image checked.
+This is corroboration of the 3.5 declaration families already present in the primary addendum inventory; it does not create additional registry entries. The page-image review confirms the command headings and the displayed forms/examples on the cited pages. The detailed English-manual audit remains authoritative for exact syntax and edge-case semantics.
 
 ## 2. Combinatorics and DATA-pointer declarations — Chapter 19
 
@@ -67,6 +67,10 @@ This conflicts internally with Chapter 19, which explicitly documents `FACT` and
 
 - p. 451: Chapter 18 explicitly labels its additions as Version 3.5 commands.
 - p. 454: `MAT BASE` and `MAT CLR`.
+- pp. 456–458: `MAT READ`, `MAT PRINT`, and `MAT INPUT` headings, syntax, and descriptions.
+- pp. 459–464: `MAT CPY`, `MAT XCPY`, and `MAT TRANS` headings and examples.
+- pp. 465–470: `MAT ADD`, `MAT SUB`, and `MAT MUL` headings and examples.
+- pp. 472–475: `MAT NORM`, `MAT DET`, `MAT QDET`, `MAT RANG`, and `MAT INV` headings and definitions.
 - p. 477: Chapter 19 and `FACT`.
 - p. 478: `VARIAT`.
 - p. 479: `COMBIN`, `_DATA`, and `_DATA=`.
