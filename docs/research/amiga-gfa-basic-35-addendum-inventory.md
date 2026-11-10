@@ -68,7 +68,7 @@ The page-image review establishes the following exact rules (printed pp. 13-8–
 
 These rules are source-verified for the 3.5 addendum and should be preserved explicitly in parser/semantic tests; do not reduce them to a generic slice-copy abstraction.
 
-### Arithmetic and matrix analysis — printed pp. 13-15–13-31
+### Arithmetic and matrix analysis — printed pp. 13-15–13-30
 
 | Command form | Source-described effect / constraints |
 |---|---|
@@ -89,7 +89,7 @@ These rules are source-verified for the 3.5 addendum and should be preserved exp
 | `MAT RANG x=a([i,j])[,n]` | Calculate rank of a square matrix; like `MAT DET`/`MAT QDET`, accepts row and column offsets, with `n` selecting an n×n submatrix from that position (printed p. 13-38) |
 | `MAT INV b()=a()` | Calculate the inverse of square matrix `a` and write it to destination matrix `b`; `b()` must have the same type/dimensions as `a()` (printed p. 13-30) |
 
-Page-image checks of printed pp. 13-27–13-33 establish matrix multiplication dimensions and the row/column normalization meanings above. Printed pp. 13-26–13-30 confirm the `MAT DET`/`MAT QDET` behavior, the `MAT RANG` square-submatrix selection rule, and the detailed `MAT INV b()=a()` example. **Operand direction resolved:** the summary on printed p. 13-16 lists the reversed form `MAT INV a()=b()`, but the detailed definition and worked example on p. 13-30 explicitly state that the inverse of source `a()` is written to destination `b()`; the German 1990 book independently confirms destination-first `MAT INV i()=m()` on p. 475. Treat the summary form as a source typo and use `MAT INV destination()=source()`. Runtime edge cases remain untested. The earlier OCR-only warning for the matrix multiplication examples is superseded by the page-image checks recorded above. Do not use OCR artifacts as normative syntax.
+Page-image checks of printed pp. 13-20–13-25 establish matrix multiplication dimensions and the row/column normalization meanings above. Printed pp. 13-26–13-30 confirm the `MAT DET`/`MAT QDET` behavior, the `MAT RANG` square-submatrix selection rule, and the detailed `MAT INV b()=a()` example. **Operand direction resolved:** the summary on printed p. 13-16 lists the reversed form `MAT INV a()=b()`, but the detailed definition and worked example on p. 13-30 explicitly state that the inverse of source `a()` is written to destination `b()`; the German 1990 book independently confirms destination-first `MAT INV i()=m()` on p. 475. Treat the summary form as a source typo and use `MAT INV destination()=source()`. Runtime edge cases remain untested. The earlier OCR-only warning for the matrix multiplication examples is superseded by the page-image checks recorded above. Do not use OCR artifacts as normative syntax.
 
 ## 4. Additional commands in version 3.5 — combined-scan Chapter 14, printed pp. 14-1–14-7
 
