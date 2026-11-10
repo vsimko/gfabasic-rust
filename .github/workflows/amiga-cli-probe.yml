@@ -1,13 +1,6 @@
 name: Amiga GFA BASIC regression and tokenized Save
 
 on:
-  push:
-    branches:
-      - "experiment/amiga-lst-to-gfa"
-    paths:
-      - ".github/workflows/amiga-cli-probe.yml"
-      - "scripts/ci/**"
-      - "tests/interpreter-probes/amiga-3.5/regression-suite.LST"
   pull_request:
     paths:
       - ".github/workflows/amiga-cli-probe.yml"
