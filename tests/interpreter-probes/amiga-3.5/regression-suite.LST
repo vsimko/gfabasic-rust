@@ -4,7 +4,7 @@ REM Each section writes a labelled observation to FACT.OUT.
 REM Keep probes small and independent; add a case only after its syntax and
 REM expected result have been checked against the 3.5 manual/interpreter.
 
-OPEN "O",#1,"DF0:FACT.OUT"
+OPEN "0",#1,"DF0:FACT.OUT"
 
 REM --- Numeric built-in: FACT boundary values (3.5 addendum example) ---
 x = FACT(0)
