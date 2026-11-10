@@ -201,15 +201,15 @@
 </tr>
 <tr>
 <td><code>MAT DET x=a([i,j])[,n]</code></td>
-<td>Calculate determinant of a square matrix/selected square submatrix</td>
+<td>Calculate determinant of a square matrix/selected square submatrix (supplied 469-page manual, printed p. 13-26; combined update scan, pp. 13-34–13-36)</td>
 </tr>
 <tr>
 <td><code>MAT QDET x=a([i,j])[,n]</code></td>
-<td>Same determinant purpose and submatrix selection as <code>MAT DET</code>; optimized for speed, not accuracy. The manual recommends <code>MAT DET</code> for critical matrices whose determinant is near zero (printed pp. 13-36–13-37)</td>
+<td>Same determinant purpose and submatrix selection as <code>MAT DET</code>; optimized for speed, not accuracy. The manual recommends <code>MAT DET</code> for critical matrices whose determinant is near zero (supplied 469-page manual, printed pp. 13-27–13-28; combined update scan, pp. 13-36–13-37)</td>
 </tr>
 <tr>
 <td><code>MAT RANG x=a([i,j])[,n]</code></td>
-<td>Calculate rank of a square matrix; like <code>MAT DET</code>/<code>MAT QDET</code>, accepts row and column offsets, with <code>n</code> selecting an n×n submatrix from that position (printed p. 13-38)</td>
+<td>Calculate rank of a square matrix; like <code>MAT DET</code>/<code>MAT QDET</code>, accepts row and column offsets, with <code>n</code> selecting an n×n submatrix from that position (supplied 469-page manual, printed p. 13-29; combined update scan, pp. 13-38–13-39)</td>
 </tr>
 <tr>
 <td><code>MAT INV b()=a()</code></td>
@@ -450,7 +450,7 @@
 </tbody>
 </table>
 <p>The four Amiga-profile entries are not general language-core declarations; in particular, the GURU statement and GURU function remain distinct declarations under one overload group. The MAT NORM locator above also corrects the earlier table's page range: the primary manual places its row/column definitions on pp. 13-31–13-33.</p>
-<p>This crosswalk is an identity and provenance aid, not an assertion that the registry is a complete 3.5 API catalogue. It does not change implementation, Linux support, or conformance status. The separate corpus fixture crosswalk in tests/corpus/README.md maps 13 page-image-verified research fixtures to declaration IDs; those fixtures are not executable conformance tests and must not be added to registry support.tests.</p>
+<p>This crosswalk is an identity and provenance aid, not an assertion that the registry is a complete 3.5 API catalogue. It does not change implementation, Linux support, or conformance status. The separate <a href="https://github.com/vsimko/gfabasic-rust/blob/main/tests/corpus/README.md#registry-declaration-crosswalk">corpus fixture crosswalk</a> maps 13 page-image-verified research fixtures to declaration IDs; those fixtures are not executable conformance tests and must not be added to registry <code>support.tests</code>.</p>
 <h2 id="source-and-rights">Source and rights</h2>
 <p>This file contains concise original summaries and syntax inventories, not a reproduction of the manual. Cite the source as <code>GFA BASIC 3.5 Interpreter</code>, Chapter 13/14, printed addendum page N. The supplied PDF is a research source and is not committed to the repository.</p>
 
