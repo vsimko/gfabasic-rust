@@ -1,6 +1,6 @@
 {
   "repository": "vsimko/gfabasic-rust",
-  "generated_at": "2026-11-10T16:59:29.508836Z",
+  "generated_at": "2026-11-10T16:59:57.096023Z",
   "freshness_threshold_hours": 168,
   "workflows": [
     {
@@ -10,14 +10,14 @@
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/docs.yml",
       "state": "pending",
       "latest": {
-        "id": 42860235671,
+        "id": 42860317299,
         "name": "Documentation checks",
         "status": "pending",
         "event": "push",
         "branch": "main",
-        "created_at": "2026-11-10T16:59:28Z",
-        "updated_at": "2026-11-10T16:59:29Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42860235671",
+        "created_at": "2026-11-10T16:59:56Z",
+        "updated_at": "2026-11-10T16:59:57Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42860317299",
         "age_hours": 0,
         "freshness": "fresh"
       },
@@ -196,14 +196,14 @@
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/pages.yml",
       "state": "pending",
       "latest": {
-        "id": 42860235771,
+        "id": 42860317704,
         "name": "Deploy GitHub Pages",
         "status": "pending",
         "event": "push",
         "branch": "main",
-        "created_at": "2026-11-10T16:59:28Z",
-        "updated_at": "2026-11-10T16:59:29Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42860235771",
+        "created_at": "2026-11-10T16:59:56Z",
+        "updated_at": "2026-11-10T16:59:57Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42860317704",
         "age_hours": 0,
         "freshness": "fresh"
       },

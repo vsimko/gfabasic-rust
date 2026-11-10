@@ -21,7 +21,7 @@
         <p class="docs-meta"><span>Architecture</span></p>
         <h1 id="current-compatibility-matrix">Current compatibility matrix</h1>
 <ul>
-<li>Status: <strong>The sole product target is Amiga GFA BASIC interpreter 3.5 to Linux x86-64. A narrow FACT/PRINT prototype exists; no complete dialect is implemented or conformant.</strong></li>
+<li>Status: <strong>The sole product target is Amiga GFA BASIC interpreter 3.5 to Linux x86-64. A narrow FACT/VARIAT/COMBIN/PRINT prototype exists; selected MAT forms are parsed/formatted but not executable. No complete dialect is implemented or conformant.</strong></li>
 <li>Updated: 2026-11-05.</li>
 <li>Tracking: <a href="https://github.com/vsimko/gfabasic-rust/issues/3">dialect policy #3</a>, <a href="https://github.com/vsimko/gfabasic-rust/issues/10">compatibility testing #10</a>, <a href="https://github.com/vsimko/gfabasic-rust/issues/58">versioning policy #58</a>, <a href="adr/0011-amiga-35-linux-sdl3-product-scope.html">product scope ADR 0011</a>.</li>
 </ul>
@@ -39,12 +39,12 @@
 <tr>
 <td>Source dialect/version</td>
 <td>Commodore Amiga GFA BASIC interpreter 3.5</td>
-<td>Experimental FACT/PRINT frontend subset only</td>
+<td>Experimental FACT/VARIAT/COMBIN assignments and PRINT; selected MAT syntax is parser/formatter-only</td>
 </tr>
 <tr>
 <td>Historical source evidence</td>
 <td>3.5 Interpreter manual and version-specific addenda; 3.0/3.03 references are inherited candidates requiring 3.5 confirmation</td>
-<td>Page-image-verified FACT/PRINT fixture; no original interpreter observation</td>
+<td>Page-image-verified 3.5 combinatorics fixtures; no original-interpreter runtime observation</td>
 </tr>
 <tr>
 <td>API profile</td>
@@ -107,9 +107,9 @@
 </table>
 <h2 id="project-wide-implementation-status">Project-wide implementation status</h2>
 <ul>
-<li>Rust workspace: bootstrapped with compiler, generated-program runtime, and Linux platform crates. Compiler source-map, strict UTF-8 transport loading, structured diagnostics, an evidence-gated FACT/PRINT frontend subset, and a temporary C/cc native bootstrap are present.</li>
+<li>Rust workspace: bootstrapped with compiler, generated-program runtime, and Linux platform crates. Compiler source maps, strict UTF-8 transport loading, structured diagnostics, a narrow FACT/VARIAT/COMBIN/PRINT frontend, selected MAT parsing/formatting, combinatorics literal lowering through typed runtime handlers, and a temporary C/cc native bootstrap are present.</li>
 <li>General lexer/parser, semantic analysis, typed IR, LLVM backend, project configuration, GFA BASIC core runtime, Amiga API compatibility runtime, and Linux/SDL3 platform adapter are not implemented.</li>
-<li>A narrow build path exists for the FACT/PRINT prototype only. General Amiga 3.5 compilation is not available; check remains unavailable.</li>
+<li>A narrow build path exists for the combinatorics/PRINT literal prototype only. Selected MAT statements are not lowered to executable IR. General Amiga 3.5 compilation is not available; check remains unavailable.</li>
 <li>CI: documentation validation and fast Rust workspace checks are present; no full GFA BASIC conformance runner or production compiler/runtime integration workflow exists.</li>
 <li>No complete Amiga 3.5 language subset or Amiga API profile is currently claimed as fully supported or conformant.</li>
 </ul>
