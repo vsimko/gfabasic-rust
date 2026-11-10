@@ -218,9 +218,11 @@ mod tests {
                         operation.to_owned(),
                     )
                 }
-                Statement::MatInv { destination, source, .. } => {
-                    Meaning::MatInv(destination.clone(), source.clone())
-                }
+                Statement::MatInv {
+                    destination,
+                    source,
+                    ..
+                } => Meaning::MatInv(destination.clone(), source.clone()),
                 Statement::MatAnalysis {
                     operation,
                     destination,
