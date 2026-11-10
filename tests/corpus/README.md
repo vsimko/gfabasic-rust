@@ -18,6 +18,28 @@ The verified combinatorics and matrix fixtures accepted by the formatter are can
 
 Use lowercase, stable fixture IDs. Each source file must be original and self-contained. Do not require external assets, host paths, locale settings, or network access.
 
+## Registry declaration crosswalk
+
+The verified fixture IDs below are source-evidence links, not executable conformance tests. They deliberately do **not** populate registry `support.tests`: that field is reserved for tests that can substantiate implementation/conformance claims. The corpus remains `research_only`, and every fixture below is page-image-verified only.
+
+| Fixture ID | Primary declaration ID(s) | Notes |
+|---|---|---|
+| `amiga-3.5-mat-one-identity` | `gfa.language.matrix.mat-one` | Identity-matrix generation; `MAT PRINT` is used only to display the result. |
+| `amiga-3.5-mat-cpy-submatrix` | `gfa.language.matrix.mat-cpy` | Research-only fixture for bounded submatrix copy; `MAT SET` initializes its operands. |
+| `amiga-3.5-mat-clear-zero` | `gfa.language.matrix.mat-clr` | `MAT SET` is setup; `MAT PRINT` displays the result. |
+| `amiga-3.5-mat-set-scalar` | `gfa.language.matrix.mat-set` | Scalar fill; `MAT PRINT` displays the result. |
+| `amiga-3.5-mat-base-transpose` | `gfa.language.matrix.mat-base`, `gfa.language.matrix.mat-trans` | Covers index-base selection and both in-place and destination/source transpose forms. |
+| `amiga-3.5-mat-norm-row` | `gfa.language.matrix.mat-norm` | Covers row-normalization mode 0; does not cover column mode 1. |
+| `amiga-3.5-mat-add` | `gfa.language.matrix.mat-add` | Destination-expression form; `MAT SET` initializes operands. |
+| `amiga-3.5-mat-sub` | `gfa.language.matrix.mat-sub` | Destination-expression form; `MAT SET` initializes operands. |
+| `amiga-3.5-mat-mul-dot` | `gfa.language.matrix.mat-mul` | Vector scalar/dot product form. |
+| `amiga-3.5-mat-read-data` | `gfa.language.matrix.mat-read` | Reads DATA rows into a previously dimensioned matrix. |
+| `amiga-3.5-fact-zero` | `gfa.language.math.fact` | FACT(0), FACT(1), and FACT(2). |
+| `amiga-3.5-combinatorics-intrinsics` | `gfa.language.math.fact`, `gfa.language.math.variat`, `gfa.language.math.combin` | One fixture covers all three Chapter 14 intrinsics. |
+| `amiga-3.5-mat-mul-triple` | `gfa.language.matrix.mat-mul` | Vector–matrix–vector scalar-result form; not currently formatter-gated. |
+
+This crosswalk records which declaration a fixture investigates; it does not imply that incidental setup/output statements have independent fixtures. In particular, `MAT PRINT` is used for display in several matrix fixtures but has no dedicated fixture here. No registry declaration is promoted to implemented, Linux-supported, or runtime-conformant by this mapping.
+
 ## Metadata contract
 
 Each sidecar TOML file must define:
