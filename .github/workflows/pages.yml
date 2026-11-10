@@ -94,7 +94,7 @@ jobs:
             git -C "$deploy_dir" fetch origin gh-pages
             git -C "$deploy_dir" reset --hard FETCH_HEAD
 
-            rsync -a --delete --exclude='.git/' --exclude='pr-preview/' "$staging_dir/" "$deploy_dir/"
+            rsync -a --delete --exclude='.git' --exclude='pr-preview/' "$staging_dir/" "$deploy_dir/"
             git -C "$deploy_dir" add -f -A
             if git -C "$deploy_dir" diff --cached --quiet; then
               echo "Production site is already up to date."
