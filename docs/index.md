@@ -24,6 +24,7 @@ This is the canonical OKF v0.2 documentation bundle for gfabasic-rust. Markdown 
 # Research and evidence
 
 - [Research](research/) - Source reviews, inventories, and evidence notes.
+- [Amiga GFA BASIC test output](research/amiga-gfa-test-output.md) - Native file-output observation and proposed batch result protocol.
 
 # Project use and contribution
 
