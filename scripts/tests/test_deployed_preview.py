@@ -82,19 +82,39 @@ def main():
     assert "data/project.json" not in html, "Dashboard should be rendered into static HTML"
 
 
+    def fetch_published_page(page_url):
+        page_request = urllib.request.Request(
+            page_url, headers={"User-Agent": "gfabasic-preview-qa/1.0"}
+        )
+        page_error = None
+        for attempt in range(18):
+            try:
+                with urllib.request.urlopen(page_request, timeout=10) as page_response:
+                    if page_response.status != 200:
+                        raise urllib.error.URLError(
+                            f"Published page returned HTTP {page_response.status}"
+                        )
+                    return page_response.read().decode("utf-8")
+            except (urllib.error.URLError, TimeoutError) as error:
+                page_error = error
+                if attempt < 17:
+                    print(
+                        f"Published page is not ready yet (attempt {attempt + 1}/18); "
+                        "retrying in 10 seconds."
+                    )
+                    time.sleep(10)
+        raise SystemExit(
+            f"Could not load published page {page_url} after 18 attempts: {page_error}"
+        ) from page_error
+
     docs_url = url.rstrip("/") + "/docs/index.html"
-    docs_request = urllib.request.Request(docs_url, headers={"User-Agent": "gfabasic-preview-qa/1.0"})
-    with urllib.request.urlopen(docs_request, timeout=10) as response:
-        docs_html = response.read().decode("utf-8")
-    assert response.status == 200
+    docs_html = fetch_published_page(docs_url)
     assert "<title>Project documentation · GFA BASIC Rust documentation</title>" in docs_html
     assert "OKF v0.2" in docs_html
     assert 'href="architecture/index.html"' in docs_html
 
     adr_url = url.rstrip("/") + "/docs/architecture/adr/0011-amiga-35-linux-sdl3-product-scope.html"
-    with urllib.request.urlopen(adr_url, timeout=10) as response:
-        adr_html = response.read().decode("utf-8")
-    assert response.status == 200
+    adr_html = fetch_published_page(adr_url)
     assert "ADR 0011: Product scope — Amiga GFA BASIC 3.5 to Linux x86-64 with SDL3" in adr_html
     assert "<script" not in adr_html.lower(), "Generated documentation must not execute embedded scripts"
 

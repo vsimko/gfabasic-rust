@@ -2242,4 +2242,41 @@ mod tests {
             assert_eq!(&source_text[span.start..span.end], expected_text);
         }
     }
+
+    #[test]
+    fn parses_statements_separated_by_bare_cr_and_without_final_newline() {
+        // CR is accepted as a transport-level separator by the lexer. This
+        // checks parser behavior without asserting historical Amiga behavior.
+        let source_text = "x=42\rPRINT x";
+        let mut sources = SourceMap::new();
+        let source_id = sources.add_source("bare-cr-no-final-newline.lst", source_text);
+
+        let document = parse_document(source_id, source_text)
+            .expect("bare CR should separate statements and EOF should terminate the last one");
+
+        assert_eq!(document.program.statements.len(), 2);
+        match &document.program.statements[0] {
+            Statement::AssignInteger {
+                name,
+                value: 42,
+                span,
+            } => {
+                assert_eq!(name, "x");
+                assert_eq!(&source_text[span.start..span.end], "x=42");
+            }
+            other => panic!("unexpected first statement: {other:?}"),
+        }
+        match &document.program.statements[1] {
+            Statement::PrintVariables { names, span } => {
+                assert_eq!(names.iter().map(String::as_str).collect::<Vec<_>>(), ["x"]);
+                assert_eq!(&source_text[span.start..span.end], "PRINT x");
+            }
+            other => panic!("unexpected second statement: {other:?}"),
+        }
+
+        assert!(document.syntax.tokens.iter().any(|token| {
+            matches!(token.kind, super::TokenKind::Newline)
+                && &source_text[token.span.start..token.span.end] == "\r"
+        }));
+    }
 }
