@@ -164,6 +164,46 @@
 <li>Add follow-up issues only for gaps that are not already covered by the workstreams above.</li>
 </ol>
 <p>The <a href="index.html">research index</a>, <a href="../reference/index.html">reference index</a>, and <a href="amiga-gfa-basic-command-catalogue.html">command catalogue</a> are the navigation entry points. This page intentionally summarizes status and links to the evidence rather than duplicating detailed command definitions.</p>
+<h2 id="declaration-level-audit-four-amiga-profile-entries-2026-11-10">Declaration-level audit: four Amiga profile entries (2026-11-10)</h2>
+<p>Compared all four records in <code>api/registry/amiga/special-and-platform-commands.toml</code> with the page-image-reviewed primary manual (<code>AM-INTERPRETER-35</code>), the Chapter 14 addendum inventory, the primary-reference pagination crosswalk, and the source register. No signature or semantic correction was required.</p>
+<table>
+<thead>
+<tr>
+<th>Registry ID / declaration</th>
+<th>Primary 3.5 evidence</th>
+<th>Inventory/source cross-check</th>
+<th>Audit result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gfa.amiga.graphics.pcolor</code> — <code>PCOLOR</code></td>
+<td>Chapter 13, printed p. 13-34</td>
+<td>Combined update scan, Chapter 14 printed p. 14-4; inventory records <code>PCOLOR foreground[,background]</code></td>
+<td>Match. PRINT screen output uses COLOR-like foreground/optional background; exact colour range and all mode interactions remain unspecified.</td>
+</tr>
+<tr>
+<td><code>gfa.amiga.windows.openw-negative-screen</code> — negative-screen <code>OPENW</code> variant</td>
+<td>Chapter 13, printed p. 13-34</td>
+<td>Combined update scan, Chapter 14 printed p. 14-3; inventory records current/top screen behavior</td>
+<td>Match. This is only the negative-screen variant, not a complete OPENW signature or lifecycle contract.</td>
+</tr>
+<tr>
+<td><code>gfa.amiga.system.guru-check</code> — <code>GURU x</code> statement</td>
+<td>Chapter 13, printed p. 13-36</td>
+<td>Combined update scan, Chapter 14 printed pp. 14-6–14-7; inventory records zero/nonzero switch and #109/#110–#118 notes</td>
+<td>Match. Compiled-program RESUME restrictions remain scoped to the manual's explicit statement; do not generalize them to interpreted mode.</td>
+</tr>
+<tr>
+<td><code>gfa.amiga.system.guru-number</code> — <code>GURU</code> function</td>
+<td>Chapter 13, printed p. 13-36</td>
+<td>Combined update scan, Chapter 14 printed pp. 14-6–14-7; dedicated GURU audit records <code>PRINT HEX$(GURU)</code></td>
+<td>Match. The function's return type is unspecified by the source; registry correctly does not infer INTEGER.</td>
+</tr>
+</tbody>
+</table>
+<p>The registry's source ID <code>AM-INTERPRETER-35</code>, source scope <code>amiga-3.5-addendum</code>, and printed-page locators agree with the source register and addendum inventory. The German 1990 book is supplementary historical 3.0/V3.03 evidence (its “bis Version 3.5” cover wording is not normative interpreter evidence); it is not needed to promote these four declarations. The inventory's TOC/OCR spelling <code>PCOLOUR</code> is not a separate declaration: the primary addendum body and registry use <code>PCOLOR</code>.</p>
+<p>These four entries are an <strong>interim addendum-only platform slice</strong>, not a complete Amiga 3.5 API. Their source documentation is verified for 3.5; implementation remains <code>not-implemented</code>, Linux support <code>unknown</code>, and conformance <code>not-tested</code>. The available native Amiberry observations are for interpreter <strong>3.52</strong> only (see #66), and must not be relabelled as 3.5 observations or used to claim 3.5 runtime conformance.</p>
 
       </article>
     </main>
