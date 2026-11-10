@@ -11,7 +11,7 @@ title: "Contributor documentation"
 
 ## Before making a change
 
-1. Read the [project documentation index](../index.md) and the [architecture overview](../architecture/README.md).
+1. Read the [project README](../../README.md) and the [architecture overview](../architecture/README.md).
 2. Check the open [GitHub issues](https://github.com/vsimko/gfabasic-rust/issues) and pull requests to avoid duplicate work.
 3. Follow the [documentation policy](../DOCUMENTATION.md) for Markdown, evidence, citations, and copyright.
 4. For language or API research, consult the [source register](../reference-sources.md) and keep Amiga and Atari ST evidence separate.
@@ -23,7 +23,7 @@ Follow the [development setup guide](development-setup.md) for the pinned Rust t
 
 ## Current development constraints
 
-The default branch contains a Cargo workspace with compiler, runtime, and Linux platform crates. The compiler crate implements source-map and strict UTF-8 file-loading primitives plus a structured diagnostic model and human renderer. Its minimal CLI supports help/version; `build` and `check` do not compile. The lexer, parser, semantic analysis, IR, backend, project configuration, runtime behavior, and Linux platform adapter remain unimplemented. The pinned toolchain is Rust 1.99.1; LLVM and SDL3 are not required for the current workspace and remain deferred. The project source code and original project documentation are licensed under MIT; see the root [LICENSE](../../LICENSE) file and the [license section in the README](../../LICENSE).
+The default branch contains a Cargo workspace with compiler, runtime, and Linux platform crates. The compiler crate implements source-map and strict UTF-8 file-loading primitives plus a structured diagnostic model and human renderer. Its minimal CLI supports help/version; `build` and `check` do not compile. The lexer, parser, semantic analysis, IR, backend, project configuration, runtime behavior, and Linux platform adapter remain unimplemented. The pinned toolchain is Rust 1.99.1; LLVM and SDL3 are not required for the current workspace and remain deferred. The project source code and original project documentation are licensed under MIT; see the root [LICENSE](../../LICENSE) file and the [license section in the README](../../README.md#contributing).
 
 The MIT license does not grant redistribution rights to third-party manuals, ROMs, disk images, sample programs, or other externally sourced materials. Check their individual rights and the documentation policy before adding or redistributing them.
 

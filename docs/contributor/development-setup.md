@@ -23,7 +23,7 @@ The initial CI host is Linux x86-64 using the GitHub-hosted Ubuntu runner. Other
 
 The compiler crate has one third-party Cargo dependency, `unicode-width` 0.2.2, for terminal display-cell measurement; its MIT OR Apache-2.0 license is within the approved allowlist. The temporary native bootstrap invokes the host `cc` compiler but requires no additional project runtime library. LLVM and SDL3 are deliberately deferred and are not required to build the Rust workspace. Do not install arbitrary LLVM or SDL3 versions for this stage.
 
-The project source code and original documentation are licensed under MIT. See the root [LICENSE](../../LICENSE) and [project README](../../LICENSE). This license does not grant redistribution rights to third-party manuals, ROMs, disk images, or sample programs.
+The project source code and original documentation are licensed under MIT. See the root [LICENSE](../../LICENSE) and [project README](../../README.md#contributing-and-licensing). This license does not grant redistribution rights to third-party manuals, ROMs, disk images, or sample programs.
 
 ## Install the toolchain
 

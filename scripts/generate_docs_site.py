@@ -63,6 +63,12 @@ def is_draft_target(target: str, source: Path) -> bool:
         return False
     if not resolved.is_file():
         return False
+    # Links may intentionally point from the OKF bundle to repository-level
+    # Markdown (for example the root README), which is not an OKF concept.
+    try:
+        resolved.resolve().relative_to(BUNDLE.resolve())
+    except ValueError:
+        return False
     data, _ = read_document(resolved)
     return data.get("status", "stable") == "draft"
 
