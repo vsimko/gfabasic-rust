@@ -15,6 +15,7 @@
 - [Chapter 5–17 heading harvest](amiga-book-chapters05-17-heading-harvest.md) - Chapter structure and heading extraction.
 - [Function inventory (116 unique names)](amiga-gfa-basic-functions.toml) - Machine-readable built-in function names and classification.
 - [Function inventory notes](amiga-gfa-basic-function-inventory.md) - Human-readable scope and counting rules for the function inventory.
+- [Base-manual numeric and string function extraction](amiga-base-manual-numeric-string-functions.md) - Source forms, argument categories, semantics, overloads, and printed-page locators for the Chapter 4 function families; explicitly separated from 3.5 availability evidence.
 - [3.5 addendum inventory](amiga-gfa-basic-35-addendum-inventory.md) - Features explicitly described by the 3.5 addendum.
 - [3.5 candidate manifest](amiga-gfa-basic-candidates.toml) - Structured version-applicability evidence by candidate family.
 - [3.5 candidate report](amiga-gfa-basic-candidate-report.md) - Generated family-level status report; not a count of individual commands.
