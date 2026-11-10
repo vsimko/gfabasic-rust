@@ -79,25 +79,37 @@ jobs:
           printf 'Kickstart candidate: %s (%s bytes)\n' "$ROM_NAME" "$ROM_SIZE" > artifacts/amiga-cli-probe/kickstart-info.txt
           printf 'KICKSTART_ROM_PATH=%s/private-kickstart/kick.rom\n' "$GITHUB_WORKSPACE" >> "$GITHUB_ENV"
 
-      - name: Prepare package caches
-        run: sudo chown -R "$USER":"$USER" /var/cache/apt/archives
+      - name: Prepare package cache directories
+        run: |
+          sudo install -d -m 0755 /var/cache/apt/archives /var/lib/apt/lists
+          sudo chown -R "$USER":"$USER" /var/cache/apt/archives /var/lib/apt/lists
+          mkdir -p .cache/amitools-wheelhouse
 
-      - name: Cache APT and pip downloads
+      - name: Cache APT indexes, package archives, and pip wheels
+        id: package-cache
         uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57
         with:
           path: |
             /var/cache/apt/archives
-            ~/.cache/pip
-          key: amiga-cli-packages-${{ runner.os }}-amiberry-v1
+            /var/lib/apt/lists
+            .cache/amitools-wheelhouse
+          key: amiga-cli-packages-${{ runner.os }}-ubuntu24-amiberry-v2
 
       - name: Install emulator and OCR
         run: |
           sudo install -d -m 0755 /usr/share/keyrings
           curl -fsSL https://packages.amiberry.com/gpg.key | sudo tee /usr/share/keyrings/amiberry-archive-keyring.gpg >/dev/null
           echo "deb [arch=amd64 signed-by=/usr/share/keyrings/amiberry-archive-keyring.gpg] https://packages.amiberry.com/apt noble main" | sudo tee /etc/apt/sources.list.d/amiberry.list >/dev/null
-          sudo apt-get update
+          # Recreate APT's unprivileged download directory after cache restore.
+          sudo install -d -o _apt -g root -m 0700 /var/lib/apt/lists/partial
+          sudo apt-get -o Acquire::Languages=none update
           sudo apt-get install -y --no-install-recommends amiberry xvfb netcat-openbsd tesseract-ocr python3-pip python3-pil
-          python3 -m pip install --break-system-packages amitools
+          # Build the wheelhouse only on a cache miss. Cache hits install fully
+          # offline, avoiding repeated PyPI index and package downloads.
+          if ! compgen -G '.cache/amitools-wheelhouse/*.whl' > /dev/null; then
+            python3 -m pip wheel --wheel-dir .cache/amitools-wheelhouse amitools
+          fi
+          python3 -m pip install --break-system-packages --no-index --find-links .cache/amitools-wheelhouse amitools
           command -v xdftool
           amiberry --version | tee artifacts/amiga-cli-probe/amiberry-version.txt
 
