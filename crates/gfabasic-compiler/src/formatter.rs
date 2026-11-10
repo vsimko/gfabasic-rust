@@ -282,9 +282,9 @@ mod tests {
 
     #[test]
     fn mat_inv_formatting_is_idempotent_and_semantics_preserving() {
-        let source = "MAT INV b()=a()\\n";
+        let source = "MAT INV b()=a()\n";
         let formatted = format(source);
-        assert_eq!(formatted, "MAT INV b() = a()\\n");
+        assert_eq!(formatted, "MAT INV b() = a()\n");
         assert_eq!(format(&formatted), formatted);
         let mut before_sources = SourceMap::new();
         let before_id = before_sources.add_source("before.bas", source);
