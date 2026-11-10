@@ -64,7 +64,8 @@
   "implementation": {
     "status": "not-implemented",
     "notes": [
-      "The destination-first syntax is source-documented; runtime behavior and numerical edge cases remain unimplemented and untested."
+      "The destination-first syntax is source-documented and is now recognized by the compiler parser/formatter; this is syntax support only.",
+      "Runtime matrix inversion, numerical behavior, and edge cases remain unimplemented and untested."
     ]
   },
   "support": [
