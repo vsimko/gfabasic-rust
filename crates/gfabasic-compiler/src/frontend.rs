@@ -1043,6 +1043,8 @@ impl Parser {
         let (destination, destination_span) = self.parse_matrix_reference()?;
         self.expect(TokenKind::Equals, "'=' in MAT INV statement")?;
         let (source, source_span) = self.parse_matrix_reference()?;
+        // Operand roles are positional, not identifier-dependent: the first
+        // matrix is always the destination and the second is always the source.
         let span = SourceSpan::new(self.source_id, start.start, source_span.end);
         Ok(Statement::MatInv {
             destination,
