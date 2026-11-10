@@ -58,7 +58,7 @@ sleep 0.2
 printf "SEND_KEY\\t102\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 sleep 1
 printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-shortcut.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-tesseract "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-shortcut.png" stdout 2>/dev/null > "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-shortcut-ocr.txt"
+# OCR is collected uniformly as a non-gating diagnostic after emulator shutdown.
 # OCR can misread the requester title ("Merge File" as "Merge Abbruch"),
 # so do not gate the fallback click on exact title recognition.
 # The first calibrated move landed at (~260,360), on the left
