@@ -168,7 +168,7 @@ The following table maps every declaration in the current 3.5 addendum registry 
 
 The four Amiga-profile entries are not general language-core declarations; in particular, the GURU statement and GURU function remain distinct declarations under one overload group. The MAT NORM locator above also corrects the earlier table's page range: the primary manual places its row/column definitions on pp. 13-31–13-33.
 
-This crosswalk is an identity and provenance aid, not an assertion that the registry is a complete 3.5 API catalogue. It does not change implementation, Linux support, or conformance status. The separate corpus fixture crosswalk in tests/corpus/README.md maps 13 page-image-verified research fixtures to declaration IDs; those fixtures are not executable conformance tests and must not be added to registry support.tests.
+This crosswalk is an identity and provenance aid, not an assertion that the registry is a complete 3.5 API catalogue. It does not change implementation, Linux support, or conformance status. The separate [corpus fixture crosswalk](../../tests/corpus/README.md#registry-declaration-crosswalk) maps 13 page-image-verified research fixtures to declaration IDs; those fixtures are not executable conformance tests and must not be added to registry `support.tests`.
 
 ## Source and rights
 
