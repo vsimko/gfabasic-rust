@@ -32,6 +32,17 @@ The separate 1989 first edition, ISBN 3-89011-276-5, explicitly documents Amiga 
 5. Keep interpreter and compiler behavior separate. The compiler is described in the German Amiga book; do not infer interpreter equivalence for compiler-only behavior.
 6. Do not import Atari ST-only 3.5 claims into the Amiga target unless corroborated by the supplied Amiga materials.
 
+## Canonical 3.5 addendum declarations
+
+The source-backed addendum slice is represented in the canonical [API registry](../../api/registry/README.md), not inferred from the 3.0 function inventory:
+
+- **24 language-core declarations** are stored in [math and initial matrix operations](../../api/registry/language-core/math-and-matrix.toml), [remaining matrix operations](../../api/registry/language-core/matrix-operations.toml), and [special variables and DATA pointers](../../api/registry/language-core/special-variables-and-data-pointers.toml). The three language-core function declarations are `gfa.language.math.fact`, `gfa.language.math.variat`, and `gfa.language.math.combin`; the remaining entries are matrix statements and DATA/special-variable operations.
+- **Four Amiga-profile declarations** are stored in [the Amiga special/platform registry](../../api/registry/amiga/special-and-platform-commands.toml): `gfa.amiga.graphics.pcolor`, `gfa.amiga.windows.openw-negative-screen`, `gfa.amiga.system.guru-check`, and `gfa.amiga.system.guru-number`.
+- `GURU()` is explicitly documented by the 3.5 addendum, but remains in the Amiga profile as `gfa.amiga.system.guru-number`, separate from the `GURU x` statement. Do not duplicate it under `gfa.language.*` without an explicit taxonomy change; its unresolved return type and runtime behavior are recorded in the [GURU declaration audit](amiga-gfa-basic-35-guru-declaration-audit.md).
+- The 117-name [function inventory](amiga-gfa-basic-function-inventory.md) includes 113 base-manual 3.0 identifiers plus the four 3.5 addendum additions, with disputed spelling slots retained. It is a source inventory, **not** a claim that all 117 names are confirmed 3.5 functions. Base-manual-only entries remain outside the normative 3.5 registry until independently reconciled.
+
+Registry declarations separate source evidence, implementation, Linux support, and conformance. The three combinatorics handlers are partial; the other addendum declarations are not implemented, and no original-interpreter 3.5 conformance is claimed. The 3.52 runtime probe is a separate, version-limited observation documented in the [3.52 baseline](amiga-gfa-basic-352-runtime-baseline.md).
+
 ## Unresolved source-language evidence
 
 The current extraction identifies the 3.5 source and its version-specific additions, but it does **not** yet establish the complete source-language contract. In particular, no 3.5-specific rule is currently claimed here for:
