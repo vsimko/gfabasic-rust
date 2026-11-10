@@ -1,0 +1,482 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Purpose: page-addressable navigation through the supplied Amiga references and the project&#x27;s source-derived extraction notes. This is a research index, not a claim that every listed feature is implemented or runtime-t…">
+  <title>Amiga GFA BASIC source and topic index · GFA BASIC Rust documentation</title>
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body class="docs-site">
+  <header class="docs-header">
+    <a href="../../index.html">GFA BASIC Rust</a>
+    <span aria-hidden="true">/</span>
+    <a href="../index.html">Documentation</a>
+  </header>
+  <div class="docs-layout">
+    <nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home" href="index.html">Section index</a><ul><li><a href="amiga-gfa-basic-documentation-audit.html">Amiga GFA BASIC documentation coverage audit</a></li><li><a href="amiga-gfa-basic-command-catalogue.html">Amiga GFA BASIC command catalogue</a></li><li><a href="amiga-gfa-basic-german-book-command-api-extraction.html">German Amiga GFA-BASIC book: command and OS API extraction</a></li><li><a href="amiga-book-command-index-ocr-transcription.html">Appendix D — OCR transcription of the command index</a></li><li><a href="gfa-basic-command-index-ocr.html">GFA-BASIC command index — first-pass extraction</a></li><li><a href="amiga-gfa-basic-source-topic-index.html">Amiga GFA BASIC source and topic index</a></li><li><a href="amiga-book-515-page-extraction-audit.html">Amiga GFA-BASIC book — 515-page extraction audit</a></li><li><a href="amiga-book-chapters05-17-heading-harvest.html">Amiga book — command-heading harvest, chapters 5–17</a></li><li><a href="amiga-gfa-basic-functions.toml">Function inventory (116 unique names)</a></li><li><a href="amiga-gfa-basic-function-inventory.html">Amiga GFA BASIC 3.5 built-in function inventory</a></li><li><a href="amiga-gfa-basic-35-addendum-inventory.html">Amiga GFA-BASIC 3.5 interpreter addendum — extracted feature inventory</a></li><li><a href="amiga-gfa-basic-candidates.toml">3.5 candidate manifest</a></li><li><a href="amiga-gfa-basic-candidate-report.html">Amiga GFA BASIC 3.5 candidate verification report</a></li><li><a href="amiga-gfa-basic-3.03-ocr-index.html">German Amiga GFA BASIC book: OCR index and edition notes</a></li><li><a href="README.html">Research materials</a></li><li><a href="amiga-gfa-test-output.html">Amiga GFA BASIC test output</a></li><li><a href="amiga-gfa-basic-dqh-source-inventory.html">Amiga GFA BASIC commands observed in dqh-amiga</a></li><li><a href="amiga-emulator-lab.html">Amiga emulator experiment lab</a></li><li><a href="amiga-gfa-basic-35-lst-probes.html">Amiga GFA BASIC 3.5 interpreter probes from text listings</a></li><li><a href="amiga-gfa-basic-352-runtime-baseline.html">Amiga GFA BASIC 3.52 runtime baseline</a></li><li><a href="amiga-gfa-basic-binary-analysis.html">Amiga GFA-BASIC binary analysis</a></li><li><a href="amiga-gfa-basic-3.0-command-index.html">Amiga GFA BASIC 3.0 command index — grouped cross-check</a></li><li><a href="amiga-gfa-basic-3.0-statement-command-candidates.html">Amiga GFA BASIC 3.0 statement and command candidate catalogue</a></li><li><a href="amiga-gfa-basic-3.0-base-inventory.html">Amiga GFA BASIC 3.0 base-manual inventory</a></li><li><a href="amiga-gfa-basic-3.0-expressions-builtins-control-flow.html">Amiga GFA BASIC 3.0 expression, intrinsic and control-flow evidence</a></li><li><a href="amiga-gfa-basic-3.0-control-file-data-io.html">Amiga GFA BASIC 3.0 control, file and data I/O evidence</a></li><li><a href="amiga-gfa-basic-3.0-graphics-evidence.html">GFA BASIC 3.0 Amiga — graphics evidence</a></li><li><a href="amiga-gfa-basic-3.0-events-windows-evidence.html">GFA BASIC 3.0 Amiga — event, menu, screen and window evidence</a></li><li><a href="amiga-gfa-basic-3.0-system-routines-evidence.html">GFA BASIC 3.0 Amiga — operating-system routine evidence</a></li><li><a href="amiga-gfa-basic-3.0-advanced-programming-evidence.html">GFA BASIC 3.0 Amiga — advanced programming evidence</a></li><li><a href="amiga-gfa-basic-3.0-appendix-index-evidence.html">GFA BASIC 3.0 Amiga — appendix and command-index evidence</a></li><li><a href="amiga-gfa-basic-3.0-german-source-notes.html">German Amiga GFA BASIC 3.0 source — initial verification notes</a></li><li><a href="amiga-gfa-basic-3.0-procedure-error-details.html">GFA BASIC 3.0 Amiga — procedures, functions and error-flow evidence</a></li><li><a href="amiga-gfa-basic-3.0-screen-window-details.html">GFA BASIC 3.0 Amiga — screen and window command details</a></li><li><a href="amiga-gfa-basic-3.0-output-device-details.html">GFA BASIC 3.0 Amiga — output, cursor, mouse and sound evidence</a></li><li><a href="amiga-gfa-basic-3.0-menu-event-details.html">GFA BASIC 3.0 Amiga — menu and event details</a></li><li><a href="amiga-gfa-basic-3.0-bob-object-details.html">GFA BASIC 3.0 Amiga — BOB and OBJECT API evidence</a></li><li><a href="amiga-gfa-basic-3.0-source-format-editor-evidence.html">Amiga GFA BASIC 3.0 — source composition and editor evidence</a></li><li><a href="amiga-gfa-basic-35-primary-reference.html">Amiga GFA-BASIC 3.5 primary reference and target decision</a></li><li><a href="amiga-book-gfa35-chapter18-19-extraction.html">GFA-BASIC 3.5 additions documented in the Amiga book</a></li><li><a href="amiga-gfa-basic-35-editor-feature-audit.html">Amiga GFA BASIC 3.5 — editor feature audit</a></li><li><a href="amiga-gfa-basic-35-lexer-evidence.html">Amiga GFA BASIC 3.5 lexer evidence inventory</a></li><li><a href="amiga-gfa-basic-35-matrix-arithmetic-analysis-audit.html">Amiga GFA BASIC 3.5 — matrix arithmetic and analysis audit</a></li><li><a href="amiga-gfa-basic-35-matrix-io-copy-audit.html">Amiga GFA BASIC 3.5 — matrix I/O and copy declaration audit</a></li><li><a href="amiga-gfa-basic-35-five-declaration-audit.html">Amiga GFA BASIC 3.5 — five declaration-level audit blocks</a></li><li><a href="amiga-gfa-basic-35-five-more-declaration-audit.html">Amiga GFA BASIC 3.5 — five more declaration-level audit blocks</a></li><li><a href="amiga-gfa-basic-35-guru-declaration-audit.html">Amiga GFA BASIC 3.5 — GURU declaration audit</a></li><li><a href="atari-gfa-book-diskette.html">Atari GFA BASIC book diskette — source-corpus research notes</a></li><li><a href="atari-gfa-book-systematic-review.html">Systematic review of *Das große GFA-BASIC-Buch* (Atari ST)</a></li><li><a href="aminet-catalogue.html">Aminet GFA BASIC package survey</a></li><li><a href="gfalist-build-and-fixture-validation.html">gfalist build and fixture validation</a></li><li><a href="gfalist-format-vs-rust-frontend.html">gfalist format notes vs. the Rust frontend</a></li></ul></nav>
+    <main class="docs-content">
+      <article>
+        <h1>Amiga GFA BASIC source and topic index</h1>
+        <p class="docs-meta"><span>Research Note</span></p>
+        <h1 id="amiga-gfa-basic-source-and-topic-index">Amiga GFA BASIC source and topic index</h1>
+<p><strong>Purpose:</strong> page-addressable navigation through the supplied Amiga references and the project's source-derived extraction notes. This is a research index, not a claim that every listed feature is implemented or runtime-tested.</p>
+<h2 id="sourceversion-key">Source/version key</h2>
+<table>
+<thead>
+<tr>
+<th>Source ID</th>
+<th>Source and scope</th>
+<th>How to use it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>AM-INTERPRETER-35</code></td>
+<td><em>GFA BASIC 3.5 Interpreter</em>; 3.0 base manual plus explicit 3.5 update material</td>
+<td>Normative source for explicit 3.5 addendum features. Base-manual material remains 3.0 evidence unless separately confirmed by the addendum or runtime.</td>
+</tr>
+<tr>
+<td><code>AM-INTERPRETER-30-35-UPDATE-SCAN</code></td>
+<td>Combined 3.0 + 3.5 update scan, including explicit Chapter 13, Chapter 14 and editor update</td>
+<td>Independent pagination witness for the same 3.5 update. Chapter 13 matrix material and Chapter 14 additions use printed pp. 14-1–14-7 in this scan.</td>
+</tr>
+<tr>
+<td><code>AM-BOOK-DE-1990</code></td>
+<td>Bleek/Hecht/Litzkendorf, <em>Das große GFA-BASIC-Buch zum Amiga</em>, Data Becker 1990, ISBN 3-89011-399-0</td>
+<td>Broad historical Amiga reference. Foreword says interpreter 3.0; section 1 identifies V3.03. Do not treat the cover's “bis Version 3.5” wording as proof of 3.5 interpreter semantics.</td>
+</tr>
+<tr>
+<td><code>AM-BOOK-FR</code></td>
+<td>French translation of the 1989 Amiga book, ISBN 2-86899-207-2</td>
+<td>Historical 3.0 corroboration; keep its page numbering separate.</td>
+</tr>
+</tbody>
+</table>
+<p>Bibliographic provenance, scan access and copyright notes are in <a href="../reference-sources.html">the source register</a>, <a href="amiga-gfa-basic-3.03-ocr-index.html">the German OCR index</a>, and <a href="amiga-gfa-basic-35-primary-reference.html">the 3.5 primary reference notes</a>. The supplied scans are external research material and are not stored in this repository.</p>
+<h2 id="topic-index-german-1990-book">Topic index: German 1990 book</h2>
+<p>All pages below are <strong>printed page numbers</strong>, not PDF viewer page numbers. Detailed source-derived summaries and page-image corrections are in <a href="amiga-gfa-basic-german-book-command-api-extraction.html">the command/API extraction</a>, with section anchors.</p>
+<table>
+<thead>
+<tr>
+<th>Topic / command family</th>
+<th style="text-align:right">Printed pages</th>
+<th>Extraction</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Book applicability, BASIC introduction, language foundations</td>
+<td style="text-align:right">13–65</td>
+<td><a href="amiga-gfa-basic-german-book-command-api-extraction.html">§1–§6</a></td>
+</tr>
+<tr>
+<td>Screen/input/output, files, channels, ports</td>
+<td style="text-align:right">75–119</td>
+<td><a href="amiga-gfa-basic-german-book-command-api-extraction.html">§1</a>, <a href="amiga-gfa-basic-german-book-command-api-extraction.html">§14</a></td>
+</tr>
+<tr>
+<td>AmigaDOS library calls</td>
+<td style="text-align:right">120–132</td>
+<td><a href="amiga-gfa-basic-german-book-command-api-extraction.html">§11</a></td>
+</tr>
+<tr>
+<td>Printer and hardcopy</td>
+<td style="text-align:right">132–138</td>
+<td><a href="amiga-gfa-basic-german-book-command-api-extraction.html">§12</a></td>
+</tr>
+<tr>
+<td>Sound, WAVE, SAY and speech</td>
+<td style="text-align:right">139–143</td>
+<td><a href="amiga-gfa-basic-german-book-command-api-extraction.html">§13</a></td>
+</tr>
+<tr>
+<td>Program structure, loops, branches, procedures and functions</td>
+<td style="text-align:right">145–191</td>
+<td><a href="amiga-gfa-basic-german-book-command-api-extraction.html">§7</a>, <a href="amiga-gfa-basic-german-book-command-api-extraction.html">§15</a></td>
+</tr>
+<tr>
+<td>Text and string operations</td>
+<td style="text-align:right">193–200</td>
+<td><a href="amiga-gfa-basic-german-book-command-api-extraction.html">§16</a></td>
+</tr>
+<tr>
+<td>Operators, arithmetic, numeric and bit functions</td>
+<td style="text-align:right">201–224</td>
+<td><a href="amiga-gfa-basic-german-book-command-api-extraction.html">§17</a></td>
+</tr>
+<tr>
+<td>Graphics definitions, drawing, DRAW$, SCROLL, GRAPHMODE</td>
+<td style="text-align:right">225–256</td>
+<td><a href="amiga-gfa-basic-german-book-command-api-extraction.html">§18</a>, <a href="amiga-gfa-basic-german-book-command-api-extraction.html">§37</a></td>
+</tr>
+<tr>
+<td>GET/PUT bitmap strings, hardware sprites, BOB/OBJECT</td>
+<td style="text-align:right">257–278</td>
+<td><a href="amiga-gfa-basic-german-book-command-api-extraction.html">§19</a>, <a href="amiga-gfa-basic-german-book-command-api-extraction.html">§38</a></td>
+</tr>
+<tr>
+<td>Number conversion and formatting</td>
+<td style="text-align:right">279–290</td>
+<td><a href="amiga-gfa-basic-german-book-command-api-extraction.html">§20</a></td>
+</tr>
+<tr>
+<td>Arrays, OPTION BASE, sorting</td>
+<td style="text-align:right">291–304</td>
+<td><a href="amiga-gfa-basic-german-book-command-api-extraction.html">§21</a></td>
+</tr>
+<tr>
+<td>Memory, typed access, allocation, pointers</td>
+<td style="text-align:right">305–316</td>
+<td><a href="amiga-gfa-basic-german-book-command-api-extraction.html">§22</a></td>
+</tr>
+<tr>
+<td>Amiga Exec tasks, signals, ports, lists, libraries, devices</td>
+<td style="text-align:right">317–328</td>
+<td><a href="amiga-gfa-basic-german-book-command-api-extraction.html">§23</a></td>
+</tr>
+<tr>
+<td>Program control, errors, debugging, DUMP, MODE</td>
+<td style="text-align:right">331–361</td>
+<td><a href="amiga-gfa-basic-german-book-command-api-extraction.html">§8</a>, <a href="amiga-gfa-basic-german-book-command-api-extraction.html">§24</a>, <a href="amiga-gfa-basic-german-book-command-api-extraction.html">§39</a></td>
+</tr>
+<tr>
+<td>ALERT, FILESELECT, mouse, joystick, STICK/STRIG</td>
+<td style="text-align:right">363–374</td>
+<td><a href="amiga-gfa-basic-german-book-command-api-extraction.html">§25</a>, <a href="amiga-gfa-basic-german-book-command-api-extraction.html">§40–§41</a></td>
+</tr>
+<tr>
+<td>Windows, screens, IDCMP, Window flags</td>
+<td style="text-align:right">375–388</td>
+<td><a href="amiga-gfa-basic-german-book-command-api-extraction.html">§26</a>, <a href="amiga-gfa-basic-german-book-command-api-extraction.html">§36</a></td>
+</tr>
+<tr>
+<td>MENU creation and attributes</td>
+<td style="text-align:right">389–393</td>
+<td><a href="amiga-gfa-basic-german-book-command-api-extraction.html">§27</a>, <a href="amiga-gfa-basic-german-book-command-api-extraction.html">§36</a></td>
+</tr>
+<tr>
+<td>Intuition event handling, MENU() payload, dispatch</td>
+<td style="text-align:right">395–404</td>
+<td><a href="amiga-gfa-basic-german-book-command-api-extraction.html">§28–§29</a>, <a href="amiga-gfa-basic-german-book-command-api-extraction.html">§42–§43</a></td>
+</tr>
+<tr>
+<td>Compiler and linker (not interpreter API)</td>
+<td style="text-align:right">405–450</td>
+<td><a href="amiga-gfa-basic-german-book-command-api-extraction.html">§33</a></td>
+</tr>
+<tr>
+<td>3.5 matrix/vector operations (compare with separate 3.5 addendum)</td>
+<td style="text-align:right">451–476</td>
+<td><a href="amiga-gfa-basic-german-book-command-api-extraction.html">§30</a>, <a href="amiga-gfa-basic-35-addendum-inventory.html">3.5 addendum inventory</a></td>
+</tr>
+<tr>
+<td>FACT, VARIAT, COMBIN, _DATA, editor additions</td>
+<td style="text-align:right">477–482</td>
+<td><a href="amiga-gfa-basic-german-book-command-api-extraction.html">§31</a></td>
+</tr>
+<tr>
+<td>Error appendices, command index and back matter</td>
+<td style="text-align:right">483–508</td>
+<td><a href="amiga-gfa-basic-german-book-command-api-extraction.html">§32</a>, <a href="amiga-gfa-basic-german-book-command-api-extraction.html">§35</a></td>
+</tr>
+</tbody>
+</table>
+<h2 id="version-specific-35-addendum-index">Version-specific 3.5 addendum index</h2>
+<p>The <em>GFA BASIC 3.5 Interpreter</em> manual contains a 3.0 base plus explicitly identified 3.5 additions. Use its printed Chapter 13 pagination; the combined update scan uses Chapter 13 for matrix operations and Chapter 14 for further commands.</p>
+<table>
+<thead>
+<tr>
+<th>3.5 feature</th>
+<th style="text-align:right">Supplied interpreter manual pages</th>
+<th style="text-align:right">Combined update scan pages</th>
+<th>Evidence note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Editor row layout, closed procedure/function search, listing changes, tab keys</td>
+<td style="text-align:right">1-25</td>
+<td style="text-align:right">1-25</td>
+<td>Explicit 3.5 editor update; not interpreter language syntax</td>
+</tr>
+<tr>
+<td>Matrix base and initialization: MAT BASE, MAT CLR/SET/ONE</td>
+<td style="text-align:right">13-1–13-3</td>
+<td style="text-align:right">13-1–13-3</td>
+<td>Floating-point 1D/2D fields only</td>
+</tr>
+<tr>
+<td>Matrix READ/PRINT/INPUT</td>
+<td style="text-align:right">13-3–13-6</td>
+<td style="text-align:right">13-3–13-6</td>
+<td>MAT PRINT punctuation visually checked; MAT INPUT is ASCII-file input</td>
+</tr>
+<tr>
+<td>Matrix copy, transpose and vector special cases</td>
+<td style="text-align:right">13-8–13-20</td>
+<td style="text-align:right">13-8–13-20</td>
+<td>MAT CPY/XCPY/TRANS and separate MAT COPY forms are distinguished by source</td>
+</tr>
+<tr>
+<td>Matrix arithmetic and multiplication</td>
+<td style="text-align:right">13-16–13-25</td>
+<td style="text-align:right">13-22–13-33</td>
+<td>Element-wise, scalar, matrix and vector forms; MAT MUL a(),x semantics remain unresolved in the extraction notes</td>
+</tr>
+<tr>
+<td>Matrix norm, determinant, quick determinant, rank and inverse</td>
+<td style="text-align:right">13-22–13-30</td>
+<td style="text-align:right">13-31–13-41</td>
+<td>MAT INV destination-first form resolved from detailed definition/example; summary on p. 13-16 is reversed typo</td>
+</tr>
+<tr>
+<td>FACT, VARIAT, COMBIN</td>
+<td style="text-align:right">13-33–13-34</td>
+<td style="text-align:right">14-1–14-2</td>
+<td>Explicit added mathematical functions</td>
+</tr>
+<tr>
+<td>Negative-screen OPENW, PCOLOR</td>
+<td style="text-align:right">13-34</td>
+<td style="text-align:right">14-3–14-4</td>
+<td>Additional interpreter commands</td>
+</tr>
+<tr>
+<td>_DATA, _DATA=, _0…_9, GURU statement/function</td>
+<td style="text-align:right">13-34–13-36</td>
+<td style="text-align:right">14-5–14-7</td>
+<td>Special variables and GURU behavior; preserve error-code caveats</td>
+</tr>
+</tbody>
+</table>
+<p>Detailed definitions, examples, disputes and evidence boundaries are in the <a href="amiga-gfa-basic-35-addendum-inventory.html">3.5 addendum inventory</a>. The German 1990 book's Chapter 18–19 is useful corroboration, but it is not substituted for the version-specific 3.5 source.</p>
+<h2 id="explicit-cross-source-reconciliation">Explicit cross-source reconciliation</h2>
+<table>
+<thead>
+<tr>
+<th>Topic</th>
+<th>3.5 source</th>
+<th>German 1990 book</th>
+<th>Treatment</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Core command reference version</td>
+<td>3.0 base + explicit 3.5 additions</td>
+<td>Foreword 3.0; section 1 V3.03</td>
+<td>Keep base behavior historical unless independently confirmed</td>
+</tr>
+<tr>
+<td>Matrix array types</td>
+<td>Floating-point fields, 1D/2D</td>
+<td>Broader “numeric fields” phrasing</td>
+<td>Use narrower explicit 3.5 constraint</td>
+</tr>
+<tr>
+<td>Matrix copy</td>
+<td>Distinct MAT CPY and MAT COPY forms</td>
+<td>MAT CPY documented</td>
+<td>Do not merge spellings</td>
+</tr>
+<tr>
+<td>Vector multiplication</td>
+<td>Outer/dyadic, inner/scalar, vector–matrix–vector</td>
+<td>Less complete treatment</td>
+<td>Preserve explicit 3.5 addendum forms</td>
+</tr>
+<tr>
+<td>Inverse</td>
+<td>Summary p. 13-16 (469-page manual) / p. 13-22 (combined scan) reverses operands; detailed definition/example p. 13-30 / p. 13-39 respectively specify destination first</td>
+<td>German book p. 475 independently agrees</td>
+<td>Use MAT INV destination()=source(); summary line is a typo</td>
+</tr>
+<tr>
+<td>FACT/VARIAT/COMBIN vs error #86</td>
+<td>3.5 addendum documents FACT/VARIAT/COMBIN</td>
+<td>Error appendix retains stale FACT/COMBIN/PERMUT wording</td>
+<td>VARIAT is documented; PERMUT alias is not established; error text is inconsistent</td>
+</tr>
+<tr>
+<td>MENU attribute value 64</td>
+<td>Not part of 3.5 addendum</td>
+<td>German page 389 prints 64 for both clear-checkmark and activate-item</td>
+<td>Preserve source duplicate; do not silently repair</td>
+</tr>
+<tr>
+<td>Intuition timer event</td>
+<td>English manual prints 4194303 beside &amp;H400000 in its IDCMP table</td>
+<td>German p.378 gives 4194304; event descriptions repeat 4194303</td>
+<td>Resolve as decimal typo: &amp;H400000 = 4194304</td>
+</tr>
+</tbody>
+</table>
+<h2 id="page-image-validation-register">Page-image validation register</h2>
+<table>
+<thead>
+<tr>
+<th>Printed pages</th>
+<th>Items checked</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>13-1–13-41 and 14-1–14-7 (3.5 addendum)</td>
+<td>Matrix syntax/operation examples, further 3.5 commands and editor changes</td>
+<td>Full addendum pass recorded in issue #65; unresolved source disagreements remain explicitly flagged</td>
+</tr>
+<tr>
+<td>1-25 (3.5 editor update)</td>
+<td>Editor changes and Tab/Ctrl+Tab/Shift+Tab operations</td>
+<td>Visually checked; ambiguous deletion boundary preserved</td>
+</tr>
+<tr>
+<td>378–379, 389</td>
+<td>IDCMP flags, Window flags, MENU attributes</td>
+<td>Page-image checked; duplicate MENU value 64 retained</td>
+</tr>
+<tr>
+<td>240, 245–250, 272–273</td>
+<td>GRAPHMODE examples, SCROLL, DRAW$, OBJECT.VY/OBJECT.PLANES</td>
+<td>Page-image checked; only documented GRAPHMODE values asserted</td>
+</tr>
+<tr>
+<td>257, 261–268</td>
+<td>GET/PUT header/modes/bitplanes, hardware SPRITE</td>
+<td>Page-image checked; PUT mask semantics remain unspecified</td>
+</tr>
+<tr>
+<td>352–354, 358</td>
+<td>DUMP selectors/output and MODE table</td>
+<td>Page-image checked; runtime details remain unverified</td>
+</tr>
+<tr>
+<td>363–368, 371–373</td>
+<td>ALERT, FILESELECT, MOUSE, STICK/STRIG</td>
+<td>Page-image checked; source-specific hardware behavior not runtime-tested</td>
+</tr>
+<tr>
+<td>398–404</td>
+<td>MENU() event payloads, ON MENU, SLEEP and handler registration</td>
+<td>Page-image checked; printed timer mismatch retained</td>
+</tr>
+</tbody>
+</table>
+<h2 id="research-and-implementation-boundaries">Research and implementation boundaries</h2>
+<ul>
+<li>This index describes source evidence, not parser support, implementation status or runtime conformance.</li>
+<li>The German 1990 book's 3.0/V3.03 material is not silently promoted to 3.5.</li>
+<li>Compiler/linker tools are separate from interpreter language/API entries.</li>
+<li>Direct Amiga OS library wrappers need ABI/layout/runtime validation before implementation decisions.</li>
+<li>Known source disagreements and unresolved OCR/runtime questions remain visible in the extraction notes and the candidate manifest.</li>
+<li>Historical scans and OCR dumps must not be committed or redistributed. Only concise citations, source metadata, original summaries and independently authored tests belong in the repository.</li>
+</ul>
+<h2 id="selected-commandfunction-navigation">Selected command/function navigation</h2>
+<p>This is a compact name-to-page index for the principal interpreter families extracted in this pass. It is intentionally a <strong>selected index</strong>, not a claim to reproduce every entry of Appendix D. Where a command is part of the 3.5 addendum, the version-specific 3.5 table above takes precedence over the older book's page number.</p>
+<table>
+<thead>
+<tr>
+<th>Names / family</th>
+<th style="text-align:right">Printed pages</th>
+<th>Scope</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>INPUT</code>, <code>LINE INPUT</code>, <code>FORM INPUT</code>, <code>INKEY$</code>, <code>PRINT</code>, <code>WRITE</code>, <code>LOCATE</code>, <code>HTAB</code>, <code>VTAB</code></td>
+<td style="text-align:right">75–92</td>
+<td>Screen and keyboard I/O; 3.0/V3.03 source</td>
+</tr>
+<tr>
+<td><code>OPEN</code>, <code>CLOSE</code>, <code>INPUT #</code>, <code>LINE INPUT #</code>, <code>PRINT #</code>, <code>WRITE #</code>, <code>FIELD</code>, <code>GET</code>, <code>PUT</code>, <code>SEEK</code>, <code>RELSEEK</code>, <code>RECORD</code>, <code>BGET</code>, <code>BPUT</code></td>
+<td style="text-align:right">92–119</td>
+<td>File and channel operations; 3.0/V3.03 source</td>
+</tr>
+<tr>
+<td><code>INP</code>, <code>OUT</code></td>
+<td style="text-align:right">119</td>
+<td>Port I/O; 3.0/V3.03 source</td>
+</tr>
+<tr>
+<td><code>OPENW</code>, <code>CLOSEW</code>, <code>MOVEW</code>, <code>FULLW</code>, <code>LIMITW</code>, <code>TITLEW</code>, <code>FRONTW</code>, <code>SIZEW</code>, <code>WINDOW()</code></td>
+<td style="text-align:right">375–388</td>
+<td>Amiga window API; negative-screen OPENW variant separately confirmed in 3.5 addendum</td>
+</tr>
+<tr>
+<td><code>OPENS</code>, <code>CLOSES</code>, <code>SCREEN()</code>, <code>SCREEN</code> and screen geometry/mode operations</td>
+<td style="text-align:right">383–388</td>
+<td>Amiga screen API; 3.0/V3.03 source</td>
+</tr>
+<tr>
+<td><code>MENU</code>, <code>MENUTEXT</code>, <code>MENUMENU</code>, <code>MENUKEY</code>, <code>MENUKILL</code>, <code>ON MENU</code>, <code>ON MENU GOSUB</code>, <code>ON MENU BUTTON GOSUB</code>, <code>ON MENU KEY GOSUB</code>, <code>SLEEP</code></td>
+<td style="text-align:right">389–404</td>
+<td>Menu creation and Intuition event dispatch; page-image verified selected event tables</td>
+</tr>
+<tr>
+<td><code>ALERT</code>, <code>FILESELECT</code>, <code>MOUSE</code>, <code>MOUSEX</code>, <code>MOUSEY</code>, <code>MOUSEK</code>, <code>STICK</code>, <code>STICK()</code>, <code>STRIG()</code></td>
+<td style="text-align:right">363–373</td>
+<td>Requesters and input devices; 3.0/V3.03 source</td>
+</tr>
+<tr>
+<td><code>PLOT</code>, <code>LINE</code>, <code>DRAW</code>, <code>DRAW$</code>, <code>BOX</code>, <code>PBOX</code>, <code>CIRCLE</code>, <code>PCIRCLE</code>, <code>ELLIPSE</code>, <code>PELLIPSE</code>, <code>POLYLINE</code>, <code>POLYFILL</code>, <code>POINT</code>, <code>SCROLL</code>, <code>TEXT</code>, <code>GRAPHMODE</code></td>
+<td style="text-align:right">225–256</td>
+<td>Raster and vector graphics; selected syntax page-image verified</td>
+</tr>
+<tr>
+<td><code>GET</code>, <code>PUT</code>, <code>SPRITE</code>, <code>VSYNC</code>, <code>OBJECT.*</code>, <code>ON COLLISION GOSUB</code></td>
+<td style="text-align:right">257–278</td>
+<td>Bitmap transfer, hardware sprites and Blitter objects; mask/runtime caveats retained</td>
+</tr>
+<tr>
+<td><code>OPTION BASE</code>, <code>DIM</code>, <code>ERASE</code>, <code>INSERT</code>, <code>QSORT</code>, <code>SSORT</code>, <code>ARRAYFILL</code>, <code>ARRPTR</code></td>
+<td style="text-align:right">291–304</td>
+<td>Arrays and sorting</td>
+</tr>
+<tr>
+<td><code>PEEK</code>, <code>POKE</code>, <code>DPEEK</code>, <code>DPOKE</code>, <code>LPEEK</code>, <code>LPOKE</code>, <code>MALLOC</code>, <code>MFREE</code>, <code>VARPTR</code>, <code>ABSOLUTE</code>, <code>INLINE</code></td>
+<td style="text-align:right">305–316</td>
+<td>Memory and pointers; low-level ABI/runtime validation required</td>
+</tr>
+<tr>
+<td><code>SOUND</code>, <code>WAVE</code>, <code>SAY</code>, <code>TRANSLATE$</code></td>
+<td style="text-align:right">139–144</td>
+<td>Sound and speech output</td>
+</tr>
+<tr>
+<td><code>DATA</code>, <code>READ</code>, <code>RESTORE</code>, <code>DEFBIT</code>, <code>DEFBYT</code>, <code>DEFINT</code>, <code>DEFSTR</code>, <code>DEFWRD</code>, <code>LOCAL</code>, <code>PROCEDURE</code>, <code>FUNCTION</code>, <code>DEFFN</code>, <code>CALL</code>, <code>EXEC</code>, <code>MONITOR</code>, <code>RCALL</code></td>
+<td style="text-align:right">145–191</td>
+<td>Program structure, declarations and external code</td>
+</tr>
+<tr>
+<td><code>DUMP</code>, <code>MODE</code>, <code>TRACE$</code>, <code>TRON</code>, <code>TROFF</code>, <code>ERROR</code>, <code>ERR</code>, <code>ERR$</code>, <code>RESUME</code></td>
+<td style="text-align:right">331–361</td>
+<td>Diagnostics, error handling and interpreter control</td>
+</tr>
+<tr>
+<td><code>MAT BASE</code>, <code>MAT CLR</code>, <code>MAT SET</code>, <code>MAT ONE</code>, <code>MAT READ</code>, <code>MAT PRINT</code>, <code>MAT INPUT</code>, <code>MAT CPY</code>, <code>MAT XCPY</code>, <code>MAT TRANS</code>, <code>MAT ADD</code>, <code>MAT SUB</code>, <code>MAT MUL</code>, <code>MAT NORM</code>, <code>MAT DET</code>, <code>MAT QDET</code>, <code>MAT RANG</code>, <code>MAT INV</code></td>
+<td style="text-align:right">13-1–13-36 (469-page manual); 13-1–13-41 (combined update scan)</td>
+<td>Version-specific matrix/vector API; floating-point fields only</td>
+</tr>
+<tr>
+<td><code>FACT</code>, <code>VARIAT</code>, <code>COMBIN</code>, <code>PCOLOR</code>, <code>GURU</code>, <code>_DATA</code>, <code>_DATA=</code>, <code>_0</code>…<code>_9</code></td>
+<td style="text-align:right">13-33–13-36 (3.5 addendum)</td>
+<td>Explicit additional 3.5 interpreter features</td>
+</tr>
+</tbody>
+</table>
+<p>Names are normalized only for navigation; this table does not settle OCR spellings where the source is damaged or internally inconsistent. For example, the book's error appendix uses <code>PERMUT</code> where Chapter 19 describes <code>VARIAT</code>, and the function inventory retains disputed <code>CVD/CVF</code> and <code>MKD/MKF</code> name slots. Consult the <a href="amiga-gfa-basic-candidates.toml">candidate manifest</a> and the detailed source notes before using any spelling as a parser requirement.</p>
+<h2 id="resolved-source-discrepancies-2026-11-08">Resolved source discrepancies (2026-11-08)</h2>
+<ul>
+<li><strong>MAT INV:</strong> <code>MAT INV destination()=source()</code> is established by the 3.5 addendum's detailed definition and worked example (printed p. 13-30 in the supplied manual; p. 13-39 in the combined update scan), and independently by the German book (p. 475). The reversed summary line on 3.5 p. 13-16 is a typo.</li>
+<li><strong>INTUITICKS:</strong> use decimal <code>4194304</code> / hexadecimal <code>&amp;H400000</code>. The repeated decimal <code>4194303</code> in event prose is a typo; the hexadecimal representation and German IDCMP table agree.</li>
+<li><strong>Error #86 / PERMUT:</strong> <code>VARIAT</code> is the documented function name; <code>PERMUT</code> occurs only in the inconsistent error catalogue entry. No alias is established.</li>
+<li><strong>MENU attribute 64:</strong> duplicate values are confirmed in the source. The runtime effect remains unknown and requires interpreter testing.</li>
+</ul>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>
