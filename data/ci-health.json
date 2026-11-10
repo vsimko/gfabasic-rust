@@ -1,6 +1,6 @@
 {
   "repository": "vsimko/gfabasic-rust",
-  "generated_at": "2026-11-10T12:06:35.191149Z",
+  "generated_at": "2026-11-10T13:44:07.860792Z",
   "freshness_threshold_hours": 168,
   "workflows": [
     {
@@ -10,26 +10,26 @@
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/docs.yml",
       "state": "in_progress",
       "latest": {
-        "id": 42812923402,
+        "id": 42827188344,
         "name": "Documentation checks",
         "status": "in_progress",
         "event": "push",
         "branch": "main",
-        "created_at": "2026-11-10T12:06:22Z",
-        "updated_at": "2026-11-10T12:06:26Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42812923402",
+        "created_at": "2026-11-10T13:43:53Z",
+        "updated_at": "2026-11-10T13:43:58Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42827188344",
         "age_hours": 0,
         "freshness": "fresh"
       },
       "last_success": {
-        "id": 42810904159,
+        "id": 42826868666,
         "name": "Documentation checks",
         "status": "success",
         "event": "pull_request",
-        "branch": "experiment/amiga-lst-to-gfa",
-        "created_at": "2026-11-10T11:51:43Z",
-        "updated_at": "2026-11-10T11:52:00Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42810904159",
+        "branch": "docs/amiga-gfa-test-output",
+        "created_at": "2026-11-10T13:41:46Z",
+        "updated_at": "2026-11-10T13:42:06Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42826868666",
         "age_hours": 0,
         "freshness": "fresh"
       }
@@ -49,7 +49,7 @@
         "created_at": "2026-11-10T06:45:23Z",
         "updated_at": "2026-11-10T06:45:42Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42770641187",
-        "age_hours": 5,
+        "age_hours": 6,
         "freshness": "fresh"
       },
       "last_success": {
@@ -61,7 +61,7 @@
         "created_at": "2026-11-10T06:45:23Z",
         "updated_at": "2026-11-10T06:45:42Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42770641187",
-        "age_hours": 5,
+        "age_hours": 6,
         "freshness": "fresh"
       }
     },
@@ -80,7 +80,7 @@
         "created_at": "2026-11-09T21:07:07Z",
         "updated_at": "2026-11-09T21:07:31Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42699425788",
-        "age_hours": 14,
+        "age_hours": 16,
         "freshness": "fresh"
       },
       "last_success": {
@@ -92,7 +92,7 @@
         "created_at": "2026-11-09T21:07:07Z",
         "updated_at": "2026-11-09T21:07:31Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42699425788",
-        "age_hours": 14,
+        "age_hours": 16,
         "freshness": "fresh"
       }
     },
@@ -111,7 +111,7 @@
         "created_at": "2026-11-09T21:04:43Z",
         "updated_at": "2026-11-09T21:06:49Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42699028842",
-        "age_hours": 14,
+        "age_hours": 16,
         "freshness": "fresh"
       },
       "last_success": {
@@ -123,7 +123,7 @@
         "created_at": "2026-11-09T21:04:43Z",
         "updated_at": "2026-11-09T21:06:49Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42699028842",
-        "age_hours": 14,
+        "age_hours": 16,
         "freshness": "fresh"
       }
     },
@@ -142,7 +142,7 @@
         "created_at": "2026-11-09T21:07:07Z",
         "updated_at": "2026-11-09T21:08:08Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42699425305",
-        "age_hours": 14,
+        "age_hours": 16,
         "freshness": "fresh"
       },
       "last_success": {
@@ -154,7 +154,7 @@
         "created_at": "2026-11-09T21:07:07Z",
         "updated_at": "2026-11-09T21:08:08Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42699425305",
-        "age_hours": 14,
+        "age_hours": 16,
         "freshness": "fresh"
       }
     },
@@ -173,7 +173,7 @@
         "created_at": "2026-11-10T06:44:18Z",
         "updated_at": "2026-11-10T06:44:31Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42770520328",
-        "age_hours": 5,
+        "age_hours": 6,
         "freshness": "fresh"
       },
       "last_success": {
@@ -185,7 +185,7 @@
         "created_at": "2026-11-10T06:44:18Z",
         "updated_at": "2026-11-10T06:44:31Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42770520328",
-        "age_hours": 5,
+        "age_hours": 6,
         "freshness": "fresh"
       }
     },
@@ -196,14 +196,14 @@
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/pages.yml",
       "state": "in_progress",
       "latest": {
-        "id": 42812923413,
+        "id": 42827188347,
         "name": "Deploy GitHub Pages",
         "status": "in_progress",
         "event": "push",
         "branch": "main",
-        "created_at": "2026-11-10T12:06:22Z",
-        "updated_at": "2026-11-10T12:06:26Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42812923413",
+        "created_at": "2026-11-10T13:43:53Z",
+        "updated_at": "2026-11-10T13:43:57Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42827188347",
         "age_hours": 0,
         "freshness": "fresh"
       },
@@ -216,7 +216,7 @@
         "created_at": "2026-11-09T18:43:08Z",
         "updated_at": "2026-11-09T18:43:43Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42676477672",
-        "age_hours": 17,
+        "age_hours": 19,
         "freshness": "fresh"
       }
     },
@@ -227,26 +227,26 @@
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/pr-preview.yml",
       "state": "in_progress",
       "latest": {
-        "id": 42812926290,
+        "id": 42827199117,
         "name": "Pull request website preview",
         "status": "in_progress",
         "event": "pull_request",
-        "branch": "experiment/amiga-lst-to-gfa",
-        "created_at": "2026-11-10T12:06:23Z",
-        "updated_at": "2026-11-10T12:06:27Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42812926290",
+        "branch": "docs/amiga-gfa-test-output",
+        "created_at": "2026-11-10T13:43:58Z",
+        "updated_at": "2026-11-10T13:44:01Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42827199117",
         "age_hours": 0,
         "freshness": "fresh"
       },
       "last_success": {
-        "id": 42810904285,
+        "id": 42826868711,
         "name": "Pull request website preview",
         "status": "success",
         "event": "pull_request",
-        "branch": "experiment/amiga-lst-to-gfa",
-        "created_at": "2026-11-10T11:51:44Z",
-        "updated_at": "2026-11-10T11:52:23Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42810904285",
+        "branch": "docs/amiga-gfa-test-output",
+        "created_at": "2026-11-10T13:41:46Z",
+        "updated_at": "2026-11-10T13:42:57Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42826868711",
         "age_hours": 0,
         "freshness": "fresh"
       }
