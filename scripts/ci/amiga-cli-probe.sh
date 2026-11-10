@@ -114,8 +114,8 @@ fi
 printf "LIST_FLOPPIES\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}" >"$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/post-merge-ipc.txt" || true
 
 # Native editor shortcut: Shift+F1 opens the tokenized GFA Save requester.
-# The floppy directory takes about three seconds to populate; Enter then
-# activates the default Save gadget without relying on mouse coordinates.
+# The floppy directory can take three to five seconds to populate; wait
+# five seconds before capturing it and activating the default Save gadget.
 printf "SEND_KEY\\t96\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 sleep 0.2
 printf "SEND_KEY\\t80\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
@@ -123,7 +123,7 @@ sleep 0.2
 printf "SEND_KEY\\t80\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 sleep 0.2
 printf "SEND_KEY\\t96\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-sleep 3
+sleep 5
 printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/save-dialog.png" | timeout 5s nc -U -N "${ipc_socket_path:-}" || true
 # Return/Enter is Amiga raw keycode 0x44 (decimal 68).
 printf "SEND_KEY\\t68\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
