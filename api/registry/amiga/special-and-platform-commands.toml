@@ -135,8 +135,8 @@ tests = []
 pending-reason = "No Amiga GURU/error handling implementation or executable reference-interpreter conformance tests are registered."
 
 [declarations.docs]
-path = "docs/research/amiga-gfa-basic-35-addendum-inventory.md"
-anchors = ["4-additional-commands-in-version-35-combined-scan-chapter-14-printed-pp-14-1-14-7"]
+path = "docs/research/amiga-gfa-basic-35-guru-declaration-audit.md"
+anchors = ["1-guru-statement"]
 
 [[declarations]]
 id = "gfa.amiga.system.guru-number"
@@ -178,5 +178,5 @@ tests = []
 pending-reason = "No GURU-number runtime implementation or executable reference-interpreter conformance tests are registered."
 
 [declarations.docs]
-path = "docs/research/amiga-gfa-basic-35-addendum-inventory.md"
-anchors = ["4-additional-commands-in-version-35-combined-scan-chapter-14-printed-pp-14-1-14-7"]
+path = "docs/research/amiga-gfa-basic-35-guru-declaration-audit.md"
+anchors = ["2-guru-function"]
