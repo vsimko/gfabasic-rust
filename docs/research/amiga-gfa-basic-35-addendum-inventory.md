@@ -82,14 +82,14 @@ These rules are source-verified for the 3.5 addendum and should be preserved exp
 | `MAT MUL x=a()*b()` | For vectors with equal element counts, calculate scalar/dot (inner) product: sum of pairwise element products (printed p. 13-22). |
 | `MAT MUL x=a()*b()*c()` | Scalar result for a row vector `a`, compatible matrix `b`, and column vector `c`; `a` has as many elements as `b` has rows, and `c` as many elements as `b` has columns (printed p. 13-22). |
 | `MAT MUL a(),x` | Multiply every element of `a` by scalar `x` in place |
-| `MAT NORM a(),0` | Normalize row-wise: each row is scaled so the sum of squares of its elements is 1 (printed pp. 13-22–13-25). |
-| `MAT NORM a(),1` | Normalize column-wise: each column is scaled so the sum of squares of its elements is 1 (printed pp. 13-22–13-25). |
+| `MAT NORM a(),0` | Normalize row-wise: each row is scaled so the sum of squares of its elements is 1 (printed pp. 13-31–13-33). |
+| `MAT NORM a(),1` | Normalize column-wise: each column is scaled so the sum of squares of its elements is 1 (printed pp. 13-31–13-33). |
 | `MAT DET x=a([i,j])[,n]` | Calculate determinant of a square matrix/selected square submatrix |
 | `MAT QDET x=a([i,j])[,n]` | Same determinant purpose and submatrix selection as `MAT DET`; optimized for speed, not accuracy. The manual recommends `MAT DET` for critical matrices whose determinant is near zero (printed pp. 13-36–13-37) |
 | `MAT RANG x=a([i,j])[,n]` | Calculate rank of a square matrix; like `MAT DET`/`MAT QDET`, accepts row and column offsets, with `n` selecting an n×n submatrix from that position (printed p. 13-38) |
 | `MAT INV b()=a()` | Calculate the inverse of square matrix `a` and write it to destination matrix `b`; `b()` must have the same type/dimensions as `a()` (printed p. 13-30) |
 
-Page-image checks of printed pp. 13-20–13-25 in the supplied 469-page manual establish matrix multiplication dimensions and the row/column normalization meanings above; the combined update scan uses a different pagination, cross-referenced in the source/topic index. Printed pp. 13-26–13-30 in the supplied 469-page manual confirm `MAT DET`, `MAT QDET`, `MAT RANG`, and the detailed `MAT INV b()=a()` example; the combined update scan uses pp. 13-34–13-39 for the corresponding later definitions. **Operand direction resolved:** the summary on printed p. 13-16 lists the reversed form `MAT INV a()=b()`, but the detailed definition and worked example on p. 13-30 explicitly state that the inverse of source `a()` is written to destination `b()`; the German 1990 book independently confirms destination-first `MAT INV i()=m()` on p. 475. Treat the summary form as a source typo and use `MAT INV destination()=source()`. Runtime edge cases remain untested. The earlier OCR-only warning for the matrix multiplication examples is superseded by the page-image checks recorded above. Do not use OCR artifacts as normative syntax.
+Page-image checks of printed pp. 13-20–13-22 in the supplied 469-page manual establish the matrix multiplication dimensions. The row/column normalization definitions are on printed pp. 13-31–13-33 (not pp. 13-22–13-25); the registry locator and the primary page images agree on this corrected pagination. The combined update scan uses a different pagination, cross-referenced in the source/topic index. Printed pp. 13-26–13-30 in the supplied 469-page manual confirm `MAT DET`, `MAT QDET`, `MAT RANG`, and the detailed `MAT INV b()=a()` example; the combined update scan uses pp. 13-34–13-39 for the corresponding later definitions. **Operand direction resolved:** the summary on printed p. 13-16 lists the reversed form `MAT INV a()=b()`, but the detailed definition and worked example on p. 13-30 explicitly state that the inverse of source `a()` is written to destination `b()`; the German 1990 book independently confirms destination-first `MAT INV i()=m()` on p. 475. Treat the summary form as a source typo and use `MAT INV destination()=source()`. Runtime edge cases remain untested. The earlier OCR-only warning for the matrix multiplication examples is superseded by the page-image checks recorded above. Do not use OCR artifacts as normative syntax.
 
 ## 4. Additional commands in version 3.5 — combined-scan Chapter 14, printed pp. 14-1–14-7
 
@@ -123,6 +123,52 @@ Page-image review of the combined update scan's printed p. 14-5 confirms the lea
 5. Add tests for DATA pointer query/restore, special-variable persistence, PCOLOR, negative-screen OPENW, and GURU handling. Tests involving OS crash recovery must be isolated and carefully sandboxed.
 6. Keep editor behavior separate from language/runtime semantics; it may be documented even if the Rust project does not implement the historical editor.
 7. Mark all 3.0 manual features not explicitly reconfirmed by this 3.5 manual as inherited candidates, not verified 3.5 facts.
+
+## 6. Registry declaration crosswalk
+
+The following table maps every declaration in the current 3.5 addendum registry slice to its stable API ID and the printed source locator used by the registry. “Language core” and “Amiga profile” are separate registry namespaces; the latter contains platform-specific PCOLOR, the negative-screen OPENW variant, and the two distinct GURU forms.
+
+### Language-core declarations (24)
+
+| Declaration | Stable registry ID | Primary 3.5 printed locator |
+|---|---|---|
+| MAT BASE | gfa.language.matrix.mat-base | Chapter 13, pp. 13-1–13-2 |
+| MAT CLR | gfa.language.matrix.mat-clr | Chapter 13, pp. 13-2–13-3 |
+| MAT SET | gfa.language.matrix.mat-set | Chapter 13, pp. 13-2–13-3 |
+| MAT ONE | gfa.language.matrix.mat-one | Chapter 13, pp. 13-2–13-3 |
+| MAT READ | gfa.language.matrix.mat-read | Chapter 13, p. 13-5 |
+| MAT PRINT | gfa.language.matrix.mat-print | Chapter 13, pp. 13-5–13-6 |
+| MAT INPUT | gfa.language.matrix.mat-input | Chapter 13, p. 13-6 |
+| MAT CPY | gfa.language.matrix.mat-cpy | Chapter 13, pp. 13-4–13-19 |
+| MAT XCPY | gfa.language.matrix.mat-xcpy | Chapter 13, pp. 13-15–13-19 |
+| MAT ADD | gfa.language.matrix.mat-add | Chapter 13, pp. 13-16–13-18 |
+| MAT SUB | gfa.language.matrix.mat-sub | Chapter 13, pp. 13-18–13-20 |
+| MAT MUL | gfa.language.matrix.mat-mul | Chapter 13, pp. 13-20–13-22 |
+| MAT TRANS | gfa.language.matrix.mat-trans | Chapter 13, pp. 13-19–13-20 |
+| MAT NORM | gfa.language.matrix.mat-norm | Chapter 13, pp. 13-31–13-33 |
+| MAT DET | gfa.language.matrix.mat-det | Chapter 13, p. 13-26 |
+| MAT QDET | gfa.language.matrix.mat-qdet | Chapter 13, pp. 13-27–13-28 |
+| MAT RANG | gfa.language.matrix.mat-rang | Chapter 13, p. 13-29 |
+| MAT INV | gfa.language.matrix.mat-inv | Chapter 13, p. 13-30 (detailed definition/example) |
+| FACT | gfa.language.math.fact | Chapter 13, pp. 13-33–13-34 |
+| VARIAT | gfa.language.math.variat | Chapter 13, pp. 13-33–13-34 |
+| COMBIN | gfa.language.math.combin | Chapter 13, pp. 13-33–13-34 |
+| _DATA | gfa.language.data.data-pointer | Chapter 13, p. 13-34 |
+| _DATA= | gfa.language.data.set-data-pointer | Chapter 13, p. 13-34 |
+| _0…_9 | gfa.language.memory.special-longword-variables | Chapter 13, p. 13-35 |
+
+### Amiga-profile declarations (4)
+
+| Declaration | Stable registry ID | Primary 3.5 printed locator |
+|---|---|---|
+| PCOLOR | gfa.amiga.graphics.pcolor | Chapter 13, p. 13-34 |
+| Negative-screen OPENW variant | gfa.amiga.windows.openw-negative-screen | Chapter 13, p. 13-34 |
+| GURU x statement | gfa.amiga.system.guru-check | Chapter 13, p. 13-36 |
+| GURU function | gfa.amiga.system.guru-number | Chapter 13, p. 13-36 |
+
+The four Amiga-profile entries are not general language-core declarations; in particular, the GURU statement and GURU function remain distinct declarations under one overload group. The MAT NORM locator above also corrects the earlier table's page range: the primary manual places its row/column definitions on pp. 13-31–13-33.
+
+This crosswalk is an identity and provenance aid, not an assertion that the registry is a complete 3.5 API catalogue. It does not change implementation, Linux support, or conformance status. The separate corpus fixture crosswalk in tests/corpus/README.md maps 13 page-image-verified research fixtures to declaration IDs; those fixtures are not executable conformance tests and must not be added to registry support.tests.
 
 ## Source and rights
 
