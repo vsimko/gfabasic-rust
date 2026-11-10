@@ -9,6 +9,8 @@ on:
   pull_request:
     paths:
       - ".github/workflows/amiga-native-merge-run.yml"
+      - "tests/interpreter-probes/amiga-3.52/**"
+      - "scripts/validate_gfatest_results.py"
   workflow_dispatch:
 
 permissions:
