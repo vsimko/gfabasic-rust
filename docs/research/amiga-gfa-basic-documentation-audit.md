@@ -51,7 +51,7 @@ The 3.5 addendum inventory resolves the operand direction as:
 
 The detailed definition and worked example on printed p. 13-30 say that the inverse of source matrix `a()` is written to destination `b()`. The reversed summary form on printed p. 13-16 is treated as a source typo. The German 1990 book's p. 475 is corroboration only, because that book's main interpreter reference is version-scoped to 3.0/V3.03.
 
-This resolves the documented syntax direction only. Runtime edge cases, parser support and conformance remain separate. The older progress note in issue #47 has been explicitly corrected by a comment; do not treat its earlier “both directions rejected pending evidence” statement as current source status.
+This resolves the documented syntax direction only. Runtime edge cases, parser support and conformance remain separate. Issue #47's former disputed-status section has been replaced with the resolved destination-first syntax evidence; do not treat its earlier “both directions rejected pending evidence” statement as current source status.
 
 ## Registry population cross-check
 
