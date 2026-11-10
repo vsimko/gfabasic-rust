@@ -1,3 +1,8 @@
+---
+type: "Research Note"
+title: "GFA BASIC 3.0 Amiga — graphics evidence"
+---
+
 # GFA BASIC 3.0 Amiga — graphics evidence
 
 Source: *GFA-BASIC 3.0 Amiga*, Chapter 8, “Graphics”, printed pages 8-2–8-24 (Interpreter PDF pages 232–254). The handbook states that the manual was originally written for 3.0; Chapter 13 is the separate 3.5 addendum. This file records the Chapter 8 baseline only.

@@ -34,7 +34,7 @@ def main():
     request = urllib.request.Request(url, headers={"User-Agent": "gfabasic-preview-qa/1.0"})
     html = None
     last_error = None
-    for attempt in range(6):
+    for attempt in range(18):
         try:
             with urllib.request.urlopen(request, timeout=10) as response:
                 if response.status != 200:
@@ -43,11 +43,11 @@ def main():
             break
         except (urllib.error.URLError, TimeoutError) as error:
             last_error = error
-            if attempt < 5:
-                print(f"Preview is not ready yet (attempt {attempt + 1}/6); retrying in 10 seconds.")
+            if attempt < 17:
+                print(f"Preview is not ready yet (attempt {attempt + 1}/18); retrying in 10 seconds.")
                 time.sleep(10)
     if html is None:
-        raise SystemExit(f"Could not load deployed preview {url} after 6 attempts: {last_error}") from last_error
+        raise SystemExit(f"Could not load deployed preview {url} after 18 attempts: {last_error}") from last_error
 
     inspector = PageInspector()
     inspector.feed(html)
@@ -80,6 +80,25 @@ def main():
     assert "Loading canonical roadmap phases" not in html
     assert "Loading…" not in html
     assert "data/project.json" not in html, "Dashboard should be rendered into static HTML"
+
+
+    docs_url = url.rstrip("/") + "/docs/index.html"
+    docs_request = urllib.request.Request(docs_url, headers={"User-Agent": "gfabasic-preview-qa/1.0"})
+    with urllib.request.urlopen(docs_request, timeout=10) as response:
+        docs_html = response.read().decode("utf-8")
+    assert response.status == 200
+    assert "<title>Project documentation · GFA BASIC Rust documentation</title>" in docs_html
+    assert "OKF v0.2" in docs_html
+    assert 'href="architecture/index.html"' in docs_html
+
+    adr_url = url.rstrip("/") + "/docs/architecture/adr/0011-amiga-35-linux-sdl3-product-scope.html"
+    with urllib.request.urlopen(adr_url, timeout=10) as response:
+        adr_html = response.read().decode("utf-8")
+    assert response.status == 200
+    assert "ADR 0011: Product scope — Amiga GFA BASIC 3.5 to Linux x86-64 with SDL3" in adr_html
+    assert "<script" not in adr_html.lower(), "Generated documentation must not execute embedded scripts"
+
+    print(f"Verified generated documentation index and ADR page: {docs_url}")
 
     print(f"Preview HTML QA passed: {url}")
     print("Verified dashboard cards, CI workflow health, scoped API and roadmap progress bars, implementation states, roadmap and API catalogue.")

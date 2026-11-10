@@ -1,3 +1,8 @@
+---
+type: "Architecture"
+title: "Rust workspace and dependency policy"
+---
+
 # Rust workspace and dependency policy
 
 - Status: Accepted; see [ADR 0002](adr/0002-initial-rust-workspace.md).

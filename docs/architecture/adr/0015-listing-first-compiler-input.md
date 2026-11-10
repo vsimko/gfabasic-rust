@@ -1,3 +1,8 @@
+---
+type: "Architecture Decision Record"
+title: "ADR 0015: Listing-first compiler input"
+---
+
 # ADR 0015: Listing-first compiler input
 
 - Status: Accepted

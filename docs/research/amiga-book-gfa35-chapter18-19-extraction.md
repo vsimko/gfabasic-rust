@@ -1,3 +1,8 @@
+---
+type: "Research Note"
+title: "GFA-BASIC 3.5 additions documented in the Amiga book"
+---
+
 # GFA-BASIC 3.5 additions documented in the Amiga book
 
 Source: `Das Grosse Buch zu GFA-BASIC 3.5 Amiga.pdf`, chapter 18 (PDF pp. 451–475; printed pp. 451–475), plus chapter 19 (PDF pp. 477–482). This is an extraction of what the book explicitly says, not a claim that the list is exhaustive for every GFA-BASIC 3.5 target/platform.

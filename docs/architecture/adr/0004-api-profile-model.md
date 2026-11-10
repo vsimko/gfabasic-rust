@@ -1,3 +1,8 @@
+---
+type: "Architecture Decision Record"
+title: "ADR 0004: API profile model"
+---
+
 # ADR 0004: API profile model
 
 - Status: Accepted historically; active product scope narrowed by [ADR 0011](0011-amiga-35-linux-sdl3-product-scope.md)

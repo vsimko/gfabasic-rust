@@ -1,3 +1,8 @@
+---
+type: "Architecture"
+title: "Memory model and hardware access"
+---
+
 # Memory model and hardware access
 
 - Status: **Approved safety baseline (2026-11-04); dialect-specific memory semantics remain subject to evidence-based research.**

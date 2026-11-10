@@ -9,6 +9,13 @@ on:
       - "scripts/**"
       - "validation/**"
       - "tests/tooling/**"
+      - "docs/**"
+      - "scripts/validate_okf.py"
+      - "scripts/generate_docs_site.py"
+      - "scripts/tests/test_validate_okf.py"
+      - "scripts/tests/test_generate_docs_site.py"
+      - ".github/workflows/docs.yml"
+      - ".github/workflows/pr-preview.yml"
       - ".github/workflows/pages.yml"
   workflow_dispatch:
 
@@ -28,8 +35,16 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
 
+      - name: Set up Python
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0
+        with:
+          python-version: '3.12'
+
       - name: Generate project data
         run: |
+          python -m pip install --disable-pip-version-check PyYAML==6.0.2 markdown-it-py==3.0.0
+          python scripts/validate_okf.py
+          python scripts/generate_docs_site.py
           if [ -f scripts/generate_project_data.py ]; then
             python3 scripts/generate_project_data.py
           fi
@@ -96,3 +111,8 @@ jobs:
           rm -rf "$staging_dir"
           echo "Could not publish production site after 5 attempts."
           exit 1
+
+      - name: Smoke-test deployed production documentation
+        env:
+          DOCS_URL: https://vsimko.github.io/gfabasic-rust/docs/index.html
+        run: python scripts/tests/test_production_docs.py

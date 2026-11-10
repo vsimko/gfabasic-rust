@@ -1,3 +1,9 @@
+---
+type: "Research Report"
+title: "Amiga GFA BASIC 3.5 candidate verification report"
+tags: [amiga, gfa-basic, evidence, research]
+---
+
 # Amiga GFA BASIC 3.5 candidate verification report
 
 > Generated from `amiga-gfa-basic-candidates.toml`. Status describes evidence of 3.5 applicability, not implementation or runtime support.

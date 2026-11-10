@@ -1,3 +1,8 @@
+---
+type: "Research Note"
+title: "Amiga GFA BASIC 3.5 — matrix arithmetic and analysis audit"
+---
+
 # Amiga GFA BASIC 3.5 — matrix arithmetic and analysis audit
 
 Primary source: *GFA BASIC 3.5 Interpreter*, Chapter 13 addendum, printed pp. 13-15–13-39. All these operations are explicitly documented in the 3.5 addendum and apply to the documented one- and/or two-dimensional floating-point fields (p. 13-1). The descriptions below are source facts, not runtime-conformance claims.

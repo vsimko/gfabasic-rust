@@ -1,3 +1,8 @@
+---
+type: "Research Note"
+title: "Amiga GFA BASIC 3.5 — five more declaration-level audit blocks"
+---
+
 # Amiga GFA BASIC 3.5 — five more declaration-level audit blocks
 
 Primary source: supplied *GFA BASIC 3.5 Interpreter*, Chapter 13 addendum, printed pp. 13-1–13-3 and 13-34–13-36. The independently supplied combined update scan numbers the latter material Chapter 14, printed pp. 14-5–14-7. These are source-confirmed 3.5 forms; runtime conformance is not implied.

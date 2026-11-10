@@ -1,7 +1,6 @@
 ---
-type: Architecture Overview
-title: Architecture overview
-tags: [architecture, design]
+type: "Architecture"
+title: "README"
 ---
 
 ## Architecture documents

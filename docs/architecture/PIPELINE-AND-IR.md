@@ -1,3 +1,8 @@
+---
+type: "Architecture"
+title: "Compiler pipeline and intermediate representation"
+---
+
 # Compiler pipeline and intermediate representation
 
 - Status: **Accepted architecture boundary**; exact dialect semantics remain governed by [issue #3](https://github.com/vsimko/gfabasic-rust/issues/3), and memory semantics by [issue #8](https://github.com/vsimko/gfabasic-rust/issues/8).

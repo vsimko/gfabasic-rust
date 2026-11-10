@@ -1,3 +1,8 @@
+---
+type: "Research Note"
+title: "German Amiga GFA BASIC book: OCR index and edition notes"
+---
+
 # German Amiga GFA BASIC book: OCR index and edition notes
 
 - **Status:** Research index; OCR-derived details require page-image review.

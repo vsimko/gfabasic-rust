@@ -1,3 +1,8 @@
+---
+type: "Architecture"
+title: "Performance benchmarks and profiling strategy"
+---
+
 # Performance benchmarks and profiling strategy
 
 - Status: **Initial source-loading microbenchmark implemented; compiler/frontend/runtime benchmarks and stable regression comparisons remain pending.**

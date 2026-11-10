@@ -1,3 +1,8 @@
+---
+type: "Testing Guide"
+title: "Original Amiga interpreter reference asset"
+---
+
 # Original Amiga interpreter reference asset
 
 The project targets **Amiga GFA BASIC interpreter 3.5**. A separately supplied

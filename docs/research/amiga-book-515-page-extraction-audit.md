@@ -1,3 +1,8 @@
+---
+type: "Research Note"
+title: "Amiga GFA-BASIC book — 515-page extraction audit"
+---
+
 # Amiga GFA-BASIC book — 515-page extraction audit
 
 Source: `Das Grosse Buch zu GFA-BASIC 3.5 Amiga.pdf` (515 PDF pages; 511 pages contain extractable text; 4 pages are blank or contain no OCR text).

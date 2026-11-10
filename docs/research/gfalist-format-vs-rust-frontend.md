@@ -1,3 +1,8 @@
+---
+type: "Research Note"
+title: "gfalist format notes vs. the Rust frontend"
+---
+
 # gfalist format notes vs. the Rust frontend
 
 ## Purpose and evidence

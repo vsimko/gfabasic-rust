@@ -1,3 +1,8 @@
+---
+type: "Reference"
+title: "Amiga GFA BASIC 3.0 reference research notes"
+---
+
 # Amiga GFA BASIC 3.0 reference research notes
 
 - Status: Historical 3.0 research baseline. This document is not a complete language specification or the selected 3.5 target contract.

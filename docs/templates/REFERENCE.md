@@ -1,3 +1,8 @@
+---
+type: "Documentation Template"
+title: "Reference topic"
+---
+
 # Reference topic
 
 <!-- State the intended audience and the status of this reference. Remove this comment before publication. -->

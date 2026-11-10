@@ -1,37 +1,33 @@
 ---
-type: Documentation Policy
-title: Documentation policy
-tags: [documentation, okf, writing, provenance]
+type: "Documentation Policy"
+title: "Documentation policy"
 ---
 
 # Documentation policy
 
 ## Decision and scope
 
-**Decision (2026-11-09):** Use **Google Open Knowledge Format (OKF) v0.2** as the canonical structure and metadata convention for the human-readable documentation bundle rooted at `docs/`. The authoritative specification is [Google's Open Knowledge Format v0.2 specification](https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md).
+**Decision (2026-11-09):** Use Google's [Open Knowledge Format (OKF) v0.2](https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md) for the canonical documentation bundle rooted at `docs/`. Markdown remains the human-readable source format; each non-reserved Markdown concept has YAML frontmatter with a non-empty `type`. The root `docs/index.md` declares `okf_version: "0.2"`.
 
-OKF v0.2 is identifiable and specified. It is a deliberately minimal, human- and agent-readable knowledge-bundle format: a directory hierarchy of UTF-8 Markdown concept files with YAML frontmatter. Each non-reserved concept file requires a non-empty `type` field. `index.md` and `log.md` are reserved filenames with their own structures; a bundle-root `index.md` may declare `okf_version: "0.2"`. The specification defines optional provenance, trust, lifecycle, and attestation metadata while allowing producer-defined types and extension fields.
+OKF v0.2 is intentionally permissive. Its conformance floor is parseable YAML frontmatter and a non-empty `type` for every concept, plus the prescribed structures for reserved `index.md` and `log.md` files. Unknown types and extension fields remain valid. This repository adds stricter project quality gates (navigation, links, metadata shapes where used, and deterministic website output) without misrepresenting those checks as requirements imposed by OKF itself.
 
-The repository's issue [#14](https://github.com/vsimko/gfabasic-rust/issues/14) explicitly selects Google OKF v0.2 and defines the migration, validation, website-generation, and CI requirements. The earlier statement that OKF could not be identified was incorrect and is superseded by this decision.
+The `docs/` tree is the only canonical human-readable documentation bundle. Do not create a parallel `knowledge/` directory or duplicate source content in website files. Keep the machine-readable API registry and generated API catalogue in their existing structured pipeline; OKF does not replace domain-specific schemas.
 
-Markdown remains the human-readable body syntax, but Markdown alone is not the complete bundle convention: OKF adds required concept frontmatter, reserved index/log semantics, and defined metadata conventions. Do not claim that the repository is fully OKF-conformant until the complete bundle has been migrated and validated against the v0.2 conformance requirements.
+The project uses UTF-8 Markdown and GitHub-flavoured Markdown (GFM) features only where GitHub renders them consistently. Source files remain readable and useful without the generated website. The website is a generated publication of selected concepts, never an authoring location.
 
-OKF does not define a fixed taxonomy, schema registry, required toolchain, or website generator. It does not replace domain-specific machine-readable schemas such as the project's API registry. Keep API declarations and configuration data in their existing structured source formats; document or link to them from OKF concepts rather than duplicating their schemas as prose.
+This policy applies to human-readable project documentation. Machine-readable API declarations and configuration data must use separately defined, validated formats. They must not be maintained by scraping explanatory Markdown.
 
-This policy applies to the canonical documentation bundle in `docs/`. Keep its editable source in Git. The website is a generated publication of selected canonical concepts, not a second authoring location. Do not create a parallel top-level `knowledge/` tree or hand-maintained duplicate website content.
+## OKF v0.2 bundle
 
-## OKF bundle conventions
-
-- The root `docs/index.md` is the OKF v0.2 bundle entry point. It contains only the permitted root `okf_version: "0.2"` metadata and navigation body.
-- Every other `index.md` is a reserved navigation file and has no concept frontmatter. A future `log.md`, if introduced, must follow the OKF update-log structure.
-- Every other Markdown file under `docs/` is a concept. It must start with YAML frontmatter containing a non-empty `type`. Use `title` and `description` where they improve discovery; use `tags` for useful cross-cutting navigation.
-- Use `sources` for material a concept derives from. Source entries must identify the source resource; add stable `id` values when body claims use source footnotes. Do not claim human verification unless a person actually reviewed the claim against the cited source.
-- Use `generated` only when the content is generated and the producer and timestamp are known. Use `verified` only for actual verification events. These fields are independent.
-- Use `status: draft` for incomplete or not-yet-reviewed concepts and `status: deprecated` for retained obsolete concepts. Omitted status means stable under OKF v0.2.
-- Keep paths and internal links valid. OKF itself tolerates broken links, but this repository's link checker is expected to reject broken local navigation.
-- Do not add project-specific required metadata beyond OKF's required `type` field. Project conventions may recommend additional fields without making them format requirements.
-
-The migration is incremental. The new root and nested indexes establish navigation, and the policy/entry-point concepts have OKF frontmatter. Legacy concept files remain to be migrated; therefore the bundle is **not yet fully conformant**. The automated validator and website generator are also outstanding requirements tracked by issue #14.
+- `docs/index.md` is the bundle entry point and declares exactly `okf_version: "0.2"`. It is the only `index.md` allowed to contain frontmatter.
+- `index.md` files are reserved directory listings and have no ordinary concept metadata. Keep their body as headings followed by links to direct concepts or subdirectories.
+- `log.md` is reserved for a chronological update log with newest-first `## YYYY-MM-DD` headings. Do not use either reserved filename for a concept.
+- Every other `.md` file under `docs/` is a concept with parseable YAML frontmatter and a non-empty string `type`. `title` is used for display; optional OKF metadata is added only when supported by evidence.
+- Use descriptive, project-owned type names (for example `Architecture`, `Architecture Decision Record`, `Research Note`, `Reference`, `User Guide`, and `Contributor Guide`). Unknown types and additional metadata keys remain valid under OKF.
+- Do not add `verified` or source-provenance claims without evidence. A manual citation does not prove interpreter execution; keep dialect/version and verification boundaries in the concept body.
+- Use nested `index.md` files to provide progressive disclosure. Each index lists its directory's direct concepts and child directories; it does not copy concept content.
+- Preserve useful paths and existing concept bodies. Prefer adding metadata and navigation over gratuitous renames. When concepts overlap, retain one canonical source and link to it rather than duplicating content.
+- Keep `README.md` and `AGENTS.md` as short repository entry points that direct readers and agents to `docs/index.md`.
 
 ## Source format
 
@@ -45,7 +41,7 @@ The migration is incremental. The new root and nested indexes establish navigati
 
 ## Generated website data
 
-The website may consume generated JSON summaries for its static dashboard. Generated data is not a canonical source of project status. Every generated value must be traceable to its canonical source, and the generation process must be deterministic and validated. Keep generated output separate from editable source data. Do not hand-edit generated files, scrape explanatory Markdown as a data source, or add credentials to browser code. Missing or stale values must remain explicit; never replace unknown values with zero or a guessed status. See [the implementation dashboard guide](architecture/IMPLEMENTATION-DASHBOARD.md) and [ADR 0014](architecture/adr/0014-implementation-dashboard.md).
+The website may consume generated JSON summaries for its static dashboard. Selected documentation pages must be rendered from the canonical OKF concepts in `docs/` rather than maintained as a second copy. Concepts with `status: draft` are not published; `status: deprecated` concepts remain available for old links and display a warning; an absent status follows OKF's default of `stable`. Generated data is not a canonical source of project status. Every generated value must be traceable to its canonical source, and the generation process must be deterministic and validated. Keep generated output separate from editable source data. Do not hand-edit generated files, scrape explanatory Markdown as a data source, or add credentials to browser code. Missing or stale values must remain explicit; never replace unknown values with zero or a guessed status. See [the implementation dashboard guide](architecture/IMPLEMENTATION-DASHBOARD.md) and [ADR 0014](architecture/adr/0014-implementation-dashboard.md).
 
 ## Writing rules
 
@@ -86,6 +82,16 @@ This project has not established a licensed ASD-STE100 dictionary or an automate
 - Do not include copyrighted source code or substantial manual extracts unless redistribution rights are confirmed.
 
 ## Validation
+
+Run the OKF validator and generate the website pages locally before review:
+
+```sh
+python -m pip install PyYAML==6.0.2 markdown-it-py==3.0.0
+python scripts/validate_okf.py
+python scripts/generate_docs_site.py
+```
+
+The validator checks frontmatter, reserved files, supported metadata shapes, local links and anchors, complete directory indexes, and reachability from the root index. The generator writes build-only HTML pages to `site/docs/`; do not edit those generated files.
 
 For every documentation change, review:
 

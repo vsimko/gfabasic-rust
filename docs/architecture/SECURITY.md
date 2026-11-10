@@ -1,3 +1,8 @@
+---
+type: "Architecture"
+title: "Dependency and supply-chain security"
+---
+
 # Dependency and supply-chain security
 
 - Status: **RustSec advisory auditing and the approved dependency-license policy are implemented.** Pull-request CI generates and validates the workspace SPDX 2.3 SBOM; the published-release attachment workflow is configured but has not yet been exercised against a real release.

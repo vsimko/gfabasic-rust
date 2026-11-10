@@ -1,3 +1,8 @@
+---
+type: "Architecture"
+title: "Repository consistency validation"
+---
+
 # Repository consistency validation
 
 See [ADR 0013](adr/0013-repository-consistency-validation.md).
@@ -37,3 +42,19 @@ python3 -m unittest discover -s tests/tooling
 ```
 
 The Pages workflow runs these steps before uploading the site artifact. Edit the model when a project status changes, update its evidence references, and regenerate the site data. Do not hand-edit generated JSON or infer statuses from unstructured issue/commit text.
+
+
+## OKF v0.2 documentation bundle
+
+The only canonical human-readable documentation bundle is `docs/`. Its root `index.md` declares OKF version `0.2`; all other non-reserved Markdown files are concepts with YAML frontmatter and a non-empty `type`. Nested `index.md` files provide directory navigation and have no frontmatter. Do not create a parallel `knowledge/` tree or hand-maintain website copies.
+
+Run the repository-owned validator and website generator:
+
+```sh
+python -m pip install PyYAML==6.0.2 markdown-it-py==3.0.0
+python scripts/validate_okf.py
+python scripts/generate_docs_site.py
+python -m unittest discover -s scripts/tests -p "test_*.py"
+```
+
+The validator is stricter than OKF's minimum conformance floor where the project needs reliable navigation: it checks local links and anchors, complete directory indexes, and reachability. The generator uses safe Markdown rendering (raw HTML disabled), deterministic paths and ordering, and writes build-only pages under `site/docs/`. PR previews and the protected `main` deployment build those pages from `docs/` before publishing.

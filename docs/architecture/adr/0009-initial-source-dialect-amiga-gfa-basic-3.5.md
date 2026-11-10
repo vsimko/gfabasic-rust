@@ -1,3 +1,8 @@
+---
+type: "Architecture Decision Record"
+title: "ADR 0009: Initial source dialect — Amiga GFA BASIC interpreter 3.5"
+---
+
 # ADR 0009: Initial source dialect — Amiga GFA BASIC interpreter 3.5
 
 - Status: Accepted

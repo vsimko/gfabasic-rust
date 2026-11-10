@@ -1,3 +1,8 @@
+---
+type: "Research Note"
+title: "Amiga emulator experiment lab"
+---
+
 # Amiga emulator experiment lab
 
 - Tracking: [issue #66](https://github.com/vsimko/gfabasic-rust/issues/66).

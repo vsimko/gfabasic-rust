@@ -1,3 +1,8 @@
+---
+type: "Architecture Decision Record"
+title: "ADR 0011: Product scope — Amiga GFA BASIC 3.5 to Linux x86-64 with SDL3"
+---
+
 # ADR 0011: Product scope — Amiga GFA BASIC 3.5 to Linux x86-64 with SDL3
 
 - Status: Accepted

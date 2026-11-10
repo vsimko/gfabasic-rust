@@ -1,3 +1,8 @@
+---
+type: "Architecture"
+title: "API profiles"
+---
+
 # API profiles
 
 - Status: **The sole product API profile is Amiga GFA BASIC interpreter 3.5.** Product scope is fixed by [ADR 0011](adr/0011-amiga-35-linux-sdl3-product-scope.md). Individual declarations and runtime behavior remain evidence-gated.

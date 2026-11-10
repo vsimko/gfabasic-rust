@@ -1,3 +1,8 @@
+---
+type: "Reference"
+title: "Amiga GFA BASIC 3.5 formatter"
+---
+
 # Amiga GFA BASIC 3.5 formatter
 
 ## Status and scope

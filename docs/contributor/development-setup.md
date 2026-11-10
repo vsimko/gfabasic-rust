@@ -1,3 +1,8 @@
+---
+type: "Contributor Guide"
+title: "Development setup"
+---
+
 # Development setup
 
 ## Scope
@@ -13,12 +18,12 @@ The initial CI host is Linux x86-64 using the GitHub-hosted Ubuntu runner. Other
 - Git.
 - A host C compiler exposed as `cc` for the experimental `gfabasic build` command and its native executable test. It is not required for `cargo build`.
 - Node.js 22 and npm/npx for Markdown linting.
-- Python 3.12 and `jsonschema==4.25.1` for API registry validation.
+- Python 3.12 with `jsonschema==4.25.1`, `PyYAML==6.0.2`, and `markdown-it-py==3.0.0` for API registry validation, OKF v0.2 validation, and static documentation generation.
 - lychee v0.24.2 for local Markdown link and anchor checks.
 
 The compiler crate has one third-party Cargo dependency, `unicode-width` 0.2.2, for terminal display-cell measurement; its MIT OR Apache-2.0 license is within the approved allowlist. The temporary native bootstrap invokes the host `cc` compiler but requires no additional project runtime library. LLVM and SDL3 are deliberately deferred and are not required to build the Rust workspace. Do not install arbitrary LLVM or SDL3 versions for this stage.
 
-The project source code and original documentation are licensed under MIT. See the root [LICENSE](../../LICENSE) and [project README](../../README.md#license). This license does not grant redistribution rights to third-party manuals, ROMs, disk images, or sample programs.
+The project source code and original documentation are licensed under MIT. See the root [LICENSE](../../LICENSE) and [project README](../../LICENSE). This license does not grant redistribution rights to third-party manuals, ROMs, disk images, or sample programs.
 
 ## Install the toolchain
 
@@ -51,13 +56,15 @@ For documentation changes, run the separate checks:
 ```sh
 npx --yes markdownlint-cli2@0.24.0 "**/*.md" "#node_modules"
 lychee --offline --include-fragments anchor-only --root-dir "$PWD" "**/*.md"
-python -m pip install --disable-pip-version-check jsonschema==4.25.1
+python -m pip install --disable-pip-version-check jsonschema==4.25.1 PyYAML==6.0.2 markdown-it-py==3.0.0
+python scripts/validate_okf.py
+python scripts/generate_docs_site.py
 python scripts/validate_api_registry.py
 python scripts/validate_corpus.py
 python -m unittest discover -s scripts/tests -p "test_*.py"
 ```
 
-The documentation workflow also validates the API registry and its validator tests. Run the same checks locally after installing the pinned Python dependency and lychee version:
+The documentation workflow also validates the OKF bundle, generates build-only HTML pages from the canonical source, validates the API registry and corpus, and runs its validator tests. Run the same checks locally after installing the pinned Python dependency and lychee version:
 
 ## Troubleshooting
 

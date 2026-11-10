@@ -1,3 +1,8 @@
+---
+type: "Research Note"
+title: "German Amiga GFA-BASIC book: command and OS API extraction"
+---
+
 # German Amiga GFA-BASIC book: command and OS API extraction
 
 - **Status:** Source-derived research notes; not a normative 3.5 specification.
