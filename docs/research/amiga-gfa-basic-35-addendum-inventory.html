@@ -201,15 +201,15 @@
 </tr>
 <tr>
 <td><code>MAT DET x=a([i,j])[,n]</code></td>
-<td>Calculate determinant of a square matrix/selected square submatrix</td>
+<td>Calculate determinant of a square matrix/selected square submatrix (supplied 469-page manual, printed p. 13-26; combined update scan, pp. 13-34–13-36)</td>
 </tr>
 <tr>
 <td><code>MAT QDET x=a([i,j])[,n]</code></td>
-<td>Same determinant purpose and submatrix selection as <code>MAT DET</code>; optimized for speed, not accuracy. The manual recommends <code>MAT DET</code> for critical matrices whose determinant is near zero (printed pp. 13-36–13-37)</td>
+<td>Same determinant purpose and submatrix selection as <code>MAT DET</code>; optimized for speed, not accuracy. The manual recommends <code>MAT DET</code> for critical matrices whose determinant is near zero (supplied 469-page manual, printed pp. 13-27–13-28; combined update scan, pp. 13-36–13-37)</td>
 </tr>
 <tr>
 <td><code>MAT RANG x=a([i,j])[,n]</code></td>
-<td>Calculate rank of a square matrix; like <code>MAT DET</code>/<code>MAT QDET</code>, accepts row and column offsets, with <code>n</code> selecting an n×n submatrix from that position (printed p. 13-38)</td>
+<td>Calculate rank of a square matrix; like <code>MAT DET</code>/<code>MAT QDET</code>, accepts row and column offsets, with <code>n</code> selecting an n×n submatrix from that position (supplied 469-page manual, printed p. 13-29; combined update scan, pp. 13-38–13-39)</td>
 </tr>
 <tr>
 <td><code>MAT INV b()=a()</code></td>
@@ -217,7 +217,7 @@
 </tr>
 </tbody>
 </table>
-<p>Page-image checks of printed pp. 13-20–13-25 in the supplied 469-page manual establish matrix multiplication dimensions and the row/column normalization meanings above; the combined update scan uses a different pagination, cross-referenced in the source/topic index. Printed pp. 13-26–13-30 in the supplied 469-page manual confirm <code>MAT DET</code>, <code>MAT QDET</code>, <code>MAT RANG</code>, and the detailed <code>MAT INV b()=a()</code> example; the combined update scan uses pp. 13-34–13-39 for the corresponding later definitions. <strong>Operand direction resolved:</strong> the summary on printed p. 13-16 lists the reversed form <code>MAT INV a()=b()</code>, but the detailed definition and worked example on p. 13-30 explicitly state that the inverse of source <code>a()</code> is written to destination <code>b()</code>; the German 1990 book independently confirms destination-first <code>MAT INV i()=m()</code> on p. 475. Treat the summary form as a source typo and use <code>MAT INV destination()=source()</code>. Runtime edge cases remain untested. The earlier OCR-only warning for the matrix multiplication examples is superseded by the page-image checks recorded above. Do not use OCR artifacts as normative syntax.</p>
+<p>Page-image checks of printed pp. 13-20–13-22 in the supplied 469-page manual establish the matrix multiplication dimensions. The row/column normalization definitions are on printed pp. 13-22–13-25 (not pp. 13-22–13-25); the registry locator and the primary page images agree on this corrected pagination. The combined update scan uses a different pagination, cross-referenced in the source/topic index. Printed pp. 13-26–13-30 in the supplied 469-page manual confirm <code>MAT DET</code>, <code>MAT QDET</code>, <code>MAT RANG</code>, and the detailed <code>MAT INV b()=a()</code> example; the combined update scan uses pp. 13-34–13-39 for the corresponding later definitions. <strong>Operand direction resolved:</strong> the summary on printed p. 13-16 lists the reversed form <code>MAT INV a()=b()</code>, but the detailed definition and worked example on p. 13-30 explicitly state that the inverse of source <code>a()</code> is written to destination <code>b()</code>; the German 1990 book independently confirms destination-first <code>MAT INV i()=m()</code> on p. 475. Treat the summary form as a source typo and use <code>MAT INV destination()=source()</code>. Runtime edge cases remain untested. The earlier OCR-only warning for the matrix multiplication examples is superseded by the page-image checks recorded above. Do not use OCR artifacts as normative syntax.</p>
 <h2 id="4-additional-commands-in-version-35-combined-scan-chapter-14-printed-pp-14-114-7">4. Additional commands in version 3.5 — combined-scan Chapter 14, printed pp. 14-1–14-7</h2>
 <p><strong>Pagination crosswalk:</strong> the supplied 469-page <code>GFA_Basic_3.5_Interpreter.pdf</code> presents the 3.5 addendum as Chapter 13. Its printed pp. 13-33–13-36 contain the FACT/VARIAT/COMBIN, OPENW, PCOLOR, DATA-pointer, special-variable, and GURU material summarized below; <code>_DATA</code>/<code>_DATA=</code> are on p. 13-34 and <code>_0</code>…<code>_9</code> on p. 13-35. The separately catalogued 487-page <code>GFA-Basic 3.0 + 3.5 Upd (Amiga).pdf</code> divides the same addendum material into Chapter 13 (linear matrix operations) and Chapter 14 (further commands), printed pp. 14-1–14-7; the corresponding special-name passages are on pp. 14-5–14-6. References in this section therefore use the combined scan's Chapter 14 pagination; references to the supplied interpreter PDF must use Chapter 13 pagination. These are two pagination witnesses for the same 3.5 feature material, not evidence for importing Atari or 3.0-only rules.</p>
 <p>The combined update scan explicitly says that, in addition to Chapter 13, version 3.5 implements further commands/features (Chapter 14). These are part of the same 3.5 interpreter source and must be included in the compatibility inventory.</p>
@@ -283,6 +283,174 @@
 <li>Keep editor behavior separate from language/runtime semantics; it may be documented even if the Rust project does not implement the historical editor.</li>
 <li>Mark all 3.0 manual features not explicitly reconfirmed by this 3.5 manual as inherited candidates, not verified 3.5 facts.</li>
 </ol>
+<h2 id="6-registry-declaration-crosswalk">6. Registry declaration crosswalk</h2>
+<p>The following table maps every declaration in the current 3.5 addendum registry slice to its stable API ID and the printed source locator used by the registry. “Language core” and “Amiga profile” are separate registry namespaces; the latter contains platform-specific PCOLOR, the negative-screen OPENW variant, and the two distinct GURU forms.</p>
+<h3 id="language-core-declarations-24">Language-core declarations (24)</h3>
+<table>
+<thead>
+<tr>
+<th>Declaration</th>
+<th>Stable registry ID</th>
+<th>Primary 3.5 printed locator</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MAT BASE</td>
+<td>gfa.language.matrix.mat-base</td>
+<td>Chapter 13, pp. 13-1–13-2</td>
+</tr>
+<tr>
+<td>MAT CLR</td>
+<td>gfa.language.matrix.mat-clr</td>
+<td>Chapter 13, pp. 13-2–13-3</td>
+</tr>
+<tr>
+<td>MAT SET</td>
+<td>gfa.language.matrix.mat-set</td>
+<td>Chapter 13, pp. 13-2–13-3</td>
+</tr>
+<tr>
+<td>MAT ONE</td>
+<td>gfa.language.matrix.mat-one</td>
+<td>Chapter 13, pp. 13-2–13-3</td>
+</tr>
+<tr>
+<td>MAT READ</td>
+<td>gfa.language.matrix.mat-read</td>
+<td>Chapter 13, p. 13-5</td>
+</tr>
+<tr>
+<td>MAT PRINT</td>
+<td>gfa.language.matrix.mat-print</td>
+<td>Chapter 13, pp. 13-5–13-6</td>
+</tr>
+<tr>
+<td>MAT INPUT</td>
+<td>gfa.language.matrix.mat-input</td>
+<td>Chapter 13, p. 13-6</td>
+</tr>
+<tr>
+<td>MAT CPY</td>
+<td>gfa.language.matrix.mat-cpy</td>
+<td>Chapter 13, pp. 13-4–13-19</td>
+</tr>
+<tr>
+<td>MAT XCPY</td>
+<td>gfa.language.matrix.mat-xcpy</td>
+<td>Chapter 13, pp. 13-15–13-19</td>
+</tr>
+<tr>
+<td>MAT ADD</td>
+<td>gfa.language.matrix.mat-add</td>
+<td>Chapter 13, pp. 13-16–13-18</td>
+</tr>
+<tr>
+<td>MAT SUB</td>
+<td>gfa.language.matrix.mat-sub</td>
+<td>Chapter 13, pp. 13-18–13-20</td>
+</tr>
+<tr>
+<td>MAT MUL</td>
+<td>gfa.language.matrix.mat-mul</td>
+<td>Chapter 13, pp. 13-20–13-22</td>
+</tr>
+<tr>
+<td>MAT TRANS</td>
+<td>gfa.language.matrix.mat-trans</td>
+<td>Chapter 13, pp. 13-19–13-20</td>
+</tr>
+<tr>
+<td>MAT NORM</td>
+<td>gfa.language.matrix.mat-norm</td>
+<td>Chapter 13, pp. 13-22–13-25</td>
+</tr>
+<tr>
+<td>MAT DET</td>
+<td>gfa.language.matrix.mat-det</td>
+<td>Chapter 13, p. 13-26</td>
+</tr>
+<tr>
+<td>MAT QDET</td>
+<td>gfa.language.matrix.mat-qdet</td>
+<td>Chapter 13, pp. 13-27–13-28</td>
+</tr>
+<tr>
+<td>MAT RANG</td>
+<td>gfa.language.matrix.mat-rang</td>
+<td>Chapter 13, p. 13-29</td>
+</tr>
+<tr>
+<td>MAT INV</td>
+<td>gfa.language.matrix.mat-inv</td>
+<td>Chapter 13, p. 13-30 (detailed definition/example)</td>
+</tr>
+<tr>
+<td>FACT</td>
+<td>gfa.language.math.fact</td>
+<td>Chapter 13, pp. 13-33–13-34</td>
+</tr>
+<tr>
+<td>VARIAT</td>
+<td>gfa.language.math.variat</td>
+<td>Chapter 13, pp. 13-33–13-34</td>
+</tr>
+<tr>
+<td>COMBIN</td>
+<td>gfa.language.math.combin</td>
+<td>Chapter 13, pp. 13-33–13-34</td>
+</tr>
+<tr>
+<td>_DATA</td>
+<td>gfa.language.data.data-pointer</td>
+<td>Chapter 13, p. 13-34</td>
+</tr>
+<tr>
+<td>_DATA=</td>
+<td>gfa.language.data.set-data-pointer</td>
+<td>Chapter 13, p. 13-34</td>
+</tr>
+<tr>
+<td>_0…_9</td>
+<td>gfa.language.memory.special-longword-variables</td>
+<td>Chapter 13, p. 13-35</td>
+</tr>
+</tbody>
+</table>
+<h3 id="amiga-profile-declarations-4">Amiga-profile declarations (4)</h3>
+<table>
+<thead>
+<tr>
+<th>Declaration</th>
+<th>Stable registry ID</th>
+<th>Primary 3.5 printed locator</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PCOLOR</td>
+<td>gfa.amiga.graphics.pcolor</td>
+<td>Chapter 13, p. 13-34</td>
+</tr>
+<tr>
+<td>Negative-screen OPENW variant</td>
+<td>gfa.amiga.windows.openw-negative-screen</td>
+<td>Chapter 13, p. 13-34</td>
+</tr>
+<tr>
+<td>GURU x statement</td>
+<td>gfa.amiga.system.guru-check</td>
+<td>Chapter 13, p. 13-36</td>
+</tr>
+<tr>
+<td>GURU function</td>
+<td>gfa.amiga.system.guru-number</td>
+<td>Chapter 13, p. 13-36</td>
+</tr>
+</tbody>
+</table>
+<p>The four Amiga-profile entries are not general language-core declarations; in particular, the GURU statement and GURU function remain distinct declarations under one overload group. The MAT NORM locator above also corrects the earlier table's page range: the primary manual places its row/column definitions on pp. 13-31–13-33.</p>
+<p>This crosswalk is an identity and provenance aid, not an assertion that the registry is a complete 3.5 API catalogue. It does not change implementation, Linux support, or conformance status. The separate <a href="https://github.com/vsimko/gfabasic-rust/blob/main/tests/corpus/README.md#registry-declaration-crosswalk">corpus fixture crosswalk</a> maps 13 page-image-verified research fixtures to declaration IDs; those fixtures are not executable conformance tests and must not be added to registry <code>support.tests</code>.</p>
 <h2 id="source-and-rights">Source and rights</h2>
 <p>This file contains concise original summaries and syntax inventories, not a reproduction of the manual. Cite the source as <code>GFA BASIC 3.5 Interpreter</code>, Chapter 13/14, printed addendum page N. The supplied PDF is a research source and is not committed to the repository.</p>
 
