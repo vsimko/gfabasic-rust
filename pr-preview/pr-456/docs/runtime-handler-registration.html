@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The TOML files under api/registry/ are the canonical source of API declaration IDs, implementation status, signatures, and implementation.handler mappings. The runtime crate consumes a generated Rust requirement table…">
+  <title>Runtime handler registration · GFA BASIC Rust documentation</title>
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body class="docs-site">
+  <header class="docs-header">
+    <a href="../index.html">GFA BASIC Rust</a>
+    <span aria-hidden="true">/</span>
+    <a href="index.html">Documentation</a>
+  </header>
+  <div class="docs-layout">
+    <nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home" href="index.html">Section index</a><ul><li><a href="DOCUMENTATION.html">Documentation policy</a></li><li><a href="README.html">Documentation overview</a></li><li><a href="reference-sources.html">GFA BASIC reference sources</a></li><li><a href="architecture/index.html">Architecture and engineering</a></li><li><a href="runtime-handler-registration.html">Runtime handler registration</a></li><li><a href="reference/index.html">Reference material</a></li><li><a href="research/index.html">Research and evidence</a></li><li><a href="research/amiga-gfa-basic-command-catalogue.html">Amiga GFA BASIC command catalogue</a></li><li><a href="research/amiga-gfa-test-output.html">Amiga GFA BASIC test output</a></li><li><a href="contributor/index.html">Contributor guidance</a></li><li><a href="user/index.html">User guidance</a></li><li><a href="testing/index.html">Testing</a></li><li><a href="templates/index.html">Templates</a></li></ul></nav>
+    <main class="docs-content">
+      <article>
+        <h1>Runtime handler registration</h1>
+        <p class="docs-meta"><span>Architecture Note</span></p>
+        <h1 id="runtime-handler-registration">Runtime handler registration</h1>
+<p>The TOML files under <code>api/registry/</code> are the canonical source of API declaration IDs, implementation status, signatures, and <code>implementation.handler</code> mappings. The runtime crate consumes a generated Rust requirement table; regenerate it with:</p>
+<pre><code class="language-sh">python3 scripts/generate_runtime_handler_requirements.py
+python3 scripts/generate_runtime_handler_requirements.py --check
+</code></pre>
+<p>Language-core IDs use <code>gfa.language.&lt;category&gt;.&lt;name&gt;</code>; Amiga IDs use
+<code>gfa.amiga.&lt;category&gt;.&lt;name&gt;</code>; Atari ST IDs use <code>gfa.atari-st.&lt;category&gt;.&lt;name&gt;</code>.
+IDs are case-sensitive. Handler IDs are explicit registry values and are not
+Rust symbol names.</p>
+<p>Each runtime registration carries an API profile and a typed Rust function
+signature. Resolution requires exactly one registration with the expected
+profile and signature. Missing, duplicate, stale, wrong-namespace, wrong-profile,
+and wrong-signature mappings are errors; there is no generic fallback handler.</p>
+<p>CI checks that every declaration marked <code>implemented</code> or <code>partial</code> has a
+supported typed signature and exactly one registered runtime handler. It also
+rejects handler IDs on non-callable declarations and registrations that are not
+referenced by the canonical registry. The runtime crate tests the complete
+generated declaration set, including unsupported declarations, without SDL3.</p>
+<p>The compiler's semantic API resolver uses the same runtime lookup by stable
+declaration ID. The narrow combinatorics IR lowering now dispatches FACT,
+VARIAT, and COMBIN through those typed registrations rather than maintaining
+duplicate arithmetic implementations.</p>
+<p>The three combinatorics declarations are marked <code>partial</code>, not complete:
+the helpers use u32 inputs and u128 results, while the original interpreter's
+overflow/error behavior remains unverified and the compiler frontend remains
+restricted to its documented literal subset. Their Linux support remains
+<code>unknown</code> and conformance remains <code>not-tested</code>. A Rust registration does not
+promote evidence, target support, or historical conformance.</p>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>
