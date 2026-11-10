@@ -27,12 +27,23 @@ The workflow is deliberately `workflow_dispatch` only. It does not run for
 pull requests or ordinary pushes, and it never copies the binary into this
 public repository.
 
-## Run it
+## Prepare and run it
 
-1. Open the [Actions tab](https://github.com/vsimko/gfabasic-rust/actions).
-2. Select **Prepare Amiga reference interpreter**.
-3. Select **Run workflow** on the `main` branch (or the branch containing the workflow).
-4. Download the `gfa-basic-3.52-amiga` artifact from the successful run.
+The **Prepare Amiga reference interpreter** workflow only fetches, verifies,
+and packages the executable. It does not execute it.
+
+The separate **Amiga GFA BASIC 3.52 native Merge and Run** workflow boots
+Amiberry with the private interpreter and licensed Kickstart ROM, merges an
+ASCII listing through the native editor, and runs it. Its current regression
+batch writes diagnostic output to `FACT.OUT` and terminal fixture records to
+`GFATEST.OUT`. The host validates the exact requested fixture IDs with
+`scripts/validate_gfatest_results.py`; it does not manufacture PASS records.
+
+The native workflow can be run from **Actions** with **Run workflow**. Pull
+requests that change the workflow also exercise it. It requires the
+`GFA_ASSETS_TOKEN` secret and the licensed private assets described above.
+Download the `amiga-gfa-basic-3.52-native-merge-run` artifact to inspect the
+raw result file, emulator diagnostics, and screenshots.
 
 ## Emulator prerequisites and limits
 
