@@ -134,5 +134,37 @@ printf "SEND_KEY\\t68\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 sleep 12
 printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-first-save.png" | timeout 5s nc -U -N "${ipc_socket_path:-}" || true
 
+# Experimental Direct Mode path: ESC toggles from the editor to the command
+# prompt. Amiberry IPC has no text-entry command, so type SAVE one raw key at
+# a time. Use a separate filename to avoid overwriting the native editor save.
+send_key() {
+  printf "SEND_KEY\\t%s\\t1\\n" "$1" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+  sleep 0.08
+  printf "SEND_KEY\\t%s\\t0\\n" "$1" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+  sleep 0.08
+}
+printf "SEND_KEY\\t69\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+sleep 0.2
+printf "SEND_KEY\\t69\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+sleep 1
+printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/direct-mode-prompt.png" | timeout 5s nc -U -N "${ipc_socket_path:-}" || true
+
+# Type: save "directmode.gfa" (Amiga raw keycodes; quotes use Shift+apostrophe).
+for key in 33 32 52 18 64; do send_key "$key"; done
+printf "SEND_KEY\\t96\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+sleep 0.08
+send_key 42
+printf "SEND_KEY\\t96\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+for key in 34 19 23 34 20 18 56 36 35 32; do send_key "$key"; done
+printf "SEND_KEY\\t96\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+sleep 0.08
+send_key 42
+printf "SEND_KEY\\t96\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+sleep 0.2
+send_key 68
+sleep 8
+printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-direct-mode-save.png" | timeout 5s nc -U -N "${ipc_socket_path:-}" || true
+printf "EJECT_FLOPPY\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}" >"$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/eject-after-save-ipc.txt" || true
+
 kill -0 "$emulator_pid"
 printf "QUIT\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}" || true
