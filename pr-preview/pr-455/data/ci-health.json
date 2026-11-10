@@ -1,6 +1,6 @@
 {
   "repository": "vsimko/gfabasic-rust",
-  "generated_at": "2026-11-10T19:52:45.316877Z",
+  "generated_at": "2026-11-10T19:53:30.963967Z",
   "freshness_threshold_hours": 168,
   "workflows": [
     {
@@ -8,16 +8,16 @@
       "file": "docs.yml",
       "note": "Markdown, JavaScript, API registry, corpus metadata and local-link validation.",
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/docs.yml",
-      "state": "in_progress",
+      "state": "failure",
       "latest": {
-        "id": 42889609504,
+        "id": 42889704227,
         "name": "Documentation checks",
-        "status": "in_progress",
+        "status": "failure",
         "event": "pull_request",
         "branch": "catalogue/base-manual-numeric-string-functions",
-        "created_at": "2026-11-10T19:52:29Z",
-        "updated_at": "2026-11-10T19:52:34Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42889609504",
+        "created_at": "2026-11-10T19:53:03Z",
+        "updated_at": "2026-11-10T19:53:22Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42889704227",
         "age_hours": 0,
         "freshness": "fresh"
       },
@@ -227,14 +227,14 @@
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/pr-preview.yml",
       "state": "in_progress",
       "latest": {
-        "id": 42889609602,
+        "id": 42889704141,
         "name": "Pull request website preview",
         "status": "in_progress",
         "event": "pull_request",
         "branch": "catalogue/base-manual-numeric-string-functions",
-        "created_at": "2026-11-10T19:52:29Z",
-        "updated_at": "2026-11-10T19:52:33Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42889609602",
+        "created_at": "2026-11-10T19:53:03Z",
+        "updated_at": "2026-11-10T19:53:21Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42889704141",
         "age_hours": 0,
         "freshness": "fresh"
       },
