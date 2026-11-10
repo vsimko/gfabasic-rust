@@ -4,11 +4,11 @@ scope = "Built-in function identifiers in the supplied Amiga GFA BASIC 3.5 inter
 counting-rule = "Count each distinct built-in function identifier once. Group alternate syntactic forms under one name, including BYTE/CARD/INT/WORD typed conversions. Include function-like type conversions. Exclude constants, variables, statements, editor features and Amiga OS library calls. Retain compiler-only functions separately and exclude them from the interpreter count."
 
 [expected-counts]
-all-identifiers = 116
-interpreter-identifiers-including-disputed-slot = 114
-unambiguous-interpreter-identifiers = 112
+all-identifiers = 117
+interpreter-identifiers-including-disputed-slot = 115
+unambiguous-interpreter-identifiers = 113
 compiler-only-identifiers = 2
-base-manual-identifiers = 112
+base-manual-identifiers = 113
 "explicit-3.5-addendum-identifiers" = 4
 disputed-name-slots = 2
 
