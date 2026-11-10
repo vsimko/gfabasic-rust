@@ -1,6 +1,6 @@
 {
   "repository": "vsimko/gfabasic-rust",
-  "generated_at": "2026-11-10T17:49:46.768585Z",
+  "generated_at": "2026-11-10T18:26:10.115069Z",
   "freshness_threshold_hours": 168,
   "workflows": [
     {
@@ -10,26 +10,26 @@
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/docs.yml",
       "state": "in_progress",
       "latest": {
-        "id": 42868882107,
+        "id": 42875123450,
         "name": "Documentation checks",
         "status": "in_progress",
         "event": "push",
         "branch": "main",
-        "created_at": "2026-11-10T17:49:33Z",
-        "updated_at": "2026-11-10T17:49:44Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42868882107",
+        "created_at": "2026-11-10T18:25:56Z",
+        "updated_at": "2026-11-10T18:26:10Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42875123450",
         "age_hours": 0,
         "freshness": "fresh"
       },
       "last_success": {
-        "id": 42868303383,
+        "id": 42871790283,
         "name": "Documentation checks",
         "status": "success",
         "event": "pull_request",
-        "branch": "docs/fix-mat-mul-evidence-status",
-        "created_at": "2026-11-10T17:46:07Z",
-        "updated_at": "2026-11-10T17:46:26Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42868303383",
+        "branch": "docs/reconcile-mat-mul-candidate-report",
+        "created_at": "2026-11-10T18:06:31Z",
+        "updated_at": "2026-11-10T18:06:50Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42871790283",
         "age_hours": 0,
         "freshness": "fresh"
       }
@@ -80,7 +80,7 @@
         "created_at": "2026-11-09T21:07:07Z",
         "updated_at": "2026-11-09T21:07:31Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42699425788",
-        "age_hours": 20,
+        "age_hours": 21,
         "freshness": "fresh"
       },
       "last_success": {
@@ -92,7 +92,7 @@
         "created_at": "2026-11-09T21:07:07Z",
         "updated_at": "2026-11-09T21:07:31Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42699425788",
-        "age_hours": 20,
+        "age_hours": 21,
         "freshness": "fresh"
       }
     },
@@ -111,7 +111,7 @@
         "created_at": "2026-11-09T21:04:43Z",
         "updated_at": "2026-11-09T21:06:49Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42699028842",
-        "age_hours": 20,
+        "age_hours": 21,
         "freshness": "fresh"
       },
       "last_success": {
@@ -123,7 +123,7 @@
         "created_at": "2026-11-09T21:04:43Z",
         "updated_at": "2026-11-09T21:06:49Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42699028842",
-        "age_hours": 20,
+        "age_hours": 21,
         "freshness": "fresh"
       }
     },
@@ -142,7 +142,7 @@
         "created_at": "2026-11-09T21:07:07Z",
         "updated_at": "2026-11-09T21:08:08Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42699425305",
-        "age_hours": 20,
+        "age_hours": 21,
         "freshness": "fresh"
       },
       "last_success": {
@@ -154,7 +154,7 @@
         "created_at": "2026-11-09T21:07:07Z",
         "updated_at": "2026-11-09T21:08:08Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42699425305",
-        "age_hours": 20,
+        "age_hours": 21,
         "freshness": "fresh"
       }
     },
@@ -173,7 +173,7 @@
         "created_at": "2026-11-10T15:12:44Z",
         "updated_at": "2026-11-10T15:13:01Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42841975538",
-        "age_hours": 2,
+        "age_hours": 3,
         "freshness": "fresh"
       },
       "last_success": {
@@ -185,7 +185,7 @@
         "created_at": "2026-11-10T15:12:44Z",
         "updated_at": "2026-11-10T15:13:01Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42841975538",
-        "age_hours": 2,
+        "age_hours": 3,
         "freshness": "fresh"
       }
     },
@@ -196,26 +196,26 @@
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/pages.yml",
       "state": "in_progress",
       "latest": {
-        "id": 42868882256,
+        "id": 42875123841,
         "name": "Deploy GitHub Pages",
         "status": "in_progress",
         "event": "push",
         "branch": "main",
-        "created_at": "2026-11-10T17:49:33Z",
-        "updated_at": "2026-11-10T17:49:37Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42868882256",
+        "created_at": "2026-11-10T18:25:56Z",
+        "updated_at": "2026-11-10T18:26:02Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42875123841",
         "age_hours": 0,
         "freshness": "fresh"
       },
       "last_success": {
-        "id": 42867768096,
+        "id": 42868882256,
         "name": "Deploy GitHub Pages",
         "status": "success",
         "event": "push",
         "branch": "main",
-        "created_at": "2026-11-10T17:42:57Z",
-        "updated_at": "2026-11-10T17:43:20Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42867768096",
+        "created_at": "2026-11-10T17:49:33Z",
+        "updated_at": "2026-11-10T17:49:56Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42868882256",
         "age_hours": 0,
         "freshness": "fresh"
       }
@@ -227,26 +227,26 @@
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/pr-preview.yml",
       "state": "in_progress",
       "latest": {
-        "id": 42868884854,
+        "id": 42875127947,
         "name": "Pull request website preview",
         "status": "in_progress",
         "event": "pull_request",
-        "branch": "docs/fix-mat-mul-evidence-status",
-        "created_at": "2026-11-10T17:49:34Z",
-        "updated_at": "2026-11-10T17:49:38Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42868884854",
+        "branch": "docs/reconcile-mat-mul-candidate-report",
+        "created_at": "2026-11-10T18:25:58Z",
+        "updated_at": "2026-11-10T18:26:04Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42875127947",
         "age_hours": 0,
         "freshness": "fresh"
       },
       "last_success": {
-        "id": 42868303826,
+        "id": 42871789930,
         "name": "Pull request website preview",
         "status": "success",
         "event": "pull_request",
-        "branch": "docs/fix-mat-mul-evidence-status",
-        "created_at": "2026-11-10T17:46:07Z",
-        "updated_at": "2026-11-10T17:47:43Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42868303826",
+        "branch": "docs/reconcile-mat-mul-candidate-report",
+        "created_at": "2026-11-10T18:06:31Z",
+        "updated_at": "2026-11-10T18:07:48Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42871789930",
         "age_hours": 0,
         "freshness": "fresh"
       }
