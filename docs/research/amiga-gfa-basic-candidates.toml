@@ -170,7 +170,7 @@ source = "AM-INTERPRETER-35"
 source-version = "3.5 addendum"
 printed-pages = ["13-31–13-39"]
 status = "confirmed-in-3.5"
-notes = "The family is documented in Chapter 13; MAT INV operand direction is explicitly disputed between summary and detailed example."
+notes = "The family is documented in Chapter 13. MAT INV destination-first order is established by the detailed definition and worked example on printed p. 13-30; the reversed summary form on p. 13-16 is treated as a source typo. Numerical edge cases remain unverified."
 
 
 [[candidates]]
