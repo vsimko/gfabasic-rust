@@ -59,8 +59,10 @@ Research-only, disputed, unknown, and unimplemented declarations must remain vis
 
 Amiga API semantics belong in project-owned runtime modules. Linux/SDL3 is an implementation adapter behind the runtime contract. The compiler frontend and target-independent IR must not depend on SDL3. Unsupported Amiga hardware/OS behavior must be classified and diagnosed rather than guessed.
 
-## Deferred details
+## Implemented registry and remaining configuration work
 
-The exact CLI/configuration serialization, registry schema, runtime capability encoding, and individual Amiga declaration inventory remain tracked under the CLI, registry, and language/API research issues. This document does not accept any specific API declaration as implemented or conformant.
+The canonical TOML declaration inventory is maintained under [`api/registry/`](../../api/registry/README.md). Its schema, validator, generated public catalogue, and runtime-handler requirement checks are implemented. The Amiga 3.5 addendum catalogue currently contains 24 language-core declarations and four Amiga-profile declarations; this is a bounded addendum inventory, not a complete Amiga API.
+
+The project-file/CLI configuration parser and its frozen serialization contract remain unimplemented (see [CLI and configuration](CLI-AND-CONFIG.md) and issue #9). Runtime capability encoding and per-declaration Linux mappings also remain incomplete. Registry presence and typed handler registration do not establish Linux support or interpreter conformance.
 
 Tracking: [issue #5](https://github.com/vsimko/gfabasic-rust/issues/5), [registry #12](https://github.com/vsimko/gfabasic-rust/issues/12), [CLI #9](https://github.com/vsimko/gfabasic-rust/issues/9), and [Amiga runtime #53](https://github.com/vsimko/gfabasic-rust/issues/53).
