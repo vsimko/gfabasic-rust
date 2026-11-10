@@ -113,48 +113,23 @@ else
 fi
 printf "LIST_FLOPPIES\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}" >"$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/post-merge-ipc.txt" || true
 
-# Small relative steps are accepted and do not terminate Amiberry.
-# From the last screenshot (~315,388), ten (-50,-50) steps and
-# one (-100,0) step should place the pointer near Save (~130,68).
-for _ in 1 2 3 4 5 6 7 8 9 10; do
-  printf "SEND_MOUSE\\t-50\\t-50\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}" >>"$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/save-menu-move-test.txt" || true
-  sleep 0.1
-done
-printf "SEND_MOUSE\\t-100\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}" >>"$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/save-menu-move-test.txt" || true
-# Calibration screenshot ended at (~76,167); two small (+60,-112)
-# steps should place the pointer over Save (~130,68).
-for _ in 1 2; do
-  printf "SEND_MOUSE\\t60\\t-112\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}" >>"$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/save-menu-move-test.txt" || true
-  sleep 0.1
-done
-# The previous calibration screenshot ended at (~105,52);
-# move onto the tokenized Save label at (~130,68).
-printf "SEND_MOUSE\\t32\\t30\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}" >>"$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/save-menu-move-test.txt" || true
-sleep 0.5
-printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/save-menu-pointer.png" | timeout 5s nc -U -N "${ipc_socket_path:-}" || true
-printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}" || true
+# Native editor shortcut: Shift+F1 opens the tokenized GFA Save requester.
+# The floppy directory takes about three seconds to populate; Enter then
+# activates the default Save gadget without relying on mouse coordinates.
+printf "SEND_KEY\\t96\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 sleep 0.2
-printf "SEND_MOUSE\\t0\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}" || true
-sleep 2
+printf "SEND_KEY\\t80\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+sleep 0.2
+printf "SEND_KEY\\t80\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+sleep 0.2
+printf "SEND_KEY\\t96\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+sleep 3
 printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/save-dialog.png" | timeout 5s nc -U -N "${ipc_socket_path:-}" || true
-# Save dialog defaults to GFABASIC:FACTZERO. The manual states
-# that Save (not Save,A) appends .GFA automatically.
-for _ in 1 2 3 4 5 6; do
-  printf "SEND_MOUSE\\t40\\t110\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}" || true
-  sleep 0.1
-done
-# Last screenshot placed the cursor at (~249,398); the Save
-# gadget center is (~323,420). Two small steps finish alignment.
-for _ in 1 2; do
-  printf "SEND_MOUSE\\t74\\t22\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}" || true
-  sleep 0.1
-done
-sleep 0.5
-printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/save-button-pointer.png" | timeout 5s nc -U -N "${ipc_socket_path:-}" || true
-printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}" || true
+# Return/Enter is Amiga raw keycode 0x44 (decimal 68).
+printf "SEND_KEY\\t68\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 sleep 0.2
-printf "SEND_MOUSE\\t0\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}" || true
-sleep 2
+printf "SEND_KEY\\t68\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+sleep 3
 printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-save.png" | timeout 5s nc -U -N "${ipc_socket_path:-}" || true
 kill -0 "$emulator_pid"
 printf "QUIT\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}" || true
