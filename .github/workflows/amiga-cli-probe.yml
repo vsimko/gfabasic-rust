@@ -11,6 +11,7 @@ on:
   pull_request:
     paths:
       - ".github/workflows/amiga-cli-probe.yml"
+      - "scripts/ci/**"
       - "tests/interpreter-probes/amiga-3.5/regression-suite.LST"
   workflow_dispatch:
 
@@ -28,6 +29,9 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+
+      - name: Check shell script syntax
+        run: bash -n scripts/ci/amiga-cli-probe.sh scripts/ci/validate-amiga-cli-probe.sh
 
       - name: Download and verify private GFA BASIC interpreter
         env:
