@@ -371,16 +371,17 @@
 </tbody>
 </table>
 <p>Hardware, memory, Exec, port, and device operations require particular care. Their Amiga semantics must be specified independently of the Linux adapter. Do not expose raw Amiga addresses, structures, or side effects as portable Linux behavior.</p>
-<h2 id="5-linux-runtime-status">5. Linux runtime status</h2>
-<p>The repository currently has no Rust workspace, compiler, runtime, CLI, or CI workflow. Therefore:</p>
+<h2 id="5-current-implementation-and-linux-target-status">5. Current implementation and Linux target status</h2>
+<p>This page remains a historical Amiga 3.0 research draft; the repository has since acquired a Rust workspace, an experimental compiler frontend, runtime and Linux platform crates, a CLI build path, and CI workflows. The earlier statement that no workspace/compiler/runtime/CLI/CI exists is obsolete.</p>
+<p>The current implementation boundary is narrower than this inventory:</p>
 <ul>
-<li>No Amiga API entry is implemented for Linux.</li>
-<li>No host mapping has been accepted for Amiga devices, graphics, windows, menus, events, sound, ports, memory, or Exec operations.</li>
-<li>The planned Linux/SDL3 platform layer is an implementation boundary, not evidence that SDL3 behavior is equivalent to Amiga behavior.</li>
-<li>Unsupported or hardware-dependent operations must eventually produce explicit diagnostics or require an explicit unsafe/capability policy; they must not be silently ignored.</li>
-<li>No conformance result or runtime observation is claimed by this document.</li>
+<li>The canonical API registry is maintained under <code>api/registry/</code>; its <a href="https://github.com/vsimko/gfabasic-rust/blob/main/api/registry/README.md">README</a> records 24 language-core and four Amiga-profile declarations in the interim 3.5 addendum slice.</li>
+<li>The four Amiga-profile declarations (<code>PCOLOR</code>, the negative-screen <code>OPENW</code> variant, <code>GURU</code>, and <code>GURU()</code>) are not implemented. Linux target support remains unknown and conformance remains untested.</li>
+<li>The current compiler/runtime prototype implements only a restricted combinatorics slice (<code>FACT</code>, <code>VARIAT</code>, <code>COMBIN</code>) from the language-core profile. This does not implement the Amiga APIs listed on this page.</li>
+<li>No host mapping has been accepted for Amiga devices, graphics, windows, menus, events, sound, ports, memory, or Exec operations. The existence of a Linux platform crate does not establish semantic equivalence with Amiga behavior or SDL3.</li>
+<li>Hardware-dependent or unavailable operations must eventually produce explicit diagnostics or require an explicit capability policy; they must not be silently ignored.</li>
+<li>This historical 3.0 inventory makes no runtime-conformance claim. Consult the <a href="../architecture/COMPATIBILITY-MATRIX.html">compatibility matrix</a>, <a href="https://github.com/vsimko/gfabasic-rust/blob/main/api/registry/README.md">canonical API registry</a>, and <a href="../research/amiga-gfa-basic-documentation-audit.html">3.5 documentation audit</a> for current status.</li>
 </ul>
-<p>The <a href="../architecture/COMPATIBILITY-MATRIX.html">current compatibility matrix</a> remains authoritative for project implementation status.</p>
 <h2 id="6-next-extraction-and-acceptance-work">6. Next extraction and acceptance work</h2>
 <p>Before promoting this research draft into an accepted API reference:</p>
 <ol>
@@ -389,7 +390,7 @@
 <li>Keep the German <code>AM-BOOK-DE-1990</code> edition and its 3.03 scope separate; record cross-checks without merging pagination.</li>
 <li>Obtain evidence for later releases before making any 3.04, 3.5, 3.51, or 3.52 availability claim.</li>
 <li>Decide which declarations belong to the language core and which require the Amiga API profile.</li>
-<li>Add declarations to the proposed API registry only after its schema and ownership decisions are accepted under issue #12.</li>
+<li>Add or revise declarations only in the accepted canonical TOML registry under <code>api/registry/</code>, following its schema, profile ownership, provenance, and validation rules.</li>
 <li>Define independently authored probes and conformance fixtures; preserve source provenance and rights information.</li>
 <li>Classify Linux runtime support per declaration only after an explicit semantic mapping, implementation, and tests exist.</li>
 </ol>
