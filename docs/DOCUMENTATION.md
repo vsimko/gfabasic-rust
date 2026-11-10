@@ -130,7 +130,7 @@ Install lychee 0.24.2 and run:
 lychee --offline --include-fragments anchor-only --root-dir "$PWD" "**/*.md"
 ```
 
-These tools do not certify ASD-STE100 compliance, validate the correctness of GFA BASIC semantics, or check external URL availability. Human review remains required. The accepted machine-readable API registry is validated by the API-registry job; generated-reference consistency and runtime-handler verification remain limited by the fact that the registry generator and compiler/runtime are not yet implemented.
+These tools do not certify ASD-STE100 compliance, validate the correctness of GFA BASIC semantics, or check external URL availability. Human review remains required. The machine-readable API registry is validated by the API-registry job. The repository already generates the public API catalogue and runtime-handler requirements from the canonical TOML registry, and CI checks generated output and typed handler registrations. This verifies registry-to-code wiring only; it does not establish complete compiler/runtime semantics, Linux support for each declaration, or conformance with the original Amiga interpreter.
 
 ## Copyright and source material
 
