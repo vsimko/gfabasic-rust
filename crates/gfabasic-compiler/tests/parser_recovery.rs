@@ -513,4 +513,3 @@ fn parser_rejects_signed_integer_rhs_and_recovers_at_the_next_line() {
     assert_eq!(&source[span.start..span.end], "-");
     assert_eq!(sources.slice(span), Some("-"));
 }
-
