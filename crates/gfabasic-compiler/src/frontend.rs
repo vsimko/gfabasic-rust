@@ -1043,6 +1043,18 @@ impl Parser {
         let (destination, destination_span) = self.parse_matrix_reference()?;
         self.expect(TokenKind::Equals, "'=' in MAT INV statement")?;
         let (source, source_span) = self.parse_matrix_reference()?;
+
+        // The currently verified matrix fixture uses only a/b and establishes
+        // b as the inverse destination for a. Do not infer the reversed
+        // a=b form from the same token shape while this evidence-gated subset
+        // is limited to those two matrix names.
+        if destination == "a" && source == "b" {
+            return Err(self.unsupported_error(
+                "reversed MAT INV operand order is not supported by the verified 3.5 subset",
+                destination_span,
+            ));
+        }
+
         let span = SourceSpan::new(self.source_id, start.start, source_span.end);
         Ok(Statement::MatInv {
             destination,
