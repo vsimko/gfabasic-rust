@@ -205,7 +205,7 @@ jobs:
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-merge.png" | timeout 5s nc -U -N "${ipc_socket_path:-}" || true
 
             # Keep the known-good socket if it is still live. Merge may recreate
-            # Amiberry's IPC endpoint; rediscover it only when the original is gone.
+            # Emulator IPC endpoint; rediscover it only when the original is gone.
             if [ ! -S "${ipc_socket_path:-}" ]; then
               printf 'IPC_SOCKET_STALE_AFTER_MERGE=%s\\n' "${ipc_socket_path:-<empty>}" >"$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/ipc-after-merge.txt"
               ipc_socket_path="$(find /run /tmp -type s -name amiberry.sock -print -quit 2>/dev/null || true)"
