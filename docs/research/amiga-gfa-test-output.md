@@ -1,3 +1,9 @@
+---
+type: "Research Note"
+title: "Amiga GFA BASIC test output"
+tags: [amiga, gfa-basic, testing, corpus]
+---
+
 # Amiga GFA BASIC test output
 
 ## Confirmed local observation
@@ -52,4 +58,3 @@ The host should compare the returned IDs with the requested batch, not infer suc
 ## Batch execution boundary
 
 The intended efficient workflow is to prepare one batch, start the emulator/interpreter once, execute the batch, close the result file, and collect the file once. This document specifies only the result channel and validation contract. It does not claim that the current workflow already supports arbitrary batches, automatic `.LST` tokenization, or per-fixture isolation inside one interpreter session.
-
