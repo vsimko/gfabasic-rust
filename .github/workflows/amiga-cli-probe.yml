@@ -85,6 +85,10 @@ jobs:
           sudo chown -R "$USER":"$USER" /var/cache/apt/archives /var/lib/apt/lists
           mkdir -p .cache/amitools-wheelhouse
 
+      - name: Cache refresh date
+        id: cache-date
+        run: echo "day=$(date -u +%Y%m%d)" >> "$GITHUB_OUTPUT"
+
       - name: Cache APT indexes, package archives, and pip wheels
         id: package-cache
         uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57
@@ -93,7 +97,9 @@ jobs:
             /var/cache/apt/archives
             /var/lib/apt/lists
             .cache/amitools-wheelhouse
-          key: amiga-cli-packages-${{ runner.os }}-ubuntu24-amiberry-v2
+          key: amiga-cli-packages-${{ runner.os }}-ubuntu24-amiberry-v2-${{ steps.cache-date.outputs.day }}
+          restore-keys: |
+            amiga-cli-packages-${{ runner.os }}-ubuntu24-amiberry-v2-
 
       - name: Install emulator and OCR
         run: |
