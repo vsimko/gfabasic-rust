@@ -204,6 +204,15 @@ jobs:
             sleep 3
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-merge.png" | timeout 5s nc -U -N "${ipc_socket_path:-}" || true
 
+            # Keep the known-good socket if it is still live. Merge may recreate
+            # Amiberry's IPC endpoint; rediscover it only when the original is gone.
+            if [ ! -S "${ipc_socket_path:-}" ]; then
+              printf 'IPC_SOCKET_STALE_AFTER_MERGE=%s\\n' "${ipc_socket_path:-<empty>}" >"$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/ipc-after-merge.txt"
+              ipc_socket_path="$(find /run /tmp -type s -name amiberry.sock -print -quit 2>/dev/null || true)"
+            fi
+            printf 'IPC_SOCKET_PATH_FOR_RUN=%s\\n' "${ipc_socket_path:-<empty>}" >>"$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/ipc-after-merge.txt"
+            test -S "${ipc_socket_path:-}" || { echo 'Amiberry IPC socket unavailable after Merge' >&2; exit 1; }
+
             # Execute the merged regression listing (Shift+F10), then dismiss
             # the interpreter's return/stop dialog with F10.
             printf "SEND_KEY\\t96\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
