@@ -214,7 +214,7 @@ jobs:
             test -S "${ipc_socket_path:-}" || { echo 'Amiberry IPC socket unavailable after Merge' >&2; exit 1; }
 
             # Execute the merged regression listing (Shift+F10), then dismiss
-            # the interpreter's return/stop dialog with F10.
+            # the interpreter return/stop dialog with F10.
             printf "SEND_KEY\\t96\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
             sleep 0.2
             printf "SEND_KEY\\t89\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
@@ -322,7 +322,7 @@ jobs:
           grep -Fq 'FOR-NEXT:' artifacts/amiga-cli-probe/FACT.OUT
           grep -Fq 'STRINGS:' artifacts/amiga-cli-probe/FACT.OUT
 
-          # Verify the Editor's tokenized Save created a non-empty .GFA on the ADF.
+          # Verify tokenized Save created a non-empty .GFA on the ADF.
           xdftool artifacts/amiga-cli-probe/factzero.adf list / all > artifacts/amiga-cli-probe/adf-after-save-list.txt
           grep -Eiq 'factzero[.]GFA' artifacts/amiga-cli-probe/adf-after-save-list.txt
           xdftool artifacts/amiga-cli-probe/factzero.adf read factzero.GFA artifacts/amiga-cli-probe/factzero.GFA
