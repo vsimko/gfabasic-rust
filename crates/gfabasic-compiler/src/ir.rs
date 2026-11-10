@@ -196,6 +196,7 @@ pub fn lower(program: &Program) -> Result<Module, Vec<IrError>> {
             | Statement::MatMulScalar { span, .. }
             | Statement::MatMulScale { span, .. }
             | Statement::MatAnalysis { span, .. }
+            | Statement::MatInv { span, .. }
             | Statement::MatCopy { span, .. }
             | Statement::MatRead { span, .. }
             | Statement::MatInput { span, .. } => {
