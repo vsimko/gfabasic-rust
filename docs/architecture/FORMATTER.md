@@ -13,7 +13,7 @@ title: "Formatter style and current support"
 
 The formatter is a library feature in `gfabasic-compiler::formatter`. It consumes source text and a source ID, validates the whole document through the lossless parser, and returns formatted text or the parser's diagnostics. It does not depend on the CLI, LLVM, generated-program runtime, or SDL3.
 
-At this stage, the parser accepts only the evidence-backed assignment forms `FACT`, `VARIAT`, `COMBIN`, and `PRINT` with the current prototype variable subset. The formatter rejects every construct the parser cannot validate. In particular, comments, string and DATA payloads, broader identifier forms, and nested blocks are not formatted until their Amiga GFA BASIC 3.5 lexical/grammar rules are verified and represented losslessly.
+The parser accepts the evidence-backed `FACT`, `VARIAT`, `COMBIN`, and `PRINT` forms with the current prototype variable subset, plus selected 3.5 matrix syntax (`DIM` and the documented `MAT` forms listed in the [formatter reference](../reference/amiga-gfa-basic-35-formatter.md)). The formatter rejects every construct the parser cannot validate. Matrix syntax is parsed/formatted only; the executable IR does not evaluate it. Comments, string and DATA payloads, broader identifier forms, and nested blocks remain unsupported until their Amiga GFA BASIC 3.5 lexical/grammar rules are verified and represented losslessly.
 
 ## Canonical prototype layout
 
