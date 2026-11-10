@@ -396,7 +396,7 @@ errors = []
 source-scope = "amiga-3.5-addendum"
 status = "book-documented"
 sources = ["AM-INTERPRETER-35"]
-printed-pages = ["Chapter 13, printed pp. 13-31–13-33"]
+printed-pages = ["Chapter 13, printed pp. 13-22–13-25"]
 notes = ["The row/column meanings of modes 0 and 1 were checked against the addendum page images.", "A page-image-verified row-normalization research fixture exists but is not an executable conformance test."]
 
 [declarations.implementation]
