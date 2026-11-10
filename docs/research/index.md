@@ -20,7 +20,7 @@
 - [Base-manual numeric and string function extraction](amiga-base-manual-numeric-string-functions.md) - Source forms, argument categories, semantics, overloads, and printed-page locators for the Chapter 4 function families; explicitly separated from 3.5 availability evidence.
 - [3.5 addendum inventory](amiga-gfa-basic-35-addendum-inventory.md) - Features explicitly described by the 3.5 addendum.
 - [3.5 candidate manifest](amiga-gfa-basic-candidates.toml) - Structured version-applicability evidence by candidate family.
-- [3.5 candidate report](amiga-gfa-basic-candidate-report.md) - Generated family-level status report; not a count of individual commands.
+- [3.5 candidate report](amiga-gfa-basic-candidate-report.md) - Generated family-level status report; not a count of individual commands.\n- [Language population policy](amiga-gfa-basic-language-population-policy.md) - Maintainer-approved rules for the issue #307 denominator, normalization, exclusions, evidence and implementation numerator.
 - [3.03 book OCR index](amiga-gfa-basic-3.03-ocr-index.md) - Book introduction and contents evidence identifying the described interpreter version.
 
 ## Other Amiga research
