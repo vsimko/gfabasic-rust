@@ -5,198 +5,164 @@ title: "Amiga GFA BASIC 3.5 built-in function inventory"
 
 # Amiga GFA BASIC 3.5 built-in function inventory
 
-> Source-derived inventory, not an implementation or runtime-conformance claim.
+> Source-derived inventory, not an implementation or runtime-conformance claim. The machine-readable source of truth is `amiga-gfa-basic-functions.toml`.
 
 ## Count
 
 | Population | Unique names |
 |---|---:|
-| Base-manual functions (3.0 text included in the supplied 3.5 manual) | 112 |
+| Base-manual functions (3.0 text included in the supplied 3.5 manual) | 113 |
 | Explicit functions added in the 3.5 addendum | 4 |
-| **All names listed across the combined manual** | **116** |
+| **All names listed across the combined manual** | **117** |
 | Compiler-only names excluded from the interpreter population (`CINT`, `CFLOAT`) | 2 |
-| **Interpreter function candidates (including disputed slots)** | **114** |
-| Unambiguous interpreter function names | 112 |
+| **Interpreter function candidates (including disputed slots)** | **115** |
+| Unambiguous interpreter function names | 113 |
 | Disputed source-name slots | 2 |
 
-Of the 114 interpreter candidates, 112 have unambiguous names. Two source slots are disputed: the appendix table lists `CVD()` while the Chapter 2-18 prose refers to `CVF`; likewise, the command table and signature list show `MKD# Amiga GFA BASIC 3.5 built-in function inventory
-
-> Source-derived inventory, not an implementation or runtime-conformance claim.
-
-## Count
-
-| Population | Unique names |
-|---|---:|
-| Base-manual functions (3.0 text included in the supplied 3.5 manual) | 112 |
-| Explicit functions added in the 3.5 addendum | 4 |
-| **All names listed across the combined manual** | **116** |
-| Compiler-only names excluded from the interpreter population (`CINT`, `CFLOAT`) | 2 |
-| **Interpreter function candidates (including disputed slots)** | **114** |
-| Unambiguous interpreter function names | 112 |
-| Disputed source-name slots | 2 |
-
-, while the Chapter 2-19 prose also mentions `MKF# Amiga GFA BASIC 3.5 built-in function inventory
-
-> Source-derived inventory, not an implementation or runtime-conformance claim.
-
-## Count
-
-| Population | Unique names |
-|---|---:|
-| Base-manual functions (3.0 text included in the supplied 3.5 manual) | 112 |
-| Explicit functions added in the 3.5 addendum | 4 |
-| **All names listed across the combined manual** | **116** |
-| Compiler-only names excluded from the interpreter population (`CINT`, `CFLOAT`) | 2 |
-| **Interpreter function candidates (including disputed slots)** | **114** |
-| Unambiguous interpreter function names | 112 |
-| Disputed source-name slots | 2 |
-
-. Each is counted as one candidate slot, not as two confirmed names.
-
-The count includes the manual's function-like typed conversions (`BYTE{}`, `CARD{}`, `CHAR{}`, `DOUBLE{}`, `FLOAT{}`, `INT{}`, `LONG{}`, `SINGLE{}`, `WORD{}`). Alternate forms such as `BYTE()` and `BYTE{}` are grouped under one identifier. `CINT` and `CFLOAT` are documented but explicitly described as meaningful only to the compiler, so they are not included in the interpreter count.
+The two disputed slots are the CVx conversion spelling (`CVD` in the index versus `CVF` in the Chapter 2-18 prose) and the MKx$ conversion spelling (`MKD$` in the p. 2-18 signature block versus `MKF$` in the p. 2-19 prose). Each slot is counted once; neither spelling conflict is silently resolved.
 
 ## Counting boundary
 
-- Included: built-in expression functions and the manual's typed-conversion forms.
-- Excluded: statements/commands, operators used only as operators, constants (`PI`, `TRUE`, `FALSE`), predefined variables (`TIMER`, `DATES$`, mouse state, etc.), editor commands, and Amiga OS library routines.
-- User-defined `FUNCTION`/`DEFFN` procedures are not built-in functions and are not counted.
-- Overloads and alternate spellings do not create additional unique function names.
-- This is a manual inventory, not proof that every base-manual 3.0 detail is unchanged in every 3.5 interpreter build. Runtime observations and disputed source details remain separate evidence dimensions.
+- Included: built-in expression functions and the manual's function-like typed-conversion forms.
+- Excluded from the interpreter population: `CINT` and `CFLOAT`, which the manual describes as compiler-only.
+- Excluded from this function inventory: statements/commands, operators used only as operators, constants, predefined variables, editor commands, user-defined procedures, and Amiga OS library routines.
+- Alternate syntactic forms and overloads do not create additional unique names.
+- Base-manual entries originate in the 3.0 text included in the supplied 3.5 manual. They are candidates, not proof that every detail remains supported by the 3.5 interpreter.
+- Runtime observations and source discrepancies remain separate evidence dimensions.
 
 ## Base-manual entries
 
-The following names are taken from the alphabetical *Table of commands* (printed pp. 12-8–12-18) and the corresponding feature pages in the 3.0 base text of the supplied 3.5 interpreter manual.
-
-| Function | Printed source page(s) | Evidence note |
+| Function | Printed source page(s) | Evidence |
 |---|---|---|
-| `ABS` | 4-12 | Base-manual function entry |
-| `ACOS` | 4-5 | Base-manual function entry |
-| `ADD` | 4-3 | Base-manual function entry |
-| `AND` | 4-23 | Base-manual function entry |
-| `ARRPTR` | 2-33 | Base-manual function entry |
-| `ASC` | 2-13 | Base-manual function entry |
-| `ASIN` | 4-5 | Base-manual function entry |
-| `ATN` | 4-5 | Base-manual function entry |
-| `BCHG` | 4-19 | Base-manual function entry |
-| `BCLR` | 4-19 | Base-manual function entry |
-| `BIN$` | 2-14 | Base-manual function entry |
-| `BSET` | 4-19 | Base-manual function entry |
-| `BTST` | 4-19 | Base-manual function entry |
-| `BYTE` | 2-37, 4-26 | Alternate typed-conversion form grouped under this name |
-| `CARD` | 2-37, 4-26 | Alternate typed-conversion form grouped under this name |
-| `CFLOAT` | 2-17 | The manual explicitly says this conversion is only meaningful to the compiler; excluded from the interpreter-specific count. |
-| `CHAR` | 2-37 | Alternate typed-conversion form grouped under this name |
-| `CHR$` | 2-13 | Base-manual function entry |
-| `CINT` | 2-17 | The manual explicitly says this conversion is only meaningful to the compiler; excluded from the interpreter-specific count. |
-| `COS` | 4-5 | Base-manual function entry |
-| `COSQ` | 4-6 | Base-manual function entry |
-| `CVD` | 2-18 | The appendix table lists CVD(); the Chapter 2-18 prose says CVF and its signature list omits CVD/CVF. Counted as one unresolved CVx function slot, not as two confirmed names. |
-| `CVI` | 2-18 | Base-manual function entry |
-| `CVL` | 2-18 | Base-manual function entry |
-| `CVS` | 2-18 | Base-manual function entry |
-| `DEG` | 4-7 | Base-manual function entry |
-| `DFREE` | 6-4 | Base-manual function entry |
-| `DIM?` | 2-9 | Base-manual function entry |
-| `DIR$` | 6-4 | Base-manual function entry |
-| `DIV` | 4-3 | Base-manual function entry |
-| `DOUBLE` | 2-37 | Alternate typed-conversion form grouped under this name |
-| `DPEEK` | 2-36 | Base-manual function entry |
-| `EOF` | 6-9 | Base-manual function entry |
-| `EQV` | 4-24 | Base-manual function entry |
-| `EVEN` | 4-15 | Base-manual function entry |
-| `EXIST` | 6-7 | Base-manual function entry |
-| `EXP` | 4-9 | Base-manual function entry |
-| `FIX` | 4-13 | Base-manual function entry |
-| `FLOAT` | 2-37 | Alternate typed-conversion form grouped under this name |
-| `FRAC` | 4-13 | Base-manual function entry |
-| `FRE` | 2-29 | Base-manual function entry |
-| `HEX$` | 2-14 | Base-manual function entry |
-| `IMP` | 4-24 | Base-manual function entry |
-| `INKEY$` | 5-2 | Base-manual function entry |
-| `INP` | 6-13 | Base-manual function entry |
-| `INPUT$` | 6-14 | Base-manual function entry |
-| `INSTR` | 4-30 | Base-manual function entry |
-| `INT` | 2-37, 4-13 | Alternate typed-conversion form grouped under this name |
-| `LEFT$` | 4-27 | Base-manual function entry |
-| `LEN` | 4-34 | Base-manual function entry |
-| `LOC` | 6-9 | Base-manual function entry |
-| `LOF` | 6-9 | Base-manual function entry |
-| `LOG` | 4-9 | Base-manual function entry |
-| `LOG10` | 4-9 | Base-manual function entry |
-| `LONG` | 2-37 | Alternate typed-conversion form grouped under this name |
-| `LPEEK` | 2-36 | Base-manual function entry |
-| `LPOS` | 5-19 | Base-manual function entry |
-| `MALLOC` | 2-41 | Base-manual function entry |
-| `MAX` | 4-16 | Base-manual function entry |
-| `MFREE` | 2-41 | Base-manual function entry |
-| `MID$` | 4-28 | Base-manual function entry |
-| `MIN` | 4-16 | Base-manual function entry |
-| `MKD$` | 2-18 | Base-manual function entry |
-| `MKI$` | 2-18 | Base-manual function entry |
-| `MKL$` | 2-18 | Base-manual function entry |
-| `MKS$` | 2-18 | Base-manual function entry |
-| `MOD` | 4-3 | Base-manual function entry |
-| `MUL` | 4-3 | Base-manual function entry |
-| `OCT$` | 2-14 | Base-manual function entry |
-| `ODD` | 4-15 | Base-manual function entry |
-| `OR` | 4-23 | Base-manual function entry |
-| `PEEK` | 2-36 | Base-manual function entry |
-| `POINT` | 8-18 | Base-manual function entry |
-| `POS` | 5-13 | Base-manual function entry |
-| `PRED` | 4-11 | Base-manual function entry |
-| `RAD` | 4-7 | Base-manual function entry |
-| `RAND` | 4-17 | Base-manual function entry |
-| `RANDOM` | 4-17 | Base-manual function entry |
-| `RIGHT$` | 4-27 | Base-manual function entry |
-| `RINSTR` | 4-31 | Base-manual function entry |
-| `RND` | 4-17 | Base-manual function entry |
-| `ROL` | 4-22 | Base-manual function entry |
-| `ROR` | 4-22 | Base-manual function entry |
-| `ROUND` | 4-14 | Base-manual function entry |
-| `SCREEN` | 9-24 | Base-manual function entry |
-| `SGN` | 4-12 | Base-manual function entry |
-| `SHL` | 4-21 | Base-manual function entry |
-| `SHR` | 4-21 | Base-manual function entry |
-| `SIN` | 4-5 | Base-manual function entry |
-| `SINGLE` | 2-37 | Alternate typed-conversion form grouped under this name |
-| `SINQ` | 4-6 | Base-manual function entry |
-| `SPACE$` | 4-32 | Base-manual function entry |
-| `SPC` | 4-32 | Base-manual function entry |
-| `SQR` | 4-8 | Base-manual function entry |
-| `STR$` | 2-15 | Base-manual function entry |
-| `STRING$` | 4-32 | Base-manual function entry |
-| `SUB` | 4-3 | Base-manual function entry |
-| `SUCC` | 4-11 | Base-manual function entry |
-| `SWAP` | 4-25 | Base-manual function entry |
-| `TAB` | 5-13 | Base-manual function entry |
-| `TAN` | 4-5 | Base-manual function entry |
-| `TRANSLATE$` | 10-9 | Base-manual function entry |
-| `TRIM$` | 4-34 | Base-manual function entry |
-| `TRUNC` | 4-13 | Base-manual function entry |
-| `TYPE` | 2-30 | Base-manual function entry |
-| `UPPER$` | 4-35 | Base-manual function entry |
-| `VAL` | 2-16 | Base-manual function entry |
-| `VAL?` | 2-16 | Base-manual function entry |
-| `VARPTR` | 2-33 | Base-manual function entry |
-| `WINDOW` | 9-35 | Base-manual function entry |
-| `WORD` | 2-37, 4-26 | Alternate typed-conversion form grouped under this name |
-| `XOR` | 4-23 | Base-manual function entry |
+| `ABS` | 4-12 | base-manual-entry |
+| `ACOS` | 4-5 | base-manual-entry |
+| `ADD` | 4-3 | base-manual-entry |
+| `AND` | 4-23 | base-manual-entry |
+| `ARRPTR` | 2-33 | base-manual-entry |
+| `ASC` | 2-13 | base-manual-entry |
+| `ASIN` | 4-5 | base-manual-entry |
+| `ATN` | 4-5 | base-manual-entry |
+| `BCHG` | 4-19 | base-manual-entry |
+| `BCLR` | 4-19 | base-manual-entry |
+| `BIN$` | 2-14 | base-manual-entry |
+| `BSET` | 4-19 | base-manual-entry |
+| `BTST` | 4-19 | base-manual-entry |
+| `BYTE` | 2-37, 4-26 | base-manual-entry |
+| `CARD` | 2-37, 4-26 | base-manual-entry |
+| `CFLOAT` | 2-17 | base-manual-entry (compiler-only): The manual explicitly says this conversion is only meaningful to the compiler; excluded from the interpreter-specific count. |
+| `CHAR` | 2-37 | base-manual-entry |
+| `CHR$` | 2-13 | base-manual-entry |
+| `CINT` | 2-17 | base-manual-entry (compiler-only): The manual explicitly says this conversion is only meaningful to the compiler; excluded from the interpreter-specific count. |
+| `COS` | 4-5 | base-manual-entry |
+| `COSQ` | 4-6 | base-manual-entry |
+| `CVD` | 2-18 | disputed-name: The printed source itself is inconsistent: the command index points to CVD (printed p. 2-18); the p. 2-18 prose names CVF; the following application list names CVS. The function signature block lists CVI/CVL but no floating-point CVx spelling. Retain one unresolved CVx slot; do not treat CVD, CVF, and CVS as three confirmed identifiers. This is a source discrepancy, not merely OCR uncertainty. |
+| `CVI` | 2-18 | base-manual-entry |
+| `CVL` | 2-18 | base-manual-entry |
+| `CVS` | 2-18 | base-manual-entry |
+| `DEG` | 4-7 | base-manual-entry |
+| `DFREE` | 6-4 | base-manual-entry |
+| `DIM?` | 2-9 | base-manual-entry |
+| `DIR$` | 6-4 | base-manual-entry |
+| `DIV` | 4-3 | base-manual-entry |
+| `DOUBLE` | 2-37 | base-manual-entry |
+| `DPEEK` | 2-36 | base-manual-entry |
+| `EOF` | 6-9 | base-manual-entry |
+| `EQV` | 4-24 | base-manual-entry |
+| `EVEN` | 4-15 | base-manual-entry |
+| `EXIST` | 6-7 | base-manual-entry |
+| `EXP` | 4-9 | base-manual-entry |
+| `FIX` | 4-13 | base-manual-entry |
+| `FLOAT` | 2-37 | base-manual-entry |
+| `FRAC` | 4-13 | base-manual-entry |
+| `FRE` | 2-29 | base-manual-entry |
+| `HEX$` | 2-14 | base-manual-entry |
+| `IMP` | 4-24 | base-manual-entry |
+| `INKEY$` | 5-2 | base-manual-entry |
+| `INP` | 6-13 | base-manual-entry |
+| `INPUT$` | 6-14 | base-manual-entry |
+| `INSTR` | 4-30 | base-manual-entry |
+| `INT` | 2-37, 4-13 | base-manual-entry |
+| `LEFT$` | 4-27 | base-manual-entry |
+| `LEN` | 4-34 | base-manual-entry |
+| `LOC` | 6-9 | base-manual-entry |
+| `LOF` | 6-9 | base-manual-entry |
+| `LOG` | 4-9 | base-manual-entry |
+| `LOG10` | 4-9 | base-manual-entry |
+| `LONG` | 2-37 | base-manual-entry |
+| `LPEEK` | 2-36 | base-manual-entry |
+| `LPOS` | 5-19 | base-manual-entry |
+| `MALLOC` | 2-41 | base-manual-entry |
+| `MAX` | 4-16 | base-manual-entry |
+| `MFREE` | 2-41 | base-manual-entry |
+| `MID$` | 4-28 | base-manual-entry |
+| `MIN` | 4-16 | base-manual-entry |
+| `MKD$` | 2-18, 2-19 | base-manual-entry: MKD$ appears in both the printed p. 2-18 signature block and the p. 2-19 prose list; its identifier is not the disputed MKx spelling. |
+| `MKF$` | 2-18, 2-19 | disputed-name: The p. 2-18 signature block lists MKS$ and MKD$, while the p. 2-19 prose additionally lists MKF$. Retain MKF$ as one unresolved MKx spelling slot; do not assume it is an alias or a confirmed additional identifier without runtime/edition evidence. |
+| `MKI$` | 2-18 | base-manual-entry |
+| `MKL$` | 2-18 | base-manual-entry |
+| `MKS$` | 2-18 | base-manual-entry |
+| `MOD` | 4-3 | base-manual-entry |
+| `MUL` | 4-3 | base-manual-entry |
+| `OCT$` | 2-14 | base-manual-entry |
+| `ODD` | 4-15 | base-manual-entry |
+| `OR` | 4-23 | base-manual-entry |
+| `PEEK` | 2-36 | base-manual-entry |
+| `POINT` | 8-18 | base-manual-entry |
+| `POS` | 5-13 | base-manual-entry |
+| `PRED` | 4-11 | base-manual-entry |
+| `RAD` | 4-7 | base-manual-entry |
+| `RAND` | 4-17 | base-manual-entry |
+| `RANDOM` | 4-17 | base-manual-entry |
+| `RIGHT$` | 4-27 | base-manual-entry |
+| `RINSTR` | 4-31 | base-manual-entry |
+| `RND` | 4-17 | base-manual-entry |
+| `ROL` | 4-22 | base-manual-entry |
+| `ROR` | 4-22 | base-manual-entry |
+| `ROUND` | 4-14 | base-manual-entry |
+| `SCREEN` | 9-24 | base-manual-entry |
+| `SGN` | 4-12 | base-manual-entry |
+| `SHL` | 4-21 | base-manual-entry |
+| `SHR` | 4-21 | base-manual-entry |
+| `SIN` | 4-5 | base-manual-entry |
+| `SINGLE` | 2-37 | base-manual-entry |
+| `SINQ` | 4-6 | base-manual-entry |
+| `SPACE$` | 4-32 | base-manual-entry |
+| `SPC` | 4-32 | base-manual-entry |
+| `SQR` | 4-8 | base-manual-entry |
+| `STR$` | 2-15 | base-manual-entry |
+| `STRING$` | 4-32 | base-manual-entry |
+| `SUB` | 4-3 | base-manual-entry |
+| `SUCC` | 4-11 | base-manual-entry |
+| `SWAP` | 4-25 | base-manual-entry |
+| `TAB` | 5-13 | base-manual-entry |
+| `TAN` | 4-5 | base-manual-entry |
+| `TRANSLATE$` | 10-9 | base-manual-entry |
+| `TRIM$` | 4-34 | base-manual-entry |
+| `TRUNC` | 4-13 | base-manual-entry |
+| `TYPE` | 2-30 | base-manual-entry |
+| `UPPER$` | 4-35 | base-manual-entry |
+| `VAL` | 2-16 | base-manual-entry |
+| `VAL?` | 2-16 | base-manual-entry |
+| `VARPTR` | 2-33 | base-manual-entry |
+| `WINDOW` | 9-35 | base-manual-entry |
+| `WORD` | 2-37, 4-26 | base-manual-entry |
+| `XOR` | 4-23 | base-manual-entry |
 
 ## Explicit 3.5 additions
 
-| Function | Printed source page(s) | Source description |
+| Function | Printed source page(s) | Evidence |
 |---|---|---|
-| `COMBIN` | 13-33–13-34 | Combination function. |
-| `FACT` | 13-33–13-34 | Factorial function; 0! is explicitly defined as 1. |
-| `GURU` | 13-35–13-36 | GURU-number function; distinct from the GURU enable/disable statement. |
-| `VARIAT` | 13-33–13-34 | Permutation function. |
+| `COMBIN` | 13-33–13-34 | explicit-3.5-addendum: Combination function. |
+| `FACT` | 13-33–13-34 | explicit-3.5-addendum: Factorial function; 0! is explicitly defined as 1. |
+| `GURU` | 13-35–13-36 | explicit-3.5-addendum: GURU-number function; distinct from the GURU enable/disable statement. |
+| `VARIAT` | 13-33–13-34 | explicit-3.5-addendum: Permutation function. |
 
 ## Primary source and caveats
 
-- `GFA BASIC 3.5 Interpreter`, supplied 469-page manual: introductory page identifies the included software as GFA BASIC 3.5 and says Chapter 13 is an addendum describing extra features. The base text is the earlier 3.0 manual; the addendum identifies the additional 3.5 features.
+- `GFA BASIC 3.5 Interpreter`, supplied 469-page manual: the introductory page identifies the included software as GFA BASIC 3.5 and identifies Chapter 13 as an addendum describing extra features. The base text is the earlier 3.0 manual.
 - Base function index: printed pp. 12-8–12-18. Detailed base pages are listed per function above.
-- 3.5 additions: printed pp. 13-33–13-36 (FACT, VARIAT, COMBIN, GURU).
-- The separate 1990 German Amiga book says its main command reference documents version 3.0; it is supplementary and is not used to inflate the 3.5 count.
-- Chapter 11's Amiga OS library index is deliberately excluded: it catalogs OS calls, not built-in GFA BASIC language functions.
+- Explicit 3.5 additions: printed pp. 13-33–13-36.
+- The separate 1990 German Amiga book says its main command reference documents version 3.0; it is supplementary and does not inflate the 3.5 count.
+- Chapter 11's Amiga OS library index is excluded: it catalogs OS calls, not built-in GFA BASIC language functions.
 
 Machine-readable source: `amiga-gfa-basic-functions.toml`. Validation: `python scripts/validate_amiga_function_inventory.py`.
