@@ -70,4 +70,13 @@ if grep -Eiq 'directmode[.]GFA' artifacts/amiga-cli-probe/adf-after-save-list.tx
   fi
 else
   echo "DIRECT_MODE_SAVE=not-created" | tee artifacts/amiga-cli-probe/directmode-save-result.txt
+  echo "::error::Direct Mode SAVE did not create DIRECTMODE.GFA."
+  exit 1
 fi
+test -s artifacts/amiga-cli-probe/directmode.GFA
+cmp -s artifacts/amiga-cli-probe/factzero.GFA artifacts/amiga-cli-probe/directmode.GFA
+if cmp -s artifacts/amiga-cli-probe/factzero.LST artifacts/amiga-cli-probe/directmode.GFA; then
+  echo "::error::Direct Mode SAVE output is byte-identical to the ASCII .LST."
+  exit 1
+fi
+echo "DIRECT_MODE_SAVE=verified" | tee artifacts/amiga-cli-probe/directmode-save-result.txt
