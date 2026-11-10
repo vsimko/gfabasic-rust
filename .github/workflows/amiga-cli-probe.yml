@@ -1,4 +1,4 @@
-name: Amiga GFA BASIC CLI/stdin probe
+name: Amiga GFA BASIC regression and tokenized Save
 
 on:
   push:
