@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Source: GFA BASIC 3.5 Interpreter, Appendix 12, “Table of commands”, printed pp. 12-8–12-18 (PDF pp. 410–420). The manual says Chapters 2–12 are the original 3.0 baseline and Chapter 13 is the 3.5 addendum. This is a …">
+  <title>Amiga GFA BASIC 3.0 command index — grouped cross-check · GFA BASIC Rust documentation</title>
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body class="docs-site">
+  <header class="docs-header">
+    <a href="../../index.html">GFA BASIC Rust</a>
+    <span aria-hidden="true">/</span>
+    <a href="../index.html">Documentation</a>
+  </header>
+  <div class="docs-layout">
+    <nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home" href="index.html">Section index</a><ul><li><a href="amiga-gfa-basic-documentation-audit.html">Amiga GFA BASIC documentation coverage audit</a></li><li><a href="amiga-gfa-basic-command-catalogue.html">Amiga GFA BASIC command catalogue</a></li><li><a href="amiga-gfa-basic-german-book-command-api-extraction.html">German Amiga GFA-BASIC book: command and OS API extraction</a></li><li><a href="amiga-book-command-index-ocr-transcription.html">Appendix D — OCR transcription of the command index</a></li><li><a href="gfa-basic-command-index-ocr.html">GFA-BASIC command index — first-pass extraction</a></li><li><a href="amiga-gfa-basic-source-topic-index.html">Amiga GFA BASIC source and topic index</a></li><li><a href="amiga-book-515-page-extraction-audit.html">Amiga GFA-BASIC book — 515-page extraction audit</a></li><li><a href="amiga-book-chapters05-17-heading-harvest.html">Amiga book — command-heading harvest, chapters 5–17</a></li><li><a href="amiga-gfa-basic-functions.toml">Function inventory (116 unique names)</a></li><li><a href="amiga-gfa-basic-function-inventory.html">Amiga GFA BASIC 3.5 built-in function inventory</a></li><li><a href="amiga-base-manual-numeric-string-functions.html">Amiga GFA BASIC base-manual numeric and string function extraction</a></li><li><a href="amiga-gfa-basic-35-addendum-inventory.html">Amiga GFA-BASIC 3.5 interpreter addendum — extracted feature inventory</a></li><li><a href="amiga-gfa-basic-candidates.toml">3.5 candidate manifest</a></li><li><a href="amiga-gfa-basic-candidate-report.html">Amiga GFA BASIC 3.5 candidate verification report</a></li><li><a href="amiga-gfa-basic-3.03-ocr-index.html">German Amiga GFA BASIC book: OCR index and edition notes</a></li><li><a href="README.html">Research materials</a></li><li><a href="amiga-gfa-test-output.html">Amiga GFA BASIC test output</a></li><li><a href="amiga-gfa-basic-dqh-source-inventory.html">Amiga GFA BASIC commands observed in dqh-amiga</a></li><li><a href="amiga-emulator-lab.html">Amiga emulator experiment lab</a></li><li><a href="amiga-gfa-basic-35-lst-probes.html">Amiga GFA BASIC 3.5 interpreter probes from text listings</a></li><li><a href="amiga-gfa-basic-352-runtime-baseline.html">Amiga GFA BASIC 3.52 runtime baseline</a></li><li><a href="amiga-gfa-basic-binary-analysis.html">Amiga GFA-BASIC binary analysis</a></li><li><a href="amiga-gfa-basic-3.0-command-index.html">Amiga GFA BASIC 3.0 command index — grouped cross-check</a></li><li><a href="amiga-gfa-basic-3.0-statement-command-candidates.html">Amiga GFA BASIC 3.0 statement and command candidate catalogue</a></li><li><a href="amiga-gfa-basic-3.0-base-inventory.html">Amiga GFA BASIC 3.0 base-manual inventory</a></li><li><a href="amiga-gfa-basic-3.0-expressions-builtins-control-flow.html">Amiga GFA BASIC 3.0 expression, intrinsic and control-flow evidence</a></li><li><a href="amiga-gfa-basic-3.0-control-file-data-io.html">Amiga GFA BASIC 3.0 control, file and data I/O evidence</a></li><li><a href="amiga-gfa-basic-3.0-graphics-evidence.html">GFA BASIC 3.0 Amiga — graphics evidence</a></li><li><a href="amiga-gfa-basic-3.0-events-windows-evidence.html">GFA BASIC 3.0 Amiga — event, menu, screen and window evidence</a></li><li><a href="amiga-gfa-basic-3.0-system-routines-evidence.html">GFA BASIC 3.0 Amiga — operating-system routine evidence</a></li><li><a href="amiga-gfa-basic-3.0-advanced-programming-evidence.html">GFA BASIC 3.0 Amiga — advanced programming evidence</a></li><li><a href="amiga-gfa-basic-3.0-appendix-index-evidence.html">GFA BASIC 3.0 Amiga — appendix and command-index evidence</a></li><li><a href="amiga-gfa-basic-3.0-german-source-notes.html">German Amiga GFA BASIC 3.0 source — initial verification notes</a></li><li><a href="amiga-gfa-basic-3.0-procedure-error-details.html">GFA BASIC 3.0 Amiga — procedures, functions and error-flow evidence</a></li><li><a href="amiga-gfa-basic-3.0-screen-window-details.html">GFA BASIC 3.0 Amiga — screen and window command details</a></li><li><a href="amiga-gfa-basic-3.0-output-device-details.html">GFA BASIC 3.0 Amiga — output, cursor, mouse and sound evidence</a></li><li><a href="amiga-gfa-basic-3.0-menu-event-details.html">GFA BASIC 3.0 Amiga — menu and event details</a></li><li><a href="amiga-gfa-basic-3.0-bob-object-details.html">GFA BASIC 3.0 Amiga — BOB and OBJECT API evidence</a></li><li><a href="amiga-gfa-basic-3.0-source-format-editor-evidence.html">Amiga GFA BASIC 3.0 — source composition and editor evidence</a></li><li><a href="amiga-gfa-basic-35-primary-reference.html">Amiga GFA-BASIC 3.5 primary reference and target decision</a></li><li><a href="amiga-gfa-basic-35-german-book-crosscheck.html">Amiga GFA-BASIC 3.5 — independent German-book cross-check</a></li><li><a href="amiga-book-gfa35-chapter18-19-extraction.html">GFA-BASIC 3.5 additions documented in the Amiga book</a></li><li><a href="amiga-gfa-basic-35-editor-feature-audit.html">Amiga GFA BASIC 3.5 — editor feature audit</a></li><li><a href="amiga-gfa-basic-35-lexer-evidence.html">Amiga GFA BASIC 3.5 lexer evidence inventory</a></li><li><a href="amiga-gfa-basic-35-matrix-arithmetic-analysis-audit.html">Amiga GFA BASIC 3.5 — matrix arithmetic and analysis audit</a></li><li><a href="amiga-gfa-basic-35-matrix-io-copy-audit.html">Amiga GFA BASIC 3.5 — matrix I/O and copy declaration audit</a></li><li><a href="amiga-gfa-basic-35-five-declaration-audit.html">Amiga GFA BASIC 3.5 — five declaration-level audit blocks</a></li><li><a href="amiga-gfa-basic-35-five-more-declaration-audit.html">Amiga GFA BASIC 3.5 — five more declaration-level audit blocks</a></li><li><a href="amiga-gfa-basic-35-guru-declaration-audit.html">Amiga GFA BASIC 3.5 — GURU declaration audit</a></li><li><a href="atari-gfa-book-diskette.html">Atari GFA BASIC book diskette — source-corpus research notes</a></li><li><a href="atari-gfa-book-systematic-review.html">Systematic review of *Das große GFA-BASIC-Buch* (Atari ST)</a></li><li><a href="aminet-catalogue.html">Aminet GFA BASIC package survey</a></li><li><a href="gfalist-build-and-fixture-validation.html">gfalist build and fixture validation</a></li><li><a href="gfalist-format-vs-rust-frontend.html">gfalist format notes vs. the Rust frontend</a></li></ul></nav>
+    <main class="docs-content">
+      <article>
+        <h1>Amiga GFA BASIC 3.0 command index — grouped cross-check</h1>
+        <p class="docs-meta"><span>Research Note</span></p>
+        <h1 id="amiga-gfa-basic-30-command-index-grouped-cross-check">Amiga GFA BASIC 3.0 command index — grouped cross-check</h1>
+<p>Source: <em>GFA BASIC 3.5 Interpreter</em>, Appendix 12, “Table of commands”, printed pp. 12-8–12-18 (PDF pp. 410–420). The manual says Chapters 2–12 are the original 3.0 baseline and Chapter 13 is the 3.5 addendum. This is a 3.0 discovery index, not a normative 3.5 declaration list.</p>
+<h2 id="reading-this-index">Reading this index</h2>
+<ul>
+<li>The appendix itself is an alphabetical table. This compact cross-check groups related names by subsystem to make omissions easier to spot; it is not a verbatim transcription of every row.</li>
+<li>An index entry proves only that a name is indexed at a page. It does not establish complete syntax, semantics, interpreter/compiler availability, or 3.5 retention.</li>
+<li>OCR-damaged names are marked for visual verification. Do not normalize them into registry identifiers without checking the page image and detailed entry.</li>
+<li>The index is a completeness cross-check, not a replacement for declaration-level documentation.</li>
+</ul>
+<h2 id="grouped-command-index-cross-check">Grouped command-index cross-check</h2>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th style="text-align:right">Printed page</th>
+<th>Area / qualification</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>!</td>
+<td style="text-align:right">7-35</td>
+<td>Comment marker</td>
+</tr>
+<tr>
+<td>$</td>
+<td style="text-align:right">7-49</td>
+<td>Compiler directive; version scope to verify</td>
+</tr>
+<tr>
+<td>*, +, -, @, {}, ~</td>
+<td style="text-align:right">2-33–2-40; 3-10–3-13; 7-24</td>
+<td>Operators / typed memory / call notation; exact glyphs need review</td>
+</tr>
+<tr>
+<td>_DosBase, _GfxBase, _IntBase, _LayersBase</td>
+<td style="text-align:right">10-4</td>
+<td>Amiga OS library bases</td>
+</tr>
+<tr>
+<td>_dosCmd$</td>
+<td style="text-align:right">10-2</td>
+<td>CLI command tail</td>
+</tr>
+<tr>
+<td>ABS(), ACOS(), ASIN(), ATN(), COS(), COSQ(), DEG(), EXP(), LOG(), LOG100, RAD(), SGN(), SIN(), SINQ(), SQR(), TAN()</td>
+<td style="text-align:right">4-5–4-12</td>
+<td>Numeric functions; LOG100 spelling needs visual check</td>
+</tr>
+<tr>
+<td>ADD, ADD(), SUB, SUB(), MUL(), DIV, DIV(), MOD()</td>
+<td style="text-align:right">4-2–4-3</td>
+<td>Arithmetic operators/functions; see detailed function inventory</td>
+</tr>
+<tr>
+<td>AFTER, EVERY</td>
+<td style="text-align:right">7-32</td>
+<td>Timer/event statements</td>
+</tr>
+<tr>
+<td>ALERT, FILESELECT</td>
+<td style="text-align:right">9-36–9-38</td>
+<td>Amiga requester APIs</td>
+</tr>
+<tr>
+<td>AND, EQV, IMP, NOT, OR, XOR</td>
+<td style="text-align:right">3-4–3-9</td>
+<td>Logical operators</td>
+</tr>
+<tr>
+<td>AND(), EQV(), IMP(), OR(), XOR()</td>
+<td style="text-align:right">4-23–4-24</td>
+<td>Bitwise functions</td>
+</tr>
+<tr>
+<td>ARRAYFILL, DIM, DIM?(), ERASE, INSERT, DELETE, OPTION BASE, QSORT, SSORT, SWAP</td>
+<td style="text-align:right">2-8–2-22</td>
+<td>Array declarations and operations</td>
+</tr>
+<tr>
+<td>ARRPTR(), VARPTR(), TYPE(), FRE, DUMP, VOID, RESERVE</td>
+<td style="text-align:right">2-29–2-44</td>
+<td>Variable, memory and runtime introspection</td>
+</tr>
+<tr>
+<td>ASC(), CHR$(), HEX$(), OCT$(), STR$(), VAL(), VAL?()</td>
+<td style="text-align:right">2-13–2-16</td>
+<td>Conversion functions; VAL? punctuation needs review</td>
+</tr>
+<tr>
+<td>BACKS, FRONTS, MOVES, OPENS, CLOSES, SCREEN(), TITLES, SETPEN, SETSTITLE</td>
+<td style="text-align:right">9-17–9-24</td>
+<td>Amiga screen APIs</td>
+</tr>
+<tr>
+<td>BACKW, CLEARW, CLOSEW, FULLW, FRONTW, LIMITW, MOVEW, OPENW, SETWPEN, SETWTITLE, SIZEW, WINDOW()</td>
+<td style="text-align:right">9-26–9-35</td>
+<td>Amiga window APIs</td>
+</tr>
+<tr>
+<td>BGET, BLOAD, BPUT, BSAVE, CHDIR, CLOSE, DFREE(), DIR, DIR$(), EXIST(), FILES, KILL, LOF(), LOC(), NAME, OPEN, RENAME, RELSEEK, SEEK, TOUCH</td>
+<td style="text-align:right">6-4–6-19</td>
+<td>Disk and file operations</td>
+</tr>
+<tr>
+<td>BOUNDARY, BOX, CIRCLE, CLIP, CLS, COLOR, DEFFILL, DEFLINE, DISPLAY, DRAW, ELLIPSE, FILL, GRAPHMODE, LINE, PBOX, PCIRCLE, PELLIPSE, PLOT, POINT(), POLYFILL, POLYLINE, RASTPORT, SETCOLOR, SETDRAW, TEXT, VSYNC</td>
+<td style="text-align:right">8-2–8-24</td>
+<td>Amiga graphics APIs</td>
+</tr>
+<tr>
+<td>BCHG(), BSET(), BTST(), SHL(), SHR(), ROL(), ROR(), BYTE(), WORD()</td>
+<td style="text-align:right">4-19–4-26</td>
+<td>Bit and numeric conversion operations; exact suffixes need source review</td>
+</tr>
+<tr>
+<td>BYTE{}, CARD{}, CHAR{}, DOUBLE{}, FLOAT{}, INT{}, LONG{}, SINGLE{}, WORD{}</td>
+<td style="text-align:right">2-37</td>
+<td>Typed memory access forms</td>
+</tr>
+<tr>
+<td>BMOVE, DPEEK(), DPOKE, LPEEK(), LPOKE, PEEK(), POKE, MALLOC(), MFREE(), ABSOLUTE</td>
+<td style="text-align:right">2-35–2-43</td>
+<td>Memory/address operations; Amiga address semantics</td>
+</tr>
+<tr>
+<td>CASE, ELSE, ELSE IF, ENDIF, IF, SELECT</td>
+<td style="text-align:right">7-4–7-9</td>
+<td>Conditional statements</td>
+</tr>
+<tr>
+<td>CHAIN, EDIT, END, LIST, LLIST, LOAD, NEW, PSAVE, QUIT, RUN, SAVE, STOP, SYSTEM</td>
+<td style="text-align:right">7-38–7-45</td>
+<td>Program/editor/system commands</td>
+</tr>
+<tr>
+<td>DATA, READ, RESTORE</td>
+<td style="text-align:right">5-15</td>
+<td>DATA statement and pointer operations</td>
+</tr>
+<tr>
+<td>DATES, SETTIME, TIMES, TIMER</td>
+<td style="text-align:right">2-26–2-28</td>
+<td>Date/time values and commands</td>
+</tr>
+<tr>
+<td>DEFBIT, DEFBYT, DEFFLT, DEFINT, DEFSTR, DEFWRD, LET</td>
+<td style="text-align:right">2-5–2-6</td>
+<td>Variable typing and assignment</td>
+</tr>
+<tr>
+<td>DEFFN, ENDFUNC, FN, FUNCTION, LOCAL, PROCEDURE, RETURN</td>
+<td style="text-align:right">7-21–7-26</td>
+<td>Procedures and user-defined functions</td>
+</tr>
+<tr>
+<td>DELAY, PAUSE</td>
+<td style="text-align:right">7-37</td>
+<td>Timing/delay statements</td>
+</tr>
+<tr>
+<td>DO, DO UNTIL, DO WHILE, LOOP, LOOP UNTIL, LOOP WHILE, REPEAT, UNTIL, WHILE, WEND, FOR, NEXT, DOWNTO, EXIT IF</td>
+<td style="text-align:right">7-13–7-20</td>
+<td>Loop statements</td>
+</tr>
+<tr>
+<td>ERR, ERROR, ON BREAK CONT, ON BREAK GOSUB, ON ERROR, ON ERROR GOSUB, RESUME NEXT</td>
+<td style="text-align:right">7-28–7-31</td>
+<td>Error handling</td>
+</tr>
+<tr>
+<td>EXEC, INLINE, MONITOR, RCALL, SAY, SPRITE, STICK, STRIG, TRANSLATE$()</td>
+<td style="text-align:right">7-50–7-55; 10-3–10-9</td>
+<td>Amiga CLI, machine, hardware and speech integration</td>
+</tr>
+<tr>
+<td>FIELD, GET, PUT, RECORD, RECALL, STORE</td>
+<td style="text-align:right">6-17–6-21</td>
+<td>Sequential and random-access file operations; GET/PUT also have graphics overloads</td>
+</tr>
+<tr>
+<td>FORM INPUT, INKEY$, INPUT, INPUT$(), LINE INPUT, MOUSE, MOUSEK, MOUSEX, MOUSEY</td>
+<td style="text-align:right">5-2–5-17</td>
+<td>Keyboard and pointer input</td>
+</tr>
+<tr>
+<td>HARDCOPY, HTAB, LOCATE, LPOS(), LPRINT, MODE, POS(), PRINT, PRINT AT, PRINT USING, TAB(), VTAB, WRITE</td>
+<td style="text-align:right">5-7–5-20</td>
+<td>Text, cursor and printer I/O</td>
+</tr>
+<tr>
+<td>INP(), OUT</td>
+<td style="text-align:right">6-13</td>
+<td>Byte I/O</td>
+</tr>
+<tr>
+<td>INPUT #, LINE INPUT #, PRINT #, WRITE #</td>
+<td style="text-align:right">6-14–6-16</td>
+<td>File-channel text I/O</td>
+</tr>
+<tr>
+<td>LEFT$(), MID$(), RIGHT$(), INSTR(), RINSTR(), SPACE$(), SPC(), STRING$(), TRIM$(), UPPER$()</td>
+<td style="text-align:right">4-27–4-35</td>
+<td>String functions</td>
+</tr>
+<tr>
+<td>MAX(), MIN(), ODD(), EVEN(), PRED(), SUCC(), ROUND(), TRUNC(), FIX(), FRAC(), INT()</td>
+<td style="text-align:right">4-11–4-16</td>
+<td>Numeric utility functions</td>
+</tr>
+<tr>
+<td>MENU, MENU KILL, ON MENU, ON MENU BUTTON GOSUB, ON MENU GOSUB, ON MENU KEY GOSUB, ON MESSAGE GOSUB</td>
+<td style="text-align:right">9-4–9-12</td>
+<td>Amiga menu/event APIs</td>
+</tr>
+<tr>
+<td>OBJECT.AX, OBJECT.AY, OBJECT.CLIP, OBJECT.CLOSE, OBJECT.OFF, OBJECT.ON, OBJECT.PLANES, OBJECT.PRIORITY, OBJECT.SHAPE, OBJECT.START, OBJECT.STOP, OBJECT.VX, OBJECT.VY, OBJECT.X, OBJECT.Y</td>
+<td style="text-align:right">10-14–10-16</td>
+<td>Amiga BOB object API</td>
+</tr>
+<tr>
+<td>ON COLLISION GOSUB</td>
+<td style="text-align:right">10-16</td>
+<td>Amiga BOB event</td>
+</tr>
+<tr>
+<td>ON x GOSUB, GOSUB, GOTO, REM, TRON, TROFF, TRACES</td>
+<td style="text-align:right">7-8; 7-21; 7-35–7-48</td>
+<td>Branching, comments and tracing</td>
+</tr>
+<tr>
+<td>PRINT#, INPUT#, WRITE#, BLOAD, BSAVE, BGET, BPUT</td>
+<td style="text-align:right">6-11–6-16</td>
+<td>File and binary operations</td>
+</tr>
+<tr>
+<td>RANDOM(), RANDOMIZE, RAND(), RND()</td>
+<td style="text-align:right">4-17</td>
+<td>Random-number functions</td>
+</tr>
+<tr>
+<td>CINT(), CFLOAT()</td>
+<td style="text-align:right">2-17</td>
+<td>Compiler-only conversions, not interpreter functions</td>
+</tr>
+<tr>
+<td>CVD(), CVI(), CVL(), CVS(), MKD$(), MKI$(), MKL$(), MKS$()</td>
+<td style="text-align:right">2-18</td>
+<td>Typed binary conversions; CVD/MKD$ OCR spellings disputed</td>
+</tr>
+<tr>
+<td>SAY, SOUND, WAVE</td>
+<td style="text-align:right">5-22; 10-9</td>
+<td>Sound/speech output; distinguish interpreter and Amiga facilities</td>
+</tr>
+<tr>
+<td>TRUE, FALSE, PI</td>
+<td style="text-align:right">2-25</td>
+<td>Constants</td>
+</tr>
+<tr>
+<td>DATA, RESTORE, READ</td>
+<td style="text-align:right">5-15</td>
+<td>3.0 DATA statements; 3.5 pointer extensions are separate below</td>
+</tr>
+<tr>
+<td>COLLISION ON/OFF/STOP</td>
+<td style="text-align:right">10-13</td>
+<td>BOB collision control</td>
+</tr>
+<tr>
+<td>_0…_9</td>
+<td style="text-align:right">13-35</td>
+<td>Explicit 3.5 special variables; not in 3.0 base index</td>
+</tr>
+</tbody>
+</table>
+<h2 id="explicit-35-addendum-names-separate-version-scope">Explicit 3.5 addendum names — separate version scope</h2>
+<p>The supplied interpreter scan's Chapter 13 explicitly documents:</p>
+<ul>
+<li>Linear matrix/vector operations: MAT BASE, MAT CLR, MAT SET, MAT ONE, MAT READ, MAT PRINT, MAT INPUT, MAT CPY, MAT XCPY, MAT TRANS, MAT ADD, MAT SUB, MAT MUL, MAT NORM, MAT DET, MAT QDET, MAT RANG, MAT INV (printed pp. 13-1–13-39).</li>
+<li>Additional commands/features: FACT, VARIAT, COMBIN, negative-screen-number OPENW variant, PCOLOR, _DATA, _DATA=, _0…_9, and GURU statement/function (printed pp. 13-33–13-36).</li>
+<li>Editor row/folding/search/listing changes and Tab/Ctrl+Tab/Shift+Tab operations (printed p. 1-25).</li>
+</ul>
+<p>Full semantics and the alternate pagination crosswalk are in <a href="amiga-gfa-basic-35-addendum-inventory.html">the 3.5 addendum inventory</a>.</p>
+<h2 id="separate-amiga-os-routine-index">Separate Amiga OS routine index</h2>
+<p>Appendix 12, printed pp. 12-19–12-28, contains a separate alphabetical table of Amiga OS library calls (Exec, Graphics, Workbench, Intuition, DiskFont, Layers and DOS). It is a platform-call index, not part of the language-core declaration count. The source extraction of representative library families is in <a href="amiga-gfa-basic-3.0-system-routines-evidence.html">system-routines evidence</a>; the full per-call signatures still need their Chapter 11 entries reviewed before registry declarations are created.</p>
+<h2 id="completion-status">Completion status</h2>
+<p>This records the principal command-index families and their page ranges; it is not yet a row-for-row exhaustive transcription of every index entry. The remaining exact index normalization and OCR review are tracked as follow-up work. It does not close issue #19: the 3.0 base candidates still require declaration-level 3.5 confirmation or controlled interpreter observations; OCR-sensitive spellings require visual review; and the complete language-core/platform-API split, exact signatures and conformance fixtures must be linked to the canonical inventory. Absence from the 3.5 addendum is not evidence that a 3.0 feature was removed or retained.</p>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>
