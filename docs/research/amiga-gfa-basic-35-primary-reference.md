@@ -47,7 +47,7 @@ These areas remain open under [issue #20](https://github.com/vsimko/gfabasic-rus
 
 ## Next work
 
-- Continue declaration-level extraction of the still-unreviewed Chapter 4 and Chapter 6–7 command families, keeping each candidate tied to a printed page and the 3.0 source scope.
+- Continue declaration-level extraction of the 3.0 base manual's Chapter 4 and Chapter 6–7 command families, keeping each candidate tied to a printed page and explicitly historical pending 3.5 reconciliation.
 - Reconcile base-manual candidates against explicit 3.5 addendum passages or controlled interpreter observations; do not treat absence from the addendum as evidence of removal.
 - The Chapter 13–14 and editor-update page-image review is complete (tracked in #65). Continue declaration-level reconciliation of the 3.0 base-manual candidates; preserve the resolved MAT INV direction and other explicitly recorded source discrepancies.
 - Map the German Amiga book's command reference and compiler chapter separately from interpreter behavior, preserving its stated 3.0 command-reference scope.
