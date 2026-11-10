@@ -34,7 +34,8 @@ def main() -> None:
 
     adr_url = index_url.rsplit("/", 1)[0] + "/architecture/adr/0011-amiga-35-linux-sdl3-product-scope.html"
     adr_html = fetch(adr_url)
-    assert "Amiga 3.5 and Linux SDL3 product scope" in adr_html
+    assert "ADR 0011: Product scope" in adr_html
+    assert "SDL3" in adr_html
     assert "<script" not in adr_html.lower()
 
     css_href = 'href="../../../styles.css"'
