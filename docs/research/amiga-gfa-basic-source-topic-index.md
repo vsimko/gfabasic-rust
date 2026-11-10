@@ -74,7 +74,7 @@ Detailed definitions, examples, disputes and evidence boundaries are in the [3.5
 | Matrix array types | Floating-point fields, 1D/2D | Broader “numeric fields” phrasing | Use narrower explicit 3.5 constraint |
 | Matrix copy | Distinct MAT CPY and MAT COPY forms | MAT CPY documented | Do not merge spellings |
 | Vector multiplication | Outer/dyadic, inner/scalar, vector–matrix–vector | Less complete treatment | Preserve explicit 3.5 addendum forms |
-| Inverse | Summary p. 13-16 reverses operands; detailed definition/example p. 13-30 specifies destination first | German book p. 475 independently agrees | Use MAT INV destination()=source(); summary line is a typo |
+| Inverse | Summary p. 13-16 reverses operands; detailed definition/example p. 13-39 specifies destination first | German book p. 475 independently agrees | Use MAT INV destination()=source(); summary line is a typo |
 | FACT/VARIAT/COMBIN vs error #86 | 3.5 addendum documents FACT/VARIAT/COMBIN | Error appendix retains stale FACT/COMBIN/PERMUT wording | VARIAT is documented; PERMUT alias is not established; error text is inconsistent |
 | MENU attribute value 64 | Not part of 3.5 addendum | German page 389 prints 64 for both clear-checkmark and activate-item | Preserve source duplicate; do not silently repair |
 | Intuition timer event | English manual prints 4194303 beside &H400000 in its IDCMP table | German p.378 gives 4194304; event descriptions repeat 4194303 | Resolve as decimal typo: &H400000 = 4194304 |
@@ -130,7 +130,7 @@ Names are normalized only for navigation; this table does not settle OCR spellin
 
 ## Resolved source discrepancies (2026-11-08)
 
-- **MAT INV:** `MAT INV destination()=source()` is established by the 3.5 addendum's detailed definition and worked example (printed p. 13-30), and independently by the German book (p. 475). The reversed summary line on 3.5 p. 13-16 is a typo.
+- **MAT INV:** `MAT INV destination()=source()` is established by the 3.5 addendum's detailed definition and worked example (printed p. 13-39), and independently by the German book (p. 475). The reversed summary line on 3.5 p. 13-16 is a typo.
 - **INTUITICKS:** use decimal `4194304` / hexadecimal `&H400000`. The repeated decimal `4194303` in event prose is a typo; the hexadecimal representation and German IDCMP table agree.
 - **Error #86 / PERMUT:** `VARIAT` is the documented function name; `PERMUT` occurs only in the inconsistent error catalogue entry. No alias is established.
 - **MENU attribute 64:** duplicate values are confirmed in the source. The runtime effect remains unknown and requires interpreter testing.
