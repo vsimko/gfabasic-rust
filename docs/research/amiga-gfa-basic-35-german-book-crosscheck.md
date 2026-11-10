@@ -11,7 +11,7 @@ Source: Wolf-Gideon Bleek, Martin Hecht, Uwe Litzkendorf, *Das große GFA-BASIC-
 
 The foreword scopes the book's main command reference to Amiga GFA-BASIC 3.0 (the introduction also refers to V3.03). This must not be generalized to the entire book: printed p. 451 opens Chapter 18 with the explicit statement that the following pages explain commands newly added in **Version 3.5**, and that the old commands have basically not changed. Printed p. 477 opens Chapter 19 and introduces additional commands and editor changes. These chapters are therefore a separately version-labelled 3.5 witness, not merely 3.0 material inferred from the cover.
 
-The page images for printed pp. 451, 454, and 477–480 were checked in the supplied scan. Page references below are printed book pages, which also happen to align with the PDF page numbers for these excerpts.
+The page images for printed pp. 451, 454, 477–480, and 488 were checked in the supplied scan. Page references below are printed book pages, which also happen to align with the PDF page numbers for these excerpts.
 
 ## 1. Matrix declarations — Chapter 18
 
@@ -71,6 +71,6 @@ This conflicts internally with Chapter 19, which explicitly documents `FACT` and
 - p. 478: `VARIAT`.
 - p. 479: `COMBIN`, `_DATA`, and `_DATA=`.
 - p. 480: DATA-pointer semantics and example.
-- p. 488 was OCR-checked for error 86; its page image has not yet been reviewed.
+- p. 488: page image confirms error 86's exact wording, `FACT/COMBIN/PERMUT nicht definiert`.
 
 This note records documentary corroboration only. It does not claim that the original interpreter has been executed.
