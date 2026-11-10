@@ -14,7 +14,7 @@
     <a href="../index.html">Documentation</a>
   </header>
   <div class="docs-layout">
-    <nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home" href="index.html">Section index</a><ul><li><a href="README.html">GFA BASIC language reference notes</a></li><li><a href="amiga-gfa-api.html">Amiga GFA BASIC API reference — initial research inventory</a></li><li><a href="amiga-gfa-basic-3.0-feature-inventory.html">Amiga GFA BASIC interpreter 3.0 — feature inventory (working draft)</a></li><li><a href="amiga-gfa-basic-3.0.html">Amiga GFA BASIC 3.0 reference research notes</a></li><li><a href="amiga-gfa-basic-35-formatter.html">Amiga GFA BASIC 3.5 formatter</a></li><li><a href="atari-gfa-api.html">Atari ST GFA BASIC API reference — research draft</a></li><li><a href="atari-gfa-basic-3.0.html">Atari ST GFA BASIC V2.xx / V3.0 — preliminary language specification</a></li></ul></nav>
+    <nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home" href="index.html">Section index</a><ul><li><a href="README.html">GFA BASIC language reference notes</a></li><li><a href="amiga-gfa-api.html">Amiga GFA BASIC API reference — initial research inventory</a></li><li><a href="amiga-gfa-basic-3.0-feature-inventory.html">Amiga GFA BASIC interpreter 3.0 — feature inventory (working draft)</a></li><li><a href="amiga-gfa-basic-3.0.html">Amiga GFA BASIC 3.0 reference research notes</a></li><li><a href="amiga-gfa-basic-35-formatter.html">Amiga GFA BASIC 3.5 formatter</a></li><li><a href="../research/amiga-gfa-basic-35-primary-reference.html">Amiga GFA BASIC 3.5 primary reference</a></li><li><a href="../research/amiga-gfa-basic-35-addendum-inventory.html">Amiga GFA BASIC 3.5 addendum inventory</a></li><li><a href="../research/amiga-gfa-basic-documentation-audit.html">Documentation coverage audit</a></li><li><a href="atari-gfa-api.html">Atari ST GFA BASIC API reference — research draft</a></li><li><a href="atari-gfa-basic-3.0.html">Atari ST GFA BASIC V2.xx / V3.0 — preliminary language specification</a></li></ul></nav>
     <main class="docs-content">
       <article>
         <h1>GFA BASIC language reference notes</h1>
@@ -53,17 +53,17 @@
 <tr>
 <td><a href="../research/amiga-gfa-basic-german-book-command-api-extraction.html">German Amiga GFA-BASIC book command/API extraction</a></td>
 <td>Amiga, DATA BECKER 1990</td>
-<td>Historical 3.0/3.03 command and OS API research, cross-checked against the English handbook's explicit 3.5 addendum; use the separate addendum inventory for detailed 3.5 matrix semantics</td>
+<td>Historical 3.0/3.03 command and OS API research, cross-checked against the English 3.5 addendum; preserve the book's stated version scope</td>
 </tr>
 <tr>
 <td><a href="../research/amiga-gfa-basic-35-primary-reference.html">Amiga GFA BASIC 3.5 primary reference</a></td>
 <td>Amiga, interpreter 3.5</td>
-<td>Primary manual identified; selected editor/addendum pages visually reviewed; full Chapter 13/14 review remains incomplete; base 3.0 language rules remain inherited candidates pending feature-level 3.5 confirmation</td>
+<td>Primary manual identified; explicitly marked 3.5 editor update and addendum page images reviewed. The base 3.0 chapters remain historical evidence unless separately confirmed for 3.5</td>
 </tr>
 <tr>
 <td><a href="../research/amiga-gfa-basic-35-addendum-inventory.html">Amiga GFA BASIC 3.5 addendum inventory</a></td>
 <td>Amiga, interpreter 3.5</td>
-<td>Selected Chapter 13/14 sections page-image reviewed; broader review remains incomplete; the <code>MAT INV</code> operand-direction conflict remains disputed and unresolved</td>
+<td>Explicit 3.5 addendum extraction with page-image review; <code>MAT INV destination()=source()</code> is resolved from the detailed definition/example (printed p. 13-30), overriding the reversed summary typo on p. 13-16. Runtime edge cases remain untested</td>
 </tr>
 <tr>
 <td><a href="../research/amiga-gfa-basic-3.0-german-source-notes.html">German Amiga GFA BASIC 3.0 source notes</a></td>
@@ -104,7 +104,7 @@
 <li>Treat later releases as separate compatibility targets until checked.</li>
 <li>Do not infer compiler support from the presence of documentation.</li>
 <li>Use original explanations and independently authored tests. Do not add scans or substantial manual reproductions.</li>
-<li>See <a href="../reference-sources.html">the source register</a> and <a href="../architecture/DIALECTS.html">dialect policy</a>.</li>
+<li>See <a href="../reference-sources.html">the source register</a>, <a href="../architecture/DIALECTS.html">dialect policy</a>, and the <a href="../research/amiga-gfa-basic-documentation-audit.html">documentation audit</a>.</li>
 </ul>
 
       </article>
