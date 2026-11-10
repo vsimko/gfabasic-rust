@@ -155,7 +155,7 @@ printf "SEND_KEY\\t96\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 sleep 0.08
 send_key 42
 printf "SEND_KEY\\t96\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-for key in 34 19 23 34 20 18 56 36 35 32; do send_key "$key"; done
+for key in 34 23 19 18 51 20 55 24 34 18; do send_key "$key"; done
 printf "SEND_KEY\\t96\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 sleep 0.08
 send_key 42
