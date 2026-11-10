@@ -6,7 +6,7 @@ title: "Amiga emulator experiment lab"
 # Amiga emulator experiment lab
 
 - Tracking: [issue #66](https://github.com/vsimko/gfabasic-rust/issues/66).
-- Status: **proposed procedure; not yet executed with a GFA BASIC image**.
+- Status: **procedure implemented and exercised against GFA BASIC 3.52; exact 3.5 interpreter validation remains blocked**.
 - Purpose: define a repeatable and evidence-safe way to compare Amiga GFA BASIC interpreter/compiler behavior with the applicable manuals.
 - Non-goal: this document does not establish that an archive-labelled release is a particular interpreter or compiler version.
 
