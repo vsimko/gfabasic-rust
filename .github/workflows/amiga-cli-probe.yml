@@ -6,9 +6,11 @@ on:
       - "experiment/amiga-cli-stdin-probe"
     paths:
       - ".github/workflows/amiga-cli-probe.yml"
+      - "tests/interpreter-probes/amiga-3.5/regression-suite.LST"
   pull_request:
     paths:
       - ".github/workflows/amiga-cli-probe.yml"
+      - "tests/interpreter-probes/amiga-3.5/regression-suite.LST"
   workflow_dispatch:
 
 permissions:
@@ -84,12 +86,7 @@ jobs:
 
       - name: Prepare CLI input and boot volume
         run: |
-          cat > amiga-volume/factzero.LST <<'EOF'
-          x = FACT(0)
-          y = FACT(1)
-          z = FACT(2)
-          PRINT x, y, z
-          EOF
+          cp tests/interpreter-probes/amiga-3.5/regression-suite.LST amiga-volume/factzero.LST
           # If the process attaches its standard input to a command console,
           # this direct-mode command should create an ASCII listing on GFAVol.
           printf 'LIST "Work:stdin-save.LST"\n' > amiga-volume/cli-input.txt
@@ -205,6 +202,21 @@ jobs:
             printf "SEND_MOUSE\\t0\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
             sleep 3
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-merge.png" | timeout 5s nc -U -N "${ipc_socket_path:-}" || true
+
+            # Execute the merged regression listing (Shift+F10), then dismiss
+            # the interpreter's return/stop dialog with F10.
+            printf "SEND_KEY\\t96\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+            sleep 0.2
+            printf "SEND_KEY\\t89\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+            sleep 0.2
+            printf "SEND_KEY\\t89\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+            sleep 0.2
+            printf "SEND_KEY\\t96\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+            sleep 5
+            printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-run.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+            printf "SEND_KEY\\t68\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+            sleep 0.2
+            printf "SEND_KEY\\t68\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
             sleep 1
             if kill -0 "$emulator_pid" 2>/dev/null; then
               echo "EMULATOR_ALIVE_AFTER_MERGE=yes"
@@ -271,7 +283,7 @@ jobs:
               printf "MISSING: %s\\n" "$diagnostic" > "artifacts/amiga-cli-probe/$diagnostic.missing"
             fi
           done
-          for screenshot in editor-before-merge.png merge-dialog.png merge-file-row-pointer.png merge-file-selected.png after-shortcut.png merge-gadget-pointer.png after-merge.png save-menu-pointer.png save-dialog.png save-button-pointer.png after-save.png; do
+          for screenshot in editor-before-merge.png merge-dialog.png merge-file-row-pointer.png merge-file-selected.png after-shortcut.png merge-gadget-pointer.png after-merge.png after-run.png save-menu-pointer.png save-dialog.png save-button-pointer.png after-save.png; do
             test -s "artifacts/amiga-cli-probe/$screenshot"
           done
           # Amiga Kickstart screenshots use bright text on a saturated blue background.
@@ -291,6 +303,14 @@ jobs:
             echo "::error::The editor screenshot does not show the merged LST source."
             exit 1
           fi
+
+          # Verify the interpreter executed the full regression listing and wrote
+          # its labelled results to the guest disk before checking tokenized Save.
+          xdftool artifacts/amiga-cli-probe/factzero.adf read FACT.OUT artifacts/amiga-cli-probe/FACT.OUT
+          grep -Fq 'FACT(0..2)' artifacts/amiga-cli-probe/FACT.OUT
+          grep -Fq 'ARITHMETIC:' artifacts/amiga-cli-probe/FACT.OUT
+          grep -Fq 'FOR-NEXT:' artifacts/amiga-cli-probe/FACT.OUT
+          grep -Fq 'STRINGS:' artifacts/amiga-cli-probe/FACT.OUT
 
           # Verify the Editor's tokenized Save created a non-empty .GFA on the ADF.
           xdftool artifacts/amiga-cli-probe/factzero.adf list / all > artifacts/amiga-cli-probe/adf-after-save-list.txt
