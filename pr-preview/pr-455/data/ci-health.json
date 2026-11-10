@@ -1,6 +1,6 @@
 {
   "repository": "vsimko/gfabasic-rust",
-  "generated_at": "2026-11-10T20:02:21.658509Z",
+  "generated_at": "2026-11-10T20:04:21.955596Z",
   "freshness_threshold_hours": 168,
   "workflows": [
     {
@@ -10,26 +10,26 @@
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/docs.yml",
       "state": "in_progress",
       "latest": {
-        "id": 42891208624,
+        "id": 42891546037,
         "name": "Documentation checks",
         "status": "in_progress",
         "event": "pull_request",
         "branch": "catalogue/base-manual-numeric-string-functions",
-        "created_at": "2026-11-10T20:02:03Z",
-        "updated_at": "2026-11-10T20:02:07Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42891208624",
+        "created_at": "2026-11-10T20:04:04Z",
+        "updated_at": "2026-11-10T20:04:12Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42891546037",
         "age_hours": 0,
         "freshness": "fresh"
       },
       "last_success": {
-        "id": 42890667562,
+        "id": 42891208624,
         "name": "Documentation checks",
         "status": "success",
         "event": "pull_request",
         "branch": "catalogue/base-manual-numeric-string-functions",
-        "created_at": "2026-11-10T19:58:54Z",
-        "updated_at": "2026-11-10T19:59:12Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42890667562",
+        "created_at": "2026-11-10T20:02:03Z",
+        "updated_at": "2026-11-10T20:02:27Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42891208624",
         "age_hours": 0,
         "freshness": "fresh"
       }
@@ -227,26 +227,26 @@
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/pr-preview.yml",
       "state": "in_progress",
       "latest": {
-        "id": 42891208641,
+        "id": 42891546033,
         "name": "Pull request website preview",
         "status": "in_progress",
         "event": "pull_request",
         "branch": "catalogue/base-manual-numeric-string-functions",
-        "created_at": "2026-11-10T20:02:03Z",
-        "updated_at": "2026-11-10T20:02:07Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42891208641",
+        "created_at": "2026-11-10T20:04:04Z",
+        "updated_at": "2026-11-10T20:04:10Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42891546033",
         "age_hours": 0,
         "freshness": "fresh"
       },
       "last_success": {
-        "id": 42890669385,
+        "id": 42891208641,
         "name": "Pull request website preview",
         "status": "success",
         "event": "pull_request",
         "branch": "catalogue/base-manual-numeric-string-functions",
-        "created_at": "2026-11-10T19:58:55Z",
-        "updated_at": "2026-11-10T19:59:18Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42890669385",
+        "created_at": "2026-11-10T20:02:03Z",
+        "updated_at": "2026-11-10T20:02:39Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42891208641",
         "age_hours": 0,
         "freshness": "fresh"
       }
