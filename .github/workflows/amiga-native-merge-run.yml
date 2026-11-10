@@ -210,10 +210,23 @@ jobs:
             printf "SEND_KEY\\t68\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
             sleep 0.2
             printf "SEND_KEY\\t68\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-            sleep 1
+            # Allow the BASIC runtime and filesystem to finish flushing the
+            # interpreter-written output files before requesting emulator exit.
+            sleep 3
 
             kill -0 "$emulator_pid"
             printf "QUIT\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}" || true
+            # QUIT is asynchronous. Wait for Amiberry to close the floppy
+            # cleanly; the EXIT trap is only a timeout fallback.
+            for attempt in $(seq 1 10); do
+              if ! kill -0 "$emulator_pid" 2>/dev/null; then break; fi
+              sleep 1
+            done
+            if kill -0 "$emulator_pid" 2>/dev/null; then
+              echo "Amiberry did not exit after QUIT; cleanup will terminate it."
+            else
+              wait "$emulator_pid" || true
+            fi
           '
           xdftool artifacts/amiga-cli-probe/factzero.adf read FACT.OUT artifacts/amiga-cli-probe/fact-output.txt
           xdftool artifacts/amiga-cli-probe/factzero.adf read GFATEST.OUT artifacts/amiga-cli-probe/gfatest-results.txt
