@@ -1,0 +1,32 @@
+' Amiga GFA BASIC 3.5 interpreter regression suite (initial seed)
+' ASCII source loaded through the native Editor Merge (F2) command.
+' Each section writes a labelled observation to FACT.OUT.
+' Keep probes small and independent; add a case only after its syntax and
+' expected result have been checked against the 3.5 manual/interpreter.
+
+OPEN "O",#1,"DF0:FACT.OUT"
+
+' --- Numeric built-in: FACT boundary values (3.5 addendum example) ---
+x = FACT(0)
+y = FACT(1)
+z = FACT(2)
+PRINT #1,"FACT(0..2):";x;y;z
+
+' --- Integer arithmetic and precedence ---
+a = 2 + 3 * 4
+b = (2 + 3) * 4
+PRINT #1,"ARITHMETIC:";a;b
+
+' --- FOR/NEXT loop ---
+sum = 0
+FOR i = 1 TO 4
+  sum = sum + i
+NEXT i
+PRINT #1,"FOR-NEXT:";sum
+
+' --- String concatenation and LEFT$ ---
+s$ = "GFA" + " BASIC"
+t$ = LEFT$(s$,3)
+PRINT #1,"STRINGS:";t$;s$
+
+CLOSE #1
