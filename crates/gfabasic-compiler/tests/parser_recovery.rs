@@ -498,7 +498,7 @@ fn parser_rejects_signed_integer_rhs_and_recovers_at_the_next_line() {
     // The current MVP accepts only unsigned decimal integer tokens as direct
     // assignment values. This guards the implementation boundary; it does not
     // claim that signed literals are invalid in the Amiga dialect.
-    let source = "x=-1\\nz=42\\n";
+    let source = "x=-1\nz=42\n";
     let mut sources = SourceMap::new();
     let source_id = sources.add_source("signed-integer-rhs.LST", source);
 
