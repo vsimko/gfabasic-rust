@@ -3,7 +3,7 @@ name: Amiga GFA BASIC regression and tokenized Save
 on:
   push:
     branches:
-      - "experiment/amiga-cli-stdin-probe"
+      - "experiment/amiga-lst-to-gfa"
     paths:
       - ".github/workflows/amiga-cli-probe.yml"
       - "tests/interpreter-probes/amiga-3.5/regression-suite.LST"
@@ -35,6 +35,7 @@ jobs:
           set -euo pipefail
           test -n "$GFA_ASSETS_TOKEN"
           mkdir -p amiga-volume/S artifacts/amiga-cli-probe
+          printf 'GFA BASIC 3.52 (private CI runtime; see docs/research/amiga-gfa-basic-352-runtime-baseline.md)\\n' > artifacts/amiga-cli-probe/interpreter-version.txt
           curl --fail --silent --show-error --location --retry 3 \
             --header "Authorization: Bearer $GFA_ASSETS_TOKEN" \
             --header "Accept: application/vnd.github.raw" \
@@ -330,7 +331,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         with:
-          name: amiga-gfa-basic-cli-stdin-probe
+          name: amiga-gfa-basic-regression-and-tokenized-save
           path: artifacts/amiga-cli-probe/
           if-no-files-found: warn
           retention-days: 7
