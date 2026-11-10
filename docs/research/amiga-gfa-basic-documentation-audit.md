@@ -39,7 +39,11 @@ Use the source register and the [3.5 primary reference notes](amiga-gfa-basic-35
 | Examples and conformance | Independently authored corpus and focused parser regressions exist | Map every example to dialect/version/evidence; distinguish documented examples from observed native behavior | [#42](https://github.com/vsimko/gfabasic-rust/issues/42) |
 | API naming and declaration identity | Canonical API catalogue and language-core/built-in registry workstreams | Reconcile prose names, registry IDs, categories, signatures and declaration status | [#283](https://github.com/vsimko/gfabasic-rust/issues/283), [#284](https://github.com/vsimko/gfabasic-rust/issues/284), [#285](https://github.com/vsimko/gfabasic-rust/issues/285) |
 
-## Registry taxonomy finding: GURU function\n\nThe 3.5 addendum documents both a `GURU` statement (enable/disable checking) and a distinct `GURU` function (returns the current GURU number), on printed pp. 13-36 (combined update scan pp. 14-6–14-7). The registry currently places both declarations in `api/registry/amiga/special-and-platform-commands.toml`; the function has stable ID `gfa.amiga.system.guru-number`. The built-in catalogue issue #285 and the function inventory in #307 should explicitly account for this existing declaration. Do not add a second `gfa.language.*` record until the project decides whether this Amiga-specific intrinsic belongs in the language-core namespace or remains in the Amiga profile.\n\n## Resolved source discrepancy: MAT INV
+## Registry taxonomy finding: GURU function
+
+The 3.5 addendum documents both a `GURU` statement (enable/disable checking) and a distinct `GURU` function (returns the current GURU number), on printed pp. 13-36 (combined update scan pp. 14-6–14-7). The registry currently places both declarations in `api/registry/amiga/special-and-platform-commands.toml`; the function has stable ID `gfa.amiga.system.guru-number`. The built-in catalogue issue #285 and the function inventory in #307 should explicitly account for this existing declaration. Do not add a second `gfa.language.*` record until the project decides whether this Amiga-specific intrinsic belongs in the language-core namespace or remains in the Amiga profile.
+
+## Resolved source discrepancy: MAT INV
 
 The 3.5 addendum inventory resolves the operand direction as:
 
@@ -48,6 +52,10 @@ The 3.5 addendum inventory resolves the operand direction as:
 The detailed definition and worked example on printed p. 13-30 say that the inverse of source matrix `a()` is written to destination `b()`. The reversed summary form on printed p. 13-16 is treated as a source typo. The German 1990 book's p. 475 is corroboration only, because that book's main interpreter reference is version-scoped to 3.0/V3.03.
 
 This resolves the documented syntax direction only. Runtime edge cases, parser support and conformance remain separate. The older progress note in issue #47 has been explicitly corrected by a comment; do not treat its earlier “both directions rejected pending evidence” statement as current source status.
+
+## Corpus cross-check
+
+The corpus currently has 13 independently authored Amiga 3.5 fixtures marked `verified` on cited page-image evidence, as documented in `tests/corpus/README.md`. These cover selected matrix operations and combinatorics only. The corpus remains `research_only`: there is no general corpus runner, and none of these fixtures constitutes original-interpreter execution. The three Amiga 3.0 fixtures remain `candidate`; their presence does not establish 3.5 compatibility. Issue #42 previously retained a stale four-fixture/partial-addendum-review summary, now corrected to reflect the current inventory and the completed Chapter 13–14 page-image review recorded in #65.
 
 ## Required status vocabulary
 
