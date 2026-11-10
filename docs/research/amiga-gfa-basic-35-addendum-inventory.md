@@ -145,7 +145,7 @@ The following table maps every declaration in the current 3.5 addendum registry 
 | MAT SUB | gfa.language.matrix.mat-sub | Chapter 13, pp. 13-18–13-20 |
 | MAT MUL | gfa.language.matrix.mat-mul | Chapter 13, pp. 13-20–13-22 |
 | MAT TRANS | gfa.language.matrix.mat-trans | Chapter 13, pp. 13-19–13-20 |
-| MAT NORM | gfa.language.matrix.mat-norm | Chapter 13, pp. 13-31–13-33 |
+| MAT NORM | gfa.language.matrix.mat-norm | Chapter 13, pp. 13-22–13-25 |
 | MAT DET | gfa.language.matrix.mat-det | Chapter 13, p. 13-26 |
 | MAT QDET | gfa.language.matrix.mat-qdet | Chapter 13, pp. 13-27–13-28 |
 | MAT RANG | gfa.language.matrix.mat-rang | Chapter 13, p. 13-29 |
