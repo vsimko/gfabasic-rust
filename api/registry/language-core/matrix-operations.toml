@@ -503,8 +503,8 @@ errors = []
 [declarations.evidence]
 source-scope = "amiga-3.5-addendum"
 status = "book-documented"
-sources = ["AM-INTERPRETER-35"]
-printed-pages = ["Chapter 13, printed p. 13-26"]
+sources = ["AM-INTERPRETER-35", "AM-INTERPRETER-30-35-UPDATE-SCAN"]
+printed-pages = ["Supplied 469-page manual, Chapter 13, printed p. 13-26; combined update scan, printed pp. 13-34–13-36"]
 notes = ["The determinant and square-submatrix selection rules were checked against the addendum page images."]
 
 [declarations.implementation]
@@ -552,8 +552,8 @@ errors = []
 [declarations.evidence]
 source-scope = "amiga-3.5-addendum"
 status = "book-documented"
-sources = ["AM-INTERPRETER-35"]
-printed-pages = ["Chapter 13, printed pp. 13-27–13-28"]
+sources = ["AM-INTERPRETER-35", "AM-INTERPRETER-30-35-UPDATE-SCAN"]
+printed-pages = ["Supplied 469-page manual, Chapter 13, printed pp. 13-27–13-28; combined update scan, printed pp. 13-36–13-37"]
 notes = ["The page-image-reviewed addendum warns to use MAT DET for critical matrices whose determinant is close to zero."]
 
 [declarations.implementation]
@@ -601,8 +601,8 @@ errors = []
 [declarations.evidence]
 source-scope = "amiga-3.5-addendum"
 status = "book-documented"
-sources = ["AM-INTERPRETER-35"]
-printed-pages = ["Chapter 13, printed p. 13-29"]
+sources = ["AM-INTERPRETER-35", "AM-INTERPRETER-30-35-UPDATE-SCAN"]
+printed-pages = ["Supplied 469-page manual, Chapter 13, printed p. 13-29; combined update scan, printed pp. 13-38–13-39"]
 notes = ["The square-matrix and submatrix selection rules were checked against the addendum page images."]
 
 [declarations.implementation]
@@ -647,9 +647,9 @@ errors = []
 [declarations.evidence]
 source-scope = "amiga-3.5-addendum"
 status = "book-documented"
-sources = ["AM-INTERPRETER-35", "AM-BOOK-DE-1990"]
-printed-pages = ["Chapter 13, printed p. 13-30 detailed description and worked example; German companion book, printed p. 475"]
-notes = ["The detailed 3.5 addendum definition and worked example specify destination-first MAT INV b()=a(): the inverse of source a() is written to destination b().", "The German companion book independently confirms destination-first MAT INV i()=m() (printed p. 475).", "The 3.5 addendum command summary on printed p. 13-16 reverses the operands as MAT INV a()=b(); the detailed definition/example and companion-book confirmation support treating that summary notation as a source typo. The summary discrepancy is retained here for traceability, not as a second accepted syntax."]
+sources = ["AM-INTERPRETER-35", "AM-INTERPRETER-30-35-UPDATE-SCAN", "AM-BOOK-DE-1990"]
+printed-pages = ["Supplied 469-page manual, Chapter 13, printed p. 13-30 detailed description and worked example; combined update scan, Chapter 13, printed p. 13-39; German companion book, printed p. 475"]
+notes = ["The detailed 3.5 addendum definition and worked example specify destination-first MAT INV b()=a(): the inverse of source a() is written to destination b().", "The German companion book independently confirms destination-first MAT INV i()=m() (printed p. 475).", "The supplied manual command summary on printed p. 13-16 (combined update scan, p. 13-22) reverses the operands as MAT INV a()=b(); the detailed definition/example and companion-book confirmation support treating that summary notation as a source typo. The summary discrepancy is retained here for traceability, not as a second accepted syntax."]
 
 [declarations.implementation]
 status = "not-implemented"
