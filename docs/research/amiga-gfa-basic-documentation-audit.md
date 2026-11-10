@@ -53,6 +53,10 @@ The detailed definition and worked example on printed p. 13-30 say that the inve
 
 This resolves the documented syntax direction only. Runtime edge cases, parser support and conformance remain separate. The older progress note in issue #47 has been explicitly corrected by a comment; do not treat its earlier “both directions rejected pending evidence” statement as current source status.
 
+## Registry population cross-check
+
+The current registry README reports an interim 3.5 addendum catalogue of **24 language-core declarations plus four Amiga-profile declarations (28 total)**. The four Amiga-profile records are `PCOLOR`, the negative-screen-number `OPENW` variant, the `GURU` statement, and the `GURU()` function. The language-core subset includes `FACT`, `VARIAT`, and `COMBIN`; the GURU function remains Amiga-profile-scoped under `gfa.amiga.system.guru-number` and must not be duplicated under a second ID. This 28-entry addendum slice is not the complete language-wide 3.5 denominator requested by #307. The 114 function candidates in #307 include 3.0 base-text candidates and two disputed name slots; they must not be treated as 114 verified 3.5 declarations.
+
 ## Corpus cross-check
 
 The corpus currently has 13 independently authored Amiga 3.5 fixtures marked `verified` on cited page-image evidence, as documented in `tests/corpus/README.md`. These cover selected matrix operations and combinatorics only. The corpus remains `research_only`: there is no general corpus runner, and none of these fixtures constitutes original-interpreter execution. The three Amiga 3.0 fixtures remain `candidate`; their presence does not establish 3.5 compatibility. Issue #42 previously retained a stale four-fixture/partial-addendum-review summary, now corrected to reflect the current inventory and the completed Chapter 13–14 page-image review recorded in #65.
