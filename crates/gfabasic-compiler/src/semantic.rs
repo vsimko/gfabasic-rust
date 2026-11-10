@@ -139,6 +139,7 @@ pub fn resolve_prototype_symbols(
             | Statement::MatMulScalar { span, .. }
             | Statement::MatMulScale { span, .. }
             | Statement::MatAnalysis { span, .. }
+            | Statement::MatInv { span, .. }
             | Statement::MatCopy { span, .. }
             | Statement::MatRead { span, .. }
             | Statement::MatInput { span, .. } => errors.push(SemanticError {
