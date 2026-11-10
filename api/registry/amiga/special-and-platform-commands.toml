@@ -154,10 +154,10 @@ form = "GURU"
 contexts = ["expression"]
 
 [declarations.signature]
-type = "integer GURU number"
+type = "GURU number (return type unspecified by source)"
 
 [declarations.semantics]
-summary = "Returns the GURU number associated with the current GURU condition."
+summary = "Returns the GURU number associated with the current GURU condition; the addendum does not specify its return type."
 side-effects = []
 
 [declarations.evidence]
