@@ -123,6 +123,8 @@ pub enum Statement {
         order: Option<i64>,
         span: SourceSpan,
     },
+    /// Source-resolved syntax: write the inverse of source to destination.
+    MatInv { destination: String, destination_span: SourceSpan, source: String, source_span: SourceSpan, span: SourceSpan },
     MatCopy {
         operation: MatCopyOperation,
         destination: String,
@@ -1031,6 +1033,14 @@ impl Parser {
         })
     }
 
+    fn parse_mat_inv(&mut self, start: SourceSpan) -> Result<Statement, Box<Diagnostic>> {
+        let (destination, destination_span) = self.parse_matrix_reference()?;
+        self.expect(TokenKind::Equals, "'=' in MAT INV statement")?;
+        let (source, source_span) = self.parse_matrix_reference()?;
+        let span = SourceSpan::new(self.source_id, start.start, source_span.end);
+        Ok(Statement::MatInv { destination, destination_span, source, source_span, span })
+    }
+
     fn parse_mat_statement(&mut self, start: SourceSpan) -> Result<Statement, Box<Diagnostic>> {
         let operation = self.advance_required("a MAT operation name")?;
         let operation_name = match operation.kind {
@@ -1064,6 +1074,7 @@ impl Parser {
             "DET" => self.parse_mat_analysis(start, MatAnalysisOperation::Det),
             "QDET" => self.parse_mat_analysis(start, MatAnalysisOperation::QDet),
             "RANG" => self.parse_mat_analysis(start, MatAnalysisOperation::Rang),
+            "INV" => self.parse_mat_inv(start),
             "MUL" => self.parse_mat_mul(start),
             "ADD" => self.parse_mat_arithmetic(start, MatArithmeticOperation::Add),
             "SUB" => self.parse_mat_arithmetic(start, MatArithmeticOperation::Sub),
@@ -1798,14 +1809,29 @@ mod tests {
     }
 
     #[test]
+    fn parses_mat_inv_destination_first_and_preserves_operand_spans() {
+        let source = "MAT INV b()=a()\n";
+        let mut sources = SourceMap::new();
+        let source_id = sources.add_source("mat-inv.bas", source);
+        let program = parse(source_id, source).expect("documented destination-first syntax");
+        let Statement::MatInv { destination, destination_span, source: matrix_source, source_span, span } = &program.statements[0] else { panic!("expected MAT INV AST node"); };
+        assert_eq!(destination, "b");
+        assert_eq!(matrix_source, "a");
+        assert_eq!(&source[destination_span.start..destination_span.end], "b()");
+        assert_eq!(&source[source_span.start..source_span.end], "a()");
+        assert_eq!(&source[span.start..span.end], "MAT INV b()=a()");
+    }
+
+    #[test]
     fn rejects_malformed_matrix_statement_shapes() {
         for source_text in [
             "MAT ONE a(3)\n",
             "MAT SET a()\n",
             "MAT SET a()=7,8\n",
             "MAT INV a()\n",
-            "MAT INV b()=a()\n",
             "MAT INV a()=b()\n",
+            "MAT INV b()=a(1)\n",
+            "MAT INV b(1)=a()\n",
         ] {
             let mut sources = SourceMap::new();
             let source_id = sources.add_source("malformed-matrix.bas", source_text);
