@@ -1,0 +1,75 @@
+schema-version = 1
+metric-id = "amiga-gfa-basic-3.5-language-constructs"
+issue = 307
+target-dialect = "amiga-gfa-basic-interpreter"
+target-version = "3.5"
+
+[denominator]
+include-kinds = [
+  "built-in-function",
+  "statement",
+  "command",
+  "predefined-variable",
+  "special-variable",
+  "operator",
+  "built-in-data-type",
+  "predefined-constant",
+  "reserved-keyword",
+  "compound-control-construct",
+]
+include-known-3.0-base-manual-candidates = true
+include-known-unverified-3.5-availability = true
+exclude-unknown-identity-or-classification = true
+exclude-topic-family-placeholders = true
+exclude-reference-material = true
+
+[denominator.normalization]
+function-signature-variants = "one-construct"
+command-syntax-variants = "one-construct"
+overloaded-operators = "one-construct"
+same-semantics-synonyms = "one-canonical-construct-with-aliases"
+compound-control-flow = "one-construct"
+count-constituent-control-keywords-separately = false
+count_named_predefined_constants_individually = true
+count_special_variables_individually = true
+count_distinct_operators_individually = true
+count_builtin_data_types_with_own_declaration_individually = true
+count_variable_type_suffixes = false
+count_numeric_or_string_literals = false
+
+[denominator.exclusions]
+editor_only_features = true
+direct_amiga_os_library_calls = true
+compiler_only_constructs = true
+user_defined_procedures_functions_variables = true
+numeric_and_string_literals = true
+
+[evidence]
+prefer-explicit-3.5-documentation-over-conflicting-3.0-base-manual = true
+accept-gfa-basic-3.52-runtime-test-as-3.5-compatibility-evidence = true
+record-exact-tested-runtime-version = true
+preserve-original-source-version = true
+promote-3.0-evidence-to-explicit-3.5-evidence = false
+
+[numerator]
+implementation-status-exactly = "implemented"
+require-source-implementation = true
+require-passing-confirming-test = true
+count-partial = false
+count-prototype = false
+count-planned = false
+count-research = false
+count-blocked = false
+
+[dimensions]
+independent = [
+  "source-evidence",
+  "implementation",
+  "target-platform-support",
+  "runtime-observation",
+  "conformance",
+]
+
+[publishing]
+allow-language-wide-total-before-complete-declaration-inventory = false
+allow-interim-explicitly-labelled-subset-metric = true
