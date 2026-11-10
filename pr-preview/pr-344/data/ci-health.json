@@ -1,6 +1,6 @@
 {
   "repository": "vsimko/gfabasic-rust",
-  "generated_at": "2026-11-10T07:35:23.084764Z",
+  "generated_at": "2026-11-10T07:40:19.873532Z",
   "freshness_threshold_hours": 168,
   "workflows": [
     {
@@ -227,14 +227,14 @@
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/pr-preview.yml",
       "state": "in_progress",
       "latest": {
-        "id": 42776301357,
+        "id": 42776881675,
         "name": "Pull request website preview",
         "status": "in_progress",
         "event": "pull_request",
         "branch": "experiment/amiga-lst-to-gfa",
-        "created_at": "2026-11-10T07:35:03Z",
-        "updated_at": "2026-11-10T07:35:11Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42776301357",
+        "created_at": "2026-11-10T07:40:04Z",
+        "updated_at": "2026-11-10T07:40:08Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42776881675",
         "age_hours": 0,
         "freshness": "fresh"
       },
