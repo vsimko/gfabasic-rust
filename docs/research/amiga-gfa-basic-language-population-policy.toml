@@ -17,8 +17,8 @@ include-kinds = [
   "reserved-keyword",
   "compound-control-construct",
 ]
-include-known-3.0-base-manual-candidates = true
-include-known-unverified-3.5-availability = true
+"include-known-3.0-base-manual-candidates" = true
+"include-known-unverified-3.5-availability" = true
 exclude-unknown-identity-or-classification = true
 exclude-topic-family-placeholders = true
 exclude-reference-material = true
@@ -45,11 +45,11 @@ user_defined_procedures_functions_variables = true
 numeric_and_string_literals = true
 
 [evidence]
-prefer-explicit-3.5-documentation-over-conflicting-3.0-base-manual = true
-accept-gfa-basic-3.52-runtime-test-as-3.5-compatibility-evidence = true
+"prefer-explicit-3.5-documentation-over-conflicting-3.0-base-manual" = true
+"accept-gfa-basic-3.52-runtime-test-as-3.5-compatibility-evidence" = true
 record-exact-tested-runtime-version = true
 preserve-original-source-version = true
-promote-3.0-evidence-to-explicit-3.5-evidence = false
+"promote-3.0-evidence-to-explicit-3.5-evidence" = false
 
 [numerator]
 implementation-status-exactly = "implemented"
