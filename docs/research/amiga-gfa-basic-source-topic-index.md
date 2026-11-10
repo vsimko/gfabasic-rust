@@ -59,7 +59,7 @@ The *GFA BASIC 3.5 Interpreter* manual contains a 3.0 base plus explicitly ident
 | Matrix READ/PRINT/INPUT | 13-3–13-6 | 13-3–13-6 | MAT PRINT punctuation visually checked; MAT INPUT is ASCII-file input |
 | Matrix copy, transpose and vector special cases | 13-8–13-20 | 13-8–13-20 | MAT CPY/XCPY/TRANS and separate MAT COPY forms are distinguished by source |
 | Matrix arithmetic and multiplication | 13-22–13-33 | 13-22–13-33 | Element-wise, scalar, matrix and vector forms; preserve uncertain operand orientation |
-| Matrix norm, determinant, quick determinant, rank and inverse | 13-31–13-41 | 13-31–13-41 | MAT INV destination-first form resolved from detailed definition/example; summary on p. 13-16 is reversed typo |
+| Matrix norm, determinant, quick determinant, rank and inverse | 13-22–13-30 | 13-22–13-30 | MAT INV destination-first form resolved from detailed definition/example; summary on p. 13-16 is reversed typo |
 | FACT, VARIAT, COMBIN | 13-33–13-34 | 14-1–14-2 | Explicit added mathematical functions |
 | Negative-screen OPENW, PCOLOR | 13-34 | 14-3–14-4 | Additional interpreter commands |
 | _DATA, _DATA=, _0…_9, GURU statement/function | 13-34–13-36 | 14-5–14-7 | Special variables and GURU behavior; preserve error-code caveats |
