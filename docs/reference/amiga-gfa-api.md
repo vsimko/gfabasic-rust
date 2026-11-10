@@ -122,17 +122,18 @@ The French 3.0 book's table of contents establishes that the following subjects 
 
 Hardware, memory, Exec, port, and device operations require particular care. Their Amiga semantics must be specified independently of the Linux adapter. Do not expose raw Amiga addresses, structures, or side effects as portable Linux behavior.
 
-## 5. Linux runtime status
+## 5. Current implementation and Linux target status
 
-The repository currently has no Rust workspace, compiler, runtime, CLI, or CI workflow. Therefore:
+This page remains a historical Amiga 3.0 research draft; the repository has since acquired a Rust workspace, an experimental compiler frontend, runtime and Linux platform crates, a CLI build path, and CI workflows. The earlier statement that no workspace/compiler/runtime/CLI/CI exists is obsolete.
 
-- No Amiga API entry is implemented for Linux.
-- No host mapping has been accepted for Amiga devices, graphics, windows, menus, events, sound, ports, memory, or Exec operations.
-- The planned Linux/SDL3 platform layer is an implementation boundary, not evidence that SDL3 behavior is equivalent to Amiga behavior.
-- Unsupported or hardware-dependent operations must eventually produce explicit diagnostics or require an explicit unsafe/capability policy; they must not be silently ignored.
-- No conformance result or runtime observation is claimed by this document.
+The current implementation boundary is narrower than this inventory:
 
-The [current compatibility matrix](../architecture/COMPATIBILITY-MATRIX.md) remains authoritative for project implementation status.
+- The canonical API registry is maintained under `api/registry/`; its [README](../../api/registry/README.md) records 24 language-core and four Amiga-profile declarations in the interim 3.5 addendum slice.
+- The four Amiga-profile declarations (`PCOLOR`, the negative-screen `OPENW` variant, `GURU`, and `GURU()`) are not implemented. Linux target support remains unknown and conformance remains untested.
+- The current compiler/runtime prototype implements only a restricted combinatorics slice (`FACT`, `VARIAT`, `COMBIN`) from the language-core profile. This does not implement the Amiga APIs listed on this page.
+- No host mapping has been accepted for Amiga devices, graphics, windows, menus, events, sound, ports, memory, or Exec operations. The existence of a Linux platform crate does not establish semantic equivalence with Amiga behavior or SDL3.
+- Hardware-dependent or unavailable operations must eventually produce explicit diagnostics or require an explicit capability policy; they must not be silently ignored.
+- This historical 3.0 inventory makes no runtime-conformance claim. Consult the [compatibility matrix](../architecture/COMPATIBILITY-MATRIX.md), [canonical API registry](../../api/registry/README.md), and [3.5 documentation audit](../research/amiga-gfa-basic-documentation-audit.md) for current status.
 
 ## 6. Next extraction and acceptance work
 
@@ -143,7 +144,7 @@ Before promoting this research draft into an accepted API reference:
 3. Keep the German `AM-BOOK-DE-1990` edition and its 3.03 scope separate; record cross-checks without merging pagination.
 4. Obtain evidence for later releases before making any 3.04, 3.5, 3.51, or 3.52 availability claim.
 5. Decide which declarations belong to the language core and which require the Amiga API profile.
-6. Add declarations to the proposed API registry only after its schema and ownership decisions are accepted under issue #12.
+6. Add or revise declarations only in the accepted canonical TOML registry under `api/registry/`, following its schema, profile ownership, provenance, and validation rules.
 7. Define independently authored probes and conformance fixtures; preserve source provenance and rights information.
 8. Classify Linux runtime support per declaration only after an explicit semantic mapping, implementation, and tests exist.
 
