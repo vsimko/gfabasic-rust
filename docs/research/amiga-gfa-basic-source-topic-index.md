@@ -74,7 +74,7 @@ Detailed definitions, examples, disputes and evidence boundaries are in the [3.5
 | Matrix array types | Floating-point fields, 1D/2D | Broader “numeric fields” phrasing | Use narrower explicit 3.5 constraint |
 | Matrix copy | Distinct MAT CPY and MAT COPY forms | MAT CPY documented | Do not merge spellings |
 | Vector multiplication | Outer/dyadic, inner/scalar, vector–matrix–vector | Less complete treatment | Preserve explicit 3.5 addendum forms |
-| Inverse | Summary p. 13-16 reverses operands; detailed definition/example p. 13-30 (469-page manual) and p. 13-39 (combined update scan) specify destination first | German book p. 475 independently agrees | Use MAT INV destination()=source(); summary line is a typo |
+| Inverse | Summary p. 13-16 (469-page manual) / p. 13-22 (combined scan) reverses operands; detailed definition/example p. 13-30 / p. 13-39 respectively specify destination first | German book p. 475 independently agrees | Use MAT INV destination()=source(); summary line is a typo |
 | FACT/VARIAT/COMBIN vs error #86 | 3.5 addendum documents FACT/VARIAT/COMBIN | Error appendix retains stale FACT/COMBIN/PERMUT wording | VARIAT is documented; PERMUT alias is not established; error text is inconsistent |
 | MENU attribute value 64 | Not part of 3.5 addendum | German page 389 prints 64 for both clear-checkmark and activate-item | Preserve source duplicate; do not silently repair |
 | Intuition timer event | English manual prints 4194303 beside &H400000 in its IDCMP table | German p.378 gives 4194304; event descriptions repeat 4194303 | Resolve as decimal typo: &H400000 = 4194304 |
@@ -122,7 +122,7 @@ This is a compact name-to-page index for the principal interpreter families extr
 | `SOUND`, `WAVE`, `SAY`, `TRANSLATE$` | 139–144 | Sound and speech output |
 | `DATA`, `READ`, `RESTORE`, `DEFBIT`, `DEFBYT`, `DEFINT`, `DEFSTR`, `DEFWRD`, `LOCAL`, `PROCEDURE`, `FUNCTION`, `DEFFN`, `CALL`, `EXEC`, `MONITOR`, `RCALL` | 145–191 | Program structure, declarations and external code |
 | `DUMP`, `MODE`, `TRACE$`, `TRON`, `TROFF`, `ERROR`, `ERR`, `ERR$`, `RESUME` | 331–361 | Diagnostics, error handling and interpreter control |
-| `MAT BASE`, `MAT CLR`, `MAT SET`, `MAT ONE`, `MAT READ`, `MAT PRINT`, `MAT INPUT`, `MAT CPY`, `MAT XCPY`, `MAT TRANS`, `MAT ADD`, `MAT SUB`, `MAT MUL`, `MAT NORM`, `MAT DET`, `MAT QDET`, `MAT RANG`, `MAT INV` | 13-1–13-41 (3.5 addendum) | Version-specific matrix/vector API; floating-point fields only |
+| `MAT BASE`, `MAT CLR`, `MAT SET`, `MAT ONE`, `MAT READ`, `MAT PRINT`, `MAT INPUT`, `MAT CPY`, `MAT XCPY`, `MAT TRANS`, `MAT ADD`, `MAT SUB`, `MAT MUL`, `MAT NORM`, `MAT DET`, `MAT QDET`, `MAT RANG`, `MAT INV` | 13-1–13-36 (469-page manual); 13-1–13-41 (combined update scan) | Version-specific matrix/vector API; floating-point fields only |
 | `FACT`, `VARIAT`, `COMBIN`, `PCOLOR`, `GURU`, `_DATA`, `_DATA=`, `_0`…`_9` | 13-33–13-36 (3.5 addendum) | Explicit additional 3.5 interpreter features |
 
 Names are normalized only for navigation; this table does not settle OCR spellings where the source is damaged or internally inconsistent. For example, the book's error appendix uses `PERMUT` where Chapter 19 describes `VARIAT`, and the function inventory retains disputed `CVD/CVF` and `MKD/MKF` name slots. Consult the [candidate manifest](amiga-gfa-basic-candidates.toml) and the detailed source notes before using any spelling as a parser requirement.
