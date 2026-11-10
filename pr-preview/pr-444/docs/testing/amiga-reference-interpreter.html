@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The project targets Amiga GFA BASIC interpreter 3.5. A separately supplied GFA BASIC 3.52 (1990) interpreter is retained in the private repository vsimko/gfabasic-private-assets for version-specific research only. Do …">
+  <title>Original Amiga interpreter reference asset · GFA BASIC Rust documentation</title>
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body class="docs-site">
+  <header class="docs-header">
+    <a href="../../index.html">GFA BASIC Rust</a>
+    <span aria-hidden="true">/</span>
+    <a href="../index.html">Documentation</a>
+  </header>
+  <div class="docs-layout">
+    <nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home" href="index.html">Section index</a><ul><li><a href="amiga-reference-interpreter.html">Original Amiga interpreter reference asset</a></li></ul></nav>
+    <main class="docs-content">
+      <article>
+        <h1>Original Amiga interpreter reference asset</h1>
+        <p class="docs-meta"><span>Testing Guide</span></p>
+        <h1 id="original-amiga-interpreter-reference-asset">Original Amiga interpreter reference asset</h1>
+<p>The project targets <strong>Amiga GFA BASIC interpreter 3.5</strong>. A separately supplied
+GFA BASIC 3.52 (1990) interpreter is retained in the private repository
+<code>vsimko/gfabasic-private-assets</code> for version-specific research only. Do not
+treat 3.52 observations as evidence for 3.5.</p>
+<h2 id="prepare-the-private-352-executable">Prepare the private 3.52 executable</h2>
+<p>The manual GitHub Actions workflow
+<a href="https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/amiga-reference.yml"><code>Prepare Amiga reference interpreter</code></a>
+downloads the <code>GFABasic</code> executable from the private assets repository and
+checks its exact size, SHA-256, and Amiga HUNK_HEADER magic before packaging it
+as a short-lived workflow artifact.</p>
+<p>Required repository secret in <code>vsimko/gfabasic-rust</code>:</p>
+<ul>
+<li><code>GFA_ASSETS_TOKEN</code>: fine-grained PAT limited to
+<code>vsimko/gfabasic-private-assets</code>, with <strong>Contents: read-only</strong> permission.</li>
+</ul>
+<p>The workflow is deliberately <code>workflow_dispatch</code> only. It does not run for
+pull requests or ordinary pushes, and it never copies the binary into this
+public repository.</p>
+<h2 id="prepare-and-run-it">Prepare and run it</h2>
+<p>The <strong>Prepare Amiga reference interpreter</strong> workflow only fetches, verifies,
+and packages the executable. It does not execute it.</p>
+<p>The separate <strong>Amiga GFA BASIC 3.52 native Merge and Run</strong> workflow boots
+Amiberry with the private interpreter and licensed Kickstart ROM, merges an
+ASCII listing through the native editor, and runs it. Its current regression
+batch writes diagnostic output to <code>FACT.OUT</code> and terminal fixture records to
+<code>GFATEST.OUT</code>. The host validates the exact requested fixture IDs with
+<code>scripts/validate_gfatest_results.py</code>; it does not manufacture PASS records.</p>
+<p>The native workflow can be run from <strong>Actions</strong> with <strong>Run workflow</strong>. Pull
+requests that change the workflow also exercise it. It requires the
+<code>GFA_ASSETS_TOKEN</code> secret and the licensed private assets described above.
+Download the <code>amiga-gfa-basic-3.52-native-merge-run</code> artifact to inspect the
+raw result file, emulator diagnostics, and screenshots.</p>
+<h2 id="emulator-prerequisites-and-limits">Emulator prerequisites and limits</h2>
+<p>The artifact contains only the <code>GFABasic</code> executable. It does not contain an
+Amiga Kickstart ROM, Workbench disk, or full disk image. A separately licensed
+and configured Amiga environment is required before the interpreter can be
+executed in FS-UAE or another Amiga emulator. This workflow only fetches,
+validates, and packages the executable; it does not claim that the interpreter
+has been run.</p>
+<p>Do not commit commercial interpreter binaries, ROMs, or disk images to this
+public repository. Keep any version-specific observations clearly labelled
+with the exact interpreter version and media provenance.</p>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>
