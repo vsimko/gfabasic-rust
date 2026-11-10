@@ -1,6 +1,6 @@
 {
   "repository": "vsimko/gfabasic-rust",
-  "generated_at": "2026-11-10T14:58:07.583141Z",
+  "generated_at": "2026-11-10T14:59:03.269977Z",
   "freshness_threshold_hours": 168,
   "workflows": [
     {
@@ -8,16 +8,16 @@
       "file": "docs.yml",
       "note": "Markdown, JavaScript, API registry, corpus metadata and local-link validation.",
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/docs.yml",
-      "state": "success",
+      "state": "queued",
       "latest": {
-        "id": 42839404781,
+        "id": 42839611699,
         "name": "Documentation checks",
-        "status": "success",
+        "status": "queued",
         "event": "push",
         "branch": "main",
-        "created_at": "2026-11-10T14:57:39Z",
-        "updated_at": "2026-11-10T14:57:58Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42839404781",
+        "created_at": "2026-11-10T14:58:53Z",
+        "updated_at": "2026-11-10T14:58:55Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42839611699",
         "age_hours": 0,
         "freshness": "fresh"
       },
@@ -39,31 +39,10 @@
       "file": "rust.yml",
       "note": "Formatting, Clippy, workspace tests/build and formatter fixtures.",
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/rust.yml",
-      "state": "success",
-      "latest": {
-        "id": 42770641187,
-        "name": "Rust checks",
-        "status": "success",
-        "event": "push",
-        "branch": "main",
-        "created_at": "2026-11-10T06:45:23Z",
-        "updated_at": "2026-11-10T06:45:42Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42770641187",
-        "age_hours": 8,
-        "freshness": "fresh"
-      },
-      "last_success": {
-        "id": 42770641187,
-        "name": "Rust checks",
-        "status": "success",
-        "event": "push",
-        "branch": "main",
-        "created_at": "2026-11-10T06:45:23Z",
-        "updated_at": "2026-11-10T06:45:42Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42770641187",
-        "age_hours": 8,
-        "freshness": "fresh"
-      }
+      "state": "unknown",
+      "error": "GitHub Actions API returned HTTP 500",
+      "latest": null,
+      "last_success": null
     },
     {
       "name": "Security audit",
@@ -194,16 +173,16 @@
       "file": "pages.yml",
       "note": "Builds and publishes the static production website.",
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/pages.yml",
-      "state": "in_progress",
+      "state": "pending",
       "latest": {
-        "id": 42839405028,
+        "id": 42839611644,
         "name": "Deploy GitHub Pages",
-        "status": "in_progress",
+        "status": "pending",
         "event": "push",
         "branch": "main",
-        "created_at": "2026-11-10T14:57:39Z",
-        "updated_at": "2026-11-10T14:57:57Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42839405028",
+        "created_at": "2026-11-10T14:58:53Z",
+        "updated_at": "2026-11-10T14:58:54Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42839611644",
         "age_hours": 0,
         "freshness": "fresh"
       },
