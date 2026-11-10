@@ -1844,13 +1844,24 @@ mod tests {
     }
 
     #[test]
+    fn mat_inv_assigns_first_operand_to_destination_role() {
+        let source = "MAT INV a()=b()\n";
+        let mut sources = SourceMap::new();
+        let source_id = sources.add_source("mat-inv-order.bas", source);
+        let program = parse(source_id, source).expect("both matrix names fit the same syntax");
+        assert!(matches!(
+            &program.statements[0],
+            Statement::MatInv { destination, source, .. } if destination == "a" && source == "b"
+        ));
+    }
+
+    #[test]
     fn rejects_malformed_matrix_statement_shapes() {
         for source_text in [
             "MAT ONE a(3)\n",
             "MAT SET a()\n",
             "MAT SET a()=7,8\n",
             "MAT INV a()\n",
-            "MAT INV a()=b()\n",
             "MAT INV b()=a(1)\n",
             "MAT INV b(1)=a()\n",
         ] {
