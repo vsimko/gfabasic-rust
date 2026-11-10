@@ -1,5 +1,9 @@
 # Research and evidence
 
+## Documentation audit
+
+- [Amiga GFA BASIC documentation coverage audit](amiga-gfa-basic-documentation-audit.md) - Current source boundary, verified 3.5 coverage, remaining base-language gaps, and linked GitHub workstreams.
+
 ## Amiga GFA BASIC command and API research
 
 - [Command catalogue — start here](amiga-gfa-basic-command-catalogue.md) - Explains the existing alphabetical index, detailed extraction, function inventory, 3.5 evidence manifest, and how their counts differ.
@@ -11,7 +15,7 @@
 - [Chapter 5–17 heading harvest](amiga-book-chapters05-17-heading-harvest.md) - Chapter structure and heading extraction.
 - [Function inventory (116 unique names)](amiga-gfa-basic-functions.toml) - Machine-readable built-in function names and classification.
 - [Function inventory notes](amiga-gfa-basic-function-inventory.md) - Human-readable scope and counting rules for the function inventory.
-- [3.5 addendum inventory](amiga-gfa-basic-35-addendum-inventory.md) - Features explicitly described in the 3.5 addendum.
+- [3.5 addendum inventory](amiga-gfa-basic-35-addendum-inventory.md) - Features explicitly described by the 3.5 addendum.
 - [3.5 candidate manifest](amiga-gfa-basic-candidates.toml) - Structured version-applicability evidence by candidate family.
 - [3.5 candidate report](amiga-gfa-basic-candidate-report.md) - Generated family-level status report; not a count of individual commands.
 - [3.03 book OCR index](amiga-gfa-basic-3.03-ocr-index.md) - Book introduction and contents evidence identifying the described interpreter version.
