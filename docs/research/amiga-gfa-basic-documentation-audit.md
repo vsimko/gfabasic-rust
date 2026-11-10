@@ -81,3 +81,19 @@ A feature can be documented but not source-verified for 3.5; implemented but not
 5. Add follow-up issues only for gaps that are not already covered by the workstreams above.
 
 The [research index](index.md), [reference index](../reference/index.md), and [command catalogue](amiga-gfa-basic-command-catalogue.md) are the navigation entry points. This page intentionally summarizes status and links to the evidence rather than duplicating detailed command definitions.
+
+
+## Declaration-level audit: four Amiga profile entries (2026-11-10)
+
+Compared all four records in `api/registry/amiga/special-and-platform-commands.toml` with the page-image-reviewed primary manual (`AM-INTERPRETER-35`), the Chapter 14 addendum inventory, the primary-reference pagination crosswalk, and the source register. No signature or semantic correction was required.
+
+| Registry ID / declaration | Primary 3.5 evidence | Inventory/source cross-check | Audit result |
+|---|---|---|---|
+| `gfa.amiga.graphics.pcolor` — `PCOLOR` | Chapter 13, printed p. 13-34 | Combined update scan, Chapter 14 printed p. 14-4; inventory records `PCOLOR foreground[,background]` | Match. PRINT screen output uses COLOR-like foreground/optional background; exact colour range and all mode interactions remain unspecified. |
+| `gfa.amiga.windows.openw-negative-screen` — negative-screen `OPENW` variant | Chapter 13, printed p. 13-34 | Combined update scan, Chapter 14 printed p. 14-3; inventory records current/top screen behavior | Match. This is only the negative-screen variant, not a complete OPENW signature or lifecycle contract. |
+| `gfa.amiga.system.guru-check` — `GURU x` statement | Chapter 13, printed p. 13-36 | Combined update scan, Chapter 14 printed pp. 14-6–14-7; inventory records zero/nonzero switch and #109/#110–#118 notes | Match. Compiled-program RESUME restrictions remain scoped to the manual's explicit statement; do not generalize them to interpreted mode. |
+| `gfa.amiga.system.guru-number` — `GURU` function | Chapter 13, printed p. 13-36 | Combined update scan, Chapter 14 printed pp. 14-6–14-7; dedicated GURU audit records `PRINT HEX$(GURU)` | Match. The function's return type is unspecified by the source; registry correctly does not infer INTEGER. |
+
+The registry's source ID `AM-INTERPRETER-35`, source scope `amiga-3.5-addendum`, and printed-page locators agree with the source register and addendum inventory. The German 1990 book is supplementary historical 3.0/V3.03 evidence (its “bis Version 3.5” cover wording is not normative interpreter evidence); it is not needed to promote these four declarations. The inventory's TOC/OCR spelling `PCOLOUR` is not a separate declaration: the primary addendum body and registry use `PCOLOR`.
+
+These four entries are an **interim addendum-only platform slice**, not a complete Amiga 3.5 API. Their source documentation is verified for 3.5; implementation remains `not-implemented`, Linux support `unknown`, and conformance `not-tested`. The available native Amiberry observations are for interpreter **3.52** only (see #66), and must not be relabelled as 3.5 observations or used to claim 3.5 runtime conformance.
