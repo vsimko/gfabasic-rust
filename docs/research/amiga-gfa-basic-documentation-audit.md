@@ -41,7 +41,7 @@ Use the source register and the [3.5 primary reference notes](amiga-gfa-basic-35
 
 ## Registry taxonomy finding: GURU function
 
-The 3.5 addendum documents both a `GURU` statement (enable/disable checking) and a distinct `GURU` function (returns the current GURU number), on printed pp. 13-36 (combined update scan pp. 14-6–14-7). The registry currently places both declarations in `api/registry/amiga/special-and-platform-commands.toml`; the function has stable ID `gfa.amiga.system.guru-number`. The built-in catalogue issue #285 and the function inventory in #307 should explicitly account for this existing declaration. Do not add a second `gfa.language.*` record until the project decides whether this Amiga-specific intrinsic belongs in the language-core namespace or remains in the Amiga profile.
+The 3.5 addendum documents both a `GURU` statement (enable/disable checking) and a distinct `GURU` function (returns the current GURU number), on printed pp. 13-36 (combined update scan pp. 14-6–14-7). The registry places both declarations in `api/registry/amiga/special-and-platform-commands.toml`; the function has stable ID `gfa.amiga.system.guru-number`. The source does not specify the function's return type (see `amiga-gfa-basic-35-guru-declaration-audit.md`), so the registry signature now records that uncertainty instead of inferring an integer type. The built-in catalogue issue #285 and function inventory in #307 account for this existing declaration. Do not add a second `gfa.language.*` record unless the namespace decision is explicitly changed.
 
 ## Resolved source discrepancy: MAT INV
 
