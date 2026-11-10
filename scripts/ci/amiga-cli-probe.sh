@@ -133,21 +133,5 @@ printf "SEND_KEY\\t68\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 sleep 3
 printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-first-save.png" | timeout 5s nc -U -N "${ipc_socket_path:-}" || true
 
-# Save the same listing a second time. GFA BASIC should preserve the previous
-# tokenized file as FACTZERO.BAK when overwriting FACTZERO.GFA.
-printf "SEND_KEY\\t96\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-sleep 0.2
-printf "SEND_KEY\\t80\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-sleep 0.2
-printf "SEND_KEY\\t80\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-sleep 0.2
-printf "SEND_KEY\\t96\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-sleep 5
-printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/save-dialog-second.png" | timeout 5s nc -U -N "${ipc_socket_path:-}" || true
-printf "SEND_KEY\\t68\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-sleep 0.2
-printf "SEND_KEY\\t68\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-sleep 3
-printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-save.png" | timeout 5s nc -U -N "${ipc_socket_path:-}" || true
 kill -0 "$emulator_pid"
 printf "QUIT\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}" || true
