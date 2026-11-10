@@ -1,6 +1,7 @@
 # Research and evidence
 
 - [Overview](README.md) - Documentation concepts in research.
+- [Amiga GFA BASIC test output](amiga-gfa-test-output.md) - Native file-output observation and proposed batch result protocol.
 - [Amiga BOOK 515 PAGE Extraction Audit](amiga-book-515-page-extraction-audit.md) - Documentation concepts in research.
 - [Amiga BOOK Chapters05 17 Heading Harvest](amiga-book-chapters05-17-heading-harvest.md) - Documentation concepts in research.
 - [Amiga BOOK Command Index OCR Transcription](amiga-book-command-index-ocr-transcription.md) - Documentation concepts in research.
