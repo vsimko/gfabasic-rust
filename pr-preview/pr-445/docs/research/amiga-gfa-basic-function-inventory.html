@@ -1,0 +1,780 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Of the 114 interpreter candidates, 112 have unambiguous names. Two source slots are disputed: the appendix table lists CVD() while the Chapter 2-18 prose refers to CVF; likewise, the command table and signature list s…">
+  <title>Amiga GFA BASIC 3.5 built-in function inventory · GFA BASIC Rust documentation</title>
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body class="docs-site">
+  <header class="docs-header">
+    <a href="../../index.html">GFA BASIC Rust</a>
+    <span aria-hidden="true">/</span>
+    <a href="../index.html">Documentation</a>
+  </header>
+  <div class="docs-layout">
+    <nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home" href="index.html">Section index</a><ul><li><a href="amiga-gfa-basic-command-catalogue.html">Amiga GFA BASIC command catalogue</a></li><li><a href="amiga-gfa-basic-german-book-command-api-extraction.html">German Amiga GFA-BASIC book: command and OS API extraction</a></li><li><a href="amiga-book-command-index-ocr-transcription.html">Appendix D — OCR transcription of the command index</a></li><li><a href="gfa-basic-command-index-ocr.html">GFA-BASIC command index — first-pass extraction</a></li><li><a href="amiga-gfa-basic-source-topic-index.html">Amiga GFA BASIC source and topic index</a></li><li><a href="amiga-book-515-page-extraction-audit.html">Amiga GFA-BASIC book — 515-page extraction audit</a></li><li><a href="amiga-book-chapters05-17-heading-harvest.html">Amiga book — command-heading harvest, chapters 5–17</a></li><li><a href="amiga-gfa-basic-functions.toml">Function inventory (116 unique names)</a></li><li><a href="amiga-gfa-basic-function-inventory.html">Amiga GFA BASIC 3.5 built-in function inventory</a></li><li><a href="amiga-gfa-basic-35-addendum-inventory.html">Amiga GFA-BASIC 3.5 interpreter addendum — extracted feature inventory</a></li><li><a href="amiga-gfa-basic-candidates.toml">3.5 candidate manifest</a></li><li><a href="amiga-gfa-basic-candidate-report.html">Amiga GFA BASIC 3.5 candidate verification report</a></li><li><a href="amiga-gfa-basic-3.03-ocr-index.html">German Amiga GFA BASIC book: OCR index and edition notes</a></li><li><a href="README.html">Research materials</a></li><li><a href="amiga-gfa-test-output.html">Amiga GFA BASIC test output</a></li><li><a href="amiga-gfa-basic-dqh-source-inventory.html">Amiga GFA BASIC commands observed in dqh-amiga</a></li><li><a href="amiga-emulator-lab.html">Amiga emulator experiment lab</a></li><li><a href="amiga-gfa-basic-35-lst-probes.html">Amiga GFA BASIC 3.5 interpreter probes from text listings</a></li><li><a href="amiga-gfa-basic-352-runtime-baseline.html">Amiga GFA BASIC 3.52 runtime baseline</a></li><li><a href="amiga-gfa-basic-binary-analysis.html">Amiga GFA-BASIC binary analysis</a></li><li><a href="amiga-gfa-basic-3.0-command-index.html">Amiga GFA BASIC 3.0 command index — grouped cross-check</a></li><li><a href="amiga-gfa-basic-3.0-statement-command-candidates.html">Amiga GFA BASIC 3.0 statement and command candidate catalogue</a></li><li><a href="amiga-gfa-basic-3.0-base-inventory.html">Amiga GFA BASIC 3.0 base-manual inventory</a></li><li><a href="amiga-gfa-basic-3.0-expressions-builtins-control-flow.html">Amiga GFA BASIC 3.0 expression, intrinsic and control-flow evidence</a></li><li><a href="amiga-gfa-basic-3.0-control-file-data-io.html">Amiga GFA BASIC 3.0 control, file and data I/O evidence</a></li><li><a href="amiga-gfa-basic-3.0-graphics-evidence.html">GFA BASIC 3.0 Amiga — graphics evidence</a></li><li><a href="amiga-gfa-basic-3.0-events-windows-evidence.html">GFA BASIC 3.0 Amiga — event, menu, screen and window evidence</a></li><li><a href="amiga-gfa-basic-3.0-system-routines-evidence.html">GFA BASIC 3.0 Amiga — operating-system routine evidence</a></li><li><a href="amiga-gfa-basic-3.0-advanced-programming-evidence.html">GFA BASIC 3.0 Amiga — advanced programming evidence</a></li><li><a href="amiga-gfa-basic-3.0-appendix-index-evidence.html">GFA BASIC 3.0 Amiga — appendix and command-index evidence</a></li><li><a href="amiga-gfa-basic-3.0-german-source-notes.html">German Amiga GFA BASIC 3.0 source — initial verification notes</a></li><li><a href="amiga-gfa-basic-3.0-procedure-error-details.html">GFA BASIC 3.0 Amiga — procedures, functions and error-flow evidence</a></li><li><a href="amiga-gfa-basic-3.0-screen-window-details.html">GFA BASIC 3.0 Amiga — screen and window command details</a></li><li><a href="amiga-gfa-basic-3.0-output-device-details.html">GFA BASIC 3.0 Amiga — output, cursor, mouse and sound evidence</a></li><li><a href="amiga-gfa-basic-3.0-menu-event-details.html">GFA BASIC 3.0 Amiga — menu and event details</a></li><li><a href="amiga-gfa-basic-3.0-bob-object-details.html">GFA BASIC 3.0 Amiga — BOB and OBJECT API evidence</a></li><li><a href="amiga-gfa-basic-3.0-source-format-editor-evidence.html">Amiga GFA BASIC 3.0 — source composition and editor evidence</a></li><li><a href="amiga-gfa-basic-35-primary-reference.html">Amiga GFA-BASIC 3.5 primary reference and target decision</a></li><li><a href="amiga-book-gfa35-chapter18-19-extraction.html">GFA-BASIC 3.5 additions documented in the Amiga book</a></li><li><a href="amiga-gfa-basic-35-editor-feature-audit.html">Amiga GFA BASIC 3.5 — editor feature audit</a></li><li><a href="amiga-gfa-basic-35-lexer-evidence.html">Amiga GFA BASIC 3.5 lexer evidence inventory</a></li><li><a href="amiga-gfa-basic-35-matrix-arithmetic-analysis-audit.html">Amiga GFA BASIC 3.5 — matrix arithmetic and analysis audit</a></li><li><a href="amiga-gfa-basic-35-matrix-io-copy-audit.html">Amiga GFA BASIC 3.5 — matrix I/O and copy declaration audit</a></li><li><a href="amiga-gfa-basic-35-five-declaration-audit.html">Amiga GFA BASIC 3.5 — five declaration-level audit blocks</a></li><li><a href="amiga-gfa-basic-35-five-more-declaration-audit.html">Amiga GFA BASIC 3.5 — five more declaration-level audit blocks</a></li><li><a href="amiga-gfa-basic-35-guru-declaration-audit.html">Amiga GFA BASIC 3.5 — GURU declaration audit</a></li><li><a href="atari-gfa-book-diskette.html">Atari GFA BASIC book diskette — source-corpus research notes</a></li><li><a href="atari-gfa-book-systematic-review.html">Systematic review of *Das große GFA-BASIC-Buch* (Atari ST)</a></li><li><a href="aminet-catalogue.html">Aminet GFA BASIC package survey</a></li><li><a href="gfalist-build-and-fixture-validation.html">gfalist build and fixture validation</a></li><li><a href="gfalist-format-vs-rust-frontend.html">gfalist format notes vs. the Rust frontend</a></li></ul></nav>
+    <main class="docs-content">
+      <article>
+        <h1>Amiga GFA BASIC 3.5 built-in function inventory</h1>
+        <p class="docs-meta"><span>Research Note</span></p>
+        <h1 id="amiga-gfa-basic-35-built-in-function-inventory">Amiga GFA BASIC 3.5 built-in function inventory</h1>
+<blockquote>
+<p>Source-derived inventory, not an implementation or runtime-conformance claim.</p>
+</blockquote>
+<h2 id="count">Count</h2>
+<table>
+<thead>
+<tr>
+<th>Population</th>
+<th style="text-align:right">Unique names</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Base-manual functions (3.0 text included in the supplied 3.5 manual)</td>
+<td style="text-align:right">112</td>
+</tr>
+<tr>
+<td>Explicit functions added in the 3.5 addendum</td>
+<td style="text-align:right">4</td>
+</tr>
+<tr>
+<td><strong>All names listed across the combined manual</strong></td>
+<td style="text-align:right"><strong>116</strong></td>
+</tr>
+<tr>
+<td>Compiler-only names excluded from the interpreter population (<code>CINT</code>, <code>CFLOAT</code>)</td>
+<td style="text-align:right">2</td>
+</tr>
+<tr>
+<td><strong>Interpreter function candidates (including disputed slots)</strong></td>
+<td style="text-align:right"><strong>114</strong></td>
+</tr>
+<tr>
+<td>Unambiguous interpreter function names</td>
+<td style="text-align:right">112</td>
+</tr>
+<tr>
+<td>Disputed source-name slots</td>
+<td style="text-align:right">2</td>
+</tr>
+</tbody>
+</table>
+<p>Of the 114 interpreter candidates, 112 have unambiguous names. Two source slots are disputed: the appendix table lists <code>CVD()</code> while the Chapter 2-18 prose refers to <code>CVF</code>; likewise, the command table and signature list show `MKD# Amiga GFA BASIC 3.5 built-in function inventory</p>
+<blockquote>
+<p>Source-derived inventory, not an implementation or runtime-conformance claim.</p>
+</blockquote>
+<h2 id="count-1">Count</h2>
+<table>
+<thead>
+<tr>
+<th>Population</th>
+<th style="text-align:right">Unique names</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Base-manual functions (3.0 text included in the supplied 3.5 manual)</td>
+<td style="text-align:right">112</td>
+</tr>
+<tr>
+<td>Explicit functions added in the 3.5 addendum</td>
+<td style="text-align:right">4</td>
+</tr>
+<tr>
+<td><strong>All names listed across the combined manual</strong></td>
+<td style="text-align:right"><strong>116</strong></td>
+</tr>
+<tr>
+<td>Compiler-only names excluded from the interpreter population (<code>CINT</code>, <code>CFLOAT</code>)</td>
+<td style="text-align:right">2</td>
+</tr>
+<tr>
+<td><strong>Interpreter function candidates (including disputed slots)</strong></td>
+<td style="text-align:right"><strong>114</strong></td>
+</tr>
+<tr>
+<td>Unambiguous interpreter function names</td>
+<td style="text-align:right">112</td>
+</tr>
+<tr>
+<td>Disputed source-name slots</td>
+<td style="text-align:right">2</td>
+</tr>
+</tbody>
+</table>
+<p>, while the Chapter 2-19 prose also mentions `MKF# Amiga GFA BASIC 3.5 built-in function inventory</p>
+<blockquote>
+<p>Source-derived inventory, not an implementation or runtime-conformance claim.</p>
+</blockquote>
+<h2 id="count-2">Count</h2>
+<table>
+<thead>
+<tr>
+<th>Population</th>
+<th style="text-align:right">Unique names</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Base-manual functions (3.0 text included in the supplied 3.5 manual)</td>
+<td style="text-align:right">112</td>
+</tr>
+<tr>
+<td>Explicit functions added in the 3.5 addendum</td>
+<td style="text-align:right">4</td>
+</tr>
+<tr>
+<td><strong>All names listed across the combined manual</strong></td>
+<td style="text-align:right"><strong>116</strong></td>
+</tr>
+<tr>
+<td>Compiler-only names excluded from the interpreter population (<code>CINT</code>, <code>CFLOAT</code>)</td>
+<td style="text-align:right">2</td>
+</tr>
+<tr>
+<td><strong>Interpreter function candidates (including disputed slots)</strong></td>
+<td style="text-align:right"><strong>114</strong></td>
+</tr>
+<tr>
+<td>Unambiguous interpreter function names</td>
+<td style="text-align:right">112</td>
+</tr>
+<tr>
+<td>Disputed source-name slots</td>
+<td style="text-align:right">2</td>
+</tr>
+</tbody>
+</table>
+<p>. Each is counted as one candidate slot, not as two confirmed names.</p>
+<p>The count includes the manual's function-like typed conversions (<code>BYTE{}</code>, <code>CARD{}</code>, <code>CHAR{}</code>, <code>DOUBLE{}</code>, <code>FLOAT{}</code>, <code>INT{}</code>, <code>LONG{}</code>, <code>SINGLE{}</code>, <code>WORD{}</code>). Alternate forms such as <code>BYTE()</code> and <code>BYTE{}</code> are grouped under one identifier. <code>CINT</code> and <code>CFLOAT</code> are documented but explicitly described as meaningful only to the compiler, so they are not included in the interpreter count.</p>
+<h2 id="counting-boundary">Counting boundary</h2>
+<ul>
+<li>Included: built-in expression functions and the manual's typed-conversion forms.</li>
+<li>Excluded: statements/commands, operators used only as operators, constants (<code>PI</code>, <code>TRUE</code>, <code>FALSE</code>), predefined variables (<code>TIMER</code>, <code>DATES$</code>, mouse state, etc.), editor commands, and Amiga OS library routines.</li>
+<li>User-defined <code>FUNCTION</code>/<code>DEFFN</code> procedures are not built-in functions and are not counted.</li>
+<li>Overloads and alternate spellings do not create additional unique function names.</li>
+<li>This is a manual inventory, not proof that every base-manual 3.0 detail is unchanged in every 3.5 interpreter build. Runtime observations and disputed source details remain separate evidence dimensions.</li>
+</ul>
+<h2 id="base-manual-entries">Base-manual entries</h2>
+<p>The following names are taken from the alphabetical <em>Table of commands</em> (printed pp. 12-8–12-18) and the corresponding feature pages in the 3.0 base text of the supplied 3.5 interpreter manual.</p>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Printed source page(s)</th>
+<th>Evidence note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ABS</code></td>
+<td>4-12</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>ACOS</code></td>
+<td>4-5</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>ADD</code></td>
+<td>4-3</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>AND</code></td>
+<td>4-23</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>ARRPTR</code></td>
+<td>2-33</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>ASC</code></td>
+<td>2-13</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>ASIN</code></td>
+<td>4-5</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>ATN</code></td>
+<td>4-5</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>BCHG</code></td>
+<td>4-19</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>BCLR</code></td>
+<td>4-19</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>BIN$</code></td>
+<td>2-14</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>BSET</code></td>
+<td>4-19</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>BTST</code></td>
+<td>4-19</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>BYTE</code></td>
+<td>2-37, 4-26</td>
+<td>Alternate typed-conversion form grouped under this name</td>
+</tr>
+<tr>
+<td><code>CARD</code></td>
+<td>2-37, 4-26</td>
+<td>Alternate typed-conversion form grouped under this name</td>
+</tr>
+<tr>
+<td><code>CFLOAT</code></td>
+<td>2-17</td>
+<td>The manual explicitly says this conversion is only meaningful to the compiler; excluded from the interpreter-specific count.</td>
+</tr>
+<tr>
+<td><code>CHAR</code></td>
+<td>2-37</td>
+<td>Alternate typed-conversion form grouped under this name</td>
+</tr>
+<tr>
+<td><code>CHR$</code></td>
+<td>2-13</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>CINT</code></td>
+<td>2-17</td>
+<td>The manual explicitly says this conversion is only meaningful to the compiler; excluded from the interpreter-specific count.</td>
+</tr>
+<tr>
+<td><code>COS</code></td>
+<td>4-5</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>COSQ</code></td>
+<td>4-6</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>CVD</code></td>
+<td>2-18</td>
+<td>The appendix table lists CVD(); the Chapter 2-18 prose says CVF and its signature list omits CVD/CVF. Counted as one unresolved CVx function slot, not as two confirmed names.</td>
+</tr>
+<tr>
+<td><code>CVI</code></td>
+<td>2-18</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>CVL</code></td>
+<td>2-18</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>CVS</code></td>
+<td>2-18</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>DEG</code></td>
+<td>4-7</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>DFREE</code></td>
+<td>6-4</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>DIM?</code></td>
+<td>2-9</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>DIR$</code></td>
+<td>6-4</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>DIV</code></td>
+<td>4-3</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>DOUBLE</code></td>
+<td>2-37</td>
+<td>Alternate typed-conversion form grouped under this name</td>
+</tr>
+<tr>
+<td><code>DPEEK</code></td>
+<td>2-36</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>EOF</code></td>
+<td>6-9</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>EQV</code></td>
+<td>4-24</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>EVEN</code></td>
+<td>4-15</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>EXIST</code></td>
+<td>6-7</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>EXP</code></td>
+<td>4-9</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>FIX</code></td>
+<td>4-13</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>FLOAT</code></td>
+<td>2-37</td>
+<td>Alternate typed-conversion form grouped under this name</td>
+</tr>
+<tr>
+<td><code>FRAC</code></td>
+<td>4-13</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>FRE</code></td>
+<td>2-29</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>HEX$</code></td>
+<td>2-14</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>IMP</code></td>
+<td>4-24</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>INKEY$</code></td>
+<td>5-2</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>INP</code></td>
+<td>6-13</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>INPUT$</code></td>
+<td>6-14</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>INSTR</code></td>
+<td>4-30</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>INT</code></td>
+<td>2-37, 4-13</td>
+<td>Alternate typed-conversion form grouped under this name</td>
+</tr>
+<tr>
+<td><code>LEFT$</code></td>
+<td>4-27</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>LEN</code></td>
+<td>4-34</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>LOC</code></td>
+<td>6-9</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>LOF</code></td>
+<td>6-9</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>LOG</code></td>
+<td>4-9</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>LOG10</code></td>
+<td>4-9</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>LONG</code></td>
+<td>2-37</td>
+<td>Alternate typed-conversion form grouped under this name</td>
+</tr>
+<tr>
+<td><code>LPEEK</code></td>
+<td>2-36</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>LPOS</code></td>
+<td>5-19</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>MALLOC</code></td>
+<td>2-41</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>MAX</code></td>
+<td>4-16</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>MFREE</code></td>
+<td>2-41</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>MID$</code></td>
+<td>4-28</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>MIN</code></td>
+<td>4-16</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>MKD$</code></td>
+<td>2-18</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>MKI$</code></td>
+<td>2-18</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>MKL$</code></td>
+<td>2-18</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>MKS$</code></td>
+<td>2-18</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>MOD</code></td>
+<td>4-3</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>MUL</code></td>
+<td>4-3</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>OCT$</code></td>
+<td>2-14</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>ODD</code></td>
+<td>4-15</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>OR</code></td>
+<td>4-23</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>PEEK</code></td>
+<td>2-36</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>POINT</code></td>
+<td>8-18</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>POS</code></td>
+<td>5-13</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>PRED</code></td>
+<td>4-11</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>RAD</code></td>
+<td>4-7</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>RAND</code></td>
+<td>4-17</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>RANDOM</code></td>
+<td>4-17</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>RIGHT$</code></td>
+<td>4-27</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>RINSTR</code></td>
+<td>4-31</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>RND</code></td>
+<td>4-17</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>ROL</code></td>
+<td>4-22</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>ROR</code></td>
+<td>4-22</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>ROUND</code></td>
+<td>4-14</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>SCREEN</code></td>
+<td>9-24</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>SGN</code></td>
+<td>4-12</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>SHL</code></td>
+<td>4-21</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>SHR</code></td>
+<td>4-21</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>SIN</code></td>
+<td>4-5</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>SINGLE</code></td>
+<td>2-37</td>
+<td>Alternate typed-conversion form grouped under this name</td>
+</tr>
+<tr>
+<td><code>SINQ</code></td>
+<td>4-6</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>SPACE$</code></td>
+<td>4-32</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>SPC</code></td>
+<td>4-32</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>SQR</code></td>
+<td>4-8</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>STR$</code></td>
+<td>2-15</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>STRING$</code></td>
+<td>4-32</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>SUB</code></td>
+<td>4-3</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>SUCC</code></td>
+<td>4-11</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>SWAP</code></td>
+<td>4-25</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>TAB</code></td>
+<td>5-13</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>TAN</code></td>
+<td>4-5</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>TRANSLATE$</code></td>
+<td>10-9</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>TRIM$</code></td>
+<td>4-34</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>TRUNC</code></td>
+<td>4-13</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>TYPE</code></td>
+<td>2-30</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>UPPER$</code></td>
+<td>4-35</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>VAL</code></td>
+<td>2-16</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>VAL?</code></td>
+<td>2-16</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>VARPTR</code></td>
+<td>2-33</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>WINDOW</code></td>
+<td>9-35</td>
+<td>Base-manual function entry</td>
+</tr>
+<tr>
+<td><code>WORD</code></td>
+<td>2-37, 4-26</td>
+<td>Alternate typed-conversion form grouped under this name</td>
+</tr>
+<tr>
+<td><code>XOR</code></td>
+<td>4-23</td>
+<td>Base-manual function entry</td>
+</tr>
+</tbody>
+</table>
+<h2 id="explicit-35-additions">Explicit 3.5 additions</h2>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Printed source page(s)</th>
+<th>Source description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>COMBIN</code></td>
+<td>13-33–13-34</td>
+<td>Combination function.</td>
+</tr>
+<tr>
+<td><code>FACT</code></td>
+<td>13-33–13-34</td>
+<td>Factorial function; 0! is explicitly defined as 1.</td>
+</tr>
+<tr>
+<td><code>GURU</code></td>
+<td>13-35–13-36</td>
+<td>GURU-number function; distinct from the GURU enable/disable statement.</td>
+</tr>
+<tr>
+<td><code>VARIAT</code></td>
+<td>13-33–13-34</td>
+<td>Permutation function.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="primary-source-and-caveats">Primary source and caveats</h2>
+<ul>
+<li><code>GFA BASIC 3.5 Interpreter</code>, supplied 469-page manual: introductory page identifies the included software as GFA BASIC 3.5 and says Chapter 13 is an addendum describing extra features. The base text is the earlier 3.0 manual; the addendum identifies the additional 3.5 features.</li>
+<li>Base function index: printed pp. 12-8–12-18. Detailed base pages are listed per function above.</li>
+<li>3.5 additions: printed pp. 13-33–13-36 (FACT, VARIAT, COMBIN, GURU).</li>
+<li>The separate 1990 German Amiga book says its main command reference documents version 3.0; it is supplementary and is not used to inflate the 3.5 count.</li>
+<li>Chapter 11's Amiga OS library index is deliberately excluded: it catalogs OS calls, not built-in GFA BASIC language functions.</li>
+</ul>
+<p>Machine-readable source: <code>amiga-gfa-basic-functions.toml</code>. Validation: <code>python scripts/validate_amiga_function_inventory.py</code>.</p>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>
