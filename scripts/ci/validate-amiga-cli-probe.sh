@@ -10,7 +10,7 @@ for diagnostic in insert-floppy-ipc.txt list-floppies-ipc.txt stdin-save.LST; do
     printf "MISSING: %s\\n" "$diagnostic" > "artifacts/amiga-cli-probe/$diagnostic.missing"
   fi
 done
-for screenshot in editor-before-merge.png merge-dialog.png merge-file-row-pointer.png merge-file-selected.png after-shortcut.png merge-gadget-pointer.png after-merge.png after-run.png save-dialog.png after-save.png; do
+for screenshot in editor-before-merge.png merge-dialog.png merge-file-row-pointer.png merge-file-selected.png after-shortcut.png merge-gadget-pointer.png after-merge.png after-run.png save-dialog.png after-first-save.png save-dialog-second.png after-save.png; do
   test -s "artifacts/amiga-cli-probe/$screenshot"
 done
 
@@ -49,6 +49,13 @@ xdftool artifacts/amiga-cli-probe/factzero.adf list / all > artifacts/amiga-cli-
 grep -Eiq 'factzero[.]GFA' artifacts/amiga-cli-probe/adf-after-save-list.txt
 xdftool artifacts/amiga-cli-probe/factzero.adf read factzero.GFA artifacts/amiga-cli-probe/factzero.GFA
 test -s artifacts/amiga-cli-probe/factzero.GFA
+grep -Eiq 'factzero[.]BAK' artifacts/amiga-cli-probe/adf-after-save-list.txt
+xdftool artifacts/amiga-cli-probe/factzero.adf read factzero.BAK artifacts/amiga-cli-probe/factzero.BAK
+test -s artifacts/amiga-cli-probe/factzero.BAK
+if cmp -s artifacts/amiga-cli-probe/factzero.GFA artifacts/amiga-cli-probe/factzero.BAK; then
+  echo "::error::The .BAK backup is byte-identical to the newly saved .GFA."
+  exit 1
+fi
 if cmp -s artifacts/amiga-cli-probe/factzero.LST artifacts/amiga-cli-probe/factzero.GFA; then
   echo "::error::The saved .GFA is byte-identical to the ASCII .LST."
   exit 1
