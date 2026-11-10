@@ -124,7 +124,13 @@ pub enum Statement {
         span: SourceSpan,
     },
     /// Source-resolved syntax: write the inverse of source to destination.
-    MatInv { destination: String, destination_span: SourceSpan, source: String, source_span: SourceSpan, span: SourceSpan },
+    MatInv {
+        destination: String,
+        destination_span: SourceSpan,
+        source: String,
+        source_span: SourceSpan,
+        span: SourceSpan,
+    },
     MatCopy {
         operation: MatCopyOperation,
         destination: String,
@@ -1038,7 +1044,13 @@ impl Parser {
         self.expect(TokenKind::Equals, "'=' in MAT INV statement")?;
         let (source, source_span) = self.parse_matrix_reference()?;
         let span = SourceSpan::new(self.source_id, start.start, source_span.end);
-        Ok(Statement::MatInv { destination, destination_span, source, source_span, span })
+        Ok(Statement::MatInv {
+            destination,
+            destination_span,
+            source,
+            source_span,
+            span,
+        })
     }
 
     fn parse_mat_statement(&mut self, start: SourceSpan) -> Result<Statement, Box<Diagnostic>> {
@@ -1814,7 +1826,16 @@ mod tests {
         let mut sources = SourceMap::new();
         let source_id = sources.add_source("mat-inv.bas", source);
         let program = parse(source_id, source).expect("documented destination-first syntax");
-        let Statement::MatInv { destination, destination_span, source: matrix_source, source_span, span } = &program.statements[0] else { panic!("expected MAT INV AST node"); };
+        let Statement::MatInv {
+            destination,
+            destination_span,
+            source: matrix_source,
+            source_span,
+            span,
+        } = &program.statements[0]
+        else {
+            panic!("expected MAT INV AST node");
+        };
         assert_eq!(destination, "b");
         assert_eq!(matrix_source, "a");
         assert_eq!(&source[destination_span.start..destination_span.end], "b()");
