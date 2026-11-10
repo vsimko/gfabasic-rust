@@ -8,6 +8,9 @@ Strings and function labels are candidates. Command syntax requires parser/dispa
 - Architecture: Motorola 68000, big-endian
 - Instructions exported: 16733
 - References exported: 6085
+- String cross-references: 160
+- Instructions outside known functions: 5895
+- Strings with cross-references: 102
 - Executable memory blocks: 1
 
 ## Printable strings (candidate evidence)
@@ -3285,9 +3288,122 @@ Strings and function labels are candidates. Command syntax requires parser/dispa
 | 0x2151C | 6 | Parent |
 | 0x21523 | 6 | GetDir |
 
+## String cross-references
+
+`string_xrefs.jsonl` maps each extracted file-offset string to Ghidra references targeting its imported address. It records source addresses and containing functions where Ghidra identified one. This is a useful bridge from user-visible diagnostics/keywords to code, but a string reference alone does not prove that the string is a BASIC token or that the referencing function implements it.
+
+| String | File offset | Referencing function(s) | Source address(es) |
+|---|---:|---|---|
+| ,@-\| | 0xE6 | (no containing function) | 0x1473E |
+| J4H\N | 0x11E | FUN_0001cb16 | 0x1CBB0 |
+| SBDBj | 0x53A | FUN_0000043e | 0x50A |
+| DBNug | 0x5C2 | (no containing function), FUN_00000914 | 0x8AE, 0x8C8, 0x94A, 0x966 |
+| DBNut | 0x5E2 | FUN_000087e2 | 0x87EA |
+| DEDBH | 0x68C | (no containing function) | 0x15B6E |
+| DBv- | 0x924 | (no containing function), FUN_00000914, FUN_00007d58 | 0xBFE, 0x8C0, 0x944 |
+| H@DBNuH@RBDBNu4< | 0xC76 | FUN_00000c28 | 0xC34 |
+| SBDB | 0x10EA | FUN_000014f6 | 0x1502, 0x1570 |
+| RBDBH | 0x1806 | (no containing function) | 0x1B600 |
+| JDgH2 | 0x1A10 | FUN_00000676 | 0x19D8, 0x19DC, 0x19E0 |
+| HCH@ | 0x1A1C | FUN_00000676 | 0x1974 |
+| GFA-BASIC Commands | 0x1B9E | FUN_00001cbc | 0x1D38 |
+| X@Nua | 0x3696 | (no containing function) | 0x3668 |
+|  _Nua | 0x36B8 | (no containing function) | 0x368C |
+| &@ S` | 0x468C | FUN_0000461c | 0x4632 |
+| &@0+ | 0x469E | FUN_0000408c, FUN_0000464e, FUN_0000a0be | 0x4664, 0xA0CC, 0x40A0 |
+| J@g2 | 0x46E8 | FUN_00004676 | 0x46BA |
+|  W P | 0x492A | (no containing function) | 0x48F8, 0x4906 |
+|  W4( | 0x49EC | FUN_000049a2 | 0x49A8, 0x49AC, 0x49B2 |
+| DBNu | 0x4C36 | (no containing function) | 0x4C0A |
+|  @4( | 0x4D0A | (no containing function) | 0x7050 |
+| Nu? P | 0x52A2 | (no containing function) | 0x527E, 0x5282, 0x5294 |
+| BgHUa | 0x52BC | (no containing function) | 0x24DC, 0x24E0 |
+| SG`4 | 0x5890 | FUN_00005754 | 0x5858 |
+| SGSF | 0x5976 | FUN_00005754 | 0x593C |
+| -@/$ @"X0 | 0x5CB0 | FUN_000069aa | 0x5CCC |
+| /(Rn/(Sn/*kz | 0x5CEE | FUN_000069aa | 0x5D3A, 0x5FC6, 0x612A |
+| Sn/*k | 0x5E14 | FUN_000069aa | 0x5DFE |
+| =n/6/4j | 0x5ED8 | FUN_000069aa | 0x5E50, 0x5E56, 0x5E7A, 0x5E80, 0x5EA8 |
+| /(Rn/(0 | 0x5F30 | FUN_000069aa | 0x5EFC |
+| Jn/4j | 0x5FA6 | FUN_000069aa | 0x5F44, 0x5F64, 0x5F6C |
+| =_/(Sn/(Rn/*` | 0x5FBA | FUN_000069aa | 0x5F50 |
+| g4 A | 0x6676 | (no containing function) | 0x6612, 0x661C, 0x6626 |
+| J_Nu | 0x6838 | (no containing function), FUN_000069aa | 0x9016, 0x5D6E |
+| UP-@i | 0x6B8C | FUN_00006ac0 | 0x6ADA, 0x6AF8, 0x6B0A, 0x6B2A, 0x6B4A |
+| HP Sz | 0x70DE | (no containing function) | 0x70B8 |
+| afHPp | 0x7148 | (no containing function) | 0x2334, 0x2338, 0x713A |
+| Nu2( | 0x7554 | FUN_00007bfe | 0x7C20, 0x7C3A |
+| Nu n | 0x805C | (no containing function) | 0x8044, 0x804E |
+| g:" k | 0x8154 | FUN_0000811c | 0x814E |
+| gz$6p` | 0x81FE | (no containing function) | 0x81CC |
+| gBnVa | 0x82A2 | (no containing function) | 0x81FE |
+| "_*n | 0x8FA6 | (no containing function) | 0x8F76 |
+|  <0000 | 0x9496 | FUN_0000939e | 0x93F8 |
+|  Gr 0. | 0x954E | FUN_000094a6 | 0x951C |
+|  n. 0 | 0x9B2C | (no containing function) | 0x9AFA |
+| SPNu0 | 0x9E14 | FUN_00009de4 | 0x9DF2 |
+| n (]Nup | 0xA07E | FUN_0000a04e | 0xA05C, 0xA060, 0xA064 |
+| a: j | 0xA2EE | (no containing function) | 0x1F68 |
+| NuJEj | 0xA394 | (no containing function) | 0xA464 |
+| :!8!&!JEk | 0xA3BE | (no containing function) | 0xA37A |
+| NuJBj | 0xA3E0 | (no containing function) | 0xA468 |
+| NuHz | 0xAA58 | FUN_0000a9f8 | 0xAA3E |
+| "_HPN | 0xAA62 | FUN_0000a9f8 | 0xAA06 |
+| &@"@A | 0xB152 | (no containing function) | 0xB08C |
+| (_B. | 0xC45C | (no containing function) | 0xC42E |
+| NupGN | 0xCD6C | (no containing function) | 0xCD40 |
+| g "n' | 0xCFB6 | FUN_0000cf04 | 0xCF88 |
+|  WaNa | 0xD102 | FUN_0000d0c8 | 0xD0CC |
+|  DHz | 0xD6E2 | FUN_0000d6a2 | 0xD6BC |
+| $_&_2 | 0xD808 | (no containing function) | 0xD7C4, 0xD7CC, 0xD7D4 |
+| Nu$n | 0xDF20 | FUN_0000de14 | 0xDEEA |
+|  F$X0 | 0xE4B2 | (no containing function) | 0xE48C |
+| Nu 9 | 0xE58A | FUN_0000ec78 | 0xECC8 |
+| Nu:.g | 0xE618 | (no containing function) | 0xE5EC |
+| HQJ) | 0xE8D8 | FUN_0000e884 | 0xE8A4 |
+| hD(< | 0xE930 | FUN_0000e8b8 | 0xE8DE |
+| R.h> | 0xE9F2 | FUN_0000e958 | 0xE974 |
+| h2BZ4 | 0xEB56 | FUN_0000e958 | 0xE9D8, 0xEA88 |
+| iZ,00 | 0xF12A | (no containing function) | 0xF08E |
+| "_$IJ./ | 0xF5C0 | (no containing function) | 0xF592 |
+| $I=F | 0x10172 | FUN_00010132 | 0x10146 |
+| YBTB=B | 0x1051E | FUN_000104b6 | 0x104DE, 0x104E6 |
+|  @"ANuN | 0x1240C | (no containing function), FUN_00012b82 | 0x12B82, 0x12CF2 |
+| ,GNua | 0x1244C | (no containing function), FUN_0001289e | 0x1289E, 0x128C2 |
+| ,GNua | 0x12D90 | (no containing function) | 0x12D58 |
+| ,@Bn | 0x14622 | FUN_000141dc, FUN_00014218, FUN_00014418, FUN_000145bc | 0x144B6, 0x1420E, 0x143F0, 0x145E8 |
+| .fpK2 | 0x149D0 | FUN_00014998 | 0x149AA |
+| GFA-BASIC | 0x152AC | FUN_0000cf04 | 0xCF7A |
+| r0!A | 0x15592 | FUN_00015582 | 0x1559E |
+| "Jp"` | 0x155B0 | FUN_00015582 | 0x155A4 |
+| `J"y | 0x1561E | FUN_0001532c | 0x15338 |
+| gd&@a | 0x15DD4 | FUN_00015da2 | 0x15DA6 |
+| NuaL | 0x18CE4 | (no containing function) | 0x18C4E, 0x18CD0, 0x18CD6 |
+| $,$HL | 0x1B6F8 | (no containing function) | 0x1B6D2 |
+| kL WN | 0x1C334 | (no containing function), FUN_0001c7b6 | 0x1C7D2, 0x1C7E2, 0x1C826, 0x1C874, 0x1C886, 0x1C8D4, 0x1C692, 0x1C696, 0x1C45E, 0x1C756 |
+| Do fehlt | 0x1DD04 | (no containing function) | 0x13306 |
+| For fehlt | 0x1DD0D | (no containing function) | 0x133CC |
+| If fehlt | 0x1DD23 | (no containing function) | 0x13452 |
+| Exit ohne Schleife | 0x1DD38 | (no containing function) | 0x1355E |
+| Procedure doppelt | 0x1DD6E | (no containing function) | 0x1362E |
+| Function in Schleife | 0x1DD8E | (no containing function) | 0x13756 |
+| Function doppelt | 0x1DDA3 | (no containing function) | 0x13760 |
+| Local ohne Procedure oder Function | 0x1DDD2 | (no containing function) | 0x136D8 |
+| Local in Schleife | 0x1DDF5 | (no containing function) | 0x136CE |
+| Resume ohne Procedure | 0x1DE47 | (no containing function) | 0x137A8 |
+| Division durch Null | 0x1DF11 | FUN_0000889c | 0x88AC |
+| Unbekannter Fehler  | 0x1DFE8 | FUN_0000889c | 0x88B4, 0x88BE |
+| Wollen Sie den Interpreter\|wirklich verlassen? | 0x1EC21 | (no containing function) | 0xB2F0 |
+| Syntax Fehler | 0x1ECBA | FUN_0000fd90 | 0xFF66 |
+| Zeile zu lang | 0x1ECCC | FUN_0000fd90 | 0xFF5E |
+
 ## Instruction and reference indexes
 
 `instructions.jsonl` contains decoded instructions from executable memory blocks; `references.jsonl` records Ghidra references originating at those instructions. Addresses are Ghidra address-space offsets, not guaranteed file offsets.
+
+## Instructions outside known functions
+
+unclaimed_instructions.jsonl contains decoded executable instructions for which Ghidra did not assign a containing function. These are candidates for missed function boundaries, not proof of a single contiguous routine.
 
 ## Function inventory
 

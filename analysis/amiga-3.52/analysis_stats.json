@@ -2,5 +2,8 @@
   "functions": 571,
   "instructions": 16733,
   "references": 6085,
+  "string_xrefs": 160,
+  "unclaimed_instructions": 5895,
+  "strings_with_xrefs": 102,
   "executable_blocks": 1
 }
