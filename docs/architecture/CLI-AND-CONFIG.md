@@ -5,14 +5,24 @@ title: "CLI, configuration, and build artifacts"
 
 # CLI, configuration, and build artifacts
 
-- Status: **Accepted by [ADR 0005](adr/0005-cli-and-project-configuration.md).** A minimal `gfabasic` executable implements help and version output. Project loading, configuration validation, source checking/compilation, and artifact writing are not implemented.
+- Status: **Accepted by [ADR 0005](adr/0005-cli-and-project-configuration.md).** The executable implements help/version, a narrow `fmt` command, and a restricted `build` prototype using the host C compiler. Project-file loading/configuration and general source checking/compilation remain unimplemented.
 - Tracking: [issue #9](https://github.com/vsimko/gfabasic-rust/issues/9).
 
 ## Command model
 
 Compiler source paths refer to textual `.LST` listings. `.BAS` is not the compiler input extension; native tokenized `.GFA` input is deferred by [ADR 0015](adr/0015-listing-first-compiler-input.md). The extension does not establish an encoding or BOM policy.
 
-The executable name is \`gfabasic\`. The initial command surface is deliberately small:
+The executable name is `gfabasic`. The accepted product interface is broader than the currently implemented subset. Current behavior is:
+
+| Command | Current implementation |
+|---|---|
+| `help`, `--help`, `version`, `--version` | Implemented |
+| `fmt <source.LST>` | Implemented for the documented FACT/VARIAT/COMBIN/PRINT and selected DIM/MAT syntax; parser/formatter only, not matrix evaluation |
+| `build <source.LST> -o <output>` | Experimental literal combinatorics/PRINT subset; temporary C/`cc` bootstrap, not LLVM |
+| `check` | Explicitly unavailable; returns an unimplemented diagnostic |
+| Project-file discovery/configuration | Not implemented |
+
+The following table describes the intended command model, not a claim that each command is available:
 
 | Command | Purpose | Output |
 |---|---|---|
@@ -144,4 +154,4 @@ The same exit code must not be used for success and failure. Human-readable diag
 
 ## Deferred implementation
 
-The current CLI executable implements only help and version output. The TOML parser/schema validator, project discovery, source composition, CLI diagnostic integration, compatibility report, native output, and artifact manifest are not implemented. The `build` and `check` commands explicitly fail with an unimplemented message; only help and version commands are currently usable. This specification accepts the interface model, not project loading or compilation.
+The current CLI implements help/version, the bounded `fmt` command, and an experimental `build` path for literal FACT/VARIAT/COMBIN assignments followed by PRINT. `build` uses a temporary C/`cc` bootstrap and does not provide a general compiler or LLVM backend. `check` explicitly reports that it is not implemented. TOML project parsing/schema validation, project discovery, source composition, compatibility reports, and artifact manifests remain unimplemented. The formatter accepts selected MAT forms, but the executable IR does not evaluate those statements. This specification accepts the interface model, not project loading or compilation.
