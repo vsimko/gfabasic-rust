@@ -9,6 +9,20 @@ This directory contains research procedures and analysis of historical material.
 
 **Research-only policy:** Historical manuals, books, ROMs, disk images, and historical sample programs are external references, not project deliverables. Do not add these artifacts to the repository or bundle them with releases. Keep only source metadata, concise citations, original analysis, and independently authored tests.
 
+## Amiga GFA BASIC command catalogue
+
+For command/function discovery, start at the dedicated [Amiga GFA BASIC command catalogue](amiga-gfa-basic-command-catalogue.md). It explains which existing source to consult for alphabetical lookup, chapter-level semantics, structured function names, and interpreter-version evidence.
+
+Quick routes:
+
+- [Appendix D alphabetical OCR index](amiga-book-command-index-ocr-transcription.md) — broad name discovery; includes non-callable index terms and OCR uncertainty.
+- [Detailed German book and Amiga OS API extraction](amiga-gfa-basic-german-book-command-api-extraction.md) — chapter-level extraction and page-backed semantics.
+- [Source/topic index](amiga-gfa-basic-source-topic-index.md) — printed-page navigation and cross-source disagreements.
+- [Machine-readable function inventory](amiga-gfa-basic-functions.toml) — 116 unique names under the documented function-inventory counting rules.
+- [3.5 candidate manifest](amiga-gfa-basic-candidates.toml) and [report](amiga-gfa-basic-candidate-report.md) — version-applicability status by feature family, not by individual command.
+
+**Counting warning:** the German book describes approximately 360 commands and functions, but its alphabetical index mixes statements, functions, aliases, constants, variables, object properties, and other terms. It describes GFA V3.03; it is not a verified 3.5 command list. The function inventory's 116 names and the candidate report's family counts measure different things. See the catalogue for definitions and workflow. Do not add these counts together or report them as a single command total.
+
 | Document | Scope | Status |
 |---|---|---|
 | [Aminet GFA BASIC package survey](aminet-catalogue.md) | Amiga Aminet `dev/basic` archive listing | Initial package inventory; readmes, archive contents, and rights remain unverified |

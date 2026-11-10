@@ -1,50 +1,67 @@
 # Research and evidence
 
-- [Overview](README.md) - Documentation concepts in research.
+## Amiga GFA BASIC command and API research
+
+- [Command catalogue — start here](amiga-gfa-basic-command-catalogue.md) - Explains the existing alphabetical index, detailed extraction, function inventory, 3.5 evidence manifest, and how their counts differ.
+- [German book command and Amiga OS API extraction](amiga-gfa-basic-german-book-command-api-extraction.md) - Main detailed chapter-based extraction through Chapter 19 and Appendices B–D, with 3.5 addendum reconciliation.
+- [Appendix D command index OCR transcription](amiga-book-command-index-ocr-transcription.md) - Page-oriented transcription of the book's alphabetical index, printed pp. 493–497.
+- [First-pass command index OCR](gfa-basic-command-index-ocr.md) - Richer first-pass transcription of Appendix D with compound forms and OCR caveats.
+- [Source and topic index](amiga-gfa-basic-source-topic-index.md) - Printed-page navigation, source/version boundaries, disagreements, and page-image review status.
+- [515-page extraction audit](amiga-book-515-page-extraction-audit.md) - PDF/page coverage audit for the German book.
+- [Chapter 5–17 heading harvest](amiga-book-chapters05-17-heading-harvest.md) - Chapter structure and heading extraction.
+- [Function inventory (116 unique names)](amiga-gfa-basic-functions.toml) - Machine-readable built-in function names and classification.
+- [Function inventory notes](amiga-gfa-basic-function-inventory.md) - Human-readable scope and counting rules for the function inventory.
+- [3.5 addendum inventory](amiga-gfa-basic-35-addendum-inventory.md) - Features explicitly described in the 3.5 addendum.
+- [3.5 candidate manifest](amiga-gfa-basic-candidates.toml) - Structured version-applicability evidence by candidate family.
+- [3.5 candidate report](amiga-gfa-basic-candidate-report.md) - Generated family-level status report; not a count of individual commands.
+- [3.03 book OCR index](amiga-gfa-basic-3.03-ocr-index.md) - Book introduction and contents evidence identifying the described interpreter version.
+
+## Other Amiga research
+
+- [Research overview](README.md) - Research scope, source policy, and remaining work.
 - [Amiga GFA BASIC test output](amiga-gfa-test-output.md) - Native file-output observation and proposed batch result protocol.
-- [Amiga BOOK 515 PAGE Extraction Audit](amiga-book-515-page-extraction-audit.md) - Documentation concepts in research.
-- [Amiga BOOK Chapters05 17 Heading Harvest](amiga-book-chapters05-17-heading-harvest.md) - Documentation concepts in research.
-- [Amiga BOOK Command Index OCR Transcription](amiga-book-command-index-ocr-transcription.md) - Documentation concepts in research.
-- [Amiga BOOK Gfa35 Chapter18 19 Extraction](amiga-book-gfa35-chapter18-19-extraction.md) - Documentation concepts in research.
-- [Amiga Emulator LAB](amiga-emulator-lab.md) - Documentation concepts in research.
-- [Amiga GFA Basic 3.0 Advanced Programming Evidence](amiga-gfa-basic-3.0-advanced-programming-evidence.md) - Documentation concepts in research.
-- [Amiga GFA Basic 3.0 Appendix Index Evidence](amiga-gfa-basic-3.0-appendix-index-evidence.md) - Documentation concepts in research.
-- [Amiga GFA Basic 3.0 BASE Inventory](amiga-gfa-basic-3.0-base-inventory.md) - Documentation concepts in research.
-- [Amiga GFA Basic 3.0 BOB Object Details](amiga-gfa-basic-3.0-bob-object-details.md) - Documentation concepts in research.
-- [Amiga GFA Basic 3.0 Command Index](amiga-gfa-basic-3.0-command-index.md) - Documentation concepts in research.
-- [Amiga GFA Basic 3.0 Control FILE DATA IO](amiga-gfa-basic-3.0-control-file-data-io.md) - Documentation concepts in research.
-- [Amiga GFA Basic 3.0 Events Windows Evidence](amiga-gfa-basic-3.0-events-windows-evidence.md) - Documentation concepts in research.
-- [Amiga GFA Basic 3.0 Expressions Builtins Control FLOW](amiga-gfa-basic-3.0-expressions-builtins-control-flow.md) - Documentation concepts in research.
-- [Amiga GFA Basic 3.0 German Source Notes](amiga-gfa-basic-3.0-german-source-notes.md) - Documentation concepts in research.
-- [Amiga GFA Basic 3.0 Graphics Evidence](amiga-gfa-basic-3.0-graphics-evidence.md) - Documentation concepts in research.
-- [Amiga GFA Basic 3.0 MENU Event Details](amiga-gfa-basic-3.0-menu-event-details.md) - Documentation concepts in research.
-- [Amiga GFA Basic 3.0 Output Device Details](amiga-gfa-basic-3.0-output-device-details.md) - Documentation concepts in research.
-- [Amiga GFA Basic 3.0 Procedure Error Details](amiga-gfa-basic-3.0-procedure-error-details.md) - Documentation concepts in research.
-- [Amiga GFA Basic 3.0 Screen Window Details](amiga-gfa-basic-3.0-screen-window-details.md) - Documentation concepts in research.
-- [Amiga GFA Basic 3.0 Source Format Editor Evidence](amiga-gfa-basic-3.0-source-format-editor-evidence.md) - Documentation concepts in research.
-- [Amiga GFA Basic 3.0 Statement Command Candidates](amiga-gfa-basic-3.0-statement-command-candidates.md) - Documentation concepts in research.
-- [Amiga GFA Basic 3.0 System Routines Evidence](amiga-gfa-basic-3.0-system-routines-evidence.md) - Documentation concepts in research.
-- [Amiga GFA Basic 3.03 OCR Index](amiga-gfa-basic-3.03-ocr-index.md) - Documentation concepts in research.
-- [Amiga GFA Basic 35 Addendum Inventory](amiga-gfa-basic-35-addendum-inventory.md) - Documentation concepts in research.
-- [Amiga GFA Basic 35 Editor Feature Audit](amiga-gfa-basic-35-editor-feature-audit.md) - Documentation concepts in research.
-- [Amiga GFA Basic 35 FIVE Declaration Audit](amiga-gfa-basic-35-five-declaration-audit.md) - Documentation concepts in research.
-- [Amiga GFA Basic 35 FIVE MORE Declaration Audit](amiga-gfa-basic-35-five-more-declaration-audit.md) - Documentation concepts in research.
-- [Amiga GFA Basic 35 GURU Declaration Audit](amiga-gfa-basic-35-guru-declaration-audit.md) - Documentation concepts in research.
-- [Amiga GFA Basic 35 Lexer Evidence](amiga-gfa-basic-35-lexer-evidence.md) - Documentation concepts in research.
-- [Amiga GFA Basic 35 Matrix Arithmetic Analysis Audit](amiga-gfa-basic-35-matrix-arithmetic-analysis-audit.md) - Documentation concepts in research.
-- [Amiga GFA Basic 35 Matrix IO COPY Audit](amiga-gfa-basic-35-matrix-io-copy-audit.md) - Documentation concepts in research.
-- [Amiga GFA Basic 35 Primary Reference](amiga-gfa-basic-35-primary-reference.md) - Documentation concepts in research.
-- [Amiga GFA Basic Candidate Report](amiga-gfa-basic-candidate-report.md) - Documentation concepts in research.
-- [Amiga GFA Basic DQH Source Inventory](amiga-gfa-basic-dqh-source-inventory.md) - Documentation concepts in research.
-- [Amiga GFA Basic Function Inventory](amiga-gfa-basic-function-inventory.md) - Documentation concepts in research.
-- [Amiga GFA Basic German BOOK Command API Extraction](amiga-gfa-basic-german-book-command-api-extraction.md) - Documentation concepts in research.
-- [Amiga GFA Basic Source Topic Index](amiga-gfa-basic-source-topic-index.md) - Documentation concepts in research.
-- [Aminet Catalogue](aminet-catalogue.md) - Documentation concepts in research.
-- [Atari GFA BOOK Diskette](atari-gfa-book-diskette.md) - Documentation concepts in research.
-- [Atari GFA BOOK Systematic Review](atari-gfa-book-systematic-review.md) - Documentation concepts in research.
-- [GFA Basic Command Index OCR](gfa-basic-command-index-ocr.md) - Documentation concepts in research.
-- [Gfalist Build AND Fixture Validation](gfalist-build-and-fixture-validation.md) - Documentation concepts in research.
-- [Gfalist Format VS RUST Frontend](gfalist-format-vs-rust-frontend.md) - Documentation concepts in research.
+- [Amiga GFA BASIC commands observed in dqh-amiga](amiga-gfa-basic-dqh-source-inventory.md) - Constructs and direct OS/library calls observed in an external game source.
+- [Amiga emulator experiment lab](amiga-emulator-lab.md) - Proposed native interpreter experiment procedure.
 - [Amiga GFA BASIC 3.5 interpreter probes](amiga-gfa-basic-35-lst-probes.md) - Manual-driven textual listing probe procedure.
-- [Amiga GFA BASIC 3.52 runtime baseline](amiga-gfa-basic-352-runtime-baseline.md) - Version-scoped runtime observation record.
-- [Amiga GFA-BASIC binary analysis](amiga-gfa-basic-binary-analysis.md) - Reproducible analysis workflow and provenance.
+- [Amiga GFA BASIC 3.52 runtime baseline](amiga-gfa-basic-352-runtime-baseline.md) - Version-scoped runtime observations.
+- [Amiga GFA-BASIC binary analysis](amiga-gfa-basic-binary-analysis.md) - Reproducible binary analysis workflow.
+
+## Base-manual topic research
+
+- [GFA BASIC 3.0 command index](amiga-gfa-basic-3.0-command-index.md) - Thematic command index derived from the base manual.
+- [GFA BASIC 3.0 statement candidates](amiga-gfa-basic-3.0-statement-command-candidates.md) - Statement-family candidates requiring version reconciliation.
+- [GFA BASIC 3.0 base inventory](amiga-gfa-basic-3.0-base-inventory.md) - Broad chapter-based base-manual inventory.
+- [GFA BASIC 3.0 expressions, built-ins, and control flow](amiga-gfa-basic-3.0-expressions-builtins-control-flow.md) - Expression and built-in extraction.
+- [GFA BASIC 3.0 control, file, and DATA I/O](amiga-gfa-basic-3.0-control-file-data-io.md) - Control-flow and I/O evidence.
+- [GFA BASIC 3.0 graphics evidence](amiga-gfa-basic-3.0-graphics-evidence.md) - Graphics command evidence.
+- [GFA BASIC 3.0 events and windows](amiga-gfa-basic-3.0-events-windows-evidence.md) - Event and window evidence.
+- [GFA BASIC 3.0 system routines](amiga-gfa-basic-3.0-system-routines-evidence.md) - OS and system routine evidence.
+- [GFA BASIC 3.0 advanced programming](amiga-gfa-basic-3.0-advanced-programming-evidence.md) - Advanced programming features.
+- [GFA BASIC 3.0 appendix index evidence](amiga-gfa-basic-3.0-appendix-index-evidence.md) - Appendix and index evidence.
+- [GFA BASIC 3.0 source notes](amiga-gfa-basic-3.0-german-source-notes.md) - Source edition and selected page notes.
+- [GFA BASIC 3.0 procedure and error details](amiga-gfa-basic-3.0-procedure-error-details.md) - Procedures and error behavior.
+- [GFA BASIC 3.0 screen and window details](amiga-gfa-basic-3.0-screen-window-details.md) - Screen/window behavior.
+- [GFA BASIC 3.0 output device details](amiga-gfa-basic-3.0-output-device-details.md) - Output-device behavior.
+- [GFA BASIC 3.0 menu event details](amiga-gfa-basic-3.0-menu-event-details.md) - Menu event payloads.
+- [GFA BASIC 3.0 BOB object details](amiga-gfa-basic-3.0-bob-object-details.md) - BOB/object behavior.
+- [GFA BASIC 3.0 source format and editor evidence](amiga-gfa-basic-3.0-source-format-editor-evidence.md) - Source and editor behavior.
+
+## 3.5 focused audits
+
+- [3.5 primary reference](amiga-gfa-basic-35-primary-reference.md) - Primary manual and version scope.
+- [3.5 Chapter 18–19 extraction](amiga-book-gfa35-chapter18-19-extraction.md) - Dedicated 3.5 chapter extraction.
+- [3.5 editor feature audit](amiga-gfa-basic-35-editor-feature-audit.md) - Editor-specific additions.
+- [3.5 lexer evidence](amiga-gfa-basic-35-lexer-evidence.md) - Lexical evidence.
+- [3.5 MAT arithmetic audit](amiga-gfa-basic-35-matrix-arithmetic-analysis-audit.md) - Matrix arithmetic details.
+- [3.5 MAT I/O and copy audit](amiga-gfa-basic-35-matrix-io-copy-audit.md) - Matrix input/output and copy details.
+- [3.5 declaration audits: FIVE](amiga-gfa-basic-35-five-declaration-audit.md) - FIVE declaration evidence.
+- [3.5 declaration audits: FIVE MORE](amiga-gfa-basic-35-five-more-declaration-audit.md) - Additional declaration evidence.
+- [3.5 GURU declaration audit](amiga-gfa-basic-35-guru-declaration-audit.md) - GURU declaration evidence.
+
+## Atari and cross-platform research
+
+- [Atari GFA book diskette](atari-gfa-book-diskette.md) - Static review of accompanying examples.
+- [Systematic Atari book review](atari-gfa-book-systematic-review.md) - Chapter-by-chapter Atari reference review.
+- [Aminet catalogue](aminet-catalogue.md) - Amiga BASIC package survey.
+- [GFAList build and fixture validation](gfalist-build-and-fixture-validation.md) - GFAList build and fixture evidence.
+- [GFAList format versus Rust frontend](gfalist-format-vs-rust-frontend.md) - Format comparison notes.

@@ -24,6 +24,7 @@ This is the canonical OKF v0.2 documentation bundle for gfabasic-rust. Markdown 
 # Research and evidence
 
 - [Research](research/) - Source reviews, inventories, and evidence notes.
+- [Amiga GFA BASIC command catalogue](research/amiga-gfa-basic-command-catalogue.md) - Entry point for the extracted Amiga command/function lists, detailed book and OS API extraction, structured inventories, version evidence, and count definitions.
 - [Amiga GFA BASIC test output](research/amiga-gfa-test-output.md) - Native file-output observation and proposed batch result protocol.
 
 # Project use and contribution
@@ -31,4 +32,4 @@ This is the canonical OKF v0.2 documentation bundle for gfabasic-rust. Markdown 
 - [Contributor guides](contributor/) - Development setup and contribution policies.
 - [User guides](user/) - User-facing guidance.
 - [Testing guides](testing/) - Reference interpreter and testing material.
-- [Templates](templates/) - Reusable documentation templates.
+- [Templates](templates/) - Reusable documentation structures.
