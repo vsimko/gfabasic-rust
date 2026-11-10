@@ -31,7 +31,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
 
       - name: Check shell script syntax
-        run: bash -n scripts/ci/amiga-cli-probe.sh scripts/ci/validate-amiga-cli-probe.sh
+        run: bash -n scripts/ci/amiga-cli-probe.sh && bash -n scripts/ci/validate-amiga-cli-probe.sh
 
       - name: Download and verify private GFA BASIC interpreter
         env:
@@ -83,7 +83,7 @@ jobs:
         run: sudo chown -R "$USER":"$USER" /var/cache/apt/archives
 
       - name: Cache APT and pip downloads
-        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9
+        uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57
         with:
           path: |
             /var/cache/apt/archives
@@ -92,7 +92,6 @@ jobs:
 
       - name: Install emulator and OCR
         run: |
-          sudo chown -R root:root /var/cache/apt/archives
           sudo install -d -m 0755 /usr/share/keyrings
           curl -fsSL https://packages.amiberry.com/gpg.key | sudo tee /usr/share/keyrings/amiberry-archive-keyring.gpg >/dev/null
           echo "deb [arch=amd64 signed-by=/usr/share/keyrings/amiberry-archive-keyring.gpg] https://packages.amiberry.com/apt noble main" | sudo tee /etc/apt/sources.list.d/amiberry.list >/dev/null
