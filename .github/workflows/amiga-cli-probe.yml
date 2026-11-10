@@ -100,6 +100,7 @@ jobs:
           key: amiga-cli-packages-${{ runner.os }}-ubuntu24-amiberry-v2-${{ steps.cache-date.outputs.day }}
           restore-keys: |
             amiga-cli-packages-${{ runner.os }}-ubuntu24-amiberry-v2-
+          save-always: true
 
       - name: Install emulator and OCR
         run: |
