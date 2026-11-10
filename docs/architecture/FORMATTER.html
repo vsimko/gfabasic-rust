@@ -27,7 +27,7 @@
 </ul>
 <h2 id="scope">Scope</h2>
 <p>The formatter is a library feature in <code>gfabasic-compiler::formatter</code>. It consumes source text and a source ID, validates the whole document through the lossless parser, and returns formatted text or the parser's diagnostics. It does not depend on the CLI, LLVM, generated-program runtime, or SDL3.</p>
-<p>At this stage, the parser accepts only the evidence-backed assignment forms <code>FACT</code>, <code>VARIAT</code>, <code>COMBIN</code>, and <code>PRINT</code> with the current prototype variable subset. The formatter rejects every construct the parser cannot validate. In particular, comments, string and DATA payloads, broader identifier forms, and nested blocks are not formatted until their Amiga GFA BASIC 3.5 lexical/grammar rules are verified and represented losslessly.</p>
+<p>The parser accepts the evidence-backed <code>FACT</code>, <code>VARIAT</code>, <code>COMBIN</code>, and <code>PRINT</code> forms with the current prototype variable subset, plus selected 3.5 matrix syntax (<code>DIM</code> and the documented <code>MAT</code> forms listed in the <a href="../reference/amiga-gfa-basic-35-formatter.html">formatter reference</a>). The formatter rejects every construct the parser cannot validate. Matrix syntax is parsed/formatted only; the executable IR does not evaluate it. Comments, string and DATA payloads, broader identifier forms, and nested blocks remain unsupported until their Amiga GFA BASIC 3.5 lexical/grammar rules are verified and represented losslessly.</p>
 <h2 id="canonical-prototype-layout">Canonical prototype layout</h2>
 <p>For the supported subset only:</p>
 <ul>
