@@ -9,6 +9,8 @@ on:
   pull_request:
     paths:
       - ".github/workflows/amiga-native-merge-run.yml"
+      - "tests/interpreter-probes/amiga-3.52/**"
+      - "scripts/validate_gfatest_results.py"
   workflow_dispatch:
 
 permissions:
@@ -83,15 +85,7 @@ jobs:
 
       - name: Prepare CLI input and boot volume
         run: |
-          cat > amiga-volume/factzero.LST <<'EOF'
-          x = FACT(0)
-          y = FACT(1)
-          z = FACT(2)
-          OPEN "O",#1,"DF0:FACT.OUT"
-          PRINT #1,x,y,z
-          CLOSE #1
-          PRINT x, y, z
-          EOF
+          cp tests/interpreter-probes/amiga-3.52/regression-suite.LST amiga-volume/factzero.LST
           # Build a bootable AmigaDOS 1.x OFS floppy. Kickstart 1.3 has no
           # built-in Workbench/CLI disk, so the boot block and Startup-Sequence
           # must live on the same disk as the interpreter and textual listing.
@@ -216,13 +210,28 @@ jobs:
             printf "SEND_KEY\\t68\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
             sleep 0.2
             printf "SEND_KEY\\t68\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-            sleep 1
+            # Allow the BASIC runtime and filesystem to finish flushing the
+            # interpreter-written output files before requesting emulator exit.
+            sleep 3
 
             kill -0 "$emulator_pid"
             printf "QUIT\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}" || true
+            # QUIT is asynchronous. Wait for Amiberry to close the floppy
+            # cleanly; the EXIT trap is only a timeout fallback.
+            for attempt in $(seq 1 10); do
+              if ! kill -0 "$emulator_pid" 2>/dev/null; then break; fi
+              sleep 1
+            done
+            if kill -0 "$emulator_pid" 2>/dev/null; then
+              echo "Amiberry did not exit after QUIT; cleanup will terminate it."
+            else
+              wait "$emulator_pid" || true
+            fi
           '
           xdftool artifacts/amiga-cli-probe/factzero.adf read FACT.OUT artifacts/amiga-cli-probe/fact-output.txt
+          xdftool artifacts/amiga-cli-probe/factzero.adf read GFATEST.OUT artifacts/amiga-cli-probe/gfatest-results.txt
           cat artifacts/amiga-cli-probe/fact-output.txt
+          cat artifacts/amiga-cli-probe/gfatest-results.txt
           for diagnostic in insert-floppy-ipc.txt list-floppies-ipc.txt stdin-save.LST; do
             if test -f "amiga-volume/$diagnostic"; then
               cp "amiga-volume/$diagnostic" "artifacts/amiga-cli-probe/$diagnostic"
@@ -252,12 +261,19 @@ jobs:
           fi
 
           # Assert the interpreter-written file, independent of screen OCR.
-          if grep -Eq '1[[:space:]]+1[[:space:]]+2' artifacts/amiga-cli-probe/fact-output.txt; then
+          if grep -Eq 'FACT\(0\.\.2\):[[:space:]]*1[[:space:]]*1[[:space:]]*2' artifacts/amiga-cli-probe/fact-output.txt; then
             echo "FACT_PROGRAM_OUTPUT=1 1 2" | tee -a artifacts/amiga-cli-probe/result.txt
           else
             echo "::error::FACT.OUT does not contain the expected output (1 1 2)."
             exit 1
           fi
+
+          # Validate one interpreter-emitted terminal record for every requested
+          # fixture. The BASIC program performs each assertion before writing
+          # PASS/FAIL; the host only validates collection completeness.
+          python3 scripts/validate_gfatest_results.py \
+            --expected-ids tests/interpreter-probes/amiga-3.52/expected-ids.txt \
+            --results artifacts/amiga-cli-probe/gfatest-results.txt
 
 
       - name: Upload diagnostic evidence (never upload commercial binary)
