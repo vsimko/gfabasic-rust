@@ -290,7 +290,7 @@ mod tests {
         let before_id = before_sources.add_source("before.bas", source);
         let before = parse_document(before_id, source).unwrap();
         let mut after_sources = SourceMap::new();
-        let after_id = after_sources.add_source("after.bas", &formatted);
+        let after_id = after_sources.add_source("after.bas", formatted.as_str());
         let after = parse_document(after_id, &formatted).unwrap();
         assert_eq!(meanings(&before.program), meanings(&after.program));
     }
