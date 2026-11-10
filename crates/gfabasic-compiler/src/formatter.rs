@@ -126,6 +126,7 @@ mod tests {
         MatMulScalar(String, Vec<String>),
         MatMulScale(String, String),
         MatAnalysis(String, String, Option<(i64, i64)>, Option<i64>, String),
+        MatInv(String, String),
         MatCopy(
             String,
             Option<(i64, i64)>,
@@ -217,6 +218,9 @@ mod tests {
                         operation.to_owned(),
                     )
                 }
+                Statement::MatInv { destination, source, .. } => {
+                    Meaning::MatInv(destination.clone(), source.clone())
+                }
                 Statement::MatAnalysis {
                     operation,
                     destination,
@@ -272,6 +276,21 @@ mod tests {
         let mut sources = SourceMap::new();
         let source_id = sources.add_source("format.bas", source);
         format_source(source_id, source).expect("supported source should format")
+    }
+
+    #[test]
+    fn mat_inv_formatting_is_idempotent_and_semantics_preserving() {
+        let source = "MAT INV b()=a()\\n";
+        let formatted = format(source);
+        assert_eq!(formatted, "MAT INV b() = a()\\n");
+        assert_eq!(format(&formatted), formatted);
+        let mut before_sources = SourceMap::new();
+        let before_id = before_sources.add_source("before.bas", source);
+        let before = parse_document(before_id, source).unwrap();
+        let mut after_sources = SourceMap::new();
+        let after_id = after_sources.add_source("after.bas", &formatted);
+        let after = parse_document(after_id, &formatted).unwrap();
+        assert_eq!(meanings(&before.program), meanings(&after.program));
     }
 
     #[test]
