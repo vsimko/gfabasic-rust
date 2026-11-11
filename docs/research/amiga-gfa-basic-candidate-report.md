@@ -15,7 +15,7 @@ tags: [amiga, gfa-basic, evidence, research]
 | candidate | 0 |
 | confirmed-in-3.5 | 13 |
 | contradicted | 0 |
-| documented-in-3.0-only | 100 |
+| documented-in-3.0-only | 102 |
 | unresolved | 0 |
 
 ## Unresolved and pending candidates
@@ -52,8 +52,10 @@ tags: [amiga, gfa-basic, evidence, research]
 | `amiga.base2.fre` | FRE | 2-29 | Memory-availability query documented in the base manual; argument/return variants need exact signature extraction. |
 | `amiga.base2.malloc-mfree` | MALLOC / MFREE | 2-41–2-42 | Memory allocation/release forms are documented; allocator/error/ownership semantics are not promoted to 3.5. |
 | `amiga.base2.mkx` | MKI$ / MKL$ / MKS$ / MKF$ / MKD$ | 2-18–2-19 | Numeric-to-binary-string conversion family; counterpart mapping inherits the CVx naming inconsistency. 3.0 base-manual evidence only. |
-| `amiga.base2.peek` | PEEK | 2-36 | Memory-read forms are documented in the base manual; width/type variants need independent 3.5 evidence. |
+| `amiga.base2.peek` | PEEK / DPEEK / LPEEK | 2-36 | Reads one, two or four bytes respectively; the source warns that even addresses must be used. 3.5 applicability remains unverified. |
 | `amiga.base2.pointer-star` | * (array descriptor pointer form) | 2-33 | Indirect array-descriptor form is documented alongside ARRPTR; keep separate from multiplication operator. |
+| `amiga.base2.poke-family` | POKE / DPOKE / LPOKE | 2-35 | Writes one, two or four bytes; source has a DPOKE separator mismatch and a stray LPOKE semicolon, preserved as printed evidence. |
+| `amiga.base2.typed-memory-access` | BYTE{} / CARD{} / INT{} / WORD{} / LONG{} / {} / FLOAT{} / SINGLE{} / DOUBLE{} / CHAR{} | 2-37–2-38 | Typed address forms read as functions and write as commands; the untyped {} form is described as similar to LONG{}. 3.5 applicability remains unverified. |
 | `amiga.base2.str` | STR$ | 2-15 | Overloads STR$(x), STR$(x,y), STR$(x,y,z); width and selected-slice behavior are described. 3.0 base-manual evidence only. |
 | `amiga.base2.timer` | TIMER | 2-28 | Timer function heading and page locator in the base manual; exact return/tick contract is not promoted. |
 | `amiga.base2.type` | TYPE | 2-30 | Variable type query documented in the base manual; 3.5 applicability unverified. |
