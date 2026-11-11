@@ -38,6 +38,7 @@
 - [GFA BASIC 3.0 variable, array, and conversion functions](amiga-base-manual-variable-array-conversion-functions.md) - Chapter 2 function forms, signatures, semantics, and unresolved evidence boundaries.
 - [GFA BASIC Chapter 7 program-handling evidence](amiga-gfa-basic-chapter-7-program-handling-evidence.md) - Page-cited control-flow, procedures, functions, and error-handling inventory (printed pp. 7-2–7-55); keeps 3.0 documentation, 3.52 probes, and 3.5 claims separate.
 - [GFA BASIC Chapter 8 graphics compatibility evidence](amiga-gfa-basic-chapter-8-graphics-evidence.md) - Page-cited graphics inventory (printed pp. 8-2–8-24), 3.5 PCOLOR reconciliation, and explicit absence of tracked 3.52 graphics probes.
+- [GFA BASIC Chapter 9 event, menu, screen and window evidence](amiga-gfa-basic-chapter-9-event-window-evidence.md) - Page-cited event/menu/screen/window inventory (printed pp. 9-2–9-39), with the narrow 3.5 negative-screen OPENW variant separated.
 - [Chapter inventory validator](../../scripts/validate_amiga_chapter_inventories.py) - Structural checks for Chapter 7–8 page-cited inventories; does not assert completeness or semantic alias equivalence.
 - [GFA BASIC 3.0 command index](amiga-gfa-basic-3.0-command-index.md) - Thematic command index derived from the base manual.
 - [GFA BASIC 3.0 statement candidates](amiga-gfa-basic-3.0-statement-command-candidates.md) - Statement-family candidates requiring version reconciliation.

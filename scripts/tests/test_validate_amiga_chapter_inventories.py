@@ -10,6 +10,7 @@ class ChapterInventoryTests(unittest.TestCase):
         counts = validate(root)
         self.assertGreaterEqual(counts[7], 20)
         self.assertGreaterEqual(counts[8], 15)
+        self.assertGreaterEqual(counts[9], 10)
 
     def test_duplicate_construct_labels_are_rejected(self):
         text = """## Inventory
