@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The project website currently combines a public introduction, prototype description, API catalogue, and a coarse roadmap. Maintainers also need a concise visual view of implementation progress, evidence coverage, deli…">
+  <title>ADR 0014: Repository implementation dashboard · GFA BASIC Rust documentation</title>
+  <link rel="stylesheet" href="../../../styles.css">
+</head>
+<body class="docs-site">
+  <header class="docs-header">
+    <a href="../../../index.html">GFA BASIC Rust</a>
+    <span aria-hidden="true">/</span>
+    <a href="../../index.html">Documentation</a>
+  </header>
+  <div class="docs-layout">
+    <nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home" href="index.html">Section index</a><ul><li><a href="0001-documentation-and-architecture-records.html">ADR 0001: Documentation and architecture decision records</a></li><li><a href="0002-initial-rust-workspace.html">ADR 0002: Initial Rust workspace crate boundaries</a></li><li><a href="0003-target-model.html">ADR 0003: Host and compilation target model</a></li><li><a href="0004-api-profile-model.html">ADR 0004: API profile model</a></li><li><a href="0005-cli-and-project-configuration.html">ADR 0005: CLI and project configuration</a></li><li><a href="0006-api-registry.html">ADR 0006: API declaration registry</a></li><li><a href="0007-compiler-pipeline-and-ir.html">ADR 0007: Compiler pipeline and typed IR boundaries</a></li><li><a href="0008-initial-source-dialect-amiga-gfa-basic-3.0.html">ADR 0008: Initial source dialect — Amiga GFA BASIC interpreter 3.0</a></li><li><a href="0009-initial-source-dialect-amiga-gfa-basic-3.5.html">ADR 0009: Initial source dialect — Amiga GFA BASIC interpreter 3.5</a></li><li><a href="0010-versioning-and-compatibility-lifecycle.html">ADR 0010: Versioning and compatibility lifecycle</a></li><li><a href="0011-amiga-35-linux-sdl3-product-scope.html">ADR 0011: Product scope — Amiga GFA BASIC 3.5 to Linux x86-64 with SDL3</a></li><li><a href="0012-language-server-and-editor-integration.html">ADR 0012: Language server and editor integration</a></li><li><a href="0013-repository-consistency-validation.html">ADR 0013: Repository consistency validation</a></li><li><a href="0014-implementation-dashboard.html">ADR 0014: Repository implementation dashboard</a></li><li><a href="0015-listing-first-compiler-input.html">ADR 0015: Listing-first compiler input</a></li><li><a href="TEMPLATE.html">ADR NNNN: Title</a></li><li><a href="0016-okf-v02-documentation-bundle.html">ADR 0016: OKF v0.2 documentation bundle</a></li></ul></nav>
+    <main class="docs-content">
+      <article>
+        <h1>ADR 0014: Repository implementation dashboard</h1>
+        <p class="docs-meta"><span>Architecture Decision Record</span></p>
+        <h1 id="adr-0014-repository-implementation-dashboard">ADR 0014: Repository implementation dashboard</h1>
+<ul>
+<li>Status: Accepted</li>
+<li>Date: 2026-11-07</li>
+<li>Decision makers: Project maintainers</li>
+</ul>
+<h2 id="context">Context</h2>
+<p>The project website currently combines a public introduction, prototype description, API catalogue, and a coarse roadmap. Maintainers also need a concise visual view of implementation progress, evidence coverage, delivery dependencies, blockers, automated checks, and recent repository activity. A single percentage would hide important distinctions: research is not implementation, a prototype is not a supported feature, and documented API declarations do not imply runtime behavior or conformance.</p>
+<p>The project already keeps its canonical information in repository files, validated registries, tests, GitHub Issues, and GitHub Actions. The website is a static GitHub Pages site and should remain useful without a runtime service, database, privileged token, or client-side API calls.</p>
+<h2 id="decision">Decision</h2>
+<ol>
+<li>Extend the existing static website with a maintainer-facing implementation dashboard while preserving its public project presentation.</li>
+<li>Generate dashboard data at build time as deterministic, validated static JSON. Do not require a server, database, runtime secret, or browser-side GitHub API access.</li>
+<li>Keep source-of-truth boundaries explicit:
+<ul>
+<li>GitHub Issues own task scope, acceptance criteria, blockers, and implementation discussion.</li>
+<li>ROADMAP.md owns project delivery phases and sequencing.</li>
+<li>The API registry owns API declaration metadata and declared evidence/support states.</li>
+<li>Source inventories and ADRs own documented research provenance and accepted architectural decisions.</li>
+<li>Tests and conformance results own executable verification claims.</li>
+<li>GitHub Actions owns CI workflow and run status.</li>
+<li>Git history and pull requests own repository activity.</li>
+</ul>
+</li>
+<li>Use component statuses Implemented, Partial, Prototype, Research, Planned, and Blocked. Each component entry must include a rationale, evidence link, related issue links where applicable, and an update timestamp or source revision.</li>
+<li>Keep these dimensions separate: source evidence, implementation state, Linux/platform support, runtime observation, and conformance verification. Every metric must define its numerator, denominator, and inclusion rules.</li>
+<li>Never calculate or display one aggregate implementation or compatibility percentage. Research, inferred evidence, and planning documents must not count as implementation or conformance.</li>
+<li>Display only facts available from canonical sources. Missing, stale, conflicting, or unavailable data must be marked unknown/stale or cause generation validation to fail; it must not be inferred silently.</li>
+<li>Render roadmap phases, dependencies, blockers, CI health, and recent activity as focused views that link to their underlying records. Do not invent delivery dates or completion claims.</li>
+<li>Keep the implementation compatible with the existing HTML/CSS/JavaScript site and static hosting. Add a framework or hosted service only through a separate ADR.</li>
+</ol>
+<h2 id="alternatives-considered">Alternatives considered</h2>
+<h3 id="use-a-single-progress-percentage">Use a single progress percentage</h3>
+<p>Rejected because it collapses research, partial prototypes, implementation, and conformance into a misleading number.</p>
+<h3 id="query-github-from-the-browser-at-runtime">Query GitHub from the browser at runtime</h3>
+<p>Rejected because it introduces rate limits, availability and CORS concerns, and possible token exposure. Build-time generation is more deterministic and works with static hosting.</p>
+<h3 id="maintain-dashboard-facts-manually-in-javascript">Maintain dashboard facts manually in JavaScript</h3>
+<p>Rejected because it creates a second source of truth and makes status drift likely. Data must be derived from canonical repository sources and validated.</p>
+<h3 id="replace-the-existing-website-with-a-dashboard-application">Replace the existing website with a dashboard application</h3>
+<p>Rejected because the site is also the public project introduction and does not need a separate application framework.</p>
+<h2 id="consequences">Consequences</h2>
+<ul>
+<li>The dashboard remains deployable as static GitHub Pages content.</li>
+<li>A small generation and validation pipeline is required.</li>
+<li>Data provenance and freshness become part of the dashboard contract.</li>
+<li>Metrics may be unavailable until the relevant canonical source provides reliable data; unknown is preferable to an invented value.</li>
+<li>The public-facing site and the maintainer dashboard share one deployment but keep distinct information hierarchies.</li>
+<li>Implementation is split into issues <a href="https://github.com/vsimko/gfabasic-rust/issues/304">#304</a> through <a href="https://github.com/vsimko/gfabasic-rust/issues/310">#310</a>.</li>
+</ul>
+<h2 id="evidence-and-references">Evidence and references</h2>
+<ul>
+<li><a href="https://github.com/vsimko/gfabasic-rust/issues/304">Issue #304: dashboard overview</a></li>
+<li><a href="https://github.com/vsimko/gfabasic-rust/issues/305">Issue #305: generated progress data model</a></li>
+<li><a href="https://github.com/vsimko/gfabasic-rust/issues/306">Issue #306: roadmap, dependencies, and blockers</a></li>
+<li><a href="https://github.com/vsimko/gfabasic-rust/issues/307">Issue #307: compatibility metrics</a></li>
+<li><a href="https://github.com/vsimko/gfabasic-rust/issues/308">Issue #308: CI and supply-chain health</a></li>
+<li><a href="https://github.com/vsimko/gfabasic-rust/issues/309">Issue #309: repository activity</a></li>
+<li><a href="https://github.com/vsimko/gfabasic-rust/issues/310">Issue #310: dashboard documentation</a></li>
+<li><a href="https://github.com/vsimko/gfabasic-rust/blob/main/ROADMAP.md">Project roadmap</a></li>
+<li><a href="0013-repository-consistency-validation.html">ADR 0013: repository consistency validation</a></li>
+</ul>
+<h2 id="supersedes-superseded-by">Supersedes / superseded by</h2>
+<p>None.</p>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>
