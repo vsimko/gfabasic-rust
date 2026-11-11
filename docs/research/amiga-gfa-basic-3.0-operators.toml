@@ -1,0 +1,146 @@
+schema-version = 1
+inventory-id = "amiga-gfa-basic-3.0-operators"
+target-dialect = "amiga-gfa-basic-interpreter"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+source-pages = ["3-2–3-16"]
+"3.5-status" = "unverified"
+notes = "Declaration-level transcription of Chapter 3 operator spellings. This is 3.0 evidence in the supplied 3.5 manual, not proof of 3.5 retention. Names shared with built-in functions are one construct under the population policy."
+
+[[operators]]
+name = "+"
+roles = ["string-concatenation", "numeric-addition", "unary-prefix"]
+printed-pages = ["3-2", "3-10"]
+aliases = []
+
+[[operators]]
+name = "-"
+roles = ["numeric-subtraction", "unary-prefix"]
+printed-pages = ["3-2", "3-10"]
+aliases = []
+
+[[operators]]
+name = "^"
+roles = ["power"]
+printed-pages = ["3-2"]
+aliases = []
+
+[[operators]]
+name = "*"
+roles = ["multiplication"]
+printed-pages = ["3-2"]
+aliases = []
+
+[[operators]]
+name = "/"
+roles = ["division"]
+printed-pages = ["3-2"]
+aliases = []
+
+[[operators]]
+name = "DIV"
+roles = ["integer-division"]
+printed-pages = ["3-2"]
+aliases = []
+
+[[operators]]
+name = "MOD"
+roles = ["integer-remainder"]
+printed-pages = ["3-2"]
+aliases = []
+
+[[operators]]
+name = "="
+roles = ["assignment", "equality-comparison"]
+printed-pages = ["3-2", "3-10", "3-11"]
+aliases = []
+
+[[operators]]
+name = "=="
+roles = ["approximate-numeric-equality"]
+printed-pages = ["3-12"]
+aliases = []
+
+[[operators]]
+name = "<"
+roles = ["less-than"]
+printed-pages = ["3-2", "3-13"]
+aliases = []
+
+[[operators]]
+name = ">"
+roles = ["greater-than"]
+printed-pages = ["3-2", "3-13"]
+aliases = []
+
+[[operators]]
+name = "<="
+roles = ["less-than-or-equal"]
+printed-pages = ["3-2", "3-13"]
+aliases = ["=<"]
+
+[[operators]]
+name = ">="
+roles = ["greater-than-or-equal"]
+printed-pages = ["3-2", "3-13"]
+aliases = ["=>"]
+
+[[operators]]
+name = "<>"
+roles = ["inequality"]
+printed-pages = ["3-2", "3-15"]
+aliases = []
+
+[[operators]]
+name = "AND"
+roles = ["logical-conjunction", "bitwise-integer-operation"]
+printed-pages = ["3-3", "3-4"]
+aliases = []
+shared-function-name = true
+
+[[operators]]
+name = "OR"
+roles = ["logical-disjunction", "bitwise-integer-operation"]
+printed-pages = ["3-5"]
+aliases = []
+shared-function-name = true
+
+[[operators]]
+name = "XOR"
+roles = ["exclusive-disjunction", "bitwise-integer-operation"]
+printed-pages = ["3-6"]
+aliases = []
+shared-function-name = true
+
+[[operators]]
+name = "IMP"
+roles = ["logical-implication", "bitwise-integer-operation"]
+printed-pages = ["3-7"]
+aliases = []
+shared-function-name = true
+
+[[operators]]
+name = "EQV"
+roles = ["logical-equivalence", "bitwise-integer-operation"]
+printed-pages = ["3-8"]
+aliases = []
+shared-function-name = true
+
+[[operators]]
+name = "NOT"
+roles = ["logical-negation"]
+printed-pages = ["3-3"]
+aliases = []
+
+[normalization]
+prefix-and-infix-forms = "one-construct-per-token-name"
+assignment-and-comparison-same-name = "one-construct"
+string-and-numeric-comparison-overloads = "one-construct-per-token-name"
+operator-and-function-same-name = "one-construct-by-name"
+aliases = "one-canonical-name-with-aliases"
+
+[limitations]
+chapter-3-population-only = true
+complete-language-inventory = false
+explicit-3.5-evidence = false
+runtime-observation = "not-recorded"
