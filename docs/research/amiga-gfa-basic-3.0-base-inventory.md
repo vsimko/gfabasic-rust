@@ -783,7 +783,7 @@ Consequently, the source itself contains an unresolved spelling conflict: `CVF` 
 **Version boundary:** these are printed pp. 2-18–2-19 in the 3.0 base-manual portion of the combined 3.5 interpreter manual. This audit is not evidence of 3.5 availability.
 
 
-## Chapter 2–4 declaration-level audit (2026-11-11)
+## Chapter 2–4 source-evidence audit (2026-11-11)
 
 The Chapter 2–4 source review is now represented by 57 granular, page-located evidence records in `amiga-gfa-basic-candidates.toml`, rather than relying only on three broad topic-family rows. These are tracking records, not a complete one-entry-per-name declaration catalogue: some related names remain grouped where their source discussion is shared. The records cover Chapter 2 conversion, date/time, memory-query and pointer topics; Chapter 3 operator forms and precedence; and Chapter 4 arithmetic, trigonometric, random, bitwise, conversion and string-function topics. Same-spelling command/function pairs are kept separate where the source distinguishes them (notably integer arithmetic functions versus mutating commands, the SWAP function versus SWAP command, and MID$ function versus MID$ command).
 
