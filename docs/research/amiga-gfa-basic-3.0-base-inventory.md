@@ -767,3 +767,17 @@ The following details are extracted from the 3.0 base-manual source and are **no
 - **RESUME (printed p. 7-29):** the source lists `RESUME [NEXT]` and `RESUME [label]`. In an error handler, `RESUME NEXT` continues with the command following the failing command; `RESUME label` continues at the named label. With no NEXT or label, RESUME retries the command that caused the error. For a FATAL error, the manual permits only `RESUME label`; it disallows bare RESUME and `RESUME NEXT`.
 - **3.5-specific cross-reference (printed p. 13-36):** the 3.5 GURU section explicitly says that a GURU Meditation can transfer to the `ONERROR GOSUB` routine or generate error #109. It further says that in compiled 3.5 programs, `RESUME NEXT` and `RESUME LABEL` cannot be executed after an `ONERROR GOSUB` call caused by a GURU. This confirms that these spellings participate in a 3.5 GURU/error-handler interaction, but it does not independently restate the full Chapter 7 syntax or all interpreter-mode behavior.
 - **Version status:** retain ON ERROR/ONERROR GOSUB and RESUME as unresolved 3.5 candidates until their base-manual grammar and semantics are reconciled against a 3.5-specific source or an authorized 3.5 runtime observation. Do not promote the full 3.0 descriptions to the normative 3.5 registry from the GURU cross-reference alone.
+
+## CVx / MKx conversion-name source audit (printed pp. 2-18–2-19)
+
+The page images for printed pp. 2-18 and 2-19 (PDF viewer pages 52–53 in the supplied English scan) have been inspected directly. They confirm that the inconsistencies are present in the printed source, not merely introduced by OCR:
+
+- The syntax block on p. 2-18 lists `CVI(a$)`, `CVL(a$)`, `MKI$(x)`, `MKL$(x)`, `MKS$(x)`, and `MKD$(x)`.
+- The prose immediately below says “CVI, CVL, and CVF” convert character strings into numbers.
+- The explanatory table labels its third conversion `CVS` (four-byte Amiga-BASIC-compatible number to a floating-point GFA-BASIC value); it does not label that row `CVF`.
+- The reverse-function sentence on p. 2-19 lists `MKI$`, `MKL$`, `MKS$`, `MKF$`, and `MKD$`.
+- The examples exercise only `MKL$(1000)` with `CVL(a$)`, and `MKI$(100.1)` with `CVI(b$)`. They do not resolve the disputed floating-point pair.
+
+Consequently, the source itself contains an unresolved spelling conflict: `CVF` versus `CVS`, and `MKF$` versus the syntax block's `MKS$`. The page images rule out an OCR-only explanation but do not establish which forms are intended, aliases, or typographical errors. Preserve both printed variants as conflicting source evidence; do not normalize them, infer alias equivalence, or create/promote registry declarations from this passage.
+
+**Version boundary:** these are printed pp. 2-18–2-19 in the 3.0 base-manual portion of the combined 3.5 interpreter manual. This audit is not evidence of 3.5 availability.
