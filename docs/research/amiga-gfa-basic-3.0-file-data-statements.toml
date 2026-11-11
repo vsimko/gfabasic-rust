@@ -5,7 +5,7 @@ source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 source-pages = ["6-4–6-21"]
 "3.5-status" = "unverified"
-notes = "Page-reviewed declaration-level additions for directory, file metadata and array persistence. This file deliberately excludes canonical statement names already present in amiga-gfa-basic-3.0-statements.toml (for example OPEN, CLOSE, BLOAD, BSAVE, BGET, BPUT, FIELD, GET, PUT, SEEK and RELSEEK). It is a partial 3.0 inventory, not a complete command population or a 3.5 compatibility claim."
+notes = "Page-reviewed declaration-level additions for directory, file metadata and array persistence. Canonical names already present in amiga-gfa-basic-3.0-statements.toml are excluded to avoid duplicate inventory rows. This is a partial 3.0 inventory, not a complete command population or a 3.5 compatibility claim."
 
 [[statements]]
 name = "CHDIR"
@@ -27,20 +27,6 @@ printed-pages = ["6-5"]
 syntax-variants = ["FILES path$ TO destination$"]
 aliases = []
 notes = "Directory-listing variant that displays file names and sizes."
-
-[[statements]]
-name = "NAME"
-printed-pages = ["6-10"]
-syntax-variants = ["NAME old$ AS new$"]
-aliases = ["RENAME"]
-notes = "RENAME is explicitly documented as an alias of NAME; NAME is already present in the shared statements inventory and must be deduplicated."
-
-[[statements]]
-name = "KILL"
-printed-pages = ["6-10"]
-syntax-variants = ["KILL name$"]
-aliases = []
-notes = "Deletes the named file. KILL is already present in the shared statements inventory and must be deduplicated."
 
 [[statements]]
 name = "TOUCH"
