@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Compiler source paths refer to textual .LST listings. .BAS is not the compiler input extension; native tokenized .GFA input is deferred by ADR 0015. The extension does not establish an encoding or BOM policy.">
+  <title>CLI, configuration, and build artifacts · GFA BASIC Rust documentation</title>
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body class="docs-site">
+  <header class="docs-header">
+    <a href="../../index.html">GFA BASIC Rust</a>
+    <span aria-hidden="true">/</span>
+    <a href="../index.html">Documentation</a>
+  </header>
+  <div class="docs-layout">
+    <nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home" href="index.html">Section index</a><ul><li><a href="AI-VERIFICATION.html">AI-assisted API verification</a></li><li><a href="API-PROFILES.html">API profiles</a></li><li><a href="API-REGISTRY.html">API registry and declaration source of truth</a></li><li><a href="BENCHMARKING.html">Performance benchmarks and profiling strategy</a></li><li><a href="CI.html">GitHub Actions workflow architecture</a></li><li><a href="CLI-AND-CONFIG.html">CLI, configuration, and build artifacts</a></li><li><a href="COMPATIBILITY-MATRIX.html">Current compatibility matrix</a></li><li><a href="DIAGNOSTICS.html">Diagnostics and compatibility reporting</a></li><li><a href="DIALECTS.html">Dialects, versions, and compatibility policy</a></li><li><a href="FORMATTER.html">Formatter style and current support</a></li><li><a href="FUZZING.html">Frontend fuzzing and robustness strategy</a></li><li><a href="GOALS.html">Project goals and compatibility objectives</a></li><li><a href="IMPLEMENTATION-DASHBOARD.html">Implementation dashboard</a></li><li><a href="LANGUAGE-TOOLING.html">Language tooling and editor integration</a></li><li><a href="MEMORY.html">Memory model and hardware access</a></li><li><a href="MVP-vertical-slice.html">First compiler vertical slice — proposed boundary</a></li><li><a href="PIPELINE-AND-IR.html">Compiler pipeline and intermediate representation</a></li><li><a href="README.html">README</a></li><li><a href="RELEASES.html">Release, artifact, and reproducible-build policy</a></li><li><a href="RUNTIME.html">Runtime architecture</a></li><li><a href="SECURITY.html">Dependency and supply-chain security</a></li><li><a href="TARGETS.html">Host and target model</a></li><li><a href="TESTING.html">Compatibility testing and release criteria</a></li><li><a href="VALIDATION.html">Repository consistency validation</a></li><li><a href="VERSIONING.html">Versioning and compatibility lifecycle</a></li><li><a href="WEBSITE_PREVIEWS.html">Website previews for pull requests</a></li><li><a href="WORKSPACE.html">Rust workspace and dependency policy</a></li><li><a href="adr/index.html">Architecture decisions</a></li></ul></nav>
+    <main class="docs-content">
+      <article>
+        <h1>CLI, configuration, and build artifacts</h1>
+        <p class="docs-meta"><span>Architecture</span></p>
+        <h1 id="cli-configuration-and-build-artifacts">CLI, configuration, and build artifacts</h1>
+<ul>
+<li>Status: <strong>Accepted by <a href="adr/0005-cli-and-project-configuration.html">ADR 0005</a>.</strong> The executable implements help/version, a narrow <code>fmt</code> command, and a restricted <code>build</code> prototype using the host C compiler. Project-file loading/configuration and general source checking/compilation remain unimplemented.</li>
+<li>Tracking: <a href="https://github.com/vsimko/gfabasic-rust/issues/9">issue #9</a>.</li>
+</ul>
+<h2 id="command-model">Command model</h2>
+<p>Compiler source paths refer to textual <code>.LST</code> listings. <code>.BAS</code> is not the compiler input extension; native tokenized <code>.GFA</code> input is deferred by <a href="adr/0015-listing-first-compiler-input.html">ADR 0015</a>. The extension does not establish an encoding or BOM policy.</p>
+<p>The executable name is <code>gfabasic</code>. The accepted product interface is broader than the currently implemented subset. Current behavior is:</p>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Current implementation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>help</code>, <code>--help</code>, <code>version</code>, <code>--version</code></td>
+<td>Implemented</td>
+</tr>
+<tr>
+<td><code>fmt &lt;source.LST&gt;</code></td>
+<td>Implemented for the documented FACT/VARIAT/COMBIN/PRINT and selected DIM/MAT syntax; parser/formatter only, not matrix evaluation</td>
+</tr>
+<tr>
+<td><code>build &lt;source.LST&gt; -o &lt;output&gt;</code></td>
+<td>Experimental literal combinatorics/PRINT subset; temporary C/<code>cc</code> bootstrap, not LLVM</td>
+</tr>
+<tr>
+<td><code>check</code></td>
+<td>Explicitly unavailable; returns an unimplemented diagnostic</td>
+</tr>
+<tr>
+<td>Project-file discovery/configuration</td>
+<td>Not implemented</td>
+</tr>
+</tbody>
+</table>
+<p>The following table describes the intended command model, not a claim that each command is available:</p>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Purpose</th>
+<th>Output</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>`gfabasic build [SOURCE]`</td>
+<td>Validate and compile a source entry point</td>
+<td>Native executable and requested optional artifacts</td>
+</tr>
+<tr>
+<td>`gfabasic check [SOURCE]`</td>
+<td>Load, parse, and semantically validate without emitting a native executable</td>
+<td>Diagnostics and optional compatibility report</td>
+</tr>
+<tr>
+<td>`gfabasic version [--verbose]`</td>
+<td>Report compiler version and build identity</td>
+<td>Human-readable version/build metadata</td>
+</tr>
+</tbody>
+</table>
+<p>If SOURCE is omitted, the command uses the entry point in the discovered or explicitly supplied project file. If SOURCE is supplied, its parent directory is the starting point for project-file discovery. Multi-file source composition must follow the separately verified MERGE/include semantics; the CLI must not invent a project module/import model.</p>
+<p>There is no implicit `run` command in the initial interface. Running generated programs is a separate runtime/deployment concern.</p>
+<h2 id="project-file">Project file</h2>
+<p>Use TOML in a project file named `gfabasic.toml`. The project-file schema has its own integer `schema-version`, independent of the compiler product version and runtime ABI.</p>
+<p>Illustrative schema (the dialect identifier and source version are intentionally placeholders):</p>
+<p>```toml
+schema-version = 1</p>
+<p>[project]
+name = &quot;example&quot;
+entry = &quot;main.LST&quot;</p>
+<p>[source]
+dialect = &quot;&lt;explicit-dialect-id&gt;&quot;
+version = &quot;&lt;explicit-dialect-version&gt;&quot;</p>
+<p>[api]
+profiles = [&quot;amiga&quot;]</p>
+<p>[target]
+triple = &quot;x86_64-unknown-linux-gnu&quot;</p>
+<p>[build]
+output-dir = &quot;build&quot;
+artifact-name = &quot;example&quot;
+emit = [&quot;executable&quot;]
+```</p>
+<p>Initial fields:</p>
+<ul>
+<li>`schema-version`: required configuration schema version.</li>
+<li>`project.name`: optional human-readable project name.</li>
+<li>`project.entry`: source entry point, relative to the project root.</li>
+<li>source.dialect and source.version: fixed to the Amiga GFA BASIC interpreter 3.5 product identity; alternate values are rejected.</li>
+<li>api.profiles: fixed to the Amiga API profile; alternate or additional profiles are rejected.</li>
+<li>target.triple: fixed to x86_64-unknown-linux-gnu; alternate target triples are rejected.</li>
+<li>`build.output-dir`: output directory, relative to the project root; default `build`.</li>
+<li>`build.artifact-name`: optional output basename; default is derived from the entry-point filename.</li>
+<li>`build.emit`: requested artifact kinds; default `[&quot;executable&quot;]`.</li>
+</ul>
+<p>The example is a policy-level schema, not an implemented parser or frozen serialization library contract. The exact TOML field types and schema validator belong to the implementation work under #12 and #55. The schema must validate the fixed Amiga 3.5 / Amiga API / Linux x86-64 product combination rather than expose alternate product targets.</p>
+<h2 id="project-discovery-and-paths">Project discovery and paths</h2>
+<ol>
+<li>`--project PATH` selects the project file explicitly and disables automatic discovery.</li>
+<li>Otherwise, start from the source file's parent directory when SOURCE is supplied, or the current working directory when it is omitted.</li>
+<li>Search that directory and its parents for the nearest `gfabasic.toml`; stop at the filesystem root.</li>
+<li>If no project file is found, use single-file mode with the fixed Amiga GFA BASIC interpreter 3.5 product identity.</li>
+<li>Resolve project-relative source and output paths against the directory containing `gfabasic.toml`, not the process working directory.</li>
+<li>A missing, unreadable, malformed, or unsupported-version project file is an actionable configuration error.</li>
+</ol>
+<p>A future `--no-project` option may explicitly disable discovery; it must not be combined with `--project`.</p>
+<h2 id="cli-options-and-precedence">CLI options and precedence</h2>
+<p>Initial options:</p>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>`--project PATH`</td>
+<td>Use the specified project file; no upward discovery</td>
+</tr>
+<tr>
+<td><code>--dialect ID</code></td>
+<td>Validate the fixed Amiga GFA BASIC dialect; reject other IDs</td>
+</tr>
+<tr>
+<td><code>--dialect-version VERSION</code></td>
+<td>Validate the fixed interpreter version 3.5; reject other versions</td>
+</tr>
+<tr>
+<td><code>--api-profile ID</code></td>
+<td>Validate the sole Amiga API profile; reject other profiles</td>
+</tr>
+<tr>
+<td><code>--no-api-profiles</code></td>
+<td>Not supported; the Amiga API profile is fixed by product scope</td>
+</tr>
+<tr>
+<td><code>--target TRIPLE</code></td>
+<td>Validate the sole Linux x86-64 target; reject other triples</td>
+</tr>
+<tr>
+<td>`--out-dir PATH`</td>
+<td>Override the output directory</td>
+</tr>
+<tr>
+<td>`--emit KIND`</td>
+<td>Request an optional artifact kind; repeatable</td>
+</tr>
+<tr>
+<td>`--diagnostic-format human|json`</td>
+<td>Select human or machine-readable diagnostics</td>
+</tr>
+<tr>
+<td>`--report-json PATH`</td>
+<td>Write a machine-readable compatibility/support report</td>
+</tr>
+<tr>
+<td>`--verbose`, `--quiet`</td>
+<td>Adjust non-diagnostic progress output</td>
+</tr>
+<tr>
+<td>`--help`</td>
+<td>Show command and option help</td>
+</tr>
+<tr>
+<td>`--version`, `--version --verbose`</td>
+<td>Show product version; verbose mode includes build identity</td>
+</tr>
+</tbody>
+</table>
+<p>Precedence is:</p>
+<ol>
+<li>Explicit command-line option.</li>
+<li>Project-file value.</li>
+<li>Documented default, only where a default is safe.</li>
+</ol>
+<p>The product dialect and version are fixed to Amiga GFA BASIC interpreter 3.5. The product API profile is fixed to Amiga, and the output target is fixed to x86_64-unknown-linux-gnu. The compiler must not infer these values from file extensions or source contents. Configuration may repeat these fixed values for clarity, but must reject unsupported alternatives; there is no user-selectable dialect/profile/target matrix.</p>
+<p>| <code>--no-api-profiles</code> | Not supported; the Amiga API profile is fixed by product scope |</p>
+<p>Unknown options, unknown project keys, invalid values, incompatible schema versions, and contradictory settings must fail with actionable diagnostics. Do not silently ignore configuration.</p>
+<h2 id="build-artifact-model">Build artifact model</h2>
+<p>The default output directory is `build/` under the project root. Place target-specific artifacts under `build/&lt;target-triple&gt;/` so builds for different targets do not overwrite each other.</p>
+<p>The initial artifact kind is `executable`. Optional kinds may include object files, LLVM IR, debug information, and a compatibility report. Each kind must be implemented and documented before it is advertised by `--emit`.</p>
+<p>Every successful build should produce a manifest containing compiler product version, source revision, selected dialect/version, API profiles, target triple, relevant schema versions, runtime ABI identity when defined, and toolchain/dependency versions. Do not embed machine-local absolute paths or nondeterministic timestamps into outputs by default.</p>
+<p>The compiler must write outputs atomically where practical. A failed build must not leave a partially written executable presented as successful. Diagnostics go to stderr; machine-readable reports are written to the requested path or stdout only when explicitly requested.</p>
+<h2 id="exit-status">Exit status</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:right">Code</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right">0</td>
+<td>Command completed successfully</td>
+</tr>
+<tr>
+<td style="text-align:right">1</td>
+<td>Source diagnostics prevent the requested operation</td>
+</tr>
+<tr>
+<td style="text-align:right">2</td>
+<td>CLI usage, project configuration, or schema validation error</td>
+</tr>
+<tr>
+<td style="text-align:right">3</td>
+<td>Compiler backend, LLVM, or target/toolchain failure</td>
+</tr>
+<tr>
+<td style="text-align:right">4</td>
+<td>File-system or environment failure</td>
+</tr>
+</tbody>
+</table>
+<p>The same exit code must not be used for success and failure. Human-readable diagnostic wording may evolve; the exit-status categories are stable public CLI behavior once implemented.</p>
+<h2 id="determinism-and-safety">Determinism and safety</h2>
+<ul>
+<li>The same source, project configuration, compiler version, and declared toolchain inputs must produce deterministic diagnostics and semantically equivalent artifacts.</li>
+<li>Use locked dependencies and record relevant toolchain/native dependency versions.</li>
+<li>Normalize timestamps and paths where supported; reproducible binary identity is governed by the release policy.</li>
+<li>Do not execute arbitrary commands from project configuration.</li>
+<li>Do not require network access or an LLM to compile source.</li>
+<li>Do not let project configuration silently enable unverified or unsupported APIs.</li>
+<li>Keep machine-readable diagnostics/report schemas independently versioned.</li>
+</ul>
+<h2 id="deferred-implementation">Deferred implementation</h2>
+<p>The current CLI implements help/version, the bounded <code>fmt</code> command, and an experimental <code>build</code> path for literal FACT/VARIAT/COMBIN assignments followed by PRINT. <code>build</code> uses a temporary C/<code>cc</code> bootstrap and does not provide a general compiler or LLVM backend. <code>check</code> explicitly reports that it is not implemented. TOML project parsing/schema validation, project discovery, source composition, compatibility reports, and artifact manifests remain unimplemented. The formatter accepts selected MAT forms, but the executable IR does not evaluate those statements. This specification accepts the interface model, not project loading or compilation.</p>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>
