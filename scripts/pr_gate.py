@@ -50,6 +50,13 @@ POLL_SECONDS = 15
 MAX_WAIT_SECONDS = 15 * 60
 
 
+def matches_pattern(path: str, pattern: str) -> bool:
+    """Match GitHub-style **/ patterns, including files at the repository root."""
+    if fnmatch.fnmatchcase(path, pattern):
+        return True
+    return pattern.startswith("**/") and fnmatch.fnmatchcase(path, pattern[3:])
+
+
 def expected_workflows(paths: list[str]) -> set[str]:
     """Return relevant workflows; unknown paths conservatively select all."""
     if not paths:
@@ -58,7 +65,7 @@ def expected_workflows(paths: list[str]) -> set[str]:
     for path in paths:
         matched = {
             workflow for workflow, patterns in WORKFLOWS.items()
-            if any(fnmatch.fnmatchcase(path, pattern) for pattern in patterns)
+            if any(matches_pattern(path, pattern) for pattern in patterns)
         }
         if not matched:
             print(f"Unclassified path {path!r}; selecting every available PR workflow.")
