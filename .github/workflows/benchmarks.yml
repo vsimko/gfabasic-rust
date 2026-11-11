@@ -2,12 +2,6 @@ name: Benchmarks
 
 on:
   pull_request:
-    paths:
-      - ".github/workflows/benchmarks.yml"
-      - ".github/workflows/security-audit.yml"
-      - "bench/**"
-      - "crates/gfabasic-compiler/src/source.rs"
-      - "docs/architecture/BENCHMARKING.md"
   push:
     branches:
       - main
