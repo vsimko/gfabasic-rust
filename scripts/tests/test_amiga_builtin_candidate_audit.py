@@ -33,7 +33,7 @@ class ChapterTwoToFourCandidateAuditTests(unittest.TestCase):
 
     def test_compiler_only_and_ocr_sensitive_cases_remain_qualified(self):
         by_id = {item["id"]: item for item in self.audit}
-        self.assertIn("compiler-only", by_id["amiga.base2.cint-cfloat"]["notes"])
+        self.assertIn("only to the compiler", by_id["amiga.base2.cint-cfloat"]["notes"])
         self.assertIn("mismatch", by_id["amiga.base2.cvx"]["notes"])
         self.assertIn("alternate spellings", by_id["amiga.base3.relational"]["notes"])
         self.assertIn("distinct", by_id["amiga.base4.integer-arithmetic-functions"]["notes"])
