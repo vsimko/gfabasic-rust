@@ -46,7 +46,7 @@
 </tr>
 <tr>
 <td>documented-in-3.0-only</td>
-<td style="text-align:right">43</td>
+<td style="text-align:right">100</td>
 </tr>
 <tr>
 <td>unresolved</td>
@@ -163,6 +163,348 @@
 <td>STICK / STRIG</td>
 <td>10-7</td>
 <td>Queries joystick position and fire-button state; port 0 interaction with mouse/Intuition is noted. 3.5 availability is unresolved.</td>
+</tr>
+<tr>
+<td><code>amiga.base2.absolute</code></td>
+<td>ABSOLUTE</td>
+<td>2-39</td>
+<td>Address/variable binding feature in the base manual; classification and detailed signature remain source-scoped.</td>
+</tr>
+<tr>
+<td><code>amiga.base2.asc-chr</code></td>
+<td>ASC / CHR$</td>
+<td>2-13</td>
+<td>ASC returns the first character code (zero for empty input); CHR$ uses the low byte. 3.0 base-manual evidence only.</td>
+</tr>
+<tr>
+<td><code>amiga.base2.bin-oct-hex</code></td>
+<td>BIN$ / OCT$ / HEX$</td>
+<td>2-14</td>
+<td>Integer-to-base-2/base-8/base-16 string conversions; optional width parameters are documented. 3.0 base-manual evidence only.</td>
+</tr>
+<tr>
+<td><code>amiga.base2.cint-cfloat</code></td>
+<td>CINT / CFLOAT</td>
+<td>2-17</td>
+<td>CINT rounds float to integer; CFLOAT converts integer to float. The manual explicitly says these are meaningful only to the compiler, not interpreter built-ins.</td>
+</tr>
+<tr>
+<td><code>amiga.base2.cvx</code></td>
+<td>CVI / CVL / CVS (CVF spelling disputed)</td>
+<td>2-18–2-19</td>
+<td>Binary-string conversions; prose names CVS while the MKx counterpart list includes MKF$. Preserve the source naming mismatch; do not normalize a CVF alias.</td>
+</tr>
+<tr>
+<td><code>amiga.base2.date-time</code></td>
+<td>DATE$ / TIME$</td>
+<td>2-26</td>
+<td>Read/write date and read time string forms are described; the source text's DATE$/DATES and TIME$/TIMES naming is retained for further checking.</td>
+</tr>
+<tr>
+<td><code>amiga.base2.dump</code></td>
+<td>DUMP</td>
+<td>2-31</td>
+<td>DUMP heading and page locator are documented; preserve uncertainty about callable form until detailed page transcription.</td>
+</tr>
+<tr>
+<td><code>amiga.base2.false-true-pi</code></td>
+<td>FALSE / TRUE / PI</td>
+<td>2-25</td>
+<td>FALSE=0, TRUE=-1, PI is the mathematical constant. 3.0 base-manual evidence only.</td>
+</tr>
+<tr>
+<td><code>amiga.base2.fre</code></td>
+<td>FRE</td>
+<td>2-29</td>
+<td>Memory-availability query documented in the base manual; argument/return variants need exact signature extraction.</td>
+</tr>
+<tr>
+<td><code>amiga.base2.malloc-mfree</code></td>
+<td>MALLOC / MFREE</td>
+<td>2-41–2-42</td>
+<td>Memory allocation/release forms are documented; allocator/error/ownership semantics are not promoted to 3.5.</td>
+</tr>
+<tr>
+<td><code>amiga.base2.mkx</code></td>
+<td>MKI$ / MKL$ / MKS$ / MKF$ / MKD$</td>
+<td>2-18–2-19</td>
+<td>Numeric-to-binary-string conversion family; counterpart mapping inherits the CVx naming inconsistency. 3.0 base-manual evidence only.</td>
+</tr>
+<tr>
+<td><code>amiga.base2.peek</code></td>
+<td>PEEK</td>
+<td>2-36</td>
+<td>Memory-read forms are documented in the base manual; width/type variants need independent 3.5 evidence.</td>
+</tr>
+<tr>
+<td><code>amiga.base2.pointer-star</code></td>
+<td>* (array descriptor pointer form)</td>
+<td>2-33</td>
+<td>Indirect array-descriptor form is documented alongside ARRPTR; keep separate from multiplication operator.</td>
+</tr>
+<tr>
+<td><code>amiga.base2.str</code></td>
+<td>STR$</td>
+<td>2-15</td>
+<td>Overloads STR$(x), STR$(x,y), STR$(x,y,z); width and selected-slice behavior are described. 3.0 base-manual evidence only.</td>
+</tr>
+<tr>
+<td><code>amiga.base2.timer</code></td>
+<td>TIMER</td>
+<td>2-28</td>
+<td>Timer function heading and page locator in the base manual; exact return/tick contract is not promoted.</td>
+</tr>
+<tr>
+<td><code>amiga.base2.type</code></td>
+<td>TYPE</td>
+<td>2-30</td>
+<td>Variable type query documented in the base manual; 3.5 applicability unverified.</td>
+</tr>
+<tr>
+<td><code>amiga.base2.val</code></td>
+<td>VAL / VAL?</td>
+<td>2-16</td>
+<td>VAL parses a numeric prefix; VAL? reports consumed characters. 3.0 base-manual evidence only.</td>
+</tr>
+<tr>
+<td><code>amiga.base2.varptr-arrptr</code></td>
+<td>VARPTR / ARRPTR</td>
+<td>2-33</td>
+<td>Distinguishes element/string-data address from array-descriptor address. 3.0 base-manual evidence only.</td>
+</tr>
+<tr>
+<td><code>amiga.base2.void</code></td>
+<td>VOID</td>
+<td>2-40</td>
+<td>VOID heading and page locator are documented; exact return semantics remain unverified.</td>
+</tr>
+<tr>
+<td><code>amiga.base3.comparison-equality</code></td>
+<td>= / == / &lt;&gt;</td>
+<td>3-2, 3-11–3-16</td>
+<td>= compares and also assigns in variable context; == is approximate numeric equality (8.5 decimal places); &lt;&gt; is inequality.</td>
+</tr>
+<tr>
+<td><code>amiga.base3.integer-divide-mod</code></td>
+<td>DIV / MOD</td>
+<td>3-2</td>
+<td>Whole-number division and modulo precedence documented; no 3.5 confirmation.</td>
+</tr>
+<tr>
+<td><code>amiga.base3.logical</code></td>
+<td>NOT / AND / OR / XOR / IMP / EQV</td>
+<td>3-2–3-9</td>
+<td>NOT is unary; remaining operators are binary; logical truth and 32-bit bitwise behavior are described. 3.0 base-manual evidence only.</td>
+</tr>
+<tr>
+<td><code>amiga.base3.multiply-divide</code></td>
+<td>* /</td>
+<td>3-2</td>
+<td>Multiplication and division precedence documented; no 3.5 confirmation.</td>
+</tr>
+<tr>
+<td><code>amiga.base3.numeric-add-sub</code></td>
+<td>Numeric + / -</td>
+<td>3-2, 3-10</td>
+<td>Arithmetic addition/subtraction documented separately from string concatenation.</td>
+</tr>
+<tr>
+<td><code>amiga.base3.power</code></td>
+<td>^</td>
+<td>3-2</td>
+<td>Power operator precedence is documented in the 3.0 base manual only.</td>
+</tr>
+<tr>
+<td><code>amiga.base3.precedence</code></td>
+<td>Operator precedence hierarchy</td>
+<td>3-2</td>
+<td>Page-image transcription gives 11 precedence levels; comparison rows contain OCR/source spelling ambiguity. No associativity inferred.</td>
+</tr>
+<tr>
+<td><code>amiga.base3.relational</code></td>
+<td>&lt; / &gt; / &lt;= / &gt;= and =&lt; / =&gt;</td>
+<td>3-2, 3-13–3-16</td>
+<td>Text explicitly accepts &lt;= and =&lt;, and &gt;= and =&gt;. Preserve both alternate spellings; string ordering is separately described.</td>
+</tr>
+<tr>
+<td><code>amiga.base3.string-plus</code></td>
+<td>String concatenation +</td>
+<td>3-2–3-10</td>
+<td>Plus is documented for string concatenation as well as numeric addition; 3.0 base-manual evidence only.</td>
+</tr>
+<tr>
+<td><code>amiga.base3.unary-plus-minus</code></td>
+<td>Unary + / -</td>
+<td>3-2, 3-10</td>
+<td>Prefix plus/minus are separately ranked in the precedence table; exact parse/associativity not inferred.</td>
+</tr>
+<tr>
+<td><code>amiga.base4.abs-sgn</code></td>
+<td>ABS() / SGN()</td>
+<td>4-12</td>
+<td>Absolute value and sign (-1, 0, 1) functions documented.</td>
+</tr>
+<tr>
+<td><code>amiga.base4.bit-test</code></td>
+<td>BCLR() / BSET() / BCHG() / BTST()</td>
+<td>4-19–4-20</td>
+<td>Zero-based bit indices masked to 0–31; BTST is described with 1/0 result in this section.</td>
+</tr>
+<tr>
+<td><code>amiga.base4.bitwise-and-or-xor</code></td>
+<td>AND() / OR() / XOR()</td>
+<td>4-23</td>
+<td>Integer bitwise function forms; distinct from logical operators as expression operators pending exact parser treatment.</td>
+</tr>
+<tr>
+<td><code>amiga.base4.bitwise-imp-eqv</code></td>
+<td>IMP() / EQV()</td>
+<td>4-24</td>
+<td>Integer bitwise function forms documented separately from logical truth tables.</td>
+</tr>
+<tr>
+<td><code>amiga.base4.byte-card-word</code></td>
+<td>BYTE() / CARD() / WORD()</td>
+<td>4-26</td>
+<td>Byte/word conversion and extension operations documented.</td>
+</tr>
+<tr>
+<td><code>amiga.base4.deg-rad</code></td>
+<td>DEG() / RAD()</td>
+<td>4-7</td>
+<td>Degree/radian conversion functions documented in the 3.0 base manual.</td>
+</tr>
+<tr>
+<td><code>amiga.base4.exp-log</code></td>
+<td>EXP() / LOG() / LOG10()</td>
+<td>4-9</td>
+<td>Exponential and logarithm family; retain LOG10 as candidate pending precise page-level confirmation.</td>
+</tr>
+<tr>
+<td><code>amiga.base4.instr-rinstr</code></td>
+<td>INSTR() / RINSTR()</td>
+<td>4-30–4-31</td>
+<td>Forward/reverse substring search functions; preserve source-specific index semantics.</td>
+</tr>
+<tr>
+<td><code>amiga.base4.int-trunc-fix-frac</code></td>
+<td>INT() / TRUNC() / FIX() / FRAC()</td>
+<td>4-13</td>
+<td>Manual distinguishes truncation from floor for negative values and describes TRUNC/FRAC relation.</td>
+</tr>
+<tr>
+<td><code>amiga.base4.integer-arithmetic-functions</code></td>
+<td>ADD() / SUB() / MUL() / DIV() / MOD()</td>
+<td>4-3</td>
+<td>Integer-expression function forms are distinct from same-named mutating commands on pp. 4-2–4-3; decimal places are ignored.</td>
+</tr>
+<tr>
+<td><code>amiga.base4.left-right</code></td>
+<td>LEFT$() / RIGHT$()</td>
+<td>4-27</td>
+<td>Substring functions; omitted count returns one character.</td>
+</tr>
+<tr>
+<td><code>amiga.base4.len-trim</code></td>
+<td>LEN() / TRIM$()</td>
+<td>4-34</td>
+<td>String length and trim functions documented.</td>
+</tr>
+<tr>
+<td><code>amiga.base4.lset-rset</code></td>
+<td>LSET / RSET</td>
+<td>4-36</td>
+<td>Left/right justified assignment into existing string variable; padding/truncation details remain unspecified.</td>
+</tr>
+<tr>
+<td><code>amiga.base4.mid</code></td>
+<td>MID$()</td>
+<td>4-28</td>
+<td>Function returns substring; separate MID$ command is on p. 4-29 and is not merged here.</td>
+</tr>
+<tr>
+<td><code>amiga.base4.mid-command</code></td>
+<td>MID$ command</td>
+<td>4-29</td>
+<td>Mutates an existing string variable; not the MID$ value-returning function.</td>
+</tr>
+<tr>
+<td><code>amiga.base4.min-max</code></td>
+<td>MIN() / MAX()</td>
+<td>4-16</td>
+<td>Accept a list of numeric or string expressions and return the extremum.</td>
+</tr>
+<tr>
+<td><code>amiga.base4.odd-even</code></td>
+<td>ODD() / EVEN()</td>
+<td>4-15</td>
+<td>Boolean result is -1/0; zero is even.</td>
+</tr>
+<tr>
+<td><code>amiga.base4.pred-succ</code></td>
+<td>PRED() / SUCC()</td>
+<td>4-11, 4-33</td>
+<td>Numeric and string forms are separately discussed; do not collapse their argument/result contracts.</td>
+</tr>
+<tr>
+<td><code>amiga.base4.quadrant-trigonometric</code></td>
+<td>SINQ() / COSQ()</td>
+<td>4-6</td>
+<td>Degree-based interpolated lookup-table functions; interpolation described in 1/16-degree steps.</td>
+</tr>
+<tr>
+<td><code>amiga.base4.random</code></td>
+<td>RND() / RANDOM() / RAND() / RANDOMIZE</td>
+<td>4-17–4-18</td>
+<td>Distinct result ranges and seeding forms are described; preserve separate contracts for RND, RANDOM and RAND.</td>
+</tr>
+<tr>
+<td><code>amiga.base4.rotate</code></td>
+<td>ROL() / ROR()</td>
+<td>4-22</td>
+<td>Rotate within selected byte/word/longword width; distinct from shifts.</td>
+</tr>
+<tr>
+<td><code>amiga.base4.round</code></td>
+<td>ROUND()</td>
+<td>4-14</td>
+<td>ROUND(x) and ROUND(x,n) are documented; negative n rounds before decimal point.</td>
+</tr>
+<tr>
+<td><code>amiga.base4.shift</code></td>
+<td>SHL() / SHR()</td>
+<td>4-21–4-22</td>
+<td>Width-sensitive byte/word/longword shift forms are documented.</td>
+</tr>
+<tr>
+<td><code>amiga.base4.sqr</code></td>
+<td>SQR()</td>
+<td>4-8</td>
+<td>Square root; negative argument is documented to produce an error.</td>
+</tr>
+<tr>
+<td><code>amiga.base4.string-space</code></td>
+<td>STRING$() / SPACE$()</td>
+<td>4-32</td>
+<td>String construction functions; SPC is excluded as PRINT formatting syntax rather than a value function.</td>
+</tr>
+<tr>
+<td><code>amiga.base4.swap</code></td>
+<td>SWAP()</td>
+<td>4-25</td>
+<td>Function swaps upper/lower 16-bit words; explicitly distinct from Chapter 2 SWAP command.</td>
+</tr>
+<tr>
+<td><code>amiga.base4.trigonometric</code></td>
+<td>SIN() / COS() / TAN()</td>
+<td>4-5</td>
+<td>Trigonometric functions use radians in the base manual.</td>
+</tr>
+<tr>
+<td><code>amiga.base4.upper</code></td>
+<td>UPPER$()</td>
+<td>4-35</td>
+<td>Uppercase conversion function documented.</td>
 </tr>
 <tr>
 <td><code>amiga.base5.form-input</code></td>

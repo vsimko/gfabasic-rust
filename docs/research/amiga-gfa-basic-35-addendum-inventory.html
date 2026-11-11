@@ -241,36 +241,16 @@
 <td><code>z=COMBIN(n,k)</code></td>
 <td>Number of k-combinations without repetition: <code>n!/((n-k)!*k!)</code>; <code>n,k</code> are integer expressions (printed p. 14-2)</td>
 </tr>
-<tr>
-<td><code>OPENW</code> with negative screen number</td>
-<td>Opens window on the current (top) screen (printed p. 14-3)</td>
-</tr>
-<tr>
-<td><code>PCOLOR foreground[,background]</code></td>
-<td>Like <code>COLOR</code>, but applies to screen output produced by <code>PRINT</code>; background is optional in the examples (printed p. 14-4)</td>
-</tr>
-<tr>
-<td><code>_DATA</code></td>
-<td>Returns/indicates DATA pointer position; zero if the next <code>READ</code> would cause “out of data”</td>
-</tr>
-<tr>
-<td><code>_DATA=</code></td>
-<td>Sets the DATA pointer to a previously determined value obtained from <code>_DATA</code></td>
-</tr>
-<tr>
-<td><code>_0</code> … <code>_9</code></td>
-<td>Ten special longword variables, like <code>%</code>, not floating-point; cleared only by <code>NEW</code>, not by <code>CLEAR</code>, <code>LOAD</code>, <code>CHAIN</code>, or <code>RUN</code> (printed p. 14-6)</td>
-</tr>
-<tr>
-<td><code>GURU x</code></td>
-<td>Enables/disables GURU checking: <code>x=0</code> disables it; <code>x&lt;&gt;0</code> enables it. On a GURU Meditation it transfers to <code>ONERROR GOSUB</code> or generates error #109 (printed pp. 14-6–14-7)</td>
-</tr>
-<tr>
-<td><code>GURU</code></td>
-<td>Function returning the GURU number (printed pp. 14-6–14-7)</td>
-</tr>
 </tbody>
 </table>
+<p>Page-image review of the supplied interpreter scan's printed p. 13-33 confirms a source-level spelling inconsistency in the worked example: the syntax line and definition repeatedly identify <code>FACT</code>, but the example prints <code>x=FAXT(6)</code>. Treat <code>FAXT</code> as an apparent typographical error in that example, not as an alias or a fourth combinatorics function. The documented declaration remains <code>FACT</code>; the page's result example is not used as evidence for a <code>FAXT</code> identifier.
+| <code>OPENW</code> with negative screen number | Opens window on the current (top) screen (printed p. 14-3) |
+| <code>PCOLOR foreground[,background]</code> | Like <code>COLOR</code>, but applies to screen output produced by <code>PRINT</code>; background is optional in the examples (printed p. 14-4) |
+| <code>_DATA</code> | Returns/indicates DATA pointer position; zero if the next <code>READ</code> would cause “out of data” |
+| <code>_DATA=</code> | Sets the DATA pointer to a previously determined value obtained from <code>_DATA</code> |
+| <code>_0</code> … <code>_9</code> | Ten special longword variables, like <code>%</code>, not floating-point; cleared only by <code>NEW</code>, not by <code>CLEAR</code>, <code>LOAD</code>, <code>CHAIN</code>, or <code>RUN</code> (printed p. 14-6) |
+| <code>GURU x</code> | Enables/disables GURU checking: <code>x=0</code> disables it; <code>x&lt;&gt;0</code> enables it. On a GURU Meditation it transfers to <code>ONERROR GOSUB</code> or generates error #109 (printed pp. 14-6–14-7) |
+| <code>GURU</code> | Function returning the GURU number (printed pp. 14-6–14-7) |</p>
 <p>Chapter 14's opening page enumerates these as the additional 3.5 features (printed p. 14-1). The examples and definitions are on pp. 14-1–14-6. The closing notes (p. 14-7) state that error messages #110–#118 correspond to normal GURUs $2–$A; in compiled 3.5 programs, <code>RESUME NEXT</code> and <code>RESUME LABEL</code> cannot be executed after an <code>ONERROR GOSUB</code> call caused by a GURU. The manual treats error #109 (GURU Meditation) as a serious system condition and warns that GURU checking only works if the system can continue execution.</p>
 <p>Page-image review of the combined update scan's printed p. 14-5 confirms the leading underscore in both DATA-pointer operations: <code>_DATA</code> and <code>_DATA=</code>. Ordinary <code>DATA</code> remains the data declaration statement. Printed p. 14-6 confirms <code>_0</code>…<code>_9</code> are longword special variables and distinguishes <code>GURU x</code> from the <code>GURU</code> function.</p>
 <h2 id="5-implementation-and-conformance-work-breakdown">5. Implementation and conformance work breakdown</h2>

@@ -1,9 +1,41 @@
 {
   "schema_version": 1,
   "status": "fresh",
-  "generated_at": "2026-11-11T20:07:05.563309+00:00",
-  "last_successful_at": "2026-11-11T20:07:05.563309+00:00",
+  "generated_at": "2026-11-11T21:45:35.512913+00:00",
+  "last_successful_at": "2026-11-11T21:45:35.512913+00:00",
   "items": [
+    {
+      "type": "merged_pull_request",
+      "title": "[Research] Add granular Chapter 2–4 evidence records without 3.5 promotion",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/499",
+      "number": 499,
+      "timestamp": "2026-11-11T21:45:16Z",
+      "summary": "PR #499 merged"
+    },
+    {
+      "type": "commit",
+      "title": "[Research] Add granular Chapter 2–4 evidence records without 3.5 promotion (#499)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/e2cea2aaac68ea270129e5443f739b0f8bc47801",
+      "number": null,
+      "timestamp": "2026-11-11T21:45:16Z",
+      "summary": "Commit e2cea2a"
+    },
+    {
+      "type": "merged_pull_request",
+      "title": "[Docs] Record FACT example spelling discrepancy",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/498",
+      "number": 498,
+      "timestamp": "2026-11-11T20:28:10Z",
+      "summary": "PR #498 merged"
+    },
+    {
+      "type": "commit",
+      "title": "[Docs] Record FACT example spelling discrepancy (#498)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/0e809fb61907a6f064c30b01b793b5e87f328a44",
+      "number": null,
+      "timestamp": "2026-11-11T20:28:10Z",
+      "summary": "Commit 0e809fb"
+    },
     {
       "type": "merged_pull_request",
       "title": "[Docs] Record reference-page and catalogue audit",
@@ -67,38 +99,6 @@
       "number": null,
       "timestamp": "2026-11-11T18:55:25Z",
       "summary": "Commit 4c5db01"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "[Docs] Complete Amiga OCR workflow inventory",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/493",
-      "number": 493,
-      "timestamp": "2026-11-11T17:27:56Z",
-      "summary": "PR #493 merged"
-    },
-    {
-      "type": "commit",
-      "title": "[Docs] Complete Amiga OCR workflow inventory (#493)",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/be53fd3c5d7ffb225a3ce391882e15d3cf08c299",
-      "number": null,
-      "timestamp": "2026-11-11T17:27:55Z",
-      "summary": "Commit be53fd3"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "[Docs] Audit OCR use in Amiga runtime workflow",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/492",
-      "number": 492,
-      "timestamp": "2026-11-11T16:24:33Z",
-      "summary": "PR #492 merged"
-    },
-    {
-      "type": "commit",
-      "title": "[Docs] Audit OCR use in Amiga runtime workflow (#492)",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/59d536c52f2c9db77834b926ef3cb85bba7717d4",
-      "number": null,
-      "timestamp": "2026-11-11T16:24:32Z",
-      "summary": "Commit 59d536c"
     }
   ]
 }
