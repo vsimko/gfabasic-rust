@@ -237,6 +237,30 @@ class CorpusValidationTests(unittest.TestCase):
         (fixture / "unlisted.lst").write_text("PRINT 3\n")
         self.assertTrue(any("not listed" in item for item in validate_corpus(root)))
 
+    def test_manifest_summary_matches_fixture_sidecars(self):
+        temp, root = self.make_root()
+        self.addCleanup(temp.cleanup)
+        from scripts.validate_corpus import manifest_summary
+        import tomllib
+        corpus_readme = root / "tests/corpus/README.md"
+        manifest = tomllib.loads((root / "tests/corpus/manifest.toml").read_text())
+        summary = manifest_summary(root / "tests/corpus", manifest["fixtures"])
+        corpus_readme.write_text(
+            "<!-- fixture-summary:start -->\\n" + summary + "\\n<!-- fixture-summary:end -->\\n"
+        )
+        self.assertEqual(validate_corpus(root), [])
+
+    def test_stale_manifest_summary_fails(self):
+        temp, root = self.make_root()
+        self.addCleanup(temp.cleanup)
+        corpus_readme = root / "tests/corpus/README.md"
+        corpus_readme.write_text(
+            "<!-- fixture-summary:start -->\\n"
+            "Manifest summary: 99 GFA BASIC Amiga 3.0 fixtures candidate; 99 total.\\n"
+            "<!-- fixture-summary:end -->\\n"
+        )
+        self.assertTrue(any("manifest-derived fixture summary is missing or stale" in item for item in validate_corpus(root)))
+
 
 if __name__ == "__main__":
     unittest.main()
