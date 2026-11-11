@@ -21,7 +21,7 @@
         <p class="docs-meta"><span>Architecture</span></p>
         <h1 id="github-actions-workflow-architecture">GitHub Actions workflow architecture</h1>
 <ul>
-<li>Status: Proposed full CI architecture. Implemented workflows cover OKF documentation validation and generation, Markdown/link checks, website preview and production publication, fast Rust workspace checks, source-loader fuzzing, RustSec audits, source-loading benchmark validation/measurement, and SPDX 2.3 workspace SBOM generation/validation with a configured GitHub Release attachment. Lexer/parser fuzzing, compiler/runtime/conformance integration, a stable final PR gate, branch protection, and compiler build/package/release workflows remain unimplemented. The SBOM attachment has not yet been exercised on a published release.</li>
+<li>Status: Proposed full CI architecture. Implemented workflows cover OKF documentation validation and generation, Markdown/link checks, website preview and production publication, fast Rust workspace checks, source-loader fuzzing, RustSec audits, source-loading benchmark validation/measurement, and SPDX 2.3 workspace SBOM generation/validation with a configured GitHub Release attachment. Lexer/parser fuzzing, compiler/runtime/conformance integration, verified branch protection, and compiler build/package/release workflows remain unimplemented. A stable <code>pr-gate</code> workflow is now implemented; it aggregates the existing path-filtered PR workflows but is not yet configured as a required ruleset check. The SBOM attachment has not yet been exercised on a published release.</li>
 <li>Tracking: <a href="https://github.com/vsimko/gfabasic-rust/issues/27">issue #27</a>.</li>
 </ul>
 <h2 id="goals">Goals</h2>
@@ -33,7 +33,7 @@
 <li>Documentation and research-only corpus changes must not imply language conformance.</li>
 <li>Long fuzzing, compatibility experiments, and benchmarks must not slow every pull request.</li>
 </ul>
-<p>This document defines the proposed full CI structure. The implemented <a href="https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/docs.yml">documentation workflow</a> runs Markdown linting, OKF v0.2 bundle validation, deterministic documentation-site generation, API registry and corpus-metadata validation, validator tests, and offline local-link/anchor checks. The <a href="https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/pr-preview.yml">PR preview workflow</a> builds and smoke-tests generated documentation; the <a href="https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/pages.yml">Pages workflow</a> runs the same source validation/generation on <code>main</code>, deploys docs-only changes, and smoke-tests the production documentation. The <a href="https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/rust.yml">Rust workflow</a> runs formatting, Clippy, workspace tests, and a workspace build on the pinned toolchain. The <a href="https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/fuzz.yml">fuzz workflow</a> runs bounded AFL++ campaigns against the generic source-loader transport boundary only (30 seconds on relevant pull requests; 10 minutes on weekly/manual runs), not a GFA BASIC lexer or parser. The <a href="https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/security-audit.yml">security audit workflow</a> checks the root, fuzz, and benchmark Cargo lockfiles against RustSec. The <a href="https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/benchmarks.yml">benchmark workflow</a> compiles the benchmark harness on pull requests and runs synthetic source-loading measurements on main/scheduled/manual runs. The <a href="https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/release-sbom.yml">release-SBOM workflow</a> generates and validates SPDX 2.3 JSON for the complete three-package workspace on pull requests and is configured to attach it to a published GitHub Release. These workflows validate the current infrastructure only; they do not test GFA BASIC compilation, runtime/platform behavior, or language conformance. No stable final PR gate or branch-protection requirement is claimed.</p>
+<p>This document defines the proposed full CI structure. The implemented <a href="https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/docs.yml">documentation workflow</a> runs Markdown linting, OKF v0.2 bundle validation, deterministic documentation-site generation, API registry and corpus-metadata validation, validator tests, and offline local-link/anchor checks. The <a href="https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/pr-preview.yml">PR preview workflow</a> builds and smoke-tests generated documentation; the <a href="https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/pages.yml">Pages workflow</a> runs the same source validation/generation on <code>main</code>, deploys docs-only changes, and smoke-tests the production documentation. The <a href="https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/rust.yml">Rust workflow</a> runs formatting, Clippy, workspace tests, and a workspace build on the pinned toolchain. The <a href="https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/fuzz.yml">fuzz workflow</a> runs bounded AFL++ campaigns against the generic source-loader transport boundary only (30 seconds on relevant pull requests; 10 minutes on weekly/manual runs), not a GFA BASIC lexer or parser. The <a href="https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/security-audit.yml">security audit workflow</a> checks the root, fuzz, and benchmark Cargo lockfiles against RustSec. The <a href="https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/benchmarks.yml">benchmark workflow</a> compiles the benchmark harness on pull requests and runs synthetic source-loading measurements on main/scheduled/manual runs. The <a href="https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/release-sbom.yml">release-SBOM workflow</a> generates and validates SPDX 2.3 JSON for the complete workspace on relevant pull requests and is configured to attach it to a published GitHub Release. The <a href="https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/pr-gate.yml">stable PR gate</a> runs for every pull request and uses the changed-file list plus a tested relevance map to decide which validation workflows must succeed. All implemented validation workflows now start on every pull request, so an unclassified path can safely require all of them. The gate fails for missing, failed, cancelled, skipped, or timed-out expected runs. These workflows validate the current infrastructure only; they do not test GFA BASIC compilation, runtime/platform behavior, or language conformance. The gate exists, but repository ruleset/branch-protection enforcement still requires independent verification.</p>
 <p>The broader compiler release and artifact policy in <a href="RELEASES.html">RELEASES.md</a> remains proposed because no compiler build, package, or installation artifact exists. The narrow release-SBOM workflow is implemented; its published-release event still needs an actual release to verify the upload.</p>
 <h2 id="implemented-workflow-set">Implemented workflow set</h2>
 <table>
@@ -47,37 +47,37 @@
 <tbody>
 <tr>
 <td><code>docs.yml</code></td>
-<td><code>pull_request</code>; <code>push</code> to <code>main</code> for documentation/registry paths</td>
+<td>Every <code>pull_request</code>; <code>push</code> to <code>main</code> for documentation/registry paths</td>
 <td>Markdown lint, OKF v0.2 validation and generation, API registry/corpus validation/tests, offline local links and anchors</td>
 </tr>
 <tr>
 <td><code>rust.yml</code></td>
-<td><code>pull_request</code>; <code>push</code> to <code>main</code> for Cargo/toolchain/crate paths</td>
+<td>Every <code>pull_request</code>; <code>push</code> to <code>main</code> for Cargo/toolchain/crate paths</td>
 <td>Formatting, Clippy, workspace tests, and workspace build</td>
 </tr>
 <tr>
 <td><code>fuzz.yml</code></td>
-<td>Relevant <code>pull_request</code>; weekly <code>schedule</code>; <code>workflow_dispatch</code></td>
+<td>Every <code>pull_request</code>; weekly <code>schedule</code>; <code>workflow_dispatch</code></td>
 <td>AFL++ source-loader transport-boundary campaign only; lexer/parser targets do not exist yet</td>
 </tr>
 <tr>
 <td><code>security-audit.yml</code></td>
-<td>Relevant dependency <code>pull_request</code>/main <code>push</code>; weekly <code>schedule</code>; <code>workflow_dispatch</code></td>
+<td>Every <code>pull_request</code>; relevant dependency <code>push</code> to <code>main</code>; weekly <code>schedule</code>; <code>workflow_dispatch</code></td>
 <td>RustSec audit of the root, fuzz, and benchmark Cargo lockfiles</td>
 </tr>
 <tr>
 <td><code>benchmarks.yml</code></td>
-<td>Relevant <code>pull_request</code>/main <code>push</code>; weekly <code>schedule</code>; <code>workflow_dispatch</code></td>
+<td>Every <code>pull_request</code>; relevant <code>push</code> to <code>main</code>; weekly <code>schedule</code>; <code>workflow_dispatch</code></td>
 <td>Pull requests format/check the benchmark harness; main/scheduled/manual runs measure synthetic source loading</td>
 </tr>
 <tr>
 <td><code>release-sbom.yml</code></td>
-<td>Relevant Cargo/crate <code>pull_request</code>; published <code>release</code></td>
+<td>Every <code>pull_request</code>; published <code>release</code></td>
 <td>Pull requests generate and validate the workspace SPDX 2.3 JSON SBOM; published releases are configured to receive the SBOM asset. A real release upload has not yet been exercised.</td>
 </tr>
 </tbody>
 </table>
-<p>These workflows do not constitute a compiler build, compiler/runtime conformance suite, or full release pipeline. No stable final PR gate or branch-protection requirement is currently claimed.</p>
+<p>These workflows do not constitute a compiler build, compiler/runtime conformance suite, or full release pipeline. The stable <code>pr-gate</code> job is implemented; requiring it through a repository ruleset or branch-protection rule remains unverified.</p>
 <h2 id="planned-workflow-components">Planned workflow components</h2>
 <p>A stable pull-request gate, component-specific compiler/runtime/platform jobs, and a compiler build/package/publish workflow remain future work. Add them only when their checks have executable commands and clean-environment validation paths.</p>
 <p>Do not add empty placeholder workflows. Introduce each workflow when its checks have an executable command and a clean-environment validation path.</p>
@@ -148,7 +148,7 @@
 <p>The exact path patterns must be maintained alongside the repository layout. A new or unclassified path must select a safe broad check rather than silently skipping validation. Changes to manifests, lockfiles, toolchain pins, workflow definitions, or shared test infrastructure should trigger the broadest relevant check set.</p>
 <p>Documentation-only changes currently run <code>docs.yml</code> and do not run compiler/runtime builds because those components and their workflows do not exist. Once the compiler workflow is implemented, path-aware change detection may skip compiler/runtime jobs only when it proves that no code, manifest, toolchain, test harness, or workflow input changed.</p>
 <h2 id="required-check-contract">Required-check contract</h2>
-<p>Use one stable, non-matrix final job name (proposed: <code>pr-gate</code>) as the branch-protection requirement. Individual component jobs may be skipped when the change detector proves they are irrelevant; the final gate must still run.</p>
+<p>Use the stable, non-matrix final job name <code>pr-gate</code> as the branch-protection requirement. The gate runs for every pull request and independently determines which existing path-filtered workflows are relevant. Individual workflows may have no run when their path filters prove them irrelevant; the final gate must still run.</p>
 <p>The gate must:</p>
 <ol>
 <li>Depend on change detection and every conditional check job.</li>
@@ -158,7 +158,7 @@
 <li>Report which categories ran, were skipped as irrelevant, or failed.</li>
 </ol>
 <p>Do not mark each matrix entry or optional component job as a required branch-protection check. A stable final gate avoids a pull request being blocked merely because a path-aware job was correctly skipped. The gate implementation itself must be tested with representative documentation-only, frontend, runtime, platform, manifest, and CI-only changes.</p>
-<p>A branch-protection rule or repository ruleset must require the final gate after it has been introduced and verified. Until that configuration is confirmed, do not assume that an empty status list means a passing check or that a pull request is protected.</p>
+<p>A branch-protection rule or repository ruleset must require <code>pr-gate</code> after its check name and behavior have been verified. The GitHub integration used for this change cannot verify or configure repository rulesets; until a maintainer confirms that configuration, do not claim that pull requests are protected.</p>
 <h2 id="permissions-and-supply-chain-policy">Permissions and supply-chain policy</h2>
 <ul>
 <li>Set workflow-level permissions to <code>contents: read</code> by default. Grant additional permissions only to the specific job that needs them.</li>
@@ -201,7 +201,7 @@
 </ul>
 <p>When a cache is introduced, keys must include OS/architecture, the exact Rust toolchain, <code>Cargo.lock</code>, relevant native dependency versions, target triple, and build profile. Prefer immutable dependency/toolchain caches first. Cache build artifacts only after measuring restore/save cost against a clean build. Never cache credentials, final release artifacts, or outputs whose provenance cannot be reproduced. A cache miss or corruption must fall back to a clean build.</p>
 <h2 id="selective-job-execution-deferred-until-component-suites-exist">Selective job execution: deferred until component suites exist</h2>
-<p>The current executable CI surface includes documentation checks, Rust workspace checks, source-loader fuzzing, RustSec audits, source-loading benchmark validation/measurement, and release-SBOM generation/validation with a configured release-asset upload. Workflow-level path filters keep documentation-only changes out of Rust builds and scope Rust checks to Cargo/toolchain/crate changes. There are not yet separate frontend, semantic/IR, LLVM, runtime, Amiga, Atari, or SDL3 integration test suites to select between.</p>
+<p>The current executable CI surface includes documentation checks, Rust workspace checks, source-loader fuzzing, RustSec audits, source-loading benchmark validation/measurement, and release-SBOM generation/validation with a configured release-asset upload. All validation workflows now run on pull requests; the stable gate requires only the workflows relevant to the changed paths. There are not yet separate frontend, semantic/IR, LLVM, runtime, Amiga, Atari, or SDL3 integration test suites to select between.</p>
 <p><strong>Do not add a job-level change detector or empty matrix now.</strong> It would add a second source of path truth without reducing any existing test work, and there are no component jobs against which to validate dependency fan-out. The path-to-test matrix above remains the design reference, not a claim that selective component execution exists.</p>
 <p>Reopen the selective-execution implementation when at least two independent component test suites exist (for example, frontend and platform integration). At that point add a tested change map, conservative handling for unknown paths, explicit dependency fan-out, and a stable final PR gate. Until then the workflow-level path filters are the proportionate implementation.</p>
 
