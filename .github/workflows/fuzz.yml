@@ -151,11 +151,11 @@ jobs:
         if: always()
         run: |
           mkdir -p "$RUNNER_TEMP/source-loader-fuzz" "$RUNNER_TEMP/source-loader-minimized"
-          touch "$RUNNER_TEMP/source-loader-fuzz-metadata.txt"
+          touch "$RUNNER_TEMP/source-loader-fuzz-metadata.txt" "$RUNNER_TEMP/source-loader-afl.log"
           tar -czf "$RUNNER_TEMP/source-loader-fuzz-results.tar.gz" \
             --transform='s/:/_/g' \
             -C "$RUNNER_TEMP" \
-            source-loader-fuzz source-loader-minimized source-loader-fuzz-metadata.txt
+            source-loader-fuzz source-loader-minimized source-loader-fuzz-metadata.txt source-loader-afl.log
 
       - name: Upload fuzzer output and resolved lockfile
         if: always()
