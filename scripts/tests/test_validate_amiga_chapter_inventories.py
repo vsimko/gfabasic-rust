@@ -30,6 +30,14 @@ class ChapterInventoryTests(unittest.TestCase):
         errors = extract_inventory(text, "## Inventory", 7, 2, 55)
         self.assertTrue(any("no printed Chapter 7 page citation" in error for error in errors))
 
+    def test_pipe_inside_inline_syntax_does_not_split_the_table(self):
+        text = """## Inventory
+| Construct | Syntax | Semantics | Printed pages |
+|---|---|---|---|
+| DO loop | `DO [WHILE x|UNTIL x]` | conditional loop | 7-18–7-19 |
+"""
+        self.assertEqual(extract_inventory(text, "## Inventory", 7, 2, 55), [])
+
     def test_missing_required_cell_is_rejected(self):
         text = """## Inventory
 | Construct | Syntax | Semantics | Printed pages |
