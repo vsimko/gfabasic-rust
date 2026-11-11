@@ -16,6 +16,8 @@ INVENTORIES = (
      "## Construct inventory", 2, 55, "Independent 3.52 compatibility evidence"),
     (8, Path("docs/research/amiga-gfa-basic-chapter-8-graphics-evidence.md"),
      "## Chapter 8 inventory", 2, 24, "## 3.52 interpreter evidence"),
+    (9, Path("docs/research/amiga-gfa-basic-chapter-9-event-window-evidence.md"),
+     "## Chapter 9 inventory", 2, 39, "## 3.52 runtime evidence"),
 )
 
 
