@@ -67,6 +67,7 @@ This conflicts internally with Chapter 19, which explicitly documents `FACT` and
 
 - p. 451: Chapter 18 explicitly labels its additions as Version 3.5 commands.
 - p. 454: `MAT BASE` and `MAT CLR`.
+- p. 455: `MAT SET m()=x` and `MAT ONE m()` headings, syntax, and descriptions.
 - pp. 456–458: `MAT READ`, `MAT PRINT`, and `MAT INPUT` headings, syntax, and descriptions.
 - pp. 459–464: `MAT CPY`, `MAT XCPY`, and `MAT TRANS` headings and examples.
 - pp. 465–470: `MAT ADD`, `MAT SUB`, and `MAT MUL` headings and examples.
