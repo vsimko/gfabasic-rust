@@ -1,0 +1,482 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Primary source: AM-INTERPRETER-35, GFA BASIC 3.5 Interpreter, Chapters 5–7, printed pages as cited below.">
+  <title>Amiga GFA BASIC 3.0 control, file and data I/O evidence · GFA BASIC Rust documentation</title>
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body class="docs-site">
+  <header class="docs-header">
+    <a href="../../index.html">GFA BASIC Rust</a>
+    <span aria-hidden="true">/</span>
+    <a href="../index.html">Documentation</a>
+  </header>
+  <div class="docs-layout">
+    <nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home" href="index.html">Section index</a><ul><li><a href="amiga-gfa-basic-documentation-audit.html">Amiga GFA BASIC documentation coverage audit</a></li><li><a href="amiga-gfa-basic-command-catalogue.html">Amiga GFA BASIC command catalogue</a></li><li><a href="amiga-gfa-basic-german-book-command-api-extraction.html">German Amiga GFA-BASIC book: command and OS API extraction</a></li><li><a href="amiga-book-command-index-ocr-transcription.html">Appendix D — OCR transcription of the command index</a></li><li><a href="gfa-basic-command-index-ocr.html">GFA-BASIC command index — first-pass extraction</a></li><li><a href="amiga-gfa-basic-source-topic-index.html">Amiga GFA BASIC source and topic index</a></li><li><a href="amiga-book-515-page-extraction-audit.html">Amiga GFA-BASIC book — 515-page extraction audit</a></li><li><a href="amiga-book-chapters05-17-heading-harvest.html">Amiga book — command-heading harvest, chapters 5–17</a></li><li><a href="amiga-gfa-basic-functions.toml">Function inventory (117 unique names)</a></li><li><a href="amiga-gfa-basic-function-inventory.html">Amiga GFA BASIC 3.5 built-in function inventory</a></li><li><a href="amiga-base-manual-io-graphics-events-advanced.html">Amiga GFA BASIC base-manual I/O, graphics, event, and advanced-programming extraction</a></li><li><a href="amiga-base-manual-io-graphics-events-advanced-details.html">Amiga GFA BASIC base-manual I/O, graphics, event, and advanced-programming details</a></li><li><a href="amiga-base-manual-numeric-string-functions.html">Amiga GFA BASIC base-manual numeric and string function extraction</a></li><li><a href="amiga-gfa-basic-35-addendum-inventory.html">Amiga GFA-BASIC 3.5 interpreter addendum — extracted feature inventory</a></li><li><a href="amiga-gfa-basic-candidates.toml">3.5 candidate manifest</a></li><li><a href="amiga-gfa-basic-candidate-report.html">Amiga GFA BASIC 3.5 candidate verification report</a></li><li><a href="amiga-gfa-basic-language-population-policy.html">Amiga GFA BASIC language population policy</a></li><li><a href="amiga-gfa-basic-3.03-ocr-index.html">German Amiga GFA BASIC book: OCR index and edition notes</a></li><li><a href="README.html">Research materials</a></li><li><a href="amiga-gfa-test-output.html">Amiga GFA BASIC test output</a></li><li><a href="amiga-gfa-basic-dqh-source-inventory.html">Amiga GFA BASIC commands observed in dqh-amiga</a></li><li><a href="amiga-emulator-lab.html">Amiga emulator experiment lab</a></li><li><a href="amiga-gfa-basic-35-lst-probes.html">Amiga GFA BASIC 3.5 interpreter probes from text listings</a></li><li><a href="amiga-gfa-basic-352-runtime-baseline.html">Amiga GFA BASIC 3.52 runtime baseline</a></li><li><a href="amiga-gfa-basic-binary-analysis.html">Amiga GFA-BASIC binary analysis</a></li><li><a href="amiga-base-manual-variable-array-conversion-functions.html">Amiga GFA BASIC base-manual variable, array, and conversion functions</a></li><li><a href="amiga-gfa-basic-chapter-7-program-handling-evidence.html">Amiga GFA BASIC Chapter 7 — program handling evidence</a></li><li><a href="amiga-gfa-basic-chapter-8-graphics-evidence.html">Amiga GFA BASIC Chapter 8 — graphics compatibility evidence</a></li><li><a href="amiga-gfa-basic-3.0-command-index.html">Amiga GFA BASIC 3.0 command index — grouped cross-check</a></li><li><a href="amiga-gfa-basic-3.0-statement-command-candidates.html">Amiga GFA BASIC 3.0 statement and command candidate catalogue</a></li><li><a href="amiga-gfa-basic-3.0-base-inventory.html">Amiga GFA BASIC 3.0 base-manual inventory</a></li><li><a href="amiga-gfa-basic-3.0-expressions-builtins-control-flow.html">Amiga GFA BASIC 3.0 expression, intrinsic and control-flow evidence</a></li><li><a href="amiga-gfa-basic-3.0-control-file-data-io.html">Amiga GFA BASIC 3.0 control, file and data I/O evidence</a></li><li><a href="amiga-gfa-basic-3.0-graphics-evidence.html">GFA BASIC 3.0 Amiga — graphics evidence</a></li><li><a href="amiga-gfa-basic-3.0-events-windows-evidence.html">GFA BASIC 3.0 Amiga — event, menu, screen and window evidence</a></li><li><a href="amiga-gfa-basic-3.0-system-routines-evidence.html">GFA BASIC 3.0 Amiga — operating-system routine evidence</a></li><li><a href="amiga-gfa-basic-3.0-advanced-programming-evidence.html">GFA BASIC 3.0 Amiga — advanced programming evidence</a></li><li><a href="amiga-gfa-basic-3.0-appendix-index-evidence.html">GFA BASIC 3.0 Amiga — appendix and command-index evidence</a></li><li><a href="amiga-gfa-basic-3.0-german-source-notes.html">German Amiga GFA BASIC 3.0 source — initial verification notes</a></li><li><a href="amiga-gfa-basic-3.0-procedure-error-details.html">GFA BASIC 3.0 Amiga — procedures, functions and error-flow evidence</a></li><li><a href="amiga-gfa-basic-3.0-screen-window-details.html">GFA BASIC 3.0 Amiga — screen and window command details</a></li><li><a href="amiga-gfa-basic-3.0-output-device-details.html">GFA BASIC 3.0 Amiga — output, cursor, mouse and sound evidence</a></li><li><a href="amiga-gfa-basic-3.0-menu-event-details.html">GFA BASIC 3.0 Amiga — menu and event details</a></li><li><a href="amiga-gfa-basic-3.0-bob-object-details.html">GFA BASIC 3.0 Amiga — BOB and OBJECT API evidence</a></li><li><a href="amiga-gfa-basic-3.0-source-format-editor-evidence.html">Amiga GFA BASIC 3.0 — source composition and editor evidence</a></li><li><a href="amiga-gfa-basic-35-primary-reference.html">Amiga GFA-BASIC 3.5 primary reference and target decision</a></li><li><a href="amiga-gfa-basic-35-german-book-crosscheck.html">Amiga GFA-BASIC 3.5 — independent German-book cross-check</a></li><li><a href="amiga-book-gfa35-chapter18-19-extraction.html">GFA-BASIC 3.5 additions documented in the Amiga book</a></li><li><a href="amiga-gfa-basic-35-editor-feature-audit.html">Amiga GFA BASIC 3.5 — editor feature audit</a></li><li><a href="amiga-gfa-basic-35-lexer-evidence.html">Amiga GFA BASIC 3.5 lexer evidence inventory</a></li><li><a href="amiga-gfa-basic-35-matrix-arithmetic-analysis-audit.html">Amiga GFA BASIC 3.5 — matrix arithmetic and analysis audit</a></li><li><a href="amiga-gfa-basic-35-matrix-io-copy-audit.html">Amiga GFA BASIC 3.5 — matrix I/O and copy declaration audit</a></li><li><a href="amiga-gfa-basic-35-five-declaration-audit.html">Amiga GFA BASIC 3.5 — five declaration-level audit blocks</a></li><li><a href="amiga-gfa-basic-35-five-more-declaration-audit.html">Amiga GFA BASIC 3.5 — five more declaration-level audit blocks</a></li><li><a href="amiga-gfa-basic-35-guru-declaration-audit.html">Amiga GFA BASIC 3.5 — GURU declaration audit</a></li><li><a href="atari-gfa-book-diskette.html">Atari GFA BASIC book diskette — source-corpus research notes</a></li><li><a href="atari-gfa-book-systematic-review.html">Systematic review of *Das große GFA-BASIC-Buch* (Atari ST)</a></li><li><a href="aminet-catalogue.html">Aminet GFA BASIC package survey</a></li><li><a href="gfalist-build-and-fixture-validation.html">gfalist build and fixture validation</a></li><li><a href="gfalist-format-vs-rust-frontend.html">gfalist format notes vs. the Rust frontend</a></li></ul></nav>
+    <main class="docs-content">
+      <article>
+        <h1>Amiga GFA BASIC 3.0 control, file and data I/O evidence</h1>
+        <p class="docs-meta"><span>Research Note</span></p>
+        <h1 id="amiga-gfa-basic-30-control-file-and-data-io-evidence">Amiga GFA BASIC 3.0 control, file and data I/O evidence</h1>
+<blockquote>
+<p><strong>Version boundary:</strong> This is a page-reviewed extraction from the 3.0 base body of the supplied <em>GFA BASIC 3.5 Interpreter</em> scan. The source identifies the base language as GFA BASIC 3.0 and treats the 3.5 update separately. These declarations are inherited 3.0 candidates only; this document does not assert unchanged availability or behavior in interpreter 3.5.</p>
+</blockquote>
+<p>Primary source: <code>AM-INTERPRETER-35</code>, <em>GFA BASIC 3.5 Interpreter</em>, Chapters 5–7, printed pages as cited below.</p>
+<h2 id="block-1-remaining-program-control-and-system-commands">Block 1 — remaining program-control and system commands</h2>
+<h3 id="break-and-error-handling">Break and error handling</h3>
+<table>
+<thead>
+<tr>
+<th>Form</th>
+<th>Source-described behavior</th>
+<th>Printed page</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ON BREAK</code></td>
+<td>Enables the normal program-break response to the Control + left Shift + Alt key combination.</td>
+<td>7-28</td>
+</tr>
+<tr>
+<td><code>ON BREAK CONT</code></td>
+<td>Suppresses the normal break response.</td>
+<td>7-28</td>
+</tr>
+<tr>
+<td><code>ON BREAK GOSUB proc</code></td>
+<td>Installs a procedure called when the key combination is pressed.</td>
+<td>7-28</td>
+</tr>
+<tr>
+<td><code>ON ERROR</code></td>
+<td>Restores normal error reporting and program break behavior.</td>
+<td>7-29</td>
+</tr>
+<tr>
+<td><code>ON ERROR GOSUB proc</code></td>
+<td>Transfers control to an error-handling procedure when an error occurs. The handler must reinstall this command if it is to handle subsequent errors.</td>
+<td>7-29</td>
+</tr>
+<tr>
+<td><code>RESUME</code></td>
+<td>Resumes after the error-handling procedure; only meaningful in that handler.</td>
+<td>7-29–7-30</td>
+</tr>
+<tr>
+<td><code>RESUME NEXT</code></td>
+<td>Continues with the command following the command that caused the error.</td>
+<td>7-29–7-30</td>
+</tr>
+<tr>
+<td><code>RESUME label</code></td>
+<td>Continues at a named label.</td>
+<td>7-29–7-30</td>
+</tr>
+<tr>
+<td><code>ERROR x</code></td>
+<td>Raises the error with number x; useful for testing error handlers.</td>
+<td>7-31</td>
+</tr>
+<tr>
+<td><code>ERR</code></td>
+<td>Contains the number of the most recently encountered error.</td>
+<td>7-31</td>
+</tr>
+<tr>
+<td><code>ERR$(x)</code></td>
+<td>Returns the interpreter error message for error number x.</td>
+<td>7-31</td>
+</tr>
+</tbody>
+</table>
+<p>The manual's example demonstrates <code>ON ERROR GOSUB</code> followed by <code>ERROR 5</code>, then uses <code>ERR</code> in the handler and <code>RESUME NEXT</code> to continue. The error number/message table is elsewhere in the manual; this extraction does not reproduce or normalize that table.</p>
+<h3 id="timed-procedure-calls">Timed procedure calls</h3>
+<ul>
+<li><code>EVERY ticks GOSUB proc</code> schedules the parameterless procedure repeatedly at the specified interval.</li>
+<li><code>AFTER ticks GOSUB proc</code> schedules a one-time procedure call after the interval.</li>
+<li>Time is expressed in 1/50-second ticks; the manual describes practical resolution as approximately one tenth of a second, somewhat higher during mouse movement.</li>
+<li><code>EVERY STOP</code> / <code>EVERY CONT</code> suspend and resume the recurring schedule.</li>
+<li><code>AFTER STOP</code> / <code>AFTER CONT</code> suspend and resume the one-shot schedule.</li>
+<li>The manual cautions that timing checks depend on command execution and can be delayed by slow commands.</li>
+</ul>
+<p>Evidence: printed pp. 7-32–7-34. The sample uses <code>EVERY 4 GOSUB lines</code> and <code>AFTER 600 GOSUB text</code>. The exact scheduling/re-entrancy behavior beyond these descriptions is not specified here.</p>
+<h3 id="labels-comments-and-jumps">Labels, comments and jumps</h3>
+<ul>
+<li><code>GOTO label</code> transfers execution to a programmer-defined label. A label may contain letters, digits, underscores and periods, may begin with a digit, and ends with a colon; the colon is omitted from the GOTO operand (p. 7-36).</li>
+<li>The source explicitly says GOTO cannot branch into or out of procedures/functions. It warns that extensive GOTO use quickly makes programs difficult to read.</li>
+<li><code>REM</code> and apostrophe comments ignore the remainder of a line. The source also documents an exclamation mark as an inline-comment introducer after a command, except on DATA instructions (p. 7-35).</li>
+<li>The source says alternate comment characters typed in place of apostrophe are replaced by apostrophe by the editor. This is an editor behavior, not evidence of distinct runtime comment tokens.</li>
+</ul>
+<h3 id="delay-termination-and-program-lifecycle">Delay, termination and program lifecycle</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Source-described behavior</th>
+<th>Printed page</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PAUSE x</code></td>
+<td>Halts execution for x/50 seconds.</td>
+<td>7-37</td>
+</tr>
+<tr>
+<td><code>DELAY x</code></td>
+<td>Delays execution for x seconds; the manual notes OS multitasking and practical resolution limitations.</td>
+<td>7-37</td>
+</tr>
+<tr>
+<td><code>END</code></td>
+<td>Ends program execution and displays a program-end alert before returning to the editor.</td>
+<td>7-38</td>
+</tr>
+<tr>
+<td><code>EDIT</code></td>
+<td>Ends execution and returns directly to the editor.</td>
+<td>7-38</td>
+</tr>
+<tr>
+<td><code>STOP</code></td>
+<td>Displays STOP/CONT choices; CONT resumes, STOP enters direct mode where variables can be inspected/changed and execution continued with CONT.</td>
+<td>7-38</td>
+</tr>
+<tr>
+<td><code>NEW</code></td>
+<td>Erases the current program; can also be executed from a program.</td>
+<td>7-39</td>
+</tr>
+<tr>
+<td><code>LOAD f$</code></td>
+<td>Loads a GFA BASIC program; default extension is .GFA.</td>
+<td>7-40</td>
+</tr>
+<tr>
+<td><code>SAVE f$</code></td>
+<td>Saves program data; default extension is .GFA.</td>
+<td>7-41</td>
+</tr>
+<tr>
+<td><code>PSAVE f$</code></td>
+<td>Saves a list-protected program that is run when loaded but cannot subsequently be listed.</td>
+<td>7-41</td>
+</tr>
+<tr>
+<td><code>LIST [f$]</code></td>
+<td>Lists the current program; with a path, saves the program as ASCII text, default extension .LST.</td>
+<td>7-42</td>
+</tr>
+<tr>
+<td><code>LLIST</code></td>
+<td>Sends the listing to the printer.</td>
+<td>7-42</td>
+</tr>
+<tr>
+<td><code>CHAIN f$</code></td>
+<td>Loads and executes another GFA BASIC program; default extension is .GFA.</td>
+<td>7-43</td>
+</tr>
+<tr>
+<td><code>RUN [f$]</code></td>
+<td>Executes the current program or loads and executes the named program.</td>
+<td>7-44</td>
+</tr>
+<tr>
+<td><code>SYSTEM [n]</code>, <code>QUIT [n]</code></td>
+<td>Ends the program and exits GFA BASIC, passing an exit value to the caller; zero conventionally means no error.</td>
+<td>7-45</td>
+</tr>
+<tr>
+<td><code>TRON</code>, <code>TRON #n</code>, <code>TROFF</code></td>
+<td>Enables/disables command tracing to the screen or an open channel.</td>
+<td>7-46–7-47</td>
+</tr>
+<tr>
+<td><code>TRON proc</code></td>
+<td>Installs a procedure to run before each command; <code>TRACES</code> contains the next command.</td>
+<td>7-48</td>
+</tr>
+<tr>
+<td><code>$</code></td>
+<td>A compiler-control command treated as REM by the interpreter; details are deferred to the compiler handbook.</td>
+<td>7-49</td>
+</tr>
+</tbody>
+</table>
+<p>The printed pages 7-50–7-55 cover <code>INLINE</code>, <code>C:</code> and <code>RCALL</code>/system-call mechanisms; these are memory/native-code integration, not ordinary control flow. They are not expanded in this block. Exact behavior and version applicability require separate review before compiler/runtime implementation.</p>
+<h2 id="block-2-disk-and-file-organization">Block 2 — disk and file organization</h2>
+<h3 id="paths-and-directory-operations">Paths and directory operations</h3>
+<p>The manual describes a hierarchical file specification consisting of a drive/device, directory path and file name (printed p. 6-2). The following declarations are documented:</p>
+<table>
+<thead>
+<tr>
+<th>Form</th>
+<th>Source-described behavior</th>
+<th>Printed page</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CHDIR name$</code></td>
+<td>Changes the current directory of the current drive.</td>
+<td>6-4</td>
+</tr>
+<tr>
+<td><code>DIR$(n)</code></td>
+<td>Returns the current path for a drive; the manual says n is a dummy parameter.</td>
+<td>6-4</td>
+</tr>
+<tr>
+<td><code>DFREE(n)</code></td>
+<td>Returns free disk space for a drive.</td>
+<td>6-4</td>
+</tr>
+<tr>
+<td><code>DIR p$ [TO name$]</code></td>
+<td>Displays a directory in a window; optional destination redirects the output.</td>
+<td>6-5</td>
+</tr>
+<tr>
+<td><code>FILES p$ [TO name$]</code></td>
+<td>Directory listing variant that displays file names and file sizes.</td>
+<td>6-5</td>
+</tr>
+<tr>
+<td><code>EXIST(name$)</code></td>
+<td>Returns true/false according to whether the named file exists.</td>
+<td>6-6</td>
+</tr>
+<tr>
+<td><code>NAME old$ AS new$</code></td>
+<td>Renames a file; source says both names must be on the same disk.</td>
+<td>6-10</td>
+</tr>
+<tr>
+<td><code>RENAME old$ AS new$</code></td>
+<td>Alias for NAME in the source.</td>
+<td>6-10</td>
+</tr>
+<tr>
+<td><code>KILL name$</code></td>
+<td>Deletes the named file.</td>
+<td>6-10</td>
+</tr>
+</tbody>
+</table>
+<p>The source's directory examples use Amiga device/path syntax. Do not silently substitute host filesystem path rules. The manual does not define a Linux path mapping.</p>
+<h3 id="opening-closing-and-file-metadata">Opening, closing and file metadata</h3>
+<p><code>OPEN mode$,[#]n,name$ [num]</code> opens a channel to a file or peripheral (printed p. 6-7). The documented modes are:</p>
+<ul>
+<li><code>O</code>: output (create/write),</li>
+<li><code>I</code>: input (read),</li>
+<li><code>A</code>: append,</li>
+<li><code>U</code>: update,</li>
+<li><code>R</code>: random access.</li>
+</ul>
+<p>The channel number is an integer in the documented range 0–99. The optional <code>#</code> marker is described as optional for file-channel commands (cross-reference printed p. 1-6). The optional record-length argument is associated with random-access files; the random-access chapter describes records and fields separately.</p>
+<table>
+<thead>
+<tr>
+<th>Form</th>
+<th>Source-described behavior</th>
+<th>Printed page</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>LOF(#n)</code></td>
+<td>Returns file length for an opened channel.</td>
+<td>6-8</td>
+</tr>
+<tr>
+<td><code>LOC(#n)</code></td>
+<td>Returns current file position.</td>
+<td>6-8</td>
+</tr>
+<tr>
+<td><code>EOF(#n)</code></td>
+<td>Tests end-of-file for an opened channel.</td>
+<td>6-8</td>
+</tr>
+<tr>
+<td><code>CLOSE [#n]</code></td>
+<td>Closes one channel or, without a number, all open channels.</td>
+<td>6-8</td>
+</tr>
+<tr>
+<td><code>TOUCH [#]n</code></td>
+<td>Updates the file's date/time information.</td>
+<td>6-8</td>
+</tr>
+</tbody>
+</table>
+<h3 id="binary-memoryfile-transfer-and-file-positioning">Binary memory/file transfer and file positioning</h3>
+<table>
+<thead>
+<tr>
+<th>Form</th>
+<th>Source-described behavior</th>
+<th>Printed page</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>BLOAD name$ [,adr]</code></td>
+<td>Loads a binary file into memory, optionally at an address.</td>
+<td>6-11</td>
+</tr>
+<tr>
+<td><code>BSAVE name$,adr,num</code></td>
+<td>Saves a memory region to a binary file.</td>
+<td>6-11</td>
+</tr>
+<tr>
+<td><code>BGET #n,adr,num</code></td>
+<td>Reads bytes from an opened channel into memory.</td>
+<td>6-11</td>
+</tr>
+<tr>
+<td><code>BPUT #n,adr,num</code></td>
+<td>Writes bytes from memory to an opened channel.</td>
+<td>6-11</td>
+</tr>
+<tr>
+<td><code>SEEK #n,pos</code></td>
+<td>Sets the file data pointer to a position.</td>
+<td>6-18</td>
+</tr>
+<tr>
+<td><code>RELSEEK #n,num</code></td>
+<td>Moves the file data pointer relatively.</td>
+<td>6-18</td>
+</tr>
+</tbody>
+</table>
+<p>The manual's examples and descriptions identify memory addresses as integer expressions; elsewhere it warns that addresses require at least a four-byte variable. Exact byte-order, error handling and host portability are not established by this extraction.</p>
+<h2 id="block-3-sequential-io-data-and-random-access-records">Block 3 — sequential I/O, DATA and random-access records</h2>
+<h3 id="sequential-text-and-byte-io">Sequential text and byte I/O</h3>
+<table>
+<thead>
+<tr>
+<th>Form</th>
+<th>Source-described behavior</th>
+<th>Printed page</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>INPUT #n,var1[,var2,...]</code></td>
+<td>Reads values from a data channel into numeric/string variables.</td>
+<td>6-14</td>
+</tr>
+<tr>
+<td><code>LINE INPUT #n,a$[,b$,...]</code></td>
+<td>Reads a line/string from a data channel.</td>
+<td>6-14</td>
+</tr>
+<tr>
+<td><code>PRINT #n,expression</code></td>
+<td>Writes numeric/string output to a data channel.</td>
+<td>6-15</td>
+</tr>
+<tr>
+<td><code>PRINT #n, USING form$,expression</code></td>
+<td>Writes formatted output.</td>
+<td>6-15</td>
+</tr>
+<tr>
+<td><code>WRITE #n,expression</code></td>
+<td>Writes data in a form intended for later INPUT.</td>
+<td>6-15</td>
+</tr>
+<tr>
+<td><code>INPUT$(num[,#n])</code></td>
+<td>Reads a specified number of characters from keyboard or an open channel.</td>
+<td>6-13</td>
+</tr>
+<tr>
+<td><code>INP(#n)</code></td>
+<td>Reads one byte from an open data channel.</td>
+<td>6-12</td>
+</tr>
+<tr>
+<td><code>OUT #n,a[,b,c,...]</code></td>
+<td>Writes byte values to an open data channel.</td>
+<td>6-12</td>
+</tr>
+</tbody>
+</table>
+<p>The source describes <code>PRINT</code> and <code>WRITE</code> as distinct output forms: WRITE is intended to create data that can be read back with INPUT. The exact text encoding, newline convention and numeric serialization details are not established here.</p>
+<h3 id="string-array-persistence">String-array persistence</h3>
+<ul>
+<li><code>STORE #i,x$()[,n]</code> writes a string array to a text file, with line-feed separation; the optional n limits the number of elements written (printed pp. 6-16–6-17).</li>
+<li><code>RECALL #i,x$()[,n][TO z],x</code> reads strings from a file into a string array. The manual's syntax and examples use a maximum-count argument and a returned count variable; retain the original printed syntax as a candidate until OCR/page-image review resolves punctuation and optional-argument grouping.</li>
+<li>The example writes 500 array entries, erases/re-dimensions the array, reads the file into another array, and prints the number read (pp. 6-16–6-17).</li>
+</ul>
+<h3 id="random-access-files">Random-access files</h3>
+<p>The manual introduces random-access files as fixed-length records composed of fields (printed pp. 6-3 and 6-18–6-21).</p>
+<table>
+<thead>
+<tr>
+<th>Form</th>
+<th>Source-described behavior</th>
+<th>Printed page</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>FIELD #n,num AS set$[,num AS set$,...]</code></td>
+<td>Defines named string fields of specified byte lengths within a record.</td>
+<td>6-20</td>
+</tr>
+<tr>
+<td><code>FIELD #n,num AT(x)[,...]</code></td>
+<td>Defines fields at explicit offsets.</td>
+<td>6-20</td>
+</tr>
+<tr>
+<td><code>GET #n[,set]</code></td>
+<td>Reads a record from a random-access file.</td>
+<td>6-21</td>
+</tr>
+<tr>
+<td><code>PUT #n[,set]</code></td>
+<td>Writes a record to a random-access file.</td>
+<td>6-21</td>
+</tr>
+<tr>
+<td><code>RECORD #n,set</code></td>
+<td>Selects/sets the record number used by GET/PUT.</td>
+<td>6-21</td>
+</tr>
+</tbody>
+</table>
+<p>The source's worked example opens a random-access file with mode <code>R</code>, assigns field widths totaling 64 bytes, and uses GET/PUT with record numbers. A field is a string variable bound to a segment of a record; it is not an ordinary independent string buffer. The lifetime, aliasing, validation of record size and behavior for malformed/short files require further detailed review.</p>
+<h3 id="data-statements-and-in-program-data-pointers">DATA statements and in-program data pointers</h3>
+<p>Chapter 5 documents <code>DATA</code>, <code>READ</code> and <code>RESTORE</code> (printed pp. 5-13–5-14):</p>
+<ul>
+<li><code>DATA const[,const1,...]</code> declares numeric or string constants in the program.</li>
+<li><code>READ var[,var1,...]</code> assigns the next DATA values to numeric or string variables.</li>
+<li><code>RESTORE [name]</code> resets the DATA read position, optionally to a user-defined DATA label/name.</li>
+<li>The example reads values in a loop, then restores to a named DATA section and reads string values.</li>
+</ul>
+<p>The 3.5 addendum separately documents two commands for DATA pointer operation. It uses an integer array to save and restore <code>_DATA</code> pointer values; the example saves positions, traverses DATA, then restores positions to reread entries (addendum printed pp. 14-3–14-4; PDF pages 464–465). The exact declaration spellings are OCR-sensitive in the supplied scan; the addendum visibly uses <code>_DATA</code> and the example includes assignment/read operations. Do not invent a token name from OCR where the glyph is unclear; verify the page image before registry entry.</p>
+<h2 id="evidence-and-compatibility-notes">Evidence and compatibility notes</h2>
+<ul>
+<li>This file is a partial page-reviewed extraction, not a complete statement or file API catalogue.</li>
+<li>All Chapter 5–7 base-manual features above are 3.0 candidates. Their presence in the combined scan does not itself prove they were retained unchanged in interpreter 3.5.</li>
+<li>The 3.5 addendum's DATA-pointer feature is 3.5-specific evidence, but its OCR-sensitive command spelling must be image-verified before adding a normative declaration.</li>
+<li>Amiga device names, CLI behavior, native program files, and DOS semantics must not be equated with host operating-system behavior.</li>
+<li>The original interpreter has not been executed as part of this extraction. No runtime observation or conformance result is claimed.</li>
+<li>For implementation, keep source syntax, interpreter semantics, host filesystem policy, and Linux runtime support as separate status dimensions.</li>
+</ul>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>
