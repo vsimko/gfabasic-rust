@@ -71,31 +71,31 @@ jobs:
       - name: Record fuzz run metadata
         run: |
           {
-            printf 'target=source_loader\\n'
-            printf 'commit=%s\\n' "$GITHUB_SHA"
-            printf 'rustc=%s\\n' "$(rustc +1.99.1 --version)"
-            printf 'cargo-afl=0.18.2\\n'
-            printf 'fuzz-seconds=%s\\n' "$FUZZ_SECONDS"
-            printf 'max-input-bytes=1048576\\n'
-            printf 'per-input-timeout-ms=1000\\n'
-            printf 'memory-limit-mb=256\\n'
-            printf 'core-pattern-check=bypassed-for-github-hosted-runner; crash-and-hang-files-are-still-checked\\n'
-            printf 'fuzz-lock-sha256:\\n'
+            printf 'target=source_loader\n'
+            printf 'commit=%s\n' "$GITHUB_SHA"
+            printf 'rustc=%s\n' "$(rustc +1.99.1 --version)"
+            printf 'cargo-afl=0.18.2\n'
+            printf 'fuzz-seconds=%s\n' "$FUZZ_SECONDS"
+            printf 'max-input-bytes=1048576\n'
+            printf 'per-input-timeout-ms=1000\n'
+            printf 'memory-limit-mb=256\n'
+            printf 'core-pattern-check=bypassed-for-github-hosted-runner; crash-and-hang-files-are-still-checked\n'
+            printf 'fuzz-lock-sha256:\n'
             sha256sum fuzz/Cargo.lock
-            printf 'corpus-sha256:\\n'
+            printf 'corpus-sha256:\n'
             sha256sum fuzz/corpus/source_loader/*
-            printf 'skipped=lexer,parser,expressions,diagnostics,source-composition (prerequisites #46,#47,#120)\\n'
+            printf 'skipped=lexer,parser,expressions,diagnostics,source-composition (prerequisites #46,#47,#120)\n'
           } > "$RUNNER_TEMP/source-loader-fuzz-metadata.txt"
 
       - name: Run bounded source-loader campaign
         run: |
-          cargo +1.99.1 afl fuzz \\
-            -i fuzz/corpus/source_loader \\
-            -o "$RUNNER_TEMP/source-loader-fuzz" \\
-            -V "$FUZZ_SECONDS" \\
-            -t 1000 \\
-            -m 256 \\
-            -G 1048576 \\
+          cargo +1.99.1 afl fuzz \
+            -i fuzz/corpus/source_loader \
+            -o "$RUNNER_TEMP/source-loader-fuzz" \
+            -V "$FUZZ_SECONDS" \
+            -t 1000 \
+            -m 256 \
+            -G 1048576 \
             fuzz/target/release/source_loader
 
       - name: Minimize crash and hang inputs
@@ -115,8 +115,8 @@ jobs:
               [ "$(basename "$input")" = "README.txt" ] && continue
               count=$((count + 1))
               destination="$minimized/$finding-$(basename "$input")"
-              if timeout 30s cargo +1.99.1 afl tmin \\
-                -i "$input" -o "$destination" -t 1000 -m 256 -- \\
+              if timeout 30s cargo +1.99.1 afl tmin \
+                -i "$input" -o "$destination" -t 1000 -m 256 -- \
                 fuzz/target/release/source_loader; then
                 [ -f "$destination" ] || cp "$input" "$destination.original"
               else
@@ -141,9 +141,9 @@ jobs:
         run: |
           mkdir -p "$RUNNER_TEMP/source-loader-fuzz" "$RUNNER_TEMP/source-loader-minimized"
           touch "$RUNNER_TEMP/source-loader-fuzz-metadata.txt"
-          tar -czf "$RUNNER_TEMP/source-loader-fuzz-results.tar.gz" \\
-            --transform='s/:/_/g' \\
-            -C "$RUNNER_TEMP" \\
+          tar -czf "$RUNNER_TEMP/source-loader-fuzz-results.tar.gz" \
+            --transform='s/:/_/g' \
+            -C "$RUNNER_TEMP" \
             source-loader-fuzz source-loader-minimized source-loader-fuzz-metadata.txt
 
       - name: Upload fuzzer output and resolved lockfile
