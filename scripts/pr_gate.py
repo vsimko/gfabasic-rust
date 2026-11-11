@@ -12,7 +12,6 @@ import time
 import urllib.error
 import urllib.parse
 import urllib.request
-from datetime import datetime
 from typing import Any
 
 WORKFLOWS = {
@@ -116,7 +115,8 @@ class GitHub:
         result: list[dict[str, Any]] = []
         while True:
             query = urllib.parse.urlencode({"per_page": 100, "page": page})
-            payload = self.get(f"{path}?{query}")
+            separator = "&" if "?" in path else "?"
+            payload = self.get(f"{path}{separator}{query}")
             items = payload.get(key, [])
             result.extend(items)
             if len(items) < 100:
