@@ -46,7 +46,7 @@
 </tr>
 <tr>
 <td>documented-in-3.0-only</td>
-<td style="text-align:right">102</td>
+<td style="text-align:right">105</td>
 </tr>
 <tr>
 <td>unresolved</td>
@@ -183,6 +183,12 @@
 <td>Integer-to-base-2/base-8/base-16 string conversions; optional width parameters are documented. 3.0 base-manual evidence only.</td>
 </tr>
 <tr>
+<td><code>amiga.base2.bmove</code></td>
+<td>BMOVE</td>
+<td>2-43</td>
+<td>Copies cnt bytes from src to dst; overlapping source/destination blocks are supported, and even parameters execute faster than odd ones. 3.5 applicability is unverified.</td>
+</tr>
+<tr>
 <td><code>amiga.base2.cint-cfloat</code></td>
 <td>CINT / CFLOAT</td>
 <td>2-17</td>
@@ -249,10 +255,22 @@
 <td>Writes one, two or four bytes respectively to address x. The prose prints DPOKE x.y while the syntax block gives DPOKE x,y; LPOKE is shown with a stray semicolon in the syntax block. Even addresses are required for DPOKE and LPOKE. Preserve these source details; 3.5 applicability is unverified.</td>
 </tr>
 <tr>
+<td><code>amiga.base2.reserve</code></td>
+<td>RESERVE</td>
+<td>2-44</td>
+<td>RESERVE [n] sets the memory size GFA-BASIC should use; the manual says variables are erased when it executes and recommends using it only at program start. 3.5 applicability is unverified.</td>
+</tr>
+<tr>
 <td><code>amiga.base2.str</code></td>
 <td>STR$</td>
 <td>2-15</td>
 <td>Overloads STR$(x), STR$(x,y), STR$(x,y,z); width and selected-slice behavior are described. 3.0 base-manual evidence only.</td>
+</tr>
+<tr>
+<td><code>amiga.base2.swap-command</code></td>
+<td>SWAP command</td>
+<td>2-19–2-20</td>
+<td>Exchanges same-type variables or array values; the array form exchanges descriptors, and SWAP *c,d() supports indirect array naming. Explicitly distinct from the SWAP() bit-operation function in Chapter 4. 3.5 applicability is unverified.</td>
 </tr>
 <tr>
 <td><code>amiga.base2.timer</code></td>
