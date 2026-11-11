@@ -2,14 +2,6 @@ name: Security audit
 
 on:
   pull_request:
-    paths:
-      - "Cargo.toml"
-      - "Cargo.lock"
-      - "**/Cargo.toml"
-      - "**/Cargo.lock"
-      - "rust-toolchain.toml"
-      - "audit.toml"
-      - ".github/workflows/security-audit.yml"
   push:
     branches:
       - main
