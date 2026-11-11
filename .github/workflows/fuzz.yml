@@ -88,7 +88,10 @@ jobs:
           } > "$RUNNER_TEMP/source-loader-fuzz-metadata.txt"
 
       - name: Run bounded source-loader campaign
+        shell: bash
         run: |
+          set -o pipefail
+          log="$RUNNER_TEMP/source-loader-afl.log"
           cargo +1.99.1 afl fuzz \
             -i fuzz/corpus/source_loader \
             -o "$RUNNER_TEMP/source-loader-fuzz" \
@@ -96,7 +99,15 @@ jobs:
             -t 1000 \
             -m 256 \
             -G 1048576 \
-            fuzz/target/release/source_loader
+            fuzz/target/release/source_loader >"$log" 2>&1 || {
+              status=$?
+              echo "AFL++ campaign failed (exit $status); final log lines:"
+              tail -n 80 "$log"
+              exit "$status"
+            }
+          echo "AFL++ campaign completed; final summary:"
+          grep -E '^([*]|[-])|total|cycles|paths|crashes|hangs|execs|exec speed|stability|bitmap' "$log" | tail -n 30 || true
+          echo "Full AFL++ log saved as workflow artifact."
 
       - name: Minimize crash and hang inputs
         if: always()
