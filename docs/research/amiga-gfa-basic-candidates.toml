@@ -1162,3 +1162,34 @@ source-version = "3.0 base manual"
 printed-pages = ["2-37–2-38"]
 status = "documented-in-3.0-only"
 notes = "Each typed address form is both a value-reading function (for example y=BYTE{x}) and a writing command (for example BYTE{x}=y). The source associates forms with byte, integer, GFA 3.0 float, IEEE single/double and null-terminated string layouts; {} is described as similar to LONG{}. Alignment warnings and OCR-sensitive spellings are retained as source-only evidence, not 3.5 declarations."
+
+
+[[candidates]]
+id = "amiga.base2.bmove"
+name = "BMOVE"
+kind = "statement"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["2-43"]
+status = "documented-in-3.0-only"
+notes = "Copies cnt bytes from src to dst; overlapping source/destination blocks are supported, and even parameters execute faster than odd ones. 3.5 applicability is unverified."
+
+[[candidates]]
+id = "amiga.base2.reserve"
+name = "RESERVE"
+kind = "statement"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["2-44"]
+status = "documented-in-3.0-only"
+notes = "RESERVE [n] sets the memory size GFA-BASIC should use; the manual says variables are erased when it executes and recommends using it only at program start. 3.5 applicability is unverified."
+
+[[candidates]]
+id = "amiga.base2.swap-command"
+name = "SWAP command"
+kind = "statement"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["2-19–2-20"]
+status = "documented-in-3.0-only"
+notes = "Exchanges same-type variables or array values; the array form exchanges descriptors, and SWAP *c,d() supports indirect array naming. Explicitly distinct from the SWAP() bit-operation function in Chapter 4. 3.5 applicability is unverified."
