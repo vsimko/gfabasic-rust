@@ -78,3 +78,22 @@ This conflicts internally with Chapter 19, which explicitly documents `FACT` and
 - p. 488: page image confirms error 86's exact wording, `FACT/COMBIN/PERMUT nicht definiert`.
 
 This note records documentary corroboration only. It does not claim that the original interpreter has been executed.
+
+## 5. Conversion functions — general reference (printed pp. 285–286)
+
+The page images for printed pp. 285–286 were checked directly. These pages are in the book's general command reference, whose foreword scopes the main reference to Amiga GFA-BASIC 3.0; they are **not** part of the explicitly 3.5-labelled Chapters 18–19.
+
+The printed p. 285 heading lists `CVI()`, `CVL()`, `CVS()`, and `CVD()`. Its table specifies:
+
+- `CVI("2 Zeichen")`: 16-bit integer.
+- `CVL("4 Zeichen")`: 32-bit integer.
+- `CVS("4 Zeichen")`: real value in Amiga-BASIC format.
+- `CVD("8 Zeichen")`: real value in MBASIC or GFA-BASIC format.
+
+The same paragraph says these are the inverse functions of `MKI$/MKL$/MKS$/MKD$`.
+
+Printed p. 286 separately lists `MKI$()`, `MKL$()`, `MKS$()`, and `MKD$()`, with corresponding output widths/formats: 2-byte integer string, 4-byte integer string, 4-byte Amiga-BASIC real string, and 8-byte MBASIC/GFA-BASIC real string.
+
+This independently supports the `CVS` ↔ `MKS$` pairing for 4-byte Amiga-BASIC real values, and the `CVD` ↔ `MKD$` pairing for 8-byte MBASIC/GFA-BASIC real values, in the book's 3.0 general-reference scope. It does **not** establish 3.5 availability.
+
+**Cross-source discrepancy remains open:** the English base-manual passage on printed pp. 2-18–2-19 contains `CVF` in prose and `MKF$` in its reverse-function sentence, while its syntax/table also show `CVS`, `MKS$`, and `MKD$`. The German book's page images support `CVS` and `MKS$`, and separately `CVD` and `MKD$`; they do not document `CVF` or `MKF$` on these pages. Preserve the English spellings as conflicting printed evidence. Do not silently correct them, infer aliases, or promote any of these base-reference names as 3.5 declarations on this evidence alone.
