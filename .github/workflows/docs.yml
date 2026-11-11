@@ -11,6 +11,7 @@ on:
       - "scripts/**"
       - "site/**"
       - "tests/corpus/**"
+      - "tests/tooling/**"
       - "docs/**"
       - "scripts/validate_okf.py"
       - "scripts/generate_docs_site.py"
@@ -28,6 +29,7 @@ on:
       - "scripts/**"
       - "site/**"
       - "tests/corpus/**"
+      - "tests/tooling/**"
       - "docs/**"
 
 permissions:
@@ -101,6 +103,9 @@ jobs:
 
       - name: Run registry validator tests
         run: python -m unittest discover -s scripts/tests -p "test_*.py"
+
+      - name: Run repository tooling tests
+        run: python -m unittest discover -s tests/tooling -p "test_*.py"
 
   local-links:
     name: Local Markdown links and anchors
