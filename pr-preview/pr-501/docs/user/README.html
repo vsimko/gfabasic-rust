@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Audience: People evaluating or using the planned GFA BASIC compiler.">
+  <title>User documentation · GFA BASIC Rust documentation</title>
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body class="docs-site">
+  <header class="docs-header">
+    <a href="../../index.html">GFA BASIC Rust</a>
+    <span aria-hidden="true">/</span>
+    <a href="../index.html">Documentation</a>
+  </header>
+  <div class="docs-layout">
+    <nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home" href="index.html">Section index</a><ul><li><a href="README.html">User documentation</a></li><li><a href="diagnostics.html">Understanding compiler diagnostics</a></li></ul></nav>
+    <main class="docs-content">
+      <article>
+        <h1>User documentation</h1>
+        <p class="docs-meta"><span>User Guide</span></p>
+        <h1 id="user-documentation">User documentation</h1>
+<p><strong>Audience:</strong> People evaluating or using the planned GFA BASIC compiler.</p>
+<p><strong>Status:</strong> User documentation is limited because only a narrow experimental source subset can be formatted or built. The CLI supports help/version, selected-subset <code>fmt</code>, and a combinatorics/PRINT prototype <code>build</code>; <code>check</code> and general compilation are unavailable.</p>
+<h2 id="current-status">Current status</h2>
+<p>The <code>gfabasic</code> executable supports help/version, <code>fmt</code> for the evidence-gated combinatorics/PRINT and selected MAT syntax, and <code>build</code> for literal FACT/VARIAT/COMBIN assignments followed by PRINT. The build uses a temporary C/<code>cc</code> bootstrap and is not a general compiler. <code>check</code> remains unavailable. There is no installation package or generally supported GFA BASIC dialect/API profile. Do not treat the prototype as full interpreter compatibility or follow build commands copied from another GFA BASIC implementation.</p>
+<p>Start with the <a href="https://github.com/vsimko/gfabasic-rust/blob/main/README.md">project README</a> for the current project direction and limitations. Use the <a href="../architecture/COMPATIBILITY-MATRIX.html">compatibility matrix</a> for the current support status.</p>
+<p>The compiler frontend and formatter produce source-located diagnostics for unsupported or malformed syntax; the LSP publishes parser diagnostics for open documents. The <code>check</code> CLI command and a general machine-readable diagnostic/report interface remain unavailable. See <a href="diagnostics.html">Understanding compiler diagnostics</a> for the current boundary.</p>
+<h2 id="research-is-not-a-support-claim">Research is not a support claim</h2>
+<p>The <a href="../reference/README.html">language and API reference notes</a> record source-backed research and unresolved questions. Their presence does not mean that a feature is implemented, tested, or supported by this project. Amiga and Atari ST material is kept separate.</p>
+<h2 id="planned-user-guides">Planned user guides</h2>
+<p>The documentation index records where future guides belong and which implementation prerequisites they require: <a href="../index.html">planned user and contributor pages</a>.</p>
+<p>Installation, quick-start, CLI, and troubleshooting instructions will be added only after they can be verified against a reproducible build. See <a href="../README.html">the project documentation index</a>.</p>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>

@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "status": "fresh",
+  "generated_at": "2026-11-11T22:11:28.306460+00:00",
+  "last_successful_at": "2026-11-11T22:11:28.306460+00:00",
+  "items": [
+    {
+      "type": "merged_pull_request",
+      "title": "[Research] Add Chapter 2 memory access evidence",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/500",
+      "number": 500,
+      "timestamp": "2026-11-11T22:09:16Z",
+      "summary": "PR #500 merged"
+    },
+    {
+      "type": "commit",
+      "title": "[Research] Add Chapter 2 memory access evidence (#500)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/644b3d8fc94a7c744e75a2463755e594ffcd438e",
+      "number": null,
+      "timestamp": "2026-11-11T22:09:15Z",
+      "summary": "Commit 644b3d8"
+    },
+    {
+      "type": "merged_pull_request",
+      "title": "[Research] Add granular Chapter 2–4 evidence records without 3.5 promotion",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/499",
+      "number": 499,
+      "timestamp": "2026-11-11T21:45:16Z",
+      "summary": "PR #499 merged"
+    },
+    {
+      "type": "commit",
+      "title": "[Research] Add granular Chapter 2–4 evidence records without 3.5 promotion (#499)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/e2cea2aaac68ea270129e5443f739b0f8bc47801",
+      "number": null,
+      "timestamp": "2026-11-11T21:45:16Z",
+      "summary": "Commit e2cea2a"
+    },
+    {
+      "type": "merged_pull_request",
+      "title": "[Docs] Record FACT example spelling discrepancy",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/498",
+      "number": 498,
+      "timestamp": "2026-11-11T20:28:10Z",
+      "summary": "PR #498 merged"
+    },
+    {
+      "type": "commit",
+      "title": "[Docs] Record FACT example spelling discrepancy (#498)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/0e809fb61907a6f064c30b01b793b5e87f328a44",
+      "number": null,
+      "timestamp": "2026-11-11T20:28:10Z",
+      "summary": "Commit 0e809fb"
+    },
+    {
+      "type": "merged_pull_request",
+      "title": "[Docs] Record reference-page and catalogue audit",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/497",
+      "number": 497,
+      "timestamp": "2026-11-11T20:06:36Z",
+      "summary": "PR #497 merged"
+    },
+    {
+      "type": "commit",
+      "title": "[Docs] Record reference-page and catalogue audit",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/c2627483a7be38986ca3783a7f757805b6bf726f",
+      "number": null,
+      "timestamp": "2026-11-11T20:06:35Z",
+      "summary": "Commit c262748"
+    },
+    {
+      "type": "merged_pull_request",
+      "title": "[Docs] Reconcile reference navigation and compatibility snapshot",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/496",
+      "number": 496,
+      "timestamp": "2026-11-11T19:15:51Z",
+      "summary": "PR #496 merged"
+    },
+    {
+      "type": "commit",
+      "title": "[Docs] Reconcile reference navigation and compatibility snapshot",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/250de2f6d6c34995059cca00a4b57862e92d4ced",
+      "number": null,
+      "timestamp": "2026-11-11T19:15:50Z",
+      "summary": "Commit 250de2f"
+    },
+    {
+      "type": "merged_pull_request",
+      "title": "[Docs] Update documentation audit after corpus summary fix",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/495",
+      "number": 495,
+      "timestamp": "2026-11-11T19:03:03Z",
+      "summary": "PR #495 merged"
+    },
+    {
+      "type": "commit",
+      "title": "[Docs] Update documentation audit after corpus summary fix",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/72c8f62b41dea1cfb9fca66d29ef1df6175339b1",
+      "number": null,
+      "timestamp": "2026-11-11T19:03:02Z",
+      "summary": "Commit 72c8f62"
+    }
+  ]
+}
