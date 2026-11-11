@@ -148,14 +148,16 @@ The two disputed slots are the CVx conversion spelling (`CVD` in the index versu
 | `WORD` | 2-37, 4-26 | base-manual-entry |
 | `XOR` | 4-23 | base-manual-entry |
 
+The base-manual table above is a 3.0-derived candidate inventory. Its entries deliberately have no 3.5 registry IDs: the shared PDF's base chapters do not independently establish 3.5 availability, and absence from the addendum is not evidence of absence. Keep these names out of the 3.5 API registry until a separate 3.5-specific source or a correctly versioned runtime observation supports the declaration.
+
 ## Explicit 3.5 additions
 
-| Function | Printed source page(s) | Evidence |
-|---|---|---|
-| `COMBIN` | 13-33–13-34 | explicit-3.5-addendum: Combination function. |
-| `FACT` | 13-33–13-34 | explicit-3.5-addendum: Factorial function; 0! is explicitly defined as 1. |
-| `GURU` | 13-36 | explicit-3.5-addendum: GURU-number function; distinct from the GURU enable/disable statement. |
-| `VARIAT` | 13-33–13-34 | explicit-3.5-addendum: Permutation function. |
+| Function | Printed source page(s) | Registry declaration | Evidence |
+|---|---|---|---|
+| `COMBIN` | 13-33–13-34 | `gfa.language.math.combin` | explicit-3.5-addendum: Combination function. |
+| `FACT` | 13-33–13-34 | `gfa.language.math.fact` | explicit-3.5-addendum: Factorial function; 0! is explicitly defined as 1. |
+| `GURU` | 13-36 | `gfa.amiga.system.guru-number` (Amiga profile) | explicit-3.5-addendum: GURU-number function; distinct from the GURU enable/disable statement. |
+| `VARIAT` | 13-33–13-34 | `gfa.language.math.variat` | explicit-3.5-addendum: Permutation function. |
 
 ## Primary source and caveats
 
