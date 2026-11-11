@@ -950,6 +950,17 @@
 <li><strong>3.5-specific cross-reference (printed p. 13-36):</strong> the 3.5 GURU section explicitly says that a GURU Meditation can transfer to the <code>ONERROR GOSUB</code> routine or generate error #109. It further says that in compiled 3.5 programs, <code>RESUME NEXT</code> and <code>RESUME LABEL</code> cannot be executed after an <code>ONERROR GOSUB</code> call caused by a GURU. This confirms that these spellings participate in a 3.5 GURU/error-handler interaction, but it does not independently restate the full Chapter 7 syntax or all interpreter-mode behavior.</li>
 <li><strong>Version status:</strong> retain ON ERROR/ONERROR GOSUB and RESUME as unresolved 3.5 candidates until their base-manual grammar and semantics are reconciled against a 3.5-specific source or an authorized 3.5 runtime observation. Do not promote the full 3.0 descriptions to the normative 3.5 registry from the GURU cross-reference alone.</li>
 </ul>
+<h2 id="cvx-mkx-conversion-name-source-audit-printed-pp-2-182-19">CVx / MKx conversion-name source audit (printed pp. 2-18–2-19)</h2>
+<p>The page images for printed pp. 2-18 and 2-19 (PDF viewer pages 52–53 in the supplied English scan) have been inspected directly. They confirm that the inconsistencies are present in the printed source, not merely introduced by OCR:</p>
+<ul>
+<li>The syntax block on p. 2-18 lists <code>CVI(a$)</code>, <code>CVL(a$)</code>, <code>MKI$(x)</code>, <code>MKL$(x)</code>, <code>MKS$(x)</code>, and <code>MKD$(x)</code>.</li>
+<li>The prose immediately below says “CVI, CVL, and CVF” convert character strings into numbers.</li>
+<li>The explanatory table labels its third conversion <code>CVS</code> (four-byte Amiga-BASIC-compatible number to a floating-point GFA-BASIC value); it does not label that row <code>CVF</code>.</li>
+<li>The reverse-function sentence on p. 2-19 lists <code>MKI$</code>, <code>MKL$</code>, <code>MKS$</code>, <code>MKF$</code>, and <code>MKD$</code>.</li>
+<li>The examples exercise only <code>MKL$(1000)</code> with <code>CVL(a$)</code>, and <code>MKI$(100.1)</code> with <code>CVI(b$)</code>. They do not resolve the disputed floating-point pair.</li>
+</ul>
+<p>Consequently, the source itself contains an unresolved spelling conflict: <code>CVF</code> versus <code>CVS</code>, and <code>MKF$</code> versus the syntax block's <code>MKS$</code>. The page images rule out an OCR-only explanation but do not establish which forms are intended, aliases, or typographical errors. Preserve both printed variants as conflicting source evidence; do not normalize them, infer alias equivalence, or create/promote registry declarations from this passage.</p>
+<p><strong>Version boundary:</strong> these are printed pp. 2-18–2-19 in the 3.0 base-manual portion of the combined 3.5 interpreter manual. This audit is not evidence of 3.5 availability.</p>
 
       </article>
     </main>
