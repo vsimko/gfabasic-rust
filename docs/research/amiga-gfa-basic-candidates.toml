@@ -714,13 +714,13 @@ notes = "Distinguishes element/string-data address from array-descriptor address
 
 [[candidates]]
 id = "amiga.base2.peek"
-name = "PEEK"
+name = "PEEK / DPEEK / LPEEK"
 kind = "function-family"
 source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["2-36"]
 status = "documented-in-3.0-only"
-notes = "Memory-read forms are documented in the base manual; width/type variants need independent 3.5 evidence."
+notes = "Reads one, two or four bytes respectively from address x. The source warns that even addresses must be used; 3.5 availability remains unverified."
 
 [[candidates]]
 id = "amiga.base2.absolute"
@@ -1141,3 +1141,24 @@ source-version = "3.0 base manual"
 printed-pages = ["4-36"]
 status = "documented-in-3.0-only"
 notes = "Left/right justified assignment into existing string variable; padding/truncation details remain unspecified."
+
+
+[[candidates]]
+id = "amiga.base2.poke-family"
+name = "POKE / DPOKE / LPOKE"
+kind = "statement-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["2-35"]
+status = "documented-in-3.0-only"
+notes = "Writes one, two or four bytes respectively to address x. The prose prints DPOKE x.y while the syntax block gives DPOKE x,y; LPOKE is shown with a stray semicolon in the syntax block. Even addresses are required for DPOKE and LPOKE. Preserve these source details; 3.5 applicability is unverified."
+
+[[candidates]]
+id = "amiga.base2.typed-memory-access"
+name = "BYTE{} / CARD{} / INT{} / WORD{} / LONG{} / {} / FLOAT{} / SINGLE{} / DOUBLE{} / CHAR{}"
+kind = "function-command-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["2-37–2-38"]
+status = "documented-in-3.0-only"
+notes = "Each typed address form is both a value-reading function (for example y=BYTE{x}) and a writing command (for example BYTE{x}=y). The source associates forms with byte, integer, GFA 3.0 float, IEEE single/double and null-terminated string layouts; {} is described as similar to LONG{}. Alignment warnings and OCR-sensitive spellings are retained as source-only evidence, not 3.5 declarations."
