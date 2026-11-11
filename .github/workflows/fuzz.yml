@@ -29,13 +29,44 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
 
+      - name: Cache Rust toolchain
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+        with:
+          path: |
+            ~/.rustup/toolchains/1.99.1-x86_64-unknown-linux-gnu
+            ~/.rustup/update-hashes
+          key: ${{ runner.os }}-rustup-1.99.1-minimal
+
+      - name: Cache cargo-afl installation
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+        with:
+          path: ~/.cargo/bin/cargo-afl
+          key: ${{ runner.os }}-cargo-afl-0.18.2-rust-1.99.1
+
+      - name: Cache fuzz dependencies and build artifacts
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            fuzz/target
+          key: ${{ runner.os }}-fuzz-cargo-1.99.1-${{ hashFiles('fuzz/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-fuzz-cargo-1.99.1-
+
       - name: Install pinned Rust toolchain
         run: |
           rustup toolchain install 1.99.1 --profile minimal
           rustup default 1.99.1
 
       - name: Install pinned cargo-afl
-        run: cargo +1.99.1 install cargo-afl --version 0.18.2 --locked
+        run: |
+          if ! command -v cargo-afl >/dev/null 2>&1; then
+            cargo +1.99.1 install cargo-afl --version 0.18.2 --locked
+          fi
+
+      - name: Build AFL++ Rust runtime
+        run: cargo +1.99.1 afl config --build
 
       - name: Build source-loader fuzz target
         run: cargo +1.99.1 afl build --manifest-path fuzz/Cargo.toml --target-dir fuzz/target --release --bin source_loader --locked
@@ -60,7 +91,10 @@ jobs:
           } > "$RUNNER_TEMP/source-loader-fuzz-metadata.txt"
 
       - name: Run bounded source-loader campaign
+        shell: bash
         run: |
+          set -o pipefail
+          log="$RUNNER_TEMP/source-loader-afl.log"
           cargo +1.99.1 afl fuzz \
             -i fuzz/corpus/source_loader \
             -o "$RUNNER_TEMP/source-loader-fuzz" \
@@ -68,7 +102,15 @@ jobs:
             -t 1000 \
             -m 256 \
             -G 1048576 \
-            fuzz/target/release/source_loader
+            fuzz/target/release/source_loader >"$log" 2>&1 || {
+              status=$?
+              echo "AFL++ campaign failed (exit $status); final log lines:"
+              tail -n 80 "$log"
+              exit "$status"
+            }
+          echo "AFL++ campaign completed; final summary:"
+          grep -E 'Statistics:|All test cases processed|No crashes|No hangs' "$log" | tail -n 5 || true
+          echo "Full AFL++ log saved as workflow artifact."
 
       - name: Minimize crash and hang inputs
         if: always()
@@ -112,11 +154,11 @@ jobs:
         if: always()
         run: |
           mkdir -p "$RUNNER_TEMP/source-loader-fuzz" "$RUNNER_TEMP/source-loader-minimized"
-          touch "$RUNNER_TEMP/source-loader-fuzz-metadata.txt"
+          touch "$RUNNER_TEMP/source-loader-fuzz-metadata.txt" "$RUNNER_TEMP/source-loader-afl.log"
           tar -czf "$RUNNER_TEMP/source-loader-fuzz-results.tar.gz" \
             --transform='s/:/_/g' \
             -C "$RUNNER_TEMP" \
-            source-loader-fuzz source-loader-minimized source-loader-fuzz-metadata.txt
+            source-loader-fuzz source-loader-minimized source-loader-fuzz-metadata.txt source-loader-afl.log
 
       - name: Upload fuzzer output and resolved lockfile
         if: always()

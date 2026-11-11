@@ -781,3 +781,20 @@ The page images for printed pp. 2-18 and 2-19 (PDF viewer pages 52–53 in the s
 Consequently, the source itself contains an unresolved spelling conflict: `CVF` versus `CVS`, and `MKF$` versus the syntax block's `MKS$`. The page images rule out an OCR-only explanation but do not establish which forms are intended, aliases, or typographical errors. Preserve both printed variants as conflicting source evidence; do not normalize them, infer alias equivalence, or create/promote registry declarations from this passage.
 
 **Version boundary:** these are printed pp. 2-18–2-19 in the 3.0 base-manual portion of the combined 3.5 interpreter manual. This audit is not evidence of 3.5 availability.
+
+
+## Chapter 2–4 source-evidence audit (2026-11-11)
+
+The Chapter 2–4 source review is now represented by 57 granular, page-located evidence records in `amiga-gfa-basic-candidates.toml`, rather than relying only on three broad topic-family rows. These are tracking records, not a complete one-entry-per-name declaration catalogue: some related names remain grouped where their source discussion is shared. The records cover Chapter 2 conversion, date/time, memory-query and pointer topics; Chapter 3 operator forms and precedence; and Chapter 4 arithmetic, trigonometric, random, bitwise, conversion and string-function topics. Same-spelling command/function pairs are kept separate where the source distinguishes them (notably integer arithmetic functions versus mutating commands, the SWAP function versus SWAP command, and MID$ function versus MID$ command).
+
+All 57 records remain `documented-in-3.0-only`: this means the cited declaration/description is in the base-manual portion of the 3.0 manual and that 3.5 applicability is not established. It is not evidence of removal or incompatibility. The 3.5 addendum remains the only normative documentary basis for the confirmed-in-3.5 set; the German companion book is used for cross-checking only where it explicitly labels a feature as a 3.5 addition. In particular:
+
+- `CINT`/`CFLOAT` are explicitly described as compiler-only in the base manual, not interpreter built-ins.
+- The `CVx`/`MKx` family preserves the CVS/CVF/MKS$/MKF$ naming mismatch.
+- `=<` and `=>` are retained as alternate relational spellings because the prose describes them, despite ambiguity in the precedence-table OCR.
+- `==` remains distinct from `=`: the base manual describes approximate numeric equality separately from assignment/equality.
+- Numeric and string comparison rows, logical operators, and integer bitwise function forms are not merged.
+- `BTST`'s page-local 1/0 result is retained separately from the general TRUE=-1 logical convention.
+- `LOG10`, DATE$/TIME$ naming, and several memory-query forms retain qualifications where the page-level signature needs further review.
+
+The report generator now rejects Chapter 2–4 candidate records that lose their explicit 3.0 source scope or are promoted to 3.5 without new evidence. The accompanying test checks the 57 granular evidence records and their provenance. No new `gfa.language.*` declarations or runtime support claims are introduced.
