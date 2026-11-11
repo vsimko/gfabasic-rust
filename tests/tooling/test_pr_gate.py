@@ -10,6 +10,12 @@ class PullRequestGateTests(unittest.TestCase):
             {".github/workflows/docs.yml"},
         )
 
+    def test_root_markdown_file_selects_documentation_workflow(self):
+        self.assertEqual(
+            expected_workflows(["README.md"]),
+            {".github/workflows/docs.yml"},
+        )
+
     def test_cargo_change_selects_all_dependency_and_rust_checks(self):
         self.assertEqual(
             expected_workflows(["Cargo.lock"]),
