@@ -30,6 +30,7 @@ This is the canonical OKF v0.2 documentation bundle for gfabasic-rust. Markdown 
 - [Amiga GFA BASIC Chapter 8 graphics compatibility evidence](research/amiga-gfa-basic-chapter-8-graphics-evidence.md) - Page-cited graphics inventory, 3.5 PCOLOR reconciliation, and 3.52 probe coverage boundary.
 - [Amiga GFA BASIC Chapter 9 event/window evidence](research/amiga-gfa-basic-chapter-9-event-window-evidence.md) - Page-cited event, menu, screen, window and requester inventory; isolates the documented 3.5 OPENW variant.
 - [Amiga GFA BASIC Chapter 10 advanced programming evidence](research/amiga-gfa-basic-chapter-10-advanced-programming-evidence.md) - Page-cited advanced programming inventory; keeps Amiga-specific facilities and 3.0/3.5/3.52 evidence separate.
+- [Amiga GFA BASIC Chapter 11 system-routine evidence](research/amiga-gfa-basic-chapter-11-system-routines-evidence.md) - Page-cited inventory of seven Amiga OS library groups; distinguishes 3.0 base-manual APIs, 3.5 addendum evidence, and 3.52 runtime probes.
 - [Amiga GFA BASIC test output](research/amiga-gfa-test-output.md) - Native file-output observation and proposed batch result protocol.
 
 # Project use and contribution
