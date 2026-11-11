@@ -1,6 +1,6 @@
 {
   "repository": "vsimko/gfabasic-rust",
-  "generated_at": "2026-11-11T13:11:21.948670Z",
+  "generated_at": "2026-11-11T13:16:42.967653Z",
   "freshness_threshold_hours": 168,
   "workflows": [
     {
@@ -8,28 +8,28 @@
       "file": "docs.yml",
       "note": "Markdown, JavaScript, API registry, corpus metadata and local-link validation.",
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/docs.yml",
-      "state": "in_progress",
+      "state": "success",
       "latest": {
-        "id": 43026822335,
+        "id": 43027511436,
         "name": "Documentation checks",
-        "status": "in_progress",
+        "status": "success",
         "event": "push",
         "branch": "main",
-        "created_at": "2026-11-11T13:11:04Z",
-        "updated_at": "2026-11-11T13:11:19Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43026822335",
+        "created_at": "2026-11-11T13:15:40Z",
+        "updated_at": "2026-11-11T13:16:22Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43027511436",
         "age_hours": 0,
         "freshness": "fresh"
       },
       "last_success": {
-        "id": 43025638238,
+        "id": 43027511436,
         "name": "Documentation checks",
         "status": "success",
-        "event": "pull_request",
-        "branch": "docs/german-book-ch18-page-image-status",
-        "created_at": "2026-11-11T13:03:08Z",
-        "updated_at": "2026-11-11T13:03:57Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43025638238",
+        "event": "push",
+        "branch": "main",
+        "created_at": "2026-11-11T13:15:40Z",
+        "updated_at": "2026-11-11T13:16:22Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43027511436",
         "age_hours": 0,
         "freshness": "fresh"
       }
@@ -173,7 +173,7 @@
         "created_at": "2026-11-10T15:12:44Z",
         "updated_at": "2026-11-10T15:13:01Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42841975538",
-        "age_hours": 21,
+        "age_hours": 22,
         "freshness": "fresh"
       },
       "last_success": {
@@ -185,7 +185,7 @@
         "created_at": "2026-11-10T15:12:44Z",
         "updated_at": "2026-11-10T15:13:01Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42841975538",
-        "age_hours": 21,
+        "age_hours": 22,
         "freshness": "fresh"
       }
     },
@@ -196,26 +196,26 @@
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/pages.yml",
       "state": "in_progress",
       "latest": {
-        "id": 43026822157,
+        "id": 43027511404,
         "name": "Deploy GitHub Pages",
         "status": "in_progress",
         "event": "push",
         "branch": "main",
-        "created_at": "2026-11-11T13:11:04Z",
-        "updated_at": "2026-11-11T13:11:12Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43026822157",
+        "created_at": "2026-11-11T13:15:40Z",
+        "updated_at": "2026-11-11T13:16:32Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43027511404",
         "age_hours": 0,
         "freshness": "fresh"
       },
       "last_success": {
-        "id": 43019133626,
+        "id": 43026822157,
         "name": "Deploy GitHub Pages",
         "status": "success",
         "event": "push",
         "branch": "main",
-        "created_at": "2026-11-11T12:18:02Z",
-        "updated_at": "2026-11-11T12:18:25Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43019133626",
+        "created_at": "2026-11-11T13:11:04Z",
+        "updated_at": "2026-11-11T13:11:35Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43026822157",
         "age_hours": 0,
         "freshness": "fresh"
       }
@@ -225,28 +225,28 @@
       "file": "pr-preview.yml",
       "note": "Builds and smoke-tests same-repository pull request previews.",
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/pr-preview.yml",
-      "state": "in_progress",
+      "state": "success",
       "latest": {
-        "id": 43026823885,
+        "id": 43027511995,
         "name": "Pull request website preview",
-        "status": "in_progress",
+        "status": "success",
         "event": "pull_request",
-        "branch": "docs/german-conversion-crosscheck",
-        "created_at": "2026-11-11T13:11:04Z",
-        "updated_at": "2026-11-11T13:11:13Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43026823885",
+        "branch": "docs/german-book-ch18-page-image-status-v2",
+        "created_at": "2026-11-11T13:15:41Z",
+        "updated_at": "2026-11-11T13:16:05Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43027511995",
         "age_hours": 0,
         "freshness": "fresh"
       },
       "last_success": {
-        "id": 43025638069,
+        "id": 43027511995,
         "name": "Pull request website preview",
         "status": "success",
         "event": "pull_request",
-        "branch": "docs/german-book-ch18-page-image-status",
-        "created_at": "2026-11-11T13:03:08Z",
-        "updated_at": "2026-11-11T13:03:55Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43025638069",
+        "branch": "docs/german-book-ch18-page-image-status-v2",
+        "created_at": "2026-11-11T13:15:41Z",
+        "updated_at": "2026-11-11T13:16:05Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43027511995",
         "age_hours": 0,
         "freshness": "fresh"
       }
