@@ -2,11 +2,6 @@ name: Release SBOM
 
 on:
   pull_request:
-    paths:
-      - "Cargo.toml"
-      - "Cargo.lock"
-      - "crates/**"
-      - ".github/workflows/release-sbom.yml"
   release:
     types:
       - published
