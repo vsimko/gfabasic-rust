@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="The source corpus is maintained in tests/corpus/. It currently contains seven independently authored Amiga GFA BASIC 3.5 fixtures marked verified from visual review of the cited manual pages: MAT ONE, MAT CLR, MAT SET…">
+  <meta name="description" content="The source corpus is maintained in tests/corpus/; its README contains the fixture totals and status counts derived from the manifest and sidecar metadata, and CI rejects a stale summary. The 3.5 fixtures marked verifi…">
   <title>Compatibility testing and release criteria · GFA BASIC Rust documentation</title>
   <link rel="stylesheet" href="../../styles.css">
 </head>
@@ -24,7 +24,7 @@
 <li>Status: Accepted testing strategy; executable compiler conformance and release-test gates remain open under <a href="https://github.com/vsimko/gfabasic-rust/issues/116">issue #116</a>. The conventions and policy baseline are complete under <a href="https://github.com/vsimko/gfabasic-rust/issues/10">issue #10</a>.</li>
 </ul>
 <h2 id="conformance-corpus">Conformance corpus</h2>
-<p>The source corpus is maintained in <a href="https://github.com/vsimko/gfabasic-rust/blob/main/tests/corpus/README.md">tests/corpus/</a>. It currently contains <strong>seven</strong> independently authored Amiga GFA BASIC 3.5 fixtures marked <code>verified</code> from visual review of the cited manual pages: <code>MAT ONE</code>, <code>MAT CLR</code>, <code>MAT SET</code>, <code>MAT BASE</code>/<code>MAT TRANS</code>, <code>MAT NORM</code>, <code>FACT(0)</code>, and the <code>FACT</code>/<code>VARIAT</code>/<code>COMBIN</code> intrinsic group. This status supports only the documented syntax and expected behavior; none of these fixtures has been executed on the original interpreter. The Amiga 3.0 fixtures remain <code>candidate</code> and must not be promoted into the 3.5 contract without applicable evidence. The corpus validator checks metadata only. The narrow FACT/PRINT prototype has focused frontend/prototype tests and a native executable smoke test, but there is no general corpus runner or full dialect conformance suite. See <a href="https://github.com/vsimko/gfabasic-rust/issues/42">issue #42</a>.</p>
+<p>The source corpus is maintained in <a href="https://github.com/vsimko/gfabasic-rust/blob/main/tests/corpus/README.md">tests/corpus/</a>; its README contains the fixture totals and status counts derived from the manifest and sidecar metadata, and CI rejects a stale summary. The 3.5 fixtures marked <code>verified</code> support only the documented syntax and expected behavior; none has been executed on the original interpreter. The Amiga 3.0 fixtures remain <code>candidate</code> and must not be promoted into the 3.5 contract without applicable evidence. The corpus validator checks metadata only. The narrow FACT/PRINT prototype has focused frontend/prototype tests and a native executable smoke test, but there is no general corpus runner or full dialect conformance suite. See <a href="https://github.com/vsimko/gfabasic-rust/issues/42">issue #42</a>.</p>
 <p>See the <a href="COMPATIBILITY-MATRIX.html">current compatibility matrix</a> for the explicit statement of which dialects, profiles, and targets are not yet supported.</p>
 <h2 id="test-categories">Test categories</h2>
 <p>Use the category that best describes the contract under test. Categories may overlap; for example, a conformance test can be an end-to-end test.</p>
