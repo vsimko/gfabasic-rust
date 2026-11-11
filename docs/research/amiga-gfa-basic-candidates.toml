@@ -568,3 +568,576 @@ source-version = "3.0 base manual"
 printed-pages = ["7-29"]
 status = "documented-in-3.0-only"
 notes = "The 3.0 manual documents retry, continue-next and continue-at-label behavior, plus a FATAL-error restriction. The 3.5 addendum specifically disallows RESUME NEXT and RESUME LABEL after a GURU-triggered ONERROR GOSUB in compiled 3.5 programs; broader 3.5 behavior remains unverified."
+
+# Declaration-level Chapter 2–4 audit: individually tracked source facts.
+# Status remains 3.0-only evidence; this is not a 3.5 availability or absence claim.
+
+[[candidates]]
+id = "amiga.base2.asc-chr"
+name = "ASC / CHR$"
+kind = "function-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["2-13"]
+status = "documented-in-3.0-only"
+notes = "ASC returns the first character code (zero for empty input); CHR$ uses the low byte. 3.0 base-manual evidence only."
+
+[[candidates]]
+id = "amiga.base2.bin-oct-hex"
+name = "BIN$ / OCT$ / HEX$"
+kind = "function-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["2-14"]
+status = "documented-in-3.0-only"
+notes = "Integer-to-base-2/base-8/base-16 string conversions; optional width parameters are documented. 3.0 base-manual evidence only."
+
+[[candidates]]
+id = "amiga.base2.str"
+name = "STR$"
+kind = "function"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["2-15"]
+status = "documented-in-3.0-only"
+notes = "Overloads STR$(x), STR$(x,y), STR$(x,y,z); width and selected-slice behavior are described. 3.0 base-manual evidence only."
+
+[[candidates]]
+id = "amiga.base2.val"
+name = "VAL / VAL?"
+kind = "function-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["2-16"]
+status = "documented-in-3.0-only"
+notes = "VAL parses a numeric prefix; VAL? reports consumed characters. 3.0 base-manual evidence only."
+
+[[candidates]]
+id = "amiga.base2.cint-cfloat"
+name = "CINT / CFLOAT"
+kind = "compiler-only-function-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["2-17"]
+status = "documented-in-3.0-only"
+notes = "CINT rounds float to integer; CFLOAT converts integer to float. The manual explicitly says these are meaningful only to the compiler, not interpreter built-ins."
+
+[[candidates]]
+id = "amiga.base2.cvx"
+name = "CVI / CVL / CVS (CVF spelling disputed)"
+kind = "conversion-function-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["2-18–2-19"]
+status = "documented-in-3.0-only"
+notes = "Binary-string conversions; prose names CVS while the MKx counterpart list includes MKF$. Preserve the source naming mismatch; do not normalize a CVF alias."
+
+[[candidates]]
+id = "amiga.base2.mkx"
+name = "MKI$ / MKL$ / MKS$ / MKF$ / MKD$"
+kind = "conversion-function-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["2-18–2-19"]
+status = "documented-in-3.0-only"
+notes = "Numeric-to-binary-string conversion family; counterpart mapping inherits the CVx naming inconsistency. 3.0 base-manual evidence only."
+
+[[candidates]]
+id = "amiga.base2.false-true-pi"
+name = "FALSE / TRUE / PI"
+kind = "constant-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["2-25"]
+status = "documented-in-3.0-only"
+notes = "FALSE=0, TRUE=-1, PI is the mathematical constant. 3.0 base-manual evidence only."
+
+[[candidates]]
+id = "amiga.base2.date-time"
+name = "DATE$ / TIME$"
+kind = "system-value-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["2-26"]
+status = "documented-in-3.0-only"
+notes = "Read/write date and read time string forms are described; the source text's DATE$/DATES and TIME$/TIMES naming is retained for further checking."
+
+[[candidates]]
+id = "amiga.base2.timer"
+name = "TIMER"
+kind = "function"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["2-28"]
+status = "documented-in-3.0-only"
+notes = "Timer function heading and page locator in the base manual; exact return/tick contract is not promoted."
+
+[[candidates]]
+id = "amiga.base2.fre"
+name = "FRE"
+kind = "function"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["2-29"]
+status = "documented-in-3.0-only"
+notes = "Memory-availability query documented in the base manual; argument/return variants need exact signature extraction."
+
+[[candidates]]
+id = "amiga.base2.type"
+name = "TYPE"
+kind = "function"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["2-30"]
+status = "documented-in-3.0-only"
+notes = "Variable type query documented in the base manual; 3.5 applicability unverified."
+
+[[candidates]]
+id = "amiga.base2.dump"
+name = "DUMP"
+kind = "function-or-command"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["2-31"]
+status = "documented-in-3.0-only"
+notes = "DUMP heading and page locator are documented; preserve uncertainty about callable form until detailed page transcription."
+
+[[candidates]]
+id = "amiga.base2.varptr-arrptr"
+name = "VARPTR / ARRPTR"
+kind = "function-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["2-33"]
+status = "documented-in-3.0-only"
+notes = "Distinguishes element/string-data address from array-descriptor address. 3.0 base-manual evidence only."
+
+[[candidates]]
+id = "amiga.base2.peek"
+name = "PEEK"
+kind = "function-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["2-36"]
+status = "documented-in-3.0-only"
+notes = "Memory-read forms are documented in the base manual; width/type variants need independent 3.5 evidence."
+
+[[candidates]]
+id = "amiga.base2.absolute"
+name = "ABSOLUTE"
+kind = "function-or-statement"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["2-39"]
+status = "documented-in-3.0-only"
+notes = "Address/variable binding feature in the base manual; classification and detailed signature remain source-scoped."
+
+[[candidates]]
+id = "amiga.base2.void"
+name = "VOID"
+kind = "function"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["2-40"]
+status = "documented-in-3.0-only"
+notes = "VOID heading and page locator are documented; exact return semantics remain unverified."
+
+[[candidates]]
+id = "amiga.base2.malloc-mfree"
+name = "MALLOC / MFREE"
+kind = "function-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["2-41–2-42"]
+status = "documented-in-3.0-only"
+notes = "Memory allocation/release forms are documented; allocator/error/ownership semantics are not promoted to 3.5."
+
+[[candidates]]
+id = "amiga.base2.pointer-star"
+name = "* (array descriptor pointer form)"
+kind = "operator-form"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["2-33"]
+status = "documented-in-3.0-only"
+notes = "Indirect array-descriptor form is documented alongside ARRPTR; keep separate from multiplication operator."
+
+[[candidates]]
+id = "amiga.base3.precedence"
+name = "Operator precedence hierarchy"
+kind = "operator-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["3-2"]
+status = "documented-in-3.0-only"
+notes = "Page-image transcription gives 11 precedence levels; comparison rows contain OCR/source spelling ambiguity. No associativity inferred."
+
+[[candidates]]
+id = "amiga.base3.string-plus"
+name = "String concatenation +"
+kind = "operator"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["3-2–3-10"]
+status = "documented-in-3.0-only"
+notes = "Plus is documented for string concatenation as well as numeric addition; 3.0 base-manual evidence only."
+
+[[candidates]]
+id = "amiga.base3.unary-plus-minus"
+name = "Unary + / -"
+kind = "operator-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["3-2, 3-10"]
+status = "documented-in-3.0-only"
+notes = "Prefix plus/minus are separately ranked in the precedence table; exact parse/associativity not inferred."
+
+[[candidates]]
+id = "amiga.base3.power"
+name = "^"
+kind = "operator"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["3-2"]
+status = "documented-in-3.0-only"
+notes = "Power operator precedence is documented in the 3.0 base manual only."
+
+[[candidates]]
+id = "amiga.base3.multiply-divide"
+name = "* /"
+kind = "operator-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["3-2"]
+status = "documented-in-3.0-only"
+notes = "Multiplication and division precedence documented; no 3.5 confirmation."
+
+[[candidates]]
+id = "amiga.base3.integer-divide-mod"
+name = "DIV / MOD"
+kind = "operator-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["3-2"]
+status = "documented-in-3.0-only"
+notes = "Whole-number division and modulo precedence documented; no 3.5 confirmation."
+
+[[candidates]]
+id = "amiga.base3.numeric-add-sub"
+name = "Numeric + / -"
+kind = "operator-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["3-2, 3-10"]
+status = "documented-in-3.0-only"
+notes = "Arithmetic addition/subtraction documented separately from string concatenation."
+
+[[candidates]]
+id = "amiga.base3.comparison-equality"
+name = "= / == / <>"
+kind = "operator-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["3-2, 3-11–3-16"]
+status = "documented-in-3.0-only"
+notes = "= compares and also assigns in variable context; == is approximate numeric equality (8.5 decimal places); <> is inequality."
+
+[[candidates]]
+id = "amiga.base3.relational"
+name = "< / > / <= / >= and =< / =>"
+kind = "operator-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["3-2, 3-13–3-16"]
+status = "documented-in-3.0-only"
+notes = "Text explicitly accepts <= and =<, and >= and =>. Preserve both alternate spellings; string ordering is separately described."
+
+[[candidates]]
+id = "amiga.base3.logical"
+name = "NOT / AND / OR / XOR / IMP / EQV"
+kind = "operator-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["3-2–3-9"]
+status = "documented-in-3.0-only"
+notes = "NOT is unary; remaining operators are binary; logical truth and 32-bit bitwise behavior are described. 3.0 base-manual evidence only."
+
+[[candidates]]
+id = "amiga.base4.integer-arithmetic-functions"
+name = "ADD() / SUB() / MUL() / DIV() / MOD()"
+kind = "function-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-3"]
+status = "documented-in-3.0-only"
+notes = "Integer-expression function forms are distinct from same-named mutating commands on pp. 4-2–4-3; decimal places are ignored."
+
+[[candidates]]
+id = "amiga.base4.trigonometric"
+name = "SIN() / COS() / TAN()"
+kind = "function-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-5"]
+status = "documented-in-3.0-only"
+notes = "Trigonometric functions use radians in the base manual."
+
+[[candidates]]
+id = "amiga.base4.quadrant-trigonometric"
+name = "SINQ() / COSQ()"
+kind = "function-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-6"]
+status = "documented-in-3.0-only"
+notes = "Degree-based interpolated lookup-table functions; interpolation described in 1/16-degree steps."
+
+[[candidates]]
+id = "amiga.base4.deg-rad"
+name = "DEG() / RAD()"
+kind = "function-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-7"]
+status = "documented-in-3.0-only"
+notes = "Degree/radian conversion functions documented in the 3.0 base manual."
+
+[[candidates]]
+id = "amiga.base4.sqr"
+name = "SQR()"
+kind = "function"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-8"]
+status = "documented-in-3.0-only"
+notes = "Square root; negative argument is documented to produce an error."
+
+[[candidates]]
+id = "amiga.base4.exp-log"
+name = "EXP() / LOG() / LOG10()"
+kind = "function-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-9"]
+status = "documented-in-3.0-only"
+notes = "Exponential and logarithm family; retain LOG10 as candidate pending precise page-level confirmation."
+
+[[candidates]]
+id = "amiga.base4.pred-succ"
+name = "PRED() / SUCC()"
+kind = "function-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-11, 4-33"]
+status = "documented-in-3.0-only"
+notes = "Numeric and string forms are separately discussed; do not collapse their argument/result contracts."
+
+[[candidates]]
+id = "amiga.base4.abs-sgn"
+name = "ABS() / SGN()"
+kind = "function-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-12"]
+status = "documented-in-3.0-only"
+notes = "Absolute value and sign (-1, 0, 1) functions documented."
+
+[[candidates]]
+id = "amiga.base4.int-trunc-fix-frac"
+name = "INT() / TRUNC() / FIX() / FRAC()"
+kind = "function-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-13"]
+status = "documented-in-3.0-only"
+notes = "Manual distinguishes truncation from floor for negative values and describes TRUNC/FRAC relation."
+
+[[candidates]]
+id = "amiga.base4.round"
+name = "ROUND()"
+kind = "function"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-14"]
+status = "documented-in-3.0-only"
+notes = "ROUND(x) and ROUND(x,n) are documented; negative n rounds before decimal point."
+
+[[candidates]]
+id = "amiga.base4.odd-even"
+name = "ODD() / EVEN()"
+kind = "function-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-15"]
+status = "documented-in-3.0-only"
+notes = "Boolean result is -1/0; zero is even."
+
+[[candidates]]
+id = "amiga.base4.min-max"
+name = "MIN() / MAX()"
+kind = "function-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-16"]
+status = "documented-in-3.0-only"
+notes = "Accept a list of numeric or string expressions and return the extremum."
+
+[[candidates]]
+id = "amiga.base4.random"
+name = "RND() / RANDOM() / RAND() / RANDOMIZE"
+kind = "function-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-17–4-18"]
+status = "documented-in-3.0-only"
+notes = "Distinct result ranges and seeding forms are described; preserve separate contracts for RND, RANDOM and RAND."
+
+[[candidates]]
+id = "amiga.base4.bit-test"
+name = "BCLR() / BSET() / BCHG() / BTST()"
+kind = "bit-operation-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-19–4-20"]
+status = "documented-in-3.0-only"
+notes = "Zero-based bit indices masked to 0–31; BTST is described with 1/0 result in this section."
+
+[[candidates]]
+id = "amiga.base4.shift"
+name = "SHL() / SHR()"
+kind = "bit-operation-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-21–4-22"]
+status = "documented-in-3.0-only"
+notes = "Width-sensitive byte/word/longword shift forms are documented."
+
+[[candidates]]
+id = "amiga.base4.rotate"
+name = "ROL() / ROR()"
+kind = "bit-operation-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-22"]
+status = "documented-in-3.0-only"
+notes = "Rotate within selected byte/word/longword width; distinct from shifts."
+
+[[candidates]]
+id = "amiga.base4.bitwise-and-or-xor"
+name = "AND() / OR() / XOR()"
+kind = "function-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-23"]
+status = "documented-in-3.0-only"
+notes = "Integer bitwise function forms; distinct from logical operators as expression operators pending exact parser treatment."
+
+[[candidates]]
+id = "amiga.base4.bitwise-imp-eqv"
+name = "IMP() / EQV()"
+kind = "function-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-24"]
+status = "documented-in-3.0-only"
+notes = "Integer bitwise function forms documented separately from logical truth tables."
+
+[[candidates]]
+id = "amiga.base4.swap"
+name = "SWAP()"
+kind = "function"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-25"]
+status = "documented-in-3.0-only"
+notes = "Function swaps upper/lower 16-bit words; explicitly distinct from Chapter 2 SWAP command."
+
+[[candidates]]
+id = "amiga.base4.byte-card-word"
+name = "BYTE() / CARD() / WORD()"
+kind = "function-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-26"]
+status = "documented-in-3.0-only"
+notes = "Byte/word conversion and extension operations documented."
+
+[[candidates]]
+id = "amiga.base4.left-right"
+name = "LEFT$() / RIGHT$()"
+kind = "function-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-27"]
+status = "documented-in-3.0-only"
+notes = "Substring functions; omitted count returns one character."
+
+[[candidates]]
+id = "amiga.base4.mid"
+name = "MID$()"
+kind = "function"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-28"]
+status = "documented-in-3.0-only"
+notes = "Function returns substring; separate MID$ command is on p. 4-29 and is not merged here."
+
+[[candidates]]
+id = "amiga.base4.instr-rinstr"
+name = "INSTR() / RINSTR()"
+kind = "function-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-30–4-31"]
+status = "documented-in-3.0-only"
+notes = "Forward/reverse substring search functions; preserve source-specific index semantics."
+
+[[candidates]]
+id = "amiga.base4.string-space"
+name = "STRING$() / SPACE$()"
+kind = "function-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-32"]
+status = "documented-in-3.0-only"
+notes = "String construction functions; SPC is excluded as PRINT formatting syntax rather than a value function."
+
+[[candidates]]
+id = "amiga.base4.len-trim"
+name = "LEN() / TRIM$()"
+kind = "function-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-34"]
+status = "documented-in-3.0-only"
+notes = "String length and trim functions documented."
+
+[[candidates]]
+id = "amiga.base4.upper"
+name = "UPPER$()"
+kind = "function"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-35"]
+status = "documented-in-3.0-only"
+notes = "Uppercase conversion function documented."
+
+[[candidates]]
+id = "amiga.base4.mid-command"
+name = "MID$ command"
+kind = "statement"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-29"]
+status = "documented-in-3.0-only"
+notes = "Mutates an existing string variable; not the MID$ value-returning function."
+
+[[candidates]]
+id = "amiga.base4.lset-rset"
+name = "LSET / RSET"
+kind = "statement-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-36"]
+status = "documented-in-3.0-only"
+notes = "Left/right justified assignment into existing string variable; padding/truncation details remain unspecified."
