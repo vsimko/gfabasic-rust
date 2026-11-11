@@ -9,7 +9,7 @@ import subprocess
 import tomllib
 from pathlib import Path
 
-COMPONENT_STATUSES = {"implemented", "partial", "prototype", "research", "planned", "blocked"}
+COMPONENT_STATUSES = {"implemented", "partial", "prototype", "research", "planned", "blocked", "unknown"}
 PHASE_HEADING = re.compile(r"^### Phase (\d+) — (.+)$", re.MULTILINE)
 TASK_CHECKBOX = re.compile(r"^\s*-\s+\[([ xX])\]", re.MULTILINE)
 
