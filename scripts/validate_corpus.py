@@ -263,7 +263,7 @@ def validate_corpus(root: Path = ROOT) -> list[str]:
         errors.append(f"tests/corpus/README.md: cannot read manifest summary: {exc}")
     else:
         expected_summary = manifest_summary(corpus_root, fixtures)
-        expected_block = f"<!-- fixture-summary:start -->\\n{expected_summary}\\n<!-- fixture-summary:end -->"
+        expected_block = f"<!-- fixture-summary:start -->\n{expected_summary}\n<!-- fixture-summary:end -->"
         if expected_block not in readme:
             errors.append("tests/corpus/README.md: manifest-derived fixture summary is missing or stale")
 
