@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="This matrix separates the sole product target from historical research evidence, compiler implementation, Amiga API implementation, Linux/SDL3 implementation, and conformance status. A selected target does not mean th…">
+  <title>Current compatibility matrix · GFA BASIC Rust documentation</title>
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body class="docs-site">
+  <header class="docs-header">
+    <a href="../../index.html">GFA BASIC Rust</a>
+    <span aria-hidden="true">/</span>
+    <a href="../index.html">Documentation</a>
+  </header>
+  <div class="docs-layout">
+    <nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home" href="index.html">Section index</a><ul><li><a href="AI-VERIFICATION.html">AI-assisted API verification</a></li><li><a href="API-PROFILES.html">API profiles</a></li><li><a href="API-REGISTRY.html">API registry and declaration source of truth</a></li><li><a href="BENCHMARKING.html">Performance benchmarks and profiling strategy</a></li><li><a href="CI.html">GitHub Actions workflow architecture</a></li><li><a href="CLI-AND-CONFIG.html">CLI, configuration, and build artifacts</a></li><li><a href="COMPATIBILITY-MATRIX.html">Current compatibility matrix</a></li><li><a href="DIAGNOSTICS.html">Diagnostics and compatibility reporting</a></li><li><a href="DIALECTS.html">Dialects, versions, and compatibility policy</a></li><li><a href="FORMATTER.html">Formatter style and current support</a></li><li><a href="FUZZING.html">Frontend fuzzing and robustness strategy</a></li><li><a href="GOALS.html">Project goals and compatibility objectives</a></li><li><a href="IMPLEMENTATION-DASHBOARD.html">Implementation dashboard</a></li><li><a href="LANGUAGE-TOOLING.html">Language tooling and editor integration</a></li><li><a href="MEMORY.html">Memory model and hardware access</a></li><li><a href="MVP-vertical-slice.html">First compiler vertical slice — proposed boundary</a></li><li><a href="PIPELINE-AND-IR.html">Compiler pipeline and intermediate representation</a></li><li><a href="README.html">README</a></li><li><a href="RELEASES.html">Release, artifact, and reproducible-build policy</a></li><li><a href="RUNTIME.html">Runtime architecture</a></li><li><a href="SECURITY.html">Dependency and supply-chain security</a></li><li><a href="TARGETS.html">Host and target model</a></li><li><a href="TESTING.html">Compatibility testing and release criteria</a></li><li><a href="VALIDATION.html">Repository consistency validation</a></li><li><a href="VERSIONING.html">Versioning and compatibility lifecycle</a></li><li><a href="WEBSITE_PREVIEWS.html">Website previews for pull requests</a></li><li><a href="WORKSPACE.html">Rust workspace and dependency policy</a></li><li><a href="adr/index.html">Architecture decisions</a></li></ul></nav>
+    <main class="docs-content">
+      <article>
+        <h1>Current compatibility matrix</h1>
+        <p class="docs-meta"><span>Architecture</span></p>
+        <h1 id="current-compatibility-matrix">Current compatibility matrix</h1>
+<ul>
+<li>Status: <strong>The sole product target is Amiga GFA BASIC interpreter 3.5 to Linux x86-64. A narrow FACT/VARIAT/COMBIN/PRINT prototype exists; selected MAT forms are parsed/formatted but not executable. No complete dialect is implemented or conformant.</strong></li>
+<li>Updated: 2026-11-05.</li>
+<li>Tracking: <a href="https://github.com/vsimko/gfabasic-rust/issues/3">dialect policy #3</a>, <a href="https://github.com/vsimko/gfabasic-rust/issues/10">compatibility testing #10</a>, <a href="https://github.com/vsimko/gfabasic-rust/issues/58">versioning policy #58</a>, <a href="adr/0011-amiga-35-linux-sdl3-product-scope.html">product scope ADR 0011</a>.</li>
+</ul>
+<p>This matrix separates the sole product target from historical research evidence, compiler implementation, Amiga API implementation, Linux/SDL3 implementation, and conformance status. A selected target does not mean that it is implemented or supported.</p>
+<h2 id="product-target">Product target</h2>
+<table>
+<thead>
+<tr>
+<th>Dimension</th>
+<th>Sole product target</th>
+<th>Current implementation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Source dialect/version</td>
+<td>Commodore Amiga GFA BASIC interpreter 3.5</td>
+<td>Experimental FACT/VARIAT/COMBIN assignments and PRINT; selected MAT syntax is parser/formatter-only</td>
+</tr>
+<tr>
+<td>Historical source evidence</td>
+<td>3.5 Interpreter manual and version-specific addenda; 3.0/3.03 references are inherited candidates requiring 3.5 confirmation</td>
+<td>Page-image-verified 3.5 combinatorics fixtures; no original-interpreter runtime observation</td>
+</tr>
+<tr>
+<td>API profile</td>
+<td>Amiga GFA BASIC 3.5 API only</td>
+<td>Not implemented</td>
+</tr>
+<tr>
+<td>Output OS/architecture</td>
+<td>Linux x86-64</td>
+<td>Temporary host C/cc bootstrap only; production backend not implemented</td>
+</tr>
+<tr>
+<td>ABI/object format</td>
+<td>GNU ABI, ELF 64-bit; LLVM triple x86_64-unknown-linux-gnu</td>
+<td>Not implemented by production backend</td>
+</tr>
+<tr>
+<td>Native backend</td>
+<td>LLVM</td>
+<td>Not implemented</td>
+</tr>
+<tr>
+<td>Graphics/window/input</td>
+<td>SDL3 behind Linux platform adapter</td>
+<td>Not implemented</td>
+</tr>
+<tr>
+<td>Conformance</td>
+<td>Amiga 3.5 source-backed fixtures and original-interpreter observations where legally available</td>
+<td>Narrow prototype tests only; not full dialect conformance</td>
+</tr>
+</tbody>
+</table>
+<h2 id="historical-and-excluded-research">Historical and excluded research</h2>
+<table>
+<thead>
+<tr>
+<th>Material</th>
+<th>Status</th>
+<th>Permitted use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Amiga GFA BASIC 3.0 / V3.03</td>
+<td>Historical research only; not a supported source version</td>
+<td>Inherited candidates only, after confirmation against Amiga 3.5</td>
+</tr>
+<tr>
+<td>Atari ST GFA BASIC V2.xx/V3.0 and Atari ST 3.5</td>
+<td>Archival research only; outside product scope</td>
+<td>Provenance/context only; never used to define Amiga behavior or product builds</td>
+</tr>
+<tr>
+<td>Amiga interpreter 3.51 / compiler 3.52</td>
+<td>Other product versions; outside product scope</td>
+<td>Historical catalogue/source notes only; no support or compatibility commitment</td>
+</tr>
+</tbody>
+</table>
+<h2 id="project-wide-implementation-status">Project-wide implementation status</h2>
+<ul>
+<li>Rust workspace: bootstrapped with compiler, generated-program runtime, and Linux platform crates. Compiler source maps, strict UTF-8 transport loading, structured diagnostics, a narrow FACT/VARIAT/COMBIN/PRINT frontend, selected MAT parsing/formatting, combinatorics literal lowering through typed runtime handlers, and a temporary C/cc native bootstrap are present.</li>
+<li>General lexer/parser, semantic analysis, typed IR, LLVM backend, project configuration, GFA BASIC core runtime, Amiga API compatibility runtime, and Linux/SDL3 platform adapter are not implemented.</li>
+<li>A narrow build path exists for the combinatorics/PRINT literal prototype only. Selected MAT statements are not lowered to executable IR. General Amiga 3.5 compilation is not available; check remains unavailable.</li>
+<li>CI: documentation validation and fast Rust workspace checks are present; no full GFA BASIC conformance runner or production compiler/runtime integration workflow exists.</li>
+<li>No complete Amiga 3.5 language subset or Amiga API profile is currently claimed as fully supported or conformant.</li>
+</ul>
+<h2 id="rules-for-updating-the-matrix">Rules for updating the matrix</h2>
+<ol>
+<li>Name the exact Amiga interpreter version and applicable source evidence.</li>
+<li>Distinguish historical 3.0/3.03 evidence from confirmed 3.5 behavior.</li>
+<li>Report implementation status separately for language core, Amiga API, runtime, backend, and Linux/SDL3 adapter.</li>
+<li>The only product target is Linux x86-64; do not add alternate dialects, profiles, or targets without a new product-scope decision.</li>
+<li>Link conformance tests and state whether they are candidate, verified, or executed tests.</li>
+<li>List known deviations and blocked prerequisites.</li>
+<li>Do not use “supported” or “stable” until the exact feature scope is implemented and relevant tests pass.</li>
+</ol>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>
