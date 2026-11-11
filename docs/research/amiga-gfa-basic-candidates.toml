@@ -569,7 +569,7 @@ printed-pages = ["7-29"]
 status = "documented-in-3.0-only"
 notes = "The 3.0 manual documents retry, continue-next and continue-at-label behavior, plus a FATAL-error restriction. The 3.5 addendum specifically disallows RESUME NEXT and RESUME LABEL after a GURU-triggered ONERROR GOSUB in compiled 3.5 programs; broader 3.5 behavior remains unverified."
 
-# Declaration-level Chapter 2–4 audit: individually tracked source facts.
+# Granular Chapter 2–4 source-evidence records; related names may remain grouped.
 # Status remains 3.0-only evidence; this is not a 3.5 availability or absence claim.
 
 [[candidates]]
