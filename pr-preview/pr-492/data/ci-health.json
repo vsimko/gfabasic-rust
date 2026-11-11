@@ -1,0 +1,263 @@
+{
+  "repository": "vsimko/gfabasic-rust",
+  "generated_at": "2026-11-11T15:55:15.258115Z",
+  "freshness_threshold_hours": 168,
+  "workflows": [
+    {
+      "name": "Documentation checks",
+      "file": "docs.yml",
+      "note": "Markdown, JavaScript, API registry, corpus metadata and local-link validation.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/docs.yml",
+      "state": "in_progress",
+      "latest": {
+        "id": 43053086209,
+        "name": "Documentation checks",
+        "status": "in_progress",
+        "event": "pull_request",
+        "branch": "docs/audit-amiga-runtime-ocr",
+        "created_at": "2026-11-11T15:55:01Z",
+        "updated_at": "2026-11-11T15:55:10Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43053086209",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43049278077,
+        "name": "Documentation checks",
+        "status": "success",
+        "event": "push",
+        "branch": "main",
+        "created_at": "2026-11-11T15:31:54Z",
+        "updated_at": "2026-11-11T15:32:36Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43049278077",
+        "age_hours": 0,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Rust checks",
+      "file": "rust.yml",
+      "note": "Formatting, Clippy, workspace tests/build and formatter fixtures.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/rust.yml",
+      "state": "in_progress",
+      "latest": {
+        "id": 43053086136,
+        "name": "Rust checks",
+        "status": "in_progress",
+        "event": "pull_request",
+        "branch": "docs/audit-amiga-runtime-ocr",
+        "created_at": "2026-11-11T15:55:01Z",
+        "updated_at": "2026-11-11T15:55:05Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43053086136",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43051382830,
+        "name": "Rust checks",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "docs/audit-amiga-runtime-ocr",
+        "created_at": "2026-11-11T15:44:36Z",
+        "updated_at": "2026-11-11T15:44:53Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43051382830",
+        "age_hours": 0,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Security audit",
+      "file": "security-audit.yml",
+      "note": "RustSec audits for workspace, fuzz and benchmark lockfiles.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/security-audit.yml",
+      "state": "in_progress",
+      "latest": {
+        "id": 43053086097,
+        "name": "Security audit",
+        "status": "in_progress",
+        "event": "pull_request",
+        "branch": "docs/audit-amiga-runtime-ocr",
+        "created_at": "2026-11-11T15:55:01Z",
+        "updated_at": "2026-11-11T15:55:04Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43053086097",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43051382844,
+        "name": "Security audit",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "docs/audit-amiga-runtime-ocr",
+        "created_at": "2026-11-11T15:44:36Z",
+        "updated_at": "2026-11-11T15:44:56Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43051382844",
+        "age_hours": 0,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Source-loader fuzzing",
+      "file": "fuzz.yml",
+      "note": "Fuzzes the source loader only; lexer/parser fuzzing is not configured.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/fuzz.yml",
+      "state": "in_progress",
+      "latest": {
+        "id": 43053086286,
+        "name": "Fuzzing",
+        "status": "in_progress",
+        "event": "pull_request",
+        "branch": "docs/audit-amiga-runtime-ocr",
+        "created_at": "2026-11-11T15:55:01Z",
+        "updated_at": "2026-11-11T15:55:05Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43053086286",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43051383015,
+        "name": "Fuzzing",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "docs/audit-amiga-runtime-ocr",
+        "created_at": "2026-11-11T15:44:36Z",
+        "updated_at": "2026-11-11T15:46:26Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43051383015",
+        "age_hours": 0,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Benchmarks",
+      "file": "benchmarks.yml",
+      "note": "Source-loading benchmark; pull requests validate compilation without recording measurements.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/benchmarks.yml",
+      "state": "in_progress",
+      "latest": {
+        "id": 43053086375,
+        "name": "Benchmarks",
+        "status": "in_progress",
+        "event": "pull_request",
+        "branch": "docs/audit-amiga-runtime-ocr",
+        "created_at": "2026-11-11T15:55:01Z",
+        "updated_at": "2026-11-11T15:55:08Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43053086375",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43051382723,
+        "name": "Benchmarks",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "docs/audit-amiga-runtime-ocr",
+        "created_at": "2026-11-11T15:44:36Z",
+        "updated_at": "2026-11-11T15:45:02Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43051382723",
+        "age_hours": 0,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Release SBOM",
+      "file": "release-sbom.yml",
+      "note": "Validates PR SBOMs and uploads on published releases; release attachment is unproven until a release runs.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/release-sbom.yml",
+      "state": "success",
+      "latest": {
+        "id": 43053086004,
+        "name": "Release SBOM",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "docs/audit-amiga-runtime-ocr",
+        "created_at": "2026-11-11T15:55:01Z",
+        "updated_at": "2026-11-11T15:55:13Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43053086004",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43053086004,
+        "name": "Release SBOM",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "docs/audit-amiga-runtime-ocr",
+        "created_at": "2026-11-11T15:55:01Z",
+        "updated_at": "2026-11-11T15:55:13Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43053086004",
+        "age_hours": 0,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "GitHub Pages",
+      "file": "pages.yml",
+      "note": "Builds and publishes the static production website.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/pages.yml",
+      "state": "success",
+      "latest": {
+        "id": 43049278265,
+        "name": "Deploy GitHub Pages",
+        "status": "success",
+        "event": "push",
+        "branch": "main",
+        "created_at": "2026-11-11T15:31:54Z",
+        "updated_at": "2026-11-11T15:32:29Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43049278265",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43049278265,
+        "name": "Deploy GitHub Pages",
+        "status": "success",
+        "event": "push",
+        "branch": "main",
+        "created_at": "2026-11-11T15:31:54Z",
+        "updated_at": "2026-11-11T15:32:29Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43049278265",
+        "age_hours": 0,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Pull request preview",
+      "file": "pr-preview.yml",
+      "note": "Builds and smoke-tests same-repository pull request previews.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/pr-preview.yml",
+      "state": "in_progress",
+      "latest": {
+        "id": 43053086140,
+        "name": "Pull request website preview",
+        "status": "in_progress",
+        "event": "pull_request",
+        "branch": "docs/audit-amiga-runtime-ocr",
+        "created_at": "2026-11-11T15:55:01Z",
+        "updated_at": "2026-11-11T15:55:05Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43053086140",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43049280412,
+        "name": "Pull request website preview",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "ci/stable-pr-gate",
+        "created_at": "2026-11-11T15:31:55Z",
+        "updated_at": "2026-11-11T15:32:42Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43049280412",
+        "age_hours": 0,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Conformance suite",
+      "file": "conformance.yml",
+      "note": "No dedicated compiler conformance workflow is configured.",
+      "state": "not-configured",
+      "latest": null,
+      "last_success": null
+    }
+  ]
+}
