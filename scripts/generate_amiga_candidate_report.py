@@ -33,7 +33,7 @@ def load_candidates(path: Path) -> list[dict]:
             raise ValueError(f"{item['id']}: invalid status {item['status']!r}")
         if not item["printed-pages"] or not item["source"] or not item["source-version"]:
             raise ValueError(f"{item['id']}: source and printed page locators are required")
-    # Chapter 2–4 built-ins/operators are tracked declaration by declaration.
+    # Chapter 2–4 source facts are tracked as granular evidence records.
     # These records intentionally remain 3.0-only evidence until a 3.5 source
     # or reproducible interpreter observation establishes availability.
     core_candidates = [
@@ -41,7 +41,7 @@ def load_candidates(path: Path) -> list[dict]:
         if item["id"].startswith(("amiga.base2.", "amiga.base3.", "amiga.base4."))
     ]
     if len(core_candidates) < 50:
-        raise ValueError("Chapter 2–4 declaration-level audit is incomplete")
+        raise ValueError("Chapter 2–4 evidence-record audit is incomplete")
     for item in core_candidates:
         if item["source"] != "AM-INTERPRETER-35" or item["source-version"] != "3.0 base manual":
             raise ValueError(f'{item["id"]}: Chapter 2–4 candidate must retain 3.0 source scope')
