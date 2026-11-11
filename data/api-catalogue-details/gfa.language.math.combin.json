@@ -53,7 +53,7 @@
     ],
     "notes": [
       "The 3.5 addendum page images were checked. Both arguments are documented as integer expressions.",
-      "The companion German book explicitly places COMBIN among the 3.5 additions and states the domain condition n >= k (printed p. 479).",
+      "The companion German book explicitly places COMBIN among the 3.5 additions, defines combinations without repetition as n!/((n-k)!*k!), and states that n >= k is required for the function to be defined (printed p. 479). Both inputs are integer values; behavior for negative or fractional inputs and numeric overflow remains unspecified.",
       "The compiler prototype evaluates only a restricted literal subset. Partial typed runtime helpers are mapped by stable registry handler IDs, but their overflow/error behavior is not yet conformant or verified."
     ]
   },

@@ -1,6 +1,6 @@
 {
   "repository": "vsimko/gfabasic-rust",
-  "generated_at": "2026-11-11T10:55:09.901679Z",
+  "generated_at": "2026-11-11T11:30:03.442651Z",
   "freshness_threshold_hours": 168,
   "workflows": [
     {
@@ -8,28 +8,28 @@
       "file": "docs.yml",
       "note": "Markdown, JavaScript, API registry, corpus metadata and local-link validation.",
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/docs.yml",
-      "state": "in_progress",
+      "state": "success",
       "latest": {
-        "id": 43007573153,
+        "id": 43012137433,
         "name": "Documentation checks",
-        "status": "in_progress",
+        "status": "success",
         "event": "push",
         "branch": "main",
-        "created_at": "2026-11-11T10:54:56Z",
-        "updated_at": "2026-11-11T10:55:05Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43007573153",
+        "created_at": "2026-11-11T11:27:46Z",
+        "updated_at": "2026-11-11T11:28:55Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43012137433",
         "age_hours": 0,
         "freshness": "fresh"
       },
       "last_success": {
-        "id": 43006646975,
+        "id": 43012137433,
         "name": "Documentation checks",
         "status": "success",
-        "event": "pull_request",
-        "branch": "docs/function-inventory-counts",
-        "created_at": "2026-11-11T10:48:11Z",
-        "updated_at": "2026-11-11T10:50:02Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43006646975",
+        "event": "push",
+        "branch": "main",
+        "created_at": "2026-11-11T11:27:46Z",
+        "updated_at": "2026-11-11T11:28:55Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43012137433",
         "age_hours": 0,
         "freshness": "fresh"
       }
@@ -41,27 +41,27 @@
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/rust.yml",
       "state": "success",
       "latest": {
-        "id": 42867473606,
+        "id": 43012137563,
         "name": "Rust checks",
         "status": "success",
         "event": "push",
         "branch": "main",
-        "created_at": "2026-11-10T17:41:12Z",
-        "updated_at": "2026-11-10T17:41:31Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42867473606",
-        "age_hours": 17,
+        "created_at": "2026-11-11T11:27:46Z",
+        "updated_at": "2026-11-11T11:28:39Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43012137563",
+        "age_hours": 0,
         "freshness": "fresh"
       },
       "last_success": {
-        "id": 42867473606,
+        "id": 43012137563,
         "name": "Rust checks",
         "status": "success",
         "event": "push",
         "branch": "main",
-        "created_at": "2026-11-10T17:41:12Z",
-        "updated_at": "2026-11-10T17:41:31Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42867473606",
-        "age_hours": 17,
+        "created_at": "2026-11-11T11:27:46Z",
+        "updated_at": "2026-11-11T11:28:39Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43012137563",
+        "age_hours": 0,
         "freshness": "fresh"
       }
     },
@@ -80,7 +80,7 @@
         "created_at": "2026-11-09T21:07:07Z",
         "updated_at": "2026-11-09T21:07:31Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42699425788",
-        "age_hours": 37,
+        "age_hours": 38,
         "freshness": "fresh"
       },
       "last_success": {
@@ -92,7 +92,7 @@
         "created_at": "2026-11-09T21:07:07Z",
         "updated_at": "2026-11-09T21:07:31Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42699425788",
-        "age_hours": 37,
+        "age_hours": 38,
         "freshness": "fresh"
       }
     },
@@ -111,7 +111,7 @@
         "created_at": "2026-11-09T21:04:43Z",
         "updated_at": "2026-11-09T21:06:49Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42699028842",
-        "age_hours": 37,
+        "age_hours": 38,
         "freshness": "fresh"
       },
       "last_success": {
@@ -123,7 +123,7 @@
         "created_at": "2026-11-09T21:04:43Z",
         "updated_at": "2026-11-09T21:06:49Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42699028842",
-        "age_hours": 37,
+        "age_hours": 38,
         "freshness": "fresh"
       }
     },
@@ -142,7 +142,7 @@
         "created_at": "2026-11-09T21:07:07Z",
         "updated_at": "2026-11-09T21:08:08Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42699425305",
-        "age_hours": 37,
+        "age_hours": 38,
         "freshness": "fresh"
       },
       "last_success": {
@@ -154,7 +154,7 @@
         "created_at": "2026-11-09T21:07:07Z",
         "updated_at": "2026-11-09T21:08:08Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42699425305",
-        "age_hours": 37,
+        "age_hours": 38,
         "freshness": "fresh"
       }
     },
@@ -173,7 +173,7 @@
         "created_at": "2026-11-10T15:12:44Z",
         "updated_at": "2026-11-10T15:13:01Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42841975538",
-        "age_hours": 19,
+        "age_hours": 20,
         "freshness": "fresh"
       },
       "last_success": {
@@ -185,7 +185,7 @@
         "created_at": "2026-11-10T15:12:44Z",
         "updated_at": "2026-11-10T15:13:01Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42841975538",
-        "age_hours": 19,
+        "age_hours": 20,
         "freshness": "fresh"
       }
     },
@@ -196,26 +196,26 @@
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/pages.yml",
       "state": "in_progress",
       "latest": {
-        "id": 43007573098,
+        "id": 43012137351,
         "name": "Deploy GitHub Pages",
         "status": "in_progress",
         "event": "push",
         "branch": "main",
-        "created_at": "2026-11-11T10:54:56Z",
-        "updated_at": "2026-11-11T10:55:00Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43007573098",
+        "created_at": "2026-11-11T11:27:46Z",
+        "updated_at": "2026-11-11T11:29:52Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43012137351",
         "age_hours": 0,
         "freshness": "fresh"
       },
       "last_success": {
-        "id": 43006509465,
+        "id": 43007573098,
         "name": "Deploy GitHub Pages",
         "status": "success",
         "event": "push",
         "branch": "main",
-        "created_at": "2026-11-11T10:47:11Z",
-        "updated_at": "2026-11-11T10:47:32Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43006509465",
+        "created_at": "2026-11-11T10:54:56Z",
+        "updated_at": "2026-11-11T10:55:21Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43007573098",
         "age_hours": 0,
         "freshness": "fresh"
       }
@@ -227,26 +227,26 @@
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/pr-preview.yml",
       "state": "success",
       "latest": {
-        "id": 43007574570,
+        "id": 43012139191,
         "name": "Pull request website preview",
         "status": "success",
         "event": "pull_request",
-        "branch": "docs/function-inventory-counts",
-        "created_at": "2026-11-11T10:54:56Z",
-        "updated_at": "2026-11-11T10:55:10Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43007574570",
+        "branch": "docs/combinatorics-domain-evidence",
+        "created_at": "2026-11-11T11:27:47Z",
+        "updated_at": "2026-11-11T11:28:07Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43012139191",
         "age_hours": 0,
         "freshness": "fresh"
       },
       "last_success": {
-        "id": 43007574570,
+        "id": 43012139191,
         "name": "Pull request website preview",
         "status": "success",
         "event": "pull_request",
-        "branch": "docs/function-inventory-counts",
-        "created_at": "2026-11-11T10:54:56Z",
-        "updated_at": "2026-11-11T10:55:10Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43007574570",
+        "branch": "docs/combinatorics-domain-evidence",
+        "created_at": "2026-11-11T11:27:47Z",
+        "updated_at": "2026-11-11T11:28:07Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43012139191",
         "age_hours": 0,
         "freshness": "fresh"
       }
