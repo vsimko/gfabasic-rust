@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="This document defines a release workflow design. It does not claim that the project can currently build or publish a compiler.">
+  <title>Release, artifact, and reproducible-build policy · GFA BASIC Rust documentation</title>
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body class="docs-site">
+  <header class="docs-header">
+    <a href="../../index.html">GFA BASIC Rust</a>
+    <span aria-hidden="true">/</span>
+    <a href="../index.html">Documentation</a>
+  </header>
+  <div class="docs-layout">
+    <nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home" href="index.html">Section index</a><ul><li><a href="AI-VERIFICATION.html">AI-assisted API verification</a></li><li><a href="API-PROFILES.html">API profiles</a></li><li><a href="API-REGISTRY.html">API registry and declaration source of truth</a></li><li><a href="BENCHMARKING.html">Performance benchmarks and profiling strategy</a></li><li><a href="CI.html">GitHub Actions workflow architecture</a></li><li><a href="CLI-AND-CONFIG.html">CLI, configuration, and build artifacts</a></li><li><a href="COMPATIBILITY-MATRIX.html">Current compatibility matrix</a></li><li><a href="DIAGNOSTICS.html">Diagnostics and compatibility reporting</a></li><li><a href="DIALECTS.html">Dialects, versions, and compatibility policy</a></li><li><a href="FORMATTER.html">Formatter style and current support</a></li><li><a href="FUZZING.html">Frontend fuzzing and robustness strategy</a></li><li><a href="GOALS.html">Project goals and compatibility objectives</a></li><li><a href="IMPLEMENTATION-DASHBOARD.html">Implementation dashboard</a></li><li><a href="LANGUAGE-TOOLING.html">Language tooling and editor integration</a></li><li><a href="MEMORY.html">Memory model and hardware access</a></li><li><a href="MVP-vertical-slice.html">First compiler vertical slice — proposed boundary</a></li><li><a href="PIPELINE-AND-IR.html">Compiler pipeline and intermediate representation</a></li><li><a href="README.html">README</a></li><li><a href="RELEASES.html">Release, artifact, and reproducible-build policy</a></li><li><a href="RUNTIME.html">Runtime architecture</a></li><li><a href="SECURITY.html">Dependency and supply-chain security</a></li><li><a href="TARGETS.html">Host and target model</a></li><li><a href="TESTING.html">Compatibility testing and release criteria</a></li><li><a href="VALIDATION.html">Repository consistency validation</a></li><li><a href="VERSIONING.html">Versioning and compatibility lifecycle</a></li><li><a href="WEBSITE_PREVIEWS.html">Website previews for pull requests</a></li><li><a href="WORKSPACE.html">Rust workspace and dependency policy</a></li><li><a href="adr/index.html">Architecture decisions</a></li></ul></nav>
+    <main class="docs-content">
+      <article>
+        <h1>Release, artifact, and reproducible-build policy</h1>
+        <p class="docs-meta"><span>Architecture</span></p>
+        <h1 id="release-artifact-and-reproducible-build-policy">Release, artifact, and reproducible-build policy</h1>
+<ul>
+<li>Status: <strong>The compiler release policy remains proposed; no compiler build, package, installation artifact, or full release workflow exists. A narrow release-SBOM workflow is implemented for pull-request validation and is configured to attach the approved workspace SBOM to published GitHub Releases; a real release upload has not yet been exercised.</strong></li>
+<li>Tracking: <a href="https://github.com/vsimko/gfabasic-rust/issues/40">issue #40</a>.</li>
+<li>Related work: <a href="https://github.com/vsimko/gfabasic-rust/issues/58">versioning #58</a>, <a href="https://github.com/vsimko/gfabasic-rust/issues/62">packaging #62</a>, <a href="https://github.com/vsimko/gfabasic-rust/issues/39">security and supply chain #39</a>.</li>
+</ul>
+<p>This document defines a release workflow design. It does not claim that the project can currently build or publish a compiler.</p>
+<h2 id="1-release-identity">1. Release identity</h2>
+<ul>
+<li>Use a Git tag of the form <code>vMAJOR.MINOR.PATCH</code> for compiler product releases, subject to the versioning policy.</li>
+<li>A release tag must point to a commit on the protected default branch.</li>
+<li>Prefer signed annotated tags. The release process must verify the tag target and signature policy before building.</li>
+<li>Do not publish a release from a pull-request merge ref or an unreviewed branch.</li>
+<li>A pre-release must be explicitly marked as such and must not imply stable language/API compatibility.</li>
+<li>The release record must identify the compiler product version separately from GFA BASIC dialect/version, API profile, configuration/registry schema, runtime ABI, and output target.</li>
+</ul>
+<h2 id="2-trigger-and-workflow-boundaries">2. Trigger and workflow boundaries</h2>
+<p>Proposed triggers:</p>
+<table>
+<thead>
+<tr>
+<th>Trigger</th>
+<th>Purpose</th>
+<th>Publication permission</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pull request</td>
+<td>Validate release scripts and packaging metadata without publishing</td>
+<td>Read-only</td>
+</tr>
+<tr>
+<td>Push to <code>main</code></td>
+<td>Run integration validation and preserve build diagnostics</td>
+<td>Read-only</td>
+</tr>
+<tr>
+<td>Published GitHub release for a <code>v*</code> tag</td>
+<td>Build, validate, package, attest, and publish release artifacts</td>
+<td>Write permission only in the final publishing job</td>
+</tr>
+<tr>
+<td>Manual dispatch</td>
+<td>Reproduce a release build or run a dry-run against an explicit tag</td>
+<td>Read-only by default; publishing requires an explicit protected environment</td>
+</tr>
+</tbody>
+</table>
+<p>Do not publish release artifacts from a pull-request workflow. Do not use <code>pull_request_target</code> to execute untrusted code. Keep build and test jobs separate from the job that creates or uploads a GitHub release.</p>
+<p>The current implementation is limited to <a href="https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/release-sbom.yml"><code>.github/workflows/release-sbom.yml</code></a>: pull requests generate and validate the approved workspace SPDX 2.3 JSON document, while a <code>release.published</code> event checks out the release tag and attaches that SBOM to the corresponding GitHub Release. This workflow does not build or publish compiler/runtime artifacts. The release-event upload has not yet been exercised against a real published release.</p>
+<p>The publishing job should depend on successful completion of all required build and validation jobs. Use a protected GitHub Environment with reviewer approval for public releases. Grant <code>contents: write</code> only to the publishing job; all other jobs use <code>contents: read</code>. Do not expose release credentials to fork pull requests or build scripts.</p>
+<h2 id="3-release-gates">3. Release gates</h2>
+<p>Before publication, the workflow must verify:</p>
+<ol>
+<li>The tag resolves to the intended reviewed commit and satisfies the tag policy.</li>
+<li>The pinned Rust toolchain, LLVM version, system dependencies, and SDL3 integration versions match the declared build environment.</li>
+<li>Formatting, linting, unit tests, integration tests, and relevant documentation checks pass.</li>
+<li>The exact supported dialect/version, API profiles, target, and known deviations are represented in the compatibility matrix.</li>
+<li>Conformance tests run only for fixtures whose source, version, expected behavior, and redistribution rights have been reviewed.</li>
+<li>Unsupported, unverified, and target-limited behavior is not silently accepted.</li>
+<li>Packaging includes the runtime components and system-library requirements needed by generated programs.</li>
+<li>The final artifacts and metadata pass integrity checks before publication.</li>
+</ol>
+<p>A skipped test may be accepted only when the workflow has positively established that it is irrelevant to the selected artifact. A missing, cancelled, or unexpectedly skipped required job must fail the release gate.</p>
+<p>Do not publish a stable release while the compiler/runtime are absent or while the declared release scope cannot be validated. A research-only or documentation-only state is not a releasable compiler.</p>
+<h2 id="4-build-environment-and-target">4. Build environment and target</h2>
+<p>The initial planned binary target is Linux x86-64, GNU ABI, ELF 64-bit. The build host and output target must be recorded separately.</p>
+<p>The release build must use:</p>
+<ul>
+<li>the repository-pinned Rust toolchain;</li>
+<li>a declared LLVM version and Rust binding;</li>
+<li>declared SDL3/system-library versions where the selected runtime needs them;</li>
+<li>locked Cargo dependencies and a clean build directory;</li>
+<li>documented compiler flags and build profile;</li>
+<li>no network access from compiler tests unless a test is explicitly classified as external;</li>
+<li>a controlled environment with recorded OS image and architecture.</li>
+</ul>
+<p>Use <code>cargo build --locked</code> and the release validation commands defined by the implementation. Do not invent a command for a component that does not yet exist. The exact toolchain and native dependency versions remain open until workspace/bootstrap work is accepted.</p>
+<h2 id="5-artifact-set-and-naming">5. Artifact set and naming</h2>
+<p>The intended release set is:</p>
+<ul>
+<li>compiler executable for each supported host/target combination;</li>
+<li>runtime libraries or runtime package required by generated executables;</li>
+<li>optional debug-symbol artifacts where the platform toolchain supports separate symbols;</li>
+<li>release notes and compatibility matrix;</li>
+<li>machine-readable build metadata;</li>
+<li>SHA-256 checksums for every published artifact;</li>
+<li>software bill of materials (SBOM) and provenance/attestation when the selected tooling and policy are implemented.</li>
+</ul>
+<p>A package name should identify at least the product version, operating system, architecture, and ABI, for example:</p>
+<p><code>gfabasic-&lt;version&gt;-linux-x86_64-gnu.tar.gz</code></p>
+<p>This is an example naming convention, not a currently available artifact.</p>
+<p>Keep compiler installation separate from generated application assets. Do not bundle copyrighted manuals, ROMs, disk images, or research archives. The package layout, install/uninstall procedure, and runtime deployment model are defined under <a href="https://github.com/vsimko/gfabasic-rust/issues/62">issue #62</a>.</p>
+<h2 id="6-build-metadata">6. Build metadata</h2>
+<p>Each artifact set should include a machine-readable manifest with:</p>
+<ul>
+<li>compiler product version;</li>
+<li>source commit and tag;</li>
+<li>build target triple and build-host identity;</li>
+<li>Rust toolchain version;</li>
+<li>LLVM version and binding;</li>
+<li>SDL3 and other native dependency versions where relevant;</li>
+<li>build profile and feature/configuration flags;</li>
+<li>runtime ABI version, once defined;</li>
+<li>configuration, API registry, and corpus schema versions where relevant;</li>
+<li>compatibility matrix revision;</li>
+<li>reproducibility status and build-environment identifier.</li>
+</ul>
+<p>Do not include user-specific paths, secrets, or environment values. A build timestamp may be recorded for operational traceability, but it must not affect the binary when reproducible-build verification is claimed.</p>
+<h2 id="7-checksums-sbom-and-provenance">7. Checksums, SBOM, and provenance</h2>
+<ul>
+<li>Generate a SHA-256 checksum for each final artifact after packaging.</li>
+<li>Publish checksums alongside artifacts and verify them in a clean download test.</li>
+<li>Generate the approved workspace-level SPDX 2.3 JSON SBOM from the complete Cargo workspace using the pinned <code>cargo-sbom</code> 0.10.0 tool.</li>
+<li>Record provenance linking the artifact to the source commit, workflow run, build environment, and toolchain.</li>
+<li>Prefer a GitHub-supported artifact attestation mechanism with narrowly scoped permissions once the repository security policy is accepted.</li>
+<li>Do not claim signed provenance or reproducible builds until the corresponding verification is automated and reviewed.</li>
+</ul>
+<p>SPDX 2.3 JSON, <code>cargo-sbom</code> 0.10.0, complete-workspace scope, and GitHub Release asset publication are approved under <a href="https://github.com/vsimko/gfabasic-rust/issues/39">issue #39</a>. Pull-request CI validates generation and package coverage, but the published-release upload remains unverified until an actual release event runs. Signing/provenance attestation tooling remains separate release work.</p>
+<h2 id="8-reproducible-build-policy">8. Reproducible-build policy</h2>
+<p>A build is reproducible only when independent builds from the same source and declared inputs produce byte-identical artifacts, or when every documented non-deterministic field is excluded by a clearly specified comparison procedure.</p>
+<p>Before making that claim:</p>
+<ol>
+<li>Pin all build inputs, including toolchain, LLVM, native libraries, and dependencies.</li>
+<li>Normalize timestamps and filesystem ordering where supported.</li>
+<li>Avoid embedding absolute build paths and machine-local data.</li>
+<li>Record environment variables and compiler flags that affect output.</li>
+<li>Build the same tag in two clean environments.</li>
+<li>Compare artifact hashes and investigate every difference.</li>
+<li>Publish the verification method and result.</li>
+</ol>
+<p>Until this test passes, describe the process as a controlled or repeatable build, not a reproducible build.</p>
+<h2 id="9-release-notes-and-compatibility-claims">9. Release notes and compatibility claims</h2>
+<p>Each release must include:</p>
+<ul>
+<li>user-visible changes and migration instructions;</li>
+<li>compiler and runtime versions;</li>
+<li>supported source dialects and exact version subsets;</li>
+<li>API profile status and tested scope;</li>
+<li>output targets and system runtime dependencies;</li>
+<li>known unsupported, partial, unverified, and target-limited features;</li>
+<li>conformance corpus revision and validation result;</li>
+<li>configuration/registry/runtime ABI schema changes;</li>
+<li>artifact checksums and provenance links.</li>
+</ul>
+<p>Never use an unqualified “GFA BASIC compatible” claim. A successful build or passing compiler unit tests do not establish source-language or runtime compatibility.</p>
+<h2 id="10-rollback-and-publication-failure">10. Rollback and publication failure</h2>
+<p>If artifact validation or publication fails, do not leave a partially published release presented as complete. Keep failed artifacts private to the workflow run, preserve sanitized logs, and retry only after identifying the cause.</p>
+<p>If a published artifact is defective, withdraw or mark the release as superseded, publish corrected checksums and notes, and preserve the original tag/history. Do not silently replace an artifact under the same immutable release identity.</p>
+<h2 id="11-implementation-sequence">11. Implementation sequence</h2>
+<ol>
+<li>Establish the Rust workspace and verified build commands.</li>
+<li>Implement compiler/runtime packaging and installation layout under #62.</li>
+<li>Apply the approved dependency/license/SBOM policy under #39; exercise the configured SBOM asset upload on a published release.</li>
+<li>Add release validation to CI only after each check has an executable command.</li>
+<li>Test artifact naming, metadata, checksums, and clean-install behavior on a release candidate.</li>
+<li>Configure protected publishing permissions and environment approval.</li>
+<li>Verify reproducibility independently before making any reproducibility claim.</li>
+</ol>
+<p>Until these prerequisites exist, this document is a release design only.</p>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>
