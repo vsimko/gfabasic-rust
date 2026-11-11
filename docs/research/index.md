@@ -40,7 +40,8 @@
 - [GFA BASIC Chapter 8 graphics compatibility evidence](amiga-gfa-basic-chapter-8-graphics-evidence.md) - Page-cited graphics inventory (printed pp. 8-2–8-24), 3.5 PCOLOR reconciliation, and explicit absence of tracked 3.52 graphics probes.
 - [GFA BASIC Chapter 9 event, menu, screen and window evidence](amiga-gfa-basic-chapter-9-event-window-evidence.md) - Page-cited event/menu/screen/window inventory (printed pp. 9-2–9-39), with the narrow 3.5 negative-screen OPENW variant separated.
 - [GFA BASIC Chapter 10 advanced programming evidence](amiga-gfa-basic-chapter-10-advanced-programming-evidence.md) - Page-cited CLI, platform, sprite, joystick, speech, FD-file and BOB/OBJECT inventory (printed pp. 10-2–10-16), with 3.0/3.5/3.52 evidence kept distinct.
-- [Chapter inventory validator](../../scripts/validate_amiga_chapter_inventories.py) - Structural checks for Chapter 7–10 page-cited inventories; does not assert completeness or semantic alias equivalence.
+- [GFA BASIC Chapter 11 system-routine evidence](amiga-gfa-basic-chapter-11-system-routines-evidence.md) - Page-cited inventory of seven Amiga OS library groups (printed pp. 11-2–11-92); separates 3.0 base-manual APIs from 3.5 GURU additions and 3.52 probe coverage.
+- [Chapter inventory validator](../../scripts/validate_amiga_chapter_inventories.py) - Structural checks for Chapter 7–11 page-cited inventories; does not assert completeness or semantic alias equivalence.
 - [GFA BASIC 3.0 command index](amiga-gfa-basic-3.0-command-index.md) - Thematic command index derived from the base manual.
 - [GFA BASIC 3.0 statement candidates](amiga-gfa-basic-3.0-statement-command-candidates.md) - Statement-family candidates requiring version reconciliation.
 - [GFA BASIC 3.0 base inventory](amiga-gfa-basic-3.0-base-inventory.md) - Broad chapter-based base-manual inventory.
