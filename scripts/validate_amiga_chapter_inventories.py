@@ -20,6 +20,8 @@ INVENTORIES = (
      "## Chapter 9 inventory", 2, 39, "## 3.52 runtime evidence"),
     (10, Path("docs/research/amiga-gfa-basic-chapter-10-advanced-programming-evidence.md"),
      "## Chapter 10 inventory", 2, 16, "## 3.52 runtime evidence"),
+    (11, Path("docs/research/amiga-gfa-basic-chapter-11-system-routines-evidence.md"),
+     "## Chapter 11 inventory", 2, 92, "## 3.52 runtime evidence"),
 )
 
 
