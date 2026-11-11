@@ -1,3 +1,8 @@
+---
+type: "Research Note"
+title: "Amiga runtime workflow OCR audit"
+---
+
 # OCR use in the Amiga runtime workflow
 
 Issue: [#440](https://github.com/vsimko/gfabasic-rust/issues/440)
