@@ -78,7 +78,7 @@
 ## Atari and cross-platform research
 
 - [Atari GFA book diskette](atari-gfa-book-diskette.md) - Static review of accompanying examples.
-- [Systematic Atari book review](atari-gfa-systematic-review.md) - Chapter-by-chapter Atari reference review.
+- [Systematic Atari book review](atari-gfa-basic-systematic-review.md) - Chapter-by-chapter Atari reference review.
 - [Aminet catalogue](aminet-catalogue.md) - Amiga BASIC package survey.
 - [GFAList build and fixture validation](gfalist-build-and-fixture-validation.md) - GFAList build and fixture evidence.
 - [GFAList format versus Rust frontend](gfalist-format-vs-rust-frontend.md) - Format comparison notes.
