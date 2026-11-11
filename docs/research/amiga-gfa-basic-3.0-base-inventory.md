@@ -797,4 +797,4 @@ All 57 records remain `documented-in-3.0-only`: this means the cited declaration
 - `BTST`'s page-local 1/0 result is retained separately from the general TRUE=-1 logical convention.
 - `LOG10`, DATE$/TIME$ naming, and several memory-query forms retain qualifications where the page-level signature needs further review.
 
-The report generator now rejects Chapter 2–4 candidate records that lose their explicit 3.0 source scope or are promoted to 3.5 without new evidence. The accompanying test checks the 57 declaration-level records and their provenance. No new `gfa.language.*` declarations or runtime support claims are introduced.
+The report generator now rejects Chapter 2–4 candidate records that lose their explicit 3.0 source scope or are promoted to 3.5 without new evidence. The accompanying test checks the 57 granular evidence records and their provenance. No new `gfa.language.*` declarations or runtime support claims are introduced.
