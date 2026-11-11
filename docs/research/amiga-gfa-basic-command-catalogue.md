@@ -25,7 +25,7 @@ This page is the entry point for discovering the command, function, statement, p
 | [First-pass command index](gfa-basic-command-index-ocr.md) | A second, richer OCR transcription of the same Appendix D index | Candidate inventory; retain compound forms and uncertain spellings pending classification |
 | [Detailed book/API extraction](amiga-gfa-basic-german-book-command-api-extraction.md) | Chapter-based extraction through Chapter 19 and Appendices B–D, reconciled with the English 3.5 addendum | Main detailed research source for semantics, Amiga OS interfaces, and page references |
 | [Source/topic index](amiga-gfa-basic-source-topic-index.md) | Consolidated printed-page navigation and cross-source disagreements | Best route from a topic to the relevant source pages |
-| [Function inventory](amiga-gfa-basic-functions.toml) | Structured names found in the combined manual | 116 unique names; 114 interpreter candidates, with disputed/compiler-only distinctions documented alongside it |
+| [Function inventory](amiga-gfa-basic-functions.toml) | Structured names found in the combined manual | 117 unique names; 115 interpreter candidates, with disputed/compiler-only distinctions documented alongside it |
 | [3.5 addendum inventory](amiga-gfa-basic-35-addendum-inventory.md) | Features explicitly documented by the 3.5 addendum, especially Chapters 13–14 | Version-specific evidence; not a complete inventory of every feature in the interpreter |
 | [Candidate manifest and report](amiga-gfa-basic-candidates.toml) / [report](amiga-gfa-basic-candidate-report.md) | Version-scoped candidate families and their evidence state | The report currently has 13 family entries confirmed in 3.5 and 43 documented in the 3.0 base only; these are family-level statuses, not individual command counts |
 
@@ -36,7 +36,7 @@ Do not describe the material as a verified list of “400+ commands”:
 - The German book's introduction describes approximately **360 commands and functions** for the interpreter version it covers.
 - The book's Appendix D is an alphabetical index, not a normative declaration table. It mixes statements, functions, aliases, constants, variables, object properties, and other terms. OCR can also duplicate, damage, or merge entries.
 - The book is identified in its introduction as describing **GFA V3.03**. Its cover/title reference to 3.5 does not make every Appendix D entry a 3.5 declaration.
-- The structured function inventory has **116 unique names** (114 interpreter candidates under its documented counting rules). This is a function-name inventory, not a total command count.
+- The structured function inventory has **117 unique names** (115 interpreter candidates under its documented counting rules). This is a function-name inventory, not a total command count.
 - The 3.5 candidate report counts **families**, not individual declarations: 13 are currently confirmed in the 3.5 addendum and 43 are documented in the 3.0 base only, with 3.5 applicability not established.
 - The detailed book extraction and the 3.5 addendum reconciliation provide broad coverage, but individual declarations still need evidence-level classification and, where relevant, runtime conformance tests.
 
