@@ -20,7 +20,19 @@ INVENTORIES = (
 
 
 def table_cells(line: str) -> list[str]:
-    return [cell.strip() for cell in line.strip().strip("|").split("|")]
+    cells: list[str] = []
+    current: list[str] = []
+    in_code = False
+    for character in line.strip().strip("|"):
+        if character == "`":
+            in_code = not in_code
+        if character == "|" and not in_code:
+            cells.append("".join(current).strip())
+            current = []
+        else:
+            current.append(character)
+    cells.append("".join(current).strip())
+    return cells
 
 
 def extract_inventory(text: str, heading: str, chapter: int,
