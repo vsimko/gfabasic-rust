@@ -96,6 +96,9 @@ jobs:
       - name: Validate Amiga function inventory
         run: python scripts/validate_amiga_function_inventory.py
 
+      - name: Validate Amiga chapter inventories
+        run: python scripts/validate_amiga_chapter_inventories.py
+
       - name: Run registry validator tests
         run: python -m unittest discover -s scripts/tests -p "test_*.py"
 
