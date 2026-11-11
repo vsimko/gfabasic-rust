@@ -1,4 +1,4 @@
-"""Regression tests for the Chapter 2–4 evidence-only candidate audit."""
+"""Regression tests for granular Chapter 2–4 evidence records."""
 
 from pathlib import Path
 import tomllib
@@ -26,7 +26,7 @@ class ChapterTwoToFourCandidateAuditTests(unittest.TestCase):
                 self.assertTrue(item["printed-pages"])
                 self.assertEqual(item["status"], "documented-in-3.0-only")
 
-    def test_all_three_chapters_are_individually_tracked(self):
+    def test_all_three_chapters_have_evidence_records(self):
         for prefix in ("amiga.base2.", "amiga.base3.", "amiga.base4."):
             with self.subTest(chapter=prefix):
                 self.assertTrue(any(item["id"].startswith(prefix) for item in self.audit))
