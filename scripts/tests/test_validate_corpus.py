@@ -29,6 +29,13 @@ class CorpusValidationTests(unittest.TestCase):
             'expectation = "Prints one."\nexpected_stdout = "1"\nexpected_exit = "success"\n'
             'notes = ["Independently authored."]\n'
         )
+        from scripts.validate_corpus import manifest_summary
+        import tomllib
+        manifest = tomllib.loads((root / "tests/corpus/manifest.toml").read_text())
+        summary = manifest_summary(root / "tests/corpus", manifest["fixtures"])
+        (root / "tests/corpus/README.md").write_text(
+            "<!-- fixture-summary:start -->\\n" + summary + "\\n<!-- fixture-summary:end -->\\n"
+        )
         return temp, root
 
     def make_symlink(self, link, target, *, target_is_directory=False):
