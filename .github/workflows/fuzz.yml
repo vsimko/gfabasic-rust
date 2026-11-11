@@ -29,13 +29,41 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
 
+      - name: Cache Rust toolchain
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+        with:
+          path: |
+            ~/.rustup/toolchains/1.99.1-x86_64-unknown-linux-gnu
+            ~/.rustup/update-hashes
+          key: ${{ runner.os }}-rustup-1.99.1-minimal
+
+      - name: Cache cargo-afl installation
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+        with:
+          path: ~/.cargo/bin/cargo-afl
+          key: ${{ runner.os }}-cargo-afl-0.18.2-rust-1.99.1
+
+      - name: Cache fuzz dependencies and build artifacts
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            fuzz/target
+          key: ${{ runner.os }}-fuzz-cargo-1.99.1-${{ hashFiles('fuzz/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-fuzz-cargo-1.99.1-
+
       - name: Install pinned Rust toolchain
         run: |
           rustup toolchain install 1.99.1 --profile minimal
           rustup default 1.99.1
 
       - name: Install pinned cargo-afl
-        run: cargo +1.99.1 install cargo-afl --version 0.18.2 --locked
+        run: |
+          if ! command -v cargo-afl >/dev/null 2>&1; then
+            cargo +1.99.1 install cargo-afl --version 0.18.2 --locked
+          fi
 
       - name: Build source-loader fuzz target
         run: cargo +1.99.1 afl build --manifest-path fuzz/Cargo.toml --target-dir fuzz/target --release --bin source_loader --locked
@@ -43,31 +71,31 @@ jobs:
       - name: Record fuzz run metadata
         run: |
           {
-            printf 'target=source_loader\n'
-            printf 'commit=%s\n' "$GITHUB_SHA"
-            printf 'rustc=%s\n' "$(rustc +1.99.1 --version)"
-            printf 'cargo-afl=0.18.2\n'
-            printf 'fuzz-seconds=%s\n' "$FUZZ_SECONDS"
-            printf 'max-input-bytes=1048576\n'
-            printf 'per-input-timeout-ms=1000\n'
-            printf 'memory-limit-mb=256\n'
-            printf 'core-pattern-check=bypassed-for-github-hosted-runner; crash-and-hang-files-are-still-checked\n'
-            printf 'fuzz-lock-sha256:\n'
+            printf 'target=source_loader\\n'
+            printf 'commit=%s\\n' "$GITHUB_SHA"
+            printf 'rustc=%s\\n' "$(rustc +1.99.1 --version)"
+            printf 'cargo-afl=0.18.2\\n'
+            printf 'fuzz-seconds=%s\\n' "$FUZZ_SECONDS"
+            printf 'max-input-bytes=1048576\\n'
+            printf 'per-input-timeout-ms=1000\\n'
+            printf 'memory-limit-mb=256\\n'
+            printf 'core-pattern-check=bypassed-for-github-hosted-runner; crash-and-hang-files-are-still-checked\\n'
+            printf 'fuzz-lock-sha256:\\n'
             sha256sum fuzz/Cargo.lock
-            printf 'corpus-sha256:\n'
+            printf 'corpus-sha256:\\n'
             sha256sum fuzz/corpus/source_loader/*
-            printf 'skipped=lexer,parser,expressions,diagnostics,source-composition (prerequisites #46,#47,#120)\n'
+            printf 'skipped=lexer,parser,expressions,diagnostics,source-composition (prerequisites #46,#47,#120)\\n'
           } > "$RUNNER_TEMP/source-loader-fuzz-metadata.txt"
 
       - name: Run bounded source-loader campaign
         run: |
-          cargo +1.99.1 afl fuzz \
-            -i fuzz/corpus/source_loader \
-            -o "$RUNNER_TEMP/source-loader-fuzz" \
-            -V "$FUZZ_SECONDS" \
-            -t 1000 \
-            -m 256 \
-            -G 1048576 \
+          cargo +1.99.1 afl fuzz \\
+            -i fuzz/corpus/source_loader \\
+            -o "$RUNNER_TEMP/source-loader-fuzz" \\
+            -V "$FUZZ_SECONDS" \\
+            -t 1000 \\
+            -m 256 \\
+            -G 1048576 \\
             fuzz/target/release/source_loader
 
       - name: Minimize crash and hang inputs
@@ -87,8 +115,8 @@ jobs:
               [ "$(basename "$input")" = "README.txt" ] && continue
               count=$((count + 1))
               destination="$minimized/$finding-$(basename "$input")"
-              if timeout 30s cargo +1.99.1 afl tmin \
-                -i "$input" -o "$destination" -t 1000 -m 256 -- \
+              if timeout 30s cargo +1.99.1 afl tmin \\
+                -i "$input" -o "$destination" -t 1000 -m 256 -- \\
                 fuzz/target/release/source_loader; then
                 [ -f "$destination" ] || cp "$input" "$destination.original"
               else
@@ -113,9 +141,9 @@ jobs:
         run: |
           mkdir -p "$RUNNER_TEMP/source-loader-fuzz" "$RUNNER_TEMP/source-loader-minimized"
           touch "$RUNNER_TEMP/source-loader-fuzz-metadata.txt"
-          tar -czf "$RUNNER_TEMP/source-loader-fuzz-results.tar.gz" \
-            --transform='s/:/_/g' \
-            -C "$RUNNER_TEMP" \
+          tar -czf "$RUNNER_TEMP/source-loader-fuzz-results.tar.gz" \\
+            --transform='s/:/_/g' \\
+            -C "$RUNNER_TEMP" \\
             source-loader-fuzz source-loader-minimized source-loader-fuzz-metadata.txt
 
       - name: Upload fuzzer output and resolved lockfile
