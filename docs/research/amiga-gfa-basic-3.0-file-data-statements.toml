@@ -1,0 +1,61 @@
+schema-version = 1
+inventory-id = "amiga-gfa-basic-3.0-file-data-statements"
+target-dialect = "amiga-gfa-basic-interpreter"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+source-pages = ["6-4–6-21"]
+"3.5-status" = "unverified"
+notes = "Page-reviewed declaration-level additions for directory, file metadata and array persistence. Canonical names already present in amiga-gfa-basic-3.0-statements.toml are excluded to avoid duplicate inventory rows. This is a partial 3.0 inventory, not a complete command population or a 3.5 compatibility claim."
+
+[[statements]]
+name = "CHDIR"
+printed-pages = ["6-4"]
+syntax-variants = []
+aliases = []
+notes = "Changes the current directory of the current drive."
+
+[[statements]]
+name = "DIR"
+printed-pages = ["6-5"]
+syntax-variants = ["DIR path$ TO destination$"]
+aliases = []
+notes = "Displays a directory in a window; optional TO destination redirects the output."
+
+[[statements]]
+name = "FILES"
+printed-pages = ["6-5"]
+syntax-variants = ["FILES path$ TO destination$"]
+aliases = []
+notes = "Directory-listing variant that displays file names and sizes."
+
+[[statements]]
+name = "TOUCH"
+printed-pages = ["6-8"]
+syntax-variants = ["TOUCH #channel"]
+aliases = []
+notes = "Updates the file date/time information for the opened channel."
+
+[[statements]]
+name = "STORE"
+printed-pages = ["6-16–6-17"]
+syntax-variants = ["STORE #channel, string-array[, count]"]
+aliases = []
+notes = "Writes a string array to a text file with line-feed separation; optional count limits the number of elements written."
+
+[[statements]]
+name = "RECALL"
+printed-pages = ["6-16–6-17"]
+syntax-variants = ["RECALL #channel, string-array[, count][TO variable], result"]
+aliases = []
+notes = "Reads strings from a file into a string array. The source syntax and optional-argument grouping should be checked against the page image before treating this transcription as a final grammar."
+
+[normalization]
+syntax-variants = "one-canonical-statement"
+synonyms = "one-canonical-name-with-aliases"
+shared-inventory-names = "deduplicate-by-name-before-population"
+
+[limitations]
+chapter-and-index-subset-only = true
+complete-language-inventory = false
+explicit-3.5-evidence = false
+runtime-observation = "not-recorded"
