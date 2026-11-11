@@ -328,7 +328,7 @@ name = "GURU"
 origin = "3.5-addendum"
 applicability = "interpreter"
 evidence-status = "explicit-3.5-addendum"
-printed-pages = ["13-35–13-36"]
+printed-pages = ["13-36"]
 notes = "GURU-number function; distinct from the GURU enable/disable statement."
 
 [[functions]]

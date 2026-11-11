@@ -154,7 +154,7 @@ The two disputed slots are the CVx conversion spelling (`CVD` in the index versu
 |---|---|---|
 | `COMBIN` | 13-33–13-34 | explicit-3.5-addendum: Combination function. |
 | `FACT` | 13-33–13-34 | explicit-3.5-addendum: Factorial function; 0! is explicitly defined as 1. |
-| `GURU` | 13-35–13-36 | explicit-3.5-addendum: GURU-number function; distinct from the GURU enable/disable statement. |
+| `GURU` | 13-36 | explicit-3.5-addendum: GURU-number function; distinct from the GURU enable/disable statement. |
 | `VARIAT` | 13-33–13-34 | explicit-3.5-addendum: Permutation function. |
 
 ## Primary source and caveats
