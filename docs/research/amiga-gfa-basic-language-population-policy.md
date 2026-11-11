@@ -24,9 +24,11 @@ Apply these normalization rules:
 - Count a built-in function once, regardless of argument/signature variants.
 - Count a command once, regardless of optional parameters or alternate syntactic forms.
 - Count an overloaded operator once, regardless of operand types.
+- If the same construct name appears in more than one language role (for example, as both a function and an operator), count it once by name.
 - Merge synonyms and alternate spellings with identical semantics into one canonical construct and retain aliases.
 - Count a compound control-flow construct once (for example, `IF…ELSE…ENDIF`, `FOR…NEXT`, or `DO…LOOP`); do not count its constituent keywords separately.
-- Count each named predefined constant, special variable, distinct operator, and eligible built-in data type separately.
+- Do not create separate inventory entries for constituent keywords, even if a constituent also appears in a standalone use.
+- Count each named predefined constant, special variable, distinct operator name, and eligible built-in data type separately, subject to the same-name deduplication rule above.
 - Do not count variable type suffixes or numeric/string literals as separate constructs.
 
 ## Included and excluded population
@@ -50,6 +52,8 @@ Amiga-specific commands that belong to the interpreter language dialect remain i
 ## Numerator: fully implemented constructs
 
 Count a declaration in the numerator only when its implementation status is exactly `implemented`, source implementation exists, and a confirming test passes. `partial`, `prototype`, `planned`, `research`, `blocked`, unknown, or other states do not count.
+
+A documented construct remains in the denominator when a runtime test fails. Record the failed observation and exact tested runtime version; do not count it in the numerator. Documentation evidence, source implementation, and runtime behavior are separate facts.
 
 ## Independent evidence dimensions
 
