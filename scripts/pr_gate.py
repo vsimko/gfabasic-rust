@@ -124,7 +124,7 @@ class GitHub:
             query = urllib.parse.urlencode({"per_page": 100, "page": page})
             separator = "&" if "?" in path else "?"
             payload = self.get(f"{path}{separator}{query}")
-            items = payload.get(key, [])
+            items = payload if isinstance(payload, list) else payload.get(key, [])
             result.extend(items)
             if len(items) < 100:
                 return result
