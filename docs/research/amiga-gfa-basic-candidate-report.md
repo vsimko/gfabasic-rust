@@ -21,7 +21,7 @@ tags: [amiga, gfa-basic, evidence, research]
 ## Unresolved and pending candidates
 
 | ID | Candidate | Source scope | Printed pages | Notes |
-|---|---|---|---|
+|---|---|---|---|---|
 | — | None | — | — | — |
 
 ## Documented in the 3.0 base only (3.5 applicability not established)
