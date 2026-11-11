@@ -249,6 +249,12 @@
 </table>
 <p>The structural validator <code>scripts/validate_amiga_chapter_inventories.py</code> now covers Chapters 7–12. Its CI checks validate required table structure, non-empty fields, duplicate labels, chapter-local printed-page citations and an explicit runtime-evidence section. They do <strong>not</strong> prove that a chapter inventory is exhaustive, that OCR transcriptions are correct, that aliases are semantically equivalent, or that a documented construct is implemented.</p>
 <p>Remaining source-level gap: this chapter series does not close the 3.5 reconciliation for inherited 3.0 candidates. The 3.5 addendum inventory and the 13 verified page-image corpus fixtures remain distinct evidence sets. Exact 3.5 interpreter runtime validation remains tracked by <a href="https://github.com/vsimko/gfabasic-rust/issues/66">#66</a>; available 3.52 observations must not be relabelled as 3.5.</p>
+<h2 id="reference-index-and-compatibility-snapshot-review-2026-11-11">Reference index and compatibility snapshot review (2026-11-11)</h2>
+<ul>
+<li>Compared <code>docs/reference/README.md</code> with <code>docs/reference/index.md</code> and the referenced documents. The compact index already linked the historical Amiga 3.0 feature inventory, but the fuller reference README omitted it. Added the missing entry so both navigation paths expose the same historical inventory and preserve its incomplete, non-3.5 status.</li>
+<li>Rechecked the current compatibility matrix against the CLI/configuration, formatter, runtime, API-registry, and testing documents. Its implementation boundaries remain consistent: the combinatorics/PRINT build path is experimental, selected MAT forms are parse/format-only, the production LLVM/backend and Amiga/Linux runtime are not implemented, and no complete Amiga 3.5 conformance is claimed. Updated its review date and linked the canonical status documents.</li>
+<li>This is a navigation and status-freshness correction; it does not promote any 3.0 evidence to 3.5 or change implementation/conformance status.</li>
+</ul>
 
       </article>
     </main>

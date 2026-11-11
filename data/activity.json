@@ -1,9 +1,25 @@
 {
   "schema_version": 1,
   "status": "fresh",
-  "generated_at": "2026-11-11T19:03:37.031920+00:00",
-  "last_successful_at": "2026-11-11T19:03:37.031920+00:00",
+  "generated_at": "2026-11-11T19:16:09.305538+00:00",
+  "last_successful_at": "2026-11-11T19:16:09.305538+00:00",
   "items": [
+    {
+      "type": "merged_pull_request",
+      "title": "[Docs] Reconcile reference navigation and compatibility snapshot",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/496",
+      "number": 496,
+      "timestamp": "2026-11-11T19:15:51Z",
+      "summary": "PR #496 merged"
+    },
+    {
+      "type": "commit",
+      "title": "[Docs] Reconcile reference navigation and compatibility snapshot",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/250de2f6d6c34995059cca00a4b57862e92d4ced",
+      "number": null,
+      "timestamp": "2026-11-11T19:15:50Z",
+      "summary": "Commit 250de2f"
+    },
     {
       "type": "merged_pull_request",
       "title": "[Docs] Update documentation audit after corpus summary fix",
@@ -83,22 +99,6 @@
       "number": null,
       "timestamp": "2026-11-11T15:31:51Z",
       "summary": "Commit b374361"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "[Website] Represent unknown project status explicitly",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/490",
-      "number": 490,
-      "timestamp": "2026-11-11T15:21:13Z",
-      "summary": "PR #490 merged"
-    },
-    {
-      "type": "commit",
-      "title": "[Website] Represent unknown project status explicitly (#490)",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/2dd8bca4f3e05da3ebb007c2e5211c6fec513e26",
-      "number": null,
-      "timestamp": "2026-11-11T15:21:13Z",
-      "summary": "Commit 2dd8bca"
     }
   ]
 }
