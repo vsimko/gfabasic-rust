@@ -27,9 +27,11 @@ exclude-reference-material = true
 function-signature-variants = "one-construct"
 command-syntax-variants = "one-construct"
 overloaded-operators = "one-construct"
+same-name-across-language-roles = "one-construct"
 same-semantics-synonyms = "one-canonical-construct-with-aliases"
 compound-control-flow = "one-construct"
 count-constituent-control-keywords-separately = false
+count-constituent-keywords-with-standalone-use-separately = false
 count_named_predefined_constants_individually = true
 count_special_variables_individually = true
 count_distinct_operators_individually = true
@@ -50,6 +52,8 @@ numeric_and_string_literals = true
 record-exact-tested-runtime-version = true
 preserve-original-source-version = true
 "promote-3.0-evidence-to-explicit-3.5-evidence" = false
+failed-runtime-test-retains-denominator-entry = true
+record-failed-runtime-observation-and-version = true
 
 [numerator]
 implementation-status-exactly = "implemented"
@@ -60,6 +64,7 @@ count-prototype = false
 count-planned = false
 count-research = false
 count-blocked = false
+count-failed-runtime-test = false
 
 [dimensions]
 independent = [
