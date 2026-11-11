@@ -18,7 +18,7 @@ class ChapterTwoToFourCandidateAuditTests(unittest.TestCase):
         ]
 
     def test_each_candidate_has_page_provenance_and_3_0_scope(self):
-        self.assertEqual(len(self.audit), 59)
+        self.assertEqual(len(self.audit), 62)
         for item in self.audit:
             with self.subTest(candidate=item["id"]):
                 self.assertEqual(item["source"], "AM-INTERPRETER-35")
@@ -40,6 +40,9 @@ class ChapterTwoToFourCandidateAuditTests(unittest.TestCase):
         self.assertIn("DPEEK / LPEEK", by_id["amiga.base2.peek"]["name"])
         self.assertIn("DPOKE x.y", by_id["amiga.base2.poke-family"]["notes"])
         self.assertIn("BYTE{x}=y", by_id["amiga.base2.typed-memory-access"]["notes"])
+        self.assertIn("overlapping", by_id["amiga.base2.bmove"]["notes"])
+        self.assertIn("variables are erased", by_id["amiga.base2.reserve"]["notes"])
+        self.assertIn("distinct from the SWAP()", by_id["amiga.base2.swap-command"]["notes"])
 
 
 if __name__ == "__main__":
