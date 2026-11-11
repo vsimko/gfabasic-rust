@@ -27,6 +27,7 @@ This is the canonical OKF v0.2 documentation bundle for gfabasic-rust. Markdown 
 - [Amiga GFA BASIC command catalogue](research/amiga-gfa-basic-command-catalogue.md) - Entry point for the extracted Amiga command/function lists, detailed book and OS API extraction, structured inventories, version evidence, and count definitions.
 - [Amiga GFA BASIC language population policy](research/amiga-gfa-basic-language-population-policy.md) - Maintainer-approved denominator, normalization, exclusions, evidence and implementation counting rules for issue #307.
 - [Amiga GFA BASIC Chapter 7 program-handling evidence](research/amiga-gfa-basic-chapter-7-program-handling-evidence.md) - Page-cited base-manual inventory for program control, procedures, and error handling; 3.52 probes are a separate evidence dimension.
+- [Amiga GFA BASIC Chapter 8 graphics compatibility evidence](research/amiga-gfa-basic-chapter-8-graphics-evidence.md) - Page-cited graphics inventory, 3.5 PCOLOR reconciliation, and 3.52 probe coverage boundary.
 - [Amiga GFA BASIC test output](research/amiga-gfa-test-output.md) - Native file-output observation and proposed batch result protocol.
 
 # Project use and contribution
