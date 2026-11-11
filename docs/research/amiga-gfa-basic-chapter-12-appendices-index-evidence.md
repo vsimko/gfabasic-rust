@@ -13,7 +13,7 @@ Printed page labels are the primary locators. Chapter 12 is chiefly a set of ref
 
 ## Appendix inventory
 
-| Section | Source content | Purpose / evidence boundary | Printed pages |
+| Area | Source content | Purpose / evidence boundary | Printed pages |
 |---|---|---|---:|
 | Keyboard scan codes | Amiga keyboard scan-code table | Reference values for keyboard-oriented programming; the table itself does not define a BASIC statement or guarantee host keyboard compatibility. | 12-2 |
 | ASCII table | ASCII character/code table | Character-code lookup reference. Preserve the source's numeric values; do not substitute a modern Unicode interpretation. | 12-3 |
