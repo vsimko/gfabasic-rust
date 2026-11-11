@@ -28,8 +28,8 @@ class RepositoryActivityTests(unittest.TestCase):
             result = activity.collect_activity("token", datetime(2026, 11, 20, tzinfo=timezone.utc))
         self.assertEqual(len(result["items"]), activity.LIMIT)
         self.assertEqual(result["items"][0]["title"], "Commit 15")
-        self.assertEqual(result["items"][-1]["timestamp"], "2026-11-10T12:00:00Z")
-        self.assertEqual({item["type"] for item in result["items"]}, {"commit"})
+        self.assertEqual(result["items"][-1]["timestamp"], "2026-11-10T10:00:00Z")
+        self.assertEqual({item["type"] for item in result["items"]}, {"commit", "merged_pull_request"})
 
     def test_ignores_unmerged_pull_requests_and_marks_empty(self):
         with patch.object(activity, "request_json", side_effect=[
