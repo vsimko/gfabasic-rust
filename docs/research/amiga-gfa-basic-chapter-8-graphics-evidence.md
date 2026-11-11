@@ -1,0 +1,1 @@
+See the Chapter 8 graphics compatibility evidence note in the superseding PR branch.
