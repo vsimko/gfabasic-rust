@@ -2,16 +2,6 @@ name: Rust checks
 
 on:
   pull_request:
-    paths:
-      - "Cargo.toml"
-      - "Cargo.lock"
-      - "rust-toolchain.toml"
-      - "crates/**"
-      - "api/**"
-      - "tests/corpus/amiga/3.5/combinatorics/**"
-      - "tests/corpus/amiga/3.5/matrix/**"
-      - "tests/corpus/amiga/3.5/data/**"
-      - ".github/workflows/rust.yml"
   push:
     branches:
       - main
