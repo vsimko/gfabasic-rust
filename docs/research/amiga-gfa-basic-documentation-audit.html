@@ -204,6 +204,51 @@
 </table>
 <p>The registry's source ID <code>AM-INTERPRETER-35</code>, source scope <code>amiga-3.5-addendum</code>, and printed-page locators agree with the source register and addendum inventory. The German 1990 book is supplementary historical 3.0/V3.03 evidence (its “bis Version 3.5” cover wording is not normative interpreter evidence); it is not needed to promote these four declarations. The inventory's TOC/OCR spelling <code>PCOLOUR</code> is not a separate declaration: the primary addendum body and registry use <code>PCOLOR</code>.</p>
 <p>These four entries are an <strong>interim addendum-only platform slice</strong>, not a complete Amiga 3.5 API. Their source documentation is verified for 3.5; implementation remains <code>not-implemented</code>, Linux support <code>unknown</code>, and conformance <code>not-tested</code>. The available native Amiberry observations are for interpreter <strong>3.52</strong> only (see #66), and must not be relabelled as 3.5 observations or used to claim 3.5 runtime conformance.</p>
+<h2 id="base-manual-chapter-evidence-progress-2026-11-11">Base-manual chapter evidence progress (2026-11-11)</h2>
+<p>The supplied interpreter manual's Chapters 7–12 now have separate page-cited research notes. These are <strong>historical 3.0 base-manual evidence</strong>, not declarations of 3.5 availability. The notes preserve printed-page locators and keep the 3.5 addendum and 3.52 runtime observations in separate sections.</p>
+<table>
+<thead>
+<tr>
+<th>Chapter</th>
+<th>Research note</th>
+<th>Coverage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>7</td>
+<td><a href="amiga-gfa-basic-chapter-7-program-handling-evidence.html">Program-handling evidence</a></td>
+<td>Control flow, procedures/functions and error handling (pp. 7-2–7-55).</td>
+</tr>
+<tr>
+<td>8</td>
+<td><a href="amiga-gfa-basic-chapter-8-graphics-evidence.html">Graphics evidence</a></td>
+<td>Graphics statements and 3.5 PCOLOR reconciliation (pp. 8-2–8-24).</td>
+</tr>
+<tr>
+<td>9</td>
+<td><a href="amiga-gfa-basic-chapter-9-event-window-evidence.html">Event/window evidence</a></td>
+<td>Events, menus, screens, windows and requesters (pp. 9-2–9-39).</td>
+</tr>
+<tr>
+<td>10</td>
+<td><a href="amiga-gfa-basic-chapter-10-advanced-programming-evidence.html">Advanced-programming evidence</a></td>
+<td>CLI, platform variables, sprites, joystick, speech, FD files and BOB/OBJECT (pp. 10-2–10-16).</td>
+</tr>
+<tr>
+<td>11</td>
+<td><a href="amiga-gfa-basic-chapter-11-system-routines-evidence.html">System-routine evidence</a></td>
+<td>Seven Amiga OS library groups and their version/ABI boundary (pp. 11-2–11-92).</td>
+</tr>
+<tr>
+<td>12</td>
+<td><a href="amiga-gfa-basic-chapter-12-appendices-index-evidence.html">Appendix and index evidence</a></td>
+<td>Keyboard/ASCII references, fill patterns, AmigaDOS errors, command index and OS-call index (pp. 12-2–12-27).</td>
+</tr>
+</tbody>
+</table>
+<p>The structural validator <code>scripts/validate_amiga_chapter_inventories.py</code> now covers Chapters 7–12. Its CI checks validate required table structure, non-empty fields, duplicate labels, chapter-local printed-page citations and an explicit runtime-evidence section. They do <strong>not</strong> prove that a chapter inventory is exhaustive, that OCR transcriptions are correct, that aliases are semantically equivalent, or that a documented construct is implemented.</p>
+<p>Remaining source-level gap: this chapter series does not close the 3.5 reconciliation for inherited 3.0 candidates. The 3.5 addendum inventory and the 13 verified page-image corpus fixtures remain distinct evidence sets. Exact 3.5 interpreter runtime validation remains tracked by <a href="https://github.com/vsimko/gfabasic-rust/issues/66">#66</a>; available 3.52 observations must not be relabelled as 3.5.</p>
 
       </article>
     </main>
