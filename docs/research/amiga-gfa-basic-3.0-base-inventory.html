@@ -442,7 +442,7 @@
 <li><strong>PRED/SUCC string forms (p. 4-33):</strong> return the previous/next character by ASCII value, using the first character of the input string.</li>
 <li><strong>LEN/TRIM$ (p. 4-34):</strong> LEN returns string length; TRIM$ removes spaces at both ends.</li>
 <li><strong>UPPER$ (p. 4-35):</strong> converts lowercase characters to uppercase.</li>
-<li><strong>LSET/RSET (p. 4-36):</strong> the contents page identifies left/right string assignment; exact padding/truncation semantics still need extraction and page-image review.</li>
+<li><strong>LSET/RSET (p. 4-36):</strong> assign a string expression left- or right-justified into an existing string variable without changing the destination length. The manual does not specify whether overlong source text is truncated from the left/right or how shorter values are padded; preserve that as an unresolved detail rather than assuming host-language formatting rules.</li>
 </ul>
 <p>The base-manual contents index and page-level descriptions together now provide a candidate inventory for the numeric, bitwise and string families. This is still not a 3.5 claim and should not be imported into the canonical 3.5 API registry without compatibility evidence.</p>
 <h3 id="further-chapter-2-behavior-extracted-from-the-base-manual-pages">Further Chapter 2 behavior extracted from the base-manual pages</h3>
