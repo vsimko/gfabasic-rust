@@ -34,7 +34,7 @@ class CorpusValidationTests(unittest.TestCase):
         manifest = tomllib.loads((root / "tests/corpus/manifest.toml").read_text())
         summary = manifest_summary(root / "tests/corpus", manifest["fixtures"])
         (root / "tests/corpus/README.md").write_text(
-            "<!-- fixture-summary:start -->\\n" + summary + "\\n<!-- fixture-summary:end -->\\n"
+            "<!-- fixture-summary:start -->\n" + summary + "\n<!-- fixture-summary:end -->\n"
         )
         return temp, root
 
@@ -102,7 +102,7 @@ class CorpusValidationTests(unittest.TestCase):
         self.addCleanup(temp.cleanup)
         source = root / "tests/corpus/amiga/3.0/control-flow/fixture-one.lst"
         outside = root / "outside.lst"
-        outside.write_text("PRINT 99\\n")
+        outside.write_text("PRINT 99\n")
         source.unlink()
         self.make_symlink(source, outside)
 
@@ -253,7 +253,7 @@ class CorpusValidationTests(unittest.TestCase):
         manifest = tomllib.loads((root / "tests/corpus/manifest.toml").read_text())
         summary = manifest_summary(root / "tests/corpus", manifest["fixtures"])
         corpus_readme.write_text(
-            "<!-- fixture-summary:start -->\\n" + summary + "\\n<!-- fixture-summary:end -->\\n"
+            "<!-- fixture-summary:start -->\n" + summary + "\n<!-- fixture-summary:end -->\n"
         )
         self.assertEqual(validate_corpus(root), [])
 
@@ -262,9 +262,9 @@ class CorpusValidationTests(unittest.TestCase):
         self.addCleanup(temp.cleanup)
         corpus_readme = root / "tests/corpus/README.md"
         corpus_readme.write_text(
-            "<!-- fixture-summary:start -->\\n"
-            "Manifest summary: 99 GFA BASIC Amiga 3.0 fixtures candidate; 99 total.\\n"
-            "<!-- fixture-summary:end -->\\n"
+            "<!-- fixture-summary:start -->\n"
+            "Manifest summary: 99 GFA BASIC Amiga 3.0 fixtures candidate; 99 total.\n"
+            "<!-- fixture-summary:end -->\n"
         )
         self.assertTrue(any("manifest-derived fixture summary is missing or stale" in item for item in validate_corpus(root)))
 
