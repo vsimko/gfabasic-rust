@@ -1,0 +1,78 @@
+{
+  "id": "gfa.language.matrix.mat-input",
+  "name": "MAT INPUT",
+  "kind": "statement",
+  "namespace": "language-core",
+  "category": "matrix-operations",
+  "availability": [
+    {
+      "dialect": "amiga-gfa-basic-interpreter",
+      "versions": [
+        "3.5"
+      ]
+    }
+  ],
+  "syntax": [
+    {
+      "form": "MAT INPUT #channel, array()",
+      "contexts": [
+        "statement"
+      ],
+      "arguments": [
+        {
+          "name": "channel",
+          "type": "open ASCII input-file channel",
+          "required": true
+        },
+        {
+          "name": "array",
+          "type": "previously dimensioned one- or two-dimensional floating-point field",
+          "required": true,
+          "passing": "array"
+        }
+      ]
+    }
+  ],
+  "signature": {
+    "type": "no return value"
+  },
+  "semantics": {
+    "summary": "Reads a vector or matrix from an ASCII file using the reverse of MAT PRINT's format; commas and rowfeeds may vary as with INPUT #.",
+    "side-effects": [
+      "Reads from the selected open file channel and writes values into the supplied field."
+    ],
+    "errors": []
+  },
+  "evidence": {
+    "source-scope": "amiga-3.5-addendum",
+    "status": "book-documented",
+    "sources": [
+      "AM-INTERPRETER-35"
+    ],
+    "printed-pages": [
+      "Chapter 13, printed p. 13-6"
+    ],
+    "notes": [
+      "The addendum explicitly describes ASCII input and flexible commas/rowfeeds.",
+      "The printed page images were visually checked; this declaration is still marked book-documented because its behavior has not been independently cross-checked against a second primary witness or observed runtime."
+    ]
+  },
+  "implementation": {
+    "status": "not-implemented"
+  },
+  "support": [
+    {
+      "target": "x86_64-unknown-linux-gnu",
+      "classification": "unknown",
+      "conformance": "not-tested",
+      "tests": [],
+      "pending-reason": "No matrix file-input implementation or executable reference-interpreter conformance tests are registered."
+    }
+  ],
+  "docs": {
+    "path": "docs/research/amiga-gfa-basic-35-addendum-inventory.md",
+    "anchors": [
+      "3-linear-operations-on-numeric-fields"
+    ]
+  }
+}
