@@ -221,7 +221,7 @@ These are concise source notes for the 3.0 baseline only; exact 3.5 compatibilit
 - **PRED/SUCC string forms (p. 4-33):** return the previous/next character by ASCII value, using the first character of the input string.
 - **LEN/TRIM$ (p. 4-34):** LEN returns string length; TRIM$ removes spaces at both ends.
 - **UPPER$ (p. 4-35):** converts lowercase characters to uppercase.
-- **LSET/RSET (p. 4-36):** the contents page identifies left/right string assignment; exact padding/truncation semantics still need extraction and page-image review.
+- **LSET/RSET (p. 4-36):** assign a string expression left- or right-justified into an existing string variable without changing the destination length. The manual does not specify whether overlong source text is truncated from the left/right or how shorter values are padded; preserve that as an unresolved detail rather than assuming host-language formatting rules.
 
 The base-manual contents index and page-level descriptions together now provide a candidate inventory for the numeric, bitwise and string families. This is still not a 3.5 claim and should not be imported into the canonical 3.5 API registry without compatibility evidence.
 
