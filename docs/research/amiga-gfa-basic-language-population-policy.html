@@ -37,9 +37,11 @@
 <li>Count a built-in function once, regardless of argument/signature variants.</li>
 <li>Count a command once, regardless of optional parameters or alternate syntactic forms.</li>
 <li>Count an overloaded operator once, regardless of operand types.</li>
+<li>If the same construct name appears in more than one language role (for example, as both a function and an operator), count it once by name.</li>
 <li>Merge synonyms and alternate spellings with identical semantics into one canonical construct and retain aliases.</li>
 <li>Count a compound control-flow construct once (for example, <code>IF…ELSE…ENDIF</code>, <code>FOR…NEXT</code>, or <code>DO…LOOP</code>); do not count its constituent keywords separately.</li>
-<li>Count each named predefined constant, special variable, distinct operator, and eligible built-in data type separately.</li>
+<li>Do not create separate inventory entries for constituent keywords, even if a constituent also appears in a standalone use.</li>
+<li>Count each named predefined constant, special variable, distinct operator name, and eligible built-in data type separately, subject to the same-name deduplication rule above.</li>
 <li>Do not count variable type suffixes or numeric/string literals as separate constructs.</li>
 </ul>
 <h2 id="included-and-excluded-population">Included and excluded population</h2>
@@ -57,6 +59,7 @@
 <p>Amiga-specific commands that belong to the interpreter language dialect remain included.</p>
 <h2 id="numerator-fully-implemented-constructs">Numerator: fully implemented constructs</h2>
 <p>Count a declaration in the numerator only when its implementation status is exactly <code>implemented</code>, source implementation exists, and a confirming test passes. <code>partial</code>, <code>prototype</code>, <code>planned</code>, <code>research</code>, <code>blocked</code>, unknown, or other states do not count.</p>
+<p>A documented construct remains in the denominator when a runtime test fails. Record the failed observation and exact tested runtime version; do not count it in the numerator. Documentation evidence, source implementation, and runtime behavior are separate facts.</p>
 <h2 id="independent-evidence-dimensions">Independent evidence dimensions</h2>
 <p>Keep these dimensions independent on each declaration:</p>
 <ul>

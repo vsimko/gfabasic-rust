@@ -1,6 +1,6 @@
 {
   "repository": "vsimko/gfabasic-rust",
-  "generated_at": "2026-11-10T21:14:55.248182Z",
+  "generated_at": "2026-11-11T06:56:03.082529Z",
   "freshness_threshold_hours": 168,
   "workflows": [
     {
@@ -10,26 +10,26 @@
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/docs.yml",
       "state": "in_progress",
       "latest": {
-        "id": 42903132850,
+        "id": 42975846490,
         "name": "Documentation checks",
         "status": "in_progress",
         "event": "push",
         "branch": "main",
-        "created_at": "2026-11-10T21:14:45Z",
-        "updated_at": "2026-11-10T21:14:53Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42903132850",
+        "created_at": "2026-11-11T06:55:52Z",
+        "updated_at": "2026-11-11T06:55:56Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42975846490",
         "age_hours": 0,
         "freshness": "fresh"
       },
       "last_success": {
-        "id": 42901486329,
+        "id": 42970439751,
         "name": "Documentation checks",
         "status": "success",
         "event": "pull_request",
-        "branch": "issue-307/maintainer-population-rules",
-        "created_at": "2026-11-10T21:04:51Z",
-        "updated_at": "2026-11-10T21:05:06Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42901486329",
+        "branch": "docs/complete-language-population-policy",
+        "created_at": "2026-11-11T06:09:24Z",
+        "updated_at": "2026-11-11T06:09:41Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42970439751",
         "age_hours": 0,
         "freshness": "fresh"
       }
@@ -49,7 +49,7 @@
         "created_at": "2026-11-10T17:41:12Z",
         "updated_at": "2026-11-10T17:41:31Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42867473606",
-        "age_hours": 3,
+        "age_hours": 13,
         "freshness": "fresh"
       },
       "last_success": {
@@ -61,7 +61,7 @@
         "created_at": "2026-11-10T17:41:12Z",
         "updated_at": "2026-11-10T17:41:31Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42867473606",
-        "age_hours": 3,
+        "age_hours": 13,
         "freshness": "fresh"
       }
     },
@@ -80,7 +80,7 @@
         "created_at": "2026-11-09T21:07:07Z",
         "updated_at": "2026-11-09T21:07:31Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42699425788",
-        "age_hours": 24,
+        "age_hours": 33,
         "freshness": "fresh"
       },
       "last_success": {
@@ -92,7 +92,7 @@
         "created_at": "2026-11-09T21:07:07Z",
         "updated_at": "2026-11-09T21:07:31Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42699425788",
-        "age_hours": 24,
+        "age_hours": 33,
         "freshness": "fresh"
       }
     },
@@ -111,7 +111,7 @@
         "created_at": "2026-11-09T21:04:43Z",
         "updated_at": "2026-11-09T21:06:49Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42699028842",
-        "age_hours": 24,
+        "age_hours": 33,
         "freshness": "fresh"
       },
       "last_success": {
@@ -123,7 +123,7 @@
         "created_at": "2026-11-09T21:04:43Z",
         "updated_at": "2026-11-09T21:06:49Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42699028842",
-        "age_hours": 24,
+        "age_hours": 33,
         "freshness": "fresh"
       }
     },
@@ -142,7 +142,7 @@
         "created_at": "2026-11-09T21:07:07Z",
         "updated_at": "2026-11-09T21:08:08Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42699425305",
-        "age_hours": 24,
+        "age_hours": 33,
         "freshness": "fresh"
       },
       "last_success": {
@@ -154,7 +154,7 @@
         "created_at": "2026-11-09T21:07:07Z",
         "updated_at": "2026-11-09T21:08:08Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42699425305",
-        "age_hours": 24,
+        "age_hours": 33,
         "freshness": "fresh"
       }
     },
@@ -173,7 +173,7 @@
         "created_at": "2026-11-10T15:12:44Z",
         "updated_at": "2026-11-10T15:13:01Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42841975538",
-        "age_hours": 6,
+        "age_hours": 15,
         "freshness": "fresh"
       },
       "last_success": {
@@ -185,7 +185,7 @@
         "created_at": "2026-11-10T15:12:44Z",
         "updated_at": "2026-11-10T15:13:01Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42841975538",
-        "age_hours": 6,
+        "age_hours": 15,
         "freshness": "fresh"
       }
     },
@@ -196,27 +196,27 @@
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/pages.yml",
       "state": "in_progress",
       "latest": {
-        "id": 42903132897,
+        "id": 42975846487,
         "name": "Deploy GitHub Pages",
         "status": "in_progress",
         "event": "push",
         "branch": "main",
-        "created_at": "2026-11-10T21:14:45Z",
-        "updated_at": "2026-11-10T21:14:48Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42903132897",
+        "created_at": "2026-11-11T06:55:52Z",
+        "updated_at": "2026-11-11T06:55:56Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42975846487",
         "age_hours": 0,
         "freshness": "fresh"
       },
       "last_success": {
-        "id": 42897322659,
+        "id": 42903132897,
         "name": "Deploy GitHub Pages",
         "status": "success",
         "event": "push",
         "branch": "main",
-        "created_at": "2026-11-10T20:38:45Z",
-        "updated_at": "2026-11-10T20:39:08Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42897322659",
-        "age_hours": 0,
+        "created_at": "2026-11-10T21:14:45Z",
+        "updated_at": "2026-11-10T21:15:05Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42903132897",
+        "age_hours": 9,
         "freshness": "fresh"
       }
     },
@@ -227,26 +227,26 @@
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/pr-preview.yml",
       "state": "in_progress",
       "latest": {
-        "id": 42903134967,
+        "id": 42975848577,
         "name": "Pull request website preview",
         "status": "in_progress",
         "event": "pull_request",
-        "branch": "issue-307/maintainer-population-rules",
-        "created_at": "2026-11-10T21:14:45Z",
-        "updated_at": "2026-11-10T21:14:49Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42903134967",
+        "branch": "docs/complete-language-population-policy",
+        "created_at": "2026-11-11T06:55:54Z",
+        "updated_at": "2026-11-11T06:55:58Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42975848577",
         "age_hours": 0,
         "freshness": "fresh"
       },
       "last_success": {
-        "id": 42901486319,
+        "id": 42970439820,
         "name": "Pull request website preview",
         "status": "success",
         "event": "pull_request",
-        "branch": "issue-307/maintainer-population-rules",
-        "created_at": "2026-11-10T21:04:51Z",
-        "updated_at": "2026-11-10T21:06:11Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42901486319",
+        "branch": "docs/complete-language-population-policy",
+        "created_at": "2026-11-11T06:09:24Z",
+        "updated_at": "2026-11-11T06:10:29Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42970439820",
         "age_hours": 0,
         "freshness": "fresh"
       }
