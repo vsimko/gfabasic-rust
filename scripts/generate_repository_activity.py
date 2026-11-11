@@ -165,7 +165,7 @@ def render_activity(data: dict) -> str:
     else:
         parts.append('<p class="activity-provenance">No successful source fetch is available yet. GitHub API credentials are never exposed to the browser.</p>')
     parts.append('</section>')
-    return "\\n".join(parts)
+    return "\n".join(parts)
 
 
 def render_site(root: Path, data: dict) -> None:
@@ -176,7 +176,7 @@ def render_site(root: Path, data: dict) -> None:
         raise ValueError("site/index.html is missing activity generation markers")
     before, rest = document.split(start, 1)
     _, after = rest.split(end, 1)
-    path.write_text(before + start + "\\n" + render_activity(data) + "\\n" + end + after, encoding="utf-8")
+    path.write_text(before + start + "\n" + render_activity(data) + "\n" + end + after, encoding="utf-8")
 
 
 def main() -> int:
