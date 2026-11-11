@@ -270,7 +270,6 @@ def validate_corpus(root: Path = ROOT) -> list[str]:
     return errors
 
 
-
 def manifest_summary(corpus_root: Path, fixtures: list[object]) -> str:
     """Build the documentation summary from manifest paths and sidecar statuses."""
     counts: dict[tuple[str, str, str], int] = {}
@@ -280,6 +279,8 @@ def manifest_summary(corpus_root: Path, fixtures: list[object]) -> str:
         if relative is None:
             continue
         metadata_path = corpus_root / relative.with_suffix(".toml")
+        if has_symlink_component(metadata_path, corpus_root) or not metadata_path.is_file():
+            continue
         try:
             metadata = tomllib.loads(metadata_path.read_text(encoding="utf-8"))
         except (OSError, UnicodeDecodeError, tomllib.TOMLDecodeError):
