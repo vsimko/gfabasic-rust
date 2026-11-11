@@ -15,7 +15,7 @@ tags: [amiga, gfa-basic, evidence, research]
 | candidate | 0 |
 | confirmed-in-3.5 | 13 |
 | contradicted | 0 |
-| documented-in-3.0-only | 102 |
+| documented-in-3.0-only | 105 |
 | unresolved | 0 |
 
 ## Unresolved and pending candidates
@@ -44,6 +44,7 @@ tags: [amiga, gfa-basic, evidence, research]
 | `amiga.base2.absolute` | ABSOLUTE | 2-39 | Address/variable binding feature in the base manual; classification and detailed signature remain source-scoped. |
 | `amiga.base2.asc-chr` | ASC / CHR$ | 2-13 | ASC returns the first character code (zero for empty input); CHR$ uses the low byte. 3.0 base-manual evidence only. |
 | `amiga.base2.bin-oct-hex` | BIN$ / OCT$ / HEX$ | 2-14 | Integer-to-base-2/base-8/base-16 string conversions; optional width parameters are documented. 3.0 base-manual evidence only. |
+| `amiga.base2.bmove` | BMOVE | 2-43 | Copies cnt bytes from src to dst; overlapping source/destination blocks are supported, and even parameters execute faster than odd ones. 3.5 applicability is unverified. |
 | `amiga.base2.cint-cfloat` | CINT / CFLOAT | 2-17 | CINT rounds float to integer; CFLOAT converts integer to float. The manual explicitly says these are meaningful only to the compiler, not interpreter built-ins. |
 | `amiga.base2.cvx` | CVI / CVL / CVS (CVF spelling disputed) | 2-18–2-19 | Binary-string conversions; prose names CVS while the MKx counterpart list includes MKF$. Preserve the source naming mismatch; do not normalize a CVF alias. |
 | `amiga.base2.date-time` | DATE$ / TIME$ | 2-26 | Read/write date and read time string forms are described; the source text's DATE$/DATES and TIME$/TIMES naming is retained for further checking. |
@@ -55,6 +56,8 @@ tags: [amiga, gfa-basic, evidence, research]
 | `amiga.base2.peek` | PEEK / DPEEK / LPEEK | 2-36 | Reads one, two or four bytes respectively from address x. The source warns that even addresses must be used; 3.5 availability remains unverified. |
 | `amiga.base2.pointer-star` | * (array descriptor pointer form) | 2-33 | Indirect array-descriptor form is documented alongside ARRPTR; keep separate from multiplication operator. |
 | `amiga.base2.poke-family` | POKE / DPOKE / LPOKE | 2-35 | Writes one, two or four bytes respectively to address x. The prose prints DPOKE x.y while the syntax block gives DPOKE x,y; LPOKE is shown with a stray semicolon in the syntax block. Even addresses are required for DPOKE and LPOKE. Preserve these source details; 3.5 applicability is unverified. |
+| `amiga.base2.reserve` | RESERVE | 2-44 | RESERVE [n] sets the memory size GFA-BASIC should use; the manual says variables are erased when it executes and recommends using it only at program start. 3.5 applicability is unverified. |
+| `amiga.base2.swap-command` | SWAP command | 2-19–2-20 | Exchanges same-type variables or array values; the array form exchanges descriptors, and SWAP *c,d() supports indirect array naming. Explicitly distinct from the SWAP() bit-operation function in Chapter 4. 3.5 applicability is unverified. |
 | `amiga.base2.str` | STR$ | 2-15 | Overloads STR$(x), STR$(x,y), STR$(x,y,z); width and selected-slice behavior are described. 3.0 base-manual evidence only. |
 | `amiga.base2.timer` | TIMER | 2-28 | Timer function heading and page locator in the base manual; exact return/tick contract is not promoted. |
 | `amiga.base2.type` | TYPE | 2-30 | Variable type query documented in the base manual; 3.5 applicability unverified. |
