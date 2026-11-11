@@ -65,6 +65,9 @@ jobs:
             cargo +1.99.1 install cargo-afl --version 0.18.2 --locked
           fi
 
+      - name: Build AFL++ Rust runtime
+        run: cargo +1.99.1 afl config --build
+
       - name: Build source-loader fuzz target
         run: cargo +1.99.1 afl build --manifest-path fuzz/Cargo.toml --target-dir fuzz/target --release --bin source_loader --locked
 
