@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Source: Wolf-Gideon Bleek, Martin Hecht, Uwe Litzkendorf, Das große GFA-BASIC-Buch zum Amiga, DATA BECKER, 1990, ISBN 3-89011-399-0. Supplied scan: 515 PDF pages.">
+  <title>Amiga GFA-BASIC 3.5 — independent German-book cross-check · GFA BASIC Rust documentation</title>
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body class="docs-site">
+  <header class="docs-header">
+    <a href="../../index.html">GFA BASIC Rust</a>
+    <span aria-hidden="true">/</span>
+    <a href="../index.html">Documentation</a>
+  </header>
+  <div class="docs-layout">
+    <nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home" href="index.html">Section index</a><ul><li><a href="amiga-gfa-basic-documentation-audit.html">Amiga GFA BASIC documentation coverage audit</a></li><li><a href="amiga-gfa-basic-command-catalogue.html">Amiga GFA BASIC command catalogue</a></li><li><a href="amiga-gfa-basic-german-book-command-api-extraction.html">German Amiga GFA-BASIC book: command and OS API extraction</a></li><li><a href="amiga-book-command-index-ocr-transcription.html">Appendix D — OCR transcription of the command index</a></li><li><a href="gfa-basic-command-index-ocr.html">GFA-BASIC command index — first-pass extraction</a></li><li><a href="amiga-gfa-basic-source-topic-index.html">Amiga GFA BASIC source and topic index</a></li><li><a href="amiga-book-515-page-extraction-audit.html">Amiga GFA-BASIC book — 515-page extraction audit</a></li><li><a href="amiga-book-chapters05-17-heading-harvest.html">Amiga book — command-heading harvest, chapters 5–17</a></li><li><a href="amiga-gfa-basic-functions.toml">Function inventory (117 unique names)</a></li><li><a href="amiga-gfa-basic-function-inventory.html">Amiga GFA BASIC 3.5 built-in function inventory</a></li><li><a href="amiga-base-manual-io-graphics-events-advanced.html">Amiga GFA BASIC base-manual I/O, graphics, event, and advanced-programming extraction</a></li><li><a href="amiga-base-manual-io-graphics-events-advanced-details.html">Amiga GFA BASIC base-manual I/O, graphics, event, and advanced-programming details</a></li><li><a href="amiga-base-manual-numeric-string-functions.html">Amiga GFA BASIC base-manual numeric and string function extraction</a></li><li><a href="amiga-gfa-basic-35-addendum-inventory.html">Amiga GFA-BASIC 3.5 interpreter addendum — extracted feature inventory</a></li><li><a href="amiga-gfa-basic-candidates.toml">3.5 candidate manifest</a></li><li><a href="amiga-gfa-basic-candidate-report.html">Amiga GFA BASIC 3.5 candidate verification report</a></li><li><a href="amiga-gfa-basic-language-population-policy.html">Amiga GFA BASIC language population policy</a></li><li><a href="amiga-gfa-basic-3.03-ocr-index.html">German Amiga GFA BASIC book: OCR index and edition notes</a></li><li><a href="README.html">Research materials</a></li><li><a href="amiga-gfa-test-output.html">Amiga GFA BASIC test output</a></li><li><a href="amiga-gfa-basic-dqh-source-inventory.html">Amiga GFA BASIC commands observed in dqh-amiga</a></li><li><a href="amiga-emulator-lab.html">Amiga emulator experiment lab</a></li><li><a href="amiga-gfa-basic-35-lst-probes.html">Amiga GFA BASIC 3.5 interpreter probes from text listings</a></li><li><a href="amiga-gfa-basic-352-runtime-baseline.html">Amiga GFA BASIC 3.52 runtime baseline</a></li><li><a href="amiga-gfa-basic-binary-analysis.html">Amiga GFA-BASIC binary analysis</a></li><li><a href="amiga-base-manual-variable-array-conversion-functions.html">Amiga GFA BASIC base-manual variable, array, and conversion functions</a></li><li><a href="amiga-gfa-basic-chapter-7-program-handling-evidence.html">Amiga GFA BASIC Chapter 7 — program handling evidence</a></li><li><a href="amiga-gfa-basic-chapter-8-graphics-evidence.html">Amiga GFA BASIC Chapter 8 — graphics compatibility evidence</a></li><li><a href="amiga-gfa-basic-chapter-9-event-window-evidence.html">Amiga GFA BASIC Chapter 9 — event, menu, screen and window evidence</a></li><li><a href="amiga-gfa-basic-chapter-10-advanced-programming-evidence.html">Amiga GFA BASIC Chapter 10 — advanced programming evidence</a></li><li><a href="https://github.com/vsimko/gfabasic-rust/blob/main/scripts/validate_amiga_chapter_inventories.py">Chapter inventory validator</a></li><li><a href="amiga-gfa-basic-3.0-command-index.html">Amiga GFA BASIC 3.0 command index — grouped cross-check</a></li><li><a href="amiga-gfa-basic-3.0-statement-command-candidates.html">Amiga GFA BASIC 3.0 statement and command candidate catalogue</a></li><li><a href="amiga-gfa-basic-3.0-base-inventory.html">Amiga GFA BASIC 3.0 base-manual inventory</a></li><li><a href="amiga-gfa-basic-3.0-expressions-builtins-control-flow.html">Amiga GFA BASIC 3.0 expression, intrinsic and control-flow evidence</a></li><li><a href="amiga-gfa-basic-3.0-control-file-data-io.html">Amiga GFA BASIC 3.0 control, file and data I/O evidence</a></li><li><a href="amiga-gfa-basic-3.0-graphics-evidence.html">GFA BASIC 3.0 Amiga — graphics evidence</a></li><li><a href="amiga-gfa-basic-3.0-events-windows-evidence.html">GFA BASIC 3.0 Amiga — event, menu, screen and window evidence</a></li><li><a href="amiga-gfa-basic-3.0-system-routines-evidence.html">GFA BASIC 3.0 Amiga — operating-system routine evidence</a></li><li><a href="amiga-gfa-basic-3.0-advanced-programming-evidence.html">GFA BASIC 3.0 Amiga — advanced programming evidence</a></li><li><a href="amiga-gfa-basic-3.0-appendix-index-evidence.html">GFA BASIC 3.0 Amiga — appendix and command-index evidence</a></li><li><a href="amiga-gfa-basic-3.0-german-source-notes.html">German Amiga GFA BASIC 3.0 source — initial verification notes</a></li><li><a href="amiga-gfa-basic-3.0-procedure-error-details.html">GFA BASIC 3.0 Amiga — procedures, functions and error-flow evidence</a></li><li><a href="amiga-gfa-basic-3.0-screen-window-details.html">GFA BASIC 3.0 Amiga — screen and window command details</a></li><li><a href="amiga-gfa-basic-3.0-output-device-details.html">GFA BASIC 3.0 Amiga — output, cursor, mouse and sound evidence</a></li><li><a href="amiga-gfa-basic-3.0-menu-event-details.html">GFA BASIC 3.0 Amiga — menu and event details</a></li><li><a href="amiga-gfa-basic-3.0-bob-object-details.html">GFA BASIC 3.0 Amiga — BOB and OBJECT API evidence</a></li><li><a href="amiga-gfa-basic-3.0-source-format-editor-evidence.html">Amiga GFA BASIC 3.0 — source composition and editor evidence</a></li><li><a href="amiga-gfa-basic-35-primary-reference.html">Amiga GFA-BASIC 3.5 primary reference and target decision</a></li><li><a href="amiga-gfa-basic-35-german-book-crosscheck.html">Amiga GFA-BASIC 3.5 — independent German-book cross-check</a></li><li><a href="amiga-book-gfa35-chapter18-19-extraction.html">GFA-BASIC 3.5 additions documented in the Amiga book</a></li><li><a href="amiga-gfa-basic-35-editor-feature-audit.html">Amiga GFA BASIC 3.5 — editor feature audit</a></li><li><a href="amiga-gfa-basic-35-lexer-evidence.html">Amiga GFA BASIC 3.5 lexer evidence inventory</a></li><li><a href="amiga-gfa-basic-35-matrix-arithmetic-analysis-audit.html">Amiga GFA BASIC 3.5 — matrix arithmetic and analysis audit</a></li><li><a href="amiga-gfa-basic-35-matrix-io-copy-audit.html">Amiga GFA BASIC 3.5 — matrix I/O and copy declaration audit</a></li><li><a href="amiga-gfa-basic-35-five-declaration-audit.html">Amiga GFA BASIC 3.5 — five declaration-level audit blocks</a></li><li><a href="amiga-gfa-basic-35-five-more-declaration-audit.html">Amiga GFA BASIC 3.5 — five more declaration-level audit blocks</a></li><li><a href="amiga-gfa-basic-35-guru-declaration-audit.html">Amiga GFA BASIC 3.5 — GURU declaration audit</a></li><li><a href="atari-gfa-book-diskette.html">Atari GFA BASIC book diskette — source-corpus research notes</a></li><li><a href="atari-gfa-book-systematic-review.html">Systematic review of *Das große GFA-BASIC-Buch* (Atari ST)</a></li><li><a href="aminet-catalogue.html">Aminet GFA BASIC package survey</a></li><li><a href="gfalist-build-and-fixture-validation.html">gfalist build and fixture validation</a></li><li><a href="gfalist-format-vs-rust-frontend.html">gfalist format notes vs. the Rust frontend</a></li></ul></nav>
+    <main class="docs-content">
+      <article>
+        <h1>Amiga GFA-BASIC 3.5 — independent German-book cross-check</h1>
+        <p class="docs-meta"><span>Research Note</span></p>
+        <h1 id="amiga-gfa-basic-35-independent-german-book-cross-check">Amiga GFA-BASIC 3.5 — independent German-book cross-check</h1>
+<h2 id="source-and-version-boundary">Source and version boundary</h2>
+<p>Source: Wolf-Gideon Bleek, Martin Hecht, Uwe Litzkendorf, <em>Das große GFA-BASIC-Buch zum Amiga</em>, DATA BECKER, 1990, ISBN 3-89011-399-0. Supplied scan: 515 PDF pages.</p>
+<p>The foreword scopes the book's main command reference to Amiga GFA-BASIC 3.0 (the introduction also refers to V3.03). This must not be generalized to the entire book: printed p. 451 opens Chapter 18 with the explicit statement that the following pages explain commands newly added in <strong>Version 3.5</strong>, and that the old commands have basically not changed. Printed p. 477 opens Chapter 19 and introduces additional commands and editor changes. These chapters are therefore a separately version-labelled 3.5 witness, not merely 3.0 material inferred from the cover.</p>
+<p>The page images for printed pp. 451, 454, 477–480, and 488 were checked in the supplied scan. Page references below are printed book pages, which also happen to align with the PDF page numbers for these excerpts.</p>
+<h2 id="1-matrix-declarations-chapter-18">1. Matrix declarations — Chapter 18</h2>
+<p>Chapter 18, printed pp. 451–476, is explicitly labelled as new Version 3.5 material on p. 451. The page-image checked p. 454 visibly documents:</p>
+<ul>
+<li><code>MAT BASE 0</code> and <code>MAT BASE 1</code> (index offset).</li>
+<li><code>MAT CLR m()</code> (clear matrix elements to zero).</li>
+</ul>
+<p>The chapter's extracted command descriptions additionally cover the matrix families already recorded from the English 3.5 addendum:</p>
+<table>
+<thead>
+<tr>
+<th>Declaration family</th>
+<th style="text-align:right">German-book pages</th>
+<th>Cross-check status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>MAT BASE</code>, <code>MAT CLR</code>, <code>MAT SET</code>, <code>MAT ONE</code></td>
+<td style="text-align:right">454–456</td>
+<td>Chapter 18; p. 454 image checked</td>
+</tr>
+<tr>
+<td><code>MAT READ</code>, <code>MAT PRINT</code>, <code>MAT INPUT</code></td>
+<td style="text-align:right">456–458</td>
+<td>Page images checked; all three command headings and descriptions visible</td>
+</tr>
+<tr>
+<td><code>MAT CPY</code>, <code>MAT XCPY</code>, <code>MAT TRANS</code></td>
+<td style="text-align:right">459–464</td>
+<td>Page images checked; command headings and worked examples visible</td>
+</tr>
+<tr>
+<td><code>MAT ADD</code>, <code>MAT SUB</code>, <code>MAT MUL</code></td>
+<td style="text-align:right">465–470</td>
+<td>Page images checked; command headings and worked examples visible</td>
+</tr>
+<tr>
+<td><code>MAT NORM</code>, <code>MAT DET</code>, <code>MAT QDET</code>, <code>MAT RANG</code>, <code>MAT INV</code></td>
+<td style="text-align:right">472–475</td>
+<td>Page images checked; command headings and definitions visible</td>
+</tr>
+</tbody>
+</table>
+<p>This is corroboration of the 3.5 declaration families already present in the primary addendum inventory; it does not create additional registry entries. The page-image review confirms the command headings and the displayed forms/examples on the cited pages. The detailed English-manual audit remains authoritative for exact syntax and edge-case semantics.</p>
+<h2 id="2-combinatorics-and-data-pointer-declarations-chapter-19">2. Combinatorics and DATA-pointer declarations — Chapter 19</h2>
+<p>Chapter 19 begins on printed p. 477. Section 19.1, “Mathematische Befehle”, documents:</p>
+<table>
+<thead>
+<tr>
+<th>Declaration</th>
+<th style="text-align:right">German-book pages</th>
+<th>Source-derived detail</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>FACT(n)</code></td>
+<td style="text-align:right">477–478</td>
+<td>Factorial; explicitly defines <code>0!</code> as 1; p. 477 image checked</td>
+</tr>
+<tr>
+<td><code>VARIAT(m,k)</code></td>
+<td style="text-align:right">478</td>
+<td>Variations without repetition; requires <code>m &gt;= k</code>; p. 478 image checked</td>
+</tr>
+<tr>
+<td><code>COMBIN(m,k)</code></td>
+<td style="text-align:right">479</td>
+<td>Combinations without repetition; requires <code>m &gt;= k</code>; p. 479 image checked</td>
+</tr>
+<tr>
+<td><code>_DATA</code>, <code>_DATA=</code></td>
+<td style="text-align:right">479–480</td>
+<td>Read and restore a previously saved DATA-pointer position; p. 479–480 images checked</td>
+</tr>
+</tbody>
+</table>
+<p>The examples and prose independently corroborate the three 3.5 combinatorics functions and both DATA-pointer declarations in the English addendum. The German book calls the read-only pointer value <code>DATA</code> in prose and presents the actual BASIC identifier as <code>_DATA</code>; retain the exact underscore spelling from the command heading and examples.</p>
+<h2 id="3-source-discrepancy-error-86-and-permut">3. Source discrepancy: error 86 and PERMUT</h2>
+<p>The same book's error appendix, printed p. 488, says:</p>
+<blockquote>
+<p>86 FACT/COMBIN/PERMUT nicht definiert</p>
+</blockquote>
+<p>This conflicts internally with Chapter 19, which explicitly documents <code>FACT</code> and <code>COMBIN</code> as new 3.5 functions. The English 3.5 addendum documents <code>FACT</code>, <code>VARIAT</code>, and <code>COMBIN</code>; it does not document <code>PERMUT</code> as a function or alias.</p>
+<p><strong>Disposition:</strong> treat error 86's function-name list as internally inconsistent/stale catalogue text. Do not add <code>PERMUT</code> to the registry or treat it as an alias. Whether the interpreter accepts that spelling remains unverified and requires a version-identified runtime observation.</p>
+<h2 id="4-registry-and-compatibility-impact">4. Registry and compatibility impact</h2>
+<ul>
+<li>No new 3.5 declaration is added by this cross-check: the declarations above already exist in the English-addendum-derived inventory/registry.</li>
+<li>The German book provides independent, explicitly 3.5-labelled corroboration for the matrix, combinatorics, and DATA-pointer families.</li>
+<li>Do not reclassify the book's general command reference as 3.5. Its foreword remains explicit that the main reference documents interpreter 3.0 (with V3.03 also mentioned in the introduction).</li>
+<li>The 3.5 chapters do not establish runtime conformance, all overload edge cases, or compatibility of every base-manual command.</li>
+<li>The Chapter 18 table entries marked OCR-only need page-image review before using their detailed syntax as normative evidence.</li>
+</ul>
+<h2 id="5-page-image-verification-completed">5. Page-image verification completed</h2>
+<ul>
+<li>p. 451: Chapter 18 explicitly labels its additions as Version 3.5 commands.</li>
+<li>p. 454: <code>MAT BASE</code> and <code>MAT CLR</code>.</li>
+<li>pp. 456–458: <code>MAT READ</code>, <code>MAT PRINT</code>, and <code>MAT INPUT</code> headings, syntax, and descriptions.</li>
+<li>pp. 459–464: <code>MAT CPY</code>, <code>MAT XCPY</code>, and <code>MAT TRANS</code> headings and examples.</li>
+<li>pp. 465–470: <code>MAT ADD</code>, <code>MAT SUB</code>, and <code>MAT MUL</code> headings and examples.</li>
+<li>pp. 472–475: <code>MAT NORM</code>, <code>MAT DET</code>, <code>MAT QDET</code>, <code>MAT RANG</code>, and <code>MAT INV</code> headings and definitions.</li>
+<li>p. 477: Chapter 19 and <code>FACT</code>.</li>
+<li>p. 478: <code>VARIAT</code>.</li>
+<li>p. 479: <code>COMBIN</code>, <code>_DATA</code>, and <code>_DATA=</code>.</li>
+<li>p. 480: DATA-pointer semantics and example.</li>
+<li>p. 488: page image confirms error 86's exact wording, <code>FACT/COMBIN/PERMUT nicht definiert</code>.</li>
+</ul>
+<p>This note records documentary corroboration only. It does not claim that the original interpreter has been executed.</p>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>
