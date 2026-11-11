@@ -6,7 +6,7 @@ tags: [amiga, gfa-basic, documentation, audit]
 
 # Amiga GFA BASIC documentation coverage audit
 
-**Audit date:** 2026-11-10  
+**Audit date:** 2026-11-11  
 **Target:** Commodore Amiga GFA BASIC interpreter 3.5  
 **Tracking:** [GitHub issue #446](https://github.com/vsimko/gfabasic-rust/issues/446)
 
@@ -59,7 +59,7 @@ The current registry README reports an interim 3.5 addendum catalogue of **24 la
 
 ## Corpus cross-check
 
-The corpus currently has 13 independently authored Amiga 3.5 fixtures marked `verified` on cited page-image evidence. The [corpus README declaration crosswalk](../../tests/corpus/README.md#registry-declaration-crosswalk) maps each fixture ID to its stable language-core declaration ID(s), including the multi-declaration combinatorics and MAT BASE/TRANS fixtures. These mappings are evidence links only: registry `support.tests` remains empty because the fixtures are not executable conformance tests. The corpus remains `research_only`: there is no general corpus runner, and none of these fixtures constitutes original-interpreter execution. The three Amiga 3.0 fixtures remain `candidate`; their presence does not establish 3.5 compatibility. Issue #42's stale four-fixture/partial-addendum-review summary has been corrected to reflect the current inventory and completed Chapter 13–14 page-image review recorded in #65. Issue #66 provides a native Amiberry execution workflow for the available 3.52 interpreter, but those observations must remain version-labelled 3.52; exact 3.5 interpreter media is still the blocker for 3.5 runtime observations.
+The corpus currently has 13 independently authored Amiga 3.5 fixtures marked `verified` on cited page-image evidence and three Amiga 3.0 fixtures marked `candidate` (16 total). The fixture summary in `tests/corpus/README.md` is generated from the manifest and sidecar metadata, and `scripts/validate_corpus.py` checks that the summary stays synchronized; `docs/architecture/TESTING.md` links to that canonical summary rather than maintaining a second numeric count (issue [#474](https://github.com/vsimko/gfabasic-rust/issues/474), completed 2026-11-11). The [corpus README declaration crosswalk](../../tests/corpus/README.md#registry-declaration-crosswalk) maps each fixture ID to its stable language-core declaration ID(s), including the multi-declaration combinatorics and MAT BASE/TRANS fixtures. These mappings are evidence links only: registry `support.tests` remains empty because the fixtures are not executable conformance tests. The corpus remains `research_only`: there is no general corpus runner, and none of these fixtures constitutes original-interpreter execution. The three Amiga 3.0 fixtures remain `candidate`; their presence does not establish 3.5 compatibility. Issue #42's stale four-fixture/partial-addendum-review summary has been corrected to reflect the current inventory and completed Chapter 13–14 page-image review recorded in #65. Issue #66 provides a native Amiberry execution workflow for the available 3.52 interpreter, but those observations must remain version-labelled 3.52; exact 3.5 interpreter media is still the blocker for 3.5 runtime observations.
 
 ## Required status vocabulary
 
