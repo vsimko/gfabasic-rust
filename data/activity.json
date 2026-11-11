@@ -1,9 +1,25 @@
 {
   "schema_version": 1,
   "status": "fresh",
-  "generated_at": "2026-11-11T21:45:35.512913+00:00",
-  "last_successful_at": "2026-11-11T21:45:35.512913+00:00",
+  "generated_at": "2026-11-11T22:09:48.560366+00:00",
+  "last_successful_at": "2026-11-11T22:09:48.560366+00:00",
   "items": [
+    {
+      "type": "merged_pull_request",
+      "title": "[Research] Add Chapter 2 memory access evidence",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/500",
+      "number": 500,
+      "timestamp": "2026-11-11T22:09:16Z",
+      "summary": "PR #500 merged"
+    },
+    {
+      "type": "commit",
+      "title": "[Research] Add Chapter 2 memory access evidence (#500)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/644b3d8fc94a7c744e75a2463755e594ffcd438e",
+      "number": null,
+      "timestamp": "2026-11-11T22:09:15Z",
+      "summary": "Commit 644b3d8"
+    },
     {
       "type": "merged_pull_request",
       "title": "[Research] Add granular Chapter 2–4 evidence records without 3.5 promotion",
@@ -83,22 +99,6 @@
       "number": null,
       "timestamp": "2026-11-11T19:03:02Z",
       "summary": "Commit 72c8f62"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "[Website] Add recent repository activity feed",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/494",
-      "number": 494,
-      "timestamp": "2026-11-11T18:55:25Z",
-      "summary": "PR #494 merged"
-    },
-    {
-      "type": "commit",
-      "title": "[Website] Add recent repository activity feed (#494)",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/4c5db018f4fc52913be93a0761671c9f26a0d10c",
-      "number": null,
-      "timestamp": "2026-11-11T18:55:25Z",
-      "summary": "Commit 4c5db01"
     }
   ]
 }

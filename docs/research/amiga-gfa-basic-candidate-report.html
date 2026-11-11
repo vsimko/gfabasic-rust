@@ -46,7 +46,7 @@
 </tr>
 <tr>
 <td>documented-in-3.0-only</td>
-<td style="text-align:right">100</td>
+<td style="text-align:right">102</td>
 </tr>
 <tr>
 <td>unresolved</td>
@@ -232,15 +232,21 @@
 </tr>
 <tr>
 <td><code>amiga.base2.peek</code></td>
-<td>PEEK</td>
+<td>PEEK / DPEEK / LPEEK</td>
 <td>2-36</td>
-<td>Memory-read forms are documented in the base manual; width/type variants need independent 3.5 evidence.</td>
+<td>Reads one, two or four bytes respectively from address x. The source warns that even addresses must be used; 3.5 availability remains unverified.</td>
 </tr>
 <tr>
 <td><code>amiga.base2.pointer-star</code></td>
 <td>* (array descriptor pointer form)</td>
 <td>2-33</td>
 <td>Indirect array-descriptor form is documented alongside ARRPTR; keep separate from multiplication operator.</td>
+</tr>
+<tr>
+<td><code>amiga.base2.poke-family</code></td>
+<td>POKE / DPOKE / LPOKE</td>
+<td>2-35</td>
+<td>Writes one, two or four bytes respectively to address x. The prose prints DPOKE x.y while the syntax block gives DPOKE x,y; LPOKE is shown with a stray semicolon in the syntax block. Even addresses are required for DPOKE and LPOKE. Preserve these source details; 3.5 applicability is unverified.</td>
 </tr>
 <tr>
 <td><code>amiga.base2.str</code></td>
@@ -259,6 +265,12 @@
 <td>TYPE</td>
 <td>2-30</td>
 <td>Variable type query documented in the base manual; 3.5 applicability unverified.</td>
+</tr>
+<tr>
+<td><code>amiga.base2.typed-memory-access</code></td>
+<td>BYTE{} / CARD{} / INT{} / WORD{} / LONG{} / {} / FLOAT{} / SINGLE{} / DOUBLE{} / CHAR{}</td>
+<td>2-37–2-38</td>
+<td>Each typed address form is both a value-reading function (for example y=BYTE{x}) and a writing command (for example BYTE{x}=y). The source associates forms with byte, integer, GFA 3.0 float, IEEE single/double and null-terminated string layouts; {} is described as similar to LONG{}. Alignment warnings and OCR-sensitive spellings are retained as source-only evidence, not 3.5 declarations.</td>
 </tr>
 <tr>
 <td><code>amiga.base2.val</code></td>
