@@ -1,9 +1,25 @@
 {
   "schema_version": 1,
   "status": "fresh",
-  "generated_at": "2026-11-11T19:16:09.305538+00:00",
-  "last_successful_at": "2026-11-11T19:16:09.305538+00:00",
+  "generated_at": "2026-11-11T20:07:05.563309+00:00",
+  "last_successful_at": "2026-11-11T20:07:05.563309+00:00",
   "items": [
+    {
+      "type": "merged_pull_request",
+      "title": "[Docs] Record reference-page and catalogue audit",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/497",
+      "number": 497,
+      "timestamp": "2026-11-11T20:06:36Z",
+      "summary": "PR #497 merged"
+    },
+    {
+      "type": "commit",
+      "title": "[Docs] Record reference-page and catalogue audit",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/c2627483a7be38986ca3783a7f757805b6bf726f",
+      "number": null,
+      "timestamp": "2026-11-11T20:06:35Z",
+      "summary": "Commit c262748"
+    },
     {
       "type": "merged_pull_request",
       "title": "[Docs] Reconcile reference navigation and compatibility snapshot",
@@ -83,22 +99,6 @@
       "number": null,
       "timestamp": "2026-11-11T16:24:32Z",
       "summary": "Commit 59d536c"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "[CI] Add stable required PR gate",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/491",
-      "number": 491,
-      "timestamp": "2026-11-11T15:31:51Z",
-      "summary": "PR #491 merged"
-    },
-    {
-      "type": "commit",
-      "title": "[CI] Add stable required PR gate (#491)",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/b37436167d261cb86d52609b4a4152646c7d4e58",
-      "number": null,
-      "timestamp": "2026-11-11T15:31:51Z",
-      "summary": "Commit b374361"
     }
   ]
 }
