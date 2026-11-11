@@ -24,7 +24,7 @@ The chapter's extracted command descriptions additionally cover the matrix famil
 
 | Declaration family | German-book pages | Cross-check status |
 |---|---:|---|
-| `MAT BASE`, `MAT CLR`, `MAT SET`, `MAT ONE` | 454–456 | Chapter 18; p. 454 image checked |
+| `MAT BASE`, `MAT CLR`, `MAT SET`, `MAT ONE` | 454–456 | Chapter 18; pp. 454–455 image checked |
 | `MAT READ`, `MAT PRINT`, `MAT INPUT` | 456–458 | Page images checked; all three command headings and descriptions visible |
 | `MAT CPY`, `MAT XCPY`, `MAT TRANS` | 459–464 | Page images checked; command headings and worked examples visible |
 | `MAT ADD`, `MAT SUB`, `MAT MUL` | 465–470 | Page images checked; command headings and worked examples visible |
@@ -61,7 +61,7 @@ This conflicts internally with Chapter 19, which explicitly documents `FACT` and
 - The German book provides independent, explicitly 3.5-labelled corroboration for the matrix, combinatorics, and DATA-pointer families.
 - Do not reclassify the book's general command reference as 3.5. Its foreword remains explicit that the main reference documents interpreter 3.0 (with V3.03 also mentioned in the introduction).
 - The 3.5 chapters do not establish runtime conformance, all overload edge cases, or compatibility of every base-manual command.
-- The Chapter 18 table entries marked OCR-only need page-image review before using their detailed syntax as normative evidence.
+- The earlier OCR-only warning for the Chapter 18 matrix-multiplication examples is superseded by the page-image checks recorded in the 3.5 primary addendum inventory. The additional check of German-book p. 455 confirms the printed `MAT SET m()=x` and `MAT ONE m()` forms and their descriptions. The book remains independent 3.5-labelled corroboration, not runtime-conformance evidence.
 
 ## 5. Page-image verification completed
 
