@@ -1,6 +1,6 @@
 {
   "repository": "vsimko/gfabasic-rust",
-  "generated_at": "2026-11-11T08:11:02.291097Z",
+  "generated_at": "2026-11-11T08:24:38.320768Z",
   "freshness_threshold_hours": 168,
   "workflows": [
     {
@@ -10,26 +10,26 @@
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/docs.yml",
       "state": "in_progress",
       "latest": {
-        "id": 42984990654,
+        "id": 42986774216,
         "name": "Documentation checks",
         "status": "in_progress",
         "event": "push",
         "branch": "main",
-        "created_at": "2026-11-11T08:10:50Z",
-        "updated_at": "2026-11-11T08:10:54Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42984990654",
+        "created_at": "2026-11-11T08:24:24Z",
+        "updated_at": "2026-11-11T08:24:27Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42986774216",
         "age_hours": 0,
         "freshness": "fresh"
       },
       "last_success": {
-        "id": 42984630663,
+        "id": 42985212311,
         "name": "Documentation checks",
         "status": "success",
         "event": "pull_request",
-        "branch": "docs/chapter-7-program-control-evidence",
-        "created_at": "2026-11-11T08:08:05Z",
-        "updated_at": "2026-11-11T08:08:23Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42984630663",
+        "branch": "docs/chapter-8-graphics-evidence-final",
+        "created_at": "2026-11-11T08:12:31Z",
+        "updated_at": "2026-11-11T08:12:50Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42985212311",
         "age_hours": 0,
         "freshness": "fresh"
       }
@@ -173,7 +173,7 @@
         "created_at": "2026-11-10T15:12:44Z",
         "updated_at": "2026-11-10T15:13:01Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42841975538",
-        "age_hours": 16,
+        "age_hours": 17,
         "freshness": "fresh"
       },
       "last_success": {
@@ -185,7 +185,7 @@
         "created_at": "2026-11-10T15:12:44Z",
         "updated_at": "2026-11-10T15:13:01Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42841975538",
-        "age_hours": 16,
+        "age_hours": 17,
         "freshness": "fresh"
       }
     },
@@ -196,26 +196,26 @@
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/pages.yml",
       "state": "in_progress",
       "latest": {
-        "id": 42984992745,
+        "id": 42986774346,
         "name": "Deploy GitHub Pages",
         "status": "in_progress",
         "event": "push",
         "branch": "main",
-        "created_at": "2026-11-11T08:10:51Z",
-        "updated_at": "2026-11-11T08:10:54Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42984992745",
+        "created_at": "2026-11-11T08:24:24Z",
+        "updated_at": "2026-11-11T08:24:28Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42986774346",
         "age_hours": 0,
         "freshness": "fresh"
       },
       "last_success": {
-        "id": 42984167339,
+        "id": 42984992745,
         "name": "Deploy GitHub Pages",
         "status": "success",
         "event": "push",
         "branch": "main",
-        "created_at": "2026-11-11T08:04:36Z",
-        "updated_at": "2026-11-11T08:04:57Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42984167339",
+        "created_at": "2026-11-11T08:10:51Z",
+        "updated_at": "2026-11-11T08:11:13Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42984992745",
         "age_hours": 0,
         "freshness": "fresh"
       }
@@ -225,28 +225,28 @@
       "file": "pr-preview.yml",
       "note": "Builds and smoke-tests same-repository pull request previews.",
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/pr-preview.yml",
-      "state": "in_progress",
+      "state": "success",
       "latest": {
-        "id": 42984992082,
+        "id": 42986775678,
         "name": "Pull request website preview",
-        "status": "in_progress",
+        "status": "success",
         "event": "pull_request",
-        "branch": "docs/chapter-7-program-control-evidence",
-        "created_at": "2026-11-11T08:10:50Z",
-        "updated_at": "2026-11-11T08:10:55Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42984992082",
+        "branch": "docs/chapter-8-graphics-evidence-final",
+        "created_at": "2026-11-11T08:24:24Z",
+        "updated_at": "2026-11-11T08:24:38Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42986775678",
         "age_hours": 0,
         "freshness": "fresh"
       },
       "last_success": {
-        "id": 42984630679,
+        "id": 42986775678,
         "name": "Pull request website preview",
         "status": "success",
         "event": "pull_request",
-        "branch": "docs/chapter-7-program-control-evidence",
-        "created_at": "2026-11-11T08:08:05Z",
-        "updated_at": "2026-11-11T08:09:09Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42984630679",
+        "branch": "docs/chapter-8-graphics-evidence-final",
+        "created_at": "2026-11-11T08:24:24Z",
+        "updated_at": "2026-11-11T08:24:38Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42986775678",
         "age_hours": 0,
         "freshness": "fresh"
       }
