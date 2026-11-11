@@ -45,6 +45,41 @@ class ValidatorTests(unittest.TestCase):
             self.assertEqual(result.returncode, 2)
             self.assertIn("fields must be exactly", result.stderr)
 
+    def test_text_contains_passes_and_fails(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "present.txt").write_text("alpha beta", encoding="utf-8")
+            rule = self.rule(type="text_contains", text="beta")
+            passed = self.run_validator(root, rule)
+            self.assertEqual(passed.returncode, 0, passed.stderr + passed.stdout)
+
+            failed = self.run_validator(root, self.rule(type="text_contains", text="missing"))
+            self.assertEqual(failed.returncode, 1)
+            self.assertIn("test.exists", failed.stdout)
+
+    def test_warning_failure_does_not_fail_run(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            result = self.run_validator(Path(tmp), self.rule(severity="warning"))
+            self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
+            self.assertIn("WARNING test.exists", result.stdout)
+
+    def test_path_escape_is_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            result = self.run_validator(Path(tmp), self.rule(path="../outside.txt"))
+            self.assertEqual(result.returncode, 2)
+            self.assertIn("path escapes repository root", result.stderr)
+
+    def test_duplicate_rule_ids_are_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            first = self.rule()
+            second = self.rule(path="other.txt")
+            rules = root / "rules.json"
+            rules.write_text(json.dumps({"version": 1, "rules": [first, second]}), encoding="utf-8")
+            result = subprocess.run([sys.executable, str(SCRIPT), "--root", str(root), "--rules", str(rules)], text=True, capture_output=True)
+            self.assertEqual(result.returncode, 2)
+            self.assertIn("duplicate rule id", result.stderr)
+
 
 if __name__ == "__main__":
     unittest.main()
