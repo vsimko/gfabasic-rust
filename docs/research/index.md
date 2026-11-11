@@ -26,6 +26,8 @@
 
 ## Other Amiga research
 
+- [Amiga runtime workflow OCR audit](amiga-runtime-ocr-audit.md) - Inventory of active screenshot OCR, structured alternatives, and the recommendation to retain only the post-merge GUI assertion.
+
 - [Research overview](README.md) - Research scope, source policy, and remaining work.
 - [Amiga GFA BASIC test output](amiga-gfa-test-output.md) - Native file-output observation and proposed batch result protocol.
 - [Amiga GFA BASIC commands observed in dqh-amiga](amiga-gfa-basic-dqh-source-inventory.md) - Constructs and direct OS/library calls observed in an external game source.
