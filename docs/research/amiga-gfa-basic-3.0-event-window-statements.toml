@@ -196,13 +196,13 @@ aliases = []
 
 [[statements]]
 name = "SOUND"
-printed-pages = ["10-7"]
+printed-pages = ["9-16"]
 syntax-variants = []
 aliases = []
 
 [[statements]]
 name = "WAVE"
-printed-pages = ["10-8"]
+printed-pages = ["9-16"]
 syntax-variants = []
 aliases = []
 
