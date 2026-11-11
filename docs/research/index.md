@@ -20,7 +20,8 @@
 - [Base-manual numeric and string function extraction](amiga-base-manual-numeric-string-functions.md) - Source forms, argument categories, semantics, overloads, and printed-page locators for the Chapter 4 function families; explicitly separated from 3.5 availability evidence.
 - [3.5 addendum inventory](amiga-gfa-basic-35-addendum-inventory.md) - Features explicitly described by the 3.5 addendum.
 - [3.5 candidate manifest](amiga-gfa-basic-candidates.toml) - Structured version-applicability evidence by candidate family.
-- [3.5 candidate report](amiga-gfa-basic-candidate-report.md) - Generated family-level status report; not a count of individual commands.\n- [Language population policy](amiga-gfa-basic-language-population-policy.md) - Maintainer-approved rules for the issue #307 denominator, normalization, exclusions, evidence and implementation numerator.
+- [3.5 candidate report](amiga-gfa-basic-candidate-report.md) - Generated family-level status report; not a count of individual commands.
+- [Language population policy](amiga-gfa-basic-language-population-policy.md) - Maintainer-approved rules for the issue #307 denominator, normalization, exclusions, evidence and implementation numerator.
 - [3.03 book OCR index](amiga-gfa-basic-3.03-ocr-index.md) - Book introduction and contents evidence identifying the described interpreter version.
 
 ## Other Amiga research
@@ -35,7 +36,7 @@
 
 ## Base-manual topic research
 - [GFA BASIC 3.0 variable, array, and conversion functions](amiga-base-manual-variable-array-conversion-functions.md) - Chapter 2 function forms, signatures, semantics, and unresolved evidence boundaries.
-
+- [GFA BASIC Chapter 7 program-handling evidence](amiga-gfa-basic-chapter-7-program-handling-evidence.md) - Page-cited control-flow, procedures, functions, and error-handling inventory (printed pp. 7-2–7-55); keeps 3.0 documentation, 3.52 probes, and 3.5 claims separate.
 - [GFA BASIC 3.0 command index](amiga-gfa-basic-3.0-command-index.md) - Thematic command index derived from the base manual.
 - [GFA BASIC 3.0 statement candidates](amiga-gfa-basic-3.0-statement-command-candidates.md) - Statement-family candidates requiring version reconciliation.
 - [GFA BASIC 3.0 base inventory](amiga-gfa-basic-3.0-base-inventory.md) - Broad chapter-based base-manual inventory.
