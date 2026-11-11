@@ -109,7 +109,7 @@ jobs:
               exit "$status"
             }
           echo "AFL++ campaign completed; final summary:"
-          grep -E '^([*]|[-])|total|cycles|paths|crashes|hangs|execs|exec speed|stability|bitmap' "$log" | tail -n 30 || true
+          grep -E 'Statistics:|All test cases processed|No crashes|No hangs' "$log" | tail -n 5 || true
           echo "Full AFL++ log saved as workflow artifact."
 
       - name: Minimize crash and hang inputs
