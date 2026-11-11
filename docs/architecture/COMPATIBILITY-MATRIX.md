@@ -6,7 +6,7 @@ title: "Current compatibility matrix"
 # Current compatibility matrix
 
 - Status: **The sole product target is Amiga GFA BASIC interpreter 3.5 to Linux x86-64. A narrow FACT/VARIAT/COMBIN/PRINT prototype exists; selected MAT forms are parsed/formatted but not executable. No complete dialect is implemented or conformant.**
-- Updated: 2026-11-05.
+- Updated: 2026-11-11. Reviewed against the current [CLI implementation](CLI-AND-CONFIG.md), [formatter scope](../reference/amiga-gfa-basic-35-formatter.md), [runtime boundary](RUNTIME.md), [API registry](../../api/registry/README.md), and [conformance-corpus status](TESTING.md).
 - Tracking: [dialect policy #3](https://github.com/vsimko/gfabasic-rust/issues/3), [compatibility testing #10](https://github.com/vsimko/gfabasic-rust/issues/10), [versioning policy #58](https://github.com/vsimko/gfabasic-rust/issues/58), [product scope ADR 0011](adr/0011-amiga-35-linux-sdl3-product-scope.md).
 
 This matrix separates the sole product target from historical research evidence, compiler implementation, Amiga API implementation, Linux/SDL3 implementation, and conformance status. A selected target does not mean that it is implemented or supported.
