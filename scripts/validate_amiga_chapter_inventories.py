@@ -22,6 +22,8 @@ INVENTORIES = (
      "## Chapter 10 inventory", 2, 16, "## 3.52 runtime evidence"),
     (11, Path("docs/research/amiga-gfa-basic-chapter-11-system-routines-evidence.md"),
      "## Chapter 11 inventory", 2, 92, "## 3.52 runtime evidence"),
+    (12, Path("docs/research/amiga-gfa-basic-chapter-12-appendices-index-evidence.md"),
+     "## Appendix inventory", 2, 27, "## Version and runtime evidence"),
 )
 
 
