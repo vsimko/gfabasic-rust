@@ -29,6 +29,12 @@ Keep checks deterministic and offline. Use warnings for exploratory checks and e
 
 The validator implementation is tracked in [#249](https://github.com/vsimko/gfabasic-rust/issues/249). The website data generator is tracked in [#250](https://github.com/vsimko/gfabasic-rust/issues/250).
 
+## Project status model
+
+`validation/project.json` uses schema version `2`. The top-level `project` object records project identity, target, maturity, and `maturity_evidence`; `components` is a non-empty list of independently tracked capabilities. Each component has a stable `id`, display `name`, `status`, explanatory `rationale`, non-empty repository-relative `evidence` references, and `related_issues` numbers. Evidence references must resolve to files; Markdown fragments must resolve to heading anchors. Duplicate component IDs and duplicate related issue numbers are rejected.
+
+Component status is one of `implemented`, `partial`, `prototype`, `research`, `planned`, `blocked`, or `unknown`. Use `unknown` when available evidence cannot support a more specific status; do not substitute `research` or infer a status from issue/commit wording. `research` means the capability is being investigated, not that its implementation status is unknown. The generator validates the model and evidence before producing deterministic `site/data/project.json` and build-time dashboard/roadmap HTML.
+
 ## Generated website data
 
 `validation/project.json` is the explicit, versioned project-status model. Each status claim names repository evidence; the generator checks that evidence files exist and reads workspace package names from `Cargo.toml`. It writes deterministic output to `site/data/project.json`.
