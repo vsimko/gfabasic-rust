@@ -26,8 +26,7 @@
 
 ## Other Amiga research
 
-- [Amiga runtime workflow OCR audit](amiga-runtime-ocr-audit.md) - Inventory of active screenshot OCR, structured alternatives, and the recommendation to retain only the post-merge GUI assertion.
-
+- [Amiga runtime workflow OCR audit](amiga-runtime-ocr-audit.md) - Inventory of both still-triggerable emulator workflows and their scripts; separates the native post-merge OCR gate from legacy diagnostic-only screenshot transcripts.
 - [Research overview](README.md) - Research scope, source policy, and remaining work.
 - [Amiga GFA BASIC test output](amiga-gfa-test-output.md) - Native file-output observation and proposed batch result protocol.
 - [Amiga GFA BASIC commands observed in dqh-amiga](amiga-gfa-basic-dqh-source-inventory.md) - Constructs and direct OS/library calls observed in an external game source.
@@ -79,7 +78,7 @@
 ## Atari and cross-platform research
 
 - [Atari GFA book diskette](atari-gfa-book-diskette.md) - Static review of accompanying examples.
-- [Systematic Atari book review](atari-gfa-book-systematic-review.md) - Chapter-by-chapter Atari reference review.
+- [Systematic Atari book review](atari-gfa-systematic-review.md) - Chapter-by-chapter Atari reference review.
 - [Aminet catalogue](aminet-catalogue.md) - Amiga BASIC package survey.
 - [GFAList build and fixture validation](gfalist-build-and-fixture-validation.md) - GFAList build and fixture evidence.
 - [GFAList format versus Rust frontend](gfalist-format-vs-rust-frontend.md) - Format comparison notes.
