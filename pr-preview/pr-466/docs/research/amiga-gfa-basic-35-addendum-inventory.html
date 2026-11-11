@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Primary source: the supplied GFABasic3.5Interpreter.pdf; independently cross-checked against GFA-Basic 3.0 + 3.5 Upd (Amiga).pdf (487 PDF pages). The second scan&#x27;s PDF p. 3 identifies the base as GFA BASIC 3.0 Interpr…">
+  <title>Amiga GFA-BASIC 3.5 interpreter addendum — extracted feature inventory · GFA BASIC Rust documentation</title>
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body class="docs-site">
+  <header class="docs-header">
+    <a href="../../index.html">GFA BASIC Rust</a>
+    <span aria-hidden="true">/</span>
+    <a href="../index.html">Documentation</a>
+  </header>
+  <div class="docs-layout">
+    <nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home" href="index.html">Section index</a><ul><li><a href="amiga-gfa-basic-documentation-audit.html">Amiga GFA BASIC documentation coverage audit</a></li><li><a href="amiga-gfa-basic-command-catalogue.html">Amiga GFA BASIC command catalogue</a></li><li><a href="amiga-gfa-basic-german-book-command-api-extraction.html">German Amiga GFA-BASIC book: command and OS API extraction</a></li><li><a href="amiga-book-command-index-ocr-transcription.html">Appendix D — OCR transcription of the command index</a></li><li><a href="gfa-basic-command-index-ocr.html">GFA-BASIC command index — first-pass extraction</a></li><li><a href="amiga-gfa-basic-source-topic-index.html">Amiga GFA BASIC source and topic index</a></li><li><a href="amiga-book-515-page-extraction-audit.html">Amiga GFA-BASIC book — 515-page extraction audit</a></li><li><a href="amiga-book-chapters05-17-heading-harvest.html">Amiga book — command-heading harvest, chapters 5–17</a></li><li><a href="amiga-gfa-basic-functions.toml">Function inventory (117 unique names)</a></li><li><a href="amiga-gfa-basic-function-inventory.html">Amiga GFA BASIC 3.5 built-in function inventory</a></li><li><a href="amiga-base-manual-io-graphics-events-advanced.html">Amiga GFA BASIC base-manual I/O, graphics, event, and advanced-programming extraction</a></li><li><a href="amiga-base-manual-io-graphics-events-advanced-details.html">Amiga GFA BASIC base-manual I/O, graphics, event, and advanced-programming details</a></li><li><a href="amiga-base-manual-numeric-string-functions.html">Amiga GFA BASIC base-manual numeric and string function extraction</a></li><li><a href="amiga-gfa-basic-35-addendum-inventory.html">Amiga GFA-BASIC 3.5 interpreter addendum — extracted feature inventory</a></li><li><a href="amiga-gfa-basic-candidates.toml">3.5 candidate manifest</a></li><li><a href="amiga-gfa-basic-candidate-report.html">Amiga GFA BASIC 3.5 candidate verification report</a></li><li><a href="amiga-gfa-basic-language-population-policy.html">Amiga GFA BASIC language population policy</a></li><li><a href="amiga-gfa-basic-3.03-ocr-index.html">German Amiga GFA BASIC book: OCR index and edition notes</a></li><li><a href="README.html">Research materials</a></li><li><a href="amiga-gfa-test-output.html">Amiga GFA BASIC test output</a></li><li><a href="amiga-gfa-basic-dqh-source-inventory.html">Amiga GFA BASIC commands observed in dqh-amiga</a></li><li><a href="amiga-emulator-lab.html">Amiga emulator experiment lab</a></li><li><a href="amiga-gfa-basic-35-lst-probes.html">Amiga GFA BASIC 3.5 interpreter probes from text listings</a></li><li><a href="amiga-gfa-basic-352-runtime-baseline.html">Amiga GFA BASIC 3.52 runtime baseline</a></li><li><a href="amiga-gfa-basic-binary-analysis.html">Amiga GFA-BASIC binary analysis</a></li><li><a href="amiga-base-manual-variable-array-conversion-functions.html">Amiga GFA BASIC base-manual variable, array, and conversion functions</a></li><li><a href="amiga-gfa-basic-chapter-7-program-handling-evidence.html">Amiga GFA BASIC Chapter 7 — program handling evidence</a></li><li><a href="amiga-gfa-basic-3.0-command-index.html">Amiga GFA BASIC 3.0 command index — grouped cross-check</a></li><li><a href="amiga-gfa-basic-3.0-statement-command-candidates.html">Amiga GFA BASIC 3.0 statement and command candidate catalogue</a></li><li><a href="amiga-gfa-basic-3.0-base-inventory.html">Amiga GFA BASIC 3.0 base-manual inventory</a></li><li><a href="amiga-gfa-basic-3.0-expressions-builtins-control-flow.html">Amiga GFA BASIC 3.0 expression, intrinsic and control-flow evidence</a></li><li><a href="amiga-gfa-basic-3.0-control-file-data-io.html">Amiga GFA BASIC 3.0 control, file and data I/O evidence</a></li><li><a href="amiga-gfa-basic-3.0-graphics-evidence.html">GFA BASIC 3.0 Amiga — graphics evidence</a></li><li><a href="amiga-gfa-basic-3.0-events-windows-evidence.html">GFA BASIC 3.0 Amiga — event, menu, screen and window evidence</a></li><li><a href="amiga-gfa-basic-3.0-system-routines-evidence.html">GFA BASIC 3.0 Amiga — operating-system routine evidence</a></li><li><a href="amiga-gfa-basic-3.0-advanced-programming-evidence.html">GFA BASIC 3.0 Amiga — advanced programming evidence</a></li><li><a href="amiga-gfa-basic-3.0-appendix-index-evidence.html">GFA BASIC 3.0 Amiga — appendix and command-index evidence</a></li><li><a href="amiga-gfa-basic-3.0-german-source-notes.html">German Amiga GFA BASIC 3.0 source — initial verification notes</a></li><li><a href="amiga-gfa-basic-3.0-procedure-error-details.html">GFA BASIC 3.0 Amiga — procedures, functions and error-flow evidence</a></li><li><a href="amiga-gfa-basic-3.0-screen-window-details.html">GFA BASIC 3.0 Amiga — screen and window command details</a></li><li><a href="amiga-gfa-basic-3.0-output-device-details.html">GFA BASIC 3.0 Amiga — output, cursor, mouse and sound evidence</a></li><li><a href="amiga-gfa-basic-3.0-menu-event-details.html">GFA BASIC 3.0 Amiga — menu and event details</a></li><li><a href="amiga-gfa-basic-3.0-bob-object-details.html">GFA BASIC 3.0 Amiga — BOB and OBJECT API evidence</a></li><li><a href="amiga-gfa-basic-3.0-source-format-editor-evidence.html">Amiga GFA BASIC 3.0 — source composition and editor evidence</a></li><li><a href="amiga-gfa-basic-35-primary-reference.html">Amiga GFA-BASIC 3.5 primary reference and target decision</a></li><li><a href="amiga-gfa-basic-35-german-book-crosscheck.html">Amiga GFA-BASIC 3.5 — independent German-book cross-check</a></li><li><a href="amiga-book-gfa35-chapter18-19-extraction.html">GFA-BASIC 3.5 additions documented in the Amiga book</a></li><li><a href="amiga-gfa-basic-35-editor-feature-audit.html">Amiga GFA BASIC 3.5 — editor feature audit</a></li><li><a href="amiga-gfa-basic-35-lexer-evidence.html">Amiga GFA BASIC 3.5 lexer evidence inventory</a></li><li><a href="amiga-gfa-basic-35-matrix-arithmetic-analysis-audit.html">Amiga GFA BASIC 3.5 — matrix arithmetic and analysis audit</a></li><li><a href="amiga-gfa-basic-35-matrix-io-copy-audit.html">Amiga GFA BASIC 3.5 — matrix I/O and copy declaration audit</a></li><li><a href="amiga-gfa-basic-35-five-declaration-audit.html">Amiga GFA BASIC 3.5 — five declaration-level audit blocks</a></li><li><a href="amiga-gfa-basic-35-five-more-declaration-audit.html">Amiga GFA BASIC 3.5 — five more declaration-level audit blocks</a></li><li><a href="amiga-gfa-basic-35-guru-declaration-audit.html">Amiga GFA BASIC 3.5 — GURU declaration audit</a></li><li><a href="atari-gfa-book-diskette.html">Atari GFA BASIC book diskette — source-corpus research notes</a></li><li><a href="atari-gfa-book-systematic-review.html">Systematic review of *Das große GFA-BASIC-Buch* (Atari ST)</a></li><li><a href="aminet-catalogue.html">Aminet GFA BASIC package survey</a></li><li><a href="gfalist-build-and-fixture-validation.html">gfalist build and fixture validation</a></li><li><a href="gfalist-format-vs-rust-frontend.html">gfalist format notes vs. the Rust frontend</a></li></ul></nav>
+    <main class="docs-content">
+      <article>
+        <h1>Amiga GFA-BASIC 3.5 interpreter addendum — extracted feature inventory</h1>
+        <p class="docs-meta"><span>Research Note</span></p>
+        <h1 id="amiga-gfa-basic-35-interpreter-addendum-extracted-feature-inventory">Amiga GFA-BASIC 3.5 interpreter addendum — extracted feature inventory</h1>
+<p>Primary source: the supplied <code>GFA_Basic_3.5_Interpreter.pdf</code>; independently cross-checked against <code>GFA-Basic 3.0 + 3.5 Upd (Amiga).pdf</code> (487 PDF pages). The second scan's PDF p. 3 identifies the base as <code>GFA BASIC 3.0 Interpreter</code>; p. 4 gives ©1988 GFA Systemtechnik GmbH, program author Frank Ostrowski, second edition December 1988; p. 7 explicitly instructs readers to add Chapter 13, Chapter 14, and the 3.5 editor changes to the 3.0 manual. The following references are printed addendum page numbers.</p>
+<h2 id="1-editor-changes-printed-base-manual-p-1-25-explicit-35-update">1. Editor changes (printed base-manual p. 1-25; explicit 3.5 update)</h2>
+<ul>
+<li>Editor uses two more bytes per program row than versions 3.0–3.041; the source says this makes backward scrolling faster and enables folding functions.</li>
+<li>Search can also find closed procedure/function header rows.</li>
+<li>During listing, labels are shifted two characters to the left, as with <code>CASE</code>.</li>
+</ul>
+<h2 id="2-tab-key-operations-printed-base-manual-p-1-25-explicit-35-update">2. Tab-key operations (printed base-manual p. 1-25; explicit 3.5 update)</h2>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Documented action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tab</td>
+<td>Move cursor to next tabulator position</td>
+</tr>
+<tr>
+<td>Ctrl+Tab</td>
+<td>Move cursor to previous tab position</td>
+</tr>
+<tr>
+<td>LeftShift+Tab</td>
+<td>Insert spaces to next tab position</td>
+</tr>
+<tr>
+<td>RightShift+Tab</td>
+<td>Delete blank spaces in the current line “up to and from the cursor” (the manual does not define a more precise selection boundary)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="3-linear-operations-on-numeric-fields">3. Linear operations on numeric fields</h2>
+<p>The addendum explicitly limits all operations in Chapter 13 to one- and/or two-dimensional fields with floating-point variables (printed p. 13-1). Do not generalize them to integer/string arrays without evidence.</p>
+<h3 id="index-base-printed-pp-13-113-2">Index base — printed pp. 13-1–13-2</h3>
+<ul>
+<li><code>MAT BASE 0</code> and <code>MAT BASE 1</code> set/reset the row/column offset used by the listed matrix operations.</li>
+<li>The text says <code>MAT BASE</code> is sensibly used when <code>OPTION BASE 0</code> is active; <code>MAT BASE 1</code> sets the matrix-operation offset to 1, and <code>MAT BASE 0</code> resets it to 0.</li>
+<li>The stated default is <code>MAT BASE 1</code>.</li>
+<li>The setting affects <code>MAT READ</code>, <code>MAT PRINT</code>, <code>MAT CPY</code>, <code>MAT XCPY</code>, <code>MAT ADD</code>, <code>MAT SUB</code>, and <code>MAT MUL</code>.</li>
+</ul>
+<h3 id="generation-printed-pp-13-213-3">Generation — printed pp. 13-2–13-3</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Source-described effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>MAT CLR a()</code></td>
+<td>Set every element of vector/matrix <code>a()</code> to zero; described as equivalent to <code>ARRAYFILL a(),0</code></td>
+</tr>
+<tr>
+<td><code>MAT SET a()=x</code></td>
+<td>Set every element to scalar <code>x</code>; described as equivalent to <code>ARRAYFILL a(),x</code></td>
+</tr>
+<tr>
+<td><code>MAT ONE a()</code></td>
+<td>Generate a square identity/unity matrix: diagonal elements 1, all others 0</td>
+</tr>
+</tbody>
+</table>
+<h3 id="read-print-and-input-printed-pp-13-313-4">Read, print, and input — printed pp. 13-3–13-4</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Source-described effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>MAT READ a()</code></td>
+<td>Read a previously dimensioned vector/matrix from DATA rows (printed p. 13-5)</td>
+</tr>
+<tr>
+<td><code>MAT PRINT [#i,]a()[g,n]</code></td>
+<td>Print vector/matrix; vectors on one row with comma-separated elements, matrix rows followed by rowfeed; optional output channel and numeric formatting like <code>STR$(x,g,n)</code> (printed pp. 13-5–13-6)</td>
+</tr>
+<tr>
+<td><code>MAT INPUT #i,a()</code></td>
+<td>Read vector/matrix from an ASCII file; the format is the reverse of MAT PRINT, and commas/linefeeds may vary as with <code>INPUT #</code> (printed p. 13-6)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="copy-and-transpose-printed-pp-13-413-15">Copy and transpose — printed pp. 13-4–13-15</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Source-described effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>MAT CPY a([i,j])=b([k,l])[,h,w]</code></td>
+<td>Copy a selected rectangular region from <code>b</code> to <code>a</code></td>
+</tr>
+<tr>
+<td><code>MAT XCPY a([i,j])=b([k,l])[,h,w]</code></td>
+<td>Copy while transposing source rows/columns; source matrix remains unchanged</td>
+</tr>
+<tr>
+<td><code>MAT TRANS a()[=b()]</code></td>
+<td>Copy transposed matrix <code>b</code> to <code>a</code>; for square matrix, <code>MAT TRANS a()</code> transposes in place</td>
+</tr>
+</tbody>
+</table>
+<p>The page-image review establishes the following exact rules (printed pp. 13-8–13-19):</p>
+<ul>
+<li><code>MAT CPY a([i,j])=b([k,l])[,h,w]</code> copies a rectangle beginning at destination offset <code>(i,j)</code> from source offset <code>(k,l)</code>; <code>h,w</code> specify the copied height and width. The shorthand <code>MAT CPY a()=b()</code> copies the complete overlapping index region when the matrices have different orders: only elements whose row and column indices exist in both source and destination are copied (pp. 13-8–13-10, 13-14–13-15).</li>
+<li><code>MAT XCPY a([i,j])=b([k,l])[,h,w]</code> follows the same offset/extent model, but transposes <code>b</code> while copying it into <code>a</code>; <code>b</code> remains unchanged. As with <code>MAT CPY</code>, only elements with matching source/destination indices are copied (p. 13-15).</li>
+<li>Vector representation is significant. <code>DIM a(n)</code> creates a row vector; <code>DIM a(n,1)</code> creates a column vector. <code>MAT CPY</code> treats both row and column vectors syntactically as column vectors, so its vector copy form is <code>MAT CPY a(n,1)=b(m,1)</code> regardless of the actual vector orientation (p. 13-17).</li>
+<li><code>MAT XCPY</code> requires one operand explicitly dimensioned as a row vector and the other as a column vector; it transposes the second vector before copying. The documented supported cases are <code>DIM a(1,n),b(m,1)</code> (row-vector <code>a</code>, column-vector <code>b</code>) and <code>DIM a(n,1),b(1,m)</code> (column-vector <code>a</code>, row-vector <code>b</code>). For a correct <code>MAT XCPY</code> form, the manual says to write the destination/source dimensions as column vectors syntactically (pp. 13-17–13-18).</li>
+<li>Optional vector extents have special zero rules (p. 13-19): for <code>MAT CPY</code>, when <code>w&gt;=1</code>, only <code>h</code> is considered; <code>w=0</code> performs no copy. For <code>MAT XCPY</code>, when transposing a column vector <code>b</code> into a row vector, <code>w&gt;=1</code> makes only <code>h</code> relevant and <code>w=0</code> performs no copy. When transposing a row vector <code>b</code> into a column vector, <code>h&gt;=1</code> makes only <code>w</code> relevant and <code>h=0</code> performs no copy.</li>
+<li><code>MAT TRANS a()=b()</code> copies the transpose of <code>b</code> into <code>a</code>; the matrices must have compatible reversed dimensions (if <code>b</code> is <code>n×m</code>, <code>a</code> must be <code>m×n</code>). The example uses <code>DIM a(3,4),b(4,3)</code>. For a square matrix, <code>MAT TRANS a()</code> transposes in place (pp. 13-19–13-20).</li>
+</ul>
+<p>These rules are source-verified for the 3.5 addendum and should be preserved explicitly in parser/semantic tests; do not reduce them to a generic slice-copy abstraction.</p>
+<h3 id="arithmetic-and-matrix-analysis-printed-pp-13-1513-30">Arithmetic and matrix analysis — printed pp. 13-15–13-30</h3>
+<table>
+<thead>
+<tr>
+<th>Command form</th>
+<th>Source-described effect / constraints</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>MAT ADD a()=b()+c()</code></td>
+<td>Element-wise sum into <code>a</code>; operands must have same order</td>
+</tr>
+<tr>
+<td><code>MAT ADD a(),b()</code></td>
+<td>Add <code>b</code> element-wise into <code>a</code> in place; same order; original <code>a</code> lost</td>
+</tr>
+<tr>
+<td><code>MAT ADD a(),x</code></td>
+<td>Add scalar <code>x</code> to every element of <code>a</code> in place</td>
+</tr>
+<tr>
+<td><code>MAT SUB a()=b()-c()</code></td>
+<td>Element-wise difference into <code>a</code>; operands must have same order</td>
+</tr>
+<tr>
+<td><code>MAT SUB a(),b()</code></td>
+<td>Subtract <code>b</code> element-wise from <code>a</code> in place; same order</td>
+</tr>
+<tr>
+<td><code>MAT SUB a(),x</code></td>
+<td>Subtract scalar <code>x</code> from every element of <code>a</code> in place</td>
+</tr>
+<tr>
+<td><code>MAT MUL a()=b()*c()</code></td>
+<td>If <code>b</code> and <code>c</code> are matrices, multiply rows of <code>b</code> by columns of <code>c</code>; <code>b</code>'s column count must equal <code>c</code>'s row count, and result <code>a</code> has <code>b</code>'s row count and <code>c</code>'s column count (printed p. 13-20). If <code>b</code> and <code>c</code> are vectors, this form produces their dyadic/outer product (printed p. 13-21).</td>
+</tr>
+<tr>
+<td><code>MAT MUL x=a()*b()</code></td>
+<td>For vectors with equal element counts, calculate scalar/dot (inner) product: sum of pairwise element products (printed p. 13-22).</td>
+</tr>
+<tr>
+<td><code>MAT MUL x=a()*b()*c()</code></td>
+<td>Scalar result for a row vector <code>a</code>, compatible matrix <code>b</code>, and column vector <code>c</code>; <code>a</code> has as many elements as <code>b</code> has rows, and <code>c</code> as many elements as <code>b</code> has columns (printed p. 13-22).</td>
+</tr>
+<tr>
+<td><code>MAT MUL a(),x</code></td>
+<td>Multiply every element of <code>a</code> by scalar <code>x</code> in place</td>
+</tr>
+<tr>
+<td><code>MAT NORM a(),0</code></td>
+<td>Normalize row-wise: each row is scaled so the sum of squares of its elements is 1 (printed pp. 13-22–13-25).</td>
+</tr>
+<tr>
+<td><code>MAT NORM a(),1</code></td>
+<td>Normalize column-wise: each column is scaled so the sum of squares of its elements is 1 (printed pp. 13-22–13-25).</td>
+</tr>
+<tr>
+<td><code>MAT DET x=a([i,j])[,n]</code></td>
+<td>Calculate determinant of a square matrix/selected square submatrix (supplied 469-page manual, printed p. 13-26; combined update scan, pp. 13-34–13-36)</td>
+</tr>
+<tr>
+<td><code>MAT QDET x=a([i,j])[,n]</code></td>
+<td>Same determinant purpose and submatrix selection as <code>MAT DET</code>; optimized for speed, not accuracy. The manual recommends <code>MAT DET</code> for critical matrices whose determinant is near zero (supplied 469-page manual, printed pp. 13-27–13-28; combined update scan, pp. 13-36–13-37)</td>
+</tr>
+<tr>
+<td><code>MAT RANG x=a([i,j])[,n]</code></td>
+<td>Calculate rank of a square matrix; like <code>MAT DET</code>/<code>MAT QDET</code>, accepts row and column offsets, with <code>n</code> selecting an n×n submatrix from that position (supplied 469-page manual, printed p. 13-29; combined update scan, pp. 13-38–13-39)</td>
+</tr>
+<tr>
+<td><code>MAT INV b()=a()</code></td>
+<td>Calculate the inverse of square matrix <code>a</code> and write it to destination matrix <code>b</code>; <code>b()</code> must have the same type/dimensions as <code>a()</code> (printed p. 13-30)</td>
+</tr>
+</tbody>
+</table>
+<p>Page-image checks of printed pp. 13-20–13-22 in the supplied 469-page manual establish the matrix multiplication dimensions. The row/column normalization definitions are on printed pp. 13-22–13-25; the previous registry locator of pp. 13-31–13-33 was inconsistent with the primary manual's page labels and has been corrected. The combined update scan uses a different pagination, cross-referenced in the source/topic index. Printed pp. 13-26–13-30 in the supplied 469-page manual confirm <code>MAT DET</code>, <code>MAT QDET</code>, <code>MAT RANG</code>, and the detailed <code>MAT INV b()=a()</code> example; the combined update scan uses pp. 13-34–13-39 for the corresponding later definitions. <strong>Operand direction resolved:</strong> the summary on printed p. 13-16 lists the reversed form <code>MAT INV a()=b()</code>, but the detailed definition and worked example on p. 13-30 explicitly state that the inverse of source <code>a()</code> is written to destination <code>b()</code>; the German 1990 book independently confirms destination-first <code>MAT INV i()=m()</code> on p. 475. Treat the summary form as a source typo and use <code>MAT INV destination()=source()</code>. Runtime edge cases remain untested. The earlier OCR-only warning for the matrix multiplication examples is superseded by the page-image checks recorded above. Do not use OCR artifacts as normative syntax.</p>
+<h2 id="4-additional-commands-in-version-35-combined-scan-chapter-14-printed-pp-14-114-7">4. Additional commands in version 3.5 — combined-scan Chapter 14, printed pp. 14-1–14-7</h2>
+<p><strong>Pagination crosswalk:</strong> the supplied 469-page <code>GFA_Basic_3.5_Interpreter.pdf</code> presents the 3.5 addendum as Chapter 13. Its printed pp. 13-33–13-36 contain the FACT/VARIAT/COMBIN, OPENW, PCOLOR, DATA-pointer, special-variable, and GURU material summarized below; <code>_DATA</code>/<code>_DATA=</code> are on p. 13-34 and <code>_0</code>…<code>_9</code> on p. 13-35. The separately catalogued 487-page <code>GFA-Basic 3.0 + 3.5 Upd (Amiga).pdf</code> divides the same addendum material into Chapter 13 (linear matrix operations) and Chapter 14 (further commands), printed pp. 14-1–14-7; the corresponding special-name passages are on pp. 14-5–14-6. References in this section therefore use the combined scan's Chapter 14 pagination; references to the supplied interpreter PDF must use Chapter 13 pagination. These are two pagination witnesses for the same 3.5 feature material, not evidence for importing Atari or 3.0-only rules.</p>
+<p>The combined update scan explicitly says that, in addition to Chapter 13, version 3.5 implements further commands/features (Chapter 14). These are part of the same 3.5 interpreter source and must be included in the compatibility inventory.</p>
+<table>
+<thead>
+<tr>
+<th>Feature / syntax</th>
+<th>Source-described behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>x=FACT(n)</code></td>
+<td>Factorial <code>n!</code>; <code>n</code> is an integer expression, result <code>x</code> is an arithmetic expression; defines <code>0! = 1</code> (printed pp. 14-1–14-2)</td>
+</tr>
+<tr>
+<td><code>y=VARIAT(n,k)</code></td>
+<td>Number of k-permutations of n elements without repetition: <code>n!/(n-k)!</code>; <code>n,k</code> are integer expressions (printed pp. 14-1–14-2)</td>
+</tr>
+<tr>
+<td><code>z=COMBIN(n,k)</code></td>
+<td>Number of k-combinations without repetition: <code>n!/((n-k)!*k!)</code>; <code>n,k</code> are integer expressions (printed p. 14-2)</td>
+</tr>
+<tr>
+<td><code>OPENW</code> with negative screen number</td>
+<td>Opens window on the current (top) screen (printed p. 14-3)</td>
+</tr>
+<tr>
+<td><code>PCOLOR foreground[,background]</code></td>
+<td>Like <code>COLOR</code>, but applies to screen output produced by <code>PRINT</code>; background is optional in the examples (printed p. 14-4)</td>
+</tr>
+<tr>
+<td><code>_DATA</code></td>
+<td>Returns/indicates DATA pointer position; zero if the next <code>READ</code> would cause “out of data”</td>
+</tr>
+<tr>
+<td><code>_DATA=</code></td>
+<td>Sets the DATA pointer to a previously determined value obtained from <code>_DATA</code></td>
+</tr>
+<tr>
+<td><code>_0</code> … <code>_9</code></td>
+<td>Ten special longword variables, like <code>%</code>, not floating-point; cleared only by <code>NEW</code>, not by <code>CLEAR</code>, <code>LOAD</code>, <code>CHAIN</code>, or <code>RUN</code> (printed p. 14-6)</td>
+</tr>
+<tr>
+<td><code>GURU x</code></td>
+<td>Enables/disables GURU checking: <code>x=0</code> disables it; <code>x&lt;&gt;0</code> enables it. On a GURU Meditation it transfers to <code>ONERROR GOSUB</code> or generates error #109 (printed pp. 14-6–14-7)</td>
+</tr>
+<tr>
+<td><code>GURU</code></td>
+<td>Function returning the GURU number (printed pp. 14-6–14-7)</td>
+</tr>
+</tbody>
+</table>
+<p>Chapter 14's opening page enumerates these as the additional 3.5 features (printed p. 14-1). The examples and definitions are on pp. 14-1–14-6. The closing notes (p. 14-7) state that error messages #110–#118 correspond to normal GURUs $2–$A; in compiled 3.5 programs, <code>RESUME NEXT</code> and <code>RESUME LABEL</code> cannot be executed after an <code>ONERROR GOSUB</code> call caused by a GURU. The manual treats error #109 (GURU Meditation) as a serious system condition and warns that GURU checking only works if the system can continue execution.</p>
+<p>Page-image review of the combined update scan's printed p. 14-5 confirms the leading underscore in both DATA-pointer operations: <code>_DATA</code> and <code>_DATA=</code>. Ordinary <code>DATA</code> remains the data declaration statement. Printed p. 14-6 confirms <code>_0</code>…<code>_9</code> are longword special variables and distinguishes <code>GURU x</code> from the <code>GURU</code> function.</p>
+<h2 id="5-implementation-and-conformance-work-breakdown">5. Implementation and conformance work breakdown</h2>
+<ol>
+<li>Add parser/AST coverage for every MAT statement and Chapter 14 function/command above.</li>
+<li>Implement floating-point-only array constraints and dimension checks from the source; do not silently accept integer arrays.</li>
+<li>Implement and test MAT BASE interaction with OPTION BASE and each affected command.</li>
+<li>Add reference tests for generation, DATA/file I/O, region copy, transpose, arithmetic, norms, determinant, quick determinant, rank, and inverse.</li>
+<li>Add tests for DATA pointer query/restore, special-variable persistence, PCOLOR, negative-screen OPENW, and GURU handling. Tests involving OS crash recovery must be isolated and carefully sandboxed.</li>
+<li>Keep editor behavior separate from language/runtime semantics; it may be documented even if the Rust project does not implement the historical editor.</li>
+<li>Mark all 3.0 manual features not explicitly reconfirmed by this 3.5 manual as inherited candidates, not verified 3.5 facts.</li>
+</ol>
+<h2 id="6-registry-declaration-crosswalk">6. Registry declaration crosswalk</h2>
+<p>The following table maps every declaration in the current 3.5 addendum registry slice to its stable API ID and the printed source locator used by the registry. “Language core” and “Amiga profile” are separate registry namespaces; the latter contains platform-specific PCOLOR, the negative-screen OPENW variant, and the two distinct GURU forms.</p>
+<h3 id="language-core-declarations-24">Language-core declarations (24)</h3>
+<table>
+<thead>
+<tr>
+<th>Declaration</th>
+<th>Stable registry ID</th>
+<th>Primary 3.5 printed locator</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MAT BASE</td>
+<td>gfa.language.matrix.mat-base</td>
+<td>Chapter 13, pp. 13-1–13-2</td>
+</tr>
+<tr>
+<td>MAT CLR</td>
+<td>gfa.language.matrix.mat-clr</td>
+<td>Chapter 13, pp. 13-2–13-3</td>
+</tr>
+<tr>
+<td>MAT SET</td>
+<td>gfa.language.matrix.mat-set</td>
+<td>Chapter 13, pp. 13-2–13-3</td>
+</tr>
+<tr>
+<td>MAT ONE</td>
+<td>gfa.language.matrix.mat-one</td>
+<td>Chapter 13, pp. 13-2–13-3</td>
+</tr>
+<tr>
+<td>MAT READ</td>
+<td>gfa.language.matrix.mat-read</td>
+<td>Chapter 13, p. 13-5</td>
+</tr>
+<tr>
+<td>MAT PRINT</td>
+<td>gfa.language.matrix.mat-print</td>
+<td>Chapter 13, pp. 13-5–13-6</td>
+</tr>
+<tr>
+<td>MAT INPUT</td>
+<td>gfa.language.matrix.mat-input</td>
+<td>Chapter 13, p. 13-6</td>
+</tr>
+<tr>
+<td>MAT CPY</td>
+<td>gfa.language.matrix.mat-cpy</td>
+<td>Chapter 13, pp. 13-4–13-19</td>
+</tr>
+<tr>
+<td>MAT XCPY</td>
+<td>gfa.language.matrix.mat-xcpy</td>
+<td>Chapter 13, pp. 13-15–13-19</td>
+</tr>
+<tr>
+<td>MAT ADD</td>
+<td>gfa.language.matrix.mat-add</td>
+<td>Chapter 13, pp. 13-16–13-18</td>
+</tr>
+<tr>
+<td>MAT SUB</td>
+<td>gfa.language.matrix.mat-sub</td>
+<td>Chapter 13, pp. 13-18–13-20</td>
+</tr>
+<tr>
+<td>MAT MUL</td>
+<td>gfa.language.matrix.mat-mul</td>
+<td>Chapter 13, pp. 13-20–13-22</td>
+</tr>
+<tr>
+<td>MAT TRANS</td>
+<td>gfa.language.matrix.mat-trans</td>
+<td>Chapter 13, pp. 13-19–13-20</td>
+</tr>
+<tr>
+<td>MAT NORM</td>
+<td>gfa.language.matrix.mat-norm</td>
+<td>Chapter 13, pp. 13-22–13-25</td>
+</tr>
+<tr>
+<td>MAT DET</td>
+<td>gfa.language.matrix.mat-det</td>
+<td>Chapter 13, p. 13-26</td>
+</tr>
+<tr>
+<td>MAT QDET</td>
+<td>gfa.language.matrix.mat-qdet</td>
+<td>Chapter 13, pp. 13-27–13-28</td>
+</tr>
+<tr>
+<td>MAT RANG</td>
+<td>gfa.language.matrix.mat-rang</td>
+<td>Chapter 13, p. 13-29</td>
+</tr>
+<tr>
+<td>MAT INV</td>
+<td>gfa.language.matrix.mat-inv</td>
+<td>Chapter 13, p. 13-30 (detailed definition/example)</td>
+</tr>
+<tr>
+<td>FACT</td>
+<td>gfa.language.math.fact</td>
+<td>Chapter 13, pp. 13-33–13-34</td>
+</tr>
+<tr>
+<td>VARIAT</td>
+<td>gfa.language.math.variat</td>
+<td>Chapter 13, pp. 13-33–13-34</td>
+</tr>
+<tr>
+<td>COMBIN</td>
+<td>gfa.language.math.combin</td>
+<td>Chapter 13, pp. 13-33–13-34</td>
+</tr>
+<tr>
+<td>_DATA</td>
+<td>gfa.language.data.data-pointer</td>
+<td>Chapter 13, p. 13-34</td>
+</tr>
+<tr>
+<td>_DATA=</td>
+<td>gfa.language.data.set-data-pointer</td>
+<td>Chapter 13, p. 13-34</td>
+</tr>
+<tr>
+<td>_0…_9</td>
+<td>gfa.language.memory.special-longword-variables</td>
+<td>Chapter 13, p. 13-35</td>
+</tr>
+</tbody>
+</table>
+<h3 id="amiga-profile-declarations-4">Amiga-profile declarations (4)</h3>
+<table>
+<thead>
+<tr>
+<th>Declaration</th>
+<th>Stable registry ID</th>
+<th>Primary 3.5 printed locator</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PCOLOR</td>
+<td>gfa.amiga.graphics.pcolor</td>
+<td>Chapter 13, p. 13-34</td>
+</tr>
+<tr>
+<td>Negative-screen OPENW variant</td>
+<td>gfa.amiga.windows.openw-negative-screen</td>
+<td>Chapter 13, p. 13-34</td>
+</tr>
+<tr>
+<td>GURU x statement</td>
+<td>gfa.amiga.system.guru-check</td>
+<td>Chapter 13, p. 13-36</td>
+</tr>
+<tr>
+<td>GURU function</td>
+<td>gfa.amiga.system.guru-number</td>
+<td>Chapter 13, p. 13-36</td>
+</tr>
+</tbody>
+</table>
+<p>The four Amiga-profile entries are not general language-core declarations; in particular, the GURU statement and GURU function remain distinct declarations under one overload group. The MAT NORM locator above follows the primary manual's page labels on pp. 13-22–13-25; the former registry locator of pp. 13-31–13-33 was incorrect.</p>
+<p>This crosswalk is an identity and provenance aid, not an assertion that the registry is a complete 3.5 API catalogue. It does not change implementation, Linux support, or conformance status. The separate <a href="https://github.com/vsimko/gfabasic-rust/blob/main/tests/corpus/README.md#registry-declaration-crosswalk">corpus fixture crosswalk</a> maps 13 page-image-verified research fixtures to declaration IDs; those fixtures are not executable conformance tests and must not be added to registry <code>support.tests</code>.</p>
+<h2 id="source-and-rights">Source and rights</h2>
+<p>This file contains concise original summaries and syntax inventories, not a reproduction of the manual. Cite the source as <code>GFA BASIC 3.5 Interpreter</code>, Chapter 13/14, printed addendum page N. The supplied PDF is a research source and is not committed to the repository.</p>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>
