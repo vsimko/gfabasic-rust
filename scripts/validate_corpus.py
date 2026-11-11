@@ -256,8 +256,45 @@ def validate_corpus(root: Path = ROOT) -> list[str]:
         metadata_path = source_path.with_suffix(".toml")
         if metadata_path not in referenced_metadata:
             error(errors, source_path, "source file is not listed in manifest.toml", corpus_root)
+    readme_path = corpus_root / "README.md"
+    try:
+        readme = readme_path.read_text(encoding="utf-8")
+    except (OSError, UnicodeDecodeError) as exc:
+        errors.append(f"tests/corpus/README.md: cannot read manifest summary: {exc}")
+    else:
+        expected_summary = manifest_summary(corpus_root, fixtures)
+        expected_block = f"<!-- fixture-summary:start -->\\n{expected_summary}\\n<!-- fixture-summary:end -->"
+        if expected_block not in readme:
+            errors.append("tests/corpus/README.md: manifest-derived fixture summary is missing or stale")
 
     return errors
+
+
+
+def manifest_summary(corpus_root: Path, fixtures: list[object]) -> str:
+    """Build the documentation summary from manifest paths and sidecar statuses."""
+    counts: dict[tuple[str, str, str], int] = {}
+    total = 0
+    for fixture in fixtures:
+        relative = fixture_path(fixture)
+        if relative is None:
+            continue
+        metadata_path = corpus_root / relative.with_suffix(".toml")
+        try:
+            metadata = tomllib.loads(metadata_path.read_text(encoding="utf-8"))
+        except (OSError, UnicodeDecodeError, tomllib.TOMLDecodeError):
+            continue
+        dialect, version, status = (metadata.get(field) for field in ("dialect", "version", "status"))
+        if not all(is_non_empty_string(value) for value in (dialect, version, status)):
+            continue
+        key = (dialect, version, status)
+        counts[key] = counts.get(key, 0) + 1
+        total += 1
+    populations = [
+        f"{count} {dialect} {version} fixtures {status}"
+        for (dialect, version, status), count in sorted(counts.items())
+    ]
+    return "Manifest summary: " + "; ".join(populations) + f"; {total} total."
 
 
 def main() -> int:
