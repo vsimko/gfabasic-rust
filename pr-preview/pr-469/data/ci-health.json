@@ -1,6 +1,6 @@
 {
   "repository": "vsimko/gfabasic-rust",
-  "generated_at": "2026-11-11T08:26:09.973467Z",
+  "generated_at": "2026-11-11T08:26:50.016629Z",
   "freshness_threshold_hours": 168,
   "workflows": [
     {
@@ -8,28 +8,28 @@
       "file": "docs.yml",
       "note": "Markdown, JavaScript, API registry, corpus metadata and local-link validation.",
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/docs.yml",
-      "state": "in_progress",
+      "state": "success",
       "latest": {
-        "id": 42986978270,
+        "id": 42987028306,
         "name": "Documentation checks",
-        "status": "in_progress",
+        "status": "success",
         "event": "pull_request",
         "branch": "docs/chapter-inventory-validator",
-        "created_at": "2026-11-11T08:25:56Z",
-        "updated_at": "2026-11-11T08:25:59Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42986978270",
+        "created_at": "2026-11-11T08:26:18Z",
+        "updated_at": "2026-11-11T08:26:39Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42987028306",
         "age_hours": 0,
         "freshness": "fresh"
       },
       "last_success": {
-        "id": 42986774216,
+        "id": 42987028306,
         "name": "Documentation checks",
         "status": "success",
-        "event": "push",
-        "branch": "main",
-        "created_at": "2026-11-11T08:24:24Z",
-        "updated_at": "2026-11-11T08:24:42Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42986774216",
+        "event": "pull_request",
+        "branch": "docs/chapter-inventory-validator",
+        "created_at": "2026-11-11T08:26:18Z",
+        "updated_at": "2026-11-11T08:26:39Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42987028306",
         "age_hours": 0,
         "freshness": "fresh"
       }
@@ -227,14 +227,14 @@
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/pr-preview.yml",
       "state": "in_progress",
       "latest": {
-        "id": 42986978254,
+        "id": 42987028382,
         "name": "Pull request website preview",
         "status": "in_progress",
         "event": "pull_request",
         "branch": "docs/chapter-inventory-validator",
-        "created_at": "2026-11-11T08:25:56Z",
-        "updated_at": "2026-11-11T08:25:59Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42986978254",
+        "created_at": "2026-11-11T08:26:18Z",
+        "updated_at": "2026-11-11T08:26:41Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/42987028382",
         "age_hours": 0,
         "freshness": "fresh"
       },
