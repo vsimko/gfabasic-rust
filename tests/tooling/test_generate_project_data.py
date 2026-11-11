@@ -57,6 +57,15 @@ class ProjectDataGeneratorTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "invalid status"):
                 load_model(path, ROOT)
 
+    def test_unknown_component_status_is_explicitly_supported(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "model.json"
+            model = json.loads(MODEL.read_text(encoding="utf-8"))
+            model["components"][0]["status"] = "unknown"
+            path.write_text(json.dumps(model), encoding="utf-8")
+            loaded = load_model(path, ROOT)
+            self.assertEqual(loaded["components"][0]["status"], "unknown")
+
     def test_duplicate_component_ids_are_rejected(self):
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / "model.json"
