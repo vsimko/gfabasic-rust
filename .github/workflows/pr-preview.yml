@@ -42,6 +42,7 @@ jobs:
           fi
           python3 scripts/generate_api_catalogue.py
           python3 scripts/generate_ci_health.py
+          python3 scripts/generate_repository_activity.py
           if [ -f scripts/validate_repository.py ]; then
             python3 scripts/validate_repository.py
             python3 -m unittest discover -s tests/tooling
@@ -51,6 +52,8 @@ jobs:
           test -s site/script.js
           test -s site/data/api-catalogue.json
           test -s site/data/ci-health.json
+          test -s site/data/activity.json
+          grep -q 'id="recent-activity"' site/index.html
           grep -q 'id="ci-health"' site/index.html
           test -d site/data/api-catalogue-details
           python3 scripts/generate_api_catalogue.py --check

@@ -50,6 +50,7 @@ jobs:
           fi
           python3 scripts/generate_api_catalogue.py
           GH_TOKEN="${{ github.token }}" python3 scripts/generate_ci_health.py
+          GH_TOKEN="${{ github.token }}" python3 scripts/generate_repository_activity.py
 
       - name: Validate repository consistency
         run: |
@@ -65,6 +66,8 @@ jobs:
           test -s site/script.js
           test -s site/data/api-catalogue.json
           test -s site/data/ci-health.json
+          test -s site/data/activity.json
+          grep -q 'id="recent-activity"' site/index.html
           grep -q 'id="ci-health"' site/index.html
           test -d site/data/api-catalogue-details
           python3 scripts/generate_api_catalogue.py --check
