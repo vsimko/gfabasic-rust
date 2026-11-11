@@ -102,6 +102,8 @@ The combined update scan explicitly says that, in addition to Chapter 13, versio
 | `x=FACT(n)` | Factorial `n!`; `n` is an integer expression, result `x` is an arithmetic expression; defines `0! = 1` (printed pp. 14-1–14-2) |
 | `y=VARIAT(n,k)` | Number of k-permutations of n elements without repetition: `n!/(n-k)!`; `n,k` are integer expressions (printed pp. 14-1–14-2) |
 | `z=COMBIN(n,k)` | Number of k-combinations without repetition: `n!/((n-k)!*k!)`; `n,k` are integer expressions (printed p. 14-2) |
+
+Page-image review of the supplied interpreter scan's printed p. 13-33 confirms a source-level spelling inconsistency in the worked example: the syntax line and definition repeatedly identify `FACT`, but the example prints `x=FAXT(6)`. Treat `FAXT` as an apparent typographical error in that example, not as an alias or a fourth combinatorics function. The documented declaration remains `FACT`; the page's result example is not used as evidence for a `FAXT` identifier.
 | `OPENW` with negative screen number | Opens window on the current (top) screen (printed p. 14-3) |
 | `PCOLOR foreground[,background]` | Like `COLOR`, but applies to screen output produced by `PRINT`; background is optional in the examples (printed p. 14-4) |
 | `_DATA` | Returns/indicates DATA pointer position; zero if the next `READ` would cause “out of data” |
