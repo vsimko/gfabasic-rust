@@ -2,7 +2,6 @@
 type: "Research Report"
 title: "Amiga GFA BASIC 3.5 candidate verification report"
 tags: [amiga, gfa-basic, evidence, research]
----
 
 # Amiga GFA BASIC 3.5 candidate verification report
 
@@ -21,7 +20,7 @@ tags: [amiga, gfa-basic, evidence, research]
 ## Unresolved and pending candidates
 
 | ID | Candidate | Source scope | Printed pages | Notes |
-|---|---|---|---|---|
+|---|---|---|---|
 | — | None | — | — | — |
 
 ## Documented in the 3.0 base only (3.5 applicability not established)
