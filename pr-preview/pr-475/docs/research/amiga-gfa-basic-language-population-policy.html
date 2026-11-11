@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="This policy records the maintainer&#x27;s counting decisions for the language-wide implementation progress metric tracked by issue #307. The machine-readable counterpart is amiga-gfa-basic-language-population-policy.toml.">
+  <title>Amiga GFA BASIC language population policy · GFA BASIC Rust documentation</title>
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body class="docs-site">
+  <header class="docs-header">
+    <a href="../../index.html">GFA BASIC Rust</a>
+    <span aria-hidden="true">/</span>
+    <a href="../index.html">Documentation</a>
+  </header>
+  <div class="docs-layout">
+    <nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home" href="index.html">Section index</a><ul><li><a href="amiga-gfa-basic-documentation-audit.html">Amiga GFA BASIC documentation coverage audit</a></li><li><a href="amiga-gfa-basic-command-catalogue.html">Amiga GFA BASIC command catalogue</a></li><li><a href="amiga-gfa-basic-german-book-command-api-extraction.html">German Amiga GFA-BASIC book: command and OS API extraction</a></li><li><a href="amiga-book-command-index-ocr-transcription.html">Appendix D — OCR transcription of the command index</a></li><li><a href="gfa-basic-command-index-ocr.html">GFA-BASIC command index — first-pass extraction</a></li><li><a href="amiga-gfa-basic-source-topic-index.html">Amiga GFA BASIC source and topic index</a></li><li><a href="amiga-book-515-page-extraction-audit.html">Amiga GFA-BASIC book — 515-page extraction audit</a></li><li><a href="amiga-book-chapters05-17-heading-harvest.html">Amiga book — command-heading harvest, chapters 5–17</a></li><li><a href="amiga-gfa-basic-functions.toml">Function inventory (117 unique names)</a></li><li><a href="amiga-gfa-basic-function-inventory.html">Amiga GFA BASIC 3.5 built-in function inventory</a></li><li><a href="amiga-base-manual-io-graphics-events-advanced.html">Amiga GFA BASIC base-manual I/O, graphics, event, and advanced-programming extraction</a></li><li><a href="amiga-base-manual-io-graphics-events-advanced-details.html">Amiga GFA BASIC base-manual I/O, graphics, event, and advanced-programming details</a></li><li><a href="amiga-base-manual-numeric-string-functions.html">Amiga GFA BASIC base-manual numeric and string function extraction</a></li><li><a href="amiga-gfa-basic-35-addendum-inventory.html">Amiga GFA-BASIC 3.5 interpreter addendum — extracted feature inventory</a></li><li><a href="amiga-gfa-basic-candidates.toml">3.5 candidate manifest</a></li><li><a href="amiga-gfa-basic-candidate-report.html">Amiga GFA BASIC 3.5 candidate verification report</a></li><li><a href="amiga-gfa-basic-language-population-policy.html">Amiga GFA BASIC language population policy</a></li><li><a href="amiga-gfa-basic-3.03-ocr-index.html">German Amiga GFA BASIC book: OCR index and edition notes</a></li><li><a href="README.html">Research materials</a></li><li><a href="amiga-gfa-test-output.html">Amiga GFA BASIC test output</a></li><li><a href="amiga-gfa-basic-dqh-source-inventory.html">Amiga GFA BASIC commands observed in dqh-amiga</a></li><li><a href="amiga-emulator-lab.html">Amiga emulator experiment lab</a></li><li><a href="amiga-gfa-basic-35-lst-probes.html">Amiga GFA BASIC 3.5 interpreter probes from text listings</a></li><li><a href="amiga-gfa-basic-352-runtime-baseline.html">Amiga GFA BASIC 3.52 runtime baseline</a></li><li><a href="amiga-gfa-basic-binary-analysis.html">Amiga GFA-BASIC binary analysis</a></li><li><a href="amiga-base-manual-variable-array-conversion-functions.html">Amiga GFA BASIC base-manual variable, array, and conversion functions</a></li><li><a href="amiga-gfa-basic-chapter-7-program-handling-evidence.html">Amiga GFA BASIC Chapter 7 — program handling evidence</a></li><li><a href="amiga-gfa-basic-chapter-8-graphics-evidence.html">Amiga GFA BASIC Chapter 8 — graphics compatibility evidence</a></li><li><a href="amiga-gfa-basic-chapter-9-event-window-evidence.html">Amiga GFA BASIC Chapter 9 — event, menu, screen and window evidence</a></li><li><a href="amiga-gfa-basic-chapter-10-advanced-programming-evidence.html">Amiga GFA BASIC Chapter 10 — advanced programming evidence</a></li><li><a href="amiga-gfa-basic-chapter-11-system-routines-evidence.html">Amiga GFA BASIC Chapter 11 — system-routine evidence</a></li><li><a href="https://github.com/vsimko/gfabasic-rust/blob/main/scripts/validate_amiga_chapter_inventories.py">Chapter inventory validator</a></li><li><a href="amiga-gfa-basic-3.0-command-index.html">Amiga GFA BASIC 3.0 command index — grouped cross-check</a></li><li><a href="amiga-gfa-basic-3.0-statement-command-candidates.html">Amiga GFA BASIC 3.0 statement and command candidate catalogue</a></li><li><a href="amiga-gfa-basic-3.0-base-inventory.html">Amiga GFA BASIC 3.0 base-manual inventory</a></li><li><a href="amiga-gfa-basic-3.0-expressions-builtins-control-flow.html">Amiga GFA BASIC 3.0 expression, intrinsic and control-flow evidence</a></li><li><a href="amiga-gfa-basic-3.0-control-file-data-io.html">Amiga GFA BASIC 3.0 control, file and data I/O evidence</a></li><li><a href="amiga-gfa-basic-3.0-graphics-evidence.html">GFA BASIC 3.0 Amiga — graphics evidence</a></li><li><a href="amiga-gfa-basic-3.0-events-windows-evidence.html">GFA BASIC 3.0 Amiga — event, menu, screen and window evidence</a></li><li><a href="amiga-gfa-basic-3.0-system-routines-evidence.html">GFA BASIC 3.0 Amiga — operating-system routine evidence</a></li><li><a href="amiga-gfa-basic-3.0-advanced-programming-evidence.html">GFA BASIC 3.0 Amiga — advanced programming evidence</a></li><li><a href="amiga-gfa-basic-3.0-appendix-index-evidence.html">GFA BASIC 3.0 Amiga — appendix and command-index evidence</a></li><li><a href="amiga-gfa-basic-3.0-german-source-notes.html">German Amiga GFA BASIC 3.0 source — initial verification notes</a></li><li><a href="amiga-gfa-basic-3.0-procedure-error-details.html">GFA BASIC 3.0 Amiga — procedures, functions and error-flow evidence</a></li><li><a href="amiga-gfa-basic-3.0-screen-window-details.html">GFA BASIC 3.0 Amiga — screen and window command details</a></li><li><a href="amiga-gfa-basic-3.0-output-device-details.html">GFA BASIC 3.0 Amiga — output, cursor, mouse and sound evidence</a></li><li><a href="amiga-gfa-basic-3.0-menu-event-details.html">GFA BASIC 3.0 Amiga — menu and event details</a></li><li><a href="amiga-gfa-basic-3.0-bob-object-details.html">GFA BASIC 3.0 Amiga — BOB and OBJECT API evidence</a></li><li><a href="amiga-gfa-basic-3.0-source-format-editor-evidence.html">Amiga GFA BASIC 3.0 — source composition and editor evidence</a></li><li><a href="amiga-gfa-basic-35-primary-reference.html">Amiga GFA-BASIC 3.5 primary reference and target decision</a></li><li><a href="amiga-gfa-basic-35-german-book-crosscheck.html">Amiga GFA-BASIC 3.5 — independent German-book cross-check</a></li><li><a href="amiga-book-gfa35-chapter18-19-extraction.html">GFA-BASIC 3.5 additions documented in the Amiga book</a></li><li><a href="amiga-gfa-basic-35-editor-feature-audit.html">Amiga GFA BASIC 3.5 — editor feature audit</a></li><li><a href="amiga-gfa-basic-35-lexer-evidence.html">Amiga GFA BASIC 3.5 lexer evidence inventory</a></li><li><a href="amiga-gfa-basic-35-matrix-arithmetic-analysis-audit.html">Amiga GFA BASIC 3.5 — matrix arithmetic and analysis audit</a></li><li><a href="amiga-gfa-basic-35-matrix-io-copy-audit.html">Amiga GFA BASIC 3.5 — matrix I/O and copy declaration audit</a></li><li><a href="amiga-gfa-basic-35-five-declaration-audit.html">Amiga GFA BASIC 3.5 — five declaration-level audit blocks</a></li><li><a href="amiga-gfa-basic-35-five-more-declaration-audit.html">Amiga GFA BASIC 3.5 — five more declaration-level audit blocks</a></li><li><a href="amiga-gfa-basic-35-guru-declaration-audit.html">Amiga GFA BASIC 3.5 — GURU declaration audit</a></li><li><a href="atari-gfa-book-diskette.html">Atari GFA BASIC book diskette — source-corpus research notes</a></li><li><a href="atari-gfa-book-systematic-review.html">Systematic review of *Das große GFA-BASIC-Buch* (Atari ST)</a></li><li><a href="aminet-catalogue.html">Aminet GFA BASIC package survey</a></li><li><a href="gfalist-build-and-fixture-validation.html">gfalist build and fixture validation</a></li><li><a href="gfalist-format-vs-rust-frontend.html">gfalist format notes vs. the Rust frontend</a></li></ul></nav>
+    <main class="docs-content">
+      <article>
+        <h1>Amiga GFA BASIC language population policy</h1>
+        <p class="docs-meta"><span>Research</span></p>
+        <h1 id="amiga-gfa-basic-language-population-policy">Amiga GFA BASIC language population policy</h1>
+<p>This policy records the maintainer's counting decisions for the language-wide implementation progress metric tracked by <a href="https://github.com/vsimko/gfabasic-rust/issues/307">issue #307</a>. The machine-readable counterpart is <a href="amiga-gfa-basic-language-population-policy.toml">amiga-gfa-basic-language-population-policy.toml</a>.</p>
+<h2 id="denominator-distinct-built-in-language-constructs">Denominator: distinct built-in language constructs</h2>
+<p>Count distinct built-in constructs in these categories:</p>
+<ul>
+<li>Built-in functions.</li>
+<li>Statements and commands, including Amiga-dialect commands.</li>
+<li>Predefined and special variables.</li>
+<li>Distinct operators.</li>
+<li>Built-in data types that have their own declarations or commands.</li>
+<li>Predefined named constants.</li>
+<li>Reserved language keywords and control constructs.</li>
+</ul>
+<p>Apply these normalization rules:</p>
+<ul>
+<li>Count a built-in function once, regardless of argument/signature variants.</li>
+<li>Count a command once, regardless of optional parameters or alternate syntactic forms.</li>
+<li>Count an overloaded operator once, regardless of operand types.</li>
+<li>If the same construct name appears in more than one language role (for example, as both a function and an operator), count it once by name.</li>
+<li>Merge synonyms and alternate spellings with identical semantics into one canonical construct and retain aliases.</li>
+<li>Count a compound control-flow construct once (for example, <code>IF…ELSE…ENDIF</code>, <code>FOR…NEXT</code>, or <code>DO…LOOP</code>); do not count its constituent keywords separately.</li>
+<li>Do not create separate inventory entries for constituent keywords, even if a constituent also appears in a standalone use.</li>
+<li>Count each named predefined constant, special variable, distinct operator name, and eligible built-in data type separately, subject to the same-name deduplication rule above.</li>
+<li>Do not count variable type suffixes or numeric/string literals as separate constructs.</li>
+</ul>
+<h2 id="included-and-excluded-population">Included and excluded population</h2>
+<p>The supplied Amiga GFA BASIC 3.5 interpreter documentation contains a 3.0 base manual as well as version-specific 3.5 material. Known, individually identified constructs documented in the 3.0 base manual are included in the denominator even when their continued availability in 3.5 has not yet been independently verified. Preserve their original source version and mark their 3.5 status as unverified; do not relabel 3.0 evidence as explicit 3.5 evidence.</p>
+<p>Known constructs with unresolved 3.5 availability remain in the denominator and are visibly marked unverified. Entries whose identity or classification is unknown are excluded until resolved. Topic-family placeholders and reference/index headings are not declarations and must be decomposed into individually identified constructs before counting.</p>
+<p>Direct 3.5 documentation takes precedence over conflicting statements in the 3.0 base manual. A successful GFA BASIC 3.52 runtime test is accepted as compatibility evidence for 3.5, but the exact tested runtime version must remain recorded separately.</p>
+<p>Exclude:</p>
+<ul>
+<li>Editor-only commands and editor features.</li>
+<li>Direct Amiga OS library calls.</li>
+<li>Compiler-only constructs.</li>
+<li>User-defined procedures, functions, and variables.</li>
+<li>Numeric and string literals.</li>
+</ul>
+<p>Amiga-specific commands that belong to the interpreter language dialect remain included.</p>
+<h2 id="numerator-fully-implemented-constructs">Numerator: fully implemented constructs</h2>
+<p>Count a declaration in the numerator only when its implementation status is exactly <code>implemented</code>, source implementation exists, and a confirming test passes. <code>partial</code>, <code>prototype</code>, <code>planned</code>, <code>research</code>, <code>blocked</code>, unknown, or other states do not count.</p>
+<p>A documented construct remains in the denominator when a runtime test fails. Record the failed observation and exact tested runtime version; do not count it in the numerator. Documentation evidence, source implementation, and runtime behavior are separate facts.</p>
+<h2 id="independent-evidence-dimensions">Independent evidence dimensions</h2>
+<p>Keep these dimensions independent on each declaration:</p>
+<ul>
+<li>Source evidence and its provenance/version.</li>
+<li>Implementation status.</li>
+<li>Target/platform support.</li>
+<li>Runtime observation, including exact runtime version.</li>
+<li>Conformance status.</li>
+</ul>
+<p>An unverified but known declaration contributes to the denominator, never to the numerator. The dashboard must not present a final language-wide N/M until the inventory is declaration-level, deduplicated, and complete under this policy. Until then, only explicitly labelled subset metrics may be shown.</p>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>

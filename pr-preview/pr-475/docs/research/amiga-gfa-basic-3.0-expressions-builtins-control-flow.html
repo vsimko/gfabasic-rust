@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Primary source: AM-INTERPRETER-35, GFA BASIC 3.5 Interpreter, base-manual Chapters 2, 4 and 7. Page references below are printed page numbers, not PDF viewer page numbers.">
+  <title>Amiga GFA BASIC 3.0 expression, intrinsic and control-flow evidence · GFA BASIC Rust documentation</title>
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body class="docs-site">
+  <header class="docs-header">
+    <a href="../../index.html">GFA BASIC Rust</a>
+    <span aria-hidden="true">/</span>
+    <a href="../index.html">Documentation</a>
+  </header>
+  <div class="docs-layout">
+    <nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home" href="index.html">Section index</a><ul><li><a href="amiga-gfa-basic-documentation-audit.html">Amiga GFA BASIC documentation coverage audit</a></li><li><a href="amiga-gfa-basic-command-catalogue.html">Amiga GFA BASIC command catalogue</a></li><li><a href="amiga-gfa-basic-german-book-command-api-extraction.html">German Amiga GFA-BASIC book: command and OS API extraction</a></li><li><a href="amiga-book-command-index-ocr-transcription.html">Appendix D — OCR transcription of the command index</a></li><li><a href="gfa-basic-command-index-ocr.html">GFA-BASIC command index — first-pass extraction</a></li><li><a href="amiga-gfa-basic-source-topic-index.html">Amiga GFA BASIC source and topic index</a></li><li><a href="amiga-book-515-page-extraction-audit.html">Amiga GFA-BASIC book — 515-page extraction audit</a></li><li><a href="amiga-book-chapters05-17-heading-harvest.html">Amiga book — command-heading harvest, chapters 5–17</a></li><li><a href="amiga-gfa-basic-functions.toml">Function inventory (117 unique names)</a></li><li><a href="amiga-gfa-basic-function-inventory.html">Amiga GFA BASIC 3.5 built-in function inventory</a></li><li><a href="amiga-base-manual-io-graphics-events-advanced.html">Amiga GFA BASIC base-manual I/O, graphics, event, and advanced-programming extraction</a></li><li><a href="amiga-base-manual-io-graphics-events-advanced-details.html">Amiga GFA BASIC base-manual I/O, graphics, event, and advanced-programming details</a></li><li><a href="amiga-base-manual-numeric-string-functions.html">Amiga GFA BASIC base-manual numeric and string function extraction</a></li><li><a href="amiga-gfa-basic-35-addendum-inventory.html">Amiga GFA-BASIC 3.5 interpreter addendum — extracted feature inventory</a></li><li><a href="amiga-gfa-basic-candidates.toml">3.5 candidate manifest</a></li><li><a href="amiga-gfa-basic-candidate-report.html">Amiga GFA BASIC 3.5 candidate verification report</a></li><li><a href="amiga-gfa-basic-language-population-policy.html">Amiga GFA BASIC language population policy</a></li><li><a href="amiga-gfa-basic-3.03-ocr-index.html">German Amiga GFA BASIC book: OCR index and edition notes</a></li><li><a href="README.html">Research materials</a></li><li><a href="amiga-gfa-test-output.html">Amiga GFA BASIC test output</a></li><li><a href="amiga-gfa-basic-dqh-source-inventory.html">Amiga GFA BASIC commands observed in dqh-amiga</a></li><li><a href="amiga-emulator-lab.html">Amiga emulator experiment lab</a></li><li><a href="amiga-gfa-basic-35-lst-probes.html">Amiga GFA BASIC 3.5 interpreter probes from text listings</a></li><li><a href="amiga-gfa-basic-352-runtime-baseline.html">Amiga GFA BASIC 3.52 runtime baseline</a></li><li><a href="amiga-gfa-basic-binary-analysis.html">Amiga GFA-BASIC binary analysis</a></li><li><a href="amiga-base-manual-variable-array-conversion-functions.html">Amiga GFA BASIC base-manual variable, array, and conversion functions</a></li><li><a href="amiga-gfa-basic-chapter-7-program-handling-evidence.html">Amiga GFA BASIC Chapter 7 — program handling evidence</a></li><li><a href="amiga-gfa-basic-chapter-8-graphics-evidence.html">Amiga GFA BASIC Chapter 8 — graphics compatibility evidence</a></li><li><a href="amiga-gfa-basic-chapter-9-event-window-evidence.html">Amiga GFA BASIC Chapter 9 — event, menu, screen and window evidence</a></li><li><a href="amiga-gfa-basic-chapter-10-advanced-programming-evidence.html">Amiga GFA BASIC Chapter 10 — advanced programming evidence</a></li><li><a href="amiga-gfa-basic-chapter-11-system-routines-evidence.html">Amiga GFA BASIC Chapter 11 — system-routine evidence</a></li><li><a href="https://github.com/vsimko/gfabasic-rust/blob/main/scripts/validate_amiga_chapter_inventories.py">Chapter inventory validator</a></li><li><a href="amiga-gfa-basic-3.0-command-index.html">Amiga GFA BASIC 3.0 command index — grouped cross-check</a></li><li><a href="amiga-gfa-basic-3.0-statement-command-candidates.html">Amiga GFA BASIC 3.0 statement and command candidate catalogue</a></li><li><a href="amiga-gfa-basic-3.0-base-inventory.html">Amiga GFA BASIC 3.0 base-manual inventory</a></li><li><a href="amiga-gfa-basic-3.0-expressions-builtins-control-flow.html">Amiga GFA BASIC 3.0 expression, intrinsic and control-flow evidence</a></li><li><a href="amiga-gfa-basic-3.0-control-file-data-io.html">Amiga GFA BASIC 3.0 control, file and data I/O evidence</a></li><li><a href="amiga-gfa-basic-3.0-graphics-evidence.html">GFA BASIC 3.0 Amiga — graphics evidence</a></li><li><a href="amiga-gfa-basic-3.0-events-windows-evidence.html">GFA BASIC 3.0 Amiga — event, menu, screen and window evidence</a></li><li><a href="amiga-gfa-basic-3.0-system-routines-evidence.html">GFA BASIC 3.0 Amiga — operating-system routine evidence</a></li><li><a href="amiga-gfa-basic-3.0-advanced-programming-evidence.html">GFA BASIC 3.0 Amiga — advanced programming evidence</a></li><li><a href="amiga-gfa-basic-3.0-appendix-index-evidence.html">GFA BASIC 3.0 Amiga — appendix and command-index evidence</a></li><li><a href="amiga-gfa-basic-3.0-german-source-notes.html">German Amiga GFA BASIC 3.0 source — initial verification notes</a></li><li><a href="amiga-gfa-basic-3.0-procedure-error-details.html">GFA BASIC 3.0 Amiga — procedures, functions and error-flow evidence</a></li><li><a href="amiga-gfa-basic-3.0-screen-window-details.html">GFA BASIC 3.0 Amiga — screen and window command details</a></li><li><a href="amiga-gfa-basic-3.0-output-device-details.html">GFA BASIC 3.0 Amiga — output, cursor, mouse and sound evidence</a></li><li><a href="amiga-gfa-basic-3.0-menu-event-details.html">GFA BASIC 3.0 Amiga — menu and event details</a></li><li><a href="amiga-gfa-basic-3.0-bob-object-details.html">GFA BASIC 3.0 Amiga — BOB and OBJECT API evidence</a></li><li><a href="amiga-gfa-basic-3.0-source-format-editor-evidence.html">Amiga GFA BASIC 3.0 — source composition and editor evidence</a></li><li><a href="amiga-gfa-basic-35-primary-reference.html">Amiga GFA-BASIC 3.5 primary reference and target decision</a></li><li><a href="amiga-gfa-basic-35-german-book-crosscheck.html">Amiga GFA-BASIC 3.5 — independent German-book cross-check</a></li><li><a href="amiga-book-gfa35-chapter18-19-extraction.html">GFA-BASIC 3.5 additions documented in the Amiga book</a></li><li><a href="amiga-gfa-basic-35-editor-feature-audit.html">Amiga GFA BASIC 3.5 — editor feature audit</a></li><li><a href="amiga-gfa-basic-35-lexer-evidence.html">Amiga GFA BASIC 3.5 lexer evidence inventory</a></li><li><a href="amiga-gfa-basic-35-matrix-arithmetic-analysis-audit.html">Amiga GFA BASIC 3.5 — matrix arithmetic and analysis audit</a></li><li><a href="amiga-gfa-basic-35-matrix-io-copy-audit.html">Amiga GFA BASIC 3.5 — matrix I/O and copy declaration audit</a></li><li><a href="amiga-gfa-basic-35-five-declaration-audit.html">Amiga GFA BASIC 3.5 — five declaration-level audit blocks</a></li><li><a href="amiga-gfa-basic-35-five-more-declaration-audit.html">Amiga GFA BASIC 3.5 — five more declaration-level audit blocks</a></li><li><a href="amiga-gfa-basic-35-guru-declaration-audit.html">Amiga GFA BASIC 3.5 — GURU declaration audit</a></li><li><a href="atari-gfa-book-diskette.html">Atari GFA BASIC book diskette — source-corpus research notes</a></li><li><a href="atari-gfa-book-systematic-review.html">Systematic review of *Das große GFA-BASIC-Buch* (Atari ST)</a></li><li><a href="aminet-catalogue.html">Aminet GFA BASIC package survey</a></li><li><a href="gfalist-build-and-fixture-validation.html">gfalist build and fixture validation</a></li><li><a href="gfalist-format-vs-rust-frontend.html">gfalist format notes vs. the Rust frontend</a></li></ul></nav>
+    <main class="docs-content">
+      <article>
+        <h1>Amiga GFA BASIC 3.0 expression, intrinsic and control-flow evidence</h1>
+        <p class="docs-meta"><span>Research Note</span></p>
+        <h1 id="amiga-gfa-basic-30-expression-intrinsic-and-control-flow-evidence">Amiga GFA BASIC 3.0 expression, intrinsic and control-flow evidence</h1>
+<blockquote>
+<p><strong>Version boundary:</strong> This document records page-reviewed facts from the 3.0 base body of the supplied <em>GFA BASIC 3.5 Interpreter</em> scan. It is not a claim that these declarations or semantics are present unchanged in interpreter 3.5. The manual identifies its base body as 3.0 and its 3.5-specific material as a separate addendum. Keep these findings as inherited candidates until independently confirmed for 3.5.</p>
+</blockquote>
+<p>Primary source: <code>AM-INTERPRETER-35</code>, <em>GFA BASIC 3.5 Interpreter</em>, base-manual Chapters 2, 4 and 7. Page references below are printed page numbers, not PDF viewer page numbers.</p>
+<h2 id="block-1-expressions-and-conversions">Block 1 — expressions and conversions</h2>
+<h3 id="expression-forms-and-evaluation">Expression forms and evaluation</h3>
+<p>Chapter 3's precedence table (printed p. 3-2) orders operators from highest to lowest as:</p>
+<ol>
+<li>Parentheses.</li>
+<li>String addition.</li>
+<li>String comparisons.</li>
+<li>Unary prefixes <code>+</code> and <code>-</code>.</li>
+<li>Power <code>^</code>.</li>
+<li>Multiplication and division <code>*</code> and <code>/</code>.</li>
+<li>Integer division and remainder <code>DIV</code> and <code>MOD</code>.</li>
+<li>Addition and subtraction.</li>
+<li>Numeric comparisons.</li>
+<li><code>AND</code>, <code>OR</code>, <code>XOR</code>, <code>IMP</code>, <code>EQV</code>.</li>
+<li><code>NOT</code>.</li>
+</ol>
+<p>The source examples show multiplication before addition and power before multiplication. Parentheses override the listed order. The source separately lists string-comparison and numeric-comparison rows; do not collapse them into a single grammar production. Its printed comparison row contains OCR-sensitive spellings, while the detailed comparison pages (pp. 3-13–3-16) explicitly document <code>=</code>, <code>&lt;&gt;</code>, <code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>=&lt;</code>, <code>&gt;=</code> and <code>=&gt;</code>. The numeric <code>==</code> operator is separately described as approximate equality (p. 3-12).</p>
+<p>The manual does not define a complete formal expression grammar or operator associativity in these pages. It also does not specify a general eager/lazy evaluation rule. Those points remain unresolved rather than inferred from examples.</p>
+<h3 id="numeric-string-and-binary-conversions">Numeric, string and binary conversions</h3>
+<table>
+<thead>
+<tr>
+<th>Form</th>
+<th>Source-described behavior</th>
+<th>Printed page</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ASC(a$)</code></td>
+<td>Returns the character code of the first character; empty string returns zero.</td>
+<td>2-13</td>
+</tr>
+<tr>
+<td><code>CHR$(x)</code></td>
+<td>Returns the character for the low byte of the integer expression (<code>x AND 255</code>).</td>
+<td>2-13</td>
+</tr>
+<tr>
+<td><code>BIN$(x[,y])</code></td>
+<td>Converts an integer expression to base 2; optional width is 1–32.</td>
+<td>2-14</td>
+</tr>
+<tr>
+<td><code>OCT$(x[,y])</code></td>
+<td>Converts to base 8; optional width is 0–11.</td>
+<td>2-14</td>
+</tr>
+<tr>
+<td><code>HEX$(x[,y])</code></td>
+<td>Converts to base 16; optional width specifies hexadecimal digits.</td>
+<td>2-14</td>
+</tr>
+<tr>
+<td><code>STR$(x)</code></td>
+<td>Converts a numeric expression to its decimal text representation.</td>
+<td>2-15</td>
+</tr>
+<tr>
+<td><code>STR$(x,y)</code></td>
+<td>Uses a requested output width/rightmost character count, with leading spaces as needed.</td>
+<td>2-15</td>
+</tr>
+<tr>
+<td><code>STR$(x,y,z)</code></td>
+<td>Returns a selected formatted portion of the numeric representation.</td>
+<td>2-15</td>
+</tr>
+<tr>
+<td><code>VAL(a$)</code></td>
+<td>Parses a numeric prefix from a string; returns zero if no number starts the string. Supports <code>&amp;H</code>, <code>&amp;X</code> and <code>&amp;O</code> radix prefixes.</td>
+<td>2-16</td>
+</tr>
+<tr>
+<td><code>VAL?(a$)</code></td>
+<td>Returns the number of characters consumed by the numeric parse; zero if none.</td>
+<td>2-16</td>
+</tr>
+<tr>
+<td><code>CINT(x)</code></td>
+<td>Rounds a floating-point value to an integer; described as compiler-only.</td>
+<td>2-17</td>
+</tr>
+<tr>
+<td><code>CFLOAT(y)</code></td>
+<td>Converts an integer value to floating point; described as compiler-only.</td>
+<td>2-17</td>
+</tr>
+<tr>
+<td><code>CVI(a$)</code>, <code>CVL(a$)</code></td>
+<td>Interpret two-byte and four-byte strings as 16-bit and 32-bit integers.</td>
+<td>2-18</td>
+</tr>
+<tr>
+<td><code>MKI$(x)</code>, <code>MKL$(x)</code>, <code>MKS$(x)</code>, <code>MKD$(x)</code></td>
+<td>Produce internal binary numeric representations in strings, rather than ASCII decimal text.</td>
+<td>2-18–2-19</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Source ambiguity:</strong> the conversion section's prose refers to <code>CVF</code> and <code>CVS</code> inconsistently, and its reverse-function list names <code>MKS$</code> and <code>MKD$</code>. Do not silently normalize these names into a one-to-one CVx/MKx family. Preserve the printed declarations as candidates and resolve the disputed slots against a clear page image and 3.5 evidence. The text also distinguishes binary numeric representation from the textual conversion performed by <code>VAL</code>/<code>STR$</code>.</p>
+<h3 id="expression-and-conversion-implications">Expression and conversion implications</h3>
+<ul>
+<li>The source distinguishes numeric expressions (<code>aexp</code>), integer expressions (<code>iexp</code>) and string expressions (<code>sexp</code>) in its declaration notation. These are source labels, not yet a complete type grammar.</li>
+<li><code>VAL</code> is permissive prefix parsing, not a strict whole-string parser; trailing nonnumeric characters do not invalidate an already parsed prefix.</li>
+<li><code>CINT</code> and <code>CFLOAT</code> are explicitly said to be meaningful only to the compiler, so they must not be assumed to be interpreter intrinsics.</li>
+<li>The binary conversion functions are intended for interchange with other programming languages; their byte layout, endianness and disputed float representation require independent confirmation before defining a portable ABI.</li>
+</ul>
+<h2 id="block-2-built-in-functions-and-intrinsic-operations">Block 2 — built-in functions and intrinsic operations</h2>
+<p>This is a page-reviewed selection of Chapter 4, not a complete or 3.5-verified built-in catalogue. Function names and behavior below are the 3.0 base-manual evidence.</p>
+<h3 id="numeric-and-mathematical-functions">Numeric and mathematical functions</h3>
+<table>
+<thead>
+<tr>
+<th>Function family</th>
+<th>Source-described behavior</th>
+<th>Printed page</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ADD(x,y)</code>, <code>SUB(x,y)</code>, <code>MUL(x,y)</code>, <code>DIV(x,y)</code>, <code>MOD(x,y)</code></td>
+<td>Integer arithmetic functions; decimal places are ignored. The similarly named commands mutate a variable.</td>
+<td>4-2–4-3</td>
+</tr>
+<tr>
+<td><code>SIN</code>, <code>COS</code>, <code>TAN</code> and inverse functions</td>
+<td>Trigonometric functions using radians.</td>
+<td>4-5</td>
+</tr>
+<tr>
+<td><code>SINQ</code>, <code>COSQ</code></td>
+<td>Interpolated sine/cosine lookup functions using degrees.</td>
+<td>4-6</td>
+</tr>
+<tr>
+<td><code>DEG(x)</code>, <code>RAD(x)</code></td>
+<td>Convert radians to degrees and degrees to radians.</td>
+<td>4-7</td>
+</tr>
+<tr>
+<td><code>SQR(x)</code></td>
+<td>Square root; negative input produces an error.</td>
+<td>4-8</td>
+</tr>
+<tr>
+<td><code>EXP(x)</code>, <code>LOG(x)</code>, <code>LOG10(x)</code></td>
+<td>Exponential, natural logarithm and base-10 logarithm.</td>
+<td>4-9</td>
+</tr>
+<tr>
+<td><code>PRED(i)</code>, <code>SUCC(i)</code></td>
+<td>Integer predecessor/successor; decimal parts are ignored.</td>
+<td>4-11</td>
+</tr>
+<tr>
+<td><code>ABS(x)</code>, <code>SGN(x)</code></td>
+<td>Absolute value and sign (-1, 0 or 1).</td>
+<td>4-12</td>
+</tr>
+<tr>
+<td><code>INT(x)</code>, <code>TRUNC(x)</code>, <code>FIX(x)</code>, <code>FRAC(x)</code></td>
+<td>Integer/fraction decomposition; TRUNC and FIX truncate toward zero, while INT returns the greatest integer not exceeding x.</td>
+<td>4-13</td>
+</tr>
+<tr>
+<td><code>ROUND(x[,n])</code></td>
+<td>Rounds to an integer or to n decimal places; negative n rounds before the decimal point.</td>
+<td>4-14</td>
+</tr>
+<tr>
+<td><code>ODD(x)</code>, <code>EVEN(x)</code></td>
+<td>Return -1 for true and 0 for false; zero is even.</td>
+<td>4-15</td>
+</tr>
+<tr>
+<td><code>MIN(...)</code>, <code>MAX(...)</code></td>
+<td>Return the minimum/maximum of numeric or string argument lists.</td>
+<td>4-16</td>
+</tr>
+<tr>
+<td><code>RND</code>, <code>RANDOM(x)</code>, <code>RAND(y)</code></td>
+<td>Produce random floating or integer values with different documented ranges.</td>
+<td>4-17–4-18</td>
+</tr>
+</tbody>
+</table>
+<p>The source also documents bit manipulation and integer operations:</p>
+<ul>
+<li><code>BCLR(x,y)</code>, <code>BSET(x,y)</code>, <code>BCHG(x,y)</code>, <code>BTST(x,y)</code>: clear, set, toggle or test bit y; bit numbering starts at zero and is masked to 0–31 (pp. 4-19–4-20).</li>
+<li><code>SHL</code>, <code>SHR</code>, <code>ROL</code>, <code>ROR</code>, including <code>&amp;</code> and <code>|</code> width variants: shift or rotate 32-bit, 16-bit or 8-bit values (pp. 4-21–4-22).</li>
+<li><code>AND(x,y)</code>, <code>OR(x,y)</code>, <code>XOR(x,y)</code>, <code>IMP(x,y)</code>, <code>EQV(x,y)</code>: bitwise integer operations (pp. 4-23–4-24).</li>
+<li><code>SWAP(x)</code>: exchanges the upper and lower 16-bit words of a 32-bit value. This is a function and is distinct from the variable/array <code>SWAP</code> command in Chapter 2 (p. 4-25).</li>
+<li><code>BYTE(x)</code>, <code>CARD(x)</code>, <code>WORD(x)</code>: extract/extend low 8- or 16-bit portions (p. 4-26).</li>
+</ul>
+<h3 id="string-functions">String functions</h3>
+<table>
+<thead>
+<tr>
+<th>Function or command</th>
+<th>Source-described behavior</th>
+<th>Printed page</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>LEFT$(a$[,x])</code>, <code>RIGHT$(a$[,x])</code></td>
+<td>Return x characters from the left or right; default is one character.</td>
+<td>4-27</td>
+</tr>
+<tr>
+<td><code>MID$(a$,x[,y])</code></td>
+<td>Returns a substring beginning at character x; also has a command form that overwrites part of a string variable without changing its length.</td>
+<td>4-28–4-29</td>
+</tr>
+<tr>
+<td><code>INSTR(a$,b$[,x])</code></td>
+<td>Searches from the left or an optional start position; zero means not found.</td>
+<td>4-30</td>
+</tr>
+<tr>
+<td><code>RINSTR(a$,b$[,x])</code></td>
+<td>Searches from the right or an optional position.</td>
+<td>4-31</td>
+</tr>
+<tr>
+<td><code>STRING$(x,a$)</code>, <code>STRING$(x,code)</code></td>
+<td>Repeats a string or character code x times.</td>
+<td>4-32</td>
+</tr>
+<tr>
+<td><code>SPACE$(x)</code>, <code>SPC(x)</code></td>
+<td>Return a string of spaces or insert spaces in PRINT output, respectively.</td>
+<td>4-32</td>
+</tr>
+<tr>
+<td><code>PRED(a$)</code>, <code>SUCC(a$)</code></td>
+<td>Return the preceding/following character based on the first character's code.</td>
+<td>4-33</td>
+</tr>
+<tr>
+<td><code>LEN(a$)</code>, <code>TRIM$(a$)</code></td>
+<td>Return string length or remove leading/trailing spaces.</td>
+<td>4-34</td>
+</tr>
+<tr>
+<td><code>UPPER$(a$)</code></td>
+<td>Converts lowercase characters to uppercase.</td>
+<td>4-35</td>
+</tr>
+<tr>
+<td><code>LSET a$=b$</code>, <code>RSET a$=b$</code></td>
+<td>Left/right justify text in a destination string whose length is unchanged.</td>
+<td>4-36</td>
+</tr>
+</tbody>
+</table>
+<h3 id="related-commands-that-are-not-functions">Related commands that are not functions</h3>
+<p>The same chapter describes <code>DEC</code> and <code>INC</code> as mutating numeric commands (p. 4-10), and <code>SWAP a,b</code> / array forms as value or descriptor exchange in Chapter 2 (pp. 2-20–2-21). Do not confuse these with the expression function <code>SWAP(x)</code> (p. 4-25). Likewise, the arithmetic command forms <code>ADD x,y</code>, etc., are distinct from their expression-function forms.</p>
+<p>The chapter contents list these families as its 3.0 scope. This page review covers the headings above but does not establish that every overload, alias, error case or edge condition has been fully extracted. The existing project function count/inventory must remain a separate reconciliation task; do not derive a complete count from this selected table.</p>
+<h2 id="block-3-conditional-flow-loops-procedures-and-functions">Block 3 — conditional flow, loops, procedures and functions</h2>
+<p>Chapter 7 is the 3.0 base-manual program-handling chapter. The following semantics were checked against the corresponding page text. They remain 3.0 candidates, not 3.5 guarantees.</p>
+<h3 id="conditional-branching">Conditional branching</h3>
+<ul>
+<li><code>IF condition [THEN]</code> begins a conditional block; <code>ELSE</code> selects the alternative branch and <code>ENDIF</code> closes it (printed pp. 7-4–7-5). The manual says THEN is optional. A nonzero numeric condition is true.</li>
+<li><code>ELSE IF condition</code> / <code>ELSEIF condition</code> permits a chain of conditions within the same IF construction (pp. 7-6–7-7). The editor's spelling/normalization behavior is described in the source; preserve both observed spellings as candidates.</li>
+<li><code>SELECT expression</code> with <code>CASE</code>, optional <code>TO</code> ranges or comma-separated values, optional <code>DEFAULT</code>, and <code>ENDSELECT</code> selects a branch (pp. 7-9–7-12). The source also accepts <code>OTHERWISE</code> as an editor-replaced alias for DEFAULT. Numeric selectors and strings up to four characters are documented. <code>CONT</code> has a special effect when placed before a CASE/DEFAULT and continues selection processing.</li>
+<li><code>ON x GOSUB proc1,proc2,...</code> selects the xth parameterless procedure; decimal places are ignored, and out-of-range values call no procedure (p. 7-8).</li>
+</ul>
+<h3 id="loop-forms">Loop forms</h3>
+<table>
+<thead>
+<tr>
+<th>Form</th>
+<th>Source-described control behavior</th>
+<th>Printed page</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>FOR i=start TO end [STEP step] ... NEXT i</code></td>
+<td>Numbered loop; default step is 1. The source says the body executes at least once and the counter remains at the first value that exceeds the end criterion.</td>
+<td>7-13–7-14</td>
+</tr>
+<tr>
+<td><code>FOR i=start DOWNTO end ... NEXT i</code></td>
+<td>Descending form; STEP is not used with DOWNTO.</td>
+<td>7-13–7-14</td>
+</tr>
+<tr>
+<td><code>REPEAT ... UNTIL condition</code></td>
+<td>Post-tested loop: body executes before the condition is checked, and repeats while condition is false.</td>
+<td>7-15</td>
+</tr>
+<tr>
+<td><code>WHILE condition ... WEND</code></td>
+<td>Pre-tested loop: body executes while condition is true.</td>
+<td>7-16</td>
+</tr>
+<tr>
+<td><code>DO ... LOOP</code></td>
+<td>Unconditional loop; exit requires EXIT IF, GOTO or a program-ending command.</td>
+<td>7-17</td>
+</tr>
+<tr>
+<td>`DO [WHILE condition</td>
+<td>UNTIL condition] ... LOOP [WHILE condition</td>
+<td>UNTIL condition]`</td>
+</tr>
+<tr>
+<td><code>EXIT IF condition</code></td>
+<td>Leaves the current loop when the condition is true; the source also documents use inside IF/ENDIF and SELECT/ENDSELECT structures.</td>
+<td>7-20</td>
+</tr>
+</tbody>
+</table>
+<p>The manual lists <code>ENDFOR</code>, <code>ENDREPEAT</code>, <code>END WHILE</code> and <code>ENDDO</code> as editor/interpreter replacement spellings for the corresponding closing commands. Treat these as source-documented aliases, not necessarily distinct runtime tokens.</p>
+<h3 id="procedures-and-user-defined-functions">Procedures and user-defined functions</h3>
+<ul>
+<li><code>GOSUB proc[(args)]</code> calls a named procedure defined by <code>PROCEDURE proc[(parameters)] ... RETURN</code> (printed pp. 7-21–7-22). <code>SUB</code> is accepted in place of PROCEDURE; <code>ENDPROC</code> or <code>ENDSUB</code> can replace RETURN. Parameters may be values or variables passed by reference using VAR. The source notes that names colliding with command words require a prefix form such as <code>@</code> or GOSUB.</li>
+<li><code>LOCAL var1[,var2,...]</code> limits the visibility of listed variables to the procedure and procedures it calls; a same-named global is hidden during that scope (p. 7-23).</li>
+<li><code>FUNCTION name[(parameters)] ... RETURN expression ... ENDFUNC</code> defines a user function called with <code>@name(...)</code> (pp. 7-24–7-25). Parameters may be values or VAR references. A function may return numeric or string values; a trailing <code>$</code> marks a string-valued function. The source says RETURN may appear multiple times but a function must return a value rather than simply reaching ENDFUNC.</li>
+<li><code>DEFFN name[(parameters)]=expression</code> defines a one-line numeric or string function, called with <code>FN name(...)</code> or <code>@name(...)</code> (pp. 7-26–7-27). The source says these functions cannot be recursive.</li>
+</ul>
+<h3 id="control-flow-facts-still-needing-resolution">Control-flow facts still needing resolution</h3>
+<p>This block is limited to the page-reviewed constructs above. Chapter 7's contents also list GOTO/labels, ON BREAK, ON ERROR, ERROR/ERR, EVERY/AFTER, REM, PAUSE/DELAY, termination and program-loading commands. Their exact declarations and edge cases were not extracted in this block. Do not infer them from this partial list.</p>
+<h2 id="version-and-evidence-handling">Version and evidence handling</h2>
+<ul>
+<li>All declarations in this document are scoped to the <strong>Amiga GFA BASIC 3.0 base manual</strong>.</li>
+<li>The fact that the same scan also contains a 3.5 addendum does not prove that a base-manual feature was retained unchanged in 3.5.</li>
+<li>Do not promote these names into the normative 3.5 API registry without 3.5-specific primary evidence or reproducible observation on the original 3.5 interpreter.</li>
+<li>The 3.5 interpreter binary and lawful execution environment are not currently evidenced by this document; interpreter behavior is therefore not claimed as observed.</li>
+<li>The source's notation (<code>aexp</code>, <code>iexp</code>, <code>sexp</code>, <code>bexp</code>, <code>avar</code>, <code>svar</code>) should be preserved in source notes until its full grammar and exact type constraints are independently resolved.</li>
+</ul>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>

@@ -1,0 +1,588 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Status: research baseline; not a complete 3.5 lexical specification Tracking: issue #46 Normative target: Commodore Amiga GFA BASIC interpreter 3.5 only (ADR 0009).">
+  <title>Amiga GFA BASIC 3.5 lexer evidence inventory · GFA BASIC Rust documentation</title>
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body class="docs-site">
+  <header class="docs-header">
+    <a href="../../index.html">GFA BASIC Rust</a>
+    <span aria-hidden="true">/</span>
+    <a href="../index.html">Documentation</a>
+  </header>
+  <div class="docs-layout">
+    <nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home" href="index.html">Section index</a><ul><li><a href="amiga-gfa-basic-documentation-audit.html">Amiga GFA BASIC documentation coverage audit</a></li><li><a href="amiga-gfa-basic-command-catalogue.html">Amiga GFA BASIC command catalogue</a></li><li><a href="amiga-gfa-basic-german-book-command-api-extraction.html">German Amiga GFA-BASIC book: command and OS API extraction</a></li><li><a href="amiga-book-command-index-ocr-transcription.html">Appendix D — OCR transcription of the command index</a></li><li><a href="gfa-basic-command-index-ocr.html">GFA-BASIC command index — first-pass extraction</a></li><li><a href="amiga-gfa-basic-source-topic-index.html">Amiga GFA BASIC source and topic index</a></li><li><a href="amiga-book-515-page-extraction-audit.html">Amiga GFA-BASIC book — 515-page extraction audit</a></li><li><a href="amiga-book-chapters05-17-heading-harvest.html">Amiga book — command-heading harvest, chapters 5–17</a></li><li><a href="amiga-gfa-basic-functions.toml">Function inventory (117 unique names)</a></li><li><a href="amiga-gfa-basic-function-inventory.html">Amiga GFA BASIC 3.5 built-in function inventory</a></li><li><a href="amiga-base-manual-io-graphics-events-advanced.html">Amiga GFA BASIC base-manual I/O, graphics, event, and advanced-programming extraction</a></li><li><a href="amiga-base-manual-io-graphics-events-advanced-details.html">Amiga GFA BASIC base-manual I/O, graphics, event, and advanced-programming details</a></li><li><a href="amiga-base-manual-numeric-string-functions.html">Amiga GFA BASIC base-manual numeric and string function extraction</a></li><li><a href="amiga-gfa-basic-35-addendum-inventory.html">Amiga GFA-BASIC 3.5 interpreter addendum — extracted feature inventory</a></li><li><a href="amiga-gfa-basic-candidates.toml">3.5 candidate manifest</a></li><li><a href="amiga-gfa-basic-candidate-report.html">Amiga GFA BASIC 3.5 candidate verification report</a></li><li><a href="amiga-gfa-basic-language-population-policy.html">Amiga GFA BASIC language population policy</a></li><li><a href="amiga-gfa-basic-3.03-ocr-index.html">German Amiga GFA BASIC book: OCR index and edition notes</a></li><li><a href="README.html">Research materials</a></li><li><a href="amiga-gfa-test-output.html">Amiga GFA BASIC test output</a></li><li><a href="amiga-gfa-basic-dqh-source-inventory.html">Amiga GFA BASIC commands observed in dqh-amiga</a></li><li><a href="amiga-emulator-lab.html">Amiga emulator experiment lab</a></li><li><a href="amiga-gfa-basic-35-lst-probes.html">Amiga GFA BASIC 3.5 interpreter probes from text listings</a></li><li><a href="amiga-gfa-basic-352-runtime-baseline.html">Amiga GFA BASIC 3.52 runtime baseline</a></li><li><a href="amiga-gfa-basic-binary-analysis.html">Amiga GFA-BASIC binary analysis</a></li><li><a href="amiga-base-manual-variable-array-conversion-functions.html">Amiga GFA BASIC base-manual variable, array, and conversion functions</a></li><li><a href="amiga-gfa-basic-chapter-7-program-handling-evidence.html">Amiga GFA BASIC Chapter 7 — program handling evidence</a></li><li><a href="amiga-gfa-basic-chapter-8-graphics-evidence.html">Amiga GFA BASIC Chapter 8 — graphics compatibility evidence</a></li><li><a href="amiga-gfa-basic-chapter-9-event-window-evidence.html">Amiga GFA BASIC Chapter 9 — event, menu, screen and window evidence</a></li><li><a href="amiga-gfa-basic-chapter-10-advanced-programming-evidence.html">Amiga GFA BASIC Chapter 10 — advanced programming evidence</a></li><li><a href="amiga-gfa-basic-chapter-11-system-routines-evidence.html">Amiga GFA BASIC Chapter 11 — system-routine evidence</a></li><li><a href="https://github.com/vsimko/gfabasic-rust/blob/main/scripts/validate_amiga_chapter_inventories.py">Chapter inventory validator</a></li><li><a href="amiga-gfa-basic-3.0-command-index.html">Amiga GFA BASIC 3.0 command index — grouped cross-check</a></li><li><a href="amiga-gfa-basic-3.0-statement-command-candidates.html">Amiga GFA BASIC 3.0 statement and command candidate catalogue</a></li><li><a href="amiga-gfa-basic-3.0-base-inventory.html">Amiga GFA BASIC 3.0 base-manual inventory</a></li><li><a href="amiga-gfa-basic-3.0-expressions-builtins-control-flow.html">Amiga GFA BASIC 3.0 expression, intrinsic and control-flow evidence</a></li><li><a href="amiga-gfa-basic-3.0-control-file-data-io.html">Amiga GFA BASIC 3.0 control, file and data I/O evidence</a></li><li><a href="amiga-gfa-basic-3.0-graphics-evidence.html">GFA BASIC 3.0 Amiga — graphics evidence</a></li><li><a href="amiga-gfa-basic-3.0-events-windows-evidence.html">GFA BASIC 3.0 Amiga — event, menu, screen and window evidence</a></li><li><a href="amiga-gfa-basic-3.0-system-routines-evidence.html">GFA BASIC 3.0 Amiga — operating-system routine evidence</a></li><li><a href="amiga-gfa-basic-3.0-advanced-programming-evidence.html">GFA BASIC 3.0 Amiga — advanced programming evidence</a></li><li><a href="amiga-gfa-basic-3.0-appendix-index-evidence.html">GFA BASIC 3.0 Amiga — appendix and command-index evidence</a></li><li><a href="amiga-gfa-basic-3.0-german-source-notes.html">German Amiga GFA BASIC 3.0 source — initial verification notes</a></li><li><a href="amiga-gfa-basic-3.0-procedure-error-details.html">GFA BASIC 3.0 Amiga — procedures, functions and error-flow evidence</a></li><li><a href="amiga-gfa-basic-3.0-screen-window-details.html">GFA BASIC 3.0 Amiga — screen and window command details</a></li><li><a href="amiga-gfa-basic-3.0-output-device-details.html">GFA BASIC 3.0 Amiga — output, cursor, mouse and sound evidence</a></li><li><a href="amiga-gfa-basic-3.0-menu-event-details.html">GFA BASIC 3.0 Amiga — menu and event details</a></li><li><a href="amiga-gfa-basic-3.0-bob-object-details.html">GFA BASIC 3.0 Amiga — BOB and OBJECT API evidence</a></li><li><a href="amiga-gfa-basic-3.0-source-format-editor-evidence.html">Amiga GFA BASIC 3.0 — source composition and editor evidence</a></li><li><a href="amiga-gfa-basic-35-primary-reference.html">Amiga GFA-BASIC 3.5 primary reference and target decision</a></li><li><a href="amiga-gfa-basic-35-german-book-crosscheck.html">Amiga GFA-BASIC 3.5 — independent German-book cross-check</a></li><li><a href="amiga-book-gfa35-chapter18-19-extraction.html">GFA-BASIC 3.5 additions documented in the Amiga book</a></li><li><a href="amiga-gfa-basic-35-editor-feature-audit.html">Amiga GFA BASIC 3.5 — editor feature audit</a></li><li><a href="amiga-gfa-basic-35-lexer-evidence.html">Amiga GFA BASIC 3.5 lexer evidence inventory</a></li><li><a href="amiga-gfa-basic-35-matrix-arithmetic-analysis-audit.html">Amiga GFA BASIC 3.5 — matrix arithmetic and analysis audit</a></li><li><a href="amiga-gfa-basic-35-matrix-io-copy-audit.html">Amiga GFA BASIC 3.5 — matrix I/O and copy declaration audit</a></li><li><a href="amiga-gfa-basic-35-five-declaration-audit.html">Amiga GFA BASIC 3.5 — five declaration-level audit blocks</a></li><li><a href="amiga-gfa-basic-35-five-more-declaration-audit.html">Amiga GFA BASIC 3.5 — five more declaration-level audit blocks</a></li><li><a href="amiga-gfa-basic-35-guru-declaration-audit.html">Amiga GFA BASIC 3.5 — GURU declaration audit</a></li><li><a href="atari-gfa-book-diskette.html">Atari GFA BASIC book diskette — source-corpus research notes</a></li><li><a href="atari-gfa-book-systematic-review.html">Systematic review of *Das große GFA-BASIC-Buch* (Atari ST)</a></li><li><a href="aminet-catalogue.html">Aminet GFA BASIC package survey</a></li><li><a href="gfalist-build-and-fixture-validation.html">gfalist build and fixture validation</a></li><li><a href="gfalist-format-vs-rust-frontend.html">gfalist format notes vs. the Rust frontend</a></li></ul></nav>
+    <main class="docs-content">
+      <article>
+        <h1>Amiga GFA BASIC 3.5 lexer evidence inventory</h1>
+        <p class="docs-meta"><span>Research Note</span></p>
+        <h1 id="amiga-gfa-basic-35-lexer-evidence-inventory">Amiga GFA BASIC 3.5 lexer evidence inventory</h1>
+<p>Status: <strong>research baseline; not a complete 3.5 lexical specification</strong><br />
+Tracking: <a href="https://github.com/vsimko/gfabasic-rust/issues/46">issue #46</a><br />
+Normative target: Commodore Amiga GFA BASIC interpreter <strong>3.5 only</strong> (ADR 0009).</p>
+<p>This document records original findings from the two supplied PDFs. It separates explicit 3.5 addendum evidence from syntax described only in the 3.0 base manual or the 1990 V3.03 book. A rule in the latter categories is not automatically accepted by the 3.5 lexer.</p>
+<h2 id="1-sources-and-version-boundaries">1. Sources and version boundaries</h2>
+<table>
+<thead>
+<tr>
+<th>Source ID</th>
+<th>Source</th>
+<th>Scope</th>
+<th>Use for lexer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AM-INTERPRETER-35</td>
+<td><em>GFA BASIC 3.5 Interpreter</em>, supplied PDF</td>
+<td>Included software is 3.5; the base text was originally printed for 3.0, with explicit 3.5 addenda</td>
+<td>Primary. Only explicitly marked 3.5 update material is immediately normative; base rules are inherited candidates pending confirmation</td>
+</tr>
+<tr>
+<td>AM-BOOK-DE-1990</td>
+<td>Bleek, Hecht, Litzkendorf, <em>Das große GFA-BASIC-Buch zum Amiga</em>, DATA BECKER, 1990, ISBN 3-89011-399-0</td>
+<td>Cover says “Bis Version 3.5”, but the foreword identifies the main interpreter reference as V3.03 and discusses compiler material separately</td>
+<td>Supplementary Amiga evidence, not proof of 3.5 interpreter behavior</td>
+</tr>
+</tbody>
+</table>
+<p>The German 1990 book is not a substitute for the interpreter manual's 3.5 addendum. It is useful for discovering constructs and cross-checking older Amiga syntax. Its OCR must be checked against page images before ambiguous glyphs become requirements. Neither PDF is copied into this repository.</p>
+<h2 id="2-explicitly-versioned-35-lexical-evidence">2. Explicitly versioned 3.5 lexical evidence</h2>
+<h3 id="21-special-names-in-the-35-addendum">2.1 Special names in the 3.5 addendum</h3>
+<p>The supplied 469-page <code>GFA_Basic_3.5_Interpreter.pdf</code> explicitly identifies Chapter 13 as its 3.5 addendum. Its printed pp. 13-34–13-35 document the DATA-pointer operations and special variables. A separately catalogued combined 3.0 + 3.5 update scan places corresponding material in Chapter 14, printed pp. 14-5–14-6; these are alternate pagination witnesses, not conflicting language rules. The detailed descriptions and examples establish:</p>
+<table>
+<thead>
+<tr>
+<th>Spelling</th>
+<th>Lexical interpretation</th>
+<th>Evidence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>_DATA</td>
+<td>Exact special identifier naming the current DATA pointer position</td>
+<td>AM-INTERPRETER-35, printed addendum p. 13-34 (combined update scan: pp. 14-5–14-6)</td>
+</tr>
+<tr>
+<td>_DATA=</td>
+<td>The _DATA identifier followed by assignment operator =; it sets the DATA pointer to a previously saved position</td>
+<td>AM-INTERPRETER-35, printed addendum p. 13-34 (combined update scan: pp. 14-5–14-6)</td>
+</tr>
+<tr>
+<td>_0 … _9</td>
+<td>Ten exact special variable names; the manual describes them as longword variables</td>
+<td>AM-INTERPRETER-35, printed addendum p. 13-35 (combined update scan: p. 14-6)</td>
+</tr>
+</tbody>
+</table>
+<p>The 3.5 evidence authorizes these exact spellings. It does <strong>not</strong> authorize a general rule that arbitrary identifiers may start with underscore. The lexer must continue to reject unverified forms such as _foo, _10, _DATA2, and case variants unless a 3.5 source or interpreter observation establishes them.</p>
+<p>The current narrow lexer recognizes these spellings, preserving their source text and spans. This is a small verified 3.5 increment, not general identifier coverage.</p>
+<h3 id="22-page-image-verification-log">2.2 Page-image verification log</h3>
+<p>The following page images were inspected from the supplied PDFs, rather than relying only on OCR text:</p>
+<ul>
+<li><strong>AM-INTERPRETER-35, printed p. 13-34:</strong> the page visibly prints <code>_DATA</code> and <code>_DATA=</code> as separate operation forms. The prose says <code>_DATA</code> specifies the DATA-pointer position and <code>_DATA=</code> sets that pointer to a previously determined value. Lexically, <code>_DATA=</code> is therefore the <code>_DATA</code> identifier followed by the assignment token <code>=</code>; it is not one indivisible identifier token.</li>
+<li><strong>AM-INTERPRETER-35, printed p. 13-35:</strong> the heading visibly reads <code>_0..._9</code>; the prose describes ten special variables and says they are longwords like <code>%</code>, not floating-point numbers. This confirms the exact ten spellings and their special-variable status, but not a general underscore-initial identifier rule.</li>
+<li><strong>AM-INTERPRETER-35, printed p. 13-33:</strong> the 3.5 addendum shows the signatures <code>x=FACT(n)</code>, <code>y=VARIAT(n,k)</code>, and <code>z=COMBIN(n,k)</code> with sample variables <code>x</code>, <code>y</code>, and <code>z</code>. These examples demonstrate the three new intrinsic forms, but do not define general identifier syntax or case sensitivity. The page's running header reads <code>GFA-BASIC 3.5 Addendum</code>, its heading is numbered <code>14. Further new commands in Version 3.5</code>, and its footer remains <code>13-33</code>; this explains why the separately catalogued combined scan uses a distinct <code>14-x</code> pagination sequence for this material.</li>
+<li><strong>AM-INTERPRETER-35, printed p. 13-36:</strong> the addendum distinguishes the <code>GURU x</code> command from the <code>GURU</code> function (used inside <code>HEX$(GURU)</code>). This is a context distinction in a 3.5 command/function example, not a general reserved-word list.</li>
+<li><strong>AM-INTERPRETER-35, printed pp. 2-2–2-3:</strong> the variable-name rule is explicitly labelled GFA-BASIC 3.0. The Byte postfix is visibly a vertical bar <code>|</code>, not capital <code>I</code>. The type table lists Float <code>#</code>, but the prose on p. 2-3 says Float has no postfix; this is an internal source contradiction and must remain unresolved. The prose confirms <code>$</code> for String.</li>
+<li><strong>AM-INTERPRETER-35, printed p. 3-2:</strong> the operator hierarchy image clearly shows <code>^</code> as the power sign. This resolves the OCR ambiguity in the glyph, but the hierarchy is still a 3.0 candidate, not a 3.5 conformance rule.</li>
+<li><strong>AM-INTERPRETER-35, printed pp. 3-13–3-14 and 3-16:</strong> page images confirm <code>==</code> as approximate numeric equality, <code>&lt;=</code>/<code>&gt;=</code> and their alternate spellings <code>=&lt;</code>/<code>=&gt;</code>, and <code>&lt;&gt;</code> as not-equal. These are inherited 3.0 operator spellings only.</li>
+<li><strong>AM-INTERPRETER-35, printed p. 5-15:</strong> the DATA entry explicitly gives <code>DATA const [,const1,const2,...]</code>, says constants may be numeric or string, and says numeric values may be hexadecimal, octal, or binary. It requires a string containing a comma to be enclosed in quotation marks. The same page independently gives the label character set (letters, digits, underscore, period), permits a leading digit, and requires a final colon.</li>
+<li><strong>AM-INTERPRETER-35, printed p. 5-16:</strong> the DATA example visibly contains <code>DATA 10,&amp;A,&amp;A,&amp;HA,&amp;012,&amp;X1010,%1010</code>. Its accompanying prose says HEX values can be read using <code>$</code> before the number and BIN values using <code>%</code>. Because these descriptions and example spellings do not align cleanly, the exact direct-source numeric prefix grammar remains unresolved.</li>
+<li><strong>AM-INTERPRETER-35, printed p. 2-16:</strong> <code>VAL(a$)</code> converts a string to a number; the text says <code>&amp;H</code>, <code>&amp;X</code>, and <code>&amp;O</code> prefixes select hexadecimal, binary, and octal interpretation. This documents VAL's string conversion behavior, not by itself the direct numeric-literal grammar.</li>
+<li><strong>AM-INTERPRETER-35, printed pp. 7-35–7-36:</strong> page images confirm <code>REM x</code>, apostrophe-prefixed remark lines, and <code>&lt;command line&gt; ! x</code>; the manual says inline <code>!</code> is not allowed with DATA instructions. The GOTO entry repeats the label character set and states that the colon is omitted in the GOTO reference. These are still base-manual 3.0 rules.</li>
+<li><strong>AM-BOOK-DE-1990, printed p. 57:</strong> the page gives labels <code>Data_label:</code>, <code>Xyz_label.1:</code> (with a following <code>!Kommentar</code>), and <code>1:</code>; it says a label stands alone, may have a comment, and ends in a colon. The same page says variable/function names may be arbitrarily long, use A–Z/a–z/0–9 plus underscore and dot, and must begin with a letter. It lists type endings <code>%</code>, a byte marker printed as a vertical stroke-like glyph, <code>&amp;</code>, <code>!</code>, and <code>$</code>, with <code>#</code> optional for real variables. These are V3.03 supplementary observations, not 3.5 acceptance rules.</li>
+<li><strong>AM-BOOK-DE-1990, printed p. 168:</strong> the DATA section describes comma-separated value/text entries; text DATA need not normally be quoted, while a comma inside text would otherwise be interpreted as the next-entry separator. It also says arbitrary text may occur in DATA lines if the program contains no READ statement, in which case the text is ignored like REM. This is a V3.03 description and does not establish 3.5 DATA lexing.</li>
+<li><strong>AM-BOOK-DE-1990, printed p. 169:</strong> the REM entry lists <code>REM</code>, the high comma/apostrophe shorthand, and <code>!</code>. It describes <code>!</code> as usable inside a command line and says that at the beginning of a line it is converted to a REM line. This is supplementary V3.03 evidence only; it does not resolve the 3.5 comment grammar.</li>
+</ul>
+<p>The image review corrects two OCR-derived ambiguities in the earlier inventory: the broad wording about “arbitrary characters” on p. 57 applies to variable/function names, not labels; and the comment reference is printed p. 169 in this supplied book scan (not p. 166). The byte suffix glyph on p. 57 remains visually ambiguous at this scan resolution and is not promoted to a token rule.</p>
+<p>The two remaining page images in the supplied manual's printed 3.5 addendum sequence (pp. 13-33 and 13-36) were also checked. They add examples of version-specific command/function forms but no further general lexical contract. This does not amount to a full review of every page in the manual.</p>
+<p>Additional German-book page-image checks:</p>
+<ul>
+<li><strong>AM-BOOK-DE-1990, printed p. 35:</strong> the page says general hexadecimal notation uses a leading <code>$</code> (example <code>$1AF7</code>), while GFA-BASIC also accepts <code>&amp;H</code> (example <code>&amp;H1AF7</code>) and converts the dollar spelling to its own syntax. This is a V3.03 book statement, not direct evidence for the 3.5 source lexer.</li>
+<li><strong>AM-BOOK-DE-1990, printed p. 56:</strong> the book says Amiga GFA-BASIC allows command names as variable names and has no reserved terms apart from reserved variables such as <code>TIMER</code> and <code>DATE$</code>. This is useful evidence against globally reserving every command word in a future contextual parser, but remains V3.03-only.</li>
+<li><strong>AM-BOOK-DE-1990, printed p. 58:</strong> the book says a name after <code>@</code> at the beginning of a line is a procedure call, while <code>@</code> before a name following an equality sign is a function call. It also confirms the editor displays command names in uppercase. The <code>@</code> interpretation is context-sensitive and must not be flattened into a universal prefix classification.</li>
+<li><strong>AM-BOOK-DE-1990, printed p. 167:</strong> the page gives <code>Befehlszeile ! Kommentartext</code>, says <code>!</code> has the same commenting role as REM, and explicitly says it cannot be used this way on DATA lines because it would be treated as text DATA. At the beginning of a line, <code>!</code> is converted to the apostrophe REM abbreviation. This corroborates the separate REM entry on p. 169.</li>
+<li><strong>AM-BOOK-DE-1990, printed p. 170:</strong> the RESTORE entry uses <code>RESTORE [Labelname]</code> and describes resetting the DATA pointer to the first DATA item following that label. This confirms the use of a label reference without the trailing colon in this V3.03 example; it does not add a new label-character rule.</li>
+</ul>
+<h2 id="3-inherited-candidates-from-the-30-base-manual">3. Inherited candidates from the 3.0 base manual</h2>
+<p>The following rules are described in the base chapters of AM-INTERPRETER-35, but those pages are documented as GFA-BASIC 3.0. Treat each as <strong>inherited candidate / confirmation needed for 3.5</strong>, not as already verified 3.5 behavior.</p>
+<h3 id="31-variable-and-function-names">3.1 Variable and function names</h3>
+<ul>
+<li>Base manual: variable names start with an ASCII letter A–Z, followed by letters, digits 0–9, dots (.) or underscores (_) (printed pp. 2-1–2-2).</li>
+<li>The base manual's p. 2-2 type table lists Boolean <code>!</code>, Byte <code>|</code>, Word <code>&amp;</code>, Integer <code>%</code>, Float <code>#</code>, and String <code>$</code>. Its prose on p. 2-3 contradicts the table by saying Float has no postfix. The German 1990 book says the real-variable <code>#</code> is optional (printed p. 57). Keep the Float suffix disputed; do not treat the table alone as a settled rule.</li>
+<li>The German 1990 book says names may be arbitrarily long and comprise A–Z/a–z/0–9, underscore, and dot; variable and function names must begin with a letter (printed p. 56).</li>
+<li>Preserve original spelling. The 3.0 editor uppercases command names and formats variable names, but this is editor behavior, not evidence that a compiler may rewrite source spelling.</li>
+<li>Arrays use parentheses after the name, for example x%(5); array declarations and indexing therefore require parentheses to remain separate tokens from identifiers.</li>
+</ul>
+<p><strong>Implementation consequence:</strong> a future identifier token needs the full spelling, base-name span, and any suffix as part of its source representation. Do not split suffix punctuation into an unrelated operator without a grammar-aware distinction. Do not normalize case in the lossless stream.</p>
+<p><strong>Unresolved:</strong> exact Amiga 3.5 identifier repertoire, maximum length, case sensitivity, non-ASCII handling, Unicode/code-page behavior, and the internally contradictory Float <code>#</code> postfix rule in the 3.0 base manual.</p>
+<h3 id="32-labels">3.2 Labels</h3>
+<ul>
+<li>Base manual: a label is made from letters, digits, underscores, and dots; unlike a variable name it may start with a digit; it ends in colon; the colon is omitted when the label is referenced by GOTO (printed pp. 5-15 and 7-36).</li>
+<li>German 1990 book: labels may begin with a digit and end in a colon; it also warns that labels which collide with command names can be reinterpreted by the interpreter/editor (printed pp. 56–57).</li>
+</ul>
+<p><strong>Unresolved / source discrepancy:</strong> the German 1990 book uses broader wording (“arbitrary characters”) than the base manual's explicit character set. Neither establishes the exact 3.5 rule. Labels need a distinct lexical/parse context; a colon cannot simply be treated as a generic statement separator.</p>
+<h3 id="33-comments-and-remark-syntax">3.3 Comments and remark syntax</h3>
+<ul>
+<li>Base manual documents <code>REM x</code>, apostrophe-prefixed remark lines, and an inline comment introduced by <code>!</code> after a command (printed p. 7-35). It explicitly says inline <code>!</code> is not allowed with DATA instructions.</li>
+<li>German 1990 book describes the apostrophe/high comma as a shorthand for REM and ! as an inline comment introducer (printed p. 166).</li>
+<li>Both sources state that inline ! is not available on DATA lines, where it would be treated as DATA text.</li>
+<li>German 1990 book says the comment marker is ignored by BASIC and that ! comments may follow a command on the same line (printed p. 166).</li>
+</ul>
+<p><strong>Implementation consequence:</strong> comments must be retained as trivia with exact original bytes and spans. Comment recognition must be aware of string and DATA contexts; blindly truncating at the first ! is incorrect. The apostrophe is context-sensitive: it is used for remark syntax and is also a PRINT output separator in the base manual.</p>
+<p><strong>Unresolved:</strong> exact apostrophe code point(s), alternate remark characters accepted by the editor, case/spacing variants of REM, and exact 3.5 behavior for inline comments.</p>
+<h3 id="34-physical-lines-and-statement-boundaries">3.4 Physical lines and statement boundaries</h3>
+<ul>
+<li>The base manual's editor section says each program line can contain only one command and that remarks may follow the command (printed p. 1-8).</li>
+<li>It describes editor-time syntax checking, abbreviation expansion, indentation, removal of excess spaces, and command/variable name case formatting (printed pp. 1-7–1-8).</li>
+</ul>
+<p>These statements describe the historical editor. They do not yet establish the full source-file grammar accepted by the 3.5 interpreter/compiler, nor whether direct-mode input, ASCII MERGE files, and saved binary program files use identical rules.</p>
+<p><strong>Implementation consequence:</strong> preserve every physical line boundary and whitespace span. Do not silently join lines or split a line into multiple statements. Keep CR, LF, and CRLF distinctions until the 3.5 file-format/source-encoding contract is established.</p>
+<h3 id="35-string-literals-and-data-payloads">3.5 String literals and DATA payloads</h3>
+<ul>
+<li>The base manual says string constants are enclosed in quotation marks (printed pp. 1-4 and 5-7).</li>
+<li>The base manual's DATA section says DATA values may be numeric or string constants; numeric values may be hexadecimal, octal, or binary; and a string containing a comma must be enclosed in quotation marks (printed p. 5-15).</li>
+<li>German 1990 book says text DATA normally need not be quoted; commas delimit successive DATA items, so text containing commas must be quoted. It also says DATA rows may contain arbitrary text when no READ operation uses them (printed pp. 168–169).</li>
+</ul>
+<p><strong>Unresolved:</strong> string escape rules, doubled quotes, embedded quote handling, control characters, exact empty-string syntax, character encoding, and whether unquoted DATA text is consumed by the interpreter with precisely the 1990 book's described rules in 3.5.</p>
+<p><strong>Implementation consequence:</strong> preserve raw literal payload and delimiters. DATA requires a context-sensitive mode; it cannot be lexed as an ordinary comma-separated expression list with comments stripped globally.</p>
+<h3 id="36-numeric-literals">3.6 Numeric literals</h3>
+<ul>
+<li>Base manual's DATA section explicitly permits numeric DATA constants in hexadecimal, octal, and binary forms (printed p. 5-15).</li>
+<li>Base manual's <code>VAL(a$)</code> description says strings beginning with <code>&amp;H</code>, <code>&amp;X</code>, or <code>&amp;O</code> are interpreted as hexadecimal, binary, or octal (printed p. 2-16). This is evidence about VAL string conversion, not sufficient proof of direct numeric-literal syntax.</li>
+<li>The German 1990 book describes a leading dollar form such as <code>$1AF7</code> and the GFA-BASIC <code>&amp;H</code> form (printed p. 35); it also uses <code>&amp;X</code> and <code>&amp;H</code> in examples (printed p. 233). This is V3.03 supplementary evidence only.</li>
+</ul>
+<p><strong>Unresolved:</strong> the complete 3.5 numeric-literal grammar, leading/trailing decimal point rules, exponent syntax and sign rules, digit separators, suffix interaction, overflow behavior, and exact direct-source radix prefixes. The 3.0 DATA example on p. 5-16 shows <code>&amp;A</code>, <code>&amp;HA</code>, <code>&amp;012</code>, <code>&amp;X1010</code>, and <code>%1010</code>, while its prose mentions <code>$</code> for HEX and <code>%</code> for BIN; the VAL page separately documents <code>&amp;H</code>, <code>&amp;X</code>, and <code>&amp;O</code> inside strings. Do not collapse these distinct contexts into one lexer rule.</p>
+<h3 id="37-operators-and-punctuation-candidates">3.7 Operators and punctuation candidates</h3>
+<p>The base operator chapter (printed pp. 3-2–3-16) lists the following operator families:</p>
+<ul>
+<li>Parentheses: ( and ).</li>
+<li>Prefixes: unary + and -.</li>
+<li>Power: <code>^</code> (printed operator hierarchy and examples, p. 3-2; page image checked).</li>
+<li>Multiplicative: * and /.</li>
+<li>Integer arithmetic: DIV and MOD.</li>
+<li>Additive: + and -; string concatenation also uses +.</li>
+<li>Equality and comparisons: <code>=</code>, approximate numeric equality <code>==</code>, not-equal <code>&lt;&gt;</code>, <code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code>; the manual also accepts <code>=&lt;</code> and <code>=&gt;</code> as alternatives to <code>&lt;=</code> and <code>&gt;=</code> (printed pp. 3-13–3-16; page images checked).</li>
+<li>Logical/bitwise: AND, OR, XOR, IMP, EQV, unary NOT.</li>
+</ul>
+<p>The manual documents a precedence hierarchy and says logical operators operate on 32-bit integer values. This list is a 3.0 base candidate pending 3.5 confirmation. Preserve exact operator spelling in tokens; do not canonicalize =&lt; into &lt;= or =&gt; into &gt;= in the source stream.</p>
+<p>Additional punctuation observed in syntax/examples:</p>
+<ul>
+<li>comma separates arguments, list items, and DATA values;</li>
+<li>semicolon separates PRINT/INPUT forms and can affect output newline behavior;</li>
+<li>apostrophe may be a PRINT separator as well as a remark marker;</li>
+<li>colon terminates labels in the documented forms;</li>
+<li>
+<h1 id="prefixes-file-channel-references-in-examples-and-is-also-listed-as-a-variable-type-postfix">prefixes file-channel references in examples and is also listed as a variable type postfix;</h1>
+</li>
+<li>@ prefixes user-defined procedure/function calls in the German 1990 book (printed pp. 57–58);</li>
+<li>! is a Boolean variable postfix and a comment introducer in different contexts;</li>
+<li>&amp; is a Word variable postfix and part of numeric radix prefixes.</li>
+</ul>
+<p>These are lexical candidates, not a complete token contract for Amiga 3.5.</p>
+<h2 id="4-abbreviations-and-reserved-words">4. Abbreviations and reserved words</h2>
+<p>The base interpreter manual's appendix contains a command/abbreviation table. It gives examples such as P for PRINT, G for GOSUB, GO for GOTO, and multi-character abbreviations such as LI INPUT for LINE INPUT. The editor section says abbreviations are expanded to full command names when a line is accepted (printed pp. 1-7–1-8; appendix pp. 12-8 onward).</p>
+<p>The German 1990 book says Amiga GFA-BASIC permits command names as variable names and has no reserved terms apart from reserved variables such as <code>TIMER</code> and <code>DATE$</code> (printed p. 56). It says the editor displays command names in uppercase (p. 58). It also describes contextual <code>@</code> procedure/function calls (p. 58). These are V3.03 observations, not 3.5 keyword rules.</p>
+<p><strong>Unresolved:</strong> whether all abbreviation forms are accepted by the 3.5 interpreter when reading source files, exact abbreviation disambiguation, keyword boundary rules, case sensitivity outside the editor, and the complete 3.5 reserved-word/special-variable inventory. A lexer should initially emit identifier/name candidates and let a dialect-specific classification/parser layer resolve keywords by context; do not make all dictionary words globally reserved based only on the editor.</p>
+<h2 id="5-evidence-matrix-and-implementation-gate">5. Evidence matrix and implementation gate</h2>
+<table>
+<thead>
+<tr>
+<th>Area</th>
+<th>Current evidence</th>
+<th>Status for Amiga 3.5</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Exact _DATA, _DATA=, _0…_9</td>
+<td>Chapter 13 3.5 addendum, pp. 13-34–13-35 (combined update scan: Chapter 14, pp. 14-5–14-6)</td>
+<td><strong>Verified 3.5</strong></td>
+</tr>
+<tr>
+<td>General identifier grammar and suffixes</td>
+<td>Base manual pp. 2-2–2-3 (page images checked; Float <code>#</code> contradiction); German V3.03 pp. 56–57</td>
+<td>Inherited candidate; Float suffix disputed</td>
+</tr>
+<tr>
+<td>Labels</td>
+<td>Base manual pp. 5-15 and 7-36 (page images checked); German V3.03 p. 57 (page image checked)</td>
+<td>Inherited candidate; complete 3.5 status unresolved</td>
+</tr>
+<tr>
+<td>REM/apostrophe/! comments</td>
+<td>Base manual p. 7-35; German V3.03 p. 169 (page image checked)</td>
+<td>Inherited candidate; DATA exclusion explicit in base manual</td>
+</tr>
+<tr>
+<td>One command per physical line</td>
+<td>Base editor p. 1-8</td>
+<td>Editor rule; source grammar confirmation needed</td>
+</tr>
+<tr>
+<td>String delimiters and escapes</td>
+<td>Base manual pp. 1-4, 5-7; DATA p. 5-15; German V3.03 p. 168 (page image checked)</td>
+<td>Delimiter candidate; escaping unresolved</td>
+</tr>
+<tr>
+<td>Radix-prefixed numeric constants</td>
+<td>Base manual pp. 2-16, 5-15–5-16 (page images checked); German V3.03 pp. 35, 233 (p. 35 page image checked)</td>
+<td>Inherited candidate; direct-source prefixes ambiguous</td>
+</tr>
+<tr>
+<td>Operator inventory/precedence</td>
+<td>Base manual pp. 3-2, 3-13–3-16 (selected page images checked)</td>
+<td>Inherited candidate; glyphs confirmed, 3.5 status pending</td>
+</tr>
+<tr>
+<td>Command abbreviations / keyword reservation</td>
+<td>Base manual editor pp. 1-7–1-8 and appendix pp. 12-8 onward; German V3.03 p. 56 (page image checked)</td>
+<td>Editor expansion; Amiga V3.03 book says command words can be variables; 3.5 status unresolved</td>
+</tr>
+<tr>
+<td>Encoding/BOM/non-ASCII</td>
+<td>No adequate 3.5 evidence extracted</td>
+<td>Unknown</td>
+</tr>
+<tr>
+<td>Line endings and continuation</td>
+<td>No adequate 3.5 source-file evidence extracted</td>
+<td>Unknown</td>
+</tr>
+<tr>
+<td>Complete 3.5 reserved words</td>
+<td>Addendum inventory only, not full language catalogue</td>
+<td>Unknown</td>
+</tr>
+</tbody>
+</table>
+<h2 id="6-lexer-architecture-constraints-derived-from-evidence">6. Lexer architecture constraints derived from evidence</h2>
+<ol>
+<li>Keep the original source as the authority. Every token and trivia item must retain half-open byte spans into the original input.</li>
+<li>Preserve all whitespace, comments, physical line endings, original identifier spelling, operator spelling, and literal bytes. The formatter must not need to reconstruct discarded text.</li>
+<li>Recognize only the explicitly verified 3.5 special names at the underscore prefix. Do not generalize underscore-initial identifiers.</li>
+<li>Treat comments and DATA as context-sensitive; ! is not a global comment delimiter.</li>
+<li>Treat identifier suffixes and punctuation contextually. Examples include !, |, &amp;, %, #, $, @, and :.</li>
+<li>Do not normalize case, whitespace, line endings, alternate comparison spellings, or numeric radix spelling during lexing.</li>
+<li>Return structured lexical diagnostics for invalid or unverified source rather than silently repairing it.</li>
+<li>Keep physical source decoding separate from tokenization. The generic UTF-8 source loader does not establish the Amiga source code page.</li>
+<li>Maintain separate evidence-backed positive and negative tests. Each accepted form must cite the 3.5 passage or a reproducible interpreter observation; inherited candidates must remain quarantined until confirmed.</li>
+<li>Do not infer parser or semantic acceptance from a token example, editor display, compiler command line, or OCR artifact.</li>
+</ol>
+<h2 id="7-next-extraction-and-verification-steps">7. Next extraction and verification steps</h2>
+<ul>
+<li>[x] Inspect page images for primary 3.5 addendum pp. 13-33–13-36; base manual pp. 2-2–2-3, 2-16, 3-2, 3-13–3-16, 5-15–5-16, 7-35–7-36; and German 1990 pp. 35, 56–58, 57, 167–170. Keep all 3.0/V3.03 observations provisional.</li>
+<li>[x] Inspect the remaining base-manual operator page images pp. 3-1–3-12 and German 1990 p. 166; resolve the operator/comment OCR glyphs. All base operator pages pp. 3-1–3-16 are now image-checked, but remain 3.0-only candidates.</li>
+<li>[ ] Search the 3.5 addendum and all supplied 3.5-specific pages for any explicit confirmation or change to base lexical rules.</li>
+<li>[ ] Obtain a lawful, reproducible Amiga GFA BASIC 3.5 interpreter probe environment or recorded observations for unresolved cases.</li>
+<li>[ ] Determine source encoding and line-ending behavior independently of the Rust transport loader.</li>
+<li>[ ] Build an evidence-linked lexical test matrix before expanding the production lexer beyond the exact 3.5 addendum special names and existing FACT/PRINT vertical slice.</li>
+<li>[ ] Update issue #46 with the source-backed rule matrix and remaining acceptance gaps.</li>
+</ul>
+<h2 id="source-rights">Source rights</h2>
+<p>This document contains concise original summaries and bibliographic/page references only. Do not commit, redistribute, or reproduce either supplied PDF, substantial source passages, page images, or historical program listings.</p>
+<h2 id="8-focused-source-audit-2026-11-06">8. Focused source audit (2026-11-06)</h2>
+<p>A second retrieval pass over the supplied GFA BASIC 3.5 Interpreter PDF checked the version labels and the passages most likely to be mistaken for 3.5 lexical guarantees. The title page identifies the bundled software as 3.5, but explicitly says the handbook was originally printed for 3.0 and that Chapter 13 is the 3.5 addendum. The following candidate rules remain <strong>unpromoted</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Candidate</th>
+<th>Passage rechecked</th>
+<th>Audit result</th>
+<th>3.5 implementation consequence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Editor case handling and command abbreviation</td>
+<td>Base manual printed pp. 1-7–1-8; section repeatedly labels editor as GFA-BASIC 3.0</td>
+<td>Editor expands abbreviations and sets command/variable display case when leaving a line; this describes editor behavior in the 3.0 base text, not a 3.5 file-lexer case rule</td>
+<td>Do not case-fold identifiers, rewrite keyword case, or accept abbreviations in source files on this evidence</td>
+</tr>
+<tr>
+<td>One command per line and comment placement</td>
+<td>Base manual printed p. 1-8 and pp. 7-34–7-35</td>
+<td>One command per editor line; REM/remark-line forms and inline ! comments are described in the base text; inline ! is excluded after DATA instructions</td>
+<td>Keep physical-line, remark, and inline-comment grammar provisional pending explicit 3.5 confirmation</td>
+</tr>
+<tr>
+<td>Variable-name repertoire and suffixes</td>
+<td>Base manual printed pp. 2-2–2-3</td>
+<td>The variable-type discussion is explicitly a 3.0 rule; the Float # table/prose contradiction remains</td>
+<td>No general identifier/suffix acceptance expansion; retain the existing narrow 3.5 special-name exception only</td>
+</tr>
+<tr>
+<td>String delimiters and payload handling</td>
+<td>Base manual printed pp. 1-4 and 5-7; DATA p. 5-15</td>
+<td>Quoted strings and comma-separated output/data examples are base-manual syntax; no 3.5 addendum statement resolving escapes was found in this pass</td>
+<td>Do not infer quote escaping, comment stripping inside strings, or DATA payload tokenization</td>
+</tr>
+<tr>
+<td>Numeric prefixes</td>
+<td>Base manual printed pp. 2-16 and 5-15–5-16</td>
+<td>OCR/page-image notes already record conflicting $, %, &amp;H, &amp;X, &amp;O, and &amp;A descriptions/examples; no 3.5 addendum correction found</td>
+<td>Do not promote a complete direct numeric-literal prefix grammar</td>
+</tr>
+<tr>
+<td>Comment forms</td>
+<td>Base manual printed pp. 7-34–7-35</td>
+<td>REM, remark-line shorthand, and inline ! are base-manual descriptions; ! has a DATA restriction</td>
+<td>Do not implement ! as an unconditional lexer comment delimiter</td>
+</tr>
+</tbody>
+</table>
+<p>The 3.5 addendum review continues to support only the exact special spellings _DATA, _0…_9 as version-marked lexical forms (printed pp. 13-34–13-35). _DATA= is _DATA followed by =, not a combined identifier. The addendum examples for FACT/VARIAT/COMBIN and GURU do not establish general identifier, keyword-reservation, case, comment, or literal rules.</p>
+<h3 id="regression-gate-after-this-audit">Regression gate after this audit</h3>
+<p>The narrow special-name tests remain the only positive underscore-prefix contract: accept exact _DATA and each _0…_9 spelling, preserve original bytes/spans, and tokenize _DATA= as identifier plus assignment. Negative boundary cases must reject _foo, _10, _DATA2, and _data as a whole (never accept a valid prefix and leave a suffix). These are exact-name boundary tests only. Do not add broad positive tests for identifiers, comments, strings, numeric prefixes, or operators until a 3.5 source passage or a reproducible 3.5 interpreter observation supports each case. Existing FACT/PRINT prototype tests remain scoped to their cited addendum examples and are not a general grammar conformance suite.</p>
+<p>This audit adds no newly verified general lexical rule and therefore intentionally makes no production lexer behavior change.</p>
+<h2 id="9-full-chapter-13-text-sweep-2026-11-07">9. Full Chapter 13 text sweep (2026-11-07)</h2>
+<p>The complete OCR text of the supplied interpreter manual's Chapter 13 (the explicitly versioned 3.5 addendum, printed pp. 13-1 onward) was extracted and searched, rather than sampling only the last four pages. This is a text-level sweep; OCR-derived spellings below are discovery evidence and should be checked against page images before becoming exact-token regression fixtures.</p>
+<p>The sweep adds one useful qualification to the earlier abbreviation assessment:</p>
+<ul>
+<li><strong>Amiga GFA BASIC 3.5 explicitly documents command abbreviations.</strong> Printed p. 13-1 gives <code>MAT BASE 0</code> / <code>MAT BASE 1</code> and the abbreviation <code>m b 0/m b 1</code>. Printed pp. 13-2–13-3 give abbreviations for <code>MAT CLR</code>, <code>MAT SET</code>, <code>MAT ONE</code>, <code>MAT READ</code>, <code>MAT PRINT</code>, and <code>MAT INPUT</code>; later matrix-operation entries also document abbreviations for <code>MAT CPY</code>, <code>MAT XCPY</code>, and <code>MAT TRANS</code>. Therefore it is no longer accurate to describe all command abbreviations as evidenced only by the 3.0 editor appendix.</li>
+<li>These are <strong>specific command abbreviations in 3.5 documentation</strong>, not proof that the editor's complete 3.0 abbreviation table applies to 3.5 source files, nor proof of abbreviation matching, case folding, token boundaries, or ambiguity resolution. Keep generic abbreviation support unimplemented until those details are established.</li>
+<li>The chapter contains many 3.5 command signatures and examples using matrix names, parentheses, commas, brackets, assignment, numeric arguments, and command names. They are syntax examples for the documented matrix commands; they do not independently define the general identifier, literal, punctuation, or operator grammar.</li>
+<li>The chapter's final pages also contain the already inventoried <code>_DATA</code> and <code>_0</code>…<code>_9</code> special names. No additional general lexical contract for identifiers, comments, strings, numeric literal prefixes, source encoding, or line endings was found in the OCR sweep.</li>
+</ul>
+<p><strong>Evidence matrix correction:</strong> command abbreviations now have a narrow verified 3.5 subset (the explicit MAT abbreviations above), while the full abbreviation mechanism and reserved-word policy remain unresolved. This does not justify enabling abbreviations in the production lexer: abbreviation expansion is likely a command/parser/editor concern and needs a verified source-file rule.</p>
+<p>The OCR extraction is not a substitute for page-image inspection. Do not use OCR-normalized punctuation or damaged examples (including apparent decimal/comma substitutions) as lexical fixtures without checking the corresponding printed page image.</p>
+<h2 id="10-page-image-verification-of-35-matrix-abbreviations-2026-11-09">10. Page-image verification of 3.5 matrix abbreviations (2026-11-09)</h2>
+<p>The supplied 469-page interpreter manual's printed 3.5 addendum pages 13-1–13-5 (PDF pages 431–435) were visually inspected. This verifies the abbreviation spellings discovered in the Chapter 13 text sweep and fixes OCR-sensitive spacing/punctuation. The abbreviations are printed as short command forms with spaces; they are not evidence for a general lexer-level abbreviation rule.</p>
+<table>
+<thead>
+<tr>
+<th>Printed page</th>
+<th>Full command form</th>
+<th>Printed abbreviation</th>
+<th>Evidence scope</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>13-1</td>
+<td>MAT BASE 0 / MAT BASE 1</td>
+<td>m b 0 / m b 1</td>
+<td>Explicit 3.5 command abbreviation</td>
+</tr>
+<tr>
+<td>13-2</td>
+<td>MAT CLR a()</td>
+<td>m cl a()</td>
+<td>Explicit 3.5 command abbreviation</td>
+</tr>
+<tr>
+<td>13-2</td>
+<td>MAT SET a()=x</td>
+<td>m se a()=x</td>
+<td>Explicit 3.5 command abbreviation</td>
+</tr>
+<tr>
+<td>13-2</td>
+<td>MAT ONE a()</td>
+<td>m o a()</td>
+<td>Explicit 3.5 command abbreviation</td>
+</tr>
+<tr>
+<td>13-4</td>
+<td>MAT READ a()</td>
+<td>m r a()</td>
+<td>Explicit 3.5 command abbreviation</td>
+</tr>
+<tr>
+<td>13-4</td>
+<td>MAT PRINT [#i,]a()[,g,n]</td>
+<td>m p [#i]a()[g,n] or m ? [#i,]a()[g,n]</td>
+<td>Explicit 3.5 alternatives; punctuation/optional-argument notation must be preserved as printed</td>
+</tr>
+<tr>
+<td>13-5</td>
+<td>MAT INPUT #i,a()</td>
+<td>m i #i,a()</td>
+<td>Explicit 3.5 command abbreviation</td>
+</tr>
+<tr>
+<td>13-5</td>
+<td>MAT CPY a(...)=b(...)[,h,w]</td>
+<td>m c a(i,j)=b(k,l),h,w</td>
+<td>Explicit 3.5 command abbreviation</td>
+</tr>
+<tr>
+<td>13-5</td>
+<td>MAT XCPY a(...)=b(...)[,h,w]</td>
+<td>m x a(i,j)=b(k,l),h,w</td>
+<td>Explicit 3.5 command abbreviation</td>
+</tr>
+<tr>
+<td>13-5</td>
+<td>MAT TRANS a()[=b()]</td>
+<td>m t a()=b()</td>
+<td>Explicit 3.5 command abbreviation</td>
+</tr>
+</tbody>
+</table>
+<p>The page images confirm the OCR text for these forms on pp. 13-1–13-5. They do not establish whether abbreviations are accepted in merged .LST source, whether matching is case-insensitive, how whitespace is tokenized, how abbreviations interact with identifiers, or how ambiguous prefixes are resolved. The examples are command-specific and remain a parser/editor concern until source-file acceptance is demonstrated. Do not add generic abbreviation expansion to the lexer from this evidence alone.</p>
+<p>The image review is limited to pp. 13-1–13-5; later matrix-command abbreviation entries in Chapter 13 still require their own page-image checks before their exact punctuation is promoted to regression fixtures.</p>
+<h2 id="11-page-image-verification-of-later-matrix-abbreviations-2026-11-09">11. Page-image verification of later matrix abbreviations (2026-11-09)</h2>
+<p>The next addendum page images were inspected in the supplied interpreter PDF: printed pp. 13-6–13-15 (PDF pp. 436–445). These pages contain additional explicit abbreviation rows. The following spellings are legible in the page images:</p>
+<table>
+<thead>
+<tr>
+<th>Printed page</th>
+<th>Full command form</th>
+<th>Printed abbreviation</th>
+<th>Evidence scope</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>13-6</td>
+<td>MAT COPY a()=b()</td>
+<td>m c a()=b()</td>
+<td>Explicit 3.5 command abbreviation; full-matrix copy</td>
+</tr>
+<tr>
+<td>13-7</td>
+<td>MAT COPY a(i,j)=b()</td>
+<td>m c a(i,j)=b()</td>
+<td>Explicit 3.5 command abbreviation; destination offset</td>
+</tr>
+<tr>
+<td>13-8</td>
+<td>MAT COPY a()=b(i,j)</td>
+<td>m c a()=b(i,j)</td>
+<td>Explicit 3.5 command abbreviation; source offset</td>
+</tr>
+<tr>
+<td>13-9</td>
+<td>MAT COPY a(i,j)=b(k,l)</td>
+<td>m c a(i,j)=b(k,l)</td>
+<td>Explicit 3.5 command abbreviation; source and destination offsets</td>
+</tr>
+<tr>
+<td>13-10</td>
+<td>MAT COPY a()=b(),h,w</td>
+<td>m c a()=b()</td>
+<td>Explicit 3.5 command abbreviation; optional dimensions are described in the command syntax</td>
+</tr>
+<tr>
+<td>13-11</td>
+<td>MAT XCPY a(i,j)=b(k,l)[,h,w]</td>
+<td>m x a(i,j)=b(k,l),h,w</td>
+<td>Explicit 3.5 command abbreviation; transposing copy</td>
+</tr>
+<tr>
+<td>13-15</td>
+<td>MAT TRANS a()</td>
+<td>m t a()</td>
+<td>Explicit 3.5 command abbreviation; in-place transpose</td>
+</tr>
+</tbody>
+</table>
+<p>Printed pp. 13-12–13-14 were also checked. They continue the MAT CPY/XCPY/TRANS explanations and examples but do not add another distinct abbreviation row. Page 13-15 repeats the in-place MAT TRANS form and explicitly prints its abbreviation.</p>
+<p>The command-specific forms above expand the verified 3.5 abbreviation inventory; they do not establish a general abbreviation algorithm, a minimum prefix length, case-insensitive matching, acceptance in .LST files, or identifier-boundary/ambiguity behavior. In particular, the printed abbreviation m c is reused for several MAT COPY forms with different argument patterns. That is evidence for command-specific syntax, not evidence that the lexer can safely expand m c without parser context.</p>
+<p><strong>Correction to section 10:</strong> the statement that later matrix-command abbreviation entries still require page-image checks is now superseded for the entries on printed pp. 13-6–13-11 and 13-15. The image review now covers the contiguous addendum range pp. 13-1–13-15 (PDF pp. 431–445). No production lexer behavior changes.</p>
+<h2 id="12-page-image-verification-of-35-matrix-operation-abbreviations-2026-11-09">12. Page-image verification of 3.5 matrix operation abbreviations (2026-11-09)</h2>
+<p>The next contiguous addendum range, printed pp. 13-16–13-25 (PDF pp. 446–455), was checked against page images. Pages 13-16–13-23 print the following additional command-specific abbreviation forms:</p>
+<table>
+<thead>
+<tr>
+<th>Printed page</th>
+<th>Full command form</th>
+<th>Printed abbreviation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>13-16</td>
+<td>MAT ADD a()=b()+c()</td>
+<td>m a()=b()+c()</td>
+</tr>
+<tr>
+<td>13-17</td>
+<td>MAT ADD a(),b()</td>
+<td>m a a(),b()</td>
+</tr>
+<tr>
+<td>13-18</td>
+<td>MAT ADD a(),x</td>
+<td>m a a(),x</td>
+</tr>
+<tr>
+<td>13-18</td>
+<td>MAT SUB a()=b()-c()</td>
+<td>m a()=b()-c()</td>
+</tr>
+<tr>
+<td>13-19</td>
+<td>MAT SUB a(),b()</td>
+<td>m s a(),b()</td>
+</tr>
+<tr>
+<td>13-20</td>
+<td>MAT SUB a(),x</td>
+<td>m s a(),x</td>
+</tr>
+<tr>
+<td>13-20</td>
+<td>MAT MUL a()=b()*c()</td>
+<td>m a()=b()*c()</td>
+</tr>
+<tr>
+<td>13-22</td>
+<td>MAT MUL x=a()*b()</td>
+<td>m x=a()*b()</td>
+</tr>
+<tr>
+<td>13-22</td>
+<td>MAT MUL x=a()*b()*c()</td>
+<td>m x=a()*b()*c()</td>
+</tr>
+<tr>
+<td>13-23</td>
+<td>MAT NORM a(),0 / MAT NORM a(),1</td>
+<td>m no a(),0 / m no a(),1</td>
+</tr>
+</tbody>
+</table>
+<p>The page images show the spaces in the short forms as printed. The <code>MAT ADD</code> and <code>MAT SUB</code> families use different one-letter forms depending on the operand pattern (<code>m a</code> versus <code>m s</code>), while the matrix-product forms use <code>m</code> followed by the expression-shaped abbreviation. <code>MAT NORM</code> explicitly gives both alternatives and labels them with the German <code>bzw.</code> (“respectively/or”). These are documentation spellings only; they do not specify how a source lexer or editor recognizes them.</p>
+<p>Printed pp. 13-24–13-25 were also checked. They continue matrix-operation examples (including MAT CPY/XCPY and matrix multiplication) but add no separate <code>Abbreviation:</code> row. No abbreviation was inferred from example code alone.</p>
+<p>Together with sections 10–11, the page-image review now covers printed 3.5 addendum pp. 13-1–13-25 (PDF pp. 431–455). The inventory is still limited to explicitly printed command-specific forms. It does not establish a general expansion algorithm, minimum prefix length, case folding, whitespace normalization, token boundaries, ambiguity resolution, or acceptance in <code>.LST</code> source. No production lexer behavior changes.</p>
+<h2 id="13-page-image-check-of-the-intervening-addendum-page-2026-11-09">13. Page-image check of the intervening addendum page (2026-11-09)</h2>
+<p>The supplied interpreter PDF page image for printed p. 13-32 (PDF page 462) was inspected at 180 dpi. It is intentionally blank apart from the running header and footer; it contains no body text, command signature, abbreviation row, or lexical example. The OCR/text extraction likewise yields only the addendum header and page footer. No abbreviation or lexer rule is inferred from this page.</p>
+<p>This closes the page-image gap between the already reviewed printed pp. 13-1–13-31 and the separately checked pp. 13-33–13-36. It does not expand the verified lexical contract. The remaining open research work concerns confirmation of inherited 3.0 candidates and reproducible interpreter observations, not an unreviewed page in this addendum sequence.</p>
+<h2 id="14-supplementary-v303-comment-page-image-check-2026-11-09">14. Supplementary V3.03 comment page-image check (2026-11-09)</h2>
+<p>The supplied German 1990 book's printed p. 166 was inspected against its page image. Section 6.3 is headed “Kommentar innerhalb einer Befehlszeile” and prints the form <code>Befehlszeile ! Kommentartext</code>. The prose says the text after <code>!</code> is ignored as a program comment, that <code>!</code> can append a comment directly to a command line, that this form is not available on DATA lines because the text would be treated as DATA, and that a line-initial <code>!</code> is converted to the apostrophe REM abbreviation. The following printed p. 167 continues the explanation and gives examples.</p>
+<p>This confirms the OCR reading and page reference for the book's V3.03 comment description. It is supplementary evidence only; it does not promote <code>!</code> to a normative Amiga GFA BASIC 3.5 comment delimiter. The 3.5 lexer must continue to treat inline-comment recognition and DATA context as unresolved until the 3.5 interpreter manual or a reproducible 3.5 observation confirms them.</p>
+<p>The page also contains SELECT/CASE range examples, but these are control-flow syntax rather than new lexical-contract evidence and are not used to change lexer acceptance.</p>
+<h2 id="15-page-image-audit-of-the-base-manual-operator-chapter-2026-11-09">15. Page-image audit of the base-manual operator chapter (2026-11-09)</h2>
+<p>The page images for the previously uncovered operator pages, printed pp. 3-1–3-12 (PDF pp. 79–90), were checked. The chapter title page (p. 3-1) contains no operator syntax. The content pages visibly identify themselves as <strong>GFA-BASIC 3.0 Amiga</strong>, so all observations below remain inherited candidates and are not promoted to Amiga 3.5 behavior.</p>
+<p>The page-image pass confirms the following source descriptions:</p>
+<ul>
+<li><strong>p. 3-3:</strong> the logical-operator overview names <code>AND</code>, <code>OR</code>, <code>XOR</code>, <code>NOT</code>, <code>IMP</code>, and <code>EQV</code>.</li>
+<li><strong>pp. 3-4–3-9:</strong> the individual headings and forms are <code>NOT x</code>, <code>x AND y</code>, <code>x OR y</code>, <code>x XOR y</code>, <code>x IMP y</code>, and <code>x EQV y</code>.</li>
+<li><strong>p. 3-10:</strong> <code>+</code> and <code>-</code> are described for arithmetic addition/subtraction; both can also be prefixes. The same page explicitly permits <code>+</code> for string concatenation and says string subtraction is not possible.</li>
+<li><strong>p. 3-11:</strong> <code>=</code> is described as equality comparison for numeric or string expressions.</li>
+<li><strong>p. 3-12:</strong> the same <code>=</code> glyph is described as assignment when a variable is on the left and an expression on the right. This is a context distinction in the base manual, not a separate token spelling.</li>
+</ul>
+<p>The p. 3-10–3-12 page images were inspected at 180 dpi to resolve the OCR-sensitive <code>+</code>, <code>-</code>, and <code>=</code> forms; pp. 3-3–3-9 were reviewed together at 120 dpi. Combined with the previously recorded image checks of p. 3-2 and pp. 3-13–3-16, the full printed operator chapter pp. 3-1–3-16 has now been image-reviewed. The comparison glyphs and alternate forms remain as recorded in the earlier inventory; this pass adds no 3.5-specific rule.</p>
+<p><strong>Implementation gate:</strong> do not enable these operators in the Amiga 3.5 production lexer solely on this evidence. The manual labels the chapter GFA-BASIC 3.0. The operator inventory, precedence, contextual use of <code>=</code>, and string concatenation must remain inherited candidates until confirmed by an explicit 3.5 passage or reproducible 3.5 interpreter observation.</p>
+<h2 id="6-textual-listing-format-and-encoding-limits">6. Textual listing format and encoding limits</h2>
+<p>The supplied interpreter manual describes the editor's textual program interchange format:</p>
+<ul>
+<li><strong>AM-INTERPRETER-35, printed p. 1-14:</strong> the Merge (F2) command merges data “in ASCII format” from a <code>.LST</code> file into the current program. Save,A (Shift+F2) writes the current program in ASCII format for later Merge; the extension is <code>.LST</code>.</li>
+<li><strong>AM-INTERPRETER-35, printed p. 7-41:</strong> LIST writes program data in ASCII format and explicitly says data intended for later Merge must be saved with LIST or SAVE,A in ASCII format; <code>.LST</code> is the default extension.</li>
+<li><strong>AM-BOOK-DE-1990, section describing ASCII files (PDF page 100; printed page number not legible in the supplied OCR):</strong> defines an ASCII file as writing each text and control character in occurrence order as its corresponding value from 0 to 255. It contrasts these files with token-coded <code>.GFA</code> files. This is supplementary V3.03 book evidence, not a complete 3.5 byte-encoding specification.</li>
+</ul>
+<p>These passages establish the intended <em>textual ASCII listing</em> format and the <code>.LST</code> interchange role. They do not specify a concrete 8-bit character mapping for values 128–255, Unicode/UTF-8 support, BOM handling, or how malformed byte sequences should be handled. The phrase “ASCII” alone must not be silently interpreted as UTF-8, ISO-8859-1, Windows-1252, or Amiga-specific character encoding. Keep the decoder contract unresolved pending stronger 3.5 evidence or reproducible tests against the original interpreter.</p>
+<p>The German book's STORE entry separately specifies CR/LF (CHR$(13)/CHR$(10)) after each serialized string-field element. That is evidence for STORE's data-file format only; it does <strong>not</strong> establish the line-ending convention of program <code>.LST</code> files. Do not reuse it as an LST decoder rule.</p>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>
