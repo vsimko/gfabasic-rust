@@ -1,6 +1,6 @@
 {
   "repository": "vsimko/gfabasic-rust",
-  "generated_at": "2026-11-11T15:27:23.081849Z",
+  "generated_at": "2026-11-11T15:27:51.912342Z",
   "freshness_threshold_hours": 168,
   "workflows": [
     {
@@ -10,14 +10,14 @@
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/docs.yml",
       "state": "in_progress",
       "latest": {
-        "id": 43048483188,
+        "id": 43048547105,
         "name": "Documentation checks",
         "status": "in_progress",
         "event": "pull_request",
         "branch": "ci/stable-pr-gate",
-        "created_at": "2026-11-11T15:27:07Z",
-        "updated_at": "2026-11-11T15:27:17Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43048483188",
+        "created_at": "2026-11-11T15:27:31Z",
+        "updated_at": "2026-11-11T15:27:41Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43048547105",
         "age_hours": 0,
         "freshness": "fresh"
       },
@@ -227,14 +227,14 @@
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/pr-preview.yml",
       "state": "in_progress",
       "latest": {
-        "id": 43048483262,
+        "id": 43048547037,
         "name": "Pull request website preview",
         "status": "in_progress",
         "event": "pull_request",
         "branch": "ci/stable-pr-gate",
-        "created_at": "2026-11-11T15:27:07Z",
-        "updated_at": "2026-11-11T15:27:11Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43048483262",
+        "created_at": "2026-11-11T15:27:31Z",
+        "updated_at": "2026-11-11T15:27:40Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43048547037",
         "age_hours": 0,
         "freshness": "fresh"
       },
