@@ -1,0 +1,238 @@
+schema-version = 1
+inventory-id = "amiga-gfa-basic-3.0-event-window-statements"
+target-dialect = "amiga-gfa-basic-interpreter"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+source-pages = ["9-2–9-38", "10-2–10-16"]
+"3.5-status" = "unverified"
+notes = "Page-reviewed declaration subset for event, menu, screen, window and advanced Amiga facilities. Names shared with functions or already inventoried statements are explicitly marked for cross-inventory deduplication. This is 3.0 evidence only."
+
+[[statements]]
+name = "ON MENU"
+printed-pages = ["9-2", "9-9–9-10"]
+syntax-variants = ["ON MENU GOSUB", "ON MENU KEY GOSUB", "ON MENU BUTTON GOSUB"]
+aliases = []
+notes = "Event polling and event-handler forms; one canonical statement name."
+
+[[statements]]
+name = "ON MESSAGE"
+printed-pages = ["9-10"]
+syntax-variants = ["ON MESSAGE GOSUB"]
+aliases = []
+
+[[statements]]
+name = "SLEEP"
+printed-pages = ["9-9"]
+syntax-variants = []
+aliases = []
+notes = "Waits for an Intui-tick; manual describes equivalence to ON MENU 1."
+
+[[statements]]
+name = "MENU"
+printed-pages = ["9-4–9-8", "9-12"]
+syntax-variants = ["MENU m$()", "MENU(x)", "MENU KILL", "MENU(x,y)", "MENU(x,str$)", "MENU KEY x,y"]
+aliases = []
+notes = "Creation, inspection, mutation, keyboard shortcut and kill forms share the MENU name."
+
+[[statements]]
+name = "OPENS"
+printed-pages = ["9-17"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "CLOSES"
+printed-pages = ["9-18"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "FRONTS"
+printed-pages = ["9-19"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "BACKS"
+printed-pages = ["9-19"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "MOVES"
+printed-pages = ["9-20"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "TITLES"
+printed-pages = ["9-21"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "SETPEN"
+printed-pages = ["9-22"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "SETSTITLE"
+printed-pages = ["9-23"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "SCREEN"
+printed-pages = ["9-24"]
+syntax-variants = []
+aliases = []
+notes = "Same name also appears in the built-in function inventory; count once by name."
+
+[[statements]]
+name = "OPENW"
+printed-pages = ["9-26–9-27"]
+syntax-variants = []
+aliases = []
+notes = "The negative screen-number variant is separately documented in the 3.5 addendum, but remains one command name."
+
+[[statements]]
+name = "CLOSEW"
+printed-pages = ["9-28"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "CLEARW"
+printed-pages = ["9-29"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "TITLEW"
+printed-pages = ["9-30"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "BACKW"
+printed-pages = ["9-31"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "FRONTW"
+printed-pages = ["9-31"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "FULLW"
+printed-pages = ["9-32"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "MOVEW"
+printed-pages = ["9-33"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "SIZEW"
+printed-pages = ["9-33"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "LIMITW"
+printed-pages = ["9-34"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "SETWPEN"
+printed-pages = ["9-34"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "SETWTITLE"
+printed-pages = ["9-34"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "WINDOW"
+printed-pages = ["9-35"]
+syntax-variants = []
+aliases = []
+notes = "Same name also appears in the built-in function inventory; count once by name."
+
+[[statements]]
+name = "ALERT"
+printed-pages = ["9-36"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "FILESELECT"
+printed-pages = ["9-37–9-38"]
+syntax-variants = []
+aliases = []
+notes = "Also inventoried as a function-like built-in; count once by name."
+
+[[statements]]
+name = "EXEC"
+printed-pages = ["10-2–10-3"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "SPRITE"
+printed-pages = ["10-5–10-6"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "SOUND"
+printed-pages = ["10-7"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "WAVE"
+printed-pages = ["10-8"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "STICK"
+printed-pages = ["10-7"]
+syntax-variants = []
+aliases = []
+notes = "Function-like use also appears in the function inventory; count once by name."
+
+[[statements]]
+name = "STRIG"
+printed-pages = ["10-8"]
+syntax-variants = []
+aliases = []
+notes = "Function-like use also appears in the function inventory; count once by name."
+
+[[statements]]
+name = "SAY"
+printed-pages = ["10-9"]
+syntax-variants = []
+aliases = []
+
+[normalization]
+menu-and-event-syntax = "one-canonical-name-per-statement"
+shared-function-statement-name = "deduplicate-by-name"
+addendum-syntax-variant = "one-command-name"
+
+[limitations]
+chapter-9-and-10-subset-only = true
+complete-language-inventory = false
+explicit-3.5-evidence = false
+runtime-observation = "not-recorded"
