@@ -12,7 +12,7 @@ DEFAULT_MANIFEST = Path("docs/research/amiga-gfa-basic-candidates.toml")
 DEFAULT_OUTPUT = Path("docs/research/amiga-gfa-basic-candidate-report.md")
 STATUSES = {"candidate", "confirmed-in-3.5", "contradicted", "documented-in-3.0-only", "unresolved"}
 REQUIRED = {"id", "name", "kind", "source", "source-version", "printed-pages", "status", "notes"}
-EXPECTED_35_DIRECT_USE_EVIDENCE = {"amiga.base2.hex":{"source":"AM-INTERPRETER-35","version":"3.5 addendum","pages":["13-36"],"basis":"direct-example-use"},"amiga.base2.str":{"source":"AM-INTERPRETER-35","version":"3.5 addendum","pages":["13-3"],"basis":"direct-documentation-reference"},"amiga.base4.rand":{"source":"AM-INTERPRETER-35","version":"3.5 addendum","pages":["13-2"],"basis":"direct-example-use"},"amiga.base4.succ":{"source":"AM-INTERPRETER-35","version":"3.5 addendum","pages":["13-5"],"basis":"direct-example-use"},"amiga.base4.string":{"source":"AM-INTERPRETER-35","version":"3.5 addendum","pages":["13-21"],"basis":"direct-example-use"},"amiga.base4.rnd":{"source":"AM-BOOK-DE-1990","version":"3.5 companion book Chapter 18","pages":["458"],"basis":"direct-example-use"},"amiga.base4.int":{"source":"AM-BOOK-DE-1990","version":"3.5 companion book Chapter 18","pages":["458"],"basis":"direct-example-use"},"amiga.base4.sqr":{"source":"AM-BOOK-DE-1990","version":"3.5 companion book Chapter 18","pages":["473"],"basis":"direct-example-use"}}
+EXPECTED_35_SOURCE_EVIDENCE = {"amiga.base2.hex":{"source":"AM-INTERPRETER-35","version":"3.5 addendum","pages":["13-36"],"basis":"direct-example-use"},"amiga.base2.str":{"source":"AM-INTERPRETER-35","version":"3.5 addendum","pages":["13-3"],"basis":"direct-documentation-reference"},"amiga.base4.rand":{"source":"AM-INTERPRETER-35","version":"3.5 addendum","pages":["13-2"],"basis":"direct-example-use"},"amiga.base4.succ":{"source":"AM-INTERPRETER-35","version":"3.5 addendum","pages":["13-5"],"basis":"direct-example-use"},"amiga.base4.string":{"source":"AM-INTERPRETER-35","version":"3.5 addendum","pages":["13-21"],"basis":"direct-example-use"},"amiga.base4.rnd":{"source":"AM-BOOK-DE-1990","version":"3.5 companion book Chapter 18","pages":["458"],"basis":"direct-example-use"},"amiga.base4.int":{"source":"AM-BOOK-DE-1990","version":"3.5 companion book Chapter 18","pages":["458"],"basis":"direct-example-use"},"amiga.base4.sqr":{"source":"AM-BOOK-DE-1990","version":"3.5 companion book Chapter 18","pages":["473"],"basis":"direct-example-use"}}
 
 
 def load_candidates(path: Path) -> list[dict]:
@@ -35,7 +35,7 @@ def load_candidates(path: Path) -> list[dict]:
         if not item["printed-pages"] or not item["source"] or not item["source-version"]:
             raise ValueError(f"{item['id']}: source and printed page locators are required")
     # Chapter 2–4 source facts are tracked as granular evidence records.
-    # These records retain their 3.0 source origin; direct 3.5 addendum use can
+    # These records retain their 3.0 source origin; direct 3.5 source use can
     # establish only the call forms actually demonstrated.
     core_candidates = [
         item for item in candidates
@@ -48,10 +48,10 @@ def load_candidates(path: Path) -> list[dict]:
             raise ValueError(f'{item["id"]}: Chapter 2–4 candidate must retain 3.0 source scope')
         if item["status"] == "confirmed-in-3.5":
             if (
-                item.get("confirmation-source") != EXPECTED_35_DIRECT_USE_EVIDENCE.get(item["id"], {}).get("source")
-                or item.get("confirmation-source-version") != EXPECTED_35_DIRECT_USE_EVIDENCE.get(item["id"], {}).get("version")
-                or item.get("confirmation-basis") != EXPECTED_35_DIRECT_USE_EVIDENCE.get(item["id"], {}).get("basis")
-                or item.get("confirmation-printed-pages") != EXPECTED_35_DIRECT_USE_EVIDENCE.get(item["id"], {}).get("pages")
+                item.get("confirmation-source") != EXPECTED_35_SOURCE_EVIDENCE.get(item["id"], {}).get("source")
+                or item.get("confirmation-source-version") != EXPECTED_35_SOURCE_EVIDENCE.get(item["id"], {}).get("version")
+                or item.get("confirmation-basis") != EXPECTED_35_SOURCE_EVIDENCE.get(item["id"], {}).get("basis")
+                or item.get("confirmation-printed-pages") != EXPECTED_35_SOURCE_EVIDENCE.get(item["id"], {}).get("pages")
             ):
                 raise ValueError(f'{item["id"]}: 3.5 confirmation requires direct source-evidence provenance')
         elif item["status"] != "documented-in-3.0-only":
@@ -122,7 +122,7 @@ def render(candidates: list[dict]) -> str:
         "## Interpretation and limitations",
         "",
         "- `documented-in-3.0-only` means the cited declaration is present in the 3.0 base manual but no 3.5 evidence establishes its applicability. This does not mean removed or incompatible.",
-        "- `confirmed-in-3.5` can be based either on an explicit 3.5 addendum declaration or on direct use or reference in the 3.5 addendum. For inherited functions, direct addendum evidence confirms only the form actually shown or referenced; it does not revalidate every overload or edge case.",
+        "- `confirmed-in-3.5` can be based either on an explicit 3.5 source declaration or on direct use or reference in 3.5 material. For inherited functions, direct evidence confirms only the form actually shown or referenced; it does not revalidate every overload or edge case.",
         "- `unresolved` is reserved for candidates whose source scope or declaration identity still needs research.",
         "- A confirmed family does not settle every overload or edge case; qualifications in the manifest and detailed research notes remain authoritative.",
         "- Chapter 12 indexes and reference tables are navigation aids, not declarations or proof of availability.",
