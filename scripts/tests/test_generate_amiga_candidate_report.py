@@ -19,6 +19,8 @@ class AmigaCandidateReportTests(unittest.TestCase):
         self.assertIn("amiga.35.mat-copy", report)
         self.assertIn("amiga.base4.rand", report)
         self.assertIn("amiga.base2.hex", report)
+        self.assertIn("amiga.base5.data-read", report)
+        self.assertIn("amiga.base7.resume", report)
         self.assertIn("Confirmed by 3.5 sources", report)
         self.assertIn("Direct example use", report)
         self.assertIn("13-36", report)
