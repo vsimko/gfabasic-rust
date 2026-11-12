@@ -25,13 +25,23 @@ class ChapterTwoToFourCandidateAuditTests(unittest.TestCase):
                 self.assertEqual(item["source-version"], "3.0 base manual")
                 self.assertTrue(item["printed-pages"])
                 if item["status"] == "confirmed-in-3.5":
-                    expected_source = "AM-BOOK-DE-1990" if item["id"] in {"amiga.base4.rnd", "amiga.base4.int", "amiga.base4.sqr"} else "AM-INTERPRETER-35"
-                    expected_version = "3.5 companion book Chapter 18" if expected_source == "AM-BOOK-DE-1990" else "3.5 addendum"
-                    self.assertEqual(item.get("confirmation-source"), expected_source)
-                    self.assertEqual(item.get("confirmation-source-version"), expected_version)
-                    expected_basis = "direct-documentation-reference" if item["id"] == "amiga.base2.str" else "direct-example-use"
-                    self.assertEqual(item.get("confirmation-basis"), expected_basis)
-                    self.assertTrue(item.get("confirmation-printed-pages"))
+                    expected_sources = {
+                        "amiga.base2.hex": ("AM-INTERPRETER-35", "3.5 addendum", ["13-36"], "direct-example-use"),
+                        "amiga.base2.str": ("AM-INTERPRETER-35", "3.5 addendum", ["13-3"], "direct-documentation-reference"),
+                        "amiga.base4.rand": ("AM-INTERPRETER-35", "3.5 addendum", ["13-2"], "direct-example-use"),
+                        "amiga.base4.succ": ("AM-INTERPRETER-35", "3.5 addendum", ["13-5"], "direct-example-use"),
+                        "amiga.base4.string": ("AM-INTERPRETER-35", "3.5 addendum", ["13-21"], "direct-example-use"),
+                        "amiga.base4.rnd": ("AM-BOOK-DE-1990", "3.5 companion book Chapter 18", ["458"], "direct-example-use"),
+                        "amiga.base4.int": ("AM-BOOK-DE-1990", "3.5 companion book Chapter 18", ["458"], "direct-example-use"),
+                        "amiga.base4.sqr": ("AM-BOOK-DE-1990", "3.5 companion book Chapter 18", ["473"], "direct-example-use"),
+                        "amiga.base3.numeric-add-sub": ("AM-BOOK-DE-1990", "3.5 companion book Chapter 18 example", ["466", "467"], "direct-example-use"),
+                        "amiga.base3.multiply-divide": ("AM-BOOK-DE-1990", "3.5 companion book Chapter 18 example", ["469", "473"], "direct-example-use"),
+                    }
+                    expected = expected_sources[item["id"]]
+                    self.assertEqual(item.get("confirmation-source"), expected[0])
+                    self.assertEqual(item.get("confirmation-source-version"), expected[1])
+                    self.assertEqual(item.get("confirmation-printed-pages"), expected[2])
+                    self.assertEqual(item.get("confirmation-basis"), expected[3])
                 else:
                     self.assertEqual(item["status"], "documented-in-3.0-only")
 
@@ -55,6 +65,40 @@ class ChapterTwoToFourCandidateAuditTests(unittest.TestCase):
 
 
 class GermanBookCrossCheckTests(unittest.TestCase):
+
+    def test_split_statement_and_operator_groups_keep_undemonstrated_forms_unconfirmed(self):
+        candidates = tomllib.loads(MANIFEST.read_text(encoding="utf-8"))["candidates"]
+        by_id = {item["id"]: item for item in candidates}
+        expected_unconfirmed = {
+            "amiga.base3.unary-plus-minus": "Unary + / -",
+            "amiga.base5.print-write": "PRINT AT / WRITE",
+            "amiga.base8.setcolor": "SETCOLOR",
+            "amiga.base8.plot-line-draw": "PLOT / LINE / DRAW forms other than DRAW TO",
+        }
+        for candidate_id, name in expected_unconfirmed.items():
+            with self.subTest(candidate=candidate_id):
+                self.assertEqual(by_id[candidate_id]["status"], "documented-in-3.0-only")
+                self.assertEqual(by_id[candidate_id]["name"], name)
+
+    def test_statement_operator_evidence_has_exact_source_pages(self):
+        candidates = tomllib.loads(MANIFEST.read_text(encoding="utf-8"))["candidates"]
+        by_id = {item["id"]: item for item in candidates}
+        expected = {
+            "amiga.base5.print": ("3.5 companion book Chapters 18–19 examples", ["458", "471", "480"]),
+            "amiga.base5.locate": ("3.5 companion book Chapter 18 example", ["471"]),
+            "amiga.base7.for-next": ("3.5 companion book Chapters 18–19 examples", ["463", "464", "471", "480"]),
+            "amiga.base7.while-wend": ("3.5 companion book Chapter 19 example", ["480"]),
+            "amiga.base8.color": ("3.5 companion book Chapter 18 example", ["471"]),
+            "amiga.base8.draw-to": ("3.5 companion book Chapter 18 example", ["471"]),
+        }
+        for candidate_id, (version, pages) in expected.items():
+            item = by_id[candidate_id]
+            self.assertEqual(item["status"], "confirmed-in-3.5")
+            self.assertEqual(item["confirmation-source"], "AM-BOOK-DE-1990")
+            self.assertEqual(item["confirmation-source-version"], version)
+            self.assertEqual(item["confirmation-printed-pages"], pages)
+            self.assertEqual(item["confirmation-basis"], "direct-example-use")
+
     def test_explicit_3_5_families_have_independent_page_level_witness(self):
         by_id = {item["id"]: item for item in tomllib.loads(
             MANIFEST.read_text(encoding="utf-8")
@@ -76,7 +120,7 @@ class GermanBookCrossCheckTests(unittest.TestCase):
                 self.assertEqual(item["corroborating-source"], "AM-BOOK-DE-1990")
                 self.assertEqual(item["corroborating-printed-pages"], pages)
 
-    def test_german_cross_check_only_promotes_candidates_with_chapter_18_evidence(self):
+    def test_german_cross_check_only_promotes_candidates_with_direct_3_5_evidence(self):
         candidates = tomllib.loads(MANIFEST.read_text(encoding="utf-8"))["candidates"]
         base_candidates = [item for item in candidates if item["id"].startswith("amiga.base")]
         self.assertTrue(base_candidates)
@@ -90,6 +134,10 @@ class GermanBookCrossCheckTests(unittest.TestCase):
             "amiga.base2.hex", "amiga.base2.str", "amiga.base4.rand",
             "amiga.base4.succ", "amiga.base4.string",
             "amiga.base4.rnd", "amiga.base4.int", "amiga.base4.sqr",
+            "amiga.base3.numeric-add-sub", "amiga.base3.multiply-divide",
+            "amiga.base5.print", "amiga.base5.locate",
+            "amiga.base7.for-next", "amiga.base7.while-wend",
+            "amiga.base8.color", "amiga.base8.draw-to",
         })
 
 

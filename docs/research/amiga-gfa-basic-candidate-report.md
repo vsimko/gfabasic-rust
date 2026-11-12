@@ -13,9 +13,9 @@ tags: [amiga, gfa-basic, evidence, research]
 | Status | Entries |
 |---|---:|
 | candidate | 0 |
-| confirmed-in-3.5 | 21 |
+| confirmed-in-3.5 | 29 |
 | contradicted | 0 |
-| documented-in-3.0-only | 103 |
+| documented-in-3.0-only | 99 |
 | unresolved | 0 |
 
 ## Unresolved and pending candidates
@@ -67,13 +67,11 @@ tags: [amiga, gfa-basic, evidence, research]
 | `amiga.base3.comparison-equality` | = / == / <> | 3-2, 3-11–3-16 | = compares and also assigns in variable context; == is approximate numeric equality (8.5 decimal places); <> is inequality. |
 | `amiga.base3.integer-divide-mod` | DIV / MOD | 3-2 | Whole-number division and modulo precedence documented; no 3.5 confirmation. |
 | `amiga.base3.logical` | NOT / AND / OR / XOR / IMP / EQV | 3-2–3-9 | NOT is unary; remaining operators are binary; logical truth and 32-bit bitwise behavior are described. 3.0 base-manual evidence only. |
-| `amiga.base3.multiply-divide` | * / | 3-2 | Multiplication and division precedence documented; no 3.5 confirmation. |
-| `amiga.base3.numeric-add-sub` | Numeric + / - | 3-2, 3-10 | Arithmetic addition/subtraction documented separately from string concatenation. |
 | `amiga.base3.power` | ^ | 3-2 | Power operator precedence is documented in the 3.0 base manual only. |
 | `amiga.base3.precedence` | Operator precedence hierarchy | 3-2 | Page-image transcription gives 11 precedence levels; comparison rows contain OCR/source spelling ambiguity. No associativity inferred. |
 | `amiga.base3.relational` | < / > / <= / >= and =< / => | 3-2, 3-13–3-16 | Text explicitly accepts <= and =<, and >= and =>. Preserve both alternate spellings; string ordering is separately described. |
 | `amiga.base3.string-plus` | String concatenation + | 3-2–3-10 | Plus is documented for string concatenation as well as numeric addition; 3.0 base-manual evidence only. |
-| `amiga.base3.unary-plus-minus` | Unary + / - | 3-2, 3-10 | Prefix plus/minus are separately ranked in the precedence table; exact parse/associativity not inferred. |
+| `amiga.base3.unary-plus-minus` | Unary + / - | 3-2, 3-10 | The 3.0 precedence table lists prefix plus and minus. The 3.5 book shows negative DATA values (p. 471) and mathematical negative operands (p. 470), but no BASIC expression using unary prefix minus; neither prefix operator is promoted by this evidence. |
 | `amiga.base4.abs-sgn` | ABS() / SGN() | 4-12 | Absolute value and sign (-1, 0, 1) functions documented. |
 | `amiga.base4.bit-test` | BCLR() / BSET() / BCHG() / BTST() | 4-19–4-20 | Zero-based bit indices masked to 0–31; BTST is described with 1/0 result in this section. |
 | `amiga.base4.bitwise-and-or-xor` | AND() / OR() / XOR() | 4-23 | Integer bitwise function forms; distinct from logical operators as expression operators pending exact parser treatment. |
@@ -106,7 +104,7 @@ tags: [amiga, gfa-basic, evidence, research]
 | `amiga.base5.input` | INPUT | 5-3–5-4 | Reads numeric/string variables with optional prompt; window behavior and numeric re-entry are described. 3.5 availability is unresolved. |
 | `amiga.base5.line-input` | LINE INPUT | 5-5 | Reads string input while allowing commas in the entered text. 3.5 availability is unresolved. |
 | `amiga.base5.print-using` | PRINT USING | 5-9 | Formatted screen output; exact placeholder grammar remains unreviewed. 3.5 availability is unresolved. |
-| `amiga.base5.print-write` | PRINT, PRINT AT, WRITE, LOCATE | 5-7–5-8 | Screen output, cursor positioning and comma-separated WRITE format are distinguished. 3.5 availability is unresolved. |
+| `amiga.base5.print-write` | PRINT AT / WRITE | 5-7–5-8 | PRINT AT and WRITE remain 3.0 base-manual candidates. PRINT and LOCATE are tracked separately because the 3.5 companion examples demonstrate those forms, not these siblings. |
 | `amiga.base6.file-input` | INPUT # / LINE INPUT # | 6-15 | Reads channel data as values or lines; keep channel forms distinct from screen input. 3.5 availability is unresolved. |
 | `amiga.base6.file-output` | PRINT # / WRITE # | 6-16 | Writes expressions through a data channel; PRINT # supports USING but not PRINT AT. 3.5 availability is unresolved. |
 | `amiga.base6.inp-out` | INP / OUT | 6-13 | INP reads one byte from an opened data channel using INP(#n); OUT writes byte values. The addendum examples show ~INP(2), which is not the documented INP(#n) form and is not treated as confirmation. 3.5 availability remains unresolved. |
@@ -114,22 +112,20 @@ tags: [amiga, gfa-basic, evidence, research]
 | `amiga.base7.do-loop` | DO / LOOP variants | 7-17–7-19 | Beginning- and end-tested WHILE/UNTIL forms are described; exact grammar remains page-sensitive. 3.5 availability is unresolved. |
 | `amiga.base7.elseif` | ELSE IF / ELSEIF | 7-6–7-7 | Chained conditional branches; editor spelling varies and needs lexer/editor confirmation. 3.5 availability is unresolved. |
 | `amiga.base7.exit-if` | EXIT IF | 7-20 | Exits the active loop when its Boolean condition is satisfied; allowed within IF and SELECT structures per the source. 3.5 availability is unresolved. |
-| `amiga.base7.for-next` | FOR / NEXT | 7-13–7-14 | Loop forms include DOWNTO and editor replacement ENDFOR; OCR-sensitive termination details remain open. 3.5 availability is unresolved. |
 | `amiga.base7.if` | IF / ELSE / ENDIF | 7-4–7-5 | Conditional execution; THEN is optional and any nonzero numeric expression is logically true. 3.5 availability is unresolved. |
 | `amiga.base7.on-error` | ON ERROR / ON ERROR GOSUB | 7-29 | The 3.0 manual documents reset-to-default handling and procedure-based error handling. The 3.5 addendum confirms that GURU Meditation may transfer to ONERROR GOSUB, but does not restate the complete syntax or general 3.5 availability. |
 | `amiga.base7.ongosub` | ON GOSUB | 7-8 | Selects a procedure by numeric index; out-of-range selection calls none. 3.5 availability is unresolved. |
 | `amiga.base7.repeat-until` | REPEAT / UNTIL | 7-15 | Post-tested loop; body executes at least once. 3.5 availability is unresolved. |
 | `amiga.base7.resume` | RESUME / RESUME NEXT / RESUME label | 7-29 | The 3.0 manual documents retry, continue-next and continue-at-label behavior, plus a FATAL-error restriction. The 3.5 addendum specifically disallows RESUME NEXT and RESUME LABEL after a GURU-triggered ONERROR GOSUB in compiled 3.5 programs; broader 3.5 behavior remains unverified. |
 | `amiga.base7.select-case` | SELECT / CASE / DEFAULT / ENDSELECT | 7-9–7-10 | Numeric or short-string selector; CASE supports values, ranges and lists. 3.5 availability is unresolved. |
-| `amiga.base7.while-wend` | WHILE / WEND | 7-16 | Pre-tested loop; condition is checked before each body execution. 3.5 availability is unresolved. |
 | `amiga.base8.box` | BOX / PBOX | 8-15 | Draws outlined or filled rectangles. 3.5 availability is unresolved. |
 | `amiga.base8.circle-ellipse` | CIRCLE / PCIRCLE / ELLIPSE / PELLIPSE | 8-16 | Draws outlined or filled circles and ellipses. 3.5 availability is unresolved. |
 | `amiga.base8.clip` | CLIP | 8-9 | Restricts graphics output to a rectangle; source explicitly excludes GET and PUT. 3.5 availability is unresolved. |
 | `amiga.base8.deffill` | DEFFILL | 8-3–8-4 | Configures fill color/style/pattern for filled graphics operations; pattern-string limits are described. 3.5 availability is unresolved. |
-| `amiga.base8.plot-line-draw` | PLOT / LINE / DRAW | 8-10–8-14 | Point, line and path drawing; DRAW inquiry forms and OCR-sensitive command strings need exact grammar review. 3.5 availability is unresolved. |
+| `amiga.base8.plot-line-draw` | PLOT / LINE / DRAW forms other than DRAW TO | 8-10–8-14 | The 3.5 companion example demonstrates DRAW TO only (printed p. 471); PLOT, LINE and other DRAW forms remain 3.0 base-manual candidates. |
 | `amiga.base8.point` | POINT | 8-18 | Returns the color value at a screen coordinate. 3.5 availability is unresolved. |
 | `amiga.base8.poly` | POLYLINE / POLYFILL | 8-17 | Uses coordinate arrays; polygon endpoints are connected automatically. 3.5 availability is unresolved. |
-| `amiga.base8.setcolor` | SETCOLOR / COLOR | 8-2 | Sets palette RGB components and selects foreground/background/fill-outline colors. 3.5 availability is unresolved. |
+| `amiga.base8.setcolor` | SETCOLOR | 8-2 | SETCOLOR's palette-component form remains a 3.0 base-manual candidate. The 3.5 companion example uses COLOR 3 and COLOR 1; COLOR is tracked separately. |
 | `amiga.base9.fileselect` | FILESELECT | 9-37–9-38 | Displays a file selector and returns the selected name or an empty string on Cancel. 3.5 availability is unresolved. |
 
 ## Confirmed by 3.5 sources
@@ -151,12 +147,20 @@ tags: [amiga, gfa-basic, evidence, research]
 | `amiga.35.special-longwords` | _0 through _9 | 3.5 addendum | AM-INTERPRETER-35 | 13-35 (469-page scan), 14-6 (combined update scan) | Explicit 3.5 addendum declaration | Ten special longword variables; persistence and clearing behavior are described in the addendum. |
 | `amiga.base2.hex` | HEX$ | 3.0 base manual | AM-INTERPRETER-35 | 13-36 | Direct example use | The base manual documents HEX$(x[,y]). The 3.5 GURU example calls HEX$(GURU) (printed p. 13-36), confirming the one-argument form; the optional width form is not independently used in the addendum. |
 | `amiga.base2.str` | STR$ | 3.0 base manual | AM-INTERPRETER-35 | 13-3 | Direct documentation reference | The 3.5 MAT PRINT description specifies number formatting as STR$(x,g,n) (printed p. 13-3). This confirms the three-argument form used for matrix output; other base-manual overloads are not independently restated. |
+| `amiga.base3.multiply-divide` | * / | 3.0 base manual | AM-BOOK-DE-1990 | 469, 473 | Direct example use | The Chapter 18 MAT MUL example uses b()*c() (p. 469), and the normalization example uses 1/SQR(l) (p. 473). This confirms numeric * and / forms in the shown expressions, not precedence or all operand types. |
+| `amiga.base3.numeric-add-sub` | Numeric + / - | 3.0 base manual | AM-BOOK-DE-1990 | 466, 467 | Direct example use | The 3.5 Chapter 18 MAT ADD example uses b()+b() (p. 466), and MAT SUB uses b()-c() (p. 467). This confirms numeric binary + and - use in the shown matrix expressions, not precedence or string concatenation. |
 | `amiga.base4.int` | INT() | 3.0 base manual | AM-BOOK-DE-1990 | 458 | Direct example use | The 3.5 companion book's Chapter 18 matrix example uses INT(RND(1)*5) (printed p. 458), confirming the one-argument integer-conversion form. |
 | `amiga.base4.rand` | RAND() | 3.0 base manual | AM-INTERPRETER-35 | 13-2 | Direct example use | The 3.5 MAT SET example assigns RAND(10) to matrix elements (printed p. 13-2). This confirms the call form used, not all distribution or seeding details. |
 | `amiga.base4.rnd` | RND() | 3.0 base manual | AM-BOOK-DE-1990 | 458 | Direct example use | The 3.5 companion book's Chapter 18 matrix example uses RND(1) inside INT(RND(1)*5) (printed p. 458). This confirms the one-argument form; RANDOM and RANDOMIZE remain unconfirmed. |
 | `amiga.base4.sqr` | SQR() | 3.0 base manual | AM-BOOK-DE-1990 | 473 | Direct example use | The 3.5 vector-normalization example uses SQR(l) to calculate vector length and 1/SQR(l) to normalize the vector (printed p. 473). The one-argument form is demonstrated. |
 | `amiga.base4.string` | STRING$() | 3.0 base manual | AM-INTERPRETER-35 | 13-21 | Direct example use | The 3.5 matrix examples use STRING$(n, "-") as PRINT separators (printed pp. 13-21–13-30). This confirms the string-argument form; the character-code overload is not independently restated. |
 | `amiga.base4.succ` | SUCC() | 3.0 base manual | AM-INTERPRETER-35 | 13-5 | Direct example use | The 3.5 matrix-copy examples use SUCC(i%) and SUCC(j%) (printed pp. 13-5–13-13). This directly confirms numeric use; the string overload is not independently restated. |
+| `amiga.base5.locate` | LOCATE | 3.0 base manual | AM-BOOK-DE-1990 | 471 | Direct example use | The vector-animation example positions output with LOCATE 1,12 (printed p. 471). Other cursor-positioning forms are not confirmed by this occurrence. |
+| `amiga.base5.print` | PRINT | 3.0 base manual | AM-BOOK-DE-1990 | 458, 471, 480 | Direct example use | The 3.5 companion examples use ordinary screen PRINT statements alongside MAT PRINT (printed pp. 458, 471 and 480). This confirms the shown PRINT statement form, not PRINT AT or WRITE. |
+| `amiga.base7.for-next` | FOR / NEXT | 3.0 base manual | AM-BOOK-DE-1990 | 463, 464, 471, 480 | Direct example use | Chapter 18 examples use ascending FOR...TO...NEXT loops (pp. 463–464, 471); the Chapter 19 DATA-pointer example also uses FOR j=i TO 1 STEP -1...NEXT (p. 480). This confirms the shown ascending and negative-step forms, not the DOWNTO spelling or editor ENDFOR replacement. |
+| `amiga.base7.while-wend` | WHILE / WEND | 3.0 base manual | AM-BOOK-DE-1990 | 480 | Direct example use | The Chapter 19 _DATA example uses WHILE _DATA ... WEND (printed p. 480), with the loop ending when the DATA pointer reaches zero. This confirms the demonstrated condition form, not every condition or loop edge case. |
+| `amiga.base8.color` | COLOR | 3.0 base manual | AM-BOOK-DE-1990 | 471 | Direct example use | The Chapter 18 vector-animation example selects colors with COLOR 3 and COLOR 1 (printed p. 471). This confirms the shown COLOR statement form, not SETCOLOR's palette-component form. |
+| `amiga.base8.draw-to` | DRAW TO | 3.0 base manual | AM-BOOK-DE-1990 | 471 | Direct example use | The Chapter 18 vector-animation procedure uses DRAW TO with a calculated endpoint (printed p. 471). This confirms the shown path-drawing form only. |
 
 ## Contradicted candidates
 
@@ -171,4 +175,4 @@ No candidates are currently classified as contradicted. This is not evidence tha
 - Chapter 12 indexes and reference tables are navigation aids, not declarations or proof of availability.
 - No absence-based removal or compatibility inference is made.
 
-Source: `AM-INTERPRETER-35` and `AM-BOOK-DE-1990` in `docs/reference-sources.md`; detailed page notes are in `amiga-gfa-basic-3.0-base-inventory.md`, `amiga-gfa-basic-35-addendum-inventory.md`, and `amiga-gfa-basic-35-base-function-use-audit.md`.
+Source: `AM-INTERPRETER-35` and `AM-BOOK-DE-1990` in `docs/reference-sources.md`; detailed page notes are in `amiga-gfa-basic-3.0-base-inventory.md`, `amiga-gfa-basic-35-addendum-inventory.md`, `amiga-gfa-basic-35-base-function-use-audit.md`, and `amiga-gfa-basic-35-statement-operator-audit.md`.

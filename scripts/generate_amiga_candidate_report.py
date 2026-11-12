@@ -12,7 +12,7 @@ DEFAULT_MANIFEST = Path("docs/research/amiga-gfa-basic-candidates.toml")
 DEFAULT_OUTPUT = Path("docs/research/amiga-gfa-basic-candidate-report.md")
 STATUSES = {"candidate", "confirmed-in-3.5", "contradicted", "documented-in-3.0-only", "unresolved"}
 REQUIRED = {"id", "name", "kind", "source", "source-version", "printed-pages", "status", "notes"}
-EXPECTED_35_SOURCE_EVIDENCE = {"amiga.base2.hex":{"source":"AM-INTERPRETER-35","version":"3.5 addendum","pages":["13-36"],"basis":"direct-example-use"},"amiga.base2.str":{"source":"AM-INTERPRETER-35","version":"3.5 addendum","pages":["13-3"],"basis":"direct-documentation-reference"},"amiga.base4.rand":{"source":"AM-INTERPRETER-35","version":"3.5 addendum","pages":["13-2"],"basis":"direct-example-use"},"amiga.base4.succ":{"source":"AM-INTERPRETER-35","version":"3.5 addendum","pages":["13-5"],"basis":"direct-example-use"},"amiga.base4.string":{"source":"AM-INTERPRETER-35","version":"3.5 addendum","pages":["13-21"],"basis":"direct-example-use"},"amiga.base4.rnd":{"source":"AM-BOOK-DE-1990","version":"3.5 companion book Chapter 18","pages":["458"],"basis":"direct-example-use"},"amiga.base4.int":{"source":"AM-BOOK-DE-1990","version":"3.5 companion book Chapter 18","pages":["458"],"basis":"direct-example-use"},"amiga.base4.sqr":{"source":"AM-BOOK-DE-1990","version":"3.5 companion book Chapter 18","pages":["473"],"basis":"direct-example-use"}}
+EXPECTED_35_SOURCE_EVIDENCE = {"amiga.base2.hex":{"source":"AM-INTERPRETER-35","version":"3.5 addendum","pages":["13-36"],"basis":"direct-example-use"},"amiga.base2.str":{"source":"AM-INTERPRETER-35","version":"3.5 addendum","pages":["13-3"],"basis":"direct-documentation-reference"},"amiga.base4.rand":{"source":"AM-INTERPRETER-35","version":"3.5 addendum","pages":["13-2"],"basis":"direct-example-use"},"amiga.base4.succ":{"source":"AM-INTERPRETER-35","version":"3.5 addendum","pages":["13-5"],"basis":"direct-example-use"},"amiga.base4.string":{"source":"AM-INTERPRETER-35","version":"3.5 addendum","pages":["13-21"],"basis":"direct-example-use"},"amiga.base4.rnd":{"source":"AM-BOOK-DE-1990","version":"3.5 companion book Chapter 18","pages":["458"],"basis":"direct-example-use"},"amiga.base4.int":{"source":"AM-BOOK-DE-1990","version":"3.5 companion book Chapter 18","pages":["458"],"basis":"direct-example-use"},"amiga.base4.sqr":{"source":"AM-BOOK-DE-1990","version":"3.5 companion book Chapter 18","pages":["473"],"basis":"direct-example-use"},"amiga.base3.numeric-add-sub":{"source":"AM-BOOK-DE-1990","version":"3.5 companion book Chapter 18 example","pages":["466","467"],"basis":"direct-example-use"},"amiga.base3.multiply-divide":{"source":"AM-BOOK-DE-1990","version":"3.5 companion book Chapter 18 example","pages":["469","473"],"basis":"direct-example-use"}}
 
 
 def load_candidates(path: Path) -> list[dict]:
@@ -56,6 +56,29 @@ def load_candidates(path: Path) -> list[dict]:
                 raise ValueError(f'{item["id"]}: 3.5 confirmation requires direct source-evidence provenance')
         elif item["status"] != "documented-in-3.0-only":
             raise ValueError(f'{item["id"]}: invalid status for a 3.0 Chapter 2–4 candidate')
+
+    statement_evidence = {
+        "amiga.base5.print": ("3.5 companion book Chapters 18–19 examples", ["458", "471", "480"]),
+        "amiga.base5.locate": ("3.5 companion book Chapter 18 example", ["471"]),
+        "amiga.base7.for-next": ("3.5 companion book Chapters 18–19 examples", ["463", "464", "471", "480"]),
+        "amiga.base7.while-wend": ("3.5 companion book Chapter 19 example", ["480"]),
+        "amiga.base8.color": ("3.5 companion book Chapter 18 example", ["471"]),
+        "amiga.base8.draw-to": ("3.5 companion book Chapter 18 example", ["471"]),
+    }
+    for item in candidates:
+        expected = statement_evidence.get(item["id"])
+        if expected is not None:
+            if (
+                item["status"] != "confirmed-in-3.5"
+                or item.get("confirmation-source") != "AM-BOOK-DE-1990"
+                or item.get("confirmation-source-version") != expected[0]
+                or item.get("confirmation-printed-pages") != expected[1]
+                or item.get("confirmation-basis") != "direct-example-use"
+            ):
+                raise ValueError(f'{item["id"]}: 3.5 statement evidence must match the audited example pages')
+        elif item["status"] == "confirmed-in-3.5" and item["id"].startswith(("amiga.base5.", "amiga.base7.", "amiga.base8.")):
+            raise ValueError(f'{item["id"]}: no audited 3.5 statement example evidence')
+
     return sorted(candidates, key=lambda item: item["id"])
 
 
@@ -128,7 +151,7 @@ def render(candidates: list[dict]) -> str:
         "- Chapter 12 indexes and reference tables are navigation aids, not declarations or proof of availability.",
         "- No absence-based removal or compatibility inference is made.",
         "",
-        "Source: `AM-INTERPRETER-35` and `AM-BOOK-DE-1990` in `docs/reference-sources.md`; detailed page notes are in `amiga-gfa-basic-3.0-base-inventory.md`, `amiga-gfa-basic-35-addendum-inventory.md`, and `amiga-gfa-basic-35-base-function-use-audit.md`.",
+        "Source: `AM-INTERPRETER-35` and `AM-BOOK-DE-1990` in `docs/reference-sources.md`; detailed page notes are in `amiga-gfa-basic-3.0-base-inventory.md`, `amiga-gfa-basic-35-addendum-inventory.md`, `amiga-gfa-basic-35-base-function-use-audit.md`, and `amiga-gfa-basic-35-statement-operator-audit.md`.",
         "",
     ])
     return "\n".join(lines)
