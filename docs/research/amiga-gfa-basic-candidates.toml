@@ -1532,7 +1532,7 @@ source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["7-21–7-22"]
 status = "confirmed-in-3.5"
-notes = "The Chapter 18 vector example defines PROCEDURE drawp and terminates it with RETURN (printed p. 471). This confirms the shown parameterless procedure structure; GOSUB and parameter-passing forms are not demonstrated."
+notes = "The Chapter 18 vector example defines PROCEDURE drawp and terminates it with RETURN (printed p. 471). This confirms the shown parameterless procedure structure and RETURN form; the @ call prefix is recorded separately, while GOSUB and parameter-passing forms are not demonstrated."
 confirmation-source = "AM-BOOK-DE-1990"
 confirmation-source-version = "3.5 companion book Chapter 18 example"
 confirmation-printed-pages = ["471"]
@@ -1546,7 +1546,7 @@ source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["7-21–7-22"]
 status = "documented-in-3.0-only"
-notes = "The base manual documents GOSUB procedure calls. The 3.5 example defines and invokes drawp with the @ procedure-call form, not GOSUB; 3.5 GOSUB applicability remains unestablished."
+notes = "The base manual documents GOSUB procedure calls. The 3.5 example invokes drawp with the @ procedure-call form, not GOSUB; 3.5 GOSUB applicability remains unestablished."
 
 [[candidates]]
 id = "amiga.base7.end"
@@ -1571,4 +1571,18 @@ source-version = "3.0 base manual"
 printed-pages = ["7-37"]
 status = "documented-in-3.0-only"
 notes = "The base manual documents EDIT and STOP as alternatives to END. The audited 3.5 examples use END but do not demonstrate EDIT or STOP; 3.5 applicability remains unestablished."
+
+[[candidates]]
+id = "amiga.base7.procedure-call-at"
+name = "@procedure-call"
+kind = "procedure-call-syntax"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["7-21–7-22"]
+status = "confirmed-in-3.5"
+notes = "The Chapter 18 vector example invokes the parameterless drawp procedure using @drawp (printed p. 471). This confirms the @ call-prefix form only, not GOSUB or parameter passing."
+confirmation-source = "AM-BOOK-DE-1990"
+confirmation-source-version = "3.5 companion book Chapter 18 example"
+confirmation-printed-pages = ["471"]
+confirmation-basis = "direct-example-use"
 

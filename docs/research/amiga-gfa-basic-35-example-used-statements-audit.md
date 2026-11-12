@@ -25,6 +25,7 @@ Page-image checks were made for the Chapter 18 examples on printed pp. 458 and 4
 | `CLOSE` | p. 458 | `CLOSE #1` | The no-argument close-all form is not shown |
 | `PAUSE` | p. 471 | `PAUSE 50` | Does not confirm DELAY or every timing edge case |
 | `PROCEDURE / RETURN` | p. 471 | Parameterless `PROCEDURE drawp` and `RETURN` | GOSUB and parameter-passing forms are not shown |
+| `@procedure-call` | p. 471 | `@drawp` invokes the procedure | Confirms the shown prefix-call form only |
 | `END` | p. 471 | Top-level `END` | EDIT and STOP alternatives are not shown |
 
 ## Siblings deliberately left unconfirmed
@@ -40,4 +41,4 @@ These non-occurrences do not imply removal or incompatibility. They only mean th
 
 ## Result
 
-Eleven additional inherited statement records receive direct 3.5 example-use evidence. Their 3.0 source origin is retained and their 3.5 witness pages are stored separately in the candidate manifest. No registry declaration, implementation state, runtime conformance, or language-core count is changed. This is an evidence inventory increment, not a complete statement catalogue.
+Twelve additional inherited statement/procedure-call records receive direct 3.5 example-use evidence. Their 3.0 source origin is retained and their 3.5 witness pages are stored separately in the candidate manifest. No registry declaration, implementation state, runtime conformance, or language-core count is changed. This is an evidence inventory increment, not a complete statement catalogue.

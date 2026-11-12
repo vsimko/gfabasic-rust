@@ -13,7 +13,7 @@ tags: [amiga, gfa-basic, evidence, research]
 | Status | Entries |
 |---|---:|
 | candidate | 0 |
-| confirmed-in-3.5 | 40 |
+| confirmed-in-3.5 | 41 |
 | contradicted | 0 |
 | documented-in-3.0-only | 103 |
 | unresolved | 0 |
@@ -115,7 +115,7 @@ tags: [amiga, gfa-basic, evidence, research]
 | `amiga.base7.edit-stop` | EDIT / STOP | 7-37 | The base manual documents EDIT and STOP as alternatives to END. The audited 3.5 examples use END but do not demonstrate EDIT or STOP; 3.5 applicability remains unestablished. |
 | `amiga.base7.elseif` | ELSE IF / ELSEIF | 7-6–7-7 | Chained conditional branches; editor spelling varies and needs lexer/editor confirmation. 3.5 availability is unresolved. |
 | `amiga.base7.exit-if` | EXIT IF | 7-20 | Exits the active loop when its Boolean condition is satisfied; allowed within IF and SELECT structures per the source. 3.5 availability is unresolved. |
-| `amiga.base7.gosub` | GOSUB | 7-21–7-22 | The base manual documents GOSUB procedure calls. The 3.5 example defines and invokes drawp with the @ procedure-call form, not GOSUB; 3.5 GOSUB applicability remains unestablished. |
+| `amiga.base7.gosub` | GOSUB | 7-21–7-22 | The base manual documents GOSUB procedure calls. The 3.5 example invokes drawp with the @ procedure-call form, not GOSUB; 3.5 GOSUB applicability remains unestablished. |
 | `amiga.base7.if` | IF / ELSE / ENDIF | 7-4–7-5 | Conditional execution; THEN is optional and any nonzero numeric expression is logically true. 3.5 availability is unresolved. |
 | `amiga.base7.on-error` | ON ERROR / ON ERROR GOSUB | 7-29 | The 3.0 manual documents reset-to-default handling and procedure-based error handling. The 3.5 addendum confirms that GURU Meditation may transfer to ONERROR GOSUB, but does not restate the complete syntax or general 3.5 availability. |
 | `amiga.base7.ongosub` | ON GOSUB | 7-8 | Selects a procedure by numeric index; out-of-range selection calls none. 3.5 availability is unresolved. |
@@ -172,7 +172,8 @@ tags: [amiga, gfa-basic, evidence, research]
 | `amiga.base7.end` | END | 3.0 base manual | AM-BOOK-DE-1990 | 471 | Direct example use | The Chapter 18 vector-animation example ends its top-level program with END (printed p. 471). Other program-termination alternatives are not demonstrated. |
 | `amiga.base7.for-next` | FOR / NEXT | 3.0 base manual | AM-BOOK-DE-1990 | 463, 464, 471, 480 | Direct example use | Chapter 18 examples use ascending FOR...TO...NEXT loops (pp. 463–464, 471); the Chapter 19 DATA-pointer example also uses FOR j=i TO 1 STEP -1...NEXT (p. 480). This confirms the shown ascending and negative-step forms, not the DOWNTO spelling or editor ENDFOR replacement. |
 | `amiga.base7.pause` | PAUSE | 3.0 base manual | AM-BOOK-DE-1990 | 471 | Direct example use | The Chapter 18 vector-animation example uses PAUSE 50 (printed p. 471), confirming the shown numeric-argument form. |
-| `amiga.base7.procedure-return` | PROCEDURE / RETURN | 3.0 base manual | AM-BOOK-DE-1990 | 471 | Direct example use | The Chapter 18 vector example defines PROCEDURE drawp and terminates it with RETURN (printed p. 471). This confirms the shown parameterless procedure structure; GOSUB and parameter-passing forms are not demonstrated. |
+| `amiga.base7.procedure-call-at` | @procedure-call | 3.0 base manual | AM-BOOK-DE-1990 | 471 | Direct example use | The Chapter 18 vector example invokes the parameterless drawp procedure using @drawp (printed p. 471). This confirms the @ call-prefix form only, not GOSUB or parameter passing. |
+| `amiga.base7.procedure-return` | PROCEDURE / RETURN | 3.0 base manual | AM-BOOK-DE-1990 | 471 | Direct example use | The Chapter 18 vector example defines PROCEDURE drawp and terminates it with RETURN (printed p. 471). This confirms the shown parameterless procedure structure and RETURN form; the @ call prefix is recorded separately, while GOSUB and parameter-passing forms are not demonstrated. |
 | `amiga.base7.while-wend` | WHILE / WEND | 3.0 base manual | AM-BOOK-DE-1990 | 480 | Direct example use | The Chapter 19 _DATA example uses WHILE _DATA ... WEND (printed p. 480), with the loop ending when the DATA pointer reaches zero. This confirms the demonstrated condition form, not every condition or loop edge case. |
 | `amiga.base8.color` | COLOR | 3.0 base manual | AM-BOOK-DE-1990 | 471 | Direct example use | The Chapter 18 vector-animation example selects colors with COLOR 3 and COLOR 1 (printed p. 471). This confirms the shown COLOR statement form, not SETCOLOR's palette-component form. |
 | `amiga.base8.draw-to` | DRAW TO | 3.0 base manual | AM-BOOK-DE-1990 | 471 | Direct example use | The Chapter 18 vector-animation procedure uses DRAW TO with a calculated endpoint (printed p. 471). This confirms the shown path-drawing form only. |
