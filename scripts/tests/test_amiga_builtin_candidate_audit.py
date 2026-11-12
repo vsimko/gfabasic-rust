@@ -45,5 +45,35 @@ class ChapterTwoToFourCandidateAuditTests(unittest.TestCase):
         self.assertIn("distinct from the SWAP()", by_id["amiga.base2.swap-command"]["notes"])
 
 
+class GermanBookCrossCheckTests(unittest.TestCase):
+    def test_explicit_3_5_families_have_independent_page_level_witness(self):
+        by_id = {item["id"]: item for item in tomllib.loads(
+            MANIFEST.read_text(encoding="utf-8")
+        )["candidates"]}
+        expected_pages = {
+            "amiga.35.mat-base": ["454"],
+            "amiga.35.mat-generation": ["454–455"],
+            "amiga.35.mat-io": ["456–458"],
+            "amiga.35.mat-copy": ["459–464"],
+            "amiga.35.mat-arithmetic": ["465–470"],
+            "amiga.35.mat-analysis": ["472–475"],
+            "amiga.35.combinatorics": ["477–479"],
+            "amiga.35.data-pointer": ["479–480"],
+        }
+        for candidate_id, pages in expected_pages.items():
+            with self.subTest(candidate=candidate_id):
+                item = by_id[candidate_id]
+                self.assertEqual(item["status"], "confirmed-in-3.5")
+                self.assertEqual(item["corroborating-source"], "AM-BOOK-DE-1990")
+                self.assertEqual(item["corroborating-printed-pages"], pages)
+
+    def test_german_cross_check_does_not_promote_base_manual_candidates(self):
+        candidates = tomllib.loads(MANIFEST.read_text(encoding="utf-8"))["candidates"]
+        base_candidates = [item for item in candidates if item["id"].startswith("amiga.base")]
+        self.assertTrue(base_candidates)
+        self.assertTrue(all(item["status"] == "documented-in-3.0-only" for item in base_candidates))
+        self.assertTrue(all("corroborating-source" not in item for item in base_candidates))
+
+
 if __name__ == "__main__":
     unittest.main()
