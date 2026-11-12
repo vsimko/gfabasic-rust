@@ -11,6 +11,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_MANIFEST = Path("docs/research/amiga-gfa-basic-functions.toml")
 
+EXPECTED_35_ADDENDUM_FUNCTIONS = {"FACT", "VARIAT", "COMBIN", "GURU"}
+
 EXPECTED = {
     "all-identifiers": 117,
     "interpreter-identifiers-including-disputed-slot": 115,
@@ -47,6 +49,28 @@ def validate(path: Path) -> dict[str, int]:
             raise ValueError(f"{name}: invalid source origin")
         if item["applicability"] not in {"interpreter", "compiler-only"}:
             raise ValueError(f"{name}: invalid applicability")
+        origin = item["origin"]
+        evidence_status = item["evidence-status"]
+        if origin == "base-manual-3.0" and evidence_status not in {
+            "base-manual-entry",
+            "disputed-name",
+        }:
+            raise ValueError(
+                f"{name}: 3.0 base-manual evidence cannot be labelled as 3.5 addendum evidence"
+            )
+        if origin == "3.5-addendum" and evidence_status != "explicit-3.5-addendum":
+            raise ValueError(
+                f"{name}: 3.5 addendum entries require explicit-3.5-addendum evidence status"
+            )
+
+    addendum_names = {
+        item["name"] for item in functions if item["origin"] == "3.5-addendum"
+    }
+    if addendum_names != EXPECTED_35_ADDENDUM_FUNCTIONS:
+        raise ValueError(
+            "3.5 addendum function set differs from the source-verified identifiers: "
+            f"{sorted(addendum_names)}"
+        )
 
     counts = Counter(item["origin"] for item in functions)
     compiler_only = sum(item["applicability"] == "compiler-only" for item in functions)
