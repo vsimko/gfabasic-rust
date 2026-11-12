@@ -153,7 +153,7 @@ tags: [amiga, gfa-basic, evidence, research]
 | `amiga.base2.hex` | HEX$ | 3.0 base manual | 13-36 | Direct example use | The base manual documents HEX$(x[,y]). The 3.5 GURU example calls HEX$(GURU) (printed p. 13-36), confirming the one-argument form; the optional width form is not independently used in the addendum. |
 | `amiga.base2.str` | STR$ | 3.0 base manual | 13-3 | Direct documentation reference | The 3.5 MAT PRINT description specifies number formatting as STR$(x,g,n) (printed p. 13-3). This confirms the three-argument form used for matrix output; other base-manual overloads are not independently restated. |
 | `amiga.base4.rand` | RAND() | 3.0 base manual | 13-2 | Direct example use | The 3.5 MAT SET example assigns RAND(10) to matrix elements (printed p. 13-2). This confirms the call form used, not all distribution or seeding details. |
-| `amiga.base4.string` | STRING$() | 3.0 base manual | 13-21 | Direct example use | The 3.5 matrix examples use STRING$(n, "-") as PRINT separators. This confirms the string-argument form; the character-code overload is not independently restated. |
+| `amiga.base4.string` | STRING$() | 3.0 base manual | 13-21 | Direct example use | The 3.5 matrix examples use STRING$(n, "-") as PRINT separators (printed pp. 13-21–13-30). This confirms the string-argument form; the character-code overload is not independently restated. |
 | `amiga.base4.succ` | SUCC() | 3.0 base manual | 13-5 | Direct example use | The 3.5 matrix-copy examples use SUCC(i%) and SUCC(j%) (printed pp. 13-5–13-13). This directly confirms numeric use; the string overload is not independently restated. |
 
 ## Contradicted candidates
