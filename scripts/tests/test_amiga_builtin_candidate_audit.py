@@ -18,15 +18,17 @@ class ChapterTwoToFourCandidateAuditTests(unittest.TestCase):
         ]
 
     def test_each_candidate_has_page_provenance_and_3_0_scope(self):
-        self.assertEqual(len(self.audit), 66)
+        self.assertEqual(len(self.audit), 68)
         for item in self.audit:
             with self.subTest(candidate=item["id"]):
                 self.assertEqual(item["source"], "AM-INTERPRETER-35")
                 self.assertEqual(item["source-version"], "3.0 base manual")
                 self.assertTrue(item["printed-pages"])
                 if item["status"] == "confirmed-in-3.5":
-                    self.assertEqual(item.get("confirmation-source"), "AM-INTERPRETER-35")
-                    self.assertEqual(item.get("confirmation-source-version"), "3.5 addendum")
+                    expected_source = "AM-BOOK-DE-1990" if item["id"] in {"amiga.base4.rnd", "amiga.base4.int", "amiga.base4.sqr"} else "AM-INTERPRETER-35"
+                    expected_version = "3.5 companion book Chapter 18" if expected_source == "AM-BOOK-DE-1990" else "3.5 addendum"
+                    self.assertEqual(item.get("confirmation-source"), expected_source)
+                    self.assertEqual(item.get("confirmation-source-version"), expected_version)
                     expected_basis = "direct-documentation-reference" if item["id"] == "amiga.base2.str" else "direct-example-use"
                     self.assertEqual(item.get("confirmation-basis"), expected_basis)
                     self.assertTrue(item.get("confirmation-printed-pages"))
@@ -74,16 +76,20 @@ class GermanBookCrossCheckTests(unittest.TestCase):
                 self.assertEqual(item["corroborating-source"], "AM-BOOK-DE-1990")
                 self.assertEqual(item["corroborating-printed-pages"], pages)
 
-    def test_german_cross_check_does_not_promote_base_manual_candidates(self):
+    def test_german_cross_check_only_promotes_candidates_with_chapter_18_evidence(self):
         candidates = tomllib.loads(MANIFEST.read_text(encoding="utf-8"))["candidates"]
         base_candidates = [item for item in candidates if item["id"].startswith("amiga.base")]
         self.assertTrue(base_candidates)
         self.assertTrue(all(item["source-version"] == "3.0 base manual" for item in base_candidates))
-        self.assertTrue(all("corroborating-source" not in item for item in base_candidates))
+        corroborated = {item["id"]: item for item in base_candidates if "corroborating-source" in item}
+        self.assertEqual(set(corroborated), {"amiga.base2.str"})
+        self.assertEqual(corroborated["amiga.base2.str"]["corroborating-source"], "AM-BOOK-DE-1990")
+        self.assertEqual(corroborated["amiga.base2.str"]["corroborating-printed-pages"], ["457"])
         confirmed = {item["id"] for item in base_candidates if item["status"] == "confirmed-in-3.5"}
         self.assertEqual(confirmed, {
             "amiga.base2.hex", "amiga.base2.str", "amiga.base4.rand",
             "amiga.base4.succ", "amiga.base4.string",
+            "amiga.base4.rnd", "amiga.base4.int", "amiga.base4.sqr",
         })
 
 

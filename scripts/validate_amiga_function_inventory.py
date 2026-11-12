@@ -12,8 +12,8 @@ ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_MANIFEST = Path("docs/research/amiga-gfa-basic-functions.toml")
 
 EXPECTED_35_ADDENDUM_FUNCTIONS = {"FACT", "VARIAT", "COMBIN", "GURU"}
-EXPECTED_35_ADDENDUM_USE_BASIS = {"HEX$": "direct-example-use", "STR$": "direct-documentation-reference", "RAND": "direct-example-use", "SUCC": "direct-example-use", "STRING$": "direct-example-use"}
-EXPECTED_35_ADDENDUM_USE_FUNCTIONS = set(EXPECTED_35_ADDENDUM_USE_BASIS)
+EXPECTED_35_SOURCE_EVIDENCE = {"HEX$":["AM-INTERPRETER-35","3.5 addendum",["13-36"],"direct-example-use"],"STR$":["AM-INTERPRETER-35","3.5 addendum",["13-3"],"direct-documentation-reference"],"RAND":["AM-INTERPRETER-35","3.5 addendum",["13-2"],"direct-example-use"],"SUCC":["AM-INTERPRETER-35","3.5 addendum",["13-5"],"direct-example-use"],"STRING$":["AM-INTERPRETER-35","3.5 addendum",["13-21"],"direct-example-use"],"RND":["AM-BOOK-DE-1990","3.5 companion book Chapter 18",["458"],"direct-example-use"],"INT":["AM-BOOK-DE-1990","3.5 companion book Chapter 18",["458"],"direct-example-use"],"SQR":["AM-BOOK-DE-1990","3.5 companion book Chapter 18",["473"],"direct-example-use"]}
+EXPECTED_35_SOURCE_EVIDENCE_FUNCTIONS = set(EXPECTED_35_SOURCE_EVIDENCE)
 
 EXPECTED = {
     "all-identifiers": 117,
@@ -23,7 +23,7 @@ EXPECTED = {
     "base-manual-identifiers": 113,
     "explicit-3.5-addendum-identifiers": 4,
     "disputed-name-slots": 2,
-    "confirmed-by-3.5-addendum-use-identifiers": 5,
+    "confirmed-by-3.5-source-evidence-identifiers": 8,
 }
 
 
@@ -57,7 +57,7 @@ def validate(path: Path) -> dict[str, int]:
         if origin == "base-manual-3.0" and evidence_status not in {
             "base-manual-entry",
             "disputed-name",
-            "confirmed-by-3.5-addendum-use",
+            "confirmed-by-3.5-source-evidence",
         }:
             raise ValueError(
                 f"{name}: 3.0 base-manual evidence cannot be labelled as 3.5 addendum evidence"
@@ -67,18 +67,19 @@ def validate(path: Path) -> dict[str, int]:
                 f"{name}: 3.5 addendum entries require explicit-3.5-addendum evidence status"
             )
 
-        if evidence_status == "confirmed-by-3.5-addendum-use":
-            if name not in EXPECTED_35_ADDENDUM_USE_FUNCTIONS:
-                raise ValueError(f"{name}: no audited 3.5 addendum use evidence")
+        if evidence_status == "confirmed-by-3.5-source-evidence":
+            expected_evidence = EXPECTED_35_SOURCE_EVIDENCE.get(name)
+            if expected_evidence is None:
+                raise ValueError(f"{name}: no audited 3.5 source evidence")
             if (
-                item.get("confirmation-source") != "AM-INTERPRETER-35"
-                or item.get("confirmation-source-version") != "3.5 addendum"
-                or not item.get("confirmation-printed-pages")
-                or item.get("confirmation-basis") != EXPECTED_35_ADDENDUM_USE_BASIS[name]
+                item.get("confirmation-source") != expected_evidence[0]
+                or item.get("confirmation-source-version") != expected_evidence[1]
+                or item.get("confirmation-printed-pages") != expected_evidence[2]
+                or item.get("confirmation-basis") != expected_evidence[3]
             ):
-                raise ValueError(f"{name}: 3.5 addendum-use evidence needs source and printed pages")
-        elif origin == "base-manual-3.0" and name in EXPECTED_35_ADDENDUM_USE_FUNCTIONS:
-            raise ValueError(f"{name}: audited 3.5 addendum-use evidence status is required")
+                raise ValueError(f"{name}: 3.5 source evidence needs source and printed pages")
+        elif origin == "base-manual-3.0" and name in EXPECTED_35_SOURCE_EVIDENCE_FUNCTIONS:
+            raise ValueError(f"{name}: audited 3.5 source-evidence status is required")
 
     addendum_names = {
         item["name"] for item in functions if item["origin"] == "3.5-addendum"
@@ -101,8 +102,8 @@ def validate(path: Path) -> dict[str, int]:
         "base-manual-identifiers": counts["base-manual-3.0"],
         "explicit-3.5-addendum-identifiers": counts["3.5-addendum"],
         "disputed-name-slots": disputed,
-        "confirmed-by-3.5-addendum-use-identifiers": sum(
-            item["evidence-status"] == "confirmed-by-3.5-addendum-use" for item in functions
+        "confirmed-by-3.5-source-evidence-identifiers": sum(
+            item["evidence-status"] == "confirmed-by-3.5-source-evidence" for item in functions
         ),
     }
     if result != EXPECTED:
