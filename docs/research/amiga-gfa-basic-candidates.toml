@@ -329,7 +329,7 @@ source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["6-13"]
 status = "documented-in-3.0-only"
-notes = "INP reads one byte and OUT writes byte values through an opened channel; documented channel range is 0–99. 3.5 availability is unresolved."
+notes = "INP reads one byte from an opened data channel using INP(#n); OUT writes byte values. The addendum examples show ~INP(2), which is not the documented INP(#n) form and is not treated as confirmation. 3.5 availability remains unresolved."
 
 [[candidates]]
 id = "amiga.base6.input-string"
@@ -1253,7 +1253,7 @@ status = "confirmed-in-3.5"
 notes = "The 3.5 matrix-copy examples use SUCC(i%) and SUCC(j%) (printed pp. 13-5–13-13). This directly confirms numeric use; the string overload is not independently restated."
 confirmation-source = "AM-INTERPRETER-35"
 confirmation-source-version = "3.5 addendum"
-confirmation-printed-pages = ["13-5","13-6","13-7","13-8","13-9","13-10","13-11","13-12","13-13"]
+confirmation-printed-pages = ["13-5"]
 confirmation-basis = "direct-example-use"
 
 [[candidates]]
@@ -1267,6 +1267,6 @@ status = "confirmed-in-3.5"
 notes = "The 3.5 matrix examples use STRING$(n, \"-\") as PRINT separators (printed pp. 13-21–13-30). This confirms the string-argument form; the character-code overload is not independently restated."
 confirmation-source = "AM-INTERPRETER-35"
 confirmation-source-version = "3.5 addendum"
-confirmation-printed-pages = ["13-21","13-22","13-23","13-24","13-25","13-26","13-27","13-28","13-29","13-30"]
+confirmation-printed-pages = ["13-21"]
 confirmation-basis = "direct-example-use"
 

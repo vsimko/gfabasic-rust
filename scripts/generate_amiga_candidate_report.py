@@ -34,8 +34,8 @@ def load_candidates(path: Path) -> list[dict]:
         if not item["printed-pages"] or not item["source"] or not item["source-version"]:
             raise ValueError(f"{item['id']}: source and printed page locators are required")
     # Chapter 2–4 source facts are tracked as granular evidence records.
-    # These records intentionally remain 3.0-only evidence until a 3.5 source
-    # or reproducible interpreter observation establishes availability.
+    # These records retain their 3.0 source origin; direct 3.5 addendum use can
+    # establish only the call forms actually demonstrated.
     core_candidates = [
         item for item in candidates
         if item["id"].startswith(("amiga.base2.", "amiga.base3.", "amiga.base4."))

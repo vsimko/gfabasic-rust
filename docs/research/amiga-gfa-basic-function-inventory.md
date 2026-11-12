@@ -168,3 +168,8 @@ The base-manual table above is a 3.0-derived candidate inventory. Its entries de
 - Chapter 11's Amiga OS library index is excluded: it catalogs OS calls, not built-in GFA BASIC language functions.
 
 Machine-readable source: `amiga-gfa-basic-functions.toml`. Validation: `python scripts/validate_amiga_function_inventory.py`.
+
+
+## 3.5 addendum example-use audit
+
+Five inherited functions (`RAND`, `STR$`, `SUCC`, `STRING$`, and `HEX$`) are directly used in the version-specific 3.5 addendum. Their demonstrated forms and limits are recorded in [the declaration-level audit](amiga-gfa-basic-35-base-function-use-audit.md). This evidence confirms only the forms shown, not every overload or edge case; the entries retain their 3.0 base-manual origin.
