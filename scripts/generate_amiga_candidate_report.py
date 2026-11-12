@@ -55,13 +55,13 @@ def load_candidates(path: Path) -> list[dict]:
     # only the forms and contexts actually demonstrated or referenced.
     core_candidates = [
         item for item in candidates
-        if item["id"].startswith(("amiga.base2.", "amiga.base3.", "amiga.base4."))
+        if item["id"].startswith(("amiga.base2.", "amiga.base3.", "amiga.base4.", "amiga.base5.", "amiga.base7."))
     ]
     if len(core_candidates) < 50:
-        raise ValueError("Chapter 2–4 evidence-record audit is incomplete")
+        raise ValueError("Selected base-language evidence audit is incomplete")
     for item in core_candidates:
         if item["source"] != "AM-INTERPRETER-35" or item["source-version"] != "3.0 base manual":
-            raise ValueError(f'{item["id"]}: Chapter 2–4 candidate must retain 3.0 source scope')
+            raise ValueError(f'{item["id"]}: Audited base candidate must retain 3.0 source scope')
         if item["status"] == "confirmed-in-3.5":
             if (
                 item.get("confirmation-source") != EXPECTED_35_SOURCE_EVIDENCE.get(item["id"], {}).get("source")
@@ -71,7 +71,7 @@ def load_candidates(path: Path) -> list[dict]:
             ):
                 raise ValueError(f'{item["id"]}: 3.5 confirmation requires direct source-evidence provenance')
         elif item["status"] != "documented-in-3.0-only":
-            raise ValueError(f'{item["id"]}: invalid status for a 3.0 Chapter 2–4 candidate')
+            raise ValueError(f'{item["id"]}: invalid status for an audited 3.0 base candidate')
     return sorted(candidates, key=lambda item: item["id"])
 
 
@@ -138,13 +138,13 @@ def render(candidates: list[dict]) -> str:
         "## Interpretation and limitations",
         "",
         "- `documented-in-3.0-only` means the cited declaration is present in the 3.0 base manual but no 3.5 evidence establishes its applicability. This does not mean removed or incompatible.",
-        "- `confirmed-in-3.5` can be based either on an explicit 3.5 source declaration or on direct use or reference in 3.5 material. For inherited functions and statements, direct evidence confirms only the form and context actually shown or referenced; it does not revalidate every overload or variant.",
+        "- `confirmed-in-3.5` can be based on an explicit 3.5 source declaration, direct use, direct documentation reference, or a specific documented restriction. For inherited functions and statements, direct evidence confirms only the form and context actually shown or referenced; it does not revalidate every overload or variant.",
         "- `unresolved` is reserved for candidates whose source scope or declaration identity still needs research.",
         "- A confirmed family does not settle every overload or edge case; qualifications in the manifest and detailed research notes remain authoritative.",
         "- Chapter 12 indexes and reference tables are navigation aids, not declarations or proof of availability.",
         "- No absence-based removal or compatibility inference is made.",
         "",
-        "Source: `AM-INTERPRETER-35` and `AM-BOOK-DE-1990` in `docs/reference-sources.md`; detailed page notes are in `amiga-gfa-basic-3.0-base-inventory.md`, `amiga-gfa-basic-35-addendum-inventory.md`, and `amiga-gfa-basic-35-base-function-use-audit.md` and `amiga-gfa-basic-35-base-statement-use-audit.md`.",
+        "Source: `AM-INTERPRETER-35` and `AM-BOOK-DE-1990` in `docs/reference-sources.md`; detailed page notes are in `amiga-gfa-basic-3.0-base-inventory.md`, `amiga-gfa-basic-35-addendum-inventory.md`, `amiga-gfa-basic-35-base-function-use-audit.md`, and `amiga-gfa-basic-35-base-statement-use-audit.md`.",
         "",
     ])
     return "\n".join(lines)
