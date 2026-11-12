@@ -12,7 +12,7 @@ DEFAULT_MANIFEST = Path("docs/research/amiga-gfa-basic-candidates.toml")
 DEFAULT_OUTPUT = Path("docs/research/amiga-gfa-basic-candidate-report.md")
 STATUSES = {"candidate", "confirmed-in-3.5", "contradicted", "documented-in-3.0-only", "unresolved"}
 REQUIRED = {"id", "name", "kind", "source", "source-version", "printed-pages", "status", "notes"}
-EXPECTED_35_SOURCE_EVIDENCE = {"amiga.base2.hex":{"source":"AM-INTERPRETER-35","version":"3.5 addendum","pages":["13-36"],"basis":"direct-example-use"},"amiga.base2.str":{"source":"AM-INTERPRETER-35","version":"3.5 addendum","pages":["13-3"],"basis":"direct-documentation-reference"},"amiga.base4.rand":{"source":"AM-INTERPRETER-35","version":"3.5 addendum","pages":["13-2"],"basis":"direct-example-use"},"amiga.base4.succ":{"source":"AM-INTERPRETER-35","version":"3.5 addendum","pages":["13-5"],"basis":"direct-example-use"},"amiga.base4.string":{"source":"AM-INTERPRETER-35","version":"3.5 addendum","pages":["13-21"],"basis":"direct-example-use"},"amiga.base4.rnd":{"source":"AM-BOOK-DE-1990","version":"3.5 companion book Chapter 18","pages":["458"],"basis":"direct-example-use"},"amiga.base4.int":{"source":"AM-BOOK-DE-1990","version":"3.5 companion book Chapter 18","pages":["458"],"basis":"direct-example-use"},"amiga.base4.sqr":{"source":"AM-BOOK-DE-1990","version":"3.5 companion book Chapter 18","pages":["473"],"basis":"direct-example-use"},"amiga.base3.numeric-add-sub":{"source":"AM-BOOK-DE-1990","version":"3.5 companion book Chapter 18 example","pages":["466","467"],"basis":"direct-example-use"},"amiga.base3.multiply-divide":{"source":"AM-BOOK-DE-1990","version":"3.5 companion book Chapter 18 example","pages":["469","473"],"basis":"direct-example-use"}}
+EXPECTED_35_SOURCE_EVIDENCE = {"amiga.base2.hex":{"source":"AM-INTERPRETER-35","version":"3.5 addendum","pages":["13-36"],"basis":"direct-example-use"},"amiga.base2.str":{"source":"AM-INTERPRETER-35","version":"3.5 addendum","pages":["13-3"],"basis":"direct-documentation-reference"},"amiga.base4.rand":{"source":"AM-INTERPRETER-35","version":"3.5 addendum","pages":["13-2"],"basis":"direct-example-use"},"amiga.base4.succ":{"source":"AM-INTERPRETER-35","version":"3.5 addendum","pages":["13-5"],"basis":"direct-example-use"},"amiga.base4.string":{"source":"AM-INTERPRETER-35","version":"3.5 addendum","pages":["13-21"],"basis":"direct-example-use"},"amiga.base4.rnd":{"source":"AM-BOOK-DE-1990","version":"3.5 companion book Chapter 18","pages":["458"],"basis":"direct-example-use"},"amiga.base4.int":{"source":"AM-BOOK-DE-1990","version":"3.5 companion book Chapter 18","pages":["458"],"basis":"direct-example-use"},"amiga.base4.sqr":{"source":"AM-BOOK-DE-1990","version":"3.5 companion book Chapter 18","pages":["473"],"basis":"direct-example-use"},"amiga.base3.numeric-add-sub":{"source":"AM-BOOK-DE-1990","version":"3.5 companion book Chapter 18 example","pages":["466","467"],"basis":"direct-example-use"},"amiga.base3.multiply-divide":{"source":"AM-BOOK-DE-1990","version":"3.5 companion book Chapter 18 example","pages":["469","473"],"basis":"direct-example-use"},"amiga.base2.dim":{"source":"AM-BOOK-DE-1990","version":"3.5 companion book Chapters 18–19 examples","pages":["458","471","480"],"basis":"direct-example-use"},"amiga.base2.option-base":{"source":"AM-BOOK-DE-1990","version":"3.5 companion book Chapter 18 example","pages":["458"],"basis":"direct-example-use"},"amiga.base4.inc":{"source":"AM-BOOK-DE-1990","version":"3.5 companion book Chapter 19 example","pages":["480"],"basis":"direct-example-use"}}
 
 
 def load_candidates(path: Path) -> list[dict]:
@@ -59,6 +59,14 @@ def load_candidates(path: Path) -> list[dict]:
 
     statement_evidence = {
         "amiga.base5.print": ("3.5 companion book Chapters 18–19 examples", ["458", "471", "480"]),
+        "amiga.base5.data": ("3.5 companion book Chapter 18 example", ["471"]),
+        "amiga.base5.read": ("3.5 companion book Chapter 19 example", ["480"]),
+        "amiga.base5.restore": ("3.5 companion book Chapter 19 example", ["480"]),
+        "amiga.base6.open": ("3.5 companion book Chapter 18 example", ["458"]),
+        "amiga.base6.close": ("3.5 companion book Chapter 18 example", ["458"]),
+        "amiga.base7.pause": ("3.5 companion book Chapter 18 example", ["471"]),
+        "amiga.base7.procedure-return": ("3.5 companion book Chapter 18 example", ["471"]),
+        "amiga.base7.end": ("3.5 companion book Chapter 18 example", ["471"]),
         "amiga.base5.locate": ("3.5 companion book Chapter 18 example", ["471"]),
         "amiga.base7.for-next": ("3.5 companion book Chapters 18–19 examples", ["463", "464", "471", "480"]),
         "amiga.base7.while-wend": ("3.5 companion book Chapter 19 example", ["480"]),
@@ -76,7 +84,7 @@ def load_candidates(path: Path) -> list[dict]:
                 or item.get("confirmation-basis") != "direct-example-use"
             ):
                 raise ValueError(f'{item["id"]}: 3.5 statement evidence must match the audited example pages')
-        elif item["status"] == "confirmed-in-3.5" and item["id"].startswith(("amiga.base5.", "amiga.base7.", "amiga.base8.")):
+        elif item["status"] == "confirmed-in-3.5" and item["id"].startswith(("amiga.base5.", "amiga.base6.", "amiga.base7.", "amiga.base8.")):
             raise ValueError(f'{item["id"]}: no audited 3.5 statement example evidence')
 
     return sorted(candidates, key=lambda item: item["id"])

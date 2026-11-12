@@ -1377,3 +1377,198 @@ confirmation-source-version = "3.5 companion book Chapter 18 example"
 confirmation-printed-pages = ["471"]
 confirmation-basis = "direct-example-use"
 
+
+[[candidates]]
+id = "amiga.base2.dim"
+name = "DIM"
+kind = "statement"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["2-8"]
+status = "confirmed-in-3.5"
+notes = "The 3.5 companion examples dimension vector and matrix arrays with DIM v(3),m(2,5) (p. 458), dimension point and matrix arrays (p. 471), and dimension the DATA-pointer position array (p. 480). This confirms the shown numeric-dimension forms, not every type suffix or bounds variant."
+confirmation-source = "AM-BOOK-DE-1990"
+confirmation-source-version = "3.5 companion book Chapters 18–19 examples"
+confirmation-printed-pages = ["458","471","480"]
+confirmation-basis = "direct-example-use"
+
+[[candidates]]
+id = "amiga.base2.option-base"
+name = "OPTION BASE"
+kind = "statement"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["2-9"]
+status = "confirmed-in-3.5"
+notes = "The Chapter 18 matrix example sets OPTION BASE 0 (printed p. 458). This confirms the shown base-0 form only; OPTION BASE 1 is not shown."
+confirmation-source = "AM-BOOK-DE-1990"
+confirmation-source-version = "3.5 companion book Chapter 18 example"
+confirmation-printed-pages = ["458"]
+confirmation-basis = "direct-example-use"
+
+[[candidates]]
+id = "amiga.base4.inc"
+name = "INC"
+kind = "statement"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-10"]
+status = "confirmed-in-3.5"
+notes = "The Chapter 19 DATA-pointer example uses INC i (printed p. 480) to advance its index. This confirms the shown scalar increment form, not DEC or all typed/overflow behavior."
+confirmation-source = "AM-BOOK-DE-1990"
+confirmation-source-version = "3.5 companion book Chapter 19 example"
+confirmation-printed-pages = ["480"]
+confirmation-basis = "direct-example-use"
+
+[[candidates]]
+id = "amiga.base4.dec"
+name = "DEC"
+kind = "statement"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-10"]
+status = "documented-in-3.0-only"
+notes = "The base manual documents decrement-by-one behavior. The audited 3.5 examples use INC but do not demonstrate DEC; 3.5 applicability remains unestablished."
+
+[[candidates]]
+id = "amiga.base5.data"
+name = "DATA"
+kind = "statement"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["5-14–5-15"]
+status = "confirmed-in-3.5"
+notes = "The Chapter 18 vector example defines numeric DATA items (printed p. 471). This confirms numeric DATA lines in that example, not string values or numeric-prefix grammar."
+confirmation-source = "AM-BOOK-DE-1990"
+confirmation-source-version = "3.5 companion book Chapter 18 example"
+confirmation-printed-pages = ["471"]
+confirmation-basis = "direct-example-use"
+
+[[candidates]]
+id = "amiga.base5.read"
+name = "READ"
+kind = "statement"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["5-14–5-15"]
+status = "confirmed-in-3.5"
+notes = "The Chapter 19 DATA-pointer example uses READ a (printed p. 480) to fetch one item into a scalar variable. Variable lists and string reads are not shown."
+confirmation-source = "AM-BOOK-DE-1990"
+confirmation-source-version = "3.5 companion book Chapter 19 example"
+confirmation-printed-pages = ["480"]
+confirmation-basis = "direct-example-use"
+
+[[candidates]]
+id = "amiga.base5.restore"
+name = "RESTORE"
+kind = "statement"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["5-14–5-15"]
+status = "confirmed-in-3.5"
+notes = "The Chapter 19 DATA-pointer example uses bare RESTORE (printed p. 480) before reading the DATA list from its beginning. The labelled RESTORE form is not shown."
+confirmation-source = "AM-BOOK-DE-1990"
+confirmation-source-version = "3.5 companion book Chapter 19 example"
+confirmation-printed-pages = ["480"]
+confirmation-basis = "direct-example-use"
+
+[[candidates]]
+id = "amiga.base6.open"
+name = "OPEN"
+kind = "statement"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["6-7"]
+status = "confirmed-in-3.5"
+notes = "The Chapter 18 matrix example opens file channels in output and input modes using OPEN \"O\" and OPEN \"I\" (printed p. 458). Append, update and random-access modes are not demonstrated."
+confirmation-source = "AM-BOOK-DE-1990"
+confirmation-source-version = "3.5 companion book Chapter 18 example"
+confirmation-printed-pages = ["458"]
+confirmation-basis = "direct-example-use"
+
+[[candidates]]
+id = "amiga.base6.close"
+name = "CLOSE"
+kind = "statement"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["6-8"]
+status = "confirmed-in-3.5"
+notes = "The Chapter 18 matrix example closes its data channel with CLOSE #1 (printed p. 458). The no-argument close-all form is not demonstrated."
+confirmation-source = "AM-BOOK-DE-1990"
+confirmation-source-version = "3.5 companion book Chapter 18 example"
+confirmation-printed-pages = ["458"]
+confirmation-basis = "direct-example-use"
+
+[[candidates]]
+id = "amiga.base7.pause"
+name = "PAUSE"
+kind = "statement"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["7-36"]
+status = "confirmed-in-3.5"
+notes = "The Chapter 18 vector-animation example uses PAUSE 50 (printed p. 471), confirming the shown numeric-argument form."
+confirmation-source = "AM-BOOK-DE-1990"
+confirmation-source-version = "3.5 companion book Chapter 18 example"
+confirmation-printed-pages = ["471"]
+confirmation-basis = "direct-example-use"
+
+[[candidates]]
+id = "amiga.base7.delay"
+name = "DELAY"
+kind = "statement"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["7-36"]
+status = "documented-in-3.0-only"
+notes = "The base manual documents DELAY as a pause in seconds. The audited 3.5 examples use PAUSE but do not demonstrate DELAY; 3.5 applicability remains unestablished."
+
+[[candidates]]
+id = "amiga.base7.procedure-return"
+name = "PROCEDURE / RETURN"
+kind = "program-structure"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["7-21–7-22"]
+status = "confirmed-in-3.5"
+notes = "The Chapter 18 vector example defines PROCEDURE drawp and terminates it with RETURN (printed p. 471). This confirms the shown parameterless procedure structure; GOSUB and parameter-passing forms are not demonstrated."
+confirmation-source = "AM-BOOK-DE-1990"
+confirmation-source-version = "3.5 companion book Chapter 18 example"
+confirmation-printed-pages = ["471"]
+confirmation-basis = "direct-example-use"
+
+[[candidates]]
+id = "amiga.base7.gosub"
+name = "GOSUB"
+kind = "statement"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["7-21–7-22"]
+status = "documented-in-3.0-only"
+notes = "The base manual documents GOSUB procedure calls. The 3.5 example defines and invokes drawp with the @ procedure-call form, not GOSUB; 3.5 GOSUB applicability remains unestablished."
+
+[[candidates]]
+id = "amiga.base7.end"
+name = "END"
+kind = "statement"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["7-37"]
+status = "confirmed-in-3.5"
+notes = "The Chapter 18 vector-animation example ends its top-level program with END (printed p. 471). Other program-termination alternatives are not demonstrated."
+confirmation-source = "AM-BOOK-DE-1990"
+confirmation-source-version = "3.5 companion book Chapter 18 example"
+confirmation-printed-pages = ["471"]
+confirmation-basis = "direct-example-use"
+
+[[candidates]]
+id = "amiga.base7.edit-stop"
+name = "EDIT / STOP"
+kind = "statement-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["7-37"]
+status = "documented-in-3.0-only"
+notes = "The base manual documents EDIT and STOP as alternatives to END. The audited 3.5 examples use END but do not demonstrate EDIT or STOP; 3.5 applicability remains unestablished."
+

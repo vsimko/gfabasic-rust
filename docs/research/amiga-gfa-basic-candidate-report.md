@@ -13,9 +13,9 @@ tags: [amiga, gfa-basic, evidence, research]
 | Status | Entries |
 |---|---:|
 | candidate | 0 |
-| confirmed-in-3.5 | 29 |
+| confirmed-in-3.5 | 40 |
 | contradicted | 0 |
-| documented-in-3.0-only | 99 |
+| documented-in-3.0-only | 103 |
 | unresolved | 0 |
 
 ## Unresolved and pending candidates
@@ -77,6 +77,7 @@ tags: [amiga, gfa-basic, evidence, research]
 | `amiga.base4.bitwise-and-or-xor` | AND() / OR() / XOR() | 4-23 | Integer bitwise function forms; distinct from logical operators as expression operators pending exact parser treatment. |
 | `amiga.base4.bitwise-imp-eqv` | IMP() / EQV() | 4-24 | Integer bitwise function forms documented separately from logical truth tables. |
 | `amiga.base4.byte-card-word` | BYTE() / CARD() / WORD() | 4-26 | Byte/word conversion and extension operations documented. |
+| `amiga.base4.dec` | DEC | 4-10 | The base manual documents decrement-by-one behavior. The audited 3.5 examples use INC but do not demonstrate DEC; 3.5 applicability remains unestablished. |
 | `amiga.base4.deg-rad` | DEG() / RAD() | 4-7 | Degree/radian conversion functions documented in the 3.0 base manual. |
 | `amiga.base4.exp-log` | EXP() / LOG() / LOG10() | 4-9 | Exponential and logarithm family; retain LOG10 as candidate pending precise page-level confirmation. |
 | `amiga.base4.instr-rinstr` | INSTR() / RINSTR() | 4-30–4-31 | Forward/reverse substring search functions; preserve source-specific index semantics. |
@@ -109,9 +110,12 @@ tags: [amiga, gfa-basic, evidence, research]
 | `amiga.base6.file-output` | PRINT # / WRITE # | 6-16 | Writes expressions through a data channel; PRINT # supports USING but not PRINT AT. 3.5 availability is unresolved. |
 | `amiga.base6.inp-out` | INP / OUT | 6-13 | INP reads one byte from an opened data channel using INP(#n); OUT writes byte values. The addendum examples show ~INP(2), which is not the documented INP(#n) form and is not treated as confirmation. 3.5 availability remains unresolved. |
 | `amiga.base6.input-string` | INPUT$ | 6-14 | Reads a specified character count from keyboard or an optional file channel. 3.5 availability is unresolved. |
+| `amiga.base7.delay` | DELAY | 7-36 | The base manual documents DELAY as a pause in seconds. The audited 3.5 examples use PAUSE but do not demonstrate DELAY; 3.5 applicability remains unestablished. |
 | `amiga.base7.do-loop` | DO / LOOP variants | 7-17–7-19 | Beginning- and end-tested WHILE/UNTIL forms are described; exact grammar remains page-sensitive. 3.5 availability is unresolved. |
+| `amiga.base7.edit-stop` | EDIT / STOP | 7-37 | The base manual documents EDIT and STOP as alternatives to END. The audited 3.5 examples use END but do not demonstrate EDIT or STOP; 3.5 applicability remains unestablished. |
 | `amiga.base7.elseif` | ELSE IF / ELSEIF | 7-6–7-7 | Chained conditional branches; editor spelling varies and needs lexer/editor confirmation. 3.5 availability is unresolved. |
 | `amiga.base7.exit-if` | EXIT IF | 7-20 | Exits the active loop when its Boolean condition is satisfied; allowed within IF and SELECT structures per the source. 3.5 availability is unresolved. |
+| `amiga.base7.gosub` | GOSUB | 7-21–7-22 | The base manual documents GOSUB procedure calls. The 3.5 example defines and invokes drawp with the @ procedure-call form, not GOSUB; 3.5 GOSUB applicability remains unestablished. |
 | `amiga.base7.if` | IF / ELSE / ENDIF | 7-4–7-5 | Conditional execution; THEN is optional and any nonzero numeric expression is logically true. 3.5 availability is unresolved. |
 | `amiga.base7.on-error` | ON ERROR / ON ERROR GOSUB | 7-29 | The 3.0 manual documents reset-to-default handling and procedure-based error handling. The 3.5 addendum confirms that GURU Meditation may transfer to ONERROR GOSUB, but does not restate the complete syntax or general 3.5 availability. |
 | `amiga.base7.ongosub` | ON GOSUB | 7-8 | Selects a procedure by numeric index; out-of-range selection calls none. 3.5 availability is unresolved. |
@@ -145,19 +149,30 @@ tags: [amiga, gfa-basic, evidence, research]
 | `amiga.35.openw-negative-screen` | OPENW negative screen-number variant | 3.5 addendum | AM-INTERPRETER-35 | 13-34 (469-page scan), 14-3 (combined update scan) | Explicit 3.5 addendum declaration | Explicit variant opens a window on the current top screen. |
 | `amiga.35.pcolor` | PCOLOR | 3.5 addendum | AM-INTERPRETER-35 | 13-34 (469-page scan), 14-4 (combined update scan) | Explicit 3.5 addendum declaration | Applies foreground and optional background colors to PRINT screen output. |
 | `amiga.35.special-longwords` | _0 through _9 | 3.5 addendum | AM-INTERPRETER-35 | 13-35 (469-page scan), 14-6 (combined update scan) | Explicit 3.5 addendum declaration | Ten special longword variables; persistence and clearing behavior are described in the addendum. |
+| `amiga.base2.dim` | DIM | 3.0 base manual | AM-BOOK-DE-1990 | 458, 471, 480 | Direct example use | The 3.5 companion examples dimension vector and matrix arrays with DIM v(3),m(2,5) (p. 458), dimension point and matrix arrays (p. 471), and dimension the DATA-pointer position array (p. 480). This confirms the shown numeric-dimension forms, not every type suffix or bounds variant. |
 | `amiga.base2.hex` | HEX$ | 3.0 base manual | AM-INTERPRETER-35 | 13-36 | Direct example use | The base manual documents HEX$(x[,y]). The 3.5 GURU example calls HEX$(GURU) (printed p. 13-36), confirming the one-argument form; the optional width form is not independently used in the addendum. |
+| `amiga.base2.option-base` | OPTION BASE | 3.0 base manual | AM-BOOK-DE-1990 | 458 | Direct example use | The Chapter 18 matrix example sets OPTION BASE 0 (printed p. 458). This confirms the shown base-0 form only; OPTION BASE 1 is not shown. |
 | `amiga.base2.str` | STR$ | 3.0 base manual | AM-INTERPRETER-35 | 13-3 | Direct documentation reference | The 3.5 MAT PRINT description specifies number formatting as STR$(x,g,n) (printed p. 13-3). This confirms the three-argument form used for matrix output; other base-manual overloads are not independently restated. |
 | `amiga.base3.multiply-divide` | * / | 3.0 base manual | AM-BOOK-DE-1990 | 469, 473 | Direct example use | The Chapter 18 MAT MUL example uses b()*c() (p. 469), and the normalization example uses 1/SQR(l) (p. 473). This confirms numeric * and / forms in the shown expressions, not precedence or all operand types. |
 | `amiga.base3.numeric-add-sub` | Numeric + / - | 3.0 base manual | AM-BOOK-DE-1990 | 466, 467 | Direct example use | The 3.5 Chapter 18 MAT ADD example uses b()+b() (p. 466), and MAT SUB uses b()-c() (p. 467). This confirms numeric binary + and - use in the shown matrix expressions, not precedence or string concatenation. |
+| `amiga.base4.inc` | INC | 3.0 base manual | AM-BOOK-DE-1990 | 480 | Direct example use | The Chapter 19 DATA-pointer example uses INC i (printed p. 480) to advance its index. This confirms the shown scalar increment form, not DEC or all typed/overflow behavior. |
 | `amiga.base4.int` | INT() | 3.0 base manual | AM-BOOK-DE-1990 | 458 | Direct example use | The 3.5 companion book's Chapter 18 matrix example uses INT(RND(1)*5) (printed p. 458), confirming the one-argument integer-conversion form. |
 | `amiga.base4.rand` | RAND() | 3.0 base manual | AM-INTERPRETER-35 | 13-2 | Direct example use | The 3.5 MAT SET example assigns RAND(10) to matrix elements (printed p. 13-2). This confirms the call form used, not all distribution or seeding details. |
 | `amiga.base4.rnd` | RND() | 3.0 base manual | AM-BOOK-DE-1990 | 458 | Direct example use | The 3.5 companion book's Chapter 18 matrix example uses RND(1) inside INT(RND(1)*5) (printed p. 458). This confirms the one-argument form; RANDOM and RANDOMIZE remain unconfirmed. |
 | `amiga.base4.sqr` | SQR() | 3.0 base manual | AM-BOOK-DE-1990 | 473 | Direct example use | The 3.5 vector-normalization example uses SQR(l) to calculate vector length and 1/SQR(l) to normalize the vector (printed p. 473). The one-argument form is demonstrated. |
 | `amiga.base4.string` | STRING$() | 3.0 base manual | AM-INTERPRETER-35 | 13-21 | Direct example use | The 3.5 matrix examples use STRING$(n, "-") as PRINT separators (printed pp. 13-21–13-30). This confirms the string-argument form; the character-code overload is not independently restated. |
 | `amiga.base4.succ` | SUCC() | 3.0 base manual | AM-INTERPRETER-35 | 13-5 | Direct example use | The 3.5 matrix-copy examples use SUCC(i%) and SUCC(j%) (printed pp. 13-5–13-13). This directly confirms numeric use; the string overload is not independently restated. |
+| `amiga.base5.data` | DATA | 3.0 base manual | AM-BOOK-DE-1990 | 471 | Direct example use | The Chapter 18 vector example defines numeric DATA items (printed p. 471). This confirms numeric DATA lines in that example, not string values or numeric-prefix grammar. |
 | `amiga.base5.locate` | LOCATE | 3.0 base manual | AM-BOOK-DE-1990 | 471 | Direct example use | The vector-animation example positions output with LOCATE 1,12 (printed p. 471). Other cursor-positioning forms are not confirmed by this occurrence. |
 | `amiga.base5.print` | PRINT | 3.0 base manual | AM-BOOK-DE-1990 | 458, 471, 480 | Direct example use | The 3.5 companion examples use ordinary screen PRINT statements alongside MAT PRINT (printed pp. 458, 471 and 480). This confirms the shown PRINT statement form, not PRINT AT or WRITE. |
+| `amiga.base5.read` | READ | 3.0 base manual | AM-BOOK-DE-1990 | 480 | Direct example use | The Chapter 19 DATA-pointer example uses READ a (printed p. 480) to fetch one item into a scalar variable. Variable lists and string reads are not shown. |
+| `amiga.base5.restore` | RESTORE | 3.0 base manual | AM-BOOK-DE-1990 | 480 | Direct example use | The Chapter 19 DATA-pointer example uses bare RESTORE (printed p. 480) before reading the DATA list from its beginning. The labelled RESTORE form is not shown. |
+| `amiga.base6.close` | CLOSE | 3.0 base manual | AM-BOOK-DE-1990 | 458 | Direct example use | The Chapter 18 matrix example closes its data channel with CLOSE #1 (printed p. 458). The no-argument close-all form is not demonstrated. |
+| `amiga.base6.open` | OPEN | 3.0 base manual | AM-BOOK-DE-1990 | 458 | Direct example use | The Chapter 18 matrix example opens file channels in output and input modes using OPEN "O" and OPEN "I" (printed p. 458). Append, update and random-access modes are not demonstrated. |
+| `amiga.base7.end` | END | 3.0 base manual | AM-BOOK-DE-1990 | 471 | Direct example use | The Chapter 18 vector-animation example ends its top-level program with END (printed p. 471). Other program-termination alternatives are not demonstrated. |
 | `amiga.base7.for-next` | FOR / NEXT | 3.0 base manual | AM-BOOK-DE-1990 | 463, 464, 471, 480 | Direct example use | Chapter 18 examples use ascending FOR...TO...NEXT loops (pp. 463–464, 471); the Chapter 19 DATA-pointer example also uses FOR j=i TO 1 STEP -1...NEXT (p. 480). This confirms the shown ascending and negative-step forms, not the DOWNTO spelling or editor ENDFOR replacement. |
+| `amiga.base7.pause` | PAUSE | 3.0 base manual | AM-BOOK-DE-1990 | 471 | Direct example use | The Chapter 18 vector-animation example uses PAUSE 50 (printed p. 471), confirming the shown numeric-argument form. |
+| `amiga.base7.procedure-return` | PROCEDURE / RETURN | 3.0 base manual | AM-BOOK-DE-1990 | 471 | Direct example use | The Chapter 18 vector example defines PROCEDURE drawp and terminates it with RETURN (printed p. 471). This confirms the shown parameterless procedure structure; GOSUB and parameter-passing forms are not demonstrated. |
 | `amiga.base7.while-wend` | WHILE / WEND | 3.0 base manual | AM-BOOK-DE-1990 | 480 | Direct example use | The Chapter 19 _DATA example uses WHILE _DATA ... WEND (printed p. 480), with the loop ending when the DATA pointer reaches zero. This confirms the demonstrated condition form, not every condition or loop edge case. |
 | `amiga.base8.color` | COLOR | 3.0 base manual | AM-BOOK-DE-1990 | 471 | Direct example use | The Chapter 18 vector-animation example selects colors with COLOR 3 and COLOR 1 (printed p. 471). This confirms the shown COLOR statement form, not SETCOLOR's palette-component form. |
 | `amiga.base8.draw-to` | DRAW TO | 3.0 base manual | AM-BOOK-DE-1990 | 471 | Direct example use | The Chapter 18 vector-animation procedure uses DRAW TO with a calculated endpoint (printed p. 471). This confirms the shown path-drawing form only. |

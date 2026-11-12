@@ -84,3 +84,4 @@
 - [GFAList format versus Rust frontend](gfalist-format-vs-rust-frontend.md) - Format comparison notes.
 - [Amiga GFA BASIC 3.5 inherited-function evidence audit](amiga-gfa-basic-35-base-function-use-audit.md)
 - [Amiga GFA BASIC 3.5 inherited statement/operator evidence audit](amiga-gfa-basic-35-statement-operator-audit.md)
+- [Amiga GFA BASIC 3.5 example-used inherited statement audit](amiga-gfa-basic-35-example-used-statements-audit.md)
