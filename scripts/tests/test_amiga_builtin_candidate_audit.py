@@ -68,7 +68,8 @@ class ChapterTwoToFourCandidateAuditTests(unittest.TestCase):
 class GermanBookCrossCheckTests(unittest.TestCase):
 
     def test_split_statement_and_operator_groups_keep_undemonstrated_forms_unconfirmed(self):
-        by_id = {item["id"]: item for item in self.candidates}
+        candidates = tomllib.loads(MANIFEST.read_text(encoding="utf-8"))["candidates"]
+        by_id = {item["id"]: item for item in candidates}
         expected_unconfirmed = {
             "amiga.base3.unary-plus": "Unary +",
             "amiga.base5.print-write": "PRINT AT / WRITE",
@@ -81,7 +82,8 @@ class GermanBookCrossCheckTests(unittest.TestCase):
                 self.assertEqual(by_id[candidate_id]["name"], name)
 
     def test_statement_operator_evidence_has_exact_source_pages(self):
-        by_id = {item["id"]: item for item in self.candidates}
+        candidates = tomllib.loads(MANIFEST.read_text(encoding="utf-8"))["candidates"]
+        by_id = {item["id"]: item for item in candidates}
         expected = {
             "amiga.base5.print": ("3.5 companion book Chapters 18–19 examples", ["458", "471", "480"]),
             "amiga.base5.locate": ("3.5 companion book Chapter 18 example", ["471"]),
