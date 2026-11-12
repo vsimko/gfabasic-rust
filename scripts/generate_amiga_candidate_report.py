@@ -12,7 +12,7 @@ DEFAULT_MANIFEST = Path("docs/research/amiga-gfa-basic-candidates.toml")
 DEFAULT_OUTPUT = Path("docs/research/amiga-gfa-basic-candidate-report.md")
 STATUSES = {"candidate", "confirmed-in-3.5", "contradicted", "documented-in-3.0-only", "unresolved"}
 REQUIRED = {"id", "name", "kind", "source", "source-version", "printed-pages", "status", "notes"}
-EXPECTED_35_DIRECT_USE_BASIS = {"amiga.base2.hex": "direct-example-use", "amiga.base2.str": "direct-documentation-reference", "amiga.base4.rand": "direct-example-use", "amiga.base4.succ": "direct-example-use", "amiga.base4.string": "direct-example-use"}
+EXPECTED_35_DIRECT_USE_EVIDENCE = {"amiga.base2.hex":{"source":"AM-INTERPRETER-35","version":"3.5 addendum","pages":["13-36"],"basis":"direct-example-use"},"amiga.base2.str":{"source":"AM-INTERPRETER-35","version":"3.5 addendum","pages":["13-3"],"basis":"direct-documentation-reference"},"amiga.base4.rand":{"source":"AM-INTERPRETER-35","version":"3.5 addendum","pages":["13-2"],"basis":"direct-example-use"},"amiga.base4.succ":{"source":"AM-INTERPRETER-35","version":"3.5 addendum","pages":["13-5"],"basis":"direct-example-use"},"amiga.base4.string":{"source":"AM-INTERPRETER-35","version":"3.5 addendum","pages":["13-21"],"basis":"direct-example-use"},"amiga.base4.rnd":{"source":"AM-BOOK-DE-1990","version":"3.5 companion book Chapter 18","pages":["458"],"basis":"direct-example-use"},"amiga.base4.int":{"source":"AM-BOOK-DE-1990","version":"3.5 companion book Chapter 18","pages":["458"],"basis":"direct-example-use"},"amiga.base4.sqr":{"source":"AM-BOOK-DE-1990","version":"3.5 companion book Chapter 18","pages":["473"],"basis":"direct-example-use"}}
 
 
 def load_candidates(path: Path) -> list[dict]:
@@ -48,10 +48,10 @@ def load_candidates(path: Path) -> list[dict]:
             raise ValueError(f'{item["id"]}: Chapter 2–4 candidate must retain 3.0 source scope')
         if item["status"] == "confirmed-in-3.5":
             if (
-                item.get("confirmation-source") != "AM-INTERPRETER-35"
-                or item.get("confirmation-source-version") != "3.5 addendum"
-                or item.get("confirmation-basis") != EXPECTED_35_DIRECT_USE_BASIS.get(item["id"])
-                or not item.get("confirmation-printed-pages")
+                item.get("confirmation-source") != EXPECTED_35_DIRECT_USE_EVIDENCE.get(item["id"], {}).get("source")
+                or item.get("confirmation-source-version") != EXPECTED_35_DIRECT_USE_EVIDENCE.get(item["id"], {}).get("version")
+                or item.get("confirmation-basis") != EXPECTED_35_DIRECT_USE_EVIDENCE.get(item["id"], {}).get("basis")
+                or item.get("confirmation-printed-pages") != EXPECTED_35_DIRECT_USE_EVIDENCE.get(item["id"], {}).get("pages")
             ):
                 raise ValueError(f'{item["id"]}: 3.5 confirmation requires direct addendum example-use provenance')
         elif item["status"] != "documented-in-3.0-only":
@@ -99,14 +99,15 @@ def render(candidates: list[dict]) -> str:
     if not base_only:
         lines.append("| — | None | — | — |")
     lines.extend(["", "## Confirmed by the 3.5 addendum", "",
-                  "| ID | Declaration family | Original source | 3.5 evidence pages | Evidence basis | Qualification |",
-                  "|---|---|---|---|---|---|"])
+                  "| ID | Declaration family | Original source | 3.5 evidence source | 3.5 evidence pages | Evidence basis | Qualification |",
+                  "|---|---|---|---|---|---|---|"])
     confirmed = [item for item in candidates if item["status"] == "confirmed-in-3.5"]
     for item in confirmed:
         note = item["notes"].replace("|", "\\|")
         evidence_pages = ", ".join(item.get("confirmation-printed-pages", item["printed-pages"]))
+        evidence_source = item.get("confirmation-source", item["source"])
         basis = {"direct-example-use": "Direct example use", "direct-documentation-reference": "Direct documentation reference"}.get(item.get("confirmation-basis"), "Explicit 3.5 addendum declaration")
-        lines.append(f"| `{item['id']}` | {item['name']} | {item['source-version']} | {evidence_pages} | {basis} | {note} |")
+        lines.append(f"| `{item['id']}` | {item['name']} | {item['source-version']} | {evidence_source} | {evidence_pages} | {basis} | {note} |")
     if not confirmed:
         lines.append("| — | None | — | — | — | — |")
     contradicted = [item for item in candidates if item["status"] == "contradicted"]
