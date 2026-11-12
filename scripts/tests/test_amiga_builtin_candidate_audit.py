@@ -55,7 +55,6 @@ class ChapterTwoToFourCandidateAuditTests(unittest.TestCase):
         self.assertIn("distinct from the SWAP()", by_id["amiga.base2.swap-command"]["notes"])
 
 
-
 class StatementEvidenceTests(unittest.TestCase):
     def test_3_5_addendum_statement_evidence_is_exact_and_scoped(self):
         candidates = tomllib.loads(MANIFEST.read_text(encoding="utf-8"))["candidates"]
@@ -85,6 +84,7 @@ class StatementEvidenceTests(unittest.TestCase):
         ):
             with self.subTest(unconfirmed=candidate_id):
                 self.assertEqual(by_id[candidate_id]["status"], "documented-in-3.0-only")
+
 
 class GermanBookCrossCheckTests(unittest.TestCase):
     def test_explicit_3_5_families_have_independent_page_level_witness(self):

@@ -12,7 +12,23 @@ DEFAULT_MANIFEST = Path("docs/research/amiga-gfa-basic-candidates.toml")
 DEFAULT_OUTPUT = Path("docs/research/amiga-gfa-basic-candidate-report.md")
 STATUSES = {"candidate", "confirmed-in-3.5", "contradicted", "documented-in-3.0-only", "unresolved"}
 REQUIRED = {"id", "name", "kind", "source", "source-version", "printed-pages", "status", "notes"}
-EXPECTED_35_SOURCE_EVIDENCE = {"amiga.base2.hex":{"source":"AM-INTERPRETER-35","version":"3.5 addendum","pages":["13-36"],"basis":"direct-example-use"},"amiga.base2.str":{"source":"AM-INTERPRETER-35","version":"3.5 addendum","pages":["13-3"],"basis":"direct-documentation-reference"},"amiga.base4.rand":{"source":"AM-INTERPRETER-35","version":"3.5 addendum","pages":["13-2"],"basis":"direct-example-use"},"amiga.base4.succ":{"source":"AM-INTERPRETER-35","version":"3.5 addendum","pages":["13-5"],"basis":"direct-example-use"},"amiga.base4.string":{"source":"AM-INTERPRETER-35","version":"3.5 addendum","pages":["13-21"],"basis":"direct-example-use"},"amiga.base4.rnd":{"source":"AM-BOOK-DE-1990","version":"3.5 companion book Chapter 18","pages":["458"],"basis":"direct-example-use"},"amiga.base4.int":{"source":"AM-BOOK-DE-1990","version":"3.5 companion book Chapter 18","pages":["458"],"basis":"direct-example-use"},"amiga.base4.sqr":{"source":"AM-BOOK-DE-1990","version":"3.5 companion book Chapter 18","pages":["473"],"basis":"direct-example-use"},"amiga.base4.inc-dec":{"source":"AM-INTERPRETER-35","version":"3.5 addendum","pages":["13-35"],"basis":"direct-example-use"},"amiga.base5.data-read":{"source":"AM-INTERPRETER-35","version":"3.5 addendum","pages":["13-35"],"basis":"direct-example-use"},"amiga.base5.print-write":{"source":"AM-INTERPRETER-35","version":"3.5 addendum","pages":["13-2","13-34","13-35","13-36"],"basis":"direct-example-use"},"amiga.base7.for-next":{"source":"AM-INTERPRETER-35","version":"3.5 addendum","pages":["13-35"],"basis":"direct-example-use"},"amiga.base7.do-loop":{"source":"AM-INTERPRETER-35","version":"3.5 addendum","pages":["13-35"],"basis":"direct-example-use"},"amiga.base7.on-error":{"source":"AM-INTERPRETER-35","version":"3.5 addendum","pages":["13-36"],"basis":"direct-documentation-reference"},"amiga.base7.resume":{"source":"AM-INTERPRETER-35","version":"3.5 addendum","pages":["13-36"],"basis":"direct-documentation-restriction"}}
+EXPECTED_35_SOURCE_EVIDENCE = {
+    "amiga.base2.hex": {"source":"AM-INTERPRETER-35","version":"3.5 addendum","pages":["13-36"],"basis":"direct-example-use"},
+    "amiga.base2.str": {"source":"AM-INTERPRETER-35","version":"3.5 addendum","pages":["13-3"],"basis":"direct-documentation-reference"},
+    "amiga.base4.rand": {"source":"AM-INTERPRETER-35","version":"3.5 addendum","pages":["13-2"],"basis":"direct-example-use"},
+    "amiga.base4.succ": {"source":"AM-INTERPRETER-35","version":"3.5 addendum","pages":["13-5"],"basis":"direct-example-use"},
+    "amiga.base4.string": {"source":"AM-INTERPRETER-35","version":"3.5 addendum","pages":["13-21"],"basis":"direct-example-use"},
+    "amiga.base4.rnd": {"source":"AM-BOOK-DE-1990","version":"3.5 companion book Chapter 18","pages":["458"],"basis":"direct-example-use"},
+    "amiga.base4.int": {"source":"AM-BOOK-DE-1990","version":"3.5 companion book Chapter 18","pages":["458"],"basis":"direct-example-use"},
+    "amiga.base4.sqr": {"source":"AM-BOOK-DE-1990","version":"3.5 companion book Chapter 18","pages":["473"],"basis":"direct-example-use"},
+    "amiga.base4.inc-dec": {"source":"AM-INTERPRETER-35","version":"3.5 addendum","pages":["13-35"],"basis":"direct-example-use"},
+    "amiga.base5.data-read": {"source":"AM-INTERPRETER-35","version":"3.5 addendum","pages":["13-35"],"basis":"direct-example-use"},
+    "amiga.base5.print-write": {"source":"AM-INTERPRETER-35","version":"3.5 addendum","pages":["13-2","13-34","13-35","13-36"],"basis":"direct-example-use"},
+    "amiga.base7.for-next": {"source":"AM-INTERPRETER-35","version":"3.5 addendum","pages":["13-35"],"basis":"direct-example-use"},
+    "amiga.base7.do-loop": {"source":"AM-INTERPRETER-35","version":"3.5 addendum","pages":["13-35"],"basis":"direct-example-use"},
+    "amiga.base7.on-error": {"source":"AM-INTERPRETER-35","version":"3.5 addendum","pages":["13-36"],"basis":"direct-documentation-reference"},
+    "amiga.base7.resume": {"source":"AM-INTERPRETER-35","version":"3.5 addendum","pages":["13-36"],"basis":"direct-documentation-restriction"},
+}
 
 
 def load_candidates(path: Path) -> list[dict]:
@@ -34,9 +50,9 @@ def load_candidates(path: Path) -> list[dict]:
             raise ValueError(f"{item['id']}: invalid status {item['status']!r}")
         if not item["printed-pages"] or not item["source"] or not item["source-version"]:
             raise ValueError(f"{item['id']}: source and printed page locators are required")
-    # Chapter 2–7 source facts are checked against direct 3.5 source evidence.
-    # These records retain their 3.0 source origin; direct 3.5 source use can
-    # establish only the call forms actually demonstrated.
+    # Selected Chapter 2–5 and 7 candidate families are checked against direct 3.5 evidence.
+    # These records retain their 3.0 source origin; direct 3.5 evidence establishes
+    # only the forms and contexts actually demonstrated or referenced.
     core_candidates = [
         item for item in candidates
         if item["id"].startswith(("amiga.base2.", "amiga.base3.", "amiga.base4."))
