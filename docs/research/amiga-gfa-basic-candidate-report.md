@@ -13,7 +13,7 @@ tags: [amiga, gfa-basic, evidence, research]
 | Status | Entries |
 |---|---:|
 | candidate | 0 |
-| confirmed-in-3.5 | 21 |
+| confirmed-in-3.5 | 28 |
 | contradicted | 0 |
 | documented-in-3.0-only | 103 |
 | unresolved | 0 |
@@ -106,20 +106,20 @@ tags: [amiga, gfa-basic, evidence, research]
 | `amiga.base5.input` | INPUT | 5-3–5-4 | Reads numeric/string variables with optional prompt; window behavior and numeric re-entry are described. 3.5 availability is unresolved. |
 | `amiga.base5.line-input` | LINE INPUT | 5-5 | Reads string input while allowing commas in the entered text. 3.5 availability is unresolved. |
 | `amiga.base5.print-using` | PRINT USING | 5-9 | Formatted screen output; exact placeholder grammar remains unreviewed. 3.5 availability is unresolved. |
-| `amiga.base5.print-write` | PRINT, PRINT AT, WRITE, LOCATE | 5-7–5-8 | Screen output, cursor positioning and comma-separated WRITE format are distinguished. 3.5 availability is unresolved. |
+| `amiga.base5.print-variants` | PRINT AT / WRITE / LOCATE | 5-7–5-8 | These 3.0 screen-output, cursor-positioning, and WRITE variants are not demonstrated by the 3.5 addendum; only plain PRINT is confirmed. |
 | `amiga.base6.file-input` | INPUT # / LINE INPUT # | 6-15 | Reads channel data as values or lines; keep channel forms distinct from screen input. 3.5 availability is unresolved. |
 | `amiga.base6.file-output` | PRINT # / WRITE # | 6-16 | Writes expressions through a data channel; PRINT # supports USING but not PRINT AT. 3.5 availability is unresolved. |
 | `amiga.base6.inp-out` | INP / OUT | 6-13 | INP reads one byte from an opened data channel using INP(#n); OUT writes byte values. The addendum examples show ~INP(2), which is not the documented INP(#n) form and is not treated as confirmation. 3.5 availability remains unresolved. |
 | `amiga.base6.input-string` | INPUT$ | 6-14 | Reads a specified character count from keyboard or an optional file channel. 3.5 availability is unresolved. |
-| `amiga.base7.do-loop` | DO / LOOP variants | 7-17–7-19 | Beginning- and end-tested WHILE/UNTIL forms are described; exact grammar remains page-sensitive. 3.5 availability is unresolved. |
+| `amiga.base7.do-loop-variants` | DO / LOOP WHILE / UNTIL variants | 7-17–7-19 | The base manual describes additional beginning- and end-tested WHILE/UNTIL forms; the 3.5 addendum demonstrates only DO WHILE ... LOOP. |
 | `amiga.base7.elseif` | ELSE IF / ELSEIF | 7-6–7-7 | Chained conditional branches; editor spelling varies and needs lexer/editor confirmation. 3.5 availability is unresolved. |
 | `amiga.base7.exit-if` | EXIT IF | 7-20 | Exits the active loop when its Boolean condition is satisfied; allowed within IF and SELECT structures per the source. 3.5 availability is unresolved. |
-| `amiga.base7.for-next` | FOR / NEXT | 7-13–7-14 | Loop forms include DOWNTO and editor replacement ENDFOR; OCR-sensitive termination details remain open. 3.5 availability is unresolved. |
+| `amiga.base7.for-next-endfor` | ENDFOR editor replacement | 7-13–7-14 | The base manual documents ENDFOR as an editor replacement for NEXT; the 3.5 addendum uses NEXT and does not demonstrate ENDFOR. |
 | `amiga.base7.if` | IF / ELSE / ENDIF | 7-4–7-5 | Conditional execution; THEN is optional and any nonzero numeric expression is logically true. 3.5 availability is unresolved. |
-| `amiga.base7.on-error` | ON ERROR / ON ERROR GOSUB | 7-29 | The 3.0 manual documents reset-to-default handling and procedure-based error handling. The 3.5 addendum confirms that GURU Meditation may transfer to ONERROR GOSUB, but does not restate the complete syntax or general 3.5 availability. |
+| `amiga.base7.on-error-reset` | ON ERROR reset-to-default | 7-29 | The base manual documents ON ERROR reset-to-default behavior; the 3.5 addendum only references ONERROR GOSUB in GURU recovery. |
 | `amiga.base7.ongosub` | ON GOSUB | 7-8 | Selects a procedure by numeric index; out-of-range selection calls none. 3.5 availability is unresolved. |
 | `amiga.base7.repeat-until` | REPEAT / UNTIL | 7-15 | Post-tested loop; body executes at least once. 3.5 availability is unresolved. |
-| `amiga.base7.resume` | RESUME / RESUME NEXT / RESUME label | 7-29 | The 3.0 manual documents retry, continue-next and continue-at-label behavior, plus a FATAL-error restriction. The 3.5 addendum specifically disallows RESUME NEXT and RESUME LABEL after a GURU-triggered ONERROR GOSUB in compiled 3.5 programs; broader 3.5 behavior remains unverified. |
+| `amiga.base7.resume-plain` | RESUME | 7-29 | The base manual documents plain RESUME; the 3.5 addendum specifically references RESUME NEXT and RESUME LABEL in a compiled-program restriction, not plain RESUME. |
 | `amiga.base7.select-case` | SELECT / CASE / DEFAULT / ENDSELECT | 7-9–7-10 | Numeric or short-string selector; CASE supports values, ranges and lists. 3.5 availability is unresolved. |
 | `amiga.base7.while-wend` | WHILE / WEND | 7-16 | Pre-tested loop; condition is checked before each body execution. 3.5 availability is unresolved. |
 | `amiga.base8.box` | BOX / PBOX | 8-15 | Draws outlined or filled rectangles. 3.5 availability is unresolved. |
@@ -136,27 +136,34 @@ tags: [amiga, gfa-basic, evidence, research]
 
 | ID | Declaration family | Original source | 3.5 evidence source | 3.5 evidence pages | Evidence basis | Qualification |
 |---|---|---|---|---|---|---|
-| `amiga.35.combinatorics` | FACT, VARIAT, COMBIN | 3.5 addendum | AM-INTERPRETER-35 | 13-33–13-34 (469-page scan), 14-1–14-2 (combined update scan) | Explicit 3.5 addendum declaration | Factorial, permutations and combinations are explicitly enumerated as additional 3.5 functions. |
-| `amiga.35.data-pointer` | _DATA and _DATA= | 3.5 addendum | AM-INTERPRETER-35 | 13-34–13-35 (469-page scan), 14-5 (combined update scan) | Explicit 3.5 addendum declaration | The leading underscore is confirmed by page-image review; query and restore the DATA pointer. |
-| `amiga.35.editor-update` | Editor row layout, search and listing changes | 3.5 editor update | AM-INTERPRETER-35 | 1-25 | Explicit 3.5 addendum declaration | Explicit editor update; this is editor behavior, not a language/runtime declaration. |
-| `amiga.35.guru` | GURU statement and function | 3.5 addendum | AM-INTERPRETER-35 | 13-35–13-36 (469-page scan), 14-6–14-7 (combined update scan) | Explicit 3.5 addendum declaration | GURU checking control and GURU-number function are explicitly documented; crash-recovery tests require isolation. |
-| `amiga.35.mat-analysis` | MAT NORM, MAT DET, MAT QDET, MAT RANG, MAT INV | 3.5 addendum | AM-INTERPRETER-35 | 13-31–13-39 | Explicit 3.5 addendum declaration | The family is documented in Chapter 13. MAT INV destination-first order is established by the detailed definition and worked example on printed p. 13-30; the reversed summary form on p. 13-16 is treated as a source typo. Numerical edge cases remain unverified. |
-| `amiga.35.mat-arithmetic` | MAT ADD, MAT SUB, MAT MUL | 3.5 addendum | AM-INTERPRETER-35 | 13-22–13-30 | Explicit 3.5 addendum declaration | Element-wise, scalar, matrix-product and vector-product forms are documented. The 3.5 addendum explicitly defines MAT MUL array(),scalar as in-place multiplication of every field element by the scalar; this is source-verified syntax, not a runtime-conformance claim. |
-| `amiga.35.mat-base` | MAT BASE | 3.5 addendum | AM-INTERPRETER-35 | 13-1–13-2 | Explicit 3.5 addendum declaration | Explicitly documented in the version-specific Chapter 13 addendum; applicability is limited to the documented matrix operations. |
-| `amiga.35.mat-copy` | MAT CPY, MAT XCPY, MAT TRANS | 3.5 addendum | AM-INTERPRETER-35 | 13-8–13-20 | Explicit 3.5 addendum declaration | Detailed source-checked shape, offset, extent, transpose and vector-orientation rules are recorded in the addendum inventory. |
-| `amiga.35.mat-generation` | MAT CLR, MAT SET, MAT ONE | 3.5 addendum | AM-INTERPRETER-35 | 13-2–13-3 | Explicit 3.5 addendum declaration | Generation forms and floating-point field constraints are documented in Chapter 13. |
-| `amiga.35.mat-io` | MAT READ, MAT PRINT, MAT INPUT | 3.5 addendum | AM-INTERPRETER-35 | 13-3–13-6 | Explicit 3.5 addendum declaration | Chapter 13 explicitly documents vector/matrix data I/O forms. |
-| `amiga.35.openw-negative-screen` | OPENW negative screen-number variant | 3.5 addendum | AM-INTERPRETER-35 | 13-34 (469-page scan), 14-3 (combined update scan) | Explicit 3.5 addendum declaration | Explicit variant opens a window on the current top screen. |
-| `amiga.35.pcolor` | PCOLOR | 3.5 addendum | AM-INTERPRETER-35 | 13-34 (469-page scan), 14-4 (combined update scan) | Explicit 3.5 addendum declaration | Applies foreground and optional background colors to PRINT screen output. |
-| `amiga.35.special-longwords` | _0 through _9 | 3.5 addendum | AM-INTERPRETER-35 | 13-35 (469-page scan), 14-6 (combined update scan) | Explicit 3.5 addendum declaration | Ten special longword variables; persistence and clearing behavior are described in the addendum. |
+| `amiga.35.combinatorics` | FACT, VARIAT, COMBIN | 3.5 addendum | AM-INTERPRETER-35 | 13-33–13-34 (469-page scan), 14-1–14-2 (combined update scan) | Explicit 3.5 source declaration | Factorial, permutations and combinations are explicitly enumerated as additional 3.5 functions. |
+| `amiga.35.data-pointer` | _DATA and _DATA= | 3.5 addendum | AM-INTERPRETER-35 | 13-34–13-35 (469-page scan), 14-5 (combined update scan) | Explicit 3.5 source declaration | The leading underscore is confirmed by page-image review; query and restore the DATA pointer. |
+| `amiga.35.editor-update` | Editor row layout, search and listing changes | 3.5 editor update | AM-INTERPRETER-35 | 1-25 | Explicit 3.5 source declaration | Explicit editor update; this is editor behavior, not a language/runtime declaration. |
+| `amiga.35.guru` | GURU statement and function | 3.5 addendum | AM-INTERPRETER-35 | 13-35–13-36 (469-page scan), 14-6–14-7 (combined update scan) | Explicit 3.5 source declaration | GURU checking control and GURU-number function are explicitly documented; crash-recovery tests require isolation. |
+| `amiga.35.mat-analysis` | MAT NORM, MAT DET, MAT QDET, MAT RANG, MAT INV | 3.5 addendum | AM-INTERPRETER-35 | 13-31–13-39 | Explicit 3.5 source declaration | The family is documented in Chapter 13. MAT INV destination-first order is established by the detailed definition and worked example on printed p. 13-30; the reversed summary form on p. 13-16 is treated as a source typo. Numerical edge cases remain unverified. |
+| `amiga.35.mat-arithmetic` | MAT ADD, MAT SUB, MAT MUL | 3.5 addendum | AM-INTERPRETER-35 | 13-22–13-30 | Explicit 3.5 source declaration | Element-wise, scalar, matrix-product and vector-product forms are documented. The 3.5 addendum explicitly defines MAT MUL array(),scalar as in-place multiplication of every field element by the scalar; this is source-verified syntax, not a runtime-conformance claim. |
+| `amiga.35.mat-base` | MAT BASE | 3.5 addendum | AM-INTERPRETER-35 | 13-1–13-2 | Explicit 3.5 source declaration | Explicitly documented in the version-specific Chapter 13 addendum; applicability is limited to the documented matrix operations. |
+| `amiga.35.mat-copy` | MAT CPY, MAT XCPY, MAT TRANS | 3.5 addendum | AM-INTERPRETER-35 | 13-8–13-20 | Explicit 3.5 source declaration | Detailed source-checked shape, offset, extent, transpose and vector-orientation rules are recorded in the addendum inventory. |
+| `amiga.35.mat-generation` | MAT CLR, MAT SET, MAT ONE | 3.5 addendum | AM-INTERPRETER-35 | 13-2–13-3 | Explicit 3.5 source declaration | Generation forms and floating-point field constraints are documented in Chapter 13. |
+| `amiga.35.mat-io` | MAT READ, MAT PRINT, MAT INPUT | 3.5 addendum | AM-INTERPRETER-35 | 13-3–13-6 | Explicit 3.5 source declaration | Chapter 13 explicitly documents vector/matrix data I/O forms. |
+| `amiga.35.openw-negative-screen` | OPENW negative screen-number variant | 3.5 addendum | AM-INTERPRETER-35 | 13-34 (469-page scan), 14-3 (combined update scan) | Explicit 3.5 source declaration | Explicit variant opens a window on the current top screen. |
+| `amiga.35.pcolor` | PCOLOR | 3.5 addendum | AM-INTERPRETER-35 | 13-34 (469-page scan), 14-4 (combined update scan) | Explicit 3.5 source declaration | Applies foreground and optional background colors to PRINT screen output. |
+| `amiga.35.special-longwords` | _0 through _9 | 3.5 addendum | AM-INTERPRETER-35 | 13-35 (469-page scan), 14-6 (combined update scan) | Explicit 3.5 source declaration | Ten special longword variables; persistence and clearing behavior are described in the addendum. |
 | `amiga.base2.hex` | HEX$ | 3.0 base manual | AM-INTERPRETER-35 | 13-36 | Direct example use | The base manual documents HEX$(x[,y]). The 3.5 GURU example calls HEX$(GURU) (printed p. 13-36), confirming the one-argument form; the optional width form is not independently used in the addendum. |
 | `amiga.base2.str` | STR$ | 3.0 base manual | AM-INTERPRETER-35 | 13-3 | Direct documentation reference | The 3.5 MAT PRINT description specifies number formatting as STR$(x,g,n) (printed p. 13-3). This confirms the three-argument form used for matrix output; other base-manual overloads are not independently restated. |
+| `amiga.base4.inc-dec` | INC / DEC | 3.0 base manual | AM-INTERPRETER-35 | 13-35 | Direct example use | The 3.5 data-pointer example uses INC i% and DEC i% (p. 13-35). |
 | `amiga.base4.int` | INT() | 3.0 base manual | AM-BOOK-DE-1990 | 458 | Direct example use | The 3.5 companion book's Chapter 18 matrix example uses INT(RND(1)*5) (printed p. 458), confirming the one-argument integer-conversion form. |
 | `amiga.base4.rand` | RAND() | 3.0 base manual | AM-INTERPRETER-35 | 13-2 | Direct example use | The 3.5 MAT SET example assigns RAND(10) to matrix elements (printed p. 13-2). This confirms the call form used, not all distribution or seeding details. |
 | `amiga.base4.rnd` | RND() | 3.0 base manual | AM-BOOK-DE-1990 | 458 | Direct example use | The 3.5 companion book's Chapter 18 matrix example uses RND(1) inside INT(RND(1)*5) (printed p. 458). This confirms the one-argument form; RANDOM and RANDOMIZE remain unconfirmed. |
 | `amiga.base4.sqr` | SQR() | 3.0 base manual | AM-BOOK-DE-1990 | 473 | Direct example use | The 3.5 vector-normalization example uses SQR(l) to calculate vector length and 1/SQR(l) to normalize the vector (printed p. 473). The one-argument form is demonstrated. |
 | `amiga.base4.string` | STRING$() | 3.0 base manual | AM-INTERPRETER-35 | 13-21 | Direct example use | The 3.5 matrix examples use STRING$(n, "-") as PRINT separators (printed pp. 13-21–13-30). This confirms the string-argument form; the character-code overload is not independently restated. |
 | `amiga.base4.succ` | SUCC() | 3.0 base manual | AM-INTERPRETER-35 | 13-5 | Direct example use | The 3.5 matrix-copy examples use SUCC(i%) and SUCC(j%) (printed pp. 13-5–13-13). This directly confirms numeric use; the string overload is not independently restated. |
+| `amiga.base5.data-read` | DATA / READ | 3.0 base manual | AM-INTERPRETER-35 | 13-35 | Direct example use | The 3.5 data-pointer example includes DATA records and uses READ a (p. 13-35). The DO WHILE DATA predicate is tracked with the loop form, not treated as a separate function here. |
+| `amiga.base5.print-write` | PRINT | 3.0 base manual | AM-INTERPRETER-35 | 13-2, 13-34, 13-35, 13-36 | Direct example use | The 3.5 addendum uses plain PRINT for matrix headings, separator lines, and GURU output (pp. 13-2, 13-34–13-36). Only plain PRINT is confirmed; PRINT AT, WRITE, and LOCATE remain separate 3.0-only candidates. |
+| `amiga.base7.do-loop` | DO WHILE ... LOOP | 3.0 base manual | AM-INTERPRETER-35 | 13-35 | Direct example use | The data-pointer example uses DO WHILE DATA ... LOOP (p. 13-35). Only this form is confirmed; other WHILE/UNTIL placements remain separate. |
+| `amiga.base7.for-next` | FOR / NEXT / DOWNTO | 3.0 base manual | AM-INTERPRETER-35 | 13-35 | Direct example use | The data-pointer example uses FOR j%=i% DOWNTO 0 ... NEXT j% (p. 13-35), confirming FOR/NEXT and the DOWNTO form. ENDFOR is not shown and remains separate. |
+| `amiga.base7.on-error` | ONERROR GOSUB | 3.0 base manual | AM-INTERPRETER-35 | 13-36 | Direct documentation reference | The GURU description says a GURU Meditation transfers control to the ONERROR GOSUB routine; the example uses ONERROR GOSUB ER (p. 13-36). This confirms the GURU recovery form only; ON ERROR reset-to-default remains separate. |
+| `amiga.base7.resume` | RESUME NEXT / RESUME LABEL | 3.0 base manual | AM-INTERPRETER-35 | 13-36 | Direct documentation restriction | The addendum states that compiled 3.5 programs cannot execute RESUME NEXT or RESUME LABEL after a GURU-triggered ONERROR GOSUB (p. 13-36). These forms are explicitly recognized but restricted in that context; plain RESUME remains separate. |
 
 ## Contradicted candidates
 
@@ -165,10 +172,10 @@ No candidates are currently classified as contradicted. This is not evidence tha
 ## Interpretation and limitations
 
 - `documented-in-3.0-only` means the cited declaration is present in the 3.0 base manual but no 3.5 evidence establishes its applicability. This does not mean removed or incompatible.
-- `confirmed-in-3.5` can be based either on an explicit 3.5 source declaration or on direct use or reference in 3.5 material. For inherited functions, direct evidence confirms only the form actually shown or referenced; it does not revalidate every overload or edge case.
+- `confirmed-in-3.5` can be based on an explicit 3.5 source declaration, direct use, direct documentation reference, or a specific documented restriction. For inherited functions and statements, direct evidence confirms only the form and context actually shown or referenced; it does not revalidate every overload or variant.
 - `unresolved` is reserved for candidates whose source scope or declaration identity still needs research.
 - A confirmed family does not settle every overload or edge case; qualifications in the manifest and detailed research notes remain authoritative.
 - Chapter 12 indexes and reference tables are navigation aids, not declarations or proof of availability.
 - No absence-based removal or compatibility inference is made.
 
-Source: `AM-INTERPRETER-35` and `AM-BOOK-DE-1990` in `docs/reference-sources.md`; detailed page notes are in `amiga-gfa-basic-3.0-base-inventory.md`, `amiga-gfa-basic-35-addendum-inventory.md`, and `amiga-gfa-basic-35-base-function-use-audit.md`.
+Source: `AM-INTERPRETER-35` and `AM-BOOK-DE-1990` in `docs/reference-sources.md`; detailed page notes are in `amiga-gfa-basic-3.0-base-inventory.md`, `amiga-gfa-basic-35-addendum-inventory.md`, `amiga-gfa-basic-35-base-function-use-audit.md`, and `amiga-gfa-basic-35-base-statement-use-audit.md`.
