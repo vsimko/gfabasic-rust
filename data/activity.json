@@ -1,9 +1,25 @@
 {
   "schema_version": 1,
   "status": "fresh",
-  "generated_at": "2026-11-12T17:22:34.698322+00:00",
-  "last_successful_at": "2026-11-12T17:22:34.698322+00:00",
+  "generated_at": "2026-11-12T17:28:15.977011+00:00",
+  "last_successful_at": "2026-11-12T17:28:15.977011+00:00",
   "items": [
+    {
+      "type": "merged_pull_request",
+      "title": "Record CLS use in the GFA BASIC 3.5 addendum",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/511",
+      "number": 511,
+      "timestamp": "2026-11-12T17:27:53Z",
+      "summary": "PR #511 merged"
+    },
+    {
+      "type": "commit",
+      "title": "research: record CLS use in the 3.5 addendum (#511)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/e7b699075dbebb9f28d86aae37613400db78bd07",
+      "number": null,
+      "timestamp": "2026-11-12T17:27:52Z",
+      "summary": "Commit e7b6990"
+    },
     {
       "type": "merged_pull_request",
       "title": "Record the @-prefixed procedure call used in a GFA BASIC 3.5 example",
@@ -83,22 +99,6 @@
       "number": null,
       "timestamp": "2026-11-12T11:18:08Z",
       "summary": "Commit 6a9c23e"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "Guard the Amiga 3.5 built-in function registry boundary",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/503",
-      "number": 503,
-      "timestamp": "2026-11-12T10:53:59Z",
-      "summary": "PR #503 merged"
-    },
-    {
-      "type": "commit",
-      "title": "Guard the Amiga 3.5 built-in function registry boundary (#503)",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/c3ac92dcd210ab1eff149942ff10e5f6decefa2d",
-      "number": null,
-      "timestamp": "2026-11-12T10:53:59Z",
-      "summary": "Commit c3ac92d"
     }
   ]
 }
