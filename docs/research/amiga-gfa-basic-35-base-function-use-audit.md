@@ -28,11 +28,13 @@ The German book identifies the material in Chapter 18 as new in version 3.5. Its
 
 These eight identifiers remain recorded with their 3.0 base-manual origin and receive the separate `confirmed-by-3.5-source-evidence` evidence status. Their original base-manual page references remain intact; the 3.5 source identifiers and printed-page locators are stored in separate confirmation fields.
 
-## Similar-looking occurrence deliberately excluded
+## Similar-looking occurrences deliberately excluded
 
 The English addendum matrix examples contain `~INP(2)` (pp. 13-21 onward). The base-manual function candidate is documented as `INP(#n)`, which reads a byte from an opened data channel. The addendum spelling and context do not establish that it is the same call form. Therefore `INP` is not promoted and remains documented-in-3.0-only pending clarification.
 
 Likewise, apparent matches for `ADD`, `SUB`, and `MUL` in the addendum are `MAT` statements, not function calls. Words such as `AND`, `OR`, `EVEN`, `POINT`, `SCREEN`, `TAB`, `TYPE`, and `WINDOW` occur as prose or labels, not built-in function calls.
+
+The German book also contains `SIN(i%)` and `COS(i%)` in a compiler-performance example on printed p. 430. That example is in Chapter 17, before the book's explicitly version-3.5 Chapter 18 material, and is not labelled as a 3.5 addition or 3.5-specific example. It is therefore not used as independent 3.5 evidence for the trigonometric functions. This is an evidence-scope exclusion, not a claim that those functions are absent from or incompatible with 3.5.
 
 ## Result and boundary
 
