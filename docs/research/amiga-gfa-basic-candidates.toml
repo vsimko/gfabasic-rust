@@ -303,13 +303,13 @@ notes = "Edits a string field of width 1–255; FORM INPUT AS starts from the cu
 
 [[candidates]]
 id = "amiga.base5.print-write"
-name = "PRINT, PRINT AT, WRITE, LOCATE"
+name = "PRINT AT / WRITE"
 kind = "statement-family"
 source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["5-7–5-8"]
 status = "documented-in-3.0-only"
-notes = "Screen output, cursor positioning and comma-separated WRITE format are distinguished. 3.5 availability is unresolved."
+notes = "PRINT AT and WRITE remain 3.0 base-manual candidates. PRINT and LOCATE are tracked separately because the 3.5 companion examples demonstrate those forms, not these siblings."
 
 [[candidates]]
 id = "amiga.base5.print-using"
@@ -408,9 +408,13 @@ kind = "statement-family"
 source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["7-13–7-14"]
-status = "documented-in-3.0-only"
-notes = "Loop forms include DOWNTO and editor replacement ENDFOR; OCR-sensitive termination details remain open. 3.5 availability is unresolved."
+status = "confirmed-in-3.5"
+notes = "Chapter 18 examples use ascending FOR...TO...NEXT loops (pp. 463–464, 471); the Chapter 19 DATA-pointer example also uses FOR j=i TO 1 STEP -1...NEXT (p. 480). This confirms the shown ascending and negative-step forms, not the DOWNTO spelling or editor ENDFOR replacement."
 
+confirmation-source = "AM-BOOK-DE-1990"
+confirmation-source-version = "3.5 companion book Chapters 18–19 examples"
+confirmation-printed-pages = ["463","464","471","480"]
+confirmation-basis = "direct-example-use"
 [[candidates]]
 id = "amiga.base7.repeat-until"
 name = "REPEAT / UNTIL"
@@ -428,9 +432,13 @@ kind = "statement-family"
 source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["7-16"]
-status = "documented-in-3.0-only"
-notes = "Pre-tested loop; condition is checked before each body execution. 3.5 availability is unresolved."
+status = "confirmed-in-3.5"
+notes = "The Chapter 19 _DATA example uses WHILE _DATA ... WEND (printed p. 480), with the loop ending when the DATA pointer reaches zero. This confirms the demonstrated condition form, not every condition or loop edge case."
 
+confirmation-source = "AM-BOOK-DE-1990"
+confirmation-source-version = "3.5 companion book Chapter 19 example"
+confirmation-printed-pages = ["480"]
+confirmation-basis = "direct-example-use"
 [[candidates]]
 id = "amiga.base7.do-loop"
 name = "DO / LOOP variants"
@@ -453,13 +461,13 @@ notes = "Exits the active loop when its Boolean condition is satisfied; allowed 
 
 [[candidates]]
 id = "amiga.base8.setcolor"
-name = "SETCOLOR / COLOR"
+name = "SETCOLOR"
 kind = "statement-family"
 source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["8-2"]
 status = "documented-in-3.0-only"
-notes = "Sets palette RGB components and selects foreground/background/fill-outline colors. 3.5 availability is unresolved."
+notes = "SETCOLOR's palette-component form remains a 3.0 base-manual candidate. The 3.5 companion example uses COLOR 3 and COLOR 1; COLOR is tracked separately."
 
 [[candidates]]
 id = "amiga.base8.deffill"
@@ -483,13 +491,13 @@ notes = "Restricts graphics output to a rectangle; source explicitly excludes GE
 
 [[candidates]]
 id = "amiga.base8.plot-line-draw"
-name = "PLOT / LINE / DRAW"
+name = "PLOT / LINE / DRAW forms other than DRAW TO"
 kind = "statement-family"
 source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["8-10–8-14"]
 status = "documented-in-3.0-only"
-notes = "Point, line and path drawing; DRAW inquiry forms and OCR-sensitive command strings need exact grammar review. 3.5 availability is unresolved."
+notes = "The 3.5 companion example demonstrates DRAW TO only (printed p. 471); PLOT, LINE and other DRAW forms remain 3.0 base-manual candidates."
 
 [[candidates]]
 id = "amiga.base8.box"
@@ -805,14 +813,14 @@ status = "documented-in-3.0-only"
 notes = "Plus is documented for string concatenation as well as numeric addition; 3.0 base-manual evidence only."
 
 [[candidates]]
-id = "amiga.base3.unary-plus-minus"
-name = "Unary + / -"
+id = "amiga.base3.unary-plus"
+name = "Unary +"
 kind = "operator-family"
 source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["3-2, 3-10"]
 status = "documented-in-3.0-only"
-notes = "Prefix plus/minus are separately ranked in the precedence table; exact parse/associativity not inferred."
+notes = "Unary plus is listed in the 3.0 precedence table but is not used in the audited 3.5 Chapter 18–19 examples; unary minus is tracked separately."
 
 [[candidates]]
 id = "amiga.base3.power"
@@ -831,9 +839,13 @@ kind = "operator-family"
 source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["3-2"]
-status = "documented-in-3.0-only"
-notes = "Multiplication and division precedence documented; no 3.5 confirmation."
+status = "confirmed-in-3.5"
+notes = "The Chapter 18 matrix-multiplication explanation uses numeric products (p. 470), and the normalization example divides by SQR(l) using 1/SQR(l) (p. 473). This confirms the shown numeric * and / forms, not precedence or all operand types."
 
+confirmation-source = "AM-BOOK-DE-1990"
+confirmation-source-version = "3.5 companion book Chapter 18 example"
+confirmation-printed-pages = ["470","473"]
+confirmation-basis = "direct-example-use"
 [[candidates]]
 id = "amiga.base3.integer-divide-mod"
 name = "DIV / MOD"
@@ -851,9 +863,13 @@ kind = "operator-family"
 source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["3-2, 3-10"]
-status = "documented-in-3.0-only"
-notes = "Arithmetic addition/subtraction documented separately from string concatenation."
+status = "confirmed-in-3.5"
+notes = "The 3.5 companion book's MAT SUB example uses b()-c() (p. 467), and its matrix-multiplication explanation gives numeric addition expressions (p. 470). This confirms numeric + and - use in the shown expressions, not precedence or string concatenation."
 
+confirmation-source = "AM-BOOK-DE-1990"
+confirmation-source-version = "3.5 companion book Chapter 18 example"
+confirmation-printed-pages = ["467","470"]
+confirmation-basis = "direct-example-use"
 [[candidates]]
 id = "amiga.base3.comparison-equality"
 name = "= / == / <>"
@@ -1303,5 +1319,75 @@ notes = "The 3.5 companion book's Chapter 18 matrix example uses INT(RND(1)*5) (
 confirmation-source = "AM-BOOK-DE-1990"
 confirmation-source-version = "3.5 companion book Chapter 18"
 confirmation-printed-pages = ["458"]
+confirmation-basis = "direct-example-use"
+
+[[candidates]]
+id = "amiga.base3.unary-minus"
+name = "Unary -"
+kind = "operator"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["3-2","3-10"]
+status = "confirmed-in-3.5"
+notes = "The Chapter 18 matrix-multiplication explanation includes negative operands such as 0.5*-1 (printed p. 470), demonstrating unary minus in a numeric expression. Unary plus is not demonstrated."
+confirmation-source = "AM-BOOK-DE-1990"
+confirmation-source-version = "3.5 companion book Chapter 18 example"
+confirmation-printed-pages = ["470"]
+confirmation-basis = "direct-example-use"
+
+[[candidates]]
+id = "amiga.base5.print"
+name = "PRINT"
+kind = "statement"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["5-7–5-8"]
+status = "confirmed-in-3.5"
+notes = "The 3.5 companion examples use ordinary screen PRINT statements alongside MAT PRINT (printed pp. 458, 471 and 480). This confirms the shown PRINT statement form, not PRINT AT or WRITE."
+confirmation-source = "AM-BOOK-DE-1990"
+confirmation-source-version = "3.5 companion book Chapters 18–19 examples"
+confirmation-printed-pages = ["458","471","480"]
+confirmation-basis = "direct-example-use"
+
+[[candidates]]
+id = "amiga.base5.locate"
+name = "LOCATE"
+kind = "statement"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["5-7–5-8"]
+status = "confirmed-in-3.5"
+notes = "The vector-animation example positions output with LOCATE 1,12 (printed p. 471). Other cursor-positioning forms are not confirmed by this occurrence."
+confirmation-source = "AM-BOOK-DE-1990"
+confirmation-source-version = "3.5 companion book Chapter 18 example"
+confirmation-printed-pages = ["471"]
+confirmation-basis = "direct-example-use"
+
+[[candidates]]
+id = "amiga.base8.color"
+name = "COLOR"
+kind = "statement"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["8-2"]
+status = "confirmed-in-3.5"
+notes = "The Chapter 18 vector-animation example selects colors with COLOR 3 and COLOR 1 (printed p. 471). This confirms the shown COLOR statement form, not SETCOLOR's palette-component form."
+confirmation-source = "AM-BOOK-DE-1990"
+confirmation-source-version = "3.5 companion book Chapter 18 example"
+confirmation-printed-pages = ["471"]
+confirmation-basis = "direct-example-use"
+
+[[candidates]]
+id = "amiga.base8.draw-to"
+name = "DRAW TO"
+kind = "statement-syntax-variant"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["8-10–8-14"]
+status = "confirmed-in-3.5"
+notes = "The Chapter 18 vector-animation procedure uses DRAW TO with a calculated endpoint (printed p. 471). This confirms the shown path-drawing form only."
+confirmation-source = "AM-BOOK-DE-1990"
+confirmation-source-version = "3.5 companion book Chapter 18 example"
+confirmation-printed-pages = ["471"]
 confirmation-basis = "direct-example-use"
 
