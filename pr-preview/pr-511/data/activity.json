@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "status": "fresh",
+  "generated_at": "2026-11-12T17:26:11.790791+00:00",
+  "last_successful_at": "2026-11-12T17:26:11.790791+00:00",
+  "items": [
+    {
+      "type": "merged_pull_request",
+      "title": "Record the @-prefixed procedure call used in a GFA BASIC 3.5 example",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/510",
+      "number": 510,
+      "timestamp": "2026-11-12T17:22:15Z",
+      "summary": "PR #510 merged"
+    },
+    {
+      "type": "commit",
+      "title": "research: record 3.5 @ procedure-call form (#510)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/e2f198a7a1858bba3245d8f79426f43ce3bc227d",
+      "number": null,
+      "timestamp": "2026-11-12T17:22:15Z",
+      "summary": "Commit e2f198a"
+    },
+    {
+      "type": "merged_pull_request",
+      "title": "Audit additional inherited statements used by GFA BASIC 3.5 examples",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/509",
+      "number": 509,
+      "timestamp": "2026-11-12T17:17:41Z",
+      "summary": "PR #509 merged"
+    },
+    {
+      "type": "commit",
+      "title": "Audit additional inherited statements used by GFA BASIC 3.5 examples (#509)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/4b217cfa7d326da3cb5f0b55a78f11ca9c1e35ac",
+      "number": null,
+      "timestamp": "2026-11-12T17:17:40Z",
+      "summary": "Commit 4b217cf"
+    },
+    {
+      "type": "merged_pull_request",
+      "title": "Audit inherited statement and operator forms in GFA BASIC 3.5 examples",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/508",
+      "number": 508,
+      "timestamp": "2026-11-12T17:08:51Z",
+      "summary": "PR #508 merged"
+    },
+    {
+      "type": "commit",
+      "title": "Audit inherited statement and operator forms in GFA BASIC 3.5 examples (#508)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/fbebb2d07ae57c74217e8372b8afca42340e073a",
+      "number": null,
+      "timestamp": "2026-11-12T17:08:50Z",
+      "summary": "Commit fbebb2d"
+    },
+    {
+      "type": "merged_pull_request",
+      "title": "Confirm inherited functions in the German GFA BASIC 3.5 chapters",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/506",
+      "number": 506,
+      "timestamp": "2026-11-12T11:40:39Z",
+      "summary": "PR #506 merged"
+    },
+    {
+      "type": "commit",
+      "title": "Confirm inherited functions in the German GFA BASIC 3.5 chapters (#506)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/0fc4b804e43e1d5227669e4a0b37f08f6b3ab47a",
+      "number": null,
+      "timestamp": "2026-11-12T11:40:39Z",
+      "summary": "Commit 0fc4b80"
+    },
+    {
+      "type": "merged_pull_request",
+      "title": "Audit inherited functions used by the GFA BASIC 3.5 addendum",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/505",
+      "number": 505,
+      "timestamp": "2026-11-12T11:18:08Z",
+      "summary": "PR #505 merged"
+    },
+    {
+      "type": "commit",
+      "title": "Audit inherited functions used by the GFA BASIC 3.5 addendum (#505)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/6a9c23e0dca52d82de6c79051f621a00d9b27f36",
+      "number": null,
+      "timestamp": "2026-11-12T11:18:08Z",
+      "summary": "Commit 6a9c23e"
+    },
+    {
+      "type": "merged_pull_request",
+      "title": "Guard the Amiga 3.5 built-in function registry boundary",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/503",
+      "number": 503,
+      "timestamp": "2026-11-12T10:53:59Z",
+      "summary": "PR #503 merged"
+    },
+    {
+      "type": "commit",
+      "title": "Guard the Amiga 3.5 built-in function registry boundary (#503)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/c3ac92dcd210ab1eff149942ff10e5f6decefa2d",
+      "number": null,
+      "timestamp": "2026-11-12T10:53:59Z",
+      "summary": "Commit c3ac92d"
+    }
+  ]
+}

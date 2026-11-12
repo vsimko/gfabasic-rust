@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Issue: #440">
+  <title>Amiga runtime workflow OCR audit · GFA BASIC Rust documentation</title>
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body class="docs-site">
+  <header class="docs-header">
+    <a href="../../index.html">GFA BASIC Rust</a>
+    <span aria-hidden="true">/</span>
+    <a href="../index.html">Documentation</a>
+  </header>
+  <div class="docs-layout">
+    <nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home" href="index.html">Section index</a><ul><li><a href="amiga-gfa-basic-documentation-audit.html">Amiga GFA BASIC documentation coverage audit</a></li><li><a href="amiga-gfa-basic-command-catalogue.html">Amiga GFA BASIC command catalogue</a></li><li><a href="amiga-gfa-basic-german-book-command-api-extraction.html">German Amiga GFA-BASIC book: command and OS API extraction</a></li><li><a href="amiga-book-command-index-ocr-transcription.html">Appendix D — OCR transcription of the command index</a></li><li><a href="gfa-basic-command-index-ocr.html">GFA-BASIC command index — first-pass extraction</a></li><li><a href="amiga-gfa-basic-source-topic-index.html">Amiga GFA BASIC source and topic index</a></li><li><a href="amiga-book-515-page-extraction-audit.html">Amiga GFA-BASIC book — 515-page extraction audit</a></li><li><a href="amiga-book-chapters05-17-heading-harvest.html">Amiga book — command-heading harvest, chapters 5–17</a></li><li><a href="amiga-gfa-basic-functions.toml">Function inventory (117 unique names)</a></li><li><a href="amiga-gfa-basic-function-inventory.html">Amiga GFA BASIC 3.5 built-in function inventory</a></li><li><a href="amiga-base-manual-io-graphics-events-advanced.html">Amiga GFA BASIC base-manual I/O, graphics, event, and advanced-programming extraction</a></li><li><a href="amiga-base-manual-io-graphics-events-advanced-details.html">Amiga GFA BASIC base-manual I/O, graphics, event, and advanced-programming details</a></li><li><a href="amiga-base-manual-numeric-string-functions.html">Amiga GFA BASIC base-manual numeric and string function extraction</a></li><li><a href="amiga-gfa-basic-35-addendum-inventory.html">Amiga GFA-BASIC 3.5 interpreter addendum — extracted feature inventory</a></li><li><a href="amiga-gfa-basic-candidates.toml">3.5 candidate manifest</a></li><li><a href="amiga-gfa-basic-candidate-report.html">Amiga GFA BASIC 3.5 candidate verification report</a></li><li><a href="amiga-gfa-basic-language-population-policy.html">Amiga GFA BASIC language population policy</a></li><li><a href="amiga-gfa-basic-3.03-ocr-index.html">German Amiga GFA BASIC book: OCR index and edition notes</a></li><li><a href="amiga-runtime-ocr-audit.html">Amiga runtime workflow OCR audit</a></li><li><a href="README.html">Research materials</a></li><li><a href="amiga-gfa-test-output.html">Amiga GFA BASIC test output</a></li><li><a href="amiga-gfa-basic-dqh-source-inventory.html">Amiga GFA BASIC commands observed in dqh-amiga</a></li><li><a href="amiga-emulator-lab.html">Amiga emulator experiment lab</a></li><li><a href="amiga-gfa-basic-35-lst-probes.html">Amiga GFA BASIC 3.5 interpreter probes from text listings</a></li><li><a href="amiga-gfa-basic-352-runtime-baseline.html">Amiga GFA BASIC 3.52 runtime baseline</a></li><li><a href="amiga-gfa-basic-binary-analysis.html">Amiga GFA-BASIC binary analysis</a></li><li><a href="amiga-base-manual-variable-array-conversion-functions.html">Amiga GFA BASIC base-manual variable, array, and conversion functions</a></li><li><a href="amiga-gfa-basic-chapter-7-program-handling-evidence.html">Amiga GFA BASIC Chapter 7 — program handling evidence</a></li><li><a href="amiga-gfa-basic-chapter-8-graphics-evidence.html">Amiga GFA BASIC Chapter 8 — graphics compatibility evidence</a></li><li><a href="amiga-gfa-basic-chapter-9-event-window-evidence.html">Amiga GFA BASIC Chapter 9 — event, menu, screen and window evidence</a></li><li><a href="amiga-gfa-basic-chapter-10-advanced-programming-evidence.html">Amiga GFA BASIC Chapter 10 — advanced programming evidence</a></li><li><a href="amiga-gfa-basic-chapter-11-system-routines-evidence.html">Amiga GFA BASIC Chapter 11 — system-routine evidence</a></li><li><a href="amiga-gfa-basic-chapter-12-appendices-index-evidence.html">Amiga GFA BASIC Chapter 12 — appendix and index evidence</a></li><li><a href="https://github.com/vsimko/gfabasic-rust/blob/main/scripts/validate_amiga_chapter_inventories.py">Chapter inventory validator</a></li><li><a href="amiga-gfa-basic-3.0-command-index.html">Amiga GFA BASIC 3.0 command index — grouped cross-check</a></li><li><a href="amiga-gfa-basic-3.0-statement-command-candidates.html">Amiga GFA BASIC 3.0 statement and command candidate catalogue</a></li><li><a href="amiga-gfa-basic-3.0-base-inventory.html">Amiga GFA BASIC 3.0 base-manual inventory</a></li><li><a href="amiga-gfa-basic-3.0-expressions-builtins-control-flow.html">Amiga GFA BASIC 3.0 expression, intrinsic and control-flow evidence</a></li><li><a href="amiga-gfa-basic-3.0-control-file-data-io.html">Amiga GFA BASIC 3.0 control, file and data I/O evidence</a></li><li><a href="amiga-gfa-basic-3.0-graphics-evidence.html">GFA BASIC 3.0 Amiga — graphics evidence</a></li><li><a href="amiga-gfa-basic-3.0-events-windows-evidence.html">GFA BASIC 3.0 Amiga — event, menu, screen and window evidence</a></li><li><a href="amiga-gfa-basic-3.0-system-routines-evidence.html">GFA BASIC 3.0 Amiga — operating-system routine evidence</a></li><li><a href="amiga-gfa-basic-3.0-advanced-programming-evidence.html">GFA BASIC 3.0 Amiga — advanced programming evidence</a></li><li><a href="amiga-gfa-basic-3.0-appendix-index-evidence.html">GFA BASIC 3.0 Amiga — appendix and command-index evidence</a></li><li><a href="amiga-gfa-basic-3.0-german-source-notes.html">German Amiga GFA BASIC 3.0 source — initial verification notes</a></li><li><a href="amiga-gfa-basic-3.0-procedure-error-details.html">GFA BASIC 3.0 Amiga — procedures, functions and error-flow evidence</a></li><li><a href="amiga-gfa-basic-3.0-screen-window-details.html">GFA BASIC 3.0 Amiga — screen and window command details</a></li><li><a href="amiga-gfa-basic-3.0-output-device-details.html">GFA BASIC 3.0 Amiga — output, cursor, mouse and sound evidence</a></li><li><a href="amiga-gfa-basic-3.0-menu-event-details.html">GFA BASIC 3.0 Amiga — menu and event details</a></li><li><a href="amiga-gfa-basic-3.0-bob-object-details.html">GFA BASIC 3.0 Amiga — BOB and OBJECT API evidence</a></li><li><a href="amiga-gfa-basic-3.0-source-format-editor-evidence.html">Amiga GFA BASIC 3.0 — source composition and editor evidence</a></li><li><a href="amiga-gfa-basic-35-primary-reference.html">Amiga GFA-BASIC 3.5 primary reference and target decision</a></li><li><a href="amiga-gfa-basic-35-german-book-crosscheck.html">Amiga GFA-BASIC 3.5 — independent German-book cross-check</a></li><li><a href="amiga-book-gfa35-chapter18-19-extraction.html">GFA-BASIC 3.5 additions documented in the Amiga book</a></li><li><a href="amiga-gfa-basic-35-editor-feature-audit.html">Amiga GFA BASIC 3.5 — editor feature audit</a></li><li><a href="amiga-gfa-basic-35-lexer-evidence.html">Amiga GFA BASIC 3.5 lexer evidence inventory</a></li><li><a href="amiga-gfa-basic-35-matrix-arithmetic-analysis-audit.html">Amiga GFA BASIC 3.5 — matrix arithmetic and analysis audit</a></li><li><a href="amiga-gfa-basic-35-matrix-io-copy-audit.html">Amiga GFA BASIC 3.5 — matrix I/O and copy declaration audit</a></li><li><a href="amiga-gfa-basic-35-five-declaration-audit.html">Amiga GFA BASIC 3.5 — five declaration-level audit blocks</a></li><li><a href="amiga-gfa-basic-35-five-more-declaration-audit.html">Amiga GFA BASIC 3.5 — five more declaration-level audit blocks</a></li><li><a href="amiga-gfa-basic-35-guru-declaration-audit.html">Amiga GFA BASIC 3.5 — GURU declaration audit</a></li><li><a href="atari-gfa-book-diskette.html">Atari GFA BASIC book diskette — source-corpus research notes</a></li><li><a href="atari-gfa-book-systematic-review.html">Systematic review of *Das große GFA-BASIC-Buch* (Atari ST)</a></li><li><a href="aminet-catalogue.html">Aminet GFA BASIC package survey</a></li><li><a href="gfalist-build-and-fixture-validation.html">gfalist build and fixture validation</a></li><li><a href="gfalist-format-vs-rust-frontend.html">gfalist format notes vs. the Rust frontend</a></li><li><a href="amiga-gfa-basic-35-base-function-use-audit.html">Amiga GFA BASIC 3.5 — inherited function evidence from both manuals</a></li><li><a href="amiga-gfa-basic-35-statement-operator-audit.html">Amiga GFA BASIC 3.5 — inherited statement and operator evidence</a></li><li><a href="amiga-gfa-basic-35-example-used-statements-audit.html">Amiga GFA BASIC 3.5 — inherited statements used in examples</a></li></ul></nav>
+    <main class="docs-content">
+      <article>
+        <h1>Amiga runtime workflow OCR audit</h1>
+        <p class="docs-meta"><span>Research Note</span></p>
+        <h1 id="ocr-use-in-the-amiga-runtime-workflows">OCR use in the Amiga runtime workflows</h1>
+<p>Issue: <a href="https://github.com/vsimko/gfabasic-rust/issues/440">#440</a></p>
+<h2 id="scope-and-inspected-implementation">Scope and inspected implementation</h2>
+<p>The repository currently contains two Amiga emulator workflows that install OCR tooling:</p>
+<ul>
+<li><a href="https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/amiga-native-merge-run.yml"><code>.github/workflows/amiga-native-merge-run.yml</code></a> is the native 3.52 Merge + Run workflow integrated in PR #382.</li>
+<li><a href="https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/amiga-cli-probe.yml"><code>.github/workflows/amiga-cli-probe.yml</code></a> is the earlier CLI/regression and tokenized-Save workflow introduced in PR #343. It is <strong>not removed or disabled</strong>: it still runs for matching pull-request path changes and supports <code>workflow_dispatch</code>. Treat it as a separately triggerable workflow, not merely historical source.</li>
+</ul>
+<p>The repository's <a href="https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/amiga-reference.yml"><code>.github/workflows/amiga-reference.yml</code></a> does not install or invoke OCR.</p>
+<h3 id="native-merge-run-workflow">Native Merge + Run workflow</h3>
+<p>The native workflow installs:</p>
+<ul>
+<li><code>tesseract-ocr</code> to recognize text from emulator screenshots;</li>
+<li><code>python3-pil</code> to normalize the Amiga display screenshot before recognition;</li>
+<li><code>xvfb</code> and Amiberry to run and capture the GUI without a physical display.</li>
+</ul>
+<p>It uses OCR in two places:</p>
+<ol>
+<li><code>after-shortcut.png</code> is passed to Tesseract and saved as <code>after-shortcut-ocr.txt</code>. This is diagnostic evidence only; the OCR output is not used in a pass/fail condition.</li>
+<li><code>after-merge.png</code> is converted to grayscale, inverted, enlarged 3×, and contrast-enhanced. Tesseract writes <code>after-merge-ocr.txt</code>. The workflow then gates the job on a text heuristic: the output must not contain <code>Merge File</code> and must contain <code>FACT(1)</code> and <code>FACT(2)</code>. This is the only OCR-dependent pass/fail check in the native workflow.</li>
+</ol>
+<h3 id="earlier-cli-probe-workflow-and-scripts">Earlier CLI probe workflow and scripts</h3>
+<p>The still-triggerable <code>amiga-cli-probe.yml</code> workflow also installs <code>tesseract-ocr</code> and <code>python3-pil</code>. Its called scripts divide the work as follows:</p>
+<ul>
+<li><code>scripts/ci/amiga-cli-probe.sh</code> captures the editor/merge/run/save screenshots and drives the Amiberry UI. It contains an OCR diagnostic comment but does not itself invoke Tesseract.</li>
+<li><code>scripts/ci/validate-amiga-cli-probe.sh</code> loops over every captured PNG, converts it to grayscale, inverts and enlarges it 3×, applies contrast enhancement, then invokes Tesseract to create sidecar transcripts under <code>artifacts/amiga-cli-probe/ocr/</code>.</li>
+<li>OCR failures in this validator are explicitly diagnostic-only; they do not fail the job. The authoritative assertions are the guest-written <code>FACT.OUT</code>, the tokenized <code>.GFA</code> file, and the Direct Mode save result.</li>
+</ul>
+<p>Thus, the legacy workflow's OCR use is broader in screenshot coverage but has <strong>no OCR-dependent pass/fail assertion</strong>. Its Tesseract/Pillow packages currently support artifact diagnostics only.</p>
+<h2 id="what-is-already-verified-without-ocr">What is already verified without OCR</h2>
+<p>The workflows control Amiberry through its Unix-socket IPC:</p>
+<ul>
+<li><code>INSERTFLOPPY</code> and <code>LIST_FLOPPIES</code> provide structured disk-control evidence.</li>
+<li><code>SEND_KEY</code> and <code>SEND_MOUSE</code> drive editor interaction.</li>
+<li><code>SCREENSHOT</code> captures GUI states, but the image itself is not structured evidence.</li>
+<li>The validators use <code>xdftool</code> to extract guest-written result files and host-side checks to validate their contents and saved-file properties.</li>
+</ul>
+<p>These file-based assertions are stronger than screen OCR for proving that the guest program executed and emitted expected results. They do <strong>not</strong> prove that the editor's Merge action loaded the intended listing: result files alone cannot distinguish a successful merge from another way the program might have become available in the guest environment.</p>
+<p>The Amiberry IPC interface, as used here, can capture screenshots and send input, but neither workflow retrieves the editor's text buffer or a structured “merge completed” event. No non-OCR machine-readable replacement for the native workflow's post-merge GUI assertion has been demonstrated.</p>
+<h2 id="assessment">Assessment</h2>
+<table>
+<thead>
+<tr>
+<th>Workflow/check</th>
+<th>Current evidence</th>
+<th>OCR necessary?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Native emulator startup and disk insertion</td>
+<td>Amiberry process, IPC replies, disk listing, log</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Native editor navigation and input</td>
+<td>IPC commands and screenshots</td>
+<td>No for input delivery; screenshots remain visual diagnostics</td>
+</tr>
+<tr>
+<td>Native textual listing merged into editor</td>
+<td>Post-merge screenshot plus OCR heuristic</td>
+<td>No equivalent structured assertion currently demonstrated</td>
+</tr>
+<tr>
+<td>Native BASIC execution and output</td>
+<td>Guest-written result files validated on host</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Native <code>after-shortcut.png</code> text extraction</td>
+<td>OCR text artifact only</td>
+<td>Not required for pass/fail</td>
+</tr>
+<tr>
+<td>Legacy CLI probe screenshot transcripts</td>
+<td>OCR sidecars for all captured PNGs</td>
+<td>Not required for pass/fail; diagnostic only</td>
+</tr>
+<tr>
+<td>Reference workflow</td>
+<td>No OCR installation or invocation found</td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+<p>OCR is inherently a weaker signal than guest-written result files: recognition can vary with display scaling, palette, font, screenshot timing, and OCR engine version. The native post-merge heuristic is indirect: absence of the requester title plus two source tokens is not formal proof that the complete intended listing was merged. Conversely, removing it today would remove the only automated assertion of the editor-side merge state.</p>
+<h2 id="recommendation">Recommendation</h2>
+<p><strong>Retain OCR narrowly for the native post-merge editor-state check for now.</strong> Keep interpreter-written output and regression records as the authoritative execution assertions.</p>
+<p>The legacy CLI probe's OCR is diagnostic-only. Its invocation can be removed independently if its sidecar transcripts are not useful during failure analysis; doing so would also allow removing its Tesseract/Pillow installation. Do not remove those packages from the native workflow while its post-merge heuristic remains. This distinction avoids treating all OCR use as equally necessary.</p>
+<p>A future replacement for the native assertion should expose a deterministic guest-side signal for the merge operation (for example, a saved editor buffer or an independently verified state/result file) and validate it without relying on screen text. Until such a signal is demonstrated, keep the post-merge OCR assertion explicitly classified as a GUI smoke-test heuristic—not language conformance evidence. Neither workflow establishes Amiga 3.5 behavior: the available runtime is 3.52.</p>
+<h2 id="evidence-reviewed">Evidence reviewed</h2>
+<ul>
+<li>Native workflow: <code>.github/workflows/amiga-native-merge-run.yml</code>.</li>
+<li>Earlier still-triggerable workflow: <code>.github/workflows/amiga-cli-probe.yml</code>.</li>
+<li>Native and legacy scripts: <code>scripts/ci/amiga-cli-probe.sh</code> and <code>scripts/ci/validate-amiga-cli-probe.sh</code>.</li>
+<li>Reference workflow: <code>.github/workflows/amiga-reference.yml</code>.</li>
+<li>Historical integration: PRs <a href="https://github.com/vsimko/gfabasic-rust/pull/343">#343</a> and <a href="https://github.com/vsimko/gfabasic-rust/pull/382">#382</a>.</li>
+<li>Runtime scope and version limitation: <a href="amiga-emulator-lab.html">Amiga emulator experiment lab</a> and <a href="amiga-gfa-basic-352-runtime-baseline.html">3.52 runtime baseline</a>.</li>
+</ul>
+<p>This is a workflow implementation audit, not an execution experiment. No workflow was changed and no new emulator run was performed.</p>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>
