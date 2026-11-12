@@ -260,7 +260,7 @@ status = "confirmed-in-3.5"
 notes = "GURU checking control and GURU-number function are explicitly documented; crash-recovery tests require isolation."
 
 # Declaration-level candidates from page-reviewed Chapters 5–10.
-# These remain 3.0 evidence; no 3.5 availability is inferred.
+# These retain 3.0 provenance; separate confirmation fields record direct 3.5 evidence where found. Remaining base-only statuses do not imply absence or incompatibility.
 [[candidates]]
 id = "amiga.base5.inkey"
 name = "INKEY$"
@@ -575,8 +575,7 @@ notes = "Queries joystick position and fire-button state; port 0 interaction wit
 
 
 # Error handling and recovery are present in the 3.0 base manual, but the
-# 3.5 addendum only confirms a narrower GURU interaction (printed p. 13-36).
-# Keep these as unresolved until the full grammar is reconciled.
+# 3.5 addendum confirms only the GURU-specific ONERROR GOSUB and RESUME NEXT/LABEL forms (p. 13-36); broader variants remain 3.0-only.
 [[candidates]]
 id = "amiga.base7.on-error"
 name = "ONERROR GOSUB"
@@ -602,7 +601,7 @@ status = "confirmed-in-3.5"
 notes = "The addendum states that compiled 3.5 programs cannot execute RESUME NEXT or RESUME LABEL after a GURU-triggered ONERROR GOSUB (p. 13-36). These forms are explicitly recognized but restricted in that context; plain RESUME remains separate."
 
 # Granular Chapter 2–4 source-evidence records; related names may remain grouped.
-# Status remains 3.0-only evidence; this is not a 3.5 availability or absence claim.
+# Original 3.0 provenance is retained; separate confirmation fields record any direct 3.5 source evidence. Remaining base-only statuses are not absence claims.
 
 confirmation-source = "AM-INTERPRETER-35"
 confirmation-source-version = "3.5 addendum"
