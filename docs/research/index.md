@@ -82,3 +82,4 @@
 - [Aminet catalogue](aminet-catalogue.md) - Amiga BASIC package survey.
 - [GFAList build and fixture validation](gfalist-build-and-fixture-validation.md) - GFAList build and fixture evidence.
 - [GFAList format versus Rust frontend](gfalist-format-vs-rust-frontend.md) - Format comparison notes.
+- [Amiga GFA BASIC 3.5 inherited-function evidence audit](amiga-gfa-basic-35-base-function-use-audit.md)

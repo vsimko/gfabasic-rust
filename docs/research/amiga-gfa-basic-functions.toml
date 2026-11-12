@@ -11,6 +11,7 @@ compiler-only-identifiers = 2
 base-manual-identifiers = 113
 "explicit-3.5-addendum-identifiers" = 4
 disputed-name-slots = 2
+"confirmed-by-3.5-addendum-use-identifiers" = 5
 
 [[functions]]
 name = "ABS"
@@ -335,7 +336,12 @@ notes = "GURU-number function; distinct from the GURU enable/disable statement."
 name = "HEX$"
 origin = "base-manual-3.0"
 applicability = "interpreter"
-evidence-status = "base-manual-entry"
+evidence-status = "confirmed-by-3.5-addendum-use"
+confirmation-source = "AM-INTERPRETER-35"
+confirmation-source-version = "3.5 addendum"
+confirmation-printed-pages = ["13-36"]
+confirmation-basis = "direct-example-use"
+confirmation-note = "GURU example calls HEX$(GURU); only the one-argument form is demonstrated."
 printed-pages = ["2-14"]
 
 [[functions]]
@@ -591,7 +597,12 @@ printed-pages = ["4-7"]
 name = "RAND"
 origin = "base-manual-3.0"
 applicability = "interpreter"
-evidence-status = "base-manual-entry"
+evidence-status = "confirmed-by-3.5-addendum-use"
+confirmation-source = "AM-INTERPRETER-35"
+confirmation-source-version = "3.5 addendum"
+confirmation-printed-pages = ["13-2"]
+confirmation-basis = "direct-example-use"
+confirmation-note = "MAT SET example assigns RAND(10) to matrix elements."
 printed-pages = ["4-17"]
 
 [[functions]]
@@ -718,14 +729,24 @@ printed-pages = ["4-8"]
 name = "STR$"
 origin = "base-manual-3.0"
 applicability = "interpreter"
-evidence-status = "base-manual-entry"
+evidence-status = "confirmed-by-3.5-addendum-use"
+confirmation-source = "AM-INTERPRETER-35"
+confirmation-source-version = "3.5 addendum"
+confirmation-printed-pages = ["13-3"]
+confirmation-basis = "direct-documentation-reference"
+confirmation-note = "MAT PRINT documentation specifies STR$(x,g,n) formatting."
 printed-pages = ["2-15"]
 
 [[functions]]
 name = "STRING$"
 origin = "base-manual-3.0"
 applicability = "interpreter"
-evidence-status = "base-manual-entry"
+evidence-status = "confirmed-by-3.5-addendum-use"
+confirmation-source = "AM-INTERPRETER-35"
+confirmation-source-version = "3.5 addendum"
+confirmation-printed-pages = ["13-21"]
+confirmation-basis = "direct-example-use"
+confirmation-note = "Matrix examples use STRING$(n, dash-string) as PRINT separators."
 printed-pages = ["4-32"]
 
 [[functions]]
@@ -739,7 +760,12 @@ printed-pages = ["4-3"]
 name = "SUCC"
 origin = "base-manual-3.0"
 applicability = "interpreter"
-evidence-status = "base-manual-entry"
+evidence-status = "confirmed-by-3.5-addendum-use"
+confirmation-source = "AM-INTERPRETER-35"
+confirmation-source-version = "3.5 addendum"
+confirmation-printed-pages = ["13-5"]
+confirmation-basis = "direct-example-use"
+confirmation-note = "Matrix-copy examples use SUCC(i%) and SUCC(j%) in numeric expressions."
 printed-pages = ["4-11"]
 
 [[functions]]

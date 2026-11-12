@@ -18,13 +18,20 @@ class ChapterTwoToFourCandidateAuditTests(unittest.TestCase):
         ]
 
     def test_each_candidate_has_page_provenance_and_3_0_scope(self):
-        self.assertEqual(len(self.audit), 62)
+        self.assertEqual(len(self.audit), 66)
         for item in self.audit:
             with self.subTest(candidate=item["id"]):
                 self.assertEqual(item["source"], "AM-INTERPRETER-35")
                 self.assertEqual(item["source-version"], "3.0 base manual")
                 self.assertTrue(item["printed-pages"])
-                self.assertEqual(item["status"], "documented-in-3.0-only")
+                if item["status"] == "confirmed-in-3.5":
+                    self.assertEqual(item.get("confirmation-source"), "AM-INTERPRETER-35")
+                    self.assertEqual(item.get("confirmation-source-version"), "3.5 addendum")
+                    expected_basis = "direct-documentation-reference" if item["id"] == "amiga.base2.str" else "direct-example-use"
+                    self.assertEqual(item.get("confirmation-basis"), expected_basis)
+                    self.assertTrue(item.get("confirmation-printed-pages"))
+                else:
+                    self.assertEqual(item["status"], "documented-in-3.0-only")
 
     def test_all_three_chapters_have_evidence_records(self):
         for prefix in ("amiga.base2.", "amiga.base3.", "amiga.base4."):
@@ -71,8 +78,13 @@ class GermanBookCrossCheckTests(unittest.TestCase):
         candidates = tomllib.loads(MANIFEST.read_text(encoding="utf-8"))["candidates"]
         base_candidates = [item for item in candidates if item["id"].startswith("amiga.base")]
         self.assertTrue(base_candidates)
-        self.assertTrue(all(item["status"] == "documented-in-3.0-only" for item in base_candidates))
+        self.assertTrue(all(item["source-version"] == "3.0 base manual" for item in base_candidates))
         self.assertTrue(all("corroborating-source" not in item for item in base_candidates))
+        confirmed = {item["id"] for item in base_candidates if item["status"] == "confirmed-in-3.5"}
+        self.assertEqual(confirmed, {
+            "amiga.base2.hex", "amiga.base2.str", "amiga.base4.rand",
+            "amiga.base4.succ", "amiga.base4.string",
+        })
 
 
 if __name__ == "__main__":

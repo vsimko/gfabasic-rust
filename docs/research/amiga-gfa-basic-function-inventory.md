@@ -19,6 +19,8 @@ title: "Amiga GFA BASIC 3.5 built-in function inventory"
 | Unambiguous interpreter function names | 113 |
 | Disputed source-name slots | 2 |
 
+Of the 113 base-manual identifiers, five (`RAND`, `STR$`, `SUCC`, `STRING$`, and `HEX$`) have direct 3.5 addendum use/reference evidence. These are overlapping evidence confirmations, not additional identifiers, and do not change the 117/115 population counts.
+
 The two disputed slots are the CVx conversion spelling (`CVD` in the index versus `CVF` in the Chapter 2-18 prose) and the MKx$ conversion spelling (`MKD$` in the p. 2-18 signature block versus `MKF$` in the p. 2-19 prose). Each slot is counted once; neither spelling conflict is silently resolved.
 
 ## Counting boundary
@@ -30,7 +32,7 @@ The two disputed slots are the CVx conversion spelling (`CVD` in the index versu
 - Base-manual entries originate in the 3.0 text included in the supplied 3.5 manual. They are candidates, not proof that every detail remains supported by the 3.5 interpreter.
 - Runtime observations and source discrepancies remain separate evidence dimensions.
 
-## Base-manual entries
+## Base-manual entries and separate 3.5 example evidence
 
 | Function | Printed source page(s) | Evidence |
 |---|---|---|
@@ -75,7 +77,7 @@ The two disputed slots are the CVx conversion spelling (`CVD` in the index versu
 | `FLOAT` | 2-37 | base-manual-entry |
 | `FRAC` | 4-13 | base-manual-entry |
 | `FRE` | 2-29 | base-manual-entry |
-| `HEX$` | 2-14 | base-manual-entry |
+| `HEX$` | 2-14 | confirmed-by-3.5-addendum-use |
 | `IMP` | 4-24 | base-manual-entry |
 | `INKEY$` | 5-2 | base-manual-entry |
 | `INP` | 6-13 | base-manual-entry |
@@ -111,7 +113,7 @@ The two disputed slots are the CVx conversion spelling (`CVD` in the index versu
 | `POS` | 5-13 | base-manual-entry |
 | `PRED` | 4-11 | base-manual-entry |
 | `RAD` | 4-7 | base-manual-entry |
-| `RAND` | 4-17 | base-manual-entry |
+| `RAND` | 4-17 | confirmed-by-3.5-addendum-use |
 | `RANDOM` | 4-17 | base-manual-entry |
 | `RIGHT$` | 4-27 | base-manual-entry |
 | `RINSTR` | 4-31 | base-manual-entry |
@@ -129,10 +131,10 @@ The two disputed slots are the CVx conversion spelling (`CVD` in the index versu
 | `SPACE$` | 4-32 | base-manual-entry |
 | `SPC` | 4-32 | base-manual-entry |
 | `SQR` | 4-8 | base-manual-entry |
-| `STR$` | 2-15 | base-manual-entry |
-| `STRING$` | 4-32 | base-manual-entry |
+| `STR$` | 2-15 | confirmed-by-3.5-addendum-use |
+| `STRING$` | 4-32 | confirmed-by-3.5-addendum-use |
 | `SUB` | 4-3 | base-manual-entry |
-| `SUCC` | 4-11 | base-manual-entry |
+| `SUCC` | 4-11 | confirmed-by-3.5-addendum-use |
 | `SWAP` | 4-25 | base-manual-entry |
 | `TAB` | 5-13 | base-manual-entry |
 | `TAN` | 4-5 | base-manual-entry |
@@ -168,3 +170,8 @@ The base-manual table above is a 3.0-derived candidate inventory. Its entries de
 - Chapter 11's Amiga OS library index is excluded: it catalogs OS calls, not built-in GFA BASIC language functions.
 
 Machine-readable source: `amiga-gfa-basic-functions.toml`. Validation: `python scripts/validate_amiga_function_inventory.py`.
+
+
+## 3.5 addendum evidence audit
+
+Five inherited functions (`RAND`, `STR$`, `SUCC`, `STRING$`, and `HEX$`) are directly used or referenced in the version-specific 3.5 addendum. Their demonstrated forms and limits are recorded in [the declaration-level audit](amiga-gfa-basic-35-base-function-use-audit.md). This evidence confirms only the forms shown or referenced, not every overload or edge case; the entries retain their 3.0 base-manual origin.
