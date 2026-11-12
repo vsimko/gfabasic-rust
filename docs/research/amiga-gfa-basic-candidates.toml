@@ -303,14 +303,18 @@ notes = "Edits a string field of width 1–255; FORM INPUT AS starts from the cu
 
 [[candidates]]
 id = "amiga.base5.print-write"
-name = "PRINT, PRINT AT, WRITE, LOCATE"
+name = "PRINT"
 kind = "statement-family"
 source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["5-7–5-8"]
-status = "documented-in-3.0-only"
-notes = "Screen output, cursor positioning and comma-separated WRITE format are distinguished. 3.5 availability is unresolved."
+status = "confirmed-in-3.5"
+notes = "The 3.5 addendum uses plain PRINT for matrix headings, separator lines, and GURU output (pp. 13-2, 13-34–13-36). Only plain PRINT is confirmed; PRINT AT, WRITE, and LOCATE remain separate 3.0-only candidates."
 
+confirmation-source = "AM-INTERPRETER-35"
+confirmation-source-version = "3.5 addendum"
+confirmation-printed-pages = ["13-2","13-34","13-35","13-36"]
+confirmation-basis = "direct-example-use"
 [[candidates]]
 id = "amiga.base5.print-using"
 name = "PRINT USING"
@@ -403,14 +407,18 @@ notes = "Numeric or short-string selector; CASE supports values, ranges and list
 
 [[candidates]]
 id = "amiga.base7.for-next"
-name = "FOR / NEXT"
+name = "FOR / NEXT / DOWNTO"
 kind = "statement-family"
 source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["7-13–7-14"]
-status = "documented-in-3.0-only"
-notes = "Loop forms include DOWNTO and editor replacement ENDFOR; OCR-sensitive termination details remain open. 3.5 availability is unresolved."
+status = "confirmed-in-3.5"
+notes = "The data-pointer example uses FOR j%=i% DOWNTO 0 ... NEXT j% (p. 13-35), confirming FOR/NEXT and the DOWNTO form. ENDFOR is not shown and remains separate."
 
+confirmation-source = "AM-INTERPRETER-35"
+confirmation-source-version = "3.5 addendum"
+confirmation-printed-pages = ["13-35"]
+confirmation-basis = "direct-example-use"
 [[candidates]]
 id = "amiga.base7.repeat-until"
 name = "REPEAT / UNTIL"
@@ -433,14 +441,18 @@ notes = "Pre-tested loop; condition is checked before each body execution. 3.5 a
 
 [[candidates]]
 id = "amiga.base7.do-loop"
-name = "DO / LOOP variants"
+name = "DO WHILE ... LOOP"
 kind = "statement-family"
 source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["7-17–7-19"]
-status = "documented-in-3.0-only"
-notes = "Beginning- and end-tested WHILE/UNTIL forms are described; exact grammar remains page-sensitive. 3.5 availability is unresolved."
+status = "confirmed-in-3.5"
+notes = "The data-pointer example uses DO WHILE DATA ... LOOP (p. 13-35). Only this form is confirmed; other WHILE/UNTIL placements remain separate."
 
+confirmation-source = "AM-INTERPRETER-35"
+confirmation-source-version = "3.5 addendum"
+confirmation-printed-pages = ["13-35"]
+confirmation-basis = "direct-example-use"
 [[candidates]]
 id = "amiga.base7.exit-if"
 name = "EXIT IF"
@@ -567,27 +579,35 @@ notes = "Queries joystick position and fire-button state; port 0 interaction wit
 # Keep these as unresolved until the full grammar is reconciled.
 [[candidates]]
 id = "amiga.base7.on-error"
-name = "ON ERROR / ON ERROR GOSUB"
+name = "ONERROR GOSUB"
 kind = "statement-family"
 source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["7-29"]
-status = "documented-in-3.0-only"
-notes = "The 3.0 manual documents reset-to-default handling and procedure-based error handling. The 3.5 addendum confirms that GURU Meditation may transfer to ONERROR GOSUB, but does not restate the complete syntax or general 3.5 availability."
+status = "confirmed-in-3.5"
+notes = "The GURU description says a GURU Meditation transfers control to the ONERROR GOSUB routine; the example uses ONERROR GOSUB ER (p. 13-36). This confirms the GURU recovery form only; ON ERROR reset-to-default remains separate."
 
+confirmation-source = "AM-INTERPRETER-35"
+confirmation-source-version = "3.5 addendum"
+confirmation-printed-pages = ["13-36"]
+confirmation-basis = "direct-documentation-reference"
 [[candidates]]
 id = "amiga.base7.resume"
-name = "RESUME / RESUME NEXT / RESUME label"
+name = "RESUME NEXT / RESUME LABEL"
 kind = "statement-family"
 source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["7-29"]
-status = "documented-in-3.0-only"
-notes = "The 3.0 manual documents retry, continue-next and continue-at-label behavior, plus a FATAL-error restriction. The 3.5 addendum specifically disallows RESUME NEXT and RESUME LABEL after a GURU-triggered ONERROR GOSUB in compiled 3.5 programs; broader 3.5 behavior remains unverified."
+status = "confirmed-in-3.5"
+notes = "The addendum states that compiled 3.5 programs cannot execute RESUME NEXT or RESUME LABEL after a GURU-triggered ONERROR GOSUB (p. 13-36). These forms are explicitly recognized but restricted in that context; plain RESUME remains separate."
 
 # Granular Chapter 2–4 source-evidence records; related names may remain grouped.
 # Status remains 3.0-only evidence; this is not a 3.5 availability or absence claim.
 
+confirmation-source = "AM-INTERPRETER-35"
+confirmation-source-version = "3.5 addendum"
+confirmation-printed-pages = ["13-36"]
+confirmation-basis = "direct-documentation-restriction"
 [[candidates]]
 id = "amiga.base2.asc-chr"
 name = "ASC / CHR$"
@@ -1303,5 +1323,83 @@ notes = "The 3.5 companion book's Chapter 18 matrix example uses INT(RND(1)*5) (
 confirmation-source = "AM-BOOK-DE-1990"
 confirmation-source-version = "3.5 companion book Chapter 18"
 confirmation-printed-pages = ["458"]
+confirmation-basis = "direct-example-use"
+
+[[candidates]]
+id = "amiga.base5.print-variants"
+name = "PRINT AT / WRITE / LOCATE"
+kind = "statement-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["5-7–5-8"]
+status = "documented-in-3.0-only"
+notes = "These 3.0 screen-output, cursor-positioning, and WRITE variants are not demonstrated by the 3.5 addendum; only plain PRINT is confirmed."
+
+[[candidates]]
+id = "amiga.base7.for-next-endfor"
+name = "ENDFOR editor replacement"
+kind = "statement"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["7-13–7-14"]
+status = "documented-in-3.0-only"
+notes = "The base manual documents ENDFOR as an editor replacement for NEXT; the 3.5 addendum uses NEXT and does not demonstrate ENDFOR."
+
+[[candidates]]
+id = "amiga.base7.do-loop-variants"
+name = "DO / LOOP WHILE / UNTIL variants"
+kind = "statement-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["7-17–7-19"]
+status = "documented-in-3.0-only"
+notes = "The base manual describes additional beginning- and end-tested WHILE/UNTIL forms; the 3.5 addendum demonstrates only DO WHILE ... LOOP."
+
+[[candidates]]
+id = "amiga.base7.on-error-reset"
+name = "ON ERROR reset-to-default"
+kind = "statement"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["7-29"]
+status = "documented-in-3.0-only"
+notes = "The base manual documents ON ERROR reset-to-default behavior; the 3.5 addendum only references ONERROR GOSUB in GURU recovery."
+
+[[candidates]]
+id = "amiga.base7.resume-plain"
+name = "RESUME"
+kind = "statement"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["7-29"]
+status = "documented-in-3.0-only"
+notes = "The base manual documents plain RESUME; the 3.5 addendum specifically references RESUME NEXT and RESUME LABEL in a compiled-program restriction, not plain RESUME."
+
+[[candidates]]
+id = "amiga.base4.inc-dec"
+name = "INC / DEC"
+kind = "statement-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-10"]
+status = "confirmed-in-3.5"
+notes = "The 3.5 data-pointer example uses INC i% and DEC i% (p. 13-35)."
+confirmation-source = "AM-INTERPRETER-35"
+confirmation-source-version = "3.5 addendum"
+confirmation-printed-pages = "13-35"
+confirmation-basis = "direct-example-use"
+
+[[candidates]]
+id = "amiga.base5.data-read"
+name = "DATA / READ"
+kind = "statement-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["5-15"]
+status = "confirmed-in-3.5"
+notes = "The 3.5 data-pointer example includes DATA records and uses READ a (p. 13-35). The DO WHILE DATA predicate is tracked with the loop form, not treated as a separate function here."
+confirmation-source = "AM-INTERPRETER-35"
+confirmation-source-version = "3.5 addendum"
+confirmation-printed-pages = ["13-35"]
 confirmation-basis = "direct-example-use"
 
