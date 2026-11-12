@@ -41,6 +41,26 @@ class FunctionInventoryTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "3.0 base-manual evidence cannot be labelled"):
                 validate(path)
 
+    def test_3_5_addendum_identifier_set_is_exact(self):
+        root = Path(__file__).resolve().parents[2]
+        source = root / "docs/research/amiga-gfa-basic-functions.toml"
+        text = source.read_text(encoding="utf-8")
+        candidate = text.replace(
+            'name = "ABS"\norigin = "base-manual-3.0"\napplicability = "interpreter"\nevidence-status = "base-manual-entry"',
+            'name = "ABS"\norigin = "3.5-addendum"\napplicability = "interpreter"\nevidence-status = "explicit-3.5-addendum"',
+            1,
+        ).replace(
+            'name = "FACT"\norigin = "3.5-addendum"\napplicability = "interpreter"\nevidence-status = "explicit-3.5-addendum"',
+            'name = "FACT"\norigin = "base-manual-3.0"\napplicability = "interpreter"\nevidence-status = "base-manual-entry"',
+            1,
+        )
+        self.assertNotEqual(candidate, text)
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "functions.toml"
+            path.write_text(candidate, encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "3.5 addendum function set differs"):
+                validate(path)
+
     def test_3_5_addendum_entries_require_explicit_version_evidence(self):
         root = Path(__file__).resolve().parents[2]
         source = root / "docs/research/amiga-gfa-basic-functions.toml"
