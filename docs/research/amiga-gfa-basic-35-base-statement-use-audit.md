@@ -33,4 +33,4 @@ This audit records base-manual statement forms that are directly used or explici
 
 These are documentary confirmations, not claims of complete syntax coverage, runtime conformance, or Rust implementation. Original 3.0 source pages remain attached to each candidate; the 3.5 evidence source and printed pages are stored separately in `amiga-gfa-basic-candidates.toml`.
 
-See also `amiga-gfa-basic-candidate-report.md` and `amiga-gfa-basic-function-use-audit.md`.
+See also `amiga-gfa-basic-candidate-report.md` and `amiga-gfa-basic-35-base-function-use-audit.md`.
