@@ -1,0 +1,263 @@
+{
+  "repository": "vsimko/gfabasic-rust",
+  "generated_at": "2026-11-12T10:09:59.067459Z",
+  "freshness_threshold_hours": 168,
+  "workflows": [
+    {
+      "name": "Documentation checks",
+      "file": "docs.yml",
+      "note": "Markdown, JavaScript, API registry, corpus metadata and local-link validation.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/docs.yml",
+      "state": "in_progress",
+      "latest": {
+        "id": 43197875378,
+        "name": "Documentation checks",
+        "status": "in_progress",
+        "event": "pull_request",
+        "branch": "research/guard-function-inventory-version-boundary",
+        "created_at": "2026-11-12T10:09:44Z",
+        "updated_at": "2026-11-12T10:09:49Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43197875378",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43172284698,
+        "name": "Documentation checks",
+        "status": "success",
+        "event": "push",
+        "branch": "main",
+        "created_at": "2026-11-12T07:02:03Z",
+        "updated_at": "2026-11-12T07:02:26Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43172284698",
+        "age_hours": 3,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Rust checks",
+      "file": "rust.yml",
+      "note": "Formatting, Clippy, workspace tests/build and formatter fixtures.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/rust.yml",
+      "state": "in_progress",
+      "latest": {
+        "id": 43197875362,
+        "name": "Rust checks",
+        "status": "in_progress",
+        "event": "pull_request",
+        "branch": "research/guard-function-inventory-version-boundary",
+        "created_at": "2026-11-12T10:09:44Z",
+        "updated_at": "2026-11-12T10:09:48Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43197875362",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43172251404,
+        "name": "Rust checks",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "research/guard-35-function-registry-boundary",
+        "created_at": "2026-11-12T07:01:45Z",
+        "updated_at": "2026-11-12T07:02:03Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43172251404",
+        "age_hours": 3,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Security audit",
+      "file": "security-audit.yml",
+      "note": "RustSec audits for workspace, fuzz and benchmark lockfiles.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/security-audit.yml",
+      "state": "in_progress",
+      "latest": {
+        "id": 43197875357,
+        "name": "Security audit",
+        "status": "in_progress",
+        "event": "pull_request",
+        "branch": "research/guard-function-inventory-version-boundary",
+        "created_at": "2026-11-12T10:09:44Z",
+        "updated_at": "2026-11-12T10:09:48Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43197875357",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43172251340,
+        "name": "Security audit",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "research/guard-35-function-registry-boundary",
+        "created_at": "2026-11-12T07:01:45Z",
+        "updated_at": "2026-11-12T07:02:11Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43172251340",
+        "age_hours": 3,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Source-loader fuzzing",
+      "file": "fuzz.yml",
+      "note": "Fuzzes the source loader only; lexer/parser fuzzing is not configured.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/fuzz.yml",
+      "state": "in_progress",
+      "latest": {
+        "id": 43197875479,
+        "name": "Fuzzing",
+        "status": "in_progress",
+        "event": "pull_request",
+        "branch": "research/guard-function-inventory-version-boundary",
+        "created_at": "2026-11-12T10:09:44Z",
+        "updated_at": "2026-11-12T10:09:48Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43197875479",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43172251333,
+        "name": "Fuzzing",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "research/guard-35-function-registry-boundary",
+        "created_at": "2026-11-12T07:01:45Z",
+        "updated_at": "2026-11-12T07:03:43Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43172251333",
+        "age_hours": 3,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Benchmarks",
+      "file": "benchmarks.yml",
+      "note": "Source-loading benchmark; pull requests validate compilation without recording measurements.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/benchmarks.yml",
+      "state": "in_progress",
+      "latest": {
+        "id": 43197875403,
+        "name": "Benchmarks",
+        "status": "in_progress",
+        "event": "pull_request",
+        "branch": "research/guard-function-inventory-version-boundary",
+        "created_at": "2026-11-12T10:09:44Z",
+        "updated_at": "2026-11-12T10:09:48Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43197875403",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43172251442,
+        "name": "Benchmarks",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "research/guard-35-function-registry-boundary",
+        "created_at": "2026-11-12T07:01:45Z",
+        "updated_at": "2026-11-12T07:02:13Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43172251442",
+        "age_hours": 3,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Release SBOM",
+      "file": "release-sbom.yml",
+      "note": "Validates PR SBOMs and uploads on published releases; release attachment is unproven until a release runs.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/release-sbom.yml",
+      "state": "in_progress",
+      "latest": {
+        "id": 43197875356,
+        "name": "Release SBOM",
+        "status": "in_progress",
+        "event": "pull_request",
+        "branch": "research/guard-function-inventory-version-boundary",
+        "created_at": "2026-11-12T10:09:44Z",
+        "updated_at": "2026-11-12T10:09:48Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43197875356",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43172251341,
+        "name": "Release SBOM",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "research/guard-35-function-registry-boundary",
+        "created_at": "2026-11-12T07:01:45Z",
+        "updated_at": "2026-11-12T07:02:35Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43172251341",
+        "age_hours": 3,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "GitHub Pages",
+      "file": "pages.yml",
+      "note": "Builds and publishes the static production website.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/pages.yml",
+      "state": "success",
+      "latest": {
+        "id": 43172284622,
+        "name": "Deploy GitHub Pages",
+        "status": "success",
+        "event": "push",
+        "branch": "main",
+        "created_at": "2026-11-12T07:02:02Z",
+        "updated_at": "2026-11-12T07:02:26Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43172284622",
+        "age_hours": 3,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43172284622,
+        "name": "Deploy GitHub Pages",
+        "status": "success",
+        "event": "push",
+        "branch": "main",
+        "created_at": "2026-11-12T07:02:02Z",
+        "updated_at": "2026-11-12T07:02:26Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43172284622",
+        "age_hours": 3,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Pull request preview",
+      "file": "pr-preview.yml",
+      "note": "Builds and smoke-tests same-repository pull request previews.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/pr-preview.yml",
+      "state": "in_progress",
+      "latest": {
+        "id": 43197875312,
+        "name": "Pull request website preview",
+        "status": "in_progress",
+        "event": "pull_request",
+        "branch": "research/guard-function-inventory-version-boundary",
+        "created_at": "2026-11-12T10:09:44Z",
+        "updated_at": "2026-11-12T10:09:48Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43197875312",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43172285869,
+        "name": "Pull request website preview",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "research/german-35-witness-manifest",
+        "created_at": "2026-11-12T07:02:03Z",
+        "updated_at": "2026-11-12T07:02:16Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43172285869",
+        "age_hours": 3,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Conformance suite",
+      "file": "conformance.yml",
+      "note": "No dedicated compiler conformance workflow is configured.",
+      "state": "not-configured",
+      "latest": null,
+      "last_success": null
+    }
+  ]
+}
