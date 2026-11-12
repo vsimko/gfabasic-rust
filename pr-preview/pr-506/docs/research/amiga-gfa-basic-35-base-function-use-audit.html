@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="This audit compares all 117 identifiers in amiga-gfa-basic-functions.toml with the version-specific Chapter 13 addendum of GFA BASIC 3.5 Interpreter and the 3.5-specific material in Chapters 18–19 of Das Grosse Buch z…">
+  <title>Amiga GFA BASIC 3.5 — inherited function evidence from both manuals · GFA BASIC Rust documentation</title>
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body class="docs-site">
+  <header class="docs-header">
+    <a href="../../index.html">GFA BASIC Rust</a>
+    <span aria-hidden="true">/</span>
+    <a href="../index.html">Documentation</a>
+  </header>
+  <div class="docs-layout">
+    <nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home" href="index.html">Section index</a><ul><li><a href="amiga-gfa-basic-documentation-audit.html">Amiga GFA BASIC documentation coverage audit</a></li><li><a href="amiga-gfa-basic-command-catalogue.html">Amiga GFA BASIC command catalogue</a></li><li><a href="amiga-gfa-basic-german-book-command-api-extraction.html">German Amiga GFA-BASIC book: command and OS API extraction</a></li><li><a href="amiga-book-command-index-ocr-transcription.html">Appendix D — OCR transcription of the command index</a></li><li><a href="gfa-basic-command-index-ocr.html">GFA-BASIC command index — first-pass extraction</a></li><li><a href="amiga-gfa-basic-source-topic-index.html">Amiga GFA BASIC source and topic index</a></li><li><a href="amiga-book-515-page-extraction-audit.html">Amiga GFA-BASIC book — 515-page extraction audit</a></li><li><a href="amiga-book-chapters05-17-heading-harvest.html">Amiga book — command-heading harvest, chapters 5–17</a></li><li><a href="amiga-gfa-basic-functions.toml">Function inventory (117 unique names)</a></li><li><a href="amiga-gfa-basic-function-inventory.html">Amiga GFA BASIC 3.5 built-in function inventory</a></li><li><a href="amiga-base-manual-io-graphics-events-advanced.html">Amiga GFA BASIC base-manual I/O, graphics, event, and advanced-programming extraction</a></li><li><a href="amiga-base-manual-io-graphics-events-advanced-details.html">Amiga GFA BASIC base-manual I/O, graphics, event, and advanced-programming details</a></li><li><a href="amiga-base-manual-numeric-string-functions.html">Amiga GFA BASIC base-manual numeric and string function extraction</a></li><li><a href="amiga-gfa-basic-35-addendum-inventory.html">Amiga GFA-BASIC 3.5 interpreter addendum — extracted feature inventory</a></li><li><a href="amiga-gfa-basic-candidates.toml">3.5 candidate manifest</a></li><li><a href="amiga-gfa-basic-candidate-report.html">Amiga GFA BASIC 3.5 candidate verification report</a></li><li><a href="amiga-gfa-basic-language-population-policy.html">Amiga GFA BASIC language population policy</a></li><li><a href="amiga-gfa-basic-3.03-ocr-index.html">German Amiga GFA BASIC book: OCR index and edition notes</a></li><li><a href="amiga-runtime-ocr-audit.html">Amiga runtime workflow OCR audit</a></li><li><a href="README.html">Research materials</a></li><li><a href="amiga-gfa-test-output.html">Amiga GFA BASIC test output</a></li><li><a href="amiga-gfa-basic-dqh-source-inventory.html">Amiga GFA BASIC commands observed in dqh-amiga</a></li><li><a href="amiga-emulator-lab.html">Amiga emulator experiment lab</a></li><li><a href="amiga-gfa-basic-35-lst-probes.html">Amiga GFA BASIC 3.5 interpreter probes from text listings</a></li><li><a href="amiga-gfa-basic-352-runtime-baseline.html">Amiga GFA BASIC 3.52 runtime baseline</a></li><li><a href="amiga-gfa-basic-binary-analysis.html">Amiga GFA-BASIC binary analysis</a></li><li><a href="amiga-base-manual-variable-array-conversion-functions.html">Amiga GFA BASIC base-manual variable, array, and conversion functions</a></li><li><a href="amiga-gfa-basic-chapter-7-program-handling-evidence.html">Amiga GFA BASIC Chapter 7 — program handling evidence</a></li><li><a href="amiga-gfa-basic-chapter-8-graphics-evidence.html">Amiga GFA BASIC Chapter 8 — graphics compatibility evidence</a></li><li><a href="amiga-gfa-basic-chapter-9-event-window-evidence.html">Amiga GFA BASIC Chapter 9 — event, menu, screen and window evidence</a></li><li><a href="amiga-gfa-basic-chapter-10-advanced-programming-evidence.html">Amiga GFA BASIC Chapter 10 — advanced programming evidence</a></li><li><a href="amiga-gfa-basic-chapter-11-system-routines-evidence.html">Amiga GFA BASIC Chapter 11 — system-routine evidence</a></li><li><a href="amiga-gfa-basic-chapter-12-appendices-index-evidence.html">Amiga GFA BASIC Chapter 12 — appendix and index evidence</a></li><li><a href="https://github.com/vsimko/gfabasic-rust/blob/main/scripts/validate_amiga_chapter_inventories.py">Chapter inventory validator</a></li><li><a href="amiga-gfa-basic-3.0-command-index.html">Amiga GFA BASIC 3.0 command index — grouped cross-check</a></li><li><a href="amiga-gfa-basic-3.0-statement-command-candidates.html">Amiga GFA BASIC 3.0 statement and command candidate catalogue</a></li><li><a href="amiga-gfa-basic-3.0-base-inventory.html">Amiga GFA BASIC 3.0 base-manual inventory</a></li><li><a href="amiga-gfa-basic-3.0-expressions-builtins-control-flow.html">Amiga GFA BASIC 3.0 expression, intrinsic and control-flow evidence</a></li><li><a href="amiga-gfa-basic-3.0-control-file-data-io.html">Amiga GFA BASIC 3.0 control, file and data I/O evidence</a></li><li><a href="amiga-gfa-basic-3.0-graphics-evidence.html">GFA BASIC 3.0 Amiga — graphics evidence</a></li><li><a href="amiga-gfa-basic-3.0-events-windows-evidence.html">GFA BASIC 3.0 Amiga — event, menu, screen and window evidence</a></li><li><a href="amiga-gfa-basic-3.0-system-routines-evidence.html">GFA BASIC 3.0 Amiga — operating-system routine evidence</a></li><li><a href="amiga-gfa-basic-3.0-advanced-programming-evidence.html">GFA BASIC 3.0 Amiga — advanced programming evidence</a></li><li><a href="amiga-gfa-basic-3.0-appendix-index-evidence.html">GFA BASIC 3.0 Amiga — appendix and command-index evidence</a></li><li><a href="amiga-gfa-basic-3.0-german-source-notes.html">German Amiga GFA BASIC 3.0 source — initial verification notes</a></li><li><a href="amiga-gfa-basic-3.0-procedure-error-details.html">GFA BASIC 3.0 Amiga — procedures, functions and error-flow evidence</a></li><li><a href="amiga-gfa-basic-3.0-screen-window-details.html">GFA BASIC 3.0 Amiga — screen and window command details</a></li><li><a href="amiga-gfa-basic-3.0-output-device-details.html">GFA BASIC 3.0 Amiga — output, cursor, mouse and sound evidence</a></li><li><a href="amiga-gfa-basic-3.0-menu-event-details.html">GFA BASIC 3.0 Amiga — menu and event details</a></li><li><a href="amiga-gfa-basic-3.0-bob-object-details.html">GFA BASIC 3.0 Amiga — BOB and OBJECT API evidence</a></li><li><a href="amiga-gfa-basic-3.0-source-format-editor-evidence.html">Amiga GFA BASIC 3.0 — source composition and editor evidence</a></li><li><a href="amiga-gfa-basic-35-primary-reference.html">Amiga GFA-BASIC 3.5 primary reference and target decision</a></li><li><a href="amiga-gfa-basic-35-german-book-crosscheck.html">Amiga GFA-BASIC 3.5 — independent German-book cross-check</a></li><li><a href="amiga-book-gfa35-chapter18-19-extraction.html">GFA-BASIC 3.5 additions documented in the Amiga book</a></li><li><a href="amiga-gfa-basic-35-editor-feature-audit.html">Amiga GFA BASIC 3.5 — editor feature audit</a></li><li><a href="amiga-gfa-basic-35-lexer-evidence.html">Amiga GFA BASIC 3.5 lexer evidence inventory</a></li><li><a href="amiga-gfa-basic-35-matrix-arithmetic-analysis-audit.html">Amiga GFA BASIC 3.5 — matrix arithmetic and analysis audit</a></li><li><a href="amiga-gfa-basic-35-matrix-io-copy-audit.html">Amiga GFA BASIC 3.5 — matrix I/O and copy declaration audit</a></li><li><a href="amiga-gfa-basic-35-five-declaration-audit.html">Amiga GFA BASIC 3.5 — five declaration-level audit blocks</a></li><li><a href="amiga-gfa-basic-35-five-more-declaration-audit.html">Amiga GFA BASIC 3.5 — five more declaration-level audit blocks</a></li><li><a href="amiga-gfa-basic-35-guru-declaration-audit.html">Amiga GFA BASIC 3.5 — GURU declaration audit</a></li><li><a href="atari-gfa-book-diskette.html">Atari GFA BASIC book diskette — source-corpus research notes</a></li><li><a href="atari-gfa-book-systematic-review.html">Systematic review of *Das große GFA-BASIC-Buch* (Atari ST)</a></li><li><a href="aminet-catalogue.html">Aminet GFA BASIC package survey</a></li><li><a href="gfalist-build-and-fixture-validation.html">gfalist build and fixture validation</a></li><li><a href="gfalist-format-vs-rust-frontend.html">gfalist format notes vs. the Rust frontend</a></li><li><a href="amiga-gfa-basic-35-base-function-use-audit.html">Amiga GFA BASIC 3.5 — inherited function evidence from both manuals</a></li></ul></nav>
+    <main class="docs-content">
+      <article>
+        <h1>Amiga GFA BASIC 3.5 — inherited function evidence from both manuals</h1>
+        <p class="docs-meta"><span>Research Note</span></p>
+        <h1 id="amiga-gfa-basic-35-inherited-function-evidence-from-both-manuals">Amiga GFA BASIC 3.5 — inherited function evidence from both manuals</h1>
+<h2 id="scope-and-method">Scope and method</h2>
+<p>This audit compares all 117 identifiers in <code>amiga-gfa-basic-functions.toml</code> with the version-specific Chapter 13 addendum of <em>GFA BASIC 3.5 Interpreter</em> and the 3.5-specific material in Chapters 18–19 of <em>Das Grosse Buch zu GFA-Basic 3.5 Amiga</em>.</p>
+<p>A function call in a 3.5-specific example is direct documentary evidence that the shown call form is usable in the 3.5 interpreter. An explicit documentation reference is also evidence for the referenced form. Neither proves that every overload, edge case, numeric boundary, or error behavior from the 3.0 base chapter was revalidated. Each function retains its original <code>base-manual-3.0</code> source origin; 3.5 evidence is recorded separately.</p>
+<p>The German book identifies the material in Chapter 18 as new in version 3.5. Its Chapter 18 examples therefore provide independent 3.5 evidence for inherited functions that are not used in the English addendum.</p>
+<h2 id="directly-evidenced-inherited-functions">Directly evidenced inherited functions</h2>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>3.5 source and page</th>
+<th>What the source demonstrates</th>
+<th>What remains unconfirmed</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>RAND</code></td>
+<td>English interpreter addendum, p. 13-2</td>
+<td><code>RAND(10)</code> populates elements of a floating-point matrix in the <code>MAT SET</code> example.</td>
+<td>Distribution details, seed behavior, and other random functions are not restated.</td>
+</tr>
+<tr>
+<td><code>STR$</code></td>
+<td>English interpreter addendum, p. 13-3; German book, p. 457</td>
+<td>The <code>MAT PRINT</code> description explicitly refers to <code>STR$(x,g,n)</code> formatting; the German book independently corroborates the formatting reference.</td>
+<td>The one- and two-argument base-manual forms are not independently restated.</td>
+</tr>
+<tr>
+<td><code>SUCC</code></td>
+<td>English interpreter addendum, p. 13-5</td>
+<td>A matrix-copy example assigns values using <code>SUCC(i%)</code>.</td>
+<td>The string overload is not independently demonstrated.</td>
+</tr>
+<tr>
+<td><code>STRING$</code></td>
+<td>English interpreter addendum, p. 13-21</td>
+<td>Matrix examples use <code>STRING$(n, &quot;-&quot;)</code> to print separator lines.</td>
+<td>The numeric character-code overload is not independently demonstrated.</td>
+</tr>
+<tr>
+<td><code>HEX$</code></td>
+<td>English interpreter addendum, p. 13-36</td>
+<td>The GURU error-handler example prints <code>HEX$(GURU)</code>.</td>
+<td>The optional width argument is not independently demonstrated.</td>
+</tr>
+<tr>
+<td><code>RND</code></td>
+<td>German book, Chapter 18, p. 458</td>
+<td>The matrix example uses <code>RND(1)</code> inside <code>INT(RND(1)*5)</code>.</td>
+<td>Only the one-argument form is demonstrated; <code>RANDOM</code> and <code>RANDOMIZE</code> are not confirmed by this occurrence.</td>
+</tr>
+<tr>
+<td><code>INT</code></td>
+<td>German book, Chapter 18, p. 458</td>
+<td>The same matrix example uses <code>INT(RND(1)*5)</code>.</td>
+<td>Only the one-argument integer-conversion form is demonstrated.</td>
+</tr>
+<tr>
+<td><code>SQR</code></td>
+<td>German book, Chapter 18, p. 473</td>
+<td>The vector-normalization example uses <code>SQR(l)</code> for vector length and <code>1/SQR(l)</code> for normalization.</td>
+<td>Only the one-argument form is demonstrated.</td>
+</tr>
+</tbody>
+</table>
+<p>These eight identifiers remain recorded with their 3.0 base-manual origin and receive the separate <code>confirmed-by-3.5-source-evidence</code> evidence status. Their original base-manual page references remain intact; the 3.5 source identifiers and printed-page locators are stored in separate confirmation fields.</p>
+<h2 id="similar-looking-occurrence-deliberately-excluded">Similar-looking occurrence deliberately excluded</h2>
+<p>The English addendum matrix examples contain <code>~INP(2)</code> (pp. 13-21 onward). The base-manual function candidate is documented as <code>INP(#n)</code>, which reads a byte from an opened data channel. The addendum spelling and context do not establish that it is the same call form. Therefore <code>INP</code> is not promoted and remains documented-in-3.0-only pending clarification.</p>
+<p>Likewise, apparent matches for <code>ADD</code>, <code>SUB</code>, and <code>MUL</code> in the addendum are <code>MAT</code> statements, not function calls. Words such as <code>AND</code>, <code>OR</code>, <code>EVEN</code>, <code>POINT</code>, <code>SCREEN</code>, <code>TAB</code>, <code>TYPE</code>, and <code>WINDOW</code> occur as prose or labels, not built-in function calls.</p>
+<h2 id="result-and-boundary">Result and boundary</h2>
+<p>The full 117-identifier scan found eight inherited functions with direct 3.5 use/reference evidence: four example uses in the English interpreter addendum (<code>RAND</code>, <code>SUCC</code>, <code>STRING$</code>, <code>HEX$</code>), one explicit documentation reference there (<code>STR$</code>), and three example uses in the German 3.5 book (<code>RND</code>, <code>INT</code>, <code>SQR</code>). The German book also independently corroborates the <code>STR$</code> formatting reference.</p>
+<p>Together with the four functions explicitly introduced by the English addendum (<code>FACT</code>, <code>VARIAT</code>, <code>COMBIN</code>, and <code>GURU</code>), these are twelve function identifiers with direct 3.5 documentary evidence. The four explicit additions remain a distinct category; the eight inherited functions are not reclassified as 3.5 additions.</p>
+<p>No other base-manual function identifier was promoted by this pass. Lack of an occurrence in the audited 3.5 material is not evidence of removal or incompatibility. No runtime-conformance or Rust-implementation claim is made.</p>
+<p>See also <code>amiga-gfa-basic-functions.toml</code>, <code>amiga-gfa-basic-candidates.toml</code>, and the generated <code>amiga-gfa-basic-candidate-report.md</code>.</p>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>
