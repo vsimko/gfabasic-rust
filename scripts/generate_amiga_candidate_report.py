@@ -122,7 +122,7 @@ def render(candidates: list[dict]) -> str:
         note = item["notes"].replace("|", "\\|")
         evidence_pages = ", ".join(item.get("confirmation-printed-pages", item["printed-pages"]))
         evidence_source = item.get("confirmation-source", item["source"])
-        basis = {"direct-example-use": "Direct example use", "direct-documentation-reference": "Direct documentation reference", "direct-documentation-restriction": "Direct documentation restriction"}.get(item.get("confirmation-basis"), "Explicit 3.5 addendum declaration")
+        basis = {"direct-example-use": "Direct example use", "direct-documentation-reference": "Direct documentation reference", "direct-documentation-restriction": "Direct documentation restriction"}.get(item.get("confirmation-basis"), "Explicit 3.5 source declaration")
         lines.append(f"| `{item['id']}` | {item['name']} | {item['source-version']} | {evidence_source} | {evidence_pages} | {basis} | {note} |")
     if not confirmed:
         lines.append("| — | None | — | — | — | — |")
