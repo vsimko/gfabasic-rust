@@ -12,7 +12,8 @@ ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_MANIFEST = Path("docs/research/amiga-gfa-basic-functions.toml")
 
 EXPECTED_35_ADDENDUM_FUNCTIONS = {"FACT", "VARIAT", "COMBIN", "GURU"}
-EXPECTED_35_ADDENDUM_USE_FUNCTIONS = {"HEX$", "STR$", "RAND", "SUCC", "STRING$"}
+EXPECTED_35_ADDENDUM_USE_BASIS = {"HEX$": "direct-example-use", "STR$": "direct-documentation-reference", "RAND": "direct-example-use", "SUCC": "direct-example-use", "STRING$": "direct-example-use"}
+EXPECTED_35_ADDENDUM_USE_FUNCTIONS = set(EXPECTED_35_ADDENDUM_USE_BASIS)
 
 EXPECTED = {
     "all-identifiers": 117,
@@ -73,6 +74,7 @@ def validate(path: Path) -> dict[str, int]:
                 item.get("confirmation-source") != "AM-INTERPRETER-35"
                 or item.get("confirmation-source-version") != "3.5 addendum"
                 or not item.get("confirmation-printed-pages")
+                or item.get("confirmation-basis") != EXPECTED_35_ADDENDUM_USE_BASIS[name]
             ):
                 raise ValueError(f"{name}: 3.5 addendum-use evidence needs source and printed pages")
         elif origin == "base-manual-3.0" and name in EXPECTED_35_ADDENDUM_USE_FUNCTIONS:

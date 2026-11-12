@@ -28,6 +28,8 @@ class FunctionInventoryTests(unittest.TestCase):
                 self.assertEqual(item["origin"], "base-manual-3.0")
                 self.assertEqual(item["confirmation-source-version"], "3.5 addendum")
                 self.assertTrue(item["confirmation-printed-pages"])
+                expected_basis = "direct-documentation-reference" if item["name"] == "STR$" else "direct-example-use"
+                self.assertEqual(item["confirmation-basis"], expected_basis)
 
     def test_non_audited_base_function_cannot_claim_3_5_example_evidence(self):
         root = Path(__file__).resolve().parents[2]
