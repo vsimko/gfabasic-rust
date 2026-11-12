@@ -13,7 +13,7 @@ tags: [amiga, gfa-basic, evidence, research]
 | Status | Entries |
 |---|---:|
 | candidate | 0 |
-| confirmed-in-3.5 | 41 |
+| confirmed-in-3.5 | 42 |
 | contradicted | 0 |
 | documented-in-3.0-only | 103 |
 | unresolved | 0 |
@@ -175,6 +175,7 @@ tags: [amiga, gfa-basic, evidence, research]
 | `amiga.base7.procedure-call-at` | @procedure-call | 3.0 base manual | AM-BOOK-DE-1990 | 471 | Direct example use | The Chapter 18 vector example invokes the parameterless drawp procedure using @drawp (printed p. 471). This confirms the @ call-prefix form only, not GOSUB or parameter passing. |
 | `amiga.base7.procedure-return` | PROCEDURE / RETURN | 3.0 base manual | AM-BOOK-DE-1990 | 471 | Direct example use | The Chapter 18 vector example defines PROCEDURE drawp and terminates it with RETURN (printed p. 471). This confirms the shown parameterless procedure structure and RETURN form; the @ call prefix is recorded separately, while GOSUB and parameter-passing forms are not demonstrated. |
 | `amiga.base7.while-wend` | WHILE / WEND | 3.0 base manual | AM-BOOK-DE-1990 | 480 | Direct example use | The Chapter 19 _DATA example uses WHILE _DATA ... WEND (printed p. 480), with the loop ending when the DATA pointer reaches zero. This confirms the demonstrated condition form, not every condition or loop edge case. |
+| `amiga.base8.cls` | CLS | 3.0 base manual | AM-INTERPRETER-35 | 13-24 | Direct example use | The Chapter 13 3.5 addendum example uses CLS before MAT READ (printed p. 13-24). This confirms the ordinary screen-clear form; the optional CLS #n rerouting form from the base manual is not demonstrated. |
 | `amiga.base8.color` | COLOR | 3.0 base manual | AM-BOOK-DE-1990 | 471 | Direct example use | The Chapter 18 vector-animation example selects colors with COLOR 3 and COLOR 1 (printed p. 471). This confirms the shown COLOR statement form, not SETCOLOR's palette-component form. |
 | `amiga.base8.draw-to` | DRAW TO | 3.0 base manual | AM-BOOK-DE-1990 | 471 | Direct example use | The Chapter 18 vector-animation procedure uses DRAW TO with a calculated endpoint (printed p. 471). This confirms the shown path-drawing form only. |
 

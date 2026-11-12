@@ -9,7 +9,7 @@ title: "Amiga GFA BASIC 3.5 — inherited statements used in examples"
 
 This pass records additional inherited statements that are directly used in the 3.5 companion book's Chapter 18–19 examples but were not yet represented as granular candidate entries. The source origin remains the 3.0 base interpreter manual; the companion book supplies a separate 3.5 example-use witness. Each confirmation is limited to the exact form shown.
 
-Page-image checks were made for the Chapter 18 examples on printed pp. 458 and 471 and the Chapter 19 DATA-pointer example on p. 480.
+Page-image checks were made for the Chapter 18 examples on printed pp. 458 and 471, the Chapter 19 DATA-pointer example on p. 480, and the English 3.5 addendum example on p. 13-24.
 
 ## Directly evidenced statements
 
@@ -27,6 +27,7 @@ Page-image checks were made for the Chapter 18 examples on printed pp. 458 and 4
 | `PROCEDURE / RETURN` | p. 471 | Parameterless `PROCEDURE drawp` and `RETURN` | GOSUB and parameter-passing forms are not shown |
 | `@procedure-call` | p. 471 | `@drawp` invokes the procedure | Confirms the shown prefix-call form only |
 | `END` | p. 471 | Top-level `END` | EDIT and STOP alternatives are not shown |
+| `CLS` | p. 13-24 (3.5 addendum) | `CLS` before `MAT READ` | The optional `CLS #n` redirection form is not shown |
 
 ## Siblings deliberately left unconfirmed
 
@@ -41,4 +42,4 @@ These non-occurrences do not imply removal or incompatibility. They only mean th
 
 ## Result
 
-Twelve additional inherited statement/procedure-call records receive direct 3.5 example-use evidence. Their 3.0 source origin is retained and their 3.5 witness pages are stored separately in the candidate manifest. No registry declaration, implementation state, runtime conformance, or language-core count is changed. This is an evidence inventory increment, not a complete statement catalogue.
+Thirteen additional inherited statement/procedure-call records receive direct 3.5 example-use evidence. Their 3.0 source origin is retained and their 3.5 witness pages are stored separately in the candidate manifest. No registry declaration, implementation state, runtime conformance, or language-core count is changed. This is an evidence inventory increment, not a complete statement catalogue.

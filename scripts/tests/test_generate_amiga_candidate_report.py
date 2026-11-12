@@ -33,6 +33,8 @@ class AmigaCandidateReportTests(unittest.TestCase):
         self.assertIn("amiga.base5.restore", report)
         self.assertIn("amiga.base7.procedure-return", report)
         self.assertIn("amiga.base7.procedure-call-at", report)
+        self.assertIn("amiga.base8.cls", report)
+        self.assertIn("13-24", report)
         self.assertIn("3.0 base manual", report)
         self.assertIn("3.5 addendum", report)
         self.assertIn("not implementation or runtime support", report)
