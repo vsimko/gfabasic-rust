@@ -13,7 +13,7 @@ tags: [amiga, gfa-basic, evidence, research]
 | Status | Entries |
 |---|---:|
 | candidate | 0 |
-| confirmed-in-3.5 | 30 |
+| confirmed-in-3.5 | 29 |
 | contradicted | 0 |
 | documented-in-3.0-only | 99 |
 | unresolved | 0 |
@@ -71,7 +71,7 @@ tags: [amiga, gfa-basic, evidence, research]
 | `amiga.base3.precedence` | Operator precedence hierarchy | 3-2 | Page-image transcription gives 11 precedence levels; comparison rows contain OCR/source spelling ambiguity. No associativity inferred. |
 | `amiga.base3.relational` | < / > / <= / >= and =< / => | 3-2, 3-13–3-16 | Text explicitly accepts <= and =<, and >= and =>. Preserve both alternate spellings; string ordering is separately described. |
 | `amiga.base3.string-plus` | String concatenation + | 3-2–3-10 | Plus is documented for string concatenation as well as numeric addition; 3.0 base-manual evidence only. |
-| `amiga.base3.unary-plus` | Unary + | 3-2, 3-10 | Unary plus is listed in the 3.0 precedence table but is not used in the audited 3.5 Chapter 18–19 examples; unary minus is tracked separately. |
+| `amiga.base3.unary-plus-minus` | Unary + / - | 3-2, 3-10 | The 3.0 precedence table lists prefix plus and minus. Negative DATA values appear in a 3.5 example, but no BASIC expression establishes general unary-operator parsing; both remain candidates. |
 | `amiga.base4.abs-sgn` | ABS() / SGN() | 4-12 | Absolute value and sign (-1, 0, 1) functions documented. |
 | `amiga.base4.bit-test` | BCLR() / BSET() / BCHG() / BTST() | 4-19–4-20 | Zero-based bit indices masked to 0–31; BTST is described with 1/0 result in this section. |
 | `amiga.base4.bitwise-and-or-xor` | AND() / OR() / XOR() | 4-23 | Integer bitwise function forms; distinct from logical operators as expression operators pending exact parser treatment. |

@@ -17,9 +17,8 @@ Page references below are printed book pages. The vector example on p. 471 and t
 |---|---|---|---|
 | Numeric `+` and `-` | pp. 467, 470 | `MAT SUB a()=b()-c()`; the matrix-multiplication explanation gives numeric sums and signed operands | Confirms numeric arithmetic use only; not precedence, comparison, or string concatenation |
 | `*` and `/` | pp. 470, 473 | Numeric products in the matrix-multiplication explanation; `1/SQR(l)` in vector normalization | Confirms the shown numeric forms only; not precedence or all operand types |
-| Unary `-` | p. 470 | A negative operand appears in `0.5*-1` | Unary `+` is not demonstrated and remains 3.0-only evidence |
 
-The arithmetic evidence does not establish the operator hierarchy, associativity, string concatenation, exponentiation, integer division, modulo, comparison operators, or logical operators. The assignment sign in the examples is not treated as evidence for equality comparison.
+The arithmetic evidence does not establish the operator hierarchy, associativity, unary plus/minus, string concatenation, exponentiation, integer division, modulo, comparison operators, or logical operators. Although the code example contains negative DATA values on p. 471, that does not by itself establish general unary-operator parsing in expressions; both prefix forms remain candidates. The assignment sign in the examples is not treated as evidence for equality comparison.
 
 ## Directly evidenced inherited statements
 
@@ -32,7 +31,7 @@ The arithmetic evidence does not establish the operator hierarchy, associativity
 | `COLOR` | p. 471 | `COLOR 3` and `COLOR 1` | Does not confirm the distinct `SETCOLOR` palette-component form |
 | `DRAW TO` | p. 471 | A procedure draws calculated endpoints using `DRAW TO` | Does not confirm `PLOT`, `LINE`, or other `DRAW` forms |
 
-The candidate manifest splits grouped records where the example demonstrates only one member or form: `PRINT` and `LOCATE` are separated from `PRINT AT` and `WRITE`; `COLOR` from `SETCOLOR`; `DRAW TO` from `PLOT`, `LINE`, and other `DRAW` forms; unary minus from unary plus.
+The candidate manifest splits grouped records where the example demonstrates only one member or form: `PRINT` and `LOCATE` are separated from `PRINT AT` and `WRITE`; `COLOR` from `SETCOLOR`; `DRAW TO` from `PLOT`, `LINE`, and other `DRAW` forms. Prefix unary plus/minus remain grouped and unconfirmed.
 
 ## Similar-looking forms deliberately not conflated
 
@@ -44,6 +43,6 @@ The candidate manifest splits grouped records where the example demonstrates onl
 
 ## Result
 
-Nine inherited statement/operator candidate records receive narrow direct 3.5 evidence in this pass: numeric `+`/`-`, `*`/`/`, unary `-`, `PRINT`, `LOCATE`, `FOR/NEXT`, `WHILE/WEND`, `COLOR`, and `DRAW TO`. Their original source origin remains the 3.0 base manual; confirmation source and printed pages are recorded separately.
+Eight inherited statement/operator candidate records receive narrow direct 3.5 evidence in this pass: numeric `+`/`-`, `*`/`/`, `PRINT`, `LOCATE`, `FOR/NEXT`, `WHILE/WEND`, `COLOR`, and `DRAW TO`. Their original source origin remains the 3.0 base manual; confirmation source and printed pages are recorded separately.
 
 No API registry declaration, implementation state, runtime-conformance claim, or language-core count is changed. Platform-specific graphics forms remain candidates for the Amiga API profile, not language-core declarations. Unsupported siblings and operators remain documented in the 3.0 base only; their absence from these examples is not evidence of removal or incompatibility.

@@ -18,7 +18,7 @@ class ChapterTwoToFourCandidateAuditTests(unittest.TestCase):
         ]
 
     def test_each_candidate_has_page_provenance_and_3_0_scope(self):
-        self.assertEqual(len(self.audit), 69)
+        self.assertEqual(len(self.audit), 68)
         for item in self.audit:
             with self.subTest(candidate=item["id"]):
                 self.assertEqual(item["source"], "AM-INTERPRETER-35")
@@ -36,7 +36,6 @@ class ChapterTwoToFourCandidateAuditTests(unittest.TestCase):
                         "amiga.base4.sqr": ("AM-BOOK-DE-1990", "3.5 companion book Chapter 18", ["473"], "direct-example-use"),
                         "amiga.base3.numeric-add-sub": ("AM-BOOK-DE-1990", "3.5 companion book Chapter 18 example", ["467", "470"], "direct-example-use"),
                         "amiga.base3.multiply-divide": ("AM-BOOK-DE-1990", "3.5 companion book Chapter 18 example", ["470", "473"], "direct-example-use"),
-                        "amiga.base3.unary-minus": ("AM-BOOK-DE-1990", "3.5 companion book Chapter 18 example", ["470"], "direct-example-use"),
                     }
                     expected = expected_sources[item["id"]]
                     self.assertEqual(item.get("confirmation-source"), expected[0])
@@ -71,7 +70,7 @@ class GermanBookCrossCheckTests(unittest.TestCase):
         candidates = tomllib.loads(MANIFEST.read_text(encoding="utf-8"))["candidates"]
         by_id = {item["id"]: item for item in candidates}
         expected_unconfirmed = {
-            "amiga.base3.unary-plus": "Unary +",
+            "amiga.base3.unary-plus-minus": "Unary + / -",
             "amiga.base5.print-write": "PRINT AT / WRITE",
             "amiga.base8.setcolor": "SETCOLOR",
             "amiga.base8.plot-line-draw": "PLOT / LINE / DRAW forms other than DRAW TO",
@@ -136,7 +135,7 @@ class GermanBookCrossCheckTests(unittest.TestCase):
             "amiga.base4.succ", "amiga.base4.string",
             "amiga.base4.rnd", "amiga.base4.int", "amiga.base4.sqr",
             "amiga.base3.numeric-add-sub", "amiga.base3.multiply-divide",
-            "amiga.base3.unary-minus", "amiga.base5.print", "amiga.base5.locate",
+            "amiga.base5.print", "amiga.base5.locate",
             "amiga.base7.for-next", "amiga.base7.while-wend",
             "amiga.base8.color", "amiga.base8.draw-to",
         })

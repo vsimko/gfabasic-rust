@@ -813,14 +813,14 @@ status = "documented-in-3.0-only"
 notes = "Plus is documented for string concatenation as well as numeric addition; 3.0 base-manual evidence only."
 
 [[candidates]]
-id = "amiga.base3.unary-plus"
-name = "Unary +"
+id = "amiga.base3.unary-plus-minus"
+name = "Unary + / -"
 kind = "operator-family"
 source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["3-2, 3-10"]
 status = "documented-in-3.0-only"
-notes = "Unary plus is listed in the 3.0 precedence table but is not used in the audited 3.5 Chapter 18–19 examples; unary minus is tracked separately."
+notes = "The 3.0 precedence table lists prefix plus and minus. The 3.5 book shows negative DATA values (p. 471) and mathematical negative operands (p. 470), but no BASIC expression using unary prefix minus; neither prefix operator is promoted by this evidence."
 
 [[candidates]]
 id = "amiga.base3.power"
@@ -1319,20 +1319,6 @@ notes = "The 3.5 companion book's Chapter 18 matrix example uses INT(RND(1)*5) (
 confirmation-source = "AM-BOOK-DE-1990"
 confirmation-source-version = "3.5 companion book Chapter 18"
 confirmation-printed-pages = ["458"]
-confirmation-basis = "direct-example-use"
-
-[[candidates]]
-id = "amiga.base3.unary-minus"
-name = "Unary -"
-kind = "operator"
-source = "AM-INTERPRETER-35"
-source-version = "3.0 base manual"
-printed-pages = ["3-2","3-10"]
-status = "confirmed-in-3.5"
-notes = "The Chapter 18 matrix-multiplication explanation includes negative operands such as 0.5*-1 (printed p. 470), demonstrating unary minus in a numeric expression. Unary plus is not demonstrated."
-confirmation-source = "AM-BOOK-DE-1990"
-confirmation-source-version = "3.5 companion book Chapter 18 example"
-confirmation-printed-pages = ["470"]
 confirmation-basis = "direct-example-use"
 
 [[candidates]]

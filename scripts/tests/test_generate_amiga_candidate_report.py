@@ -25,6 +25,7 @@ class AmigaCandidateReportTests(unittest.TestCase):
         self.assertIn("AM-BOOK-DE-1990", report)
         self.assertIn("473", report)
         self.assertIn("amiga.base3.numeric-add-sub", report)
+        self.assertIn("amiga.base3.unary-plus-minus", report)
         self.assertIn("amiga.base7.while-wend", report)
         self.assertIn("amiga.base8.draw-to", report)
         self.assertIn("480", report)
