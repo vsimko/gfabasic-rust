@@ -1,0 +1,988 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="No candidates are currently classified as contradicted. This is not evidence that all remaining candidates are compatible.">
+  <title>Amiga GFA BASIC 3.5 candidate verification report · GFA BASIC Rust documentation</title>
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body class="docs-site">
+  <header class="docs-header">
+    <a href="../../index.html">GFA BASIC Rust</a>
+    <span aria-hidden="true">/</span>
+    <a href="../index.html">Documentation</a>
+  </header>
+  <div class="docs-layout">
+    <nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home" href="index.html">Section index</a><ul><li><a href="amiga-gfa-basic-documentation-audit.html">Amiga GFA BASIC documentation coverage audit</a></li><li><a href="amiga-gfa-basic-command-catalogue.html">Amiga GFA BASIC command catalogue</a></li><li><a href="amiga-gfa-basic-german-book-command-api-extraction.html">German Amiga GFA-BASIC book: command and OS API extraction</a></li><li><a href="amiga-book-command-index-ocr-transcription.html">Appendix D — OCR transcription of the command index</a></li><li><a href="gfa-basic-command-index-ocr.html">GFA-BASIC command index — first-pass extraction</a></li><li><a href="amiga-gfa-basic-source-topic-index.html">Amiga GFA BASIC source and topic index</a></li><li><a href="amiga-book-515-page-extraction-audit.html">Amiga GFA-BASIC book — 515-page extraction audit</a></li><li><a href="amiga-book-chapters05-17-heading-harvest.html">Amiga book — command-heading harvest, chapters 5–17</a></li><li><a href="amiga-gfa-basic-functions.toml">Function inventory (117 unique names)</a></li><li><a href="amiga-gfa-basic-function-inventory.html">Amiga GFA BASIC 3.5 built-in function inventory</a></li><li><a href="amiga-base-manual-io-graphics-events-advanced.html">Amiga GFA BASIC base-manual I/O, graphics, event, and advanced-programming extraction</a></li><li><a href="amiga-base-manual-io-graphics-events-advanced-details.html">Amiga GFA BASIC base-manual I/O, graphics, event, and advanced-programming details</a></li><li><a href="amiga-base-manual-numeric-string-functions.html">Amiga GFA BASIC base-manual numeric and string function extraction</a></li><li><a href="amiga-gfa-basic-35-addendum-inventory.html">Amiga GFA-BASIC 3.5 interpreter addendum — extracted feature inventory</a></li><li><a href="amiga-gfa-basic-candidates.toml">3.5 candidate manifest</a></li><li><a href="amiga-gfa-basic-candidate-report.html">Amiga GFA BASIC 3.5 candidate verification report</a></li><li><a href="amiga-gfa-basic-language-population-policy.html">Amiga GFA BASIC language population policy</a></li><li><a href="amiga-gfa-basic-3.03-ocr-index.html">German Amiga GFA BASIC book: OCR index and edition notes</a></li><li><a href="amiga-runtime-ocr-audit.html">Amiga runtime workflow OCR audit</a></li><li><a href="README.html">Research materials</a></li><li><a href="amiga-gfa-test-output.html">Amiga GFA BASIC test output</a></li><li><a href="amiga-gfa-basic-dqh-source-inventory.html">Amiga GFA BASIC commands observed in dqh-amiga</a></li><li><a href="amiga-emulator-lab.html">Amiga emulator experiment lab</a></li><li><a href="amiga-gfa-basic-35-lst-probes.html">Amiga GFA BASIC 3.5 interpreter probes from text listings</a></li><li><a href="amiga-gfa-basic-352-runtime-baseline.html">Amiga GFA BASIC 3.52 runtime baseline</a></li><li><a href="amiga-gfa-basic-binary-analysis.html">Amiga GFA-BASIC binary analysis</a></li><li><a href="amiga-base-manual-variable-array-conversion-functions.html">Amiga GFA BASIC base-manual variable, array, and conversion functions</a></li><li><a href="amiga-gfa-basic-chapter-7-program-handling-evidence.html">Amiga GFA BASIC Chapter 7 — program handling evidence</a></li><li><a href="amiga-gfa-basic-chapter-8-graphics-evidence.html">Amiga GFA BASIC Chapter 8 — graphics compatibility evidence</a></li><li><a href="amiga-gfa-basic-chapter-9-event-window-evidence.html">Amiga GFA BASIC Chapter 9 — event, menu, screen and window evidence</a></li><li><a href="amiga-gfa-basic-chapter-10-advanced-programming-evidence.html">Amiga GFA BASIC Chapter 10 — advanced programming evidence</a></li><li><a href="amiga-gfa-basic-chapter-11-system-routines-evidence.html">Amiga GFA BASIC Chapter 11 — system-routine evidence</a></li><li><a href="amiga-gfa-basic-chapter-12-appendices-index-evidence.html">Amiga GFA BASIC Chapter 12 — appendix and index evidence</a></li><li><a href="https://github.com/vsimko/gfabasic-rust/blob/main/scripts/validate_amiga_chapter_inventories.py">Chapter inventory validator</a></li><li><a href="amiga-gfa-basic-3.0-command-index.html">Amiga GFA BASIC 3.0 command index — grouped cross-check</a></li><li><a href="amiga-gfa-basic-3.0-statement-command-candidates.html">Amiga GFA BASIC 3.0 statement and command candidate catalogue</a></li><li><a href="amiga-gfa-basic-3.0-base-inventory.html">Amiga GFA BASIC 3.0 base-manual inventory</a></li><li><a href="amiga-gfa-basic-3.0-expressions-builtins-control-flow.html">Amiga GFA BASIC 3.0 expression, intrinsic and control-flow evidence</a></li><li><a href="amiga-gfa-basic-3.0-control-file-data-io.html">Amiga GFA BASIC 3.0 control, file and data I/O evidence</a></li><li><a href="amiga-gfa-basic-3.0-graphics-evidence.html">GFA BASIC 3.0 Amiga — graphics evidence</a></li><li><a href="amiga-gfa-basic-3.0-events-windows-evidence.html">GFA BASIC 3.0 Amiga — event, menu, screen and window evidence</a></li><li><a href="amiga-gfa-basic-3.0-system-routines-evidence.html">GFA BASIC 3.0 Amiga — operating-system routine evidence</a></li><li><a href="amiga-gfa-basic-3.0-advanced-programming-evidence.html">GFA BASIC 3.0 Amiga — advanced programming evidence</a></li><li><a href="amiga-gfa-basic-3.0-appendix-index-evidence.html">GFA BASIC 3.0 Amiga — appendix and command-index evidence</a></li><li><a href="amiga-gfa-basic-3.0-german-source-notes.html">German Amiga GFA BASIC 3.0 source — initial verification notes</a></li><li><a href="amiga-gfa-basic-3.0-procedure-error-details.html">GFA BASIC 3.0 Amiga — procedures, functions and error-flow evidence</a></li><li><a href="amiga-gfa-basic-3.0-screen-window-details.html">GFA BASIC 3.0 Amiga — screen and window command details</a></li><li><a href="amiga-gfa-basic-3.0-output-device-details.html">GFA BASIC 3.0 Amiga — output, cursor, mouse and sound evidence</a></li><li><a href="amiga-gfa-basic-3.0-menu-event-details.html">GFA BASIC 3.0 Amiga — menu and event details</a></li><li><a href="amiga-gfa-basic-3.0-bob-object-details.html">GFA BASIC 3.0 Amiga — BOB and OBJECT API evidence</a></li><li><a href="amiga-gfa-basic-3.0-source-format-editor-evidence.html">Amiga GFA BASIC 3.0 — source composition and editor evidence</a></li><li><a href="amiga-gfa-basic-35-primary-reference.html">Amiga GFA-BASIC 3.5 primary reference and target decision</a></li><li><a href="amiga-gfa-basic-35-german-book-crosscheck.html">Amiga GFA-BASIC 3.5 — independent German-book cross-check</a></li><li><a href="amiga-book-gfa35-chapter18-19-extraction.html">GFA-BASIC 3.5 additions documented in the Amiga book</a></li><li><a href="amiga-gfa-basic-35-editor-feature-audit.html">Amiga GFA BASIC 3.5 — editor feature audit</a></li><li><a href="amiga-gfa-basic-35-lexer-evidence.html">Amiga GFA BASIC 3.5 lexer evidence inventory</a></li><li><a href="amiga-gfa-basic-35-matrix-arithmetic-analysis-audit.html">Amiga GFA BASIC 3.5 — matrix arithmetic and analysis audit</a></li><li><a href="amiga-gfa-basic-35-matrix-io-copy-audit.html">Amiga GFA BASIC 3.5 — matrix I/O and copy declaration audit</a></li><li><a href="amiga-gfa-basic-35-five-declaration-audit.html">Amiga GFA BASIC 3.5 — five declaration-level audit blocks</a></li><li><a href="amiga-gfa-basic-35-five-more-declaration-audit.html">Amiga GFA BASIC 3.5 — five more declaration-level audit blocks</a></li><li><a href="amiga-gfa-basic-35-guru-declaration-audit.html">Amiga GFA BASIC 3.5 — GURU declaration audit</a></li><li><a href="atari-gfa-book-diskette.html">Atari GFA BASIC book diskette — source-corpus research notes</a></li><li><a href="atari-gfa-book-systematic-review.html">Systematic review of *Das große GFA-BASIC-Buch* (Atari ST)</a></li><li><a href="aminet-catalogue.html">Aminet GFA BASIC package survey</a></li><li><a href="gfalist-build-and-fixture-validation.html">gfalist build and fixture validation</a></li><li><a href="gfalist-format-vs-rust-frontend.html">gfalist format notes vs. the Rust frontend</a></li><li><a href="amiga-gfa-basic-35-base-function-use-audit.html">Amiga GFA BASIC 3.5 — inherited function evidence from both manuals</a></li><li><a href="amiga-gfa-basic-35-statement-operator-audit.html">Amiga GFA BASIC 3.5 — inherited statement and operator evidence</a></li></ul></nav>
+    <main class="docs-content">
+      <article>
+        <h1>Amiga GFA BASIC 3.5 candidate verification report</h1>
+        <p class="docs-meta"><span>Research Report</span></p>
+        <h1 id="amiga-gfa-basic-35-candidate-verification-report">Amiga GFA BASIC 3.5 candidate verification report</h1>
+<blockquote>
+<p>Generated from <code>amiga-gfa-basic-candidates.toml</code>. Status describes evidence of 3.5 applicability, not implementation or runtime support.</p>
+</blockquote>
+<h2 id="summary">Summary</h2>
+<table>
+<thead>
+<tr>
+<th>Status</th>
+<th style="text-align:right">Entries</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>candidate</td>
+<td style="text-align:right">0</td>
+</tr>
+<tr>
+<td>confirmed-in-3.5</td>
+<td style="text-align:right">30</td>
+</tr>
+<tr>
+<td>contradicted</td>
+<td style="text-align:right">0</td>
+</tr>
+<tr>
+<td>documented-in-3.0-only</td>
+<td style="text-align:right">99</td>
+</tr>
+<tr>
+<td>unresolved</td>
+<td style="text-align:right">0</td>
+</tr>
+</tbody>
+</table>
+<h2 id="unresolved-and-pending-candidates">Unresolved and pending candidates</h2>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Candidate</th>
+<th>Source scope</th>
+<th>Printed pages</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>—</td>
+<td>None</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<h2 id="documented-in-the-30-base-only-35-applicability-not-established">Documented in the 3.0 base only (3.5 applicability not established)</h2>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Candidate</th>
+<th>Printed pages</th>
+<th>Evidence boundary</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>amiga.base.advanced</code></td>
+<td>Advanced programming and hardware features</td>
+<td>10-2–10-14</td>
+<td>SPRITE, STICK and STRIG have selected notes; CLI, EXEC, SAY, FD-files and object commands need reconciliation.</td>
+</tr>
+<tr>
+<td><code>amiga.base.appendices</code></td>
+<td>Appendix tables and command index</td>
+<td>12-2–12-19</td>
+<td>Reference material is not a declaration candidate by itself; index entries must be checked against their cited chapter pages.</td>
+</tr>
+<tr>
+<td><code>amiga.base.events-windows</code></td>
+<td>Events, menus, screens and windows</td>
+<td>9-2–9-37</td>
+<td>FILESELECT and selected screen/window topics are inventoried; event/menu/window behavior needs systematic 3.5 verification.</td>
+</tr>
+<tr>
+<td><code>amiga.base.files</code></td>
+<td>Disk handling and file organization</td>
+<td>6-2–6-21</td>
+<td>File-channel I/O is partially extracted; other disk and random-access operations need separate 3.5 checks.</td>
+</tr>
+<tr>
+<td><code>amiga.base.graphics</code></td>
+<td>Graphics language commands</td>
+<td>8-2–8-24</td>
+<td>Selected drawing and fill operations have page-backed notes; full graphics surface is not individually reconciled.</td>
+</tr>
+<tr>
+<td><code>amiga.base.input-output</code></td>
+<td>Input and output</td>
+<td>5-2–5-22</td>
+<td>Selected command forms have page-backed notes; complete declaration-by-declaration 3.5 reconciliation remains outstanding.</td>
+</tr>
+<tr>
+<td><code>amiga.base.numeric-string</code></td>
+<td>Numeric and string functions</td>
+<td>4-2–4-36</td>
+<td>The base inventory extracts selected semantics only; the full Chapter 4 family is not individually verified for 3.5.</td>
+</tr>
+<tr>
+<td><code>amiga.base.operators</code></td>
+<td>Operators and precedence</td>
+<td>3-2–3-16</td>
+<td>OCR-sensitive operator glyphs and precedence spellings require page-image and 3.5 reconciliation.</td>
+</tr>
+<tr>
+<td><code>amiga.base.os-libraries</code></td>
+<td>Amiga OS library calls</td>
+<td>11-2–11-92</td>
+<td>Seven library families and many routines are inventoried; exact wrapper contracts, OCR details and 3.5 availability remain unverified.</td>
+</tr>
+<tr>
+<td><code>amiga.base.program-control</code></td>
+<td>Program handling and control flow</td>
+<td>7-2–7-55</td>
+<td>Selected conditionals, loops and branching forms are extracted; procedures, events, errors and editor commands remain to be reconciled.</td>
+</tr>
+<tr>
+<td><code>amiga.base.variables-memory</code></td>
+<td>Variables, arrays and memory</td>
+<td>2-2–2-44</td>
+<td>Chapter 2 contains multiple declarations; this family row is a tracking boundary, not a claim that every listed feature is absent from 3.5.</td>
+</tr>
+<tr>
+<td><code>amiga.base10.sprite</code></td>
+<td>SPRITE</td>
+<td>10-5–10-6</td>
+<td>Defines, frees, moves, enables and disables Amiga hardware sprites; source describes eight sprite numbers and shared registers. 3.5 availability is unresolved.</td>
+</tr>
+<tr>
+<td><code>amiga.base10.stick-strig</code></td>
+<td>STICK / STRIG</td>
+<td>10-7</td>
+<td>Queries joystick position and fire-button state; port 0 interaction with mouse/Intuition is noted. 3.5 availability is unresolved.</td>
+</tr>
+<tr>
+<td><code>amiga.base2.absolute</code></td>
+<td>ABSOLUTE</td>
+<td>2-39</td>
+<td>Address/variable binding feature in the base manual; classification and detailed signature remain source-scoped.</td>
+</tr>
+<tr>
+<td><code>amiga.base2.asc-chr</code></td>
+<td>ASC / CHR$</td>
+<td>2-13</td>
+<td>ASC returns the first character code (zero for empty input); CHR$ uses the low byte. 3.0 base-manual evidence only.</td>
+</tr>
+<tr>
+<td><code>amiga.base2.bin-oct-hex</code></td>
+<td>BIN$ / OCT$</td>
+<td>2-14</td>
+<td>Integer-to-base-2/base-8 string conversions; optional width parameters are documented. No direct 3.5 addendum example use was found.</td>
+</tr>
+<tr>
+<td><code>amiga.base2.bmove</code></td>
+<td>BMOVE</td>
+<td>2-43</td>
+<td>Copies cnt bytes from src to dst; overlapping source/destination blocks are supported, and even parameters execute faster than odd ones. 3.5 applicability is unverified.</td>
+</tr>
+<tr>
+<td><code>amiga.base2.cint-cfloat</code></td>
+<td>CINT / CFLOAT</td>
+<td>2-17</td>
+<td>CINT rounds float to integer; CFLOAT converts integer to float. The manual explicitly says these are meaningful only to the compiler, not interpreter built-ins.</td>
+</tr>
+<tr>
+<td><code>amiga.base2.cvx</code></td>
+<td>CVI / CVL / CVS (CVF spelling disputed)</td>
+<td>2-18–2-19</td>
+<td>Binary-string conversions; prose names CVS while the MKx counterpart list includes MKF$. Preserve the source naming mismatch; do not normalize a CVF alias.</td>
+</tr>
+<tr>
+<td><code>amiga.base2.date-time</code></td>
+<td>DATE$ / TIME$</td>
+<td>2-26</td>
+<td>Read/write date and read time string forms are described; the source text's DATE$/DATES and TIME$/TIMES naming is retained for further checking.</td>
+</tr>
+<tr>
+<td><code>amiga.base2.dump</code></td>
+<td>DUMP</td>
+<td>2-31</td>
+<td>DUMP heading and page locator are documented; preserve uncertainty about callable form until detailed page transcription.</td>
+</tr>
+<tr>
+<td><code>amiga.base2.false-true-pi</code></td>
+<td>FALSE / TRUE / PI</td>
+<td>2-25</td>
+<td>FALSE=0, TRUE=-1, PI is the mathematical constant. 3.0 base-manual evidence only.</td>
+</tr>
+<tr>
+<td><code>amiga.base2.fre</code></td>
+<td>FRE</td>
+<td>2-29</td>
+<td>Memory-availability query documented in the base manual; argument/return variants need exact signature extraction.</td>
+</tr>
+<tr>
+<td><code>amiga.base2.malloc-mfree</code></td>
+<td>MALLOC / MFREE</td>
+<td>2-41–2-42</td>
+<td>Memory allocation/release forms are documented; allocator/error/ownership semantics are not promoted to 3.5.</td>
+</tr>
+<tr>
+<td><code>amiga.base2.mkx</code></td>
+<td>MKI$ / MKL$ / MKS$ / MKF$ / MKD$</td>
+<td>2-18–2-19</td>
+<td>Numeric-to-binary-string conversion family; counterpart mapping inherits the CVx naming inconsistency. 3.0 base-manual evidence only.</td>
+</tr>
+<tr>
+<td><code>amiga.base2.peek</code></td>
+<td>PEEK / DPEEK / LPEEK</td>
+<td>2-36</td>
+<td>Reads one, two or four bytes respectively from address x. The source warns that even addresses must be used; 3.5 availability remains unverified.</td>
+</tr>
+<tr>
+<td><code>amiga.base2.pointer-star</code></td>
+<td>* (array descriptor pointer form)</td>
+<td>2-33</td>
+<td>Indirect array-descriptor form is documented alongside ARRPTR; keep separate from multiplication operator.</td>
+</tr>
+<tr>
+<td><code>amiga.base2.poke-family</code></td>
+<td>POKE / DPOKE / LPOKE</td>
+<td>2-35</td>
+<td>Writes one, two or four bytes respectively to address x. The prose prints DPOKE x.y while the syntax block gives DPOKE x,y; LPOKE is shown with a stray semicolon in the syntax block. Even addresses are required for DPOKE and LPOKE. Preserve these source details; 3.5 applicability is unverified.</td>
+</tr>
+<tr>
+<td><code>amiga.base2.reserve</code></td>
+<td>RESERVE</td>
+<td>2-44</td>
+<td>RESERVE [n] sets the memory size GFA-BASIC should use; the manual says variables are erased when it executes and recommends using it only at program start. 3.5 applicability is unverified.</td>
+</tr>
+<tr>
+<td><code>amiga.base2.swap-command</code></td>
+<td>SWAP command</td>
+<td>2-19–2-20</td>
+<td>Exchanges same-type variables or array values; the array form exchanges descriptors, and SWAP *c,d() supports indirect array naming. Explicitly distinct from the SWAP() bit-operation function in Chapter 4. 3.5 applicability is unverified.</td>
+</tr>
+<tr>
+<td><code>amiga.base2.timer</code></td>
+<td>TIMER</td>
+<td>2-28</td>
+<td>Timer function heading and page locator in the base manual; exact return/tick contract is not promoted.</td>
+</tr>
+<tr>
+<td><code>amiga.base2.type</code></td>
+<td>TYPE</td>
+<td>2-30</td>
+<td>Variable type query documented in the base manual; 3.5 applicability unverified.</td>
+</tr>
+<tr>
+<td><code>amiga.base2.typed-memory-access</code></td>
+<td>BYTE{} / CARD{} / INT{} / WORD{} / LONG{} / {} / FLOAT{} / SINGLE{} / DOUBLE{} / CHAR{}</td>
+<td>2-37–2-38</td>
+<td>Each typed address form is both a value-reading function (for example y=BYTE{x}) and a writing command (for example BYTE{x}=y). The source associates forms with byte, integer, GFA 3.0 float, IEEE single/double and null-terminated string layouts; {} is described as similar to LONG{}. Alignment warnings and OCR-sensitive spellings are retained as source-only evidence, not 3.5 declarations.</td>
+</tr>
+<tr>
+<td><code>amiga.base2.val</code></td>
+<td>VAL / VAL?</td>
+<td>2-16</td>
+<td>VAL parses a numeric prefix; VAL? reports consumed characters. 3.0 base-manual evidence only.</td>
+</tr>
+<tr>
+<td><code>amiga.base2.varptr-arrptr</code></td>
+<td>VARPTR / ARRPTR</td>
+<td>2-33</td>
+<td>Distinguishes element/string-data address from array-descriptor address. 3.0 base-manual evidence only.</td>
+</tr>
+<tr>
+<td><code>amiga.base2.void</code></td>
+<td>VOID</td>
+<td>2-40</td>
+<td>VOID heading and page locator are documented; exact return semantics remain unverified.</td>
+</tr>
+<tr>
+<td><code>amiga.base3.comparison-equality</code></td>
+<td>= / == / &lt;&gt;</td>
+<td>3-2, 3-11–3-16</td>
+<td>= compares and also assigns in variable context; == is approximate numeric equality (8.5 decimal places); &lt;&gt; is inequality.</td>
+</tr>
+<tr>
+<td><code>amiga.base3.integer-divide-mod</code></td>
+<td>DIV / MOD</td>
+<td>3-2</td>
+<td>Whole-number division and modulo precedence documented; no 3.5 confirmation.</td>
+</tr>
+<tr>
+<td><code>amiga.base3.logical</code></td>
+<td>NOT / AND / OR / XOR / IMP / EQV</td>
+<td>3-2–3-9</td>
+<td>NOT is unary; remaining operators are binary; logical truth and 32-bit bitwise behavior are described. 3.0 base-manual evidence only.</td>
+</tr>
+<tr>
+<td><code>amiga.base3.power</code></td>
+<td>^</td>
+<td>3-2</td>
+<td>Power operator precedence is documented in the 3.0 base manual only.</td>
+</tr>
+<tr>
+<td><code>amiga.base3.precedence</code></td>
+<td>Operator precedence hierarchy</td>
+<td>3-2</td>
+<td>Page-image transcription gives 11 precedence levels; comparison rows contain OCR/source spelling ambiguity. No associativity inferred.</td>
+</tr>
+<tr>
+<td><code>amiga.base3.relational</code></td>
+<td>&lt; / &gt; / &lt;= / &gt;= and =&lt; / =&gt;</td>
+<td>3-2, 3-13–3-16</td>
+<td>Text explicitly accepts &lt;= and =&lt;, and &gt;= and =&gt;. Preserve both alternate spellings; string ordering is separately described.</td>
+</tr>
+<tr>
+<td><code>amiga.base3.string-plus</code></td>
+<td>String concatenation +</td>
+<td>3-2–3-10</td>
+<td>Plus is documented for string concatenation as well as numeric addition; 3.0 base-manual evidence only.</td>
+</tr>
+<tr>
+<td><code>amiga.base3.unary-plus</code></td>
+<td>Unary +</td>
+<td>3-2, 3-10</td>
+<td>Unary plus is listed in the 3.0 precedence table but is not used in the audited 3.5 Chapter 18–19 examples; unary minus is tracked separately.</td>
+</tr>
+<tr>
+<td><code>amiga.base4.abs-sgn</code></td>
+<td>ABS() / SGN()</td>
+<td>4-12</td>
+<td>Absolute value and sign (-1, 0, 1) functions documented.</td>
+</tr>
+<tr>
+<td><code>amiga.base4.bit-test</code></td>
+<td>BCLR() / BSET() / BCHG() / BTST()</td>
+<td>4-19–4-20</td>
+<td>Zero-based bit indices masked to 0–31; BTST is described with 1/0 result in this section.</td>
+</tr>
+<tr>
+<td><code>amiga.base4.bitwise-and-or-xor</code></td>
+<td>AND() / OR() / XOR()</td>
+<td>4-23</td>
+<td>Integer bitwise function forms; distinct from logical operators as expression operators pending exact parser treatment.</td>
+</tr>
+<tr>
+<td><code>amiga.base4.bitwise-imp-eqv</code></td>
+<td>IMP() / EQV()</td>
+<td>4-24</td>
+<td>Integer bitwise function forms documented separately from logical truth tables.</td>
+</tr>
+<tr>
+<td><code>amiga.base4.byte-card-word</code></td>
+<td>BYTE() / CARD() / WORD()</td>
+<td>4-26</td>
+<td>Byte/word conversion and extension operations documented.</td>
+</tr>
+<tr>
+<td><code>amiga.base4.deg-rad</code></td>
+<td>DEG() / RAD()</td>
+<td>4-7</td>
+<td>Degree/radian conversion functions documented in the 3.0 base manual.</td>
+</tr>
+<tr>
+<td><code>amiga.base4.exp-log</code></td>
+<td>EXP() / LOG() / LOG10()</td>
+<td>4-9</td>
+<td>Exponential and logarithm family; retain LOG10 as candidate pending precise page-level confirmation.</td>
+</tr>
+<tr>
+<td><code>amiga.base4.instr-rinstr</code></td>
+<td>INSTR() / RINSTR()</td>
+<td>4-30–4-31</td>
+<td>Forward/reverse substring search functions; preserve source-specific index semantics.</td>
+</tr>
+<tr>
+<td><code>amiga.base4.int-trunc-fix-frac</code></td>
+<td>TRUNC() / FIX() / FRAC()</td>
+<td>4-13</td>
+<td>The base manual distinguishes truncation from floor for negative values and describes TRUNC/FRAC. INT is split into its own entry and confirmed by the 3.5 companion book; the remaining functions have no direct 3.5 evidence.</td>
+</tr>
+<tr>
+<td><code>amiga.base4.integer-arithmetic-functions</code></td>
+<td>ADD() / SUB() / MUL() / DIV() / MOD()</td>
+<td>4-3</td>
+<td>Integer-expression function forms are distinct from same-named mutating commands on pp. 4-2–4-3; decimal places are ignored.</td>
+</tr>
+<tr>
+<td><code>amiga.base4.left-right</code></td>
+<td>LEFT$() / RIGHT$()</td>
+<td>4-27</td>
+<td>Substring functions; omitted count returns one character.</td>
+</tr>
+<tr>
+<td><code>amiga.base4.len-trim</code></td>
+<td>LEN() / TRIM$()</td>
+<td>4-34</td>
+<td>String length and trim functions documented.</td>
+</tr>
+<tr>
+<td><code>amiga.base4.lset-rset</code></td>
+<td>LSET / RSET</td>
+<td>4-36</td>
+<td>Left/right justified assignment into existing string variable; padding/truncation details remain unspecified.</td>
+</tr>
+<tr>
+<td><code>amiga.base4.mid</code></td>
+<td>MID$()</td>
+<td>4-28</td>
+<td>Function returns substring; separate MID$ command is on p. 4-29 and is not merged here.</td>
+</tr>
+<tr>
+<td><code>amiga.base4.mid-command</code></td>
+<td>MID$ command</td>
+<td>4-29</td>
+<td>Mutates an existing string variable; not the MID$ value-returning function.</td>
+</tr>
+<tr>
+<td><code>amiga.base4.min-max</code></td>
+<td>MIN() / MAX()</td>
+<td>4-16</td>
+<td>Accept a list of numeric or string expressions and return the extremum.</td>
+</tr>
+<tr>
+<td><code>amiga.base4.odd-even</code></td>
+<td>ODD() / EVEN()</td>
+<td>4-15</td>
+<td>Boolean result is -1/0; zero is even.</td>
+</tr>
+<tr>
+<td><code>amiga.base4.pred-succ</code></td>
+<td>PRED()</td>
+<td>4-11, 4-33</td>
+<td>The base manual documents numeric and string PRED forms. The 3.5 addendum examples use SUCC, not PRED; PRED remains 3.0-only evidence.</td>
+</tr>
+<tr>
+<td><code>amiga.base4.quadrant-trigonometric</code></td>
+<td>SINQ() / COSQ()</td>
+<td>4-6</td>
+<td>Degree-based interpolated lookup-table functions; interpolation described in 1/16-degree steps.</td>
+</tr>
+<tr>
+<td><code>amiga.base4.random</code></td>
+<td>RANDOM() / RANDOMIZE</td>
+<td>4-17–4-18</td>
+<td>The base manual documents RANDOM and RANDOMIZE. RND is split into its own entry and confirmed by the 3.5 companion book; these remaining forms have no direct 3.5 evidence.</td>
+</tr>
+<tr>
+<td><code>amiga.base4.rotate</code></td>
+<td>ROL() / ROR()</td>
+<td>4-22</td>
+<td>Rotate within selected byte/word/longword width; distinct from shifts.</td>
+</tr>
+<tr>
+<td><code>amiga.base4.round</code></td>
+<td>ROUND()</td>
+<td>4-14</td>
+<td>ROUND(x) and ROUND(x,n) are documented; negative n rounds before decimal point.</td>
+</tr>
+<tr>
+<td><code>amiga.base4.shift</code></td>
+<td>SHL() / SHR()</td>
+<td>4-21–4-22</td>
+<td>Width-sensitive byte/word/longword shift forms are documented.</td>
+</tr>
+<tr>
+<td><code>amiga.base4.string-space</code></td>
+<td>SPACE$()</td>
+<td>4-32</td>
+<td>The base manual documents SPACE$ as a string constructor. The 3.5 addendum examples use STRING$ but do not directly use SPACE$.</td>
+</tr>
+<tr>
+<td><code>amiga.base4.swap</code></td>
+<td>SWAP()</td>
+<td>4-25</td>
+<td>Function swaps upper/lower 16-bit words; explicitly distinct from Chapter 2 SWAP command.</td>
+</tr>
+<tr>
+<td><code>amiga.base4.trigonometric</code></td>
+<td>SIN() / COS() / TAN()</td>
+<td>4-5</td>
+<td>Trigonometric functions use radians in the base manual.</td>
+</tr>
+<tr>
+<td><code>amiga.base4.upper</code></td>
+<td>UPPER$()</td>
+<td>4-35</td>
+<td>Uppercase conversion function documented.</td>
+</tr>
+<tr>
+<td><code>amiga.base5.form-input</code></td>
+<td>FORM INPUT / FORM INPUT AS</td>
+<td>5-6</td>
+<td>Edits a string field of width 1–255; FORM INPUT AS starts from the current value. 3.5 availability is unresolved.</td>
+</tr>
+<tr>
+<td><code>amiga.base5.inkey</code></td>
+<td>INKEY$</td>
+<td>5-2</td>
+<td>Reads keyboard input; special keys use a CSI sequence. 3.0 source fact only; 3.5 availability is unresolved.</td>
+</tr>
+<tr>
+<td><code>amiga.base5.input</code></td>
+<td>INPUT</td>
+<td>5-3–5-4</td>
+<td>Reads numeric/string variables with optional prompt; window behavior and numeric re-entry are described. 3.5 availability is unresolved.</td>
+</tr>
+<tr>
+<td><code>amiga.base5.line-input</code></td>
+<td>LINE INPUT</td>
+<td>5-5</td>
+<td>Reads string input while allowing commas in the entered text. 3.5 availability is unresolved.</td>
+</tr>
+<tr>
+<td><code>amiga.base5.print-using</code></td>
+<td>PRINT USING</td>
+<td>5-9</td>
+<td>Formatted screen output; exact placeholder grammar remains unreviewed. 3.5 availability is unresolved.</td>
+</tr>
+<tr>
+<td><code>amiga.base5.print-write</code></td>
+<td>PRINT AT / WRITE</td>
+<td>5-7–5-8</td>
+<td>PRINT AT and WRITE remain 3.0 base-manual candidates. PRINT and LOCATE are tracked separately because the 3.5 companion examples demonstrate those forms, not these siblings.</td>
+</tr>
+<tr>
+<td><code>amiga.base6.file-input</code></td>
+<td>INPUT # / LINE INPUT #</td>
+<td>6-15</td>
+<td>Reads channel data as values or lines; keep channel forms distinct from screen input. 3.5 availability is unresolved.</td>
+</tr>
+<tr>
+<td><code>amiga.base6.file-output</code></td>
+<td>PRINT # / WRITE #</td>
+<td>6-16</td>
+<td>Writes expressions through a data channel; PRINT # supports USING but not PRINT AT. 3.5 availability is unresolved.</td>
+</tr>
+<tr>
+<td><code>amiga.base6.inp-out</code></td>
+<td>INP / OUT</td>
+<td>6-13</td>
+<td>INP reads one byte from an opened data channel using INP(#n); OUT writes byte values. The addendum examples show ~INP(2), which is not the documented INP(#n) form and is not treated as confirmation. 3.5 availability remains unresolved.</td>
+</tr>
+<tr>
+<td><code>amiga.base6.input-string</code></td>
+<td>INPUT$</td>
+<td>6-14</td>
+<td>Reads a specified character count from keyboard or an optional file channel. 3.5 availability is unresolved.</td>
+</tr>
+<tr>
+<td><code>amiga.base7.do-loop</code></td>
+<td>DO / LOOP variants</td>
+<td>7-17–7-19</td>
+<td>Beginning- and end-tested WHILE/UNTIL forms are described; exact grammar remains page-sensitive. 3.5 availability is unresolved.</td>
+</tr>
+<tr>
+<td><code>amiga.base7.elseif</code></td>
+<td>ELSE IF / ELSEIF</td>
+<td>7-6–7-7</td>
+<td>Chained conditional branches; editor spelling varies and needs lexer/editor confirmation. 3.5 availability is unresolved.</td>
+</tr>
+<tr>
+<td><code>amiga.base7.exit-if</code></td>
+<td>EXIT IF</td>
+<td>7-20</td>
+<td>Exits the active loop when its Boolean condition is satisfied; allowed within IF and SELECT structures per the source. 3.5 availability is unresolved.</td>
+</tr>
+<tr>
+<td><code>amiga.base7.if</code></td>
+<td>IF / ELSE / ENDIF</td>
+<td>7-4–7-5</td>
+<td>Conditional execution; THEN is optional and any nonzero numeric expression is logically true. 3.5 availability is unresolved.</td>
+</tr>
+<tr>
+<td><code>amiga.base7.on-error</code></td>
+<td>ON ERROR / ON ERROR GOSUB</td>
+<td>7-29</td>
+<td>The 3.0 manual documents reset-to-default handling and procedure-based error handling. The 3.5 addendum confirms that GURU Meditation may transfer to ONERROR GOSUB, but does not restate the complete syntax or general 3.5 availability.</td>
+</tr>
+<tr>
+<td><code>amiga.base7.ongosub</code></td>
+<td>ON GOSUB</td>
+<td>7-8</td>
+<td>Selects a procedure by numeric index; out-of-range selection calls none. 3.5 availability is unresolved.</td>
+</tr>
+<tr>
+<td><code>amiga.base7.repeat-until</code></td>
+<td>REPEAT / UNTIL</td>
+<td>7-15</td>
+<td>Post-tested loop; body executes at least once. 3.5 availability is unresolved.</td>
+</tr>
+<tr>
+<td><code>amiga.base7.resume</code></td>
+<td>RESUME / RESUME NEXT / RESUME label</td>
+<td>7-29</td>
+<td>The 3.0 manual documents retry, continue-next and continue-at-label behavior, plus a FATAL-error restriction. The 3.5 addendum specifically disallows RESUME NEXT and RESUME LABEL after a GURU-triggered ONERROR GOSUB in compiled 3.5 programs; broader 3.5 behavior remains unverified.</td>
+</tr>
+<tr>
+<td><code>amiga.base7.select-case</code></td>
+<td>SELECT / CASE / DEFAULT / ENDSELECT</td>
+<td>7-9–7-10</td>
+<td>Numeric or short-string selector; CASE supports values, ranges and lists. 3.5 availability is unresolved.</td>
+</tr>
+<tr>
+<td><code>amiga.base8.box</code></td>
+<td>BOX / PBOX</td>
+<td>8-15</td>
+<td>Draws outlined or filled rectangles. 3.5 availability is unresolved.</td>
+</tr>
+<tr>
+<td><code>amiga.base8.circle-ellipse</code></td>
+<td>CIRCLE / PCIRCLE / ELLIPSE / PELLIPSE</td>
+<td>8-16</td>
+<td>Draws outlined or filled circles and ellipses. 3.5 availability is unresolved.</td>
+</tr>
+<tr>
+<td><code>amiga.base8.clip</code></td>
+<td>CLIP</td>
+<td>8-9</td>
+<td>Restricts graphics output to a rectangle; source explicitly excludes GET and PUT. 3.5 availability is unresolved.</td>
+</tr>
+<tr>
+<td><code>amiga.base8.deffill</code></td>
+<td>DEFFILL</td>
+<td>8-3–8-4</td>
+<td>Configures fill color/style/pattern for filled graphics operations; pattern-string limits are described. 3.5 availability is unresolved.</td>
+</tr>
+<tr>
+<td><code>amiga.base8.plot-line-draw</code></td>
+<td>PLOT / LINE / DRAW forms other than DRAW TO</td>
+<td>8-10–8-14</td>
+<td>The 3.5 companion example demonstrates DRAW TO only (printed p. 471); PLOT, LINE and other DRAW forms remain 3.0 base-manual candidates.</td>
+</tr>
+<tr>
+<td><code>amiga.base8.point</code></td>
+<td>POINT</td>
+<td>8-18</td>
+<td>Returns the color value at a screen coordinate. 3.5 availability is unresolved.</td>
+</tr>
+<tr>
+<td><code>amiga.base8.poly</code></td>
+<td>POLYLINE / POLYFILL</td>
+<td>8-17</td>
+<td>Uses coordinate arrays; polygon endpoints are connected automatically. 3.5 availability is unresolved.</td>
+</tr>
+<tr>
+<td><code>amiga.base8.setcolor</code></td>
+<td>SETCOLOR</td>
+<td>8-2</td>
+<td>SETCOLOR's palette-component form remains a 3.0 base-manual candidate. The 3.5 companion example uses COLOR 3 and COLOR 1; COLOR is tracked separately.</td>
+</tr>
+<tr>
+<td><code>amiga.base9.fileselect</code></td>
+<td>FILESELECT</td>
+<td>9-37–9-38</td>
+<td>Displays a file selector and returns the selected name or an empty string on Cancel. 3.5 availability is unresolved.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="confirmed-by-35-sources">Confirmed by 3.5 sources</h2>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Declaration family</th>
+<th>Original source</th>
+<th>3.5 evidence source</th>
+<th>3.5 evidence pages</th>
+<th>Evidence basis</th>
+<th>Qualification</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>amiga.35.combinatorics</code></td>
+<td>FACT, VARIAT, COMBIN</td>
+<td>3.5 addendum</td>
+<td>AM-INTERPRETER-35</td>
+<td>13-33–13-34 (469-page scan), 14-1–14-2 (combined update scan)</td>
+<td>Explicit 3.5 addendum declaration</td>
+<td>Factorial, permutations and combinations are explicitly enumerated as additional 3.5 functions.</td>
+</tr>
+<tr>
+<td><code>amiga.35.data-pointer</code></td>
+<td>_DATA and _DATA=</td>
+<td>3.5 addendum</td>
+<td>AM-INTERPRETER-35</td>
+<td>13-34–13-35 (469-page scan), 14-5 (combined update scan)</td>
+<td>Explicit 3.5 addendum declaration</td>
+<td>The leading underscore is confirmed by page-image review; query and restore the DATA pointer.</td>
+</tr>
+<tr>
+<td><code>amiga.35.editor-update</code></td>
+<td>Editor row layout, search and listing changes</td>
+<td>3.5 editor update</td>
+<td>AM-INTERPRETER-35</td>
+<td>1-25</td>
+<td>Explicit 3.5 addendum declaration</td>
+<td>Explicit editor update; this is editor behavior, not a language/runtime declaration.</td>
+</tr>
+<tr>
+<td><code>amiga.35.guru</code></td>
+<td>GURU statement and function</td>
+<td>3.5 addendum</td>
+<td>AM-INTERPRETER-35</td>
+<td>13-35–13-36 (469-page scan), 14-6–14-7 (combined update scan)</td>
+<td>Explicit 3.5 addendum declaration</td>
+<td>GURU checking control and GURU-number function are explicitly documented; crash-recovery tests require isolation.</td>
+</tr>
+<tr>
+<td><code>amiga.35.mat-analysis</code></td>
+<td>MAT NORM, MAT DET, MAT QDET, MAT RANG, MAT INV</td>
+<td>3.5 addendum</td>
+<td>AM-INTERPRETER-35</td>
+<td>13-31–13-39</td>
+<td>Explicit 3.5 addendum declaration</td>
+<td>The family is documented in Chapter 13. MAT INV destination-first order is established by the detailed definition and worked example on printed p. 13-30; the reversed summary form on p. 13-16 is treated as a source typo. Numerical edge cases remain unverified.</td>
+</tr>
+<tr>
+<td><code>amiga.35.mat-arithmetic</code></td>
+<td>MAT ADD, MAT SUB, MAT MUL</td>
+<td>3.5 addendum</td>
+<td>AM-INTERPRETER-35</td>
+<td>13-22–13-30</td>
+<td>Explicit 3.5 addendum declaration</td>
+<td>Element-wise, scalar, matrix-product and vector-product forms are documented. The 3.5 addendum explicitly defines MAT MUL array(),scalar as in-place multiplication of every field element by the scalar; this is source-verified syntax, not a runtime-conformance claim.</td>
+</tr>
+<tr>
+<td><code>amiga.35.mat-base</code></td>
+<td>MAT BASE</td>
+<td>3.5 addendum</td>
+<td>AM-INTERPRETER-35</td>
+<td>13-1–13-2</td>
+<td>Explicit 3.5 addendum declaration</td>
+<td>Explicitly documented in the version-specific Chapter 13 addendum; applicability is limited to the documented matrix operations.</td>
+</tr>
+<tr>
+<td><code>amiga.35.mat-copy</code></td>
+<td>MAT CPY, MAT XCPY, MAT TRANS</td>
+<td>3.5 addendum</td>
+<td>AM-INTERPRETER-35</td>
+<td>13-8–13-20</td>
+<td>Explicit 3.5 addendum declaration</td>
+<td>Detailed source-checked shape, offset, extent, transpose and vector-orientation rules are recorded in the addendum inventory.</td>
+</tr>
+<tr>
+<td><code>amiga.35.mat-generation</code></td>
+<td>MAT CLR, MAT SET, MAT ONE</td>
+<td>3.5 addendum</td>
+<td>AM-INTERPRETER-35</td>
+<td>13-2–13-3</td>
+<td>Explicit 3.5 addendum declaration</td>
+<td>Generation forms and floating-point field constraints are documented in Chapter 13.</td>
+</tr>
+<tr>
+<td><code>amiga.35.mat-io</code></td>
+<td>MAT READ, MAT PRINT, MAT INPUT</td>
+<td>3.5 addendum</td>
+<td>AM-INTERPRETER-35</td>
+<td>13-3–13-6</td>
+<td>Explicit 3.5 addendum declaration</td>
+<td>Chapter 13 explicitly documents vector/matrix data I/O forms.</td>
+</tr>
+<tr>
+<td><code>amiga.35.openw-negative-screen</code></td>
+<td>OPENW negative screen-number variant</td>
+<td>3.5 addendum</td>
+<td>AM-INTERPRETER-35</td>
+<td>13-34 (469-page scan), 14-3 (combined update scan)</td>
+<td>Explicit 3.5 addendum declaration</td>
+<td>Explicit variant opens a window on the current top screen.</td>
+</tr>
+<tr>
+<td><code>amiga.35.pcolor</code></td>
+<td>PCOLOR</td>
+<td>3.5 addendum</td>
+<td>AM-INTERPRETER-35</td>
+<td>13-34 (469-page scan), 14-4 (combined update scan)</td>
+<td>Explicit 3.5 addendum declaration</td>
+<td>Applies foreground and optional background colors to PRINT screen output.</td>
+</tr>
+<tr>
+<td><code>amiga.35.special-longwords</code></td>
+<td>_0 through _9</td>
+<td>3.5 addendum</td>
+<td>AM-INTERPRETER-35</td>
+<td>13-35 (469-page scan), 14-6 (combined update scan)</td>
+<td>Explicit 3.5 addendum declaration</td>
+<td>Ten special longword variables; persistence and clearing behavior are described in the addendum.</td>
+</tr>
+<tr>
+<td><code>amiga.base2.hex</code></td>
+<td>HEX$</td>
+<td>3.0 base manual</td>
+<td>AM-INTERPRETER-35</td>
+<td>13-36</td>
+<td>Direct example use</td>
+<td>The base manual documents HEX$(x[,y]). The 3.5 GURU example calls HEX$(GURU) (printed p. 13-36), confirming the one-argument form; the optional width form is not independently used in the addendum.</td>
+</tr>
+<tr>
+<td><code>amiga.base2.str</code></td>
+<td>STR$</td>
+<td>3.0 base manual</td>
+<td>AM-INTERPRETER-35</td>
+<td>13-3</td>
+<td>Direct documentation reference</td>
+<td>The 3.5 MAT PRINT description specifies number formatting as STR$(x,g,n) (printed p. 13-3). This confirms the three-argument form used for matrix output; other base-manual overloads are not independently restated.</td>
+</tr>
+<tr>
+<td><code>amiga.base3.multiply-divide</code></td>
+<td>* /</td>
+<td>3.0 base manual</td>
+<td>AM-BOOK-DE-1990</td>
+<td>470, 473</td>
+<td>Direct example use</td>
+<td>The Chapter 18 matrix-multiplication explanation uses numeric products (p. 470), and the normalization example divides by SQR(l) using 1/SQR(l) (p. 473). This confirms the shown numeric * and / forms, not precedence or all operand types.</td>
+</tr>
+<tr>
+<td><code>amiga.base3.numeric-add-sub</code></td>
+<td>Numeric + / -</td>
+<td>3.0 base manual</td>
+<td>AM-BOOK-DE-1990</td>
+<td>467, 470</td>
+<td>Direct example use</td>
+<td>The 3.5 companion book's MAT SUB example uses b()-c() (p. 467), and its matrix-multiplication explanation gives numeric addition expressions (p. 470). This confirms numeric + and - use in the shown expressions, not precedence or string concatenation.</td>
+</tr>
+<tr>
+<td><code>amiga.base3.unary-minus</code></td>
+<td>Unary -</td>
+<td>3.0 base manual</td>
+<td>AM-BOOK-DE-1990</td>
+<td>470</td>
+<td>Direct example use</td>
+<td>The Chapter 18 matrix-multiplication explanation includes negative operands such as 0.5*-1 (printed p. 470), demonstrating unary minus in a numeric expression. Unary plus is not demonstrated.</td>
+</tr>
+<tr>
+<td><code>amiga.base4.int</code></td>
+<td>INT()</td>
+<td>3.0 base manual</td>
+<td>AM-BOOK-DE-1990</td>
+<td>458</td>
+<td>Direct example use</td>
+<td>The 3.5 companion book's Chapter 18 matrix example uses INT(RND(1)*5) (printed p. 458), confirming the one-argument integer-conversion form.</td>
+</tr>
+<tr>
+<td><code>amiga.base4.rand</code></td>
+<td>RAND()</td>
+<td>3.0 base manual</td>
+<td>AM-INTERPRETER-35</td>
+<td>13-2</td>
+<td>Direct example use</td>
+<td>The 3.5 MAT SET example assigns RAND(10) to matrix elements (printed p. 13-2). This confirms the call form used, not all distribution or seeding details.</td>
+</tr>
+<tr>
+<td><code>amiga.base4.rnd</code></td>
+<td>RND()</td>
+<td>3.0 base manual</td>
+<td>AM-BOOK-DE-1990</td>
+<td>458</td>
+<td>Direct example use</td>
+<td>The 3.5 companion book's Chapter 18 matrix example uses RND(1) inside INT(RND(1)*5) (printed p. 458). This confirms the one-argument form; RANDOM and RANDOMIZE remain unconfirmed.</td>
+</tr>
+<tr>
+<td><code>amiga.base4.sqr</code></td>
+<td>SQR()</td>
+<td>3.0 base manual</td>
+<td>AM-BOOK-DE-1990</td>
+<td>473</td>
+<td>Direct example use</td>
+<td>The 3.5 vector-normalization example uses SQR(l) to calculate vector length and 1/SQR(l) to normalize the vector (printed p. 473). The one-argument form is demonstrated.</td>
+</tr>
+<tr>
+<td><code>amiga.base4.string</code></td>
+<td>STRING$()</td>
+<td>3.0 base manual</td>
+<td>AM-INTERPRETER-35</td>
+<td>13-21</td>
+<td>Direct example use</td>
+<td>The 3.5 matrix examples use STRING$(n, &quot;-&quot;) as PRINT separators (printed pp. 13-21–13-30). This confirms the string-argument form; the character-code overload is not independently restated.</td>
+</tr>
+<tr>
+<td><code>amiga.base4.succ</code></td>
+<td>SUCC()</td>
+<td>3.0 base manual</td>
+<td>AM-INTERPRETER-35</td>
+<td>13-5</td>
+<td>Direct example use</td>
+<td>The 3.5 matrix-copy examples use SUCC(i%) and SUCC(j%) (printed pp. 13-5–13-13). This directly confirms numeric use; the string overload is not independently restated.</td>
+</tr>
+<tr>
+<td><code>amiga.base5.locate</code></td>
+<td>LOCATE</td>
+<td>3.0 base manual</td>
+<td>AM-BOOK-DE-1990</td>
+<td>471</td>
+<td>Direct example use</td>
+<td>The vector-animation example positions output with LOCATE 1,12 (printed p. 471). Other cursor-positioning forms are not confirmed by this occurrence.</td>
+</tr>
+<tr>
+<td><code>amiga.base5.print</code></td>
+<td>PRINT</td>
+<td>3.0 base manual</td>
+<td>AM-BOOK-DE-1990</td>
+<td>458, 471, 480</td>
+<td>Direct example use</td>
+<td>The 3.5 companion examples use ordinary screen PRINT statements alongside MAT PRINT (printed pp. 458, 471 and 480). This confirms the shown PRINT statement form, not PRINT AT or WRITE.</td>
+</tr>
+<tr>
+<td><code>amiga.base7.for-next</code></td>
+<td>FOR / NEXT</td>
+<td>3.0 base manual</td>
+<td>AM-BOOK-DE-1990</td>
+<td>463, 464, 471, 480</td>
+<td>Direct example use</td>
+<td>Chapter 18 examples use ascending FOR...TO...NEXT loops (pp. 463–464, 471); the Chapter 19 DATA-pointer example also uses FOR j=i TO 1 STEP -1...NEXT (p. 480). This confirms the shown ascending and negative-step forms, not the DOWNTO spelling or editor ENDFOR replacement.</td>
+</tr>
+<tr>
+<td><code>amiga.base7.while-wend</code></td>
+<td>WHILE / WEND</td>
+<td>3.0 base manual</td>
+<td>AM-BOOK-DE-1990</td>
+<td>480</td>
+<td>Direct example use</td>
+<td>The Chapter 19 _DATA example uses WHILE _DATA ... WEND (printed p. 480), with the loop ending when the DATA pointer reaches zero. This confirms the demonstrated condition form, not every condition or loop edge case.</td>
+</tr>
+<tr>
+<td><code>amiga.base8.color</code></td>
+<td>COLOR</td>
+<td>3.0 base manual</td>
+<td>AM-BOOK-DE-1990</td>
+<td>471</td>
+<td>Direct example use</td>
+<td>The Chapter 18 vector-animation example selects colors with COLOR 3 and COLOR 1 (printed p. 471). This confirms the shown COLOR statement form, not SETCOLOR's palette-component form.</td>
+</tr>
+<tr>
+<td><code>amiga.base8.draw-to</code></td>
+<td>DRAW TO</td>
+<td>3.0 base manual</td>
+<td>AM-BOOK-DE-1990</td>
+<td>471</td>
+<td>Direct example use</td>
+<td>The Chapter 18 vector-animation procedure uses DRAW TO with a calculated endpoint (printed p. 471). This confirms the shown path-drawing form only.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="contradicted-candidates">Contradicted candidates</h2>
+<p>No candidates are currently classified as contradicted. This is not evidence that all remaining candidates are compatible.</p>
+<h2 id="interpretation-and-limitations">Interpretation and limitations</h2>
+<ul>
+<li><code>documented-in-3.0-only</code> means the cited declaration is present in the 3.0 base manual but no 3.5 evidence establishes its applicability. This does not mean removed or incompatible.</li>
+<li><code>confirmed-in-3.5</code> can be based either on an explicit 3.5 source declaration or on direct use or reference in 3.5 material. For inherited functions, direct evidence confirms only the form actually shown or referenced; it does not revalidate every overload or edge case.</li>
+<li><code>unresolved</code> is reserved for candidates whose source scope or declaration identity still needs research.</li>
+<li>A confirmed family does not settle every overload or edge case; qualifications in the manifest and detailed research notes remain authoritative.</li>
+<li>Chapter 12 indexes and reference tables are navigation aids, not declarations or proof of availability.</li>
+<li>No absence-based removal or compatibility inference is made.</li>
+</ul>
+<p>Source: <code>AM-INTERPRETER-35</code> and <code>AM-BOOK-DE-1990</code> in <code>docs/reference-sources.md</code>; detailed page notes are in <code>amiga-gfa-basic-3.0-base-inventory.md</code>, <code>amiga-gfa-basic-35-addendum-inventory.md</code>, <code>amiga-gfa-basic-35-base-function-use-audit.md</code>, and <code>amiga-gfa-basic-35-statement-operator-audit.md</code>.</p>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>
