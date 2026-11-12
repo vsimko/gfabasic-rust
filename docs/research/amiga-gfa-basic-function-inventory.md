@@ -21,8 +21,6 @@ title: "Amiga GFA BASIC 3.5 built-in function inventory"
 
 Of the 113 base-manual identifiers, eight (`RAND`, `STR$`, `SUCC`, `STRING$`, `HEX$`, `RND`, `INT`, and `SQR`) have direct 3.5 use/reference evidence. Five are evidenced by the English interpreter addendum and three by the German companion book's 3.5-specific Chapter 18. These are overlapping evidence confirmations, not additional identifiers, and do not change the 117/115 population counts.
 
-Of the 113 base-manual identifiers, five (`RAND`, `STR$`, `SUCC`, `STRING$`, and `HEX$`) have direct 3.5 addendum use/reference evidence. These are overlapping evidence confirmations, not additional identifiers, and do not change the 117/115 population counts.
-
 The two disputed slots are the CVx conversion spelling (`CVD` in the index versus `CVF` in the Chapter 2-18 prose) and the MKx$ conversion spelling (`MKD$` in the p. 2-18 signature block versus `MKF$` in the p. 2-19 prose). Each slot is counted once; neither spelling conflict is silently resolved.
 
 ## Counting boundary
@@ -34,7 +32,7 @@ The two disputed slots are the CVx conversion spelling (`CVD` in the index versu
 - Base-manual entries originate in the 3.0 text included in the supplied 3.5 manual. They are candidates, not proof that every detail remains supported by the 3.5 interpreter.
 - Runtime observations and source discrepancies remain separate evidence dimensions.
 
-## Base-manual entries and separate 3.5 evidence and separate 3.5 example evidence
+## Base-manual entries and separate 3.5 evidence
 
 | Function | Printed source page(s) | Evidence |
 |---|---|---|
@@ -172,11 +170,6 @@ The base-manual table above is a 3.0-derived candidate inventory. Its entries de
 - Chapter 11's Amiga OS library index is excluded: it catalogs OS calls, not built-in GFA BASIC language functions.
 
 Machine-readable source: `amiga-gfa-basic-functions.toml`. Validation: `python scripts/validate_amiga_function_inventory.py`.
-
-
-## 3.5 addendum evidence audit
-
-Five inherited functions (`RAND`, `STR$`, `SUCC`, `STRING$`, and `HEX$`) are directly used or referenced in the version-specific 3.5 addendum. Their demonstrated forms and limits are recorded in [the declaration-level audit](amiga-gfa-basic-35-base-function-use-audit.md). This evidence confirms only the forms shown or referenced, not every overload or edge case; the entries retain their 3.0 base-manual origin.
 
 
 ## 3.5 evidence audit
