@@ -1,9 +1,25 @@
 {
   "schema_version": 1,
   "status": "fresh",
-  "generated_at": "2026-11-12T10:51:23.530004+00:00",
-  "last_successful_at": "2026-11-12T10:51:23.530004+00:00",
+  "generated_at": "2026-11-12T10:54:19.063937+00:00",
+  "last_successful_at": "2026-11-12T10:54:19.063937+00:00",
   "items": [
+    {
+      "type": "merged_pull_request",
+      "title": "Guard the Amiga 3.5 built-in function registry boundary",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/503",
+      "number": 503,
+      "timestamp": "2026-11-12T10:53:59Z",
+      "summary": "PR #503 merged"
+    },
+    {
+      "type": "commit",
+      "title": "Guard the Amiga 3.5 built-in function registry boundary (#503)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/c3ac92dcd210ab1eff149942ff10e5f6decefa2d",
+      "number": null,
+      "timestamp": "2026-11-12T10:53:59Z",
+      "summary": "Commit c3ac92d"
+    },
     {
       "type": "merged_pull_request",
       "title": "Enforce function inventory version evidence boundaries",
@@ -83,22 +99,6 @@
       "number": null,
       "timestamp": "2026-11-11T21:45:16Z",
       "summary": "Commit e2cea2a"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "[Docs] Record FACT example spelling discrepancy",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/498",
-      "number": 498,
-      "timestamp": "2026-11-11T20:28:10Z",
-      "summary": "PR #498 merged"
-    },
-    {
-      "type": "commit",
-      "title": "[Docs] Record FACT example spelling discrepancy (#498)",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/0e809fb61907a6f064c30b01b793b5e87f328a44",
-      "number": null,
-      "timestamp": "2026-11-11T20:28:10Z",
-      "summary": "Commit 0e809fb"
     }
   ]
 }
