@@ -1,9 +1,25 @@
 {
   "schema_version": 1,
   "status": "fresh",
-  "generated_at": "2026-11-11T22:13:18.398516+00:00",
-  "last_successful_at": "2026-11-11T22:13:18.398516+00:00",
+  "generated_at": "2026-11-12T07:02:19.267241+00:00",
+  "last_successful_at": "2026-11-12T07:02:19.267241+00:00",
   "items": [
+    {
+      "type": "merged_pull_request",
+      "title": "Record independent German 3.5 evidence in candidate manifest",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/502",
+      "number": 502,
+      "timestamp": "2026-11-12T07:02:00Z",
+      "summary": "PR #502 merged"
+    },
+    {
+      "type": "commit",
+      "title": "Record independent German 3.5 evidence in candidate manifest (#502)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/5715532865689332806c110b4adcfe3ab4a5fd66",
+      "number": null,
+      "timestamp": "2026-11-12T07:01:59Z",
+      "summary": "Commit 5715532"
+    },
     {
       "type": "merged_pull_request",
       "title": "[Research] Complete remaining Chapter 2 memory command evidence",
@@ -83,22 +99,6 @@
       "number": null,
       "timestamp": "2026-11-11T20:06:35Z",
       "summary": "Commit c262748"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "[Docs] Reconcile reference navigation and compatibility snapshot",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/496",
-      "number": 496,
-      "timestamp": "2026-11-11T19:15:51Z",
-      "summary": "PR #496 merged"
-    },
-    {
-      "type": "commit",
-      "title": "[Docs] Reconcile reference navigation and compatibility snapshot",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/250de2f6d6c34995059cca00a4b57862e92d4ced",
-      "number": null,
-      "timestamp": "2026-11-11T19:15:50Z",
-      "summary": "Commit 250de2f"
     }
   ]
 }
