@@ -1,9 +1,25 @@
 {
   "schema_version": 1,
   "status": "fresh",
-  "generated_at": "2026-11-12T11:18:53.816030+00:00",
-  "last_successful_at": "2026-11-12T11:18:53.816030+00:00",
+  "generated_at": "2026-11-12T11:40:57.114632+00:00",
+  "last_successful_at": "2026-11-12T11:40:57.114632+00:00",
   "items": [
+    {
+      "type": "merged_pull_request",
+      "title": "Confirm inherited functions in the German GFA BASIC 3.5 chapters",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/506",
+      "number": 506,
+      "timestamp": "2026-11-12T11:40:39Z",
+      "summary": "PR #506 merged"
+    },
+    {
+      "type": "commit",
+      "title": "Confirm inherited functions in the German GFA BASIC 3.5 chapters (#506)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/0fc4b804e43e1d5227669e4a0b37f08f6b3ab47a",
+      "number": null,
+      "timestamp": "2026-11-12T11:40:39Z",
+      "summary": "Commit 0fc4b80"
+    },
     {
       "type": "merged_pull_request",
       "title": "Audit inherited functions used by the GFA BASIC 3.5 addendum",
@@ -83,22 +99,6 @@
       "number": null,
       "timestamp": "2026-11-11T22:12:56Z",
       "summary": "Commit 135ae00"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "[Research] Add Chapter 2 memory access evidence",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/500",
-      "number": 500,
-      "timestamp": "2026-11-11T22:09:16Z",
-      "summary": "PR #500 merged"
-    },
-    {
-      "type": "commit",
-      "title": "[Research] Add Chapter 2 memory access evidence (#500)",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/644b3d8fc94a7c744e75a2463755e594ffcd438e",
-      "number": null,
-      "timestamp": "2026-11-11T22:09:15Z",
-      "summary": "Commit 644b3d8"
     }
   ]
 }
