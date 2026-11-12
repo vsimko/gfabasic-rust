@@ -8,7 +8,7 @@ from scripts.generate_amiga_candidate_report import generate, load_candidates, r
 
 
 class AmigaCandidateReportTests(unittest.TestCase):
-    def test_report_separates_3_0_only_from_addendum_confirmed(self) -> None:
+    def test_report_separates_3_0_only_from_3_5_source_confirmed(self) -> None:
         root = Path(__file__).resolve().parents[2]
         manifest = root / "docs/research/amiga-gfa-basic-candidates.toml"
         candidates = load_candidates(manifest)
@@ -21,8 +21,12 @@ class AmigaCandidateReportTests(unittest.TestCase):
         self.assertIn("amiga.base2.hex", report)
         self.assertIn("amiga.base5.data-read", report)
         self.assertIn("amiga.base7.resume", report)
+        self.assertIn("amiga.base7.on-error", report)
+        self.assertIn("amiga.base4.inc-dec", report)
         self.assertIn("Confirmed by 3.5 sources", report)
         self.assertIn("Direct example use", report)
+        self.assertIn("Direct documentation restriction", report)
+        self.assertIn("| confirmed-in-3.5 | 28 |", report)
         self.assertIn("13-36", report)
         self.assertIn("AM-BOOK-DE-1990", report)
         self.assertIn("473", report)
