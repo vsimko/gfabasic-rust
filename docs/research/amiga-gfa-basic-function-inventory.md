@@ -13,6 +13,7 @@ title: "Amiga GFA BASIC 3.5 built-in function inventory"
 |---|---:|
 | Base-manual functions (3.0 text included in the supplied 3.5 manual) | 113 |
 | Explicit functions added in the 3.5 addendum | 4 |
+| Inherited functions directly used in 3.5 addendum examples | 5 |
 | **All names listed across the combined manual** | **117** |
 | Compiler-only names excluded from the interpreter population (`CINT`, `CFLOAT`) | 2 |
 | **Interpreter function candidates (including disputed slots)** | **115** |
@@ -30,7 +31,7 @@ The two disputed slots are the CVx conversion spelling (`CVD` in the index versu
 - Base-manual entries originate in the 3.0 text included in the supplied 3.5 manual. They are candidates, not proof that every detail remains supported by the 3.5 interpreter.
 - Runtime observations and source discrepancies remain separate evidence dimensions.
 
-## Base-manual entries
+## Base-manual entries and separate 3.5 example evidence
 
 | Function | Printed source page(s) | Evidence |
 |---|---|---|
@@ -75,7 +76,7 @@ The two disputed slots are the CVx conversion spelling (`CVD` in the index versu
 | `FLOAT` | 2-37 | base-manual-entry |
 | `FRAC` | 4-13 | base-manual-entry |
 | `FRE` | 2-29 | base-manual-entry |
-| `HEX$` | 2-14 | base-manual-entry |
+| `HEX$` | 2-14 | confirmed-by-3.5-example |
 | `IMP` | 4-24 | base-manual-entry |
 | `INKEY$` | 5-2 | base-manual-entry |
 | `INP` | 6-13 | base-manual-entry |
@@ -111,7 +112,7 @@ The two disputed slots are the CVx conversion spelling (`CVD` in the index versu
 | `POS` | 5-13 | base-manual-entry |
 | `PRED` | 4-11 | base-manual-entry |
 | `RAD` | 4-7 | base-manual-entry |
-| `RAND` | 4-17 | base-manual-entry |
+| `RAND` | 4-17 | confirmed-by-3.5-example |
 | `RANDOM` | 4-17 | base-manual-entry |
 | `RIGHT$` | 4-27 | base-manual-entry |
 | `RINSTR` | 4-31 | base-manual-entry |
@@ -129,10 +130,10 @@ The two disputed slots are the CVx conversion spelling (`CVD` in the index versu
 | `SPACE$` | 4-32 | base-manual-entry |
 | `SPC` | 4-32 | base-manual-entry |
 | `SQR` | 4-8 | base-manual-entry |
-| `STR$` | 2-15 | base-manual-entry |
-| `STRING$` | 4-32 | base-manual-entry |
+| `STR$` | 2-15 | confirmed-by-3.5-example |
+| `STRING$` | 4-32 | confirmed-by-3.5-example |
 | `SUB` | 4-3 | base-manual-entry |
-| `SUCC` | 4-11 | base-manual-entry |
+| `SUCC` | 4-11 | confirmed-by-3.5-example |
 | `SWAP` | 4-25 | base-manual-entry |
 | `TAB` | 5-13 | base-manual-entry |
 | `TAN` | 4-5 | base-manual-entry |
