@@ -2,6 +2,7 @@
 type: "Research Report"
 title: "Amiga GFA BASIC 3.5 candidate verification report"
 tags: [amiga, gfa-basic, evidence, research]
+---
 
 # Amiga GFA BASIC 3.5 candidate verification report
 
