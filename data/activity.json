@@ -1,9 +1,25 @@
 {
   "schema_version": 1,
   "status": "fresh",
-  "generated_at": "2026-11-12T10:54:19.063937+00:00",
-  "last_successful_at": "2026-11-12T10:54:19.063937+00:00",
+  "generated_at": "2026-11-12T11:18:53.816030+00:00",
+  "last_successful_at": "2026-11-12T11:18:53.816030+00:00",
   "items": [
+    {
+      "type": "merged_pull_request",
+      "title": "Audit inherited functions used by the GFA BASIC 3.5 addendum",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/505",
+      "number": 505,
+      "timestamp": "2026-11-12T11:18:08Z",
+      "summary": "PR #505 merged"
+    },
+    {
+      "type": "commit",
+      "title": "Audit inherited functions used by the GFA BASIC 3.5 addendum (#505)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/6a9c23e0dca52d82de6c79051f621a00d9b27f36",
+      "number": null,
+      "timestamp": "2026-11-12T11:18:08Z",
+      "summary": "Commit 6a9c23e"
+    },
     {
       "type": "merged_pull_request",
       "title": "Guard the Amiga 3.5 built-in function registry boundary",
@@ -83,22 +99,6 @@
       "number": null,
       "timestamp": "2026-11-11T22:09:15Z",
       "summary": "Commit 644b3d8"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "[Research] Add granular Chapter 2–4 evidence records without 3.5 promotion",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/499",
-      "number": 499,
-      "timestamp": "2026-11-11T21:45:16Z",
-      "summary": "PR #499 merged"
-    },
-    {
-      "type": "commit",
-      "title": "[Research] Add granular Chapter 2–4 evidence records without 3.5 promotion (#499)",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/e2cea2aaac68ea270129e5443f739b0f8bc47801",
-      "number": null,
-      "timestamp": "2026-11-11T21:45:16Z",
-      "summary": "Commit e2cea2a"
     }
   ]
 }
