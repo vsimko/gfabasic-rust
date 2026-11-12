@@ -18,7 +18,7 @@ class ChapterTwoToFourCandidateAuditTests(unittest.TestCase):
         ]
 
     def test_each_candidate_has_page_provenance_and_3_0_scope(self):
-        self.assertEqual(len(self.audit), 68)
+        self.assertEqual(len(self.audit), 72)
         for item in self.audit:
             with self.subTest(candidate=item["id"]):
                 self.assertEqual(item["source"], "AM-INTERPRETER-35")
@@ -36,6 +36,9 @@ class ChapterTwoToFourCandidateAuditTests(unittest.TestCase):
                         "amiga.base4.sqr": ("AM-BOOK-DE-1990", "3.5 companion book Chapter 18", ["473"], "direct-example-use"),
                         "amiga.base3.numeric-add-sub": ("AM-BOOK-DE-1990", "3.5 companion book Chapter 18 example", ["466", "467"], "direct-example-use"),
                         "amiga.base3.multiply-divide": ("AM-BOOK-DE-1990", "3.5 companion book Chapter 18 example", ["469", "473"], "direct-example-use"),
+                        "amiga.base2.dim": ("AM-BOOK-DE-1990", "3.5 companion book Chapters 18–19 examples", ["458", "471", "480"], "direct-example-use"),
+                        "amiga.base2.option-base": ("AM-BOOK-DE-1990", "3.5 companion book Chapter 18 example", ["458"], "direct-example-use"),
+                        "amiga.base4.inc": ("AM-BOOK-DE-1990", "3.5 companion book Chapter 19 example", ["480"], "direct-example-use"),
                     }
                     expected = expected_sources[item["id"]]
                     self.assertEqual(item.get("confirmation-source"), expected[0])
@@ -74,6 +77,10 @@ class GermanBookCrossCheckTests(unittest.TestCase):
             "amiga.base5.print-write": "PRINT AT / WRITE",
             "amiga.base8.setcolor": "SETCOLOR",
             "amiga.base8.plot-line-draw": "PLOT / LINE / DRAW forms other than DRAW TO",
+            "amiga.base4.dec": "DEC",
+            "amiga.base7.delay": "DELAY",
+            "amiga.base7.gosub": "GOSUB",
+            "amiga.base7.edit-stop": "EDIT / STOP",
         }
         for candidate_id, name in expected_unconfirmed.items():
             with self.subTest(candidate=candidate_id):
@@ -90,6 +97,14 @@ class GermanBookCrossCheckTests(unittest.TestCase):
             "amiga.base7.while-wend": ("3.5 companion book Chapter 19 example", ["480"]),
             "amiga.base8.color": ("3.5 companion book Chapter 18 example", ["471"]),
             "amiga.base8.draw-to": ("3.5 companion book Chapter 18 example", ["471"]),
+            "amiga.base5.data": ("3.5 companion book Chapter 18 example", ["471"]),
+            "amiga.base5.read": ("3.5 companion book Chapter 19 example", ["480"]),
+            "amiga.base5.restore": ("3.5 companion book Chapter 19 example", ["480"]),
+            "amiga.base6.open": ("3.5 companion book Chapter 18 example", ["458"]),
+            "amiga.base6.close": ("3.5 companion book Chapter 18 example", ["458"]),
+            "amiga.base7.pause": ("3.5 companion book Chapter 18 example", ["471"]),
+            "amiga.base7.procedure-return": ("3.5 companion book Chapter 18 example", ["471"]),
+            "amiga.base7.end": ("3.5 companion book Chapter 18 example", ["471"]),
         }
         for candidate_id, (version, pages) in expected.items():
             item = by_id[candidate_id]
@@ -138,6 +153,10 @@ class GermanBookCrossCheckTests(unittest.TestCase):
             "amiga.base5.print", "amiga.base5.locate",
             "amiga.base7.for-next", "amiga.base7.while-wend",
             "amiga.base8.color", "amiga.base8.draw-to",
+            "amiga.base2.dim", "amiga.base2.option-base", "amiga.base4.inc",
+            "amiga.base5.data", "amiga.base5.read", "amiga.base5.restore",
+            "amiga.base6.open", "amiga.base6.close", "amiga.base7.pause",
+            "amiga.base7.procedure-return", "amiga.base7.end",
         })
 
 
