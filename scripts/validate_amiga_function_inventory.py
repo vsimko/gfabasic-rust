@@ -12,6 +12,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_MANIFEST = Path("docs/research/amiga-gfa-basic-functions.toml")
 
 EXPECTED_35_ADDENDUM_FUNCTIONS = {"FACT", "VARIAT", "COMBIN", "GURU"}
+EXPECTED_35_EXAMPLE_FUNCTIONS = {"HEX$", "STR$", "RAND", "SUCC", "STRING$"}
 
 EXPECTED = {
     "all-identifiers": 117,
@@ -21,6 +22,7 @@ EXPECTED = {
     "base-manual-identifiers": 113,
     "explicit-3.5-addendum-identifiers": 4,
     "disputed-name-slots": 2,
+    "confirmed-by-3.5-example-identifiers": 5,
 }
 
 
@@ -54,6 +56,7 @@ def validate(path: Path) -> dict[str, int]:
         if origin == "base-manual-3.0" and evidence_status not in {
             "base-manual-entry",
             "disputed-name",
+            "confirmed-by-3.5-example",
         }:
             raise ValueError(
                 f"{name}: 3.0 base-manual evidence cannot be labelled as 3.5 addendum evidence"
@@ -62,6 +65,18 @@ def validate(path: Path) -> dict[str, int]:
             raise ValueError(
                 f"{name}: 3.5 addendum entries require explicit-3.5-addendum evidence status"
             )
+
+        if evidence_status == "confirmed-by-3.5-example":
+            if name not in EXPECTED_35_EXAMPLE_FUNCTIONS:
+                raise ValueError(f"{name}: no audited 3.5 addendum example-use evidence")
+            if (
+                item.get("confirmation-source") != "AM-INTERPRETER-35"
+                or item.get("confirmation-source-version") != "3.5 addendum"
+                or not item.get("confirmation-printed-pages")
+            ):
+                raise ValueError(f"{name}: 3.5 example-use evidence needs source and printed pages")
+        elif origin == "base-manual-3.0" and name in EXPECTED_35_EXAMPLE_FUNCTIONS:
+            raise ValueError(f"{name}: audited 3.5 example-use evidence status is required")
 
     addendum_names = {
         item["name"] for item in functions if item["origin"] == "3.5-addendum"
@@ -84,6 +99,9 @@ def validate(path: Path) -> dict[str, int]:
         "base-manual-identifiers": counts["base-manual-3.0"],
         "explicit-3.5-addendum-identifiers": counts["3.5-addendum"],
         "disputed-name-slots": disputed,
+        "confirmed-by-3.5-example-identifiers": sum(
+            item["evidence-status"] == "confirmed-by-3.5-example" for item in functions
+        ),
     }
     if result != EXPECTED:
         raise ValueError(f"inventory counts differ from expected values: {result}")
