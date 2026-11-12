@@ -30,11 +30,12 @@ class FunctionInventoryTests(unittest.TestCase):
                 expected_version = "3.5 companion book Chapter 18" if item["name"] in {"RND", "INT", "SQR"} else "3.5 addendum"
                 self.assertEqual(item["confirmation-source"], expected_source)
                 self.assertEqual(item["confirmation-source-version"], expected_version)
-                self.assertTrue(item["confirmation-printed-pages"])
+                expected_pages = {"HEX$": ["13-36"], "STR$": ["13-3"], "RAND": ["13-2"], "SUCC": ["13-5"], "STRING$": ["13-21"], "RND": ["458"], "INT": ["458"], "SQR": ["473"]}
+                self.assertEqual(item["confirmation-printed-pages"], expected_pages[item["name"]])
                 expected_basis = "direct-documentation-reference" if item["name"] == "STR$" else "direct-example-use"
                 self.assertEqual(item["confirmation-basis"], expected_basis)
 
-    def test_non_audited_base_function_cannot_claim_3_5_addendum_use_evidence(self):
+    def test_non_audited_base_function_cannot_claim_3_5_source_evidence(self):
         root = Path(__file__).resolve().parents[2]
         source = root / "docs/research/amiga-gfa-basic-functions.toml"
         text = source.read_text(encoding="utf-8")
