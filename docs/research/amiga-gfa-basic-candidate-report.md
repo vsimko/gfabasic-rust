@@ -165,7 +165,7 @@ No candidates are currently classified as contradicted. This is not evidence tha
 ## Interpretation and limitations
 
 - `documented-in-3.0-only` means the cited declaration is present in the 3.0 base manual but no 3.5 evidence establishes its applicability. This does not mean removed or incompatible.
-- `confirmed-in-3.5` can be based either on an explicit 3.5 addendum declaration or on direct use or reference in 3.5 material. For inherited functions, direct evidence confirms only the form actually shown or referenced; it does not revalidate every overload or edge case.
+- `confirmed-in-3.5` can be based either on an explicit 3.5 source declaration or on direct use or reference in 3.5 material. For inherited functions, direct evidence confirms only the form actually shown or referenced; it does not revalidate every overload or edge case.
 - `unresolved` is reserved for candidates whose source scope or declaration identity still needs research.
 - A confirmed family does not settle every overload or edge case; qualifications in the manifest and detailed research notes remain authoritative.
 - Chapter 12 indexes and reference tables are navigation aids, not declarations or proof of availability.
