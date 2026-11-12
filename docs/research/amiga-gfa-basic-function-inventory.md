@@ -19,64 +19,7 @@ title: "Amiga GFA BASIC 3.5 built-in function inventory"
 | Unambiguous interpreter function names | 113 |
 | Disputed source-name slots | 2 |
 
-Of the 113 base-manual identifiers, five (`RAND`, `STR---
-type: "Research Note"
-title: "Amiga GFA BASIC 3.5 built-in function inventory"
----
-
-# Amiga GFA BASIC 3.5 built-in function inventory
-
-> Source-derived inventory, not an implementation or runtime-conformance claim. The machine-readable source of truth is `amiga-gfa-basic-functions.toml`.
-
-## Count
-
-| Population | Unique names |
-|---|---:|
-| Base-manual functions (3.0 text included in the supplied 3.5 manual) | 113 |
-| Explicit functions added in the 3.5 addendum | 4 |
-| **All names listed across the combined manual** | **117** |
-| Compiler-only names excluded from the interpreter population (`CINT`, `CFLOAT`) | 2 |
-| **Interpreter function candidates (including disputed slots)** | **115** |
-| Unambiguous interpreter function names | 113 |
-, `SUCC`, `STRING---
-type: "Research Note"
-title: "Amiga GFA BASIC 3.5 built-in function inventory"
----
-
-# Amiga GFA BASIC 3.5 built-in function inventory
-
-> Source-derived inventory, not an implementation or runtime-conformance claim. The machine-readable source of truth is `amiga-gfa-basic-functions.toml`.
-
-## Count
-
-| Population | Unique names |
-|---|---:|
-| Base-manual functions (3.0 text included in the supplied 3.5 manual) | 113 |
-| Explicit functions added in the 3.5 addendum | 4 |
-| **All names listed across the combined manual** | **117** |
-| Compiler-only names excluded from the interpreter population (`CINT`, `CFLOAT`) | 2 |
-| **Interpreter function candidates (including disputed slots)** | **115** |
-| Unambiguous interpreter function names | 113 |
-, and `HEX---
-type: "Research Note"
-title: "Amiga GFA BASIC 3.5 built-in function inventory"
----
-
-# Amiga GFA BASIC 3.5 built-in function inventory
-
-> Source-derived inventory, not an implementation or runtime-conformance claim. The machine-readable source of truth is `amiga-gfa-basic-functions.toml`.
-
-## Count
-
-| Population | Unique names |
-|---|---:|
-| Base-manual functions (3.0 text included in the supplied 3.5 manual) | 113 |
-| Explicit functions added in the 3.5 addendum | 4 |
-| **All names listed across the combined manual** | **117** |
-| Compiler-only names excluded from the interpreter population (`CINT`, `CFLOAT`) | 2 |
-| **Interpreter function candidates (including disputed slots)** | **115** |
-| Unambiguous interpreter function names | 113 |
-) have direct 3.5 addendum use/reference evidence. These are overlapping evidence confirmations, not additional identifiers, and do not change the 117/115 population counts.
+Of the 113 base-manual identifiers, five (`RAND`, `STR$`, `SUCC`, `STRING$`, and `HEX$`) have direct 3.5 addendum use/reference evidence. These are overlapping evidence confirmations, not additional identifiers, and do not change the 117/115 population counts.
 
 The two disputed slots are the CVx conversion spelling (`CVD` in the index versus `CVF` in the Chapter 2-18 prose) and the MKx$ conversion spelling (`MKD$` in the p. 2-18 signature block versus `MKF$` in the p. 2-19 prose). Each slot is counted once; neither spelling conflict is silently resolved.
 
@@ -229,6 +172,6 @@ The base-manual table above is a 3.0-derived candidate inventory. Its entries de
 Machine-readable source: `amiga-gfa-basic-functions.toml`. Validation: `python scripts/validate_amiga_function_inventory.py`.
 
 
-## 3.5 addendum example-use audit
+## 3.5 addendum evidence audit
 
-Five inherited functions (`RAND`, `STR$`, `SUCC`, `STRING$`, and `HEX$`) are directly used or referenced in the version-specific 3.5 addendum. Their demonstrated forms and limits are recorded in [the declaration-level audit](amiga-gfa-basic-35-base-function-use-audit.md). This evidence confirms only the forms shown, not every overload or edge case; the entries retain their 3.0 base-manual origin.
+Five inherited functions (`RAND`, `STR$`, `SUCC`, `STRING$`, and `HEX$`) are directly used or referenced in the version-specific 3.5 addendum. Their demonstrated forms and limits are recorded in [the declaration-level audit](amiga-gfa-basic-35-base-function-use-audit.md). This evidence confirms only the forms shown or referenced, not every overload or edge case; the entries retain their 3.0 base-manual origin.
