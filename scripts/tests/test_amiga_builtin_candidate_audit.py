@@ -104,6 +104,7 @@ class GermanBookCrossCheckTests(unittest.TestCase):
             "amiga.base6.close": ("3.5 companion book Chapter 18 example", ["458"]),
             "amiga.base7.pause": ("3.5 companion book Chapter 18 example", ["471"]),
             "amiga.base7.procedure-return": ("3.5 companion book Chapter 18 example", ["471"]),
+            "amiga.base7.procedure-call-at": ("3.5 companion book Chapter 18 example", ["471"]),
             "amiga.base7.end": ("3.5 companion book Chapter 18 example", ["471"]),
         }
         for candidate_id, (version, pages) in expected.items():
@@ -157,6 +158,7 @@ class GermanBookCrossCheckTests(unittest.TestCase):
             "amiga.base5.data", "amiga.base5.read", "amiga.base5.restore",
             "amiga.base6.open", "amiga.base6.close", "amiga.base7.pause",
             "amiga.base7.procedure-return", "amiga.base7.end",
+            "amiga.base7.procedure-call-at",
         })
 
 

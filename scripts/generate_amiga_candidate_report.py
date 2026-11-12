@@ -66,6 +66,7 @@ def load_candidates(path: Path) -> list[dict]:
         "amiga.base6.close": ("3.5 companion book Chapter 18 example", ["458"]),
         "amiga.base7.pause": ("3.5 companion book Chapter 18 example", ["471"]),
         "amiga.base7.procedure-return": ("3.5 companion book Chapter 18 example", ["471"]),
+        "amiga.base7.procedure-call-at": ("3.5 companion book Chapter 18 example", ["471"]),
         "amiga.base7.end": ("3.5 companion book Chapter 18 example", ["471"]),
         "amiga.base5.locate": ("3.5 companion book Chapter 18 example", ["471"]),
         "amiga.base7.for-next": ("3.5 companion book Chapters 18–19 examples", ["463", "464", "471", "480"]),
