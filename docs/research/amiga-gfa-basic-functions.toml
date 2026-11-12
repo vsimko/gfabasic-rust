@@ -11,7 +11,7 @@ compiler-only-identifiers = 2
 base-manual-identifiers = 113
 "explicit-3.5-addendum-identifiers" = 4
 disputed-name-slots = 2
-"confirmed-by-3.5-addendum-use-identifiers" = 5
+"confirmed-by-3.5-addendum-use-identifiers" = 8
 
 [[functions]]
 name = "ABS"
@@ -383,7 +383,12 @@ printed-pages = ["4-30"]
 name = "INT"
 origin = "base-manual-3.0"
 applicability = "interpreter"
-evidence-status = "base-manual-entry"
+evidence-status = "confirmed-by-3.5-addendum-use"
+confirmation-source = "AM-BOOK-DE-1990"
+confirmation-source-version = "3.5 companion book Chapter 18"
+confirmation-printed-pages = ["458"]
+confirmation-basis = "direct-example-use"
+confirmation-note = "Chapter 18 matrix example uses INT(RND(1)*5); one-argument form demonstrated."
 printed-pages = ["2-37", "4-13"]
 forms = ["INT(...)", "INT{...}"]
 
@@ -630,7 +635,12 @@ printed-pages = ["4-31"]
 name = "RND"
 origin = "base-manual-3.0"
 applicability = "interpreter"
-evidence-status = "base-manual-entry"
+evidence-status = "confirmed-by-3.5-addendum-use"
+confirmation-source = "AM-BOOK-DE-1990"
+confirmation-source-version = "3.5 companion book Chapter 18"
+confirmation-printed-pages = ["458"]
+confirmation-basis = "direct-example-use"
+confirmation-note = "Chapter 18 matrix example uses RND(1) inside INT(RND(1)*5); one-argument form demonstrated."
 printed-pages = ["4-17"]
 
 [[functions]]
@@ -722,7 +732,12 @@ printed-pages = ["4-32"]
 name = "SQR"
 origin = "base-manual-3.0"
 applicability = "interpreter"
-evidence-status = "base-manual-entry"
+evidence-status = "confirmed-by-3.5-addendum-use"
+confirmation-source = "AM-BOOK-DE-1990"
+confirmation-source-version = "3.5 companion book Chapter 18"
+confirmation-printed-pages = ["473"]
+confirmation-basis = "direct-example-use"
+confirmation-note = "Chapter 18 vector-normalization example uses SQR(l) for vector length and 1/SQR(l) for normalization."
 printed-pages = ["4-8"]
 
 [[functions]]
@@ -735,6 +750,8 @@ confirmation-source-version = "3.5 addendum"
 confirmation-printed-pages = ["13-3"]
 confirmation-basis = "direct-documentation-reference"
 confirmation-note = "MAT PRINT documentation specifies STR$(x,g,n) formatting."
+confirmation-corroborating-source = "AM-BOOK-DE-1990"
+confirmation-corroborating-pages = ["457"]
 printed-pages = ["2-15"]
 
 [[functions]]

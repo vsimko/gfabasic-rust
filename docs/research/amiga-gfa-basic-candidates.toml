@@ -622,6 +622,8 @@ confirmation-source = "AM-INTERPRETER-35"
 confirmation-source-version = "3.5 addendum"
 confirmation-printed-pages = ["13-3"]
 confirmation-basis = "direct-documentation-reference"
+corroborating-source = "AM-BOOK-DE-1990"
+corroborating-printed-pages = ["457"]
 [[candidates]]
 id = "amiga.base2.val"
 name = "VAL / VAL?"
@@ -929,9 +931,13 @@ kind = "function"
 source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["4-8"]
-status = "documented-in-3.0-only"
-notes = "Square root; negative argument is documented to produce an error."
+status = "confirmed-in-3.5"
+notes = "The 3.5 vector-normalization example uses SQR(l) to calculate vector length and 1/SQR(l) to normalize the vector (printed p. 473). The one-argument form is demonstrated."
 
+confirmation-source = "AM-BOOK-DE-1990"
+confirmation-source-version = "3.5 companion book Chapter 18"
+confirmation-printed-pages = ["473"]
+confirmation-basis = "direct-example-use"
 [[candidates]]
 id = "amiga.base4.exp-log"
 name = "EXP() / LOG() / LOG10()"
@@ -964,13 +970,13 @@ notes = "Absolute value and sign (-1, 0, 1) functions documented."
 
 [[candidates]]
 id = "amiga.base4.int-trunc-fix-frac"
-name = "INT() / TRUNC() / FIX() / FRAC()"
+name = "TRUNC() / FIX() / FRAC()"
 kind = "function-family"
 source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["4-13"]
 status = "documented-in-3.0-only"
-notes = "Manual distinguishes truncation from floor for negative values and describes TRUNC/FRAC relation."
+notes = "The base manual distinguishes truncation from floor for negative values and describes TRUNC/FRAC. INT is split into its own entry and confirmed by the 3.5 companion book; the remaining functions have no direct 3.5 evidence."
 
 [[candidates]]
 id = "amiga.base4.round"
@@ -1004,13 +1010,13 @@ notes = "Accept a list of numeric or string expressions and return the extremum.
 
 [[candidates]]
 id = "amiga.base4.random"
-name = "RND() / RANDOM() / RANDOMIZE"
+name = "RANDOM() / RANDOMIZE"
 kind = "function-family"
 source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["4-17–4-18"]
 status = "documented-in-3.0-only"
-notes = "The base manual documents RND and RANDOM functions plus RANDOMIZE statement. The 3.5 addendum example uses RAND separately; these remaining forms have no direct addendum example evidence."
+notes = "The base manual documents RANDOM and RANDOMIZE. RND is split into its own entry and confirmed by the 3.5 companion book; these remaining forms have no direct 3.5 evidence."
 
 [[candidates]]
 id = "amiga.base4.bit-test"
@@ -1268,5 +1274,34 @@ notes = "The 3.5 matrix examples use STRING$(n, \"-\") as PRINT separators (prin
 confirmation-source = "AM-INTERPRETER-35"
 confirmation-source-version = "3.5 addendum"
 confirmation-printed-pages = ["13-21"]
+confirmation-basis = "direct-example-use"
+
+
+[[candidates]]
+id = "amiga.base4.rnd"
+name = "RND()"
+kind = "function"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-17"]
+status = "confirmed-in-3.5"
+notes = "The 3.5 companion book's Chapter 18 matrix example uses RND(1) inside INT(RND(1)*5) (printed p. 458). This confirms the one-argument form; RANDOM and RANDOMIZE remain unconfirmed."
+confirmation-source = "AM-BOOK-DE-1990"
+confirmation-source-version = "3.5 companion book Chapter 18"
+confirmation-printed-pages = ["458"]
+confirmation-basis = "direct-example-use"
+
+[[candidates]]
+id = "amiga.base4.int"
+name = "INT()"
+kind = "function"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-13"]
+status = "confirmed-in-3.5"
+notes = "The 3.5 companion book's Chapter 18 matrix example uses INT(RND(1)*5) (printed p. 458), confirming the one-argument integer-conversion form."
+confirmation-source = "AM-BOOK-DE-1990"
+confirmation-source-version = "3.5 companion book Chapter 18"
+confirmation-printed-pages = ["458"]
 confirmation-basis = "direct-example-use"
 
