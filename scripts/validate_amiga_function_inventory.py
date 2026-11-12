@@ -12,8 +12,8 @@ ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_MANIFEST = Path("docs/research/amiga-gfa-basic-functions.toml")
 
 EXPECTED_35_ADDENDUM_FUNCTIONS = {"FACT", "VARIAT", "COMBIN", "GURU"}
-EXPECTED_35_ADDENDUM_USE_BASIS = {"HEX$": "direct-example-use", "STR$": "direct-documentation-reference", "RAND": "direct-example-use", "SUCC": "direct-example-use", "STRING$": "direct-example-use"}
-EXPECTED_35_ADDENDUM_USE_FUNCTIONS = set(EXPECTED_35_ADDENDUM_USE_BASIS)
+EXPECTED_35_ADDENDUM_USE_EVIDENCE = {"HEX$":["AM-INTERPRETER-35","3.5 addendum",["13-36"],"direct-example-use"],"STR$":["AM-INTERPRETER-35","3.5 addendum",["13-3"],"direct-documentation-reference"],"RAND":["AM-INTERPRETER-35","3.5 addendum",["13-2"],"direct-example-use"],"SUCC":["AM-INTERPRETER-35","3.5 addendum",["13-5"],"direct-example-use"],"STRING$":["AM-INTERPRETER-35","3.5 addendum",["13-21"],"direct-example-use"],"RND":["AM-BOOK-DE-1990","3.5 companion book Chapter 18",["458"],"direct-example-use"],"INT":["AM-BOOK-DE-1990","3.5 companion book Chapter 18",["458"],"direct-example-use"],"SQR":["AM-BOOK-DE-1990","3.5 companion book Chapter 18",["473"],"direct-example-use"]}
+EXPECTED_35_ADDENDUM_USE_FUNCTIONS = set(EXPECTED_35_ADDENDUM_USE_EVIDENCE)
 
 EXPECTED = {
     "all-identifiers": 117,

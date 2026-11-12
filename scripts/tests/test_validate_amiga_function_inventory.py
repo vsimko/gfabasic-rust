@@ -20,13 +20,16 @@ class FunctionInventoryTests(unittest.TestCase):
         source = root / "docs/research/amiga-gfa-basic-functions.toml"
         import tomllib
         functions = tomllib.loads(source.read_text(encoding="utf-8"))["functions"]
-        expected = {"HEX$", "STR$", "RAND", "SUCC", "STRING$"}
+        expected = {"HEX$", "STR$", "RAND", "SUCC", "STRING$", "RND", "INT", "SQR"}
         actual = {item["name"] for item in functions if item["evidence-status"] == "confirmed-by-3.5-addendum-use"}
         self.assertEqual(actual, expected)
         for item in functions:
             if item["name"] in expected:
                 self.assertEqual(item["origin"], "base-manual-3.0")
-                self.assertEqual(item["confirmation-source-version"], "3.5 addendum")
+                expected_source = "AM-BOOK-DE-1990" if item["name"] in {"RND", "INT", "SQR"} else "AM-INTERPRETER-35"
+                expected_version = "3.5 companion book Chapter 18" if item["name"] in {"RND", "INT", "SQR"} else "3.5 addendum"
+                self.assertEqual(item["confirmation-source"], expected_source)
+                self.assertEqual(item["confirmation-source-version"], expected_version)
                 self.assertTrue(item["confirmation-printed-pages"])
                 expected_basis = "direct-documentation-reference" if item["name"] == "STR$" else "direct-example-use"
                 self.assertEqual(item["confirmation-basis"], expected_basis)

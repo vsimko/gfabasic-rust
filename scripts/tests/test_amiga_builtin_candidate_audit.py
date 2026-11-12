@@ -18,7 +18,7 @@ class ChapterTwoToFourCandidateAuditTests(unittest.TestCase):
         ]
 
     def test_each_candidate_has_page_provenance_and_3_0_scope(self):
-        self.assertEqual(len(self.audit), 66)
+        self.assertEqual(len(self.audit), 68)
         for item in self.audit:
             with self.subTest(candidate=item["id"]):
                 self.assertEqual(item["source"], "AM-INTERPRETER-35")
@@ -84,6 +84,7 @@ class GermanBookCrossCheckTests(unittest.TestCase):
         self.assertEqual(confirmed, {
             "amiga.base2.hex", "amiga.base2.str", "amiga.base4.rand",
             "amiga.base4.succ", "amiga.base4.string",
+            "amiga.base4.rnd", "amiga.base4.int", "amiga.base4.sqr",
         })
 
 
