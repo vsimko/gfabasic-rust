@@ -18,7 +18,7 @@ class ChapterTwoToFourCandidateAuditTests(unittest.TestCase):
         ]
 
     def test_each_candidate_has_page_provenance_and_3_0_scope(self):
-        self.assertEqual(len(self.audit), 71)
+        self.assertEqual(len(self.audit), 72)
         for item in self.audit:
             with self.subTest(candidate=item["id"]):
                 self.assertEqual(item["source"], "AM-INTERPRETER-35")
