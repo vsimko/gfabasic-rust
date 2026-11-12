@@ -102,6 +102,6 @@ This independently supports the `CVS` ↔ `MKS$` pairing for 4-byte Amiga-BASIC 
 
 ## 5. Inherited statement/operator forms used in 3.5 examples
 
-The page-image-checked Chapter 18 vector example (printed p. 471) directly uses ordinary `PRINT`, `LOCATE 1,12`, `COLOR 3`/`COLOR 1`, `DRAW TO`, and an ascending `FOR ... NEXT` loop. The Chapter 19 DATA-pointer example (p. 480) uses `WHILE _DATA ... WEND` and a descending `FOR ... STEP -1 ... NEXT` loop. Chapter 18 matrix examples use numeric `+`, `-`, and `*` (pp. 467, 470); the normalization example uses `1/SQR(l)` (p. 473). These are direct-use witnesses for only the forms shown.
+The page-image-checked Chapter 18 vector example (printed p. 471) directly uses ordinary `PRINT`, `LOCATE 1,12`, `COLOR 3`/`COLOR 1`, `DRAW TO`, and an ascending `FOR ... NEXT` loop. The Chapter 19 DATA-pointer example (p. 480) uses `WHILE _DATA ... WEND` and a descending `FOR ... STEP -1 ... NEXT` loop. Chapter 18 MAT ADD/SUB examples use numeric `+` and `-` (pp. 466–467), and MAT MUL uses `*` (p. 469); the normalization example uses `1/SQR(l)` (p. 473). These are direct-use witnesses for only the forms shown.
 
 The candidate manifest splits grouped families so unshown siblings are not promoted: `PRINT AT`/`WRITE`, `SETCOLOR`, `PLOT`/`LINE`/other `DRAW` forms, and prefix unary plus/minus remain 3.0-only evidence. The detailed form-by-form limits are in [the inherited statement/operator audit](amiga-gfa-basic-35-statement-operator-audit.md). No runtime-conformance or full compatibility claim follows from these examples.

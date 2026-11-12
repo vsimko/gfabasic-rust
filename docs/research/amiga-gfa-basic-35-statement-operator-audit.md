@@ -15,8 +15,8 @@ Page references below are printed book pages. The vector example on p. 471 and t
 
 | Candidate | 3.5 evidence | Demonstrated form | Boundary |
 |---|---|---|---|
-| Numeric `+` and `-` | pp. 467, 470 | `MAT SUB a()=b()-c()`; the matrix-multiplication explanation gives numeric sums and signed operands | Confirms numeric arithmetic use only; not precedence, comparison, or string concatenation |
-| `*` and `/` | pp. 470, 473 | Numeric products in the matrix-multiplication explanation; `1/SQR(l)` in vector normalization | Confirms the shown numeric forms only; not precedence or all operand types |
+| Numeric `+` and `-` | pp. 466–467 | `MAT ADD c()=b()+b()` and `MAT SUB a()=b()-c()` | Confirms numeric arithmetic use only; not precedence, comparison, or string concatenation |
+| `*` and `/` | pp. 469, 473 | `MAT MUL a()=b()*c()` and `MAT MUL v(),1/SQR(l)` | Confirms the shown numeric forms only; not precedence or all operand types |
 
 The arithmetic evidence does not establish the operator hierarchy, associativity, unary plus/minus, string concatenation, exponentiation, integer division, modulo, comparison operators, or logical operators. Although the code example contains negative DATA values on p. 471, that does not by itself establish general unary-operator parsing in expressions; both prefix forms remain candidates. The assignment sign in the examples is not treated as evidence for equality comparison.
 

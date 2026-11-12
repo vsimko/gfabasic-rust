@@ -840,11 +840,11 @@ source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["3-2"]
 status = "confirmed-in-3.5"
-notes = "The Chapter 18 matrix-multiplication explanation uses numeric products (p. 470), and the normalization example divides by SQR(l) using 1/SQR(l) (p. 473). This confirms the shown numeric * and / forms, not precedence or all operand types."
+notes = "The Chapter 18 MAT MUL example uses b()*c() (p. 469), and the normalization example uses 1/SQR(l) (p. 473). This confirms numeric * and / forms in the shown expressions, not precedence or all operand types."
 
 confirmation-source = "AM-BOOK-DE-1990"
 confirmation-source-version = "3.5 companion book Chapter 18 example"
-confirmation-printed-pages = ["470","473"]
+confirmation-printed-pages = ["469","473"]
 confirmation-basis = "direct-example-use"
 [[candidates]]
 id = "amiga.base3.integer-divide-mod"
@@ -864,11 +864,11 @@ source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["3-2, 3-10"]
 status = "confirmed-in-3.5"
-notes = "The 3.5 companion book's MAT SUB example uses b()-c() (p. 467), and its matrix-multiplication explanation gives numeric addition expressions (p. 470). This confirms numeric + and - use in the shown expressions, not precedence or string concatenation."
+notes = "The 3.5 Chapter 18 MAT ADD example uses b()+b() (p. 466), and MAT SUB uses b()-c() (p. 467). This confirms numeric binary + and - use in the shown matrix expressions, not precedence or string concatenation."
 
 confirmation-source = "AM-BOOK-DE-1990"
 confirmation-source-version = "3.5 companion book Chapter 18 example"
-confirmation-printed-pages = ["467","470"]
+confirmation-printed-pages = ["466","467"]
 confirmation-basis = "direct-example-use"
 [[candidates]]
 id = "amiga.base3.comparison-equality"
