@@ -13,6 +13,21 @@ class FunctionInventoryTests(unittest.TestCase):
         self.assertEqual(result["interpreter-identifiers-including-disputed-slot"], 115)
         self.assertEqual(result["unambiguous-interpreter-identifiers"], 113)
         self.assertEqual(result["disputed-name-slots"], 2)
+        self.assertEqual(result["confirmed-by-3.5-example-identifiers"], 5)
+
+    def test_only_the_five_audited_example_functions_have_3_5_use_evidence(self):
+        root = Path(__file__).resolve().parents[2]
+        source = root / "docs/research/amiga-gfa-basic-functions.toml"
+        import tomllib
+        functions = tomllib.loads(source.read_text(encoding="utf-8"))["functions"]
+        expected = {"HEX$", "STR$", "RAND", "SUCC", "STRING$"}
+        actual = {item["name"] for item in functions if item["evidence-status"] == "confirmed-by-3.5-example"}
+        self.assertEqual(actual, expected)
+        for item in functions:
+            if item["name"] in expected:
+                self.assertEqual(item["origin"], "base-manual-3.0")
+                self.assertEqual(item["confirmation-source-version"], "3.5 addendum")
+                self.assertTrue(item["confirmation-printed-pages"])
 
     def test_duplicate_names_are_rejected(self):
         root = Path(__file__).resolve().parents[2]
