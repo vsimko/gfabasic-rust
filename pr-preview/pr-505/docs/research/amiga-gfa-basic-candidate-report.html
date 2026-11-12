@@ -582,7 +582,7 @@
 <td><code>amiga.base6.inp-out</code></td>
 <td>INP / OUT</td>
 <td>6-13</td>
-<td>INP reads one byte and OUT writes byte values through an opened channel; documented channel range is 0–99. 3.5 availability is unresolved.</td>
+<td>INP reads one byte from an opened data channel using INP(#n); OUT writes byte values. The addendum examples show ~INP(2), which is not the documented INP(#n) form and is not treated as confirmation. 3.5 availability remains unresolved.</td>
 </tr>
 <tr>
 <td><code>amiga.base6.input-string</code></td>
@@ -744,7 +744,7 @@
 <tr>
 <td><code>amiga.35.editor-update</code></td>
 <td>Editor row layout, search and listing changes</td>
-<td>3.5 addendum</td>
+<td>3.5 editor update</td>
 <td>1-25</td>
 <td>Explicit 3.5 addendum declaration</td>
 <td>Explicit editor update; this is editor behavior, not a language/runtime declaration.</td>
@@ -835,7 +835,7 @@
 <td>3.0 base manual</td>
 <td>13-36</td>
 <td>Direct example use</td>
-<td>The 3.5 GURU example calls HEX$(GURU), confirming the one-argument form; the optional width form is not independently used in the addendum.</td>
+<td>The base manual documents HEX$(x[,y]). The 3.5 GURU example calls HEX$(GURU) (printed p. 13-36), confirming the one-argument form; the optional width form is not independently used in the addendum.</td>
 </tr>
 <tr>
 <td><code>amiga.base2.str</code></td>
@@ -851,7 +851,7 @@
 <td>3.0 base manual</td>
 <td>13-2</td>
 <td>Direct example use</td>
-<td>The 3.5 MAT SET example assigns RAND(10) to matrix elements. This confirms the call form used, not all distribution or seeding details.</td>
+<td>The 3.5 MAT SET example assigns RAND(10) to matrix elements (printed p. 13-2). This confirms the call form used, not all distribution or seeding details.</td>
 </tr>
 <tr>
 <td><code>amiga.base4.string</code></td>
@@ -859,7 +859,7 @@
 <td>3.0 base manual</td>
 <td>13-21</td>
 <td>Direct example use</td>
-<td>The 3.5 matrix examples use STRING$(n, &quot;-&quot;) as PRINT separators. This confirms the string-argument form; the character-code overload is not independently restated.</td>
+<td>The 3.5 matrix examples use STRING$(n, &quot;-&quot;) as PRINT separators (printed pp. 13-21–13-30). This confirms the string-argument form; the character-code overload is not independently restated.</td>
 </tr>
 <tr>
 <td><code>amiga.base4.succ</code></td>
