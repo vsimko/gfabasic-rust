@@ -52,7 +52,10 @@ class Amiga35FunctionRegistryBoundaryTests(unittest.TestCase):
                 self.assertTrue(declaration["id"].startswith("gfa.language."))
                 self.assertTrue(declaration["syntax"])
                 self.assertTrue(declaration["signature"])
-                self.assertTrue(declaration["availability"])
+                self.assertIn(
+                    {"dialect": "amiga-gfa-basic-interpreter", "versions": ["3.5"]},
+                    declaration["availability"],
+                )
                 evidence = declaration["evidence"]
                 self.assertEqual(evidence["source-scope"], "amiga-3.5-addendum")
                 self.assertIn("AM-INTERPRETER-35", evidence["sources"])
@@ -70,6 +73,11 @@ class Amiga35FunctionRegistryBoundaryTests(unittest.TestCase):
             if item["name"] == "GURU" and item["kind"] == "function"
         )
         self.assertEqual(guru["id"], "gfa.amiga.system.guru-number")
+        self.assertIn(
+            {"dialect": "amiga-gfa-basic-interpreter", "versions": ["3.5"], "profile": "amiga"},
+            guru["availability"],
+        )
+        self.assertEqual(guru["evidence"]["source-scope"], "amiga-3.5-addendum")
         self.assertIn("AM-INTERPRETER-35", guru["evidence"]["sources"])
 
 
