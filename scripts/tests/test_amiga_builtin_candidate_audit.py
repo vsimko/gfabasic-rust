@@ -27,7 +27,7 @@ class ChapterTwoToFourCandidateAuditTests(unittest.TestCase):
                 if item["status"] == "confirmed-in-3.5":
                     self.assertEqual(item.get("confirmation-source"), "AM-INTERPRETER-35")
                     self.assertEqual(item.get("confirmation-source-version"), "3.5 addendum")
-                    self.assertEqual(item.get("confirmation-basis"), "direct-example-use")
+                    self.assertIn(item.get("confirmation-basis"), {"direct-example-use", "direct-documentation-reference"})
                     self.assertTrue(item.get("confirmation-printed-pages"))
                 else:
                     self.assertEqual(item["status"], "documented-in-3.0-only")

@@ -1,6 +1,6 @@
 ---
 type: "Research Note"
-title: "Amiga GFA BASIC 3.5 — inherited function use in addendum examples"
+title: "Amiga GFA BASIC 3.5 — inherited function evidence in the addendum"
 ---
 
 # Amiga GFA BASIC 3.5 — inherited function use in addendum examples
@@ -31,7 +31,7 @@ Likewise, the addendum’s English words “function”, “screen”, “type�
 
 ## Result and boundary
 
-The five direct-use confirmations are limited to `RAND`, `STR$`, `SUCC`, `STRING$`, and `HEX$`. Together with the four functions explicitly introduced by the addendum (`FACT`, `VARIAT`, `COMBIN`, and `GURU`), these are nine function identifiers with direct 3.5 documentary evidence in this pass. The four explicit additions remain a distinct category; the five inherited functions are not reclassified as 3.5 additions.
+The five direct addendum-use confirmations (four example uses and one explicit documentation reference) are limited to `RAND`, `STR$`, `SUCC`, `STRING$`, and `HEX$`. Together with the four functions explicitly introduced by the addendum (`FACT`, `VARIAT`, `COMBIN`, and `GURU`), these are nine function identifiers with direct 3.5 documentary evidence in this pass. The four explicit additions remain a distinct category; the five inherited functions are not reclassified as 3.5 additions.
 
 No other base-manual function identifier was promoted by this pass. Lack of an occurrence in the addendum is not evidence of removal or incompatibility. The German companion book’s general Chapters 1–17 are historical 3.0/3.03 material and are not used to promote inherited functions to 3.5. No runtime-conformance or Rust-implementation claim is made.
 

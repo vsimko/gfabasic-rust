@@ -76,7 +76,7 @@ The two disputed slots are the CVx conversion spelling (`CVD` in the index versu
 | `FLOAT` | 2-37 | base-manual-entry |
 | `FRAC` | 4-13 | base-manual-entry |
 | `FRE` | 2-29 | base-manual-entry |
-| `HEX$` | 2-14 | confirmed-by-3.5-example |
+| `HEX$` | 2-14 | confirmed-by-3.5-addendum-use |
 | `IMP` | 4-24 | base-manual-entry |
 | `INKEY$` | 5-2 | base-manual-entry |
 | `INP` | 6-13 | base-manual-entry |
@@ -112,7 +112,7 @@ The two disputed slots are the CVx conversion spelling (`CVD` in the index versu
 | `POS` | 5-13 | base-manual-entry |
 | `PRED` | 4-11 | base-manual-entry |
 | `RAD` | 4-7 | base-manual-entry |
-| `RAND` | 4-17 | confirmed-by-3.5-example |
+| `RAND` | 4-17 | confirmed-by-3.5-addendum-use |
 | `RANDOM` | 4-17 | base-manual-entry |
 | `RIGHT$` | 4-27 | base-manual-entry |
 | `RINSTR` | 4-31 | base-manual-entry |
@@ -130,10 +130,10 @@ The two disputed slots are the CVx conversion spelling (`CVD` in the index versu
 | `SPACE$` | 4-32 | base-manual-entry |
 | `SPC` | 4-32 | base-manual-entry |
 | `SQR` | 4-8 | base-manual-entry |
-| `STR$` | 2-15 | confirmed-by-3.5-example |
-| `STRING$` | 4-32 | confirmed-by-3.5-example |
+| `STR$` | 2-15 | confirmed-by-3.5-addendum-use |
+| `STRING$` | 4-32 | confirmed-by-3.5-addendum-use |
 | `SUB` | 4-3 | base-manual-entry |
-| `SUCC` | 4-11 | confirmed-by-3.5-example |
+| `SUCC` | 4-11 | confirmed-by-3.5-addendum-use |
 | `SWAP` | 4-25 | base-manual-entry |
 | `TAB` | 5-13 | base-manual-entry |
 | `TAN` | 4-5 | base-manual-entry |
@@ -173,4 +173,4 @@ Machine-readable source: `amiga-gfa-basic-functions.toml`. Validation: `python s
 
 ## 3.5 addendum example-use audit
 
-Five inherited functions (`RAND`, `STR$`, `SUCC`, `STRING$`, and `HEX$`) are directly used in the version-specific 3.5 addendum. Their demonstrated forms and limits are recorded in [the declaration-level audit](amiga-gfa-basic-35-base-function-use-audit.md). This evidence confirms only the forms shown, not every overload or edge case; the entries retain their 3.0 base-manual origin.
+Five inherited functions (`RAND`, `STR$`, `SUCC`, `STRING$`, and `HEX$`) are directly used or referenced in the version-specific 3.5 addendum. Their demonstrated forms and limits are recorded in [the declaration-level audit](amiga-gfa-basic-35-base-function-use-audit.md). This evidence confirms only the forms shown, not every overload or edge case; the entries retain their 3.0 base-manual origin.

@@ -621,7 +621,7 @@ notes = "The 3.5 MAT PRINT description specifies number formatting as STR$(x,g,n
 confirmation-source = "AM-INTERPRETER-35"
 confirmation-source-version = "3.5 addendum"
 confirmation-printed-pages = ["13-3"]
-confirmation-basis = "direct-example-use"
+confirmation-basis = "direct-documentation-reference"
 [[candidates]]
 id = "amiga.base2.val"
 name = "VAL / VAL?"

@@ -151,7 +151,7 @@ tags: [amiga, gfa-basic, evidence, research]
 | `amiga.35.pcolor` | PCOLOR | 3.5 addendum | 13-34 (469-page scan), 14-4 (combined update scan) | Explicit 3.5 addendum declaration | Applies foreground and optional background colors to PRINT screen output. |
 | `amiga.35.special-longwords` | _0 through _9 | 3.5 addendum | 13-35 (469-page scan), 14-6 (combined update scan) | Explicit 3.5 addendum declaration | Ten special longword variables; persistence and clearing behavior are described in the addendum. |
 | `amiga.base2.hex` | HEX$ | 3.0 base manual | 13-36 | Direct example use | The 3.5 GURU example calls HEX$(GURU), confirming the one-argument form; the optional width form is not independently used in the addendum. |
-| `amiga.base2.str` | STR$ | 3.0 base manual | 13-3 | Direct example use | The 3.5 MAT PRINT description specifies number formatting as STR$(x,g,n) (printed p. 13-3). This confirms the three-argument form used for matrix output; other base-manual overloads are not independently restated. |
+| `amiga.base2.str` | STR$ | 3.0 base manual | 13-3 | Direct documentation reference | The 3.5 MAT PRINT description specifies number formatting as STR$(x,g,n) (printed p. 13-3). This confirms the three-argument form used for matrix output; other base-manual overloads are not independently restated. |
 | `amiga.base4.rand` | RAND() | 3.0 base manual | 13-2 | Direct example use | The 3.5 MAT SET example assigns RAND(10) to matrix elements. This confirms the call form used, not all distribution or seeding details. |
 | `amiga.base4.string` | STRING$() | 3.0 base manual | 13-21 | Direct example use | The 3.5 matrix examples use STRING$(n, "-") as PRINT separators. This confirms the string-argument form; the character-code overload is not independently restated. |
 | `amiga.base4.succ` | SUCC() | 3.0 base manual | 13-5 | Direct example use | The 3.5 matrix-copy examples use SUCC(i%) and SUCC(j%) (printed pp. 13-5–13-13). This directly confirms numeric use; the string overload is not independently restated. |
@@ -163,7 +163,7 @@ No candidates are currently classified as contradicted. This is not evidence tha
 ## Interpretation and limitations
 
 - `documented-in-3.0-only` means the cited declaration is present in the 3.0 base manual but no 3.5 evidence establishes its applicability. This does not mean removed or incompatible.
-- `confirmed-in-3.5` can be based either on an explicit 3.5 addendum declaration or on direct use in a 3.5 addendum example. For inherited functions, direct example use confirms only the form actually shown; it does not revalidate every overload or edge case.
+- `confirmed-in-3.5` can be based either on an explicit 3.5 addendum declaration or on direct use or reference in the 3.5 addendum. For inherited functions, direct addendum evidence confirms only the form actually shown or referenced; it does not revalidate every overload or edge case.
 - `unresolved` is reserved for candidates whose source scope or declaration identity still needs research.
 - A confirmed family does not settle every overload or edge case; qualifications in the manifest and detailed research notes remain authoritative.
 - Chapter 12 indexes and reference tables are navigation aids, not declarations or proof of availability.

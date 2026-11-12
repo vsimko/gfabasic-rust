@@ -49,7 +49,7 @@ def load_candidates(path: Path) -> list[dict]:
             if (
                 item.get("confirmation-source") != "AM-INTERPRETER-35"
                 or item.get("confirmation-source-version") != "3.5 addendum"
-                or item.get("confirmation-basis") != "direct-example-use"
+                or item.get("confirmation-basis") not in {"direct-example-use", "direct-documentation-reference"}
                 or not item.get("confirmation-printed-pages")
             ):
                 raise ValueError(f'{item["id"]}: 3.5 confirmation requires direct addendum example-use provenance')
@@ -104,7 +104,7 @@ def render(candidates: list[dict]) -> str:
     for item in confirmed:
         note = item["notes"].replace("|", "\\|")
         evidence_pages = ", ".join(item.get("confirmation-printed-pages", item["printed-pages"]))
-        basis = "Direct example use" if item.get("confirmation-basis") == "direct-example-use" else "Explicit 3.5 addendum declaration"
+        basis = {"direct-example-use": "Direct example use", "direct-documentation-reference": "Direct documentation reference"}.get(item.get("confirmation-basis"), "Explicit 3.5 addendum declaration")
         lines.append(f"| `{item['id']}` | {item['name']} | {item['source-version']} | {evidence_pages} | {basis} | {note} |")
     if not confirmed:
         lines.append("| — | None | — | — | — | — |")
@@ -120,7 +120,7 @@ def render(candidates: list[dict]) -> str:
         "## Interpretation and limitations",
         "",
         "- `documented-in-3.0-only` means the cited declaration is present in the 3.0 base manual but no 3.5 evidence establishes its applicability. This does not mean removed or incompatible.",
-        "- `confirmed-in-3.5` can be based either on an explicit 3.5 addendum declaration or on direct use in a 3.5 addendum example. For inherited functions, direct example use confirms only the form actually shown; it does not revalidate every overload or edge case.",
+        "- `confirmed-in-3.5` can be based either on an explicit 3.5 addendum declaration or on direct use or reference in the 3.5 addendum. For inherited functions, direct addendum evidence confirms only the form actually shown or referenced; it does not revalidate every overload or edge case.",
         "- `unresolved` is reserved for candidates whose source scope or declaration identity still needs research.",
         "- A confirmed family does not settle every overload or edge case; qualifications in the manifest and detailed research notes remain authoritative.",
         "- Chapter 12 indexes and reference tables are navigation aids, not declarations or proof of availability.",
