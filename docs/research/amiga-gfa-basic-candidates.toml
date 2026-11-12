@@ -1586,3 +1586,17 @@ confirmation-source-version = "3.5 companion book Chapter 18 example"
 confirmation-printed-pages = ["471"]
 confirmation-basis = "direct-example-use"
 
+[[candidates]]
+id = "amiga.base8.cls"
+name = "CLS"
+kind = "statement"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["8-20"]
+status = "confirmed-in-3.5"
+notes = "The Chapter 13 3.5 addendum example uses CLS before MAT READ (printed p. 13-24). This confirms the ordinary screen-clear form; the optional CLS #n rerouting form from the base manual is not demonstrated."
+confirmation-source = "AM-INTERPRETER-35"
+confirmation-source-version = "3.5 addendum"
+confirmation-printed-pages = ["13-24"]
+confirmation-basis = "direct-example-use"
+

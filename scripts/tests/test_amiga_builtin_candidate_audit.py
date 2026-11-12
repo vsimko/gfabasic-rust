@@ -115,6 +115,16 @@ class GermanBookCrossCheckTests(unittest.TestCase):
             self.assertEqual(item["confirmation-printed-pages"], pages)
             self.assertEqual(item["confirmation-basis"], "direct-example-use")
 
+
+    def test_cls_is_confirmed_from_the_3_5_addendum_example_only(self):
+        candidates = tomllib.loads(MANIFEST.read_text(encoding="utf-8"))["candidates"]
+        item = next(candidate for candidate in candidates if candidate["id"] == "amiga.base8.cls")
+        self.assertEqual(item["status"], "confirmed-in-3.5")
+        self.assertEqual(item["confirmation-source"], "AM-INTERPRETER-35")
+        self.assertEqual(item["confirmation-source-version"], "3.5 addendum")
+        self.assertEqual(item["confirmation-printed-pages"], ["13-24"])
+        self.assertEqual(item["confirmation-basis"], "direct-example-use")
+
     def test_explicit_3_5_families_have_independent_page_level_witness(self):
         by_id = {item["id"]: item for item in tomllib.loads(
             MANIFEST.read_text(encoding="utf-8")
@@ -159,6 +169,7 @@ class GermanBookCrossCheckTests(unittest.TestCase):
             "amiga.base6.open", "amiga.base6.close", "amiga.base7.pause",
             "amiga.base7.procedure-return", "amiga.base7.end",
             "amiga.base7.procedure-call-at",
+            "amiga.base8.cls",
         })
 
 

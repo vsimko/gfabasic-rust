@@ -85,6 +85,15 @@ def load_candidates(path: Path) -> list[dict]:
                 or item.get("confirmation-basis") != "direct-example-use"
             ):
                 raise ValueError(f'{item["id"]}: 3.5 statement evidence must match the audited example pages')
+        elif item["id"] == "amiga.base8.cls":
+            if (
+                item["status"] != "confirmed-in-3.5"
+                or item.get("confirmation-source") != "AM-INTERPRETER-35"
+                or item.get("confirmation-source-version") != "3.5 addendum"
+                or item.get("confirmation-printed-pages") != ["13-24"]
+                or item.get("confirmation-basis") != "direct-example-use"
+            ):
+                raise ValueError("amiga.base8.cls: 3.5 addendum evidence must match the CLS example on p. 13-24")
         elif item["status"] == "confirmed-in-3.5" and item["id"].startswith(("amiga.base5.", "amiga.base6.", "amiga.base7.", "amiga.base8.")):
             raise ValueError(f'{item["id"]}: no audited 3.5 statement example evidence')
 
