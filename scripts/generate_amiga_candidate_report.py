@@ -122,13 +122,13 @@ def render(candidates: list[dict]) -> str:
         "## Interpretation and limitations",
         "",
         "- `documented-in-3.0-only` means the cited declaration is present in the 3.0 base manual but no 3.5 evidence establishes its applicability. This does not mean removed or incompatible.",
-        "- `confirmed-in-3.5` can be based either on an explicit 3.5 source declaration or on direct use or reference in 3.5 material. For inherited functions, direct evidence confirms only the form actually shown or referenced; it does not revalidate every overload or edge case.",
+        "- `confirmed-in-3.5` can be based either on an explicit 3.5 source declaration or on direct use or reference in 3.5 material. For inherited functions and statements, direct evidence confirms only the form and context actually shown or referenced; it does not revalidate every overload or variant.",
         "- `unresolved` is reserved for candidates whose source scope or declaration identity still needs research.",
         "- A confirmed family does not settle every overload or edge case; qualifications in the manifest and detailed research notes remain authoritative.",
         "- Chapter 12 indexes and reference tables are navigation aids, not declarations or proof of availability.",
         "- No absence-based removal or compatibility inference is made.",
         "",
-        "Source: `AM-INTERPRETER-35` and `AM-BOOK-DE-1990` in `docs/reference-sources.md`; detailed page notes are in `amiga-gfa-basic-3.0-base-inventory.md`, `amiga-gfa-basic-35-addendum-inventory.md`, and `amiga-gfa-basic-35-base-function-use-audit.md`.",
+        "Source: `AM-INTERPRETER-35` and `AM-BOOK-DE-1990` in `docs/reference-sources.md`; detailed page notes are in `amiga-gfa-basic-3.0-base-inventory.md`, `amiga-gfa-basic-35-addendum-inventory.md`, and `amiga-gfa-basic-35-base-function-use-audit.md` and `amiga-gfa-basic-35-base-statement-use-audit.md`.",
         "",
     ])
     return "\n".join(lines)
