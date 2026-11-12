@@ -159,7 +159,7 @@ def render(candidates: list[dict]) -> str:
         "- Chapter 12 indexes and reference tables are navigation aids, not declarations or proof of availability.",
         "- No absence-based removal or compatibility inference is made.",
         "",
-        "Source: `AM-INTERPRETER-35` and `AM-BOOK-DE-1990` in `docs/reference-sources.md`; detailed page notes are in `amiga-gfa-basic-3.0-base-inventory.md`, `amiga-gfa-basic-35-addendum-inventory.md`, `amiga-gfa-basic-35-base-function-use-audit.md`, and `amiga-gfa-basic-35-statement-operator-audit.md`.",
+        "Source: `AM-INTERPRETER-35` and `AM-BOOK-DE-1990` in `docs/reference-sources.md`; detailed page notes are in `amiga-gfa-basic-3.0-base-inventory.md`, `amiga-gfa-basic-35-addendum-inventory.md`, `amiga-gfa-basic-35-base-function-use-audit.md`, `amiga-gfa-basic-35-statement-operator-audit.md`, and `amiga-gfa-basic-35-example-used-statements-audit.md`.",
         "",
     ])
     return "\n".join(lines)
