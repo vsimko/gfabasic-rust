@@ -76,12 +76,15 @@ class GermanBookCrossCheckTests(unittest.TestCase):
                 self.assertEqual(item["corroborating-source"], "AM-BOOK-DE-1990")
                 self.assertEqual(item["corroborating-printed-pages"], pages)
 
-    def test_german_cross_check_does_not_promote_base_manual_candidates(self):
+    def test_german_cross_check_only_promotes_candidates_with_chapter_18_evidence(self):
         candidates = tomllib.loads(MANIFEST.read_text(encoding="utf-8"))["candidates"]
         base_candidates = [item for item in candidates if item["id"].startswith("amiga.base")]
         self.assertTrue(base_candidates)
         self.assertTrue(all(item["source-version"] == "3.0 base manual" for item in base_candidates))
-        self.assertTrue(all("corroborating-source" not in item for item in base_candidates))
+        corroborated = {item["id"]: item for item in base_candidates if "corroborating-source" in item}
+        self.assertEqual(set(corroborated), {"amiga.base2.str"})
+        self.assertEqual(corroborated["amiga.base2.str"]["corroborating-source"], "AM-BOOK-DE-1990")
+        self.assertEqual(corroborated["amiga.base2.str"]["corroborating-printed-pages"], ["457"])
         confirmed = {item["id"] for item in base_candidates if item["status"] == "confirmed-in-3.5"}
         self.assertEqual(confirmed, {
             "amiga.base2.hex", "amiga.base2.str", "amiga.base4.rand",

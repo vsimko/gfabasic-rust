@@ -79,7 +79,7 @@ def validate(path: Path) -> dict[str, int]:
             ):
                 raise ValueError(f"{name}: 3.5 source evidence needs source and printed pages")
         elif origin == "base-manual-3.0" and name in EXPECTED_35_SOURCE_EVIDENCE_FUNCTIONS:
-            raise ValueError(f"{name}: audited 3.5 addendum-use evidence status is required")
+            raise ValueError(f"{name}: audited 3.5 source-evidence status is required")
 
     addendum_names = {
         item["name"] for item in functions if item["origin"] == "3.5-addendum"
