@@ -34,8 +34,8 @@ class ChapterTwoToFourCandidateAuditTests(unittest.TestCase):
                         "amiga.base4.rnd": ("AM-BOOK-DE-1990", "3.5 companion book Chapter 18", ["458"], "direct-example-use"),
                         "amiga.base4.int": ("AM-BOOK-DE-1990", "3.5 companion book Chapter 18", ["458"], "direct-example-use"),
                         "amiga.base4.sqr": ("AM-BOOK-DE-1990", "3.5 companion book Chapter 18", ["473"], "direct-example-use"),
-                        "amiga.base3.numeric-add-sub": ("AM-BOOK-DE-1990", "3.5 companion book Chapter 18 example", ["467", "470"], "direct-example-use"),
-                        "amiga.base3.multiply-divide": ("AM-BOOK-DE-1990", "3.5 companion book Chapter 18 example", ["470", "473"], "direct-example-use"),
+                        "amiga.base3.numeric-add-sub": ("AM-BOOK-DE-1990", "3.5 companion book Chapter 18 example", ["466", "467"], "direct-example-use"),
+                        "amiga.base3.multiply-divide": ("AM-BOOK-DE-1990", "3.5 companion book Chapter 18 example", ["469", "473"], "direct-example-use"),
                     }
                     expected = expected_sources[item["id"]]
                     self.assertEqual(item.get("confirmation-source"), expected[0])
