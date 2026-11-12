@@ -1386,7 +1386,7 @@ status = "confirmed-in-3.5"
 notes = "The 3.5 data-pointer example uses INC i% and DEC i% (p. 13-35)."
 confirmation-source = "AM-INTERPRETER-35"
 confirmation-source-version = "3.5 addendum"
-confirmation-printed-pages = "13-35"
+confirmation-printed-pages = ["13-35"]
 confirmation-basis = "direct-example-use"
 
 [[candidates]]
