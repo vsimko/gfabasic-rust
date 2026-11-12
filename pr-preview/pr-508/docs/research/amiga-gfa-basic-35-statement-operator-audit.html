@@ -46,15 +46,9 @@
 <td>Numeric products in the matrix-multiplication explanation; <code>1/SQR(l)</code> in vector normalization</td>
 <td>Confirms the shown numeric forms only; not precedence or all operand types</td>
 </tr>
-<tr>
-<td>Unary <code>-</code></td>
-<td>p. 470</td>
-<td>A negative operand appears in <code>0.5*-1</code></td>
-<td>Unary <code>+</code> is not demonstrated and remains 3.0-only evidence</td>
-</tr>
 </tbody>
 </table>
-<p>The arithmetic evidence does not establish the operator hierarchy, associativity, string concatenation, exponentiation, integer division, modulo, comparison operators, or logical operators. The assignment sign in the examples is not treated as evidence for equality comparison.</p>
+<p>The arithmetic evidence does not establish the operator hierarchy, associativity, unary plus/minus, string concatenation, exponentiation, integer division, modulo, comparison operators, or logical operators. Although the code example contains negative DATA values on p. 471, that does not by itself establish general unary-operator parsing in expressions; both prefix forms remain candidates. The assignment sign in the examples is not treated as evidence for equality comparison.</p>
 <h2 id="directly-evidenced-inherited-statements">Directly evidenced inherited statements</h2>
 <table>
 <thead>
@@ -104,7 +98,7 @@
 </tr>
 </tbody>
 </table>
-<p>The candidate manifest splits grouped records where the example demonstrates only one member or form: <code>PRINT</code> and <code>LOCATE</code> are separated from <code>PRINT AT</code> and <code>WRITE</code>; <code>COLOR</code> from <code>SETCOLOR</code>; <code>DRAW TO</code> from <code>PLOT</code>, <code>LINE</code>, and other <code>DRAW</code> forms; unary minus from unary plus.</p>
+<p>The candidate manifest splits grouped records where the example demonstrates only one member or form: <code>PRINT</code> and <code>LOCATE</code> are separated from <code>PRINT AT</code> and <code>WRITE</code>; <code>COLOR</code> from <code>SETCOLOR</code>; <code>DRAW TO</code> from <code>PLOT</code>, <code>LINE</code>, and other <code>DRAW</code> forms. Prefix unary plus/minus remain grouped and unconfirmed.</p>
 <h2 id="similar-looking-forms-deliberately-not-conflated">Similar-looking forms deliberately not conflated</h2>
 <ul>
 <li><code>MAT PRINT #1</code> and <code>MAT INPUT #1</code> are matrix-specific commands; they do not confirm ordinary <code>PRINT #</code>, <code>INPUT #</code>, or <code>LINE INPUT #</code> file statements.</li>
@@ -114,7 +108,7 @@
 <li>The <code>DRAW TO</code> example does not confirm the full <code>DRAW</code> command family.</li>
 </ul>
 <h2 id="result">Result</h2>
-<p>Nine inherited statement/operator candidate records receive narrow direct 3.5 evidence in this pass: numeric <code>+</code>/<code>-</code>, <code>*</code>/<code>/</code>, unary <code>-</code>, <code>PRINT</code>, <code>LOCATE</code>, <code>FOR/NEXT</code>, <code>WHILE/WEND</code>, <code>COLOR</code>, and <code>DRAW TO</code>. Their original source origin remains the 3.0 base manual; confirmation source and printed pages are recorded separately.</p>
+<p>Eight inherited statement/operator candidate records receive narrow direct 3.5 evidence in this pass: numeric <code>+</code>/<code>-</code>, <code>*</code>/<code>/</code>, <code>PRINT</code>, <code>LOCATE</code>, <code>FOR/NEXT</code>, <code>WHILE/WEND</code>, <code>COLOR</code>, and <code>DRAW TO</code>. Their original source origin remains the 3.0 base manual; confirmation source and printed pages are recorded separately.</p>
 <p>No API registry declaration, implementation state, runtime-conformance claim, or language-core count is changed. Platform-specific graphics forms remain candidates for the Amiga API profile, not language-core declarations. Unsupported siblings and operators remain documented in the 3.0 base only; their absence from these examples is not evidence of removal or incompatibility.</p>
 
       </article>
