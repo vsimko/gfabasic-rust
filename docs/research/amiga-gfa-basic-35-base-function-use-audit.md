@@ -26,7 +26,7 @@ The German book identifies the material in Chapter 18 as new in version 3.5. Its
 | `INT` | German book, Chapter 18, p. 458 | The same matrix example uses `INT(RND(1)*5)`. | Only the one-argument integer-conversion form is demonstrated. |
 | `SQR` | German book, Chapter 18, p. 473 | The vector-normalization example uses `SQR(l)` for vector length and `1/SQR(l)` for normalization. | Only the one-argument form is demonstrated. |
 
-These eight identifiers remain recorded with their 3.0 base-manual origin and receive the separate `confirmed-by-3.5-addendum-use` evidence status. Their original base-manual page references remain intact; the 3.5 source identifiers and printed-page locators are stored in separate confirmation fields.
+These eight identifiers remain recorded with their 3.0 base-manual origin and receive the separate `confirmed-by-3.5-source-evidence` evidence status. Their original base-manual page references remain intact; the 3.5 source identifiers and printed-page locators are stored in separate confirmation fields.
 
 ## Similar-looking occurrence deliberately excluded
 
