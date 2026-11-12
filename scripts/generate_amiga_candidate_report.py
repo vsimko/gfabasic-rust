@@ -12,6 +12,7 @@ DEFAULT_MANIFEST = Path("docs/research/amiga-gfa-basic-candidates.toml")
 DEFAULT_OUTPUT = Path("docs/research/amiga-gfa-basic-candidate-report.md")
 STATUSES = {"candidate", "confirmed-in-3.5", "contradicted", "documented-in-3.0-only", "unresolved"}
 REQUIRED = {"id", "name", "kind", "source", "source-version", "printed-pages", "status", "notes"}
+EXPECTED_35_DIRECT_USE_BASIS = {"amiga.base2.hex": "direct-example-use", "amiga.base2.str": "direct-documentation-reference", "amiga.base4.rand": "direct-example-use", "amiga.base4.succ": "direct-example-use", "amiga.base4.string": "direct-example-use"}
 
 
 def load_candidates(path: Path) -> list[dict]:
@@ -49,7 +50,7 @@ def load_candidates(path: Path) -> list[dict]:
             if (
                 item.get("confirmation-source") != "AM-INTERPRETER-35"
                 or item.get("confirmation-source-version") != "3.5 addendum"
-                or item.get("confirmation-basis") not in {"direct-example-use", "direct-documentation-reference"}
+                or item.get("confirmation-basis") != EXPECTED_35_DIRECT_USE_BASIS.get(item["id"])
                 or not item.get("confirmation-printed-pages")
             ):
                 raise ValueError(f'{item["id"]}: 3.5 confirmation requires direct addendum example-use provenance')

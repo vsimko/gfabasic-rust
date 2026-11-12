@@ -31,7 +31,7 @@ class FunctionInventoryTests(unittest.TestCase):
                 expected_basis = "direct-documentation-reference" if item["name"] == "STR$" else "direct-example-use"
                 self.assertEqual(item["confirmation-basis"], expected_basis)
 
-    def test_non_audited_base_function_cannot_claim_3_5_example_evidence(self):
+    def test_non_audited_base_function_cannot_claim_3_5_addendum_use_evidence(self):
         root = Path(__file__).resolve().parents[2]
         source = root / "docs/research/amiga-gfa-basic-functions.toml"
         text = source.read_text(encoding="utf-8")

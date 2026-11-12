@@ -69,7 +69,7 @@ def validate(path: Path) -> dict[str, int]:
 
         if evidence_status == "confirmed-by-3.5-addendum-use":
             if name not in EXPECTED_35_ADDENDUM_USE_FUNCTIONS:
-                raise ValueError(f"{name}: no audited 3.5 addendum addendum-use evidence")
+                raise ValueError(f"{name}: no audited 3.5 addendum use evidence")
             if (
                 item.get("confirmation-source") != "AM-INTERPRETER-35"
                 or item.get("confirmation-source-version") != "3.5 addendum"
