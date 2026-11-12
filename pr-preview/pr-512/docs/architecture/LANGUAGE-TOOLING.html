@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Provide one reusable language engine for the selected Commodore Amiga GFA BASIC interpreter 3.5 dialect. The CLI, formatter, language server, and editor integrations must consume the same source and semantic models.">
+  <title>Language tooling and editor integration · GFA BASIC Rust documentation</title>
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body class="docs-site">
+  <header class="docs-header">
+    <a href="../../index.html">GFA BASIC Rust</a>
+    <span aria-hidden="true">/</span>
+    <a href="../index.html">Documentation</a>
+  </header>
+  <div class="docs-layout">
+    <nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home" href="index.html">Section index</a><ul><li><a href="AI-VERIFICATION.html">AI-assisted API verification</a></li><li><a href="API-PROFILES.html">API profiles</a></li><li><a href="API-REGISTRY.html">API registry and declaration source of truth</a></li><li><a href="BENCHMARKING.html">Performance benchmarks and profiling strategy</a></li><li><a href="CI.html">GitHub Actions workflow architecture</a></li><li><a href="CLI-AND-CONFIG.html">CLI, configuration, and build artifacts</a></li><li><a href="COMPATIBILITY-MATRIX.html">Current compatibility matrix</a></li><li><a href="DIAGNOSTICS.html">Diagnostics and compatibility reporting</a></li><li><a href="DIALECTS.html">Dialects, versions, and compatibility policy</a></li><li><a href="FORMATTER.html">Formatter style and current support</a></li><li><a href="FUZZING.html">Frontend fuzzing and robustness strategy</a></li><li><a href="GOALS.html">Project goals and compatibility objectives</a></li><li><a href="IMPLEMENTATION-DASHBOARD.html">Implementation dashboard</a></li><li><a href="LANGUAGE-TOOLING.html">Language tooling and editor integration</a></li><li><a href="MEMORY.html">Memory model and hardware access</a></li><li><a href="MVP-vertical-slice.html">First compiler vertical slice — proposed boundary</a></li><li><a href="PIPELINE-AND-IR.html">Compiler pipeline and intermediate representation</a></li><li><a href="README.html">README</a></li><li><a href="RELEASES.html">Release, artifact, and reproducible-build policy</a></li><li><a href="RUNTIME.html">Runtime architecture</a></li><li><a href="SECURITY.html">Dependency and supply-chain security</a></li><li><a href="TARGETS.html">Host and target model</a></li><li><a href="TESTING.html">Compatibility testing and release criteria</a></li><li><a href="VALIDATION.html">Repository consistency validation</a></li><li><a href="VERSIONING.html">Versioning and compatibility lifecycle</a></li><li><a href="WEBSITE_PREVIEWS.html">Website previews for pull requests</a></li><li><a href="WORKSPACE.html">Rust workspace and dependency policy</a></li><li><a href="adr/index.html">Architecture decisions</a></li></ul></nav>
+    <main class="docs-content">
+      <article>
+        <h1>Language tooling and editor integration</h1>
+        <p class="docs-meta"><span>Architecture</span></p>
+        <h1 id="language-tooling-and-editor-integration">Language tooling and editor integration</h1>
+<ul>
+<li>Status: <strong>Accepted architecture direction</strong>; implementation is tracked by <a href="https://github.com/vsimko/gfabasic-rust/issues/209">#209</a>, <a href="https://github.com/vsimko/gfabasic-rust/issues/210">#210</a>, and <a href="https://github.com/vsimko/gfabasic-rust/issues/211">#211</a>.</li>
+<li>Decision record: <a href="adr/0012-language-server-and-editor-integration.html">ADR 0012</a>.</li>
+</ul>
+<h2 id="goals-and-boundaries">Goals and boundaries</h2>
+<p>Provide one reusable language engine for the selected <strong>Commodore Amiga GFA BASIC interpreter 3.5</strong> dialect. The CLI, formatter, language server, and editor integrations must consume the same source and semantic models.</p>
+<p>The language server is a protocol adapter. It is not another compiler frontend and must not reimplement tokenization, parsing, symbol resolution, diagnostics, or formatting. The frontend and semantic engine remain independent of LSP, VS Code, IntelliJ, LLVM, SDL3, and generated-program runtime code.</p>
+<h2 id="logical-architecture">Logical architecture</h2>
+<pre><code class="language-text">VS Code extension                 IntelliJ plugin
+       |                                |
+       +----------- LSP / JSON-RPC -----+
+                       |
+                gfabasic-lsp
+                       |
+             shared compiler services
+          +------------+-------------+
+          |            |             |
+      lossless CST   semantics    formatter
+          |         symbol index      |
+          +------------+-------------+
+                       |
+                 compiler / CLI
+                       |
+               typed IR / backend
+</code></pre>
+<p>The diagram shows logical responsibilities, not a mandatory Cargo crate split. The LSP server may be a separate crate because it owns a protocol/binary boundary and protocol dependencies; keep internal compiler stages as modules unless a demonstrated dependency or ownership boundary justifies another crate.</p>
+<h2 id="shared-frontend-contract">Shared frontend contract</h2>
+<p>The language tooling depends on these shared services:</p>
+<ul>
+<li><strong>Lossless source model:</strong> retain comments, whitespace/trivia, original literal payloads, line boundaries, and source spans. A semantic AST alone is not sufficient for formatting or precise editor edits.</li>
+<li><strong>Semantic model:</strong> expose stable symbol identities, declaration/reference relationships, scopes, signatures, and source locations.</li>
+<li><strong>Diagnostics:</strong> reuse compiler diagnostic codes, severity, source spans, and source-map conversion. Editor diagnostics must not be generated by a second parser.</li>
+<li><strong>Formatter:</strong> expose a library API independent of CLI and LSP. Formatting is available only for syntax the frontend can parse and safely preserve.</li>
+<li><strong>Build service:</strong> reuse the compiler's build pipeline and configuration. Editor build actions must not contain their own compiler or code generator.</li>
+</ul>
+<p>The selected dialect/version is explicit. Rules found only in Amiga 3.0/3.03 references remain inherited candidates until confirmed for 3.5. Atari syntax and AmigaBASIC syntax must not be imported into the language server's Amiga GFA BASIC 3.5 grammar.</p>
+<p>Identifiers are source data, not prose. Slovak, English, mixed-language, and other valid identifier names must be retained exactly. The formatter must not translate or normalize them. Rename changes only the symbol explicitly selected by the user and references proven to resolve to it.</p>
+<h2 id="lsp-process-and-protocol">LSP process and protocol</h2>
+<ul>
+<li>Use standard LSP over JSON-RPC with <strong>stdio</strong> as the initial transport.</li>
+<li>Implement initialize, capability negotiation, shutdown, exit, and document lifecycle.</li>
+<li>Begin with full-document synchronization. Advertise incremental synchronization only after correct versioned incremental updates and reparsing are implemented.</li>
+<li>Keep document versions and reject or avoid stale diagnostics and workspace edits.</li>
+<li>Compiler source spans remain byte-based. Convert to and from LSP line/character positions at the boundary; LSP character offsets are UTF-16 code units. Test non-ASCII identifiers/comments, supplementary Unicode characters, CRLF/LF, and edits around line boundaries.</li>
+<li>Support cancellation and multiple open documents as the server matures.</li>
+<li>Do not advertise a capability before its implementation and protocol tests pass.</li>
+</ul>
+<h2 id="capability-progression">Capability progression</h2>
+<table>
+<thead>
+<tr>
+<th>Capability</th>
+<th>Shared prerequisite</th>
+<th>Planned behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Diagnostics</td>
+<td>Lexer/parser, source map, semantic diagnostics</td>
+<td>Publish compiler diagnostics for the current document version</td>
+</tr>
+<tr>
+<td>Formatting</td>
+<td>Lossless CST/trivia and formatter library</td>
+<td>Whole-document and range formatting without changing program meaning</td>
+</tr>
+<tr>
+<td>Go to definition</td>
+<td>Symbol resolution</td>
+<td>Navigate to the resolved declaration</td>
+</tr>
+<tr>
+<td>Find references</td>
+<td>Symbol index</td>
+<td>Return references bound to the selected symbol</td>
+</tr>
+<tr>
+<td>Completion</td>
+<td>Parser context and visible symbols</td>
+<td>Offer in-scope identifiers and only verified built-ins/keywords</td>
+</tr>
+<tr>
+<td>Rename</td>
+<td>Stable symbol identity and reference index</td>
+<td>Emit versioned workspace edits for the selected symbol only</td>
+</tr>
+<tr>
+<td>Code actions</td>
+<td>Diagnostics and safe transformation APIs</td>
+<td>Offer only transformations with verified preconditions</td>
+</tr>
+<tr>
+<td>Build</td>
+<td>Shared compiler/build pipeline and stable CLI/configuration contract</td>
+<td>Invoke the same build implementation used outside the editor and report diagnostics/artifacts</td>
+</tr>
+</tbody>
+</table>
+<p>Capability rollout is incremental. Initial server scaffolding may precede the semantic engine, but unsupported capabilities must remain unadvertised. Formatting and compiler diagnostics are the first useful capabilities; navigation and refactoring follow symbol resolution.</p>
+<h2 id="refactoring-correctness">Refactoring correctness</h2>
+<p>Rename must never be implemented as a plain text search-and-replace. It must:</p>
+<ol>
+<li>Resolve the selected occurrence to a unique symbol identity.</li>
+<li>Obtain declarations and references from the semantic index.</li>
+<li>Exclude strings, comments, DATA payloads, unrelated identifiers, and shadowed symbols.</li>
+<li>Check document versions before returning or applying edits.</li>
+<li>Preserve spelling and encoding outside the explicitly renamed identifier.</li>
+<li>Return no unsafe edit when the symbol is unresolved or ambiguous.</li>
+</ol>
+<p>Extract/inline refactoring and structural transformations are later capabilities. They require verified control-flow and scope semantics and are not part of the first LSP milestone.</p>
+<h2 id="editor-clients">Editor clients</h2>
+<h3 id="visual-studio-code">Visual Studio Code</h3>
+<p>The extension owns language registration, file associations, basic syntax highlighting, server discovery/configuration, and task integration. It consumes LSP features and delegates builds to the common <code>gfabasic</code> CLI/build service. TextMate or similar highlighting is a presentation layer only and must not be treated as syntax validation.</p>
+<p>Tracking: <a href="https://github.com/vsimko/gfabasic-rust/issues/210">#210</a>.</p>
+<h3 id="intellij-idea">IntelliJ IDEA</h3>
+<p>Prefer a thin plugin using an established LSP client integration. It owns file-type registration, server configuration, settings, and build/run configuration integration. Add native IntelliJ PSI or refactoring adapters only when a concrete capability cannot be delivered through LSP and the maintenance cost is justified. Any native adapter must remain consistent with the shared frontend.</p>
+<p>Tracking: <a href="https://github.com/vsimko/gfabasic-rust/issues/211">#211</a>.</p>
+<h2 id="build-and-debug-integration">Build and debug integration</h2>
+<p>The server may expose a documented <code>gfabasic.build</code> execute-command or equivalent. It must call the shared compiler/build pipeline, use the same configuration and diagnostics as the CLI, and report progress/result information through protocol notifications where supported. The LSP server does not own code generation, linking, runtime startup, or platform APIs.</p>
+<p>Debugging is explicitly deferred. A future Debug Adapter Protocol (DAP) adapter requires a separate decision covering source-level stepping, variable inspection, runtime instrumentation, and the relationship between generated code and original BASIC source.</p>
+<h2 id="testing-and-quality-gates">Testing and quality gates</h2>
+<ul>
+<li>Unit-test UTF-8 byte-span / UTF-16 position conversions and line-ending behavior.</li>
+<li>Test document lifecycle, versioning, cancellation, and multiple documents.</li>
+<li>Use protocol integration tests for diagnostics, formatting, navigation, references, completion, and rename.</li>
+<li>Test that formatting is idempotent and preserves comments/literals as specified by <a href="https://github.com/vsimko/gfabasic-rust/issues/208">#208</a>.</li>
+<li>Test rename against shadowed names, unresolved references, comments, strings, DATA statements, and non-ASCII identifiers.</li>
+<li>Keep server tests independent of both editor applications and LLVM/SDL3 system dependencies.</li>
+<li>Verify editor extensions from clean installations and test server discovery/failure behavior.</li>
+<li>Keep the GFA BASIC 3.5 compatibility/evidence gate authoritative for all advertised language behavior.</li>
+</ul>
+<h2 id="related-work">Related work</h2>
+<ul>
+<li><a href="PIPELINE-AND-IR.html">Compiler pipeline and IR</a>, <a href="https://github.com/vsimko/gfabasic-rust/issues/6">#6</a>.</li>
+<li><a href="WORKSPACE.html">Workspace boundaries</a>, <a href="https://github.com/vsimko/gfabasic-rust/issues/11">#11</a>.</li>
+<li><a href="https://github.com/vsimko/gfabasic-rust/issues/46">Lexer and lossless token stream</a>.</li>
+<li><a href="https://github.com/vsimko/gfabasic-rust/issues/47">Parser and lossless syntax representation</a>.</li>
+<li><a href="https://github.com/vsimko/gfabasic-rust/issues/48">Semantic analysis and symbol index</a>.</li>
+<li><a href="https://github.com/vsimko/gfabasic-rust/issues/208">Formatter</a>.</li>
+<li><a href="https://github.com/vsimko/gfabasic-rust/issues/209">LSP server</a>.</li>
+</ul>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>
