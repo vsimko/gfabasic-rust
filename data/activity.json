@@ -1,9 +1,25 @@
 {
   "schema_version": 1,
   "status": "fresh",
-  "generated_at": "2026-11-12T07:02:19.267241+00:00",
-  "last_successful_at": "2026-11-12T07:02:19.267241+00:00",
+  "generated_at": "2026-11-12T10:51:23.530004+00:00",
+  "last_successful_at": "2026-11-12T10:51:23.530004+00:00",
   "items": [
+    {
+      "type": "merged_pull_request",
+      "title": "Enforce function inventory version evidence boundaries",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/504",
+      "number": 504,
+      "timestamp": "2026-11-12T10:51:02Z",
+      "summary": "PR #504 merged"
+    },
+    {
+      "type": "commit",
+      "title": "Enforce function inventory version evidence boundaries",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/ce7308882f46e213713d9eeb63ece1ae09d7e3b6",
+      "number": null,
+      "timestamp": "2026-11-12T10:51:02Z",
+      "summary": "Commit ce73088"
+    },
     {
       "type": "merged_pull_request",
       "title": "Record independent German 3.5 evidence in candidate manifest",
@@ -83,22 +99,6 @@
       "number": null,
       "timestamp": "2026-11-11T20:28:10Z",
       "summary": "Commit 0e809fb"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "[Docs] Record reference-page and catalogue audit",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/497",
-      "number": 497,
-      "timestamp": "2026-11-11T20:06:36Z",
-      "summary": "PR #497 merged"
-    },
-    {
-      "type": "commit",
-      "title": "[Docs] Record reference-page and catalogue audit",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/c2627483a7be38986ca3783a7f757805b6bf726f",
-      "number": null,
-      "timestamp": "2026-11-11T20:06:35Z",
-      "summary": "Commit c262748"
     }
   ]
 }
