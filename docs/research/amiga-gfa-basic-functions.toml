@@ -11,7 +11,7 @@ compiler-only-identifiers = 2
 base-manual-identifiers = 113
 "explicit-3.5-addendum-identifiers" = 4
 disputed-name-slots = 2
-confirmed-by-3.5-addendum-use-identifiers = 5
+"confirmed-by-3.5-addendum-use-identifiers" = 5
 
 [[functions]]
 name = "ABS"
