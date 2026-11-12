@@ -132,7 +132,7 @@ tags: [amiga, gfa-basic, evidence, research]
 | `amiga.base8.setcolor` | SETCOLOR / COLOR | 8-2 | Sets palette RGB components and selects foreground/background/fill-outline colors. 3.5 availability is unresolved. |
 | `amiga.base9.fileselect` | FILESELECT | 9-37–9-38 | Displays a file selector and returns the selected name or an empty string on Cancel. 3.5 availability is unresolved. |
 
-## Confirmed by the 3.5 addendum
+## Confirmed by 3.5 sources
 
 | ID | Declaration family | Original source | 3.5 evidence source | 3.5 evidence pages | Evidence basis | Qualification |
 |---|---|---|---|---|---|---|

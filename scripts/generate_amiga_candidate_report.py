@@ -53,7 +53,7 @@ def load_candidates(path: Path) -> list[dict]:
                 or item.get("confirmation-basis") != EXPECTED_35_DIRECT_USE_EVIDENCE.get(item["id"], {}).get("basis")
                 or item.get("confirmation-printed-pages") != EXPECTED_35_DIRECT_USE_EVIDENCE.get(item["id"], {}).get("pages")
             ):
-                raise ValueError(f'{item["id"]}: 3.5 confirmation requires direct addendum example-use provenance')
+                raise ValueError(f'{item["id"]}: 3.5 confirmation requires direct source-evidence provenance')
         elif item["status"] != "documented-in-3.0-only":
             raise ValueError(f'{item["id"]}: invalid status for a 3.0 Chapter 2–4 candidate')
     return sorted(candidates, key=lambda item: item["id"])
@@ -98,7 +98,7 @@ def render(candidates: list[dict]) -> str:
         lines.append(f"| `{item['id']}` | {item['name']} | {pages} | {note} |")
     if not base_only:
         lines.append("| — | None | — | — |")
-    lines.extend(["", "## Confirmed by the 3.5 addendum", "",
+    lines.extend(["", "## Confirmed by 3.5 sources", "",
                   "| ID | Declaration family | Original source | 3.5 evidence source | 3.5 evidence pages | Evidence basis | Qualification |",
                   "|---|---|---|---|---|---|---|"])
     confirmed = [item for item in candidates if item["status"] == "confirmed-in-3.5"]
@@ -128,7 +128,7 @@ def render(candidates: list[dict]) -> str:
         "- Chapter 12 indexes and reference tables are navigation aids, not declarations or proof of availability.",
         "- No absence-based removal or compatibility inference is made.",
         "",
-        "Source: `AM-INTERPRETER-35` in `docs/reference-sources.md`; detailed page notes are in `amiga-gfa-basic-3.0-base-inventory.md` and `amiga-gfa-basic-35-addendum-inventory.md`.",
+        "Source: `AM-INTERPRETER-35` in `docs/reference-sources.md`; detailed page notes are in `amiga-gfa-basic-3.0-base-inventory.md`, `amiga-gfa-basic-35-addendum-inventory.md`, and `amiga-gfa-basic-35-base-function-use-audit.md`.",
         "",
     ])
     return "\n".join(lines)
