@@ -1,0 +1,263 @@
+{
+  "repository": "vsimko/gfabasic-rust",
+  "generated_at": "2026-11-12T11:06:42.681374Z",
+  "freshness_threshold_hours": 168,
+  "workflows": [
+    {
+      "name": "Documentation checks",
+      "file": "docs.yml",
+      "note": "Markdown, JavaScript, API registry, corpus metadata and local-link validation.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/docs.yml",
+      "state": "in_progress",
+      "latest": {
+        "id": 43206169758,
+        "name": "Documentation checks",
+        "status": "in_progress",
+        "event": "pull_request",
+        "branch": "research/audit-35-example-inherited-functions",
+        "created_at": "2026-11-12T11:05:59Z",
+        "updated_at": "2026-11-12T11:06:40Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43206169758",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43204407711,
+        "name": "Documentation checks",
+        "status": "success",
+        "event": "push",
+        "branch": "main",
+        "created_at": "2026-11-12T10:54:02Z",
+        "updated_at": "2026-11-12T10:54:24Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43204407711",
+        "age_hours": 0,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Rust checks",
+      "file": "rust.yml",
+      "note": "Formatting, Clippy, workspace tests/build and formatter fixtures.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/rust.yml",
+      "state": "success",
+      "latest": {
+        "id": 43206169920,
+        "name": "Rust checks",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "research/audit-35-example-inherited-functions",
+        "created_at": "2026-11-12T11:05:59Z",
+        "updated_at": "2026-11-12T11:06:29Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43206169920",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43206169920,
+        "name": "Rust checks",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "research/audit-35-example-inherited-functions",
+        "created_at": "2026-11-12T11:05:59Z",
+        "updated_at": "2026-11-12T11:06:29Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43206169920",
+        "age_hours": 0,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Security audit",
+      "file": "security-audit.yml",
+      "note": "RustSec audits for workspace, fuzz and benchmark lockfiles.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/security-audit.yml",
+      "state": "success",
+      "latest": {
+        "id": 43206170137,
+        "name": "Security audit",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "research/audit-35-example-inherited-functions",
+        "created_at": "2026-11-12T11:05:59Z",
+        "updated_at": "2026-11-12T11:06:26Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43206170137",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43206170137,
+        "name": "Security audit",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "research/audit-35-example-inherited-functions",
+        "created_at": "2026-11-12T11:05:59Z",
+        "updated_at": "2026-11-12T11:06:26Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43206170137",
+        "age_hours": 0,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Source-loader fuzzing",
+      "file": "fuzz.yml",
+      "note": "Fuzzes the source loader only; lexer/parser fuzzing is not configured.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/fuzz.yml",
+      "state": "in_progress",
+      "latest": {
+        "id": 43206169939,
+        "name": "Fuzzing",
+        "status": "in_progress",
+        "event": "pull_request",
+        "branch": "research/audit-35-example-inherited-functions",
+        "created_at": "2026-11-12T11:05:59Z",
+        "updated_at": "2026-11-12T11:06:32Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43206169939",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43204070544,
+        "name": "Fuzzing",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "research/guard-35-function-registry-boundary",
+        "created_at": "2026-11-12T10:51:41Z",
+        "updated_at": "2026-11-12T10:53:04Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43204070544",
+        "age_hours": 0,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Benchmarks",
+      "file": "benchmarks.yml",
+      "note": "Source-loading benchmark; pull requests validate compilation without recording measurements.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/benchmarks.yml",
+      "state": "in_progress",
+      "latest": {
+        "id": 43206169781,
+        "name": "Benchmarks",
+        "status": "in_progress",
+        "event": "pull_request",
+        "branch": "research/audit-35-example-inherited-functions",
+        "created_at": "2026-11-12T11:05:59Z",
+        "updated_at": "2026-11-12T11:06:25Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43206169781",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43204070664,
+        "name": "Benchmarks",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "research/guard-35-function-registry-boundary",
+        "created_at": "2026-11-12T10:51:41Z",
+        "updated_at": "2026-11-12T10:52:09Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43204070664",
+        "age_hours": 0,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Release SBOM",
+      "file": "release-sbom.yml",
+      "note": "Validates PR SBOMs and uploads on published releases; release attachment is unproven until a release runs.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/release-sbom.yml",
+      "state": "in_progress",
+      "latest": {
+        "id": 43206169759,
+        "name": "Release SBOM",
+        "status": "in_progress",
+        "event": "pull_request",
+        "branch": "research/audit-35-example-inherited-functions",
+        "created_at": "2026-11-12T11:05:59Z",
+        "updated_at": "2026-11-12T11:06:12Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43206169759",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43204070502,
+        "name": "Release SBOM",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "research/guard-35-function-registry-boundary",
+        "created_at": "2026-11-12T10:51:41Z",
+        "updated_at": "2026-11-12T10:51:57Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43204070502",
+        "age_hours": 0,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "GitHub Pages",
+      "file": "pages.yml",
+      "note": "Builds and publishes the static production website.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/pages.yml",
+      "state": "success",
+      "latest": {
+        "id": 43204407588,
+        "name": "Deploy GitHub Pages",
+        "status": "success",
+        "event": "push",
+        "branch": "main",
+        "created_at": "2026-11-12T10:54:02Z",
+        "updated_at": "2026-11-12T10:54:26Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43204407588",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43204407588,
+        "name": "Deploy GitHub Pages",
+        "status": "success",
+        "event": "push",
+        "branch": "main",
+        "created_at": "2026-11-12T10:54:02Z",
+        "updated_at": "2026-11-12T10:54:26Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43204407588",
+        "age_hours": 0,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Pull request preview",
+      "file": "pr-preview.yml",
+      "note": "Builds and smoke-tests same-repository pull request previews.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/pr-preview.yml",
+      "state": "in_progress",
+      "latest": {
+        "id": 43206169860,
+        "name": "Pull request website preview",
+        "status": "in_progress",
+        "event": "pull_request",
+        "branch": "research/audit-35-example-inherited-functions",
+        "created_at": "2026-11-12T11:05:59Z",
+        "updated_at": "2026-11-12T11:06:30Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43206169860",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43204410777,
+        "name": "Pull request website preview",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "research/guard-35-function-registry-boundary",
+        "created_at": "2026-11-12T10:54:03Z",
+        "updated_at": "2026-11-12T10:54:17Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43204410777",
+        "age_hours": 0,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Conformance suite",
+      "file": "conformance.yml",
+      "note": "No dedicated compiler conformance workflow is configured.",
+      "state": "not-configured",
+      "latest": null,
+      "last_success": null
+    }
+  ]
+}
