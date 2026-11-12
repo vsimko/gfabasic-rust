@@ -13,9 +13,9 @@ tags: [amiga, gfa-basic, evidence, research]
 | Status | Entries |
 |---|---:|
 | candidate | 0 |
-| confirmed-in-3.5 | 18 |
+| confirmed-in-3.5 | 21 |
 | contradicted | 0 |
-| documented-in-3.0-only | 104 |
+| documented-in-3.0-only | 103 |
 | unresolved | 0 |
 
 ## Unresolved and pending candidates
@@ -82,7 +82,7 @@ tags: [amiga, gfa-basic, evidence, research]
 | `amiga.base4.deg-rad` | DEG() / RAD() | 4-7 | Degree/radian conversion functions documented in the 3.0 base manual. |
 | `amiga.base4.exp-log` | EXP() / LOG() / LOG10() | 4-9 | Exponential and logarithm family; retain LOG10 as candidate pending precise page-level confirmation. |
 | `amiga.base4.instr-rinstr` | INSTR() / RINSTR() | 4-30–4-31 | Forward/reverse substring search functions; preserve source-specific index semantics. |
-| `amiga.base4.int-trunc-fix-frac` | INT() / TRUNC() / FIX() / FRAC() | 4-13 | Manual distinguishes truncation from floor for negative values and describes TRUNC/FRAC relation. |
+| `amiga.base4.int-trunc-fix-frac` | TRUNC() / FIX() / FRAC() | 4-13 | The base manual distinguishes truncation from floor for negative values and describes TRUNC/FRAC. INT is split into its own entry and confirmed by the 3.5 companion book; the remaining functions have no direct 3.5 evidence. |
 | `amiga.base4.integer-arithmetic-functions` | ADD() / SUB() / MUL() / DIV() / MOD() | 4-3 | Integer-expression function forms are distinct from same-named mutating commands on pp. 4-2–4-3; decimal places are ignored. |
 | `amiga.base4.left-right` | LEFT$() / RIGHT$() | 4-27 | Substring functions; omitted count returns one character. |
 | `amiga.base4.len-trim` | LEN() / TRIM$() | 4-34 | String length and trim functions documented. |
@@ -93,11 +93,10 @@ tags: [amiga, gfa-basic, evidence, research]
 | `amiga.base4.odd-even` | ODD() / EVEN() | 4-15 | Boolean result is -1/0; zero is even. |
 | `amiga.base4.pred-succ` | PRED() | 4-11, 4-33 | The base manual documents numeric and string PRED forms. The 3.5 addendum examples use SUCC, not PRED; PRED remains 3.0-only evidence. |
 | `amiga.base4.quadrant-trigonometric` | SINQ() / COSQ() | 4-6 | Degree-based interpolated lookup-table functions; interpolation described in 1/16-degree steps. |
-| `amiga.base4.random` | RND() / RANDOM() / RANDOMIZE | 4-17–4-18 | The base manual documents RND and RANDOM functions plus RANDOMIZE statement. The 3.5 addendum example uses RAND separately; these remaining forms have no direct addendum example evidence. |
+| `amiga.base4.random` | RANDOM() / RANDOMIZE | 4-17–4-18 | The base manual documents RANDOM and RANDOMIZE. RND is split into its own entry and confirmed by the 3.5 companion book; these remaining forms have no direct 3.5 evidence. |
 | `amiga.base4.rotate` | ROL() / ROR() | 4-22 | Rotate within selected byte/word/longword width; distinct from shifts. |
 | `amiga.base4.round` | ROUND() | 4-14 | ROUND(x) and ROUND(x,n) are documented; negative n rounds before decimal point. |
 | `amiga.base4.shift` | SHL() / SHR() | 4-21–4-22 | Width-sensitive byte/word/longword shift forms are documented. |
-| `amiga.base4.sqr` | SQR() | 4-8 | Square root; negative argument is documented to produce an error. |
 | `amiga.base4.string-space` | SPACE$() | 4-32 | The base manual documents SPACE$ as a string constructor. The 3.5 addendum examples use STRING$ but do not directly use SPACE$. |
 | `amiga.base4.swap` | SWAP() | 4-25 | Function swaps upper/lower 16-bit words; explicitly distinct from Chapter 2 SWAP command. |
 | `amiga.base4.trigonometric` | SIN() / COS() / TAN() | 4-5 | Trigonometric functions use radians in the base manual. |
@@ -135,26 +134,29 @@ tags: [amiga, gfa-basic, evidence, research]
 
 ## Confirmed by the 3.5 addendum
 
-| ID | Declaration family | Original source | 3.5 evidence pages | Evidence basis | Qualification |
-|---|---|---|---|---|---|
-| `amiga.35.combinatorics` | FACT, VARIAT, COMBIN | 3.5 addendum | 13-33–13-34 (469-page scan), 14-1–14-2 (combined update scan) | Explicit 3.5 addendum declaration | Factorial, permutations and combinations are explicitly enumerated as additional 3.5 functions. |
-| `amiga.35.data-pointer` | _DATA and _DATA= | 3.5 addendum | 13-34–13-35 (469-page scan), 14-5 (combined update scan) | Explicit 3.5 addendum declaration | The leading underscore is confirmed by page-image review; query and restore the DATA pointer. |
-| `amiga.35.editor-update` | Editor row layout, search and listing changes | 3.5 editor update | 1-25 | Explicit 3.5 addendum declaration | Explicit editor update; this is editor behavior, not a language/runtime declaration. |
-| `amiga.35.guru` | GURU statement and function | 3.5 addendum | 13-35–13-36 (469-page scan), 14-6–14-7 (combined update scan) | Explicit 3.5 addendum declaration | GURU checking control and GURU-number function are explicitly documented; crash-recovery tests require isolation. |
-| `amiga.35.mat-analysis` | MAT NORM, MAT DET, MAT QDET, MAT RANG, MAT INV | 3.5 addendum | 13-31–13-39 | Explicit 3.5 addendum declaration | The family is documented in Chapter 13. MAT INV destination-first order is established by the detailed definition and worked example on printed p. 13-30; the reversed summary form on p. 13-16 is treated as a source typo. Numerical edge cases remain unverified. |
-| `amiga.35.mat-arithmetic` | MAT ADD, MAT SUB, MAT MUL | 3.5 addendum | 13-22–13-30 | Explicit 3.5 addendum declaration | Element-wise, scalar, matrix-product and vector-product forms are documented. The 3.5 addendum explicitly defines MAT MUL array(),scalar as in-place multiplication of every field element by the scalar; this is source-verified syntax, not a runtime-conformance claim. |
-| `amiga.35.mat-base` | MAT BASE | 3.5 addendum | 13-1–13-2 | Explicit 3.5 addendum declaration | Explicitly documented in the version-specific Chapter 13 addendum; applicability is limited to the documented matrix operations. |
-| `amiga.35.mat-copy` | MAT CPY, MAT XCPY, MAT TRANS | 3.5 addendum | 13-8–13-20 | Explicit 3.5 addendum declaration | Detailed source-checked shape, offset, extent, transpose and vector-orientation rules are recorded in the addendum inventory. |
-| `amiga.35.mat-generation` | MAT CLR, MAT SET, MAT ONE | 3.5 addendum | 13-2–13-3 | Explicit 3.5 addendum declaration | Generation forms and floating-point field constraints are documented in Chapter 13. |
-| `amiga.35.mat-io` | MAT READ, MAT PRINT, MAT INPUT | 3.5 addendum | 13-3–13-6 | Explicit 3.5 addendum declaration | Chapter 13 explicitly documents vector/matrix data I/O forms. |
-| `amiga.35.openw-negative-screen` | OPENW negative screen-number variant | 3.5 addendum | 13-34 (469-page scan), 14-3 (combined update scan) | Explicit 3.5 addendum declaration | Explicit variant opens a window on the current top screen. |
-| `amiga.35.pcolor` | PCOLOR | 3.5 addendum | 13-34 (469-page scan), 14-4 (combined update scan) | Explicit 3.5 addendum declaration | Applies foreground and optional background colors to PRINT screen output. |
-| `amiga.35.special-longwords` | _0 through _9 | 3.5 addendum | 13-35 (469-page scan), 14-6 (combined update scan) | Explicit 3.5 addendum declaration | Ten special longword variables; persistence and clearing behavior are described in the addendum. |
-| `amiga.base2.hex` | HEX$ | 3.0 base manual | 13-36 | Direct example use | The base manual documents HEX$(x[,y]). The 3.5 GURU example calls HEX$(GURU) (printed p. 13-36), confirming the one-argument form; the optional width form is not independently used in the addendum. |
-| `amiga.base2.str` | STR$ | 3.0 base manual | 13-3 | Direct documentation reference | The 3.5 MAT PRINT description specifies number formatting as STR$(x,g,n) (printed p. 13-3). This confirms the three-argument form used for matrix output; other base-manual overloads are not independently restated. |
-| `amiga.base4.rand` | RAND() | 3.0 base manual | 13-2 | Direct example use | The 3.5 MAT SET example assigns RAND(10) to matrix elements (printed p. 13-2). This confirms the call form used, not all distribution or seeding details. |
-| `amiga.base4.string` | STRING$() | 3.0 base manual | 13-21 | Direct example use | The 3.5 matrix examples use STRING$(n, "-") as PRINT separators (printed pp. 13-21–13-30). This confirms the string-argument form; the character-code overload is not independently restated. |
-| `amiga.base4.succ` | SUCC() | 3.0 base manual | 13-5 | Direct example use | The 3.5 matrix-copy examples use SUCC(i%) and SUCC(j%) (printed pp. 13-5–13-13). This directly confirms numeric use; the string overload is not independently restated. |
+| ID | Declaration family | Original source | 3.5 evidence source | 3.5 evidence pages | Evidence basis | Qualification |
+|---|---|---|---|---|---|---|
+| `amiga.35.combinatorics` | FACT, VARIAT, COMBIN | 3.5 addendum | AM-INTERPRETER-35 | 13-33–13-34 (469-page scan), 14-1–14-2 (combined update scan) | Explicit 3.5 addendum declaration | Factorial, permutations and combinations are explicitly enumerated as additional 3.5 functions. |
+| `amiga.35.data-pointer` | _DATA and _DATA= | 3.5 addendum | AM-INTERPRETER-35 | 13-34–13-35 (469-page scan), 14-5 (combined update scan) | Explicit 3.5 addendum declaration | The leading underscore is confirmed by page-image review; query and restore the DATA pointer. |
+| `amiga.35.editor-update` | Editor row layout, search and listing changes | 3.5 editor update | AM-INTERPRETER-35 | 1-25 | Explicit 3.5 addendum declaration | Explicit editor update; this is editor behavior, not a language/runtime declaration. |
+| `amiga.35.guru` | GURU statement and function | 3.5 addendum | AM-INTERPRETER-35 | 13-35–13-36 (469-page scan), 14-6–14-7 (combined update scan) | Explicit 3.5 addendum declaration | GURU checking control and GURU-number function are explicitly documented; crash-recovery tests require isolation. |
+| `amiga.35.mat-analysis` | MAT NORM, MAT DET, MAT QDET, MAT RANG, MAT INV | 3.5 addendum | AM-INTERPRETER-35 | 13-31–13-39 | Explicit 3.5 addendum declaration | The family is documented in Chapter 13. MAT INV destination-first order is established by the detailed definition and worked example on printed p. 13-30; the reversed summary form on p. 13-16 is treated as a source typo. Numerical edge cases remain unverified. |
+| `amiga.35.mat-arithmetic` | MAT ADD, MAT SUB, MAT MUL | 3.5 addendum | AM-INTERPRETER-35 | 13-22–13-30 | Explicit 3.5 addendum declaration | Element-wise, scalar, matrix-product and vector-product forms are documented. The 3.5 addendum explicitly defines MAT MUL array(),scalar as in-place multiplication of every field element by the scalar; this is source-verified syntax, not a runtime-conformance claim. |
+| `amiga.35.mat-base` | MAT BASE | 3.5 addendum | AM-INTERPRETER-35 | 13-1–13-2 | Explicit 3.5 addendum declaration | Explicitly documented in the version-specific Chapter 13 addendum; applicability is limited to the documented matrix operations. |
+| `amiga.35.mat-copy` | MAT CPY, MAT XCPY, MAT TRANS | 3.5 addendum | AM-INTERPRETER-35 | 13-8–13-20 | Explicit 3.5 addendum declaration | Detailed source-checked shape, offset, extent, transpose and vector-orientation rules are recorded in the addendum inventory. |
+| `amiga.35.mat-generation` | MAT CLR, MAT SET, MAT ONE | 3.5 addendum | AM-INTERPRETER-35 | 13-2–13-3 | Explicit 3.5 addendum declaration | Generation forms and floating-point field constraints are documented in Chapter 13. |
+| `amiga.35.mat-io` | MAT READ, MAT PRINT, MAT INPUT | 3.5 addendum | AM-INTERPRETER-35 | 13-3–13-6 | Explicit 3.5 addendum declaration | Chapter 13 explicitly documents vector/matrix data I/O forms. |
+| `amiga.35.openw-negative-screen` | OPENW negative screen-number variant | 3.5 addendum | AM-INTERPRETER-35 | 13-34 (469-page scan), 14-3 (combined update scan) | Explicit 3.5 addendum declaration | Explicit variant opens a window on the current top screen. |
+| `amiga.35.pcolor` | PCOLOR | 3.5 addendum | AM-INTERPRETER-35 | 13-34 (469-page scan), 14-4 (combined update scan) | Explicit 3.5 addendum declaration | Applies foreground and optional background colors to PRINT screen output. |
+| `amiga.35.special-longwords` | _0 through _9 | 3.5 addendum | AM-INTERPRETER-35 | 13-35 (469-page scan), 14-6 (combined update scan) | Explicit 3.5 addendum declaration | Ten special longword variables; persistence and clearing behavior are described in the addendum. |
+| `amiga.base2.hex` | HEX$ | 3.0 base manual | AM-INTERPRETER-35 | 13-36 | Direct example use | The base manual documents HEX$(x[,y]). The 3.5 GURU example calls HEX$(GURU) (printed p. 13-36), confirming the one-argument form; the optional width form is not independently used in the addendum. |
+| `amiga.base2.str` | STR$ | 3.0 base manual | AM-INTERPRETER-35 | 13-3 | Direct documentation reference | The 3.5 MAT PRINT description specifies number formatting as STR$(x,g,n) (printed p. 13-3). This confirms the three-argument form used for matrix output; other base-manual overloads are not independently restated. |
+| `amiga.base4.int` | INT() | 3.0 base manual | AM-BOOK-DE-1990 | 458 | Direct example use | The 3.5 companion book's Chapter 18 matrix example uses INT(RND(1)*5) (printed p. 458), confirming the one-argument integer-conversion form. |
+| `amiga.base4.rand` | RAND() | 3.0 base manual | AM-INTERPRETER-35 | 13-2 | Direct example use | The 3.5 MAT SET example assigns RAND(10) to matrix elements (printed p. 13-2). This confirms the call form used, not all distribution or seeding details. |
+| `amiga.base4.rnd` | RND() | 3.0 base manual | AM-BOOK-DE-1990 | 458 | Direct example use | The 3.5 companion book's Chapter 18 matrix example uses RND(1) inside INT(RND(1)*5) (printed p. 458). This confirms the one-argument form; RANDOM and RANDOMIZE remain unconfirmed. |
+| `amiga.base4.sqr` | SQR() | 3.0 base manual | AM-BOOK-DE-1990 | 473 | Direct example use | The 3.5 vector-normalization example uses SQR(l) to calculate vector length and 1/SQR(l) to normalize the vector (printed p. 473). The one-argument form is demonstrated. |
+| `amiga.base4.string` | STRING$() | 3.0 base manual | AM-INTERPRETER-35 | 13-21 | Direct example use | The 3.5 matrix examples use STRING$(n, "-") as PRINT separators (printed pp. 13-21–13-30). This confirms the string-argument form; the character-code overload is not independently restated. |
+| `amiga.base4.succ` | SUCC() | 3.0 base manual | AM-INTERPRETER-35 | 13-5 | Direct example use | The 3.5 matrix-copy examples use SUCC(i%) and SUCC(j%) (printed pp. 13-5–13-13). This directly confirms numeric use; the string overload is not independently restated. |
 
 ## Contradicted candidates
 
@@ -163,10 +165,10 @@ No candidates are currently classified as contradicted. This is not evidence tha
 ## Interpretation and limitations
 
 - `documented-in-3.0-only` means the cited declaration is present in the 3.0 base manual but no 3.5 evidence establishes its applicability. This does not mean removed or incompatible.
-- `confirmed-in-3.5` can be based either on an explicit 3.5 addendum declaration or on direct use or reference in the 3.5 addendum. For inherited functions, direct addendum evidence confirms only the form actually shown or referenced; it does not revalidate every overload or edge case.
+- `confirmed-in-3.5` can be based either on an explicit 3.5 addendum declaration or on direct use or reference in 3.5 material. For inherited functions, direct evidence confirms only the form actually shown or referenced; it does not revalidate every overload or edge case.
 - `unresolved` is reserved for candidates whose source scope or declaration identity still needs research.
 - A confirmed family does not settle every overload or edge case; qualifications in the manifest and detailed research notes remain authoritative.
 - Chapter 12 indexes and reference tables are navigation aids, not declarations or proof of availability.
 - No absence-based removal or compatibility inference is made.
 
-Source: `AM-INTERPRETER-35` in `docs/reference-sources.md`; detailed page notes are in `amiga-gfa-basic-3.0-base-inventory.md` and `amiga-gfa-basic-35-addendum-inventory.md`.
+Source: `AM-INTERPRETER-35` and `AM-BOOK-DE-1990` in `docs/reference-sources.md`; detailed page notes are in `amiga-gfa-basic-3.0-base-inventory.md`, `amiga-gfa-basic-35-addendum-inventory.md`, and `amiga-gfa-basic-35-base-function-use-audit.md`.
