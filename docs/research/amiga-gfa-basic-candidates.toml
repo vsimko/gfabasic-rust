@@ -600,13 +600,13 @@ notes = "ASC returns the first character code (zero for empty input); CHR$ uses 
 
 [[candidates]]
 id = "amiga.base2.bin-oct-hex"
-name = "BIN$ / OCT$ / HEX$"
+name = "BIN$ / OCT$"
 kind = "function-family"
 source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["2-14"]
 status = "documented-in-3.0-only"
-notes = "Integer-to-base-2/base-8/base-16 string conversions; optional width parameters are documented. 3.0 base-manual evidence only."
+notes = "Integer-to-base-2/base-8 string conversions; optional width parameters are documented. No direct 3.5 addendum example use was found."
 
 [[candidates]]
 id = "amiga.base2.str"
@@ -615,9 +615,13 @@ kind = "function"
 source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["2-15"]
-status = "documented-in-3.0-only"
-notes = "Overloads STR$(x), STR$(x,y), STR$(x,y,z); width and selected-slice behavior are described. 3.0 base-manual evidence only."
+status = "confirmed-in-3.5"
+notes = "The 3.5 MAT PRINT description specifies number formatting as STR$(x,g,n) (printed p. 13-3). This confirms the three-argument form used for matrix output; other base-manual overloads are not independently restated."
 
+confirmation-source = "AM-INTERPRETER-35"
+confirmation-source-version = "3.5 addendum"
+confirmation-printed-pages = ["13-3"]
+confirmation-basis = "direct-example-use"
 [[candidates]]
 id = "amiga.base2.val"
 name = "VAL / VAL?"
@@ -940,13 +944,13 @@ notes = "Exponential and logarithm family; retain LOG10 as candidate pending pre
 
 [[candidates]]
 id = "amiga.base4.pred-succ"
-name = "PRED() / SUCC()"
+name = "PRED()"
 kind = "function-family"
 source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["4-11, 4-33"]
 status = "documented-in-3.0-only"
-notes = "Numeric and string forms are separately discussed; do not collapse their argument/result contracts."
+notes = "The base manual documents numeric and string PRED forms. The 3.5 addendum examples use SUCC, not PRED; PRED remains 3.0-only evidence."
 
 [[candidates]]
 id = "amiga.base4.abs-sgn"
@@ -1000,13 +1004,13 @@ notes = "Accept a list of numeric or string expressions and return the extremum.
 
 [[candidates]]
 id = "amiga.base4.random"
-name = "RND() / RANDOM() / RAND() / RANDOMIZE"
+name = "RND() / RANDOM() / RANDOMIZE"
 kind = "function-family"
 source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["4-17–4-18"]
 status = "documented-in-3.0-only"
-notes = "Distinct result ranges and seeding forms are described; preserve separate contracts for RND, RANDOM and RAND."
+notes = "The base manual documents RND and RANDOM functions plus RANDOMIZE statement. The 3.5 addendum example uses RAND separately; these remaining forms have no direct addendum example evidence."
 
 [[candidates]]
 id = "amiga.base4.bit-test"
@@ -1110,13 +1114,13 @@ notes = "Forward/reverse substring search functions; preserve source-specific in
 
 [[candidates]]
 id = "amiga.base4.string-space"
-name = "STRING$() / SPACE$()"
+name = "SPACE$()"
 kind = "function-family"
 source = "AM-INTERPRETER-35"
 source-version = "3.0 base manual"
 printed-pages = ["4-32"]
 status = "documented-in-3.0-only"
-notes = "String construction functions; SPC is excluded as PRINT formatting syntax rather than a value function."
+notes = "The base manual documents SPACE$ as a string constructor. The 3.5 addendum examples use STRING$ but do not directly use SPACE$."
 
 [[candidates]]
 id = "amiga.base4.len-trim"
@@ -1209,3 +1213,60 @@ source-version = "3.0 base manual"
 printed-pages = ["2-19–2-20"]
 status = "documented-in-3.0-only"
 notes = "Exchanges same-type variables or array values; the array form exchanges descriptors, and SWAP *c,d() supports indirect array naming. Explicitly distinct from the SWAP() bit-operation function in Chapter 4. 3.5 applicability is unverified."
+
+[[candidates]]
+id = "amiga.base2.hex"
+name = "HEX$"
+kind = "function"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["2-14"]
+status = "confirmed-in-3.5"
+notes = "The base manual documents HEX$(x[,y]). The 3.5 GURU example calls HEX$(GURU) (printed p. 13-36), confirming the one-argument form; the optional width form is not independently used in the addendum."
+confirmation-source = "AM-INTERPRETER-35"
+confirmation-source-version = "3.5 addendum"
+confirmation-printed-pages = ["13-36"]
+confirmation-basis = "direct-example-use"
+
+[[candidates]]
+id = "amiga.base4.rand"
+name = "RAND()"
+kind = "function"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-17–4-18"]
+status = "confirmed-in-3.5"
+notes = "The 3.5 MAT SET example assigns RAND(10) to matrix elements (printed p. 13-2). This confirms the call form used, not all distribution or seeding details."
+confirmation-source = "AM-INTERPRETER-35"
+confirmation-source-version = "3.5 addendum"
+confirmation-printed-pages = ["13-2"]
+confirmation-basis = "direct-example-use"
+
+[[candidates]]
+id = "amiga.base4.succ"
+name = "SUCC()"
+kind = "function"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-11","4-33"]
+status = "confirmed-in-3.5"
+notes = "The 3.5 matrix-copy examples use SUCC(i%) and SUCC(j%) (printed pp. 13-5–13-13). This directly confirms numeric use; the string overload is not independently restated."
+confirmation-source = "AM-INTERPRETER-35"
+confirmation-source-version = "3.5 addendum"
+confirmation-printed-pages = ["13-5","13-6","13-7","13-8","13-9","13-10","13-11","13-12","13-13"]
+confirmation-basis = "direct-example-use"
+
+[[candidates]]
+id = "amiga.base4.string"
+name = "STRING$()"
+kind = "function"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-32"]
+status = "confirmed-in-3.5"
+notes = "The 3.5 matrix examples use STRING$(n, \"-\") as PRINT separators (printed pp. 13-21–13-30). This confirms the string-argument form; the character-code overload is not independently restated."
+confirmation-source = "AM-INTERPRETER-35"
+confirmation-source-version = "3.5 addendum"
+confirmation-printed-pages = ["13-21","13-22","13-23","13-24","13-25","13-26","13-27","13-28","13-29","13-30"]
+confirmation-basis = "direct-example-use"
+
