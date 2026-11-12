@@ -13,9 +13,9 @@ class FunctionInventoryTests(unittest.TestCase):
         self.assertEqual(result["interpreter-identifiers-including-disputed-slot"], 115)
         self.assertEqual(result["unambiguous-interpreter-identifiers"], 113)
         self.assertEqual(result["disputed-name-slots"], 2)
-        self.assertEqual(result["confirmed-by-3.5-addendum-use-identifiers"], 5)
+        self.assertEqual(result["confirmed-by-3.5-addendum-use-identifiers"], 8)
 
-    def test_only_the_five_audited_addendum_use_functions_have_3_5_evidence(self):
+    def test_only_the_eight_audited_addendum_use_functions_have_3_5_evidence(self):
         root = Path(__file__).resolve().parents[2]
         source = root / "docs/research/amiga-gfa-basic-functions.toml"
         import tomllib

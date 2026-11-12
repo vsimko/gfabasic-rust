@@ -23,7 +23,7 @@ EXPECTED = {
     "base-manual-identifiers": 113,
     "explicit-3.5-addendum-identifiers": 4,
     "disputed-name-slots": 2,
-    "confirmed-by-3.5-addendum-use-identifiers": 5,
+    "confirmed-by-3.5-addendum-use-identifiers": 8,
 }
 
 
@@ -68,13 +68,14 @@ def validate(path: Path) -> dict[str, int]:
             )
 
         if evidence_status == "confirmed-by-3.5-addendum-use":
-            if name not in EXPECTED_35_ADDENDUM_USE_FUNCTIONS:
+            expected_evidence = EXPECTED_35_ADDENDUM_USE_EVIDENCE.get(name)
+            if expected_evidence is None:
                 raise ValueError(f"{name}: no audited 3.5 addendum use evidence")
             if (
-                item.get("confirmation-source") != "AM-INTERPRETER-35"
-                or item.get("confirmation-source-version") != "3.5 addendum"
-                or not item.get("confirmation-printed-pages")
-                or item.get("confirmation-basis") != EXPECTED_35_ADDENDUM_USE_BASIS[name]
+                item.get("confirmation-source") != expected_evidence[0]
+                or item.get("confirmation-source-version") != expected_evidence[1]
+                or item.get("confirmation-printed-pages") != expected_evidence[2]
+                or item.get("confirmation-basis") != expected_evidence[3]
             ):
                 raise ValueError(f"{name}: 3.5 addendum-use evidence needs source and printed pages")
         elif origin == "base-manual-3.0" and name in EXPECTED_35_ADDENDUM_USE_FUNCTIONS:

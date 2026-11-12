@@ -25,8 +25,10 @@ class ChapterTwoToFourCandidateAuditTests(unittest.TestCase):
                 self.assertEqual(item["source-version"], "3.0 base manual")
                 self.assertTrue(item["printed-pages"])
                 if item["status"] == "confirmed-in-3.5":
-                    self.assertEqual(item.get("confirmation-source"), "AM-INTERPRETER-35")
-                    self.assertEqual(item.get("confirmation-source-version"), "3.5 addendum")
+                    expected_source = "AM-BOOK-DE-1990" if item["id"] in {"amiga.base4.rnd", "amiga.base4.int", "amiga.base4.sqr"} else "AM-INTERPRETER-35"
+                    expected_version = "3.5 companion book Chapter 18" if expected_source == "AM-BOOK-DE-1990" else "3.5 addendum"
+                    self.assertEqual(item.get("confirmation-source"), expected_source)
+                    self.assertEqual(item.get("confirmation-source-version"), expected_version)
                     expected_basis = "direct-documentation-reference" if item["id"] == "amiga.base2.str" else "direct-example-use"
                     self.assertEqual(item.get("confirmation-basis"), expected_basis)
                     self.assertTrue(item.get("confirmation-printed-pages"))
