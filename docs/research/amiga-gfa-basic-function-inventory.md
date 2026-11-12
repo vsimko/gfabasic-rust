@@ -77,13 +77,13 @@ The two disputed slots are the CVx conversion spelling (`CVD` in the index versu
 | `FLOAT` | 2-37 | base-manual-entry |
 | `FRAC` | 4-13 | base-manual-entry |
 | `FRE` | 2-29 | base-manual-entry |
-| `HEX$` | 2-14 | confirmed-by-3.5-addendum-use |
+| `HEX$` | 2-14 | confirmed-by-3.5-source-evidence |
 | `IMP` | 4-24 | base-manual-entry |
 | `INKEY$` | 5-2 | base-manual-entry |
 | `INP` | 6-13 | base-manual-entry |
 | `INPUT$` | 6-14 | base-manual-entry |
 | `INSTR` | 4-30 | base-manual-entry |
-| `INT` | 2-37, 4-13 | confirmed-by-3.5-addendum-use |
+| `INT` | 2-37, 4-13 | confirmed-by-3.5-source-evidence |
 | `LEFT$` | 4-27 | base-manual-entry |
 | `LEN` | 4-34 | base-manual-entry |
 | `LOC` | 6-9 | base-manual-entry |
@@ -113,11 +113,11 @@ The two disputed slots are the CVx conversion spelling (`CVD` in the index versu
 | `POS` | 5-13 | base-manual-entry |
 | `PRED` | 4-11 | base-manual-entry |
 | `RAD` | 4-7 | base-manual-entry |
-| `RAND` | 4-17 | confirmed-by-3.5-addendum-use |
+| `RAND` | 4-17 | confirmed-by-3.5-source-evidence |
 | `RANDOM` | 4-17 | base-manual-entry |
 | `RIGHT$` | 4-27 | base-manual-entry |
 | `RINSTR` | 4-31 | base-manual-entry |
-| `RND` | 4-17 | confirmed-by-3.5-addendum-use |
+| `RND` | 4-17 | confirmed-by-3.5-source-evidence |
 | `ROL` | 4-22 | base-manual-entry |
 | `ROR` | 4-22 | base-manual-entry |
 | `ROUND` | 4-14 | base-manual-entry |
@@ -130,11 +130,11 @@ The two disputed slots are the CVx conversion spelling (`CVD` in the index versu
 | `SINQ` | 4-6 | base-manual-entry |
 | `SPACE$` | 4-32 | base-manual-entry |
 | `SPC` | 4-32 | base-manual-entry |
-| `SQR` | 4-8 | confirmed-by-3.5-addendum-use |
-| `STR$` | 2-15 | confirmed-by-3.5-addendum-use |
-| `STRING$` | 4-32 | confirmed-by-3.5-addendum-use |
+| `SQR` | 4-8 | confirmed-by-3.5-source-evidence |
+| `STR$` | 2-15 | confirmed-by-3.5-source-evidence |
+| `STRING$` | 4-32 | confirmed-by-3.5-source-evidence |
 | `SUB` | 4-3 | base-manual-entry |
-| `SUCC` | 4-11 | confirmed-by-3.5-addendum-use |
+| `SUCC` | 4-11 | confirmed-by-3.5-source-evidence |
 | `SWAP` | 4-25 | base-manual-entry |
 | `TAB` | 5-13 | base-manual-entry |
 | `TAN` | 4-5 | base-manual-entry |
