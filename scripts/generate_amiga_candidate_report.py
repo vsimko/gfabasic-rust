@@ -45,8 +45,16 @@ def load_candidates(path: Path) -> list[dict]:
     for item in core_candidates:
         if item["source"] != "AM-INTERPRETER-35" or item["source-version"] != "3.0 base manual":
             raise ValueError(f'{item["id"]}: Chapter 2–4 candidate must retain 3.0 source scope')
-        if item["status"] != "documented-in-3.0-only":
-            raise ValueError(f'{item["id"]}: do not promote a 3.0-only candidate without 3.5 evidence')
+        if item["status"] == "confirmed-in-3.5":
+            if (
+                item.get("confirmation-source") != "AM-INTERPRETER-35"
+                or item.get("confirmation-source-version") != "3.5 addendum"
+                or item.get("confirmation-basis") != "direct-example-use"
+                or not item.get("confirmation-printed-pages")
+            ):
+                raise ValueError(f'{item["id"]}: 3.5 confirmation requires direct addendum example-use provenance')
+        elif item["status"] != "documented-in-3.0-only":
+            raise ValueError(f'{item["id"]}: invalid status for a 3.0 Chapter 2–4 candidate')
     return sorted(candidates, key=lambda item: item["id"])
 
 
@@ -89,15 +97,17 @@ def render(candidates: list[dict]) -> str:
         lines.append(f"| `{item['id']}` | {item['name']} | {pages} | {note} |")
     if not base_only:
         lines.append("| — | None | — | — |")
-    lines.extend(["", "## Explicitly confirmed by the 3.5 addendum", "",
-                  "| ID | Declaration family | Printed pages | Qualification |",
-                  "|---|---|---|---|"])
+    lines.extend(["", "## Confirmed by the 3.5 addendum", "",
+                  "| ID | Declaration family | Original source | 3.5 evidence pages | Evidence basis | Qualification |",
+                  "|---|---|---|---|---|---|"])
     confirmed = [item for item in candidates if item["status"] == "confirmed-in-3.5"]
     for item in confirmed:
         note = item["notes"].replace("|", "\\|")
-        lines.append(f"| `{item['id']}` | {item['name']} | {', '.join(item['printed-pages'])} | {note} |")
+        evidence_pages = ", ".join(item.get("confirmation-printed-pages", item["printed-pages"]))
+        basis = "Direct example use" if item.get("confirmation-basis") == "direct-example-use" else "Explicit 3.5 addendum declaration"
+        lines.append(f"| `{item['id']}` | {item['name']} | {item['source-version']} | {evidence_pages} | {basis} | {note} |")
     if not confirmed:
-        lines.append("| — | None | — | — | — |")
+        lines.append("| — | None | — | — | — | — |")
     contradicted = [item for item in candidates if item["status"] == "contradicted"]
     lines.extend(["", "## Contradicted candidates", ""])
     if contradicted:
@@ -109,7 +119,8 @@ def render(candidates: list[dict]) -> str:
         "",
         "## Interpretation and limitations",
         "",
-        "- `documented-in-3.0-only` closes the source audit: the cited evidence is from the 3.0 base manual, and neither the 3.5 addendum nor a reproducible runtime observation establishes 3.5 applicability. This does not mean removed, incompatible, or confirmed in 3.5.",
+        "- `documented-in-3.0-only` means the cited declaration is present in the 3.0 base manual but no 3.5 evidence establishes its applicability. This does not mean removed or incompatible.",
+        "- `confirmed-in-3.5` can be based either on an explicit 3.5 addendum declaration or on direct use in a 3.5 addendum example. For inherited functions, direct example use confirms only the form actually shown; it does not revalidate every overload or edge case.",
         "- `unresolved` is reserved for candidates whose source scope or declaration identity still needs research.",
         "- A confirmed family does not settle every overload or edge case; qualifications in the manifest and detailed research notes remain authoritative.",
         "- Chapter 12 indexes and reference tables are navigation aids, not declarations or proof of availability.",
