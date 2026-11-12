@@ -21,6 +21,8 @@ class AmigaCandidateReportTests(unittest.TestCase):
         self.assertIn("amiga.base2.hex", report)
         self.assertIn("Direct example use", report)
         self.assertIn("13-36", report)
+        self.assertIn("AM-BOOK-DE-1990", report)
+        self.assertIn("473", report)
         self.assertIn("3.0 base manual", report)
         self.assertIn("3.5 addendum", report)
         self.assertIn("not implementation or runtime support", report)
