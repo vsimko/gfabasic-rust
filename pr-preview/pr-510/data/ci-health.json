@@ -1,0 +1,263 @@
+{
+  "repository": "vsimko/gfabasic-rust",
+  "generated_at": "2026-11-12T17:19:57.679936Z",
+  "freshness_threshold_hours": 168,
+  "workflows": [
+    {
+      "name": "Documentation checks",
+      "file": "docs.yml",
+      "note": "Markdown, JavaScript, API registry, corpus metadata and local-link validation.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/docs.yml",
+      "state": "in_progress",
+      "latest": {
+        "id": 43268235047,
+        "name": "Documentation checks",
+        "status": "in_progress",
+        "event": "pull_request",
+        "branch": "research/audit-35-at-procedure-call-form",
+        "created_at": "2026-11-12T17:19:40Z",
+        "updated_at": "2026-11-12T17:19:44Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43268235047",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43267888200,
+        "name": "Documentation checks",
+        "status": "success",
+        "event": "push",
+        "branch": "main",
+        "created_at": "2026-11-12T17:17:44Z",
+        "updated_at": "2026-11-12T17:18:02Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43267888200",
+        "age_hours": 0,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Rust checks",
+      "file": "rust.yml",
+      "note": "Formatting, Clippy, workspace tests/build and formatter fixtures.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/rust.yml",
+      "state": "success",
+      "latest": {
+        "id": 43268235150,
+        "name": "Rust checks",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "research/audit-35-at-procedure-call-form",
+        "created_at": "2026-11-12T17:19:40Z",
+        "updated_at": "2026-11-12T17:19:55Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43268235150",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43268235150,
+        "name": "Rust checks",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "research/audit-35-at-procedure-call-form",
+        "created_at": "2026-11-12T17:19:40Z",
+        "updated_at": "2026-11-12T17:19:55Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43268235150",
+        "age_hours": 0,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Security audit",
+      "file": "security-audit.yml",
+      "note": "RustSec audits for workspace, fuzz and benchmark lockfiles.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/security-audit.yml",
+      "state": "in_progress",
+      "latest": {
+        "id": 43268235091,
+        "name": "Security audit",
+        "status": "in_progress",
+        "event": "pull_request",
+        "branch": "research/audit-35-at-procedure-call-form",
+        "created_at": "2026-11-12T17:19:40Z",
+        "updated_at": "2026-11-12T17:19:44Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43268235091",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43267401593,
+        "name": "Security audit",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "research/audit-35-example-used-statements",
+        "created_at": "2026-11-12T17:15:02Z",
+        "updated_at": "2026-11-12T17:15:28Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43267401593",
+        "age_hours": 0,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Source-loader fuzzing",
+      "file": "fuzz.yml",
+      "note": "Fuzzes the source loader only; lexer/parser fuzzing is not configured.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/fuzz.yml",
+      "state": "in_progress",
+      "latest": {
+        "id": 43268235027,
+        "name": "Fuzzing",
+        "status": "in_progress",
+        "event": "pull_request",
+        "branch": "research/audit-35-at-procedure-call-form",
+        "created_at": "2026-11-12T17:19:40Z",
+        "updated_at": "2026-11-12T17:19:44Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43268235027",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43267401596,
+        "name": "Fuzzing",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "research/audit-35-example-used-statements",
+        "created_at": "2026-11-12T17:15:02Z",
+        "updated_at": "2026-11-12T17:17:15Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43267401596",
+        "age_hours": 0,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Benchmarks",
+      "file": "benchmarks.yml",
+      "note": "Source-loading benchmark; pull requests validate compilation without recording measurements.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/benchmarks.yml",
+      "state": "in_progress",
+      "latest": {
+        "id": 43268235315,
+        "name": "Benchmarks",
+        "status": "in_progress",
+        "event": "pull_request",
+        "branch": "research/audit-35-at-procedure-call-form",
+        "created_at": "2026-11-12T17:19:40Z",
+        "updated_at": "2026-11-12T17:19:44Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43268235315",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43267401754,
+        "name": "Benchmarks",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "research/audit-35-example-used-statements",
+        "created_at": "2026-11-12T17:15:02Z",
+        "updated_at": "2026-11-12T17:15:27Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43267401754",
+        "age_hours": 0,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Release SBOM",
+      "file": "release-sbom.yml",
+      "note": "Validates PR SBOMs and uploads on published releases; release attachment is unproven until a release runs.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/release-sbom.yml",
+      "state": "in_progress",
+      "latest": {
+        "id": 43268235026,
+        "name": "Release SBOM",
+        "status": "in_progress",
+        "event": "pull_request",
+        "branch": "research/audit-35-at-procedure-call-form",
+        "created_at": "2026-11-12T17:19:40Z",
+        "updated_at": "2026-11-12T17:19:44Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43268235026",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43267401624,
+        "name": "Release SBOM",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "research/audit-35-example-used-statements",
+        "created_at": "2026-11-12T17:15:02Z",
+        "updated_at": "2026-11-12T17:15:23Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43267401624",
+        "age_hours": 0,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "GitHub Pages",
+      "file": "pages.yml",
+      "note": "Builds and publishes the static production website.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/pages.yml",
+      "state": "success",
+      "latest": {
+        "id": 43267888172,
+        "name": "Deploy GitHub Pages",
+        "status": "success",
+        "event": "push",
+        "branch": "main",
+        "created_at": "2026-11-12T17:17:44Z",
+        "updated_at": "2026-11-12T17:18:09Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43267888172",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43267888172,
+        "name": "Deploy GitHub Pages",
+        "status": "success",
+        "event": "push",
+        "branch": "main",
+        "created_at": "2026-11-12T17:17:44Z",
+        "updated_at": "2026-11-12T17:18:09Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43267888172",
+        "age_hours": 0,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Pull request preview",
+      "file": "pr-preview.yml",
+      "note": "Builds and smoke-tests same-repository pull request previews.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/pr-preview.yml",
+      "state": "in_progress",
+      "latest": {
+        "id": 43268234858,
+        "name": "Pull request website preview",
+        "status": "in_progress",
+        "event": "pull_request",
+        "branch": "research/audit-35-at-procedure-call-form",
+        "created_at": "2026-11-12T17:19:40Z",
+        "updated_at": "2026-11-12T17:19:43Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43268234858",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43267894007,
+        "name": "Pull request website preview",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "research/audit-35-example-used-statements",
+        "created_at": "2026-11-12T17:17:46Z",
+        "updated_at": "2026-11-12T17:18:04Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43267894007",
+        "age_hours": 0,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Conformance suite",
+      "file": "conformance.yml",
+      "note": "No dedicated compiler conformance workflow is configured.",
+      "state": "not-configured",
+      "latest": null,
+      "last_success": null
+    }
+  ]
+}

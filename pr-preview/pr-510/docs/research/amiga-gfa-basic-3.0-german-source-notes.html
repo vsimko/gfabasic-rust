@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The project owner selected Amiga GFA-BASIC 3.5 as the normative compatibility target on 2026-11-04.">
+  <title>German Amiga GFA BASIC 3.0 source — initial verification notes · GFA BASIC Rust documentation</title>
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body class="docs-site">
+  <header class="docs-header">
+    <a href="../../index.html">GFA BASIC Rust</a>
+    <span aria-hidden="true">/</span>
+    <a href="../index.html">Documentation</a>
+  </header>
+  <div class="docs-layout">
+    <nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home" href="index.html">Section index</a><ul><li><a href="amiga-gfa-basic-documentation-audit.html">Amiga GFA BASIC documentation coverage audit</a></li><li><a href="amiga-gfa-basic-command-catalogue.html">Amiga GFA BASIC command catalogue</a></li><li><a href="amiga-gfa-basic-german-book-command-api-extraction.html">German Amiga GFA-BASIC book: command and OS API extraction</a></li><li><a href="amiga-book-command-index-ocr-transcription.html">Appendix D — OCR transcription of the command index</a></li><li><a href="gfa-basic-command-index-ocr.html">GFA-BASIC command index — first-pass extraction</a></li><li><a href="amiga-gfa-basic-source-topic-index.html">Amiga GFA BASIC source and topic index</a></li><li><a href="amiga-book-515-page-extraction-audit.html">Amiga GFA-BASIC book — 515-page extraction audit</a></li><li><a href="amiga-book-chapters05-17-heading-harvest.html">Amiga book — command-heading harvest, chapters 5–17</a></li><li><a href="amiga-gfa-basic-functions.toml">Function inventory (117 unique names)</a></li><li><a href="amiga-gfa-basic-function-inventory.html">Amiga GFA BASIC 3.5 built-in function inventory</a></li><li><a href="amiga-base-manual-io-graphics-events-advanced.html">Amiga GFA BASIC base-manual I/O, graphics, event, and advanced-programming extraction</a></li><li><a href="amiga-base-manual-io-graphics-events-advanced-details.html">Amiga GFA BASIC base-manual I/O, graphics, event, and advanced-programming details</a></li><li><a href="amiga-base-manual-numeric-string-functions.html">Amiga GFA BASIC base-manual numeric and string function extraction</a></li><li><a href="amiga-gfa-basic-35-addendum-inventory.html">Amiga GFA-BASIC 3.5 interpreter addendum — extracted feature inventory</a></li><li><a href="amiga-gfa-basic-candidates.toml">3.5 candidate manifest</a></li><li><a href="amiga-gfa-basic-candidate-report.html">Amiga GFA BASIC 3.5 candidate verification report</a></li><li><a href="amiga-gfa-basic-language-population-policy.html">Amiga GFA BASIC language population policy</a></li><li><a href="amiga-gfa-basic-3.03-ocr-index.html">German Amiga GFA BASIC book: OCR index and edition notes</a></li><li><a href="amiga-runtime-ocr-audit.html">Amiga runtime workflow OCR audit</a></li><li><a href="README.html">Research materials</a></li><li><a href="amiga-gfa-test-output.html">Amiga GFA BASIC test output</a></li><li><a href="amiga-gfa-basic-dqh-source-inventory.html">Amiga GFA BASIC commands observed in dqh-amiga</a></li><li><a href="amiga-emulator-lab.html">Amiga emulator experiment lab</a></li><li><a href="amiga-gfa-basic-35-lst-probes.html">Amiga GFA BASIC 3.5 interpreter probes from text listings</a></li><li><a href="amiga-gfa-basic-352-runtime-baseline.html">Amiga GFA BASIC 3.52 runtime baseline</a></li><li><a href="amiga-gfa-basic-binary-analysis.html">Amiga GFA-BASIC binary analysis</a></li><li><a href="amiga-base-manual-variable-array-conversion-functions.html">Amiga GFA BASIC base-manual variable, array, and conversion functions</a></li><li><a href="amiga-gfa-basic-chapter-7-program-handling-evidence.html">Amiga GFA BASIC Chapter 7 — program handling evidence</a></li><li><a href="amiga-gfa-basic-chapter-8-graphics-evidence.html">Amiga GFA BASIC Chapter 8 — graphics compatibility evidence</a></li><li><a href="amiga-gfa-basic-chapter-9-event-window-evidence.html">Amiga GFA BASIC Chapter 9 — event, menu, screen and window evidence</a></li><li><a href="amiga-gfa-basic-chapter-10-advanced-programming-evidence.html">Amiga GFA BASIC Chapter 10 — advanced programming evidence</a></li><li><a href="amiga-gfa-basic-chapter-11-system-routines-evidence.html">Amiga GFA BASIC Chapter 11 — system-routine evidence</a></li><li><a href="amiga-gfa-basic-chapter-12-appendices-index-evidence.html">Amiga GFA BASIC Chapter 12 — appendix and index evidence</a></li><li><a href="https://github.com/vsimko/gfabasic-rust/blob/main/scripts/validate_amiga_chapter_inventories.py">Chapter inventory validator</a></li><li><a href="amiga-gfa-basic-3.0-command-index.html">Amiga GFA BASIC 3.0 command index — grouped cross-check</a></li><li><a href="amiga-gfa-basic-3.0-statement-command-candidates.html">Amiga GFA BASIC 3.0 statement and command candidate catalogue</a></li><li><a href="amiga-gfa-basic-3.0-base-inventory.html">Amiga GFA BASIC 3.0 base-manual inventory</a></li><li><a href="amiga-gfa-basic-3.0-expressions-builtins-control-flow.html">Amiga GFA BASIC 3.0 expression, intrinsic and control-flow evidence</a></li><li><a href="amiga-gfa-basic-3.0-control-file-data-io.html">Amiga GFA BASIC 3.0 control, file and data I/O evidence</a></li><li><a href="amiga-gfa-basic-3.0-graphics-evidence.html">GFA BASIC 3.0 Amiga — graphics evidence</a></li><li><a href="amiga-gfa-basic-3.0-events-windows-evidence.html">GFA BASIC 3.0 Amiga — event, menu, screen and window evidence</a></li><li><a href="amiga-gfa-basic-3.0-system-routines-evidence.html">GFA BASIC 3.0 Amiga — operating-system routine evidence</a></li><li><a href="amiga-gfa-basic-3.0-advanced-programming-evidence.html">GFA BASIC 3.0 Amiga — advanced programming evidence</a></li><li><a href="amiga-gfa-basic-3.0-appendix-index-evidence.html">GFA BASIC 3.0 Amiga — appendix and command-index evidence</a></li><li><a href="amiga-gfa-basic-3.0-german-source-notes.html">German Amiga GFA BASIC 3.0 source — initial verification notes</a></li><li><a href="amiga-gfa-basic-3.0-procedure-error-details.html">GFA BASIC 3.0 Amiga — procedures, functions and error-flow evidence</a></li><li><a href="amiga-gfa-basic-3.0-screen-window-details.html">GFA BASIC 3.0 Amiga — screen and window command details</a></li><li><a href="amiga-gfa-basic-3.0-output-device-details.html">GFA BASIC 3.0 Amiga — output, cursor, mouse and sound evidence</a></li><li><a href="amiga-gfa-basic-3.0-menu-event-details.html">GFA BASIC 3.0 Amiga — menu and event details</a></li><li><a href="amiga-gfa-basic-3.0-bob-object-details.html">GFA BASIC 3.0 Amiga — BOB and OBJECT API evidence</a></li><li><a href="amiga-gfa-basic-3.0-source-format-editor-evidence.html">Amiga GFA BASIC 3.0 — source composition and editor evidence</a></li><li><a href="amiga-gfa-basic-35-primary-reference.html">Amiga GFA-BASIC 3.5 primary reference and target decision</a></li><li><a href="amiga-gfa-basic-35-german-book-crosscheck.html">Amiga GFA-BASIC 3.5 — independent German-book cross-check</a></li><li><a href="amiga-book-gfa35-chapter18-19-extraction.html">GFA-BASIC 3.5 additions documented in the Amiga book</a></li><li><a href="amiga-gfa-basic-35-editor-feature-audit.html">Amiga GFA BASIC 3.5 — editor feature audit</a></li><li><a href="amiga-gfa-basic-35-lexer-evidence.html">Amiga GFA BASIC 3.5 lexer evidence inventory</a></li><li><a href="amiga-gfa-basic-35-matrix-arithmetic-analysis-audit.html">Amiga GFA BASIC 3.5 — matrix arithmetic and analysis audit</a></li><li><a href="amiga-gfa-basic-35-matrix-io-copy-audit.html">Amiga GFA BASIC 3.5 — matrix I/O and copy declaration audit</a></li><li><a href="amiga-gfa-basic-35-five-declaration-audit.html">Amiga GFA BASIC 3.5 — five declaration-level audit blocks</a></li><li><a href="amiga-gfa-basic-35-five-more-declaration-audit.html">Amiga GFA BASIC 3.5 — five more declaration-level audit blocks</a></li><li><a href="amiga-gfa-basic-35-guru-declaration-audit.html">Amiga GFA BASIC 3.5 — GURU declaration audit</a></li><li><a href="atari-gfa-book-diskette.html">Atari GFA BASIC book diskette — source-corpus research notes</a></li><li><a href="atari-gfa-book-systematic-review.html">Systematic review of *Das große GFA-BASIC-Buch* (Atari ST)</a></li><li><a href="aminet-catalogue.html">Aminet GFA BASIC package survey</a></li><li><a href="gfalist-build-and-fixture-validation.html">gfalist build and fixture validation</a></li><li><a href="gfalist-format-vs-rust-frontend.html">gfalist format notes vs. the Rust frontend</a></li><li><a href="amiga-gfa-basic-35-base-function-use-audit.html">Amiga GFA BASIC 3.5 — inherited function evidence from both manuals</a></li><li><a href="amiga-gfa-basic-35-statement-operator-audit.html">Amiga GFA BASIC 3.5 — inherited statement and operator evidence</a></li><li><a href="amiga-gfa-basic-35-example-used-statements-audit.html">Amiga GFA BASIC 3.5 — inherited statements used in examples</a></li></ul></nav>
+    <main class="docs-content">
+      <article>
+        <h1>German Amiga GFA BASIC 3.0 source — initial verification notes</h1>
+        <p class="docs-meta"><span>Research Note</span></p>
+        <h1 id="german-amiga-gfa-basic-30-source-initial-verification-notes">German Amiga GFA BASIC 3.0 source — initial verification notes</h1>
+<ul>
+<li><strong>Source ID:</strong> <code>AM-BOOK-DE-1989</code></li>
+<li><strong>Title page:</strong> <em>Das große GFA-BASIC-Buch</em></li>
+<li><strong>Authors:</strong> Wolf-Gideon Bleek, Martin Hecht, Uwe Litzkendorf</li>
+<li><strong>Publisher:</strong> DATA BECKER GmbH</li>
+<li><strong>Edition:</strong> 1. Auflage, 1989</li>
+<li><strong>ISBN:</strong> 3-89011-276-5</li>
+<li><strong>Dialect/version documented by this source:</strong> Commodore Amiga GFA-BASIC interpreter 3.0</li>
+<li><strong>Project compatibility target (decision, 2026-11-04):</strong> Commodore Amiga GFA-BASIC 3.5</li>
+<li><strong>Source scan:</strong> <a href="https://dn710209.ca.archive.org/0/items/das-grosse-buch-zu-gfa-basic-amiga/Das_grosse_Buch_zu_GFA_BASIC_AMIGA%20%28Data%20Becker%29.pdf">PDF on the Internet Archive</a></li>
+<li><strong>Research copy:</strong> supplied by the repository owner in the conversation/work environment on 2026-11-04. The PDF is not stored in this repository.</li>
+<li><strong>Scan properties:</strong> 432 PDF pages; selectable OCR text is present. Printed page numbers are visible and correspond to the book's own pagination, not necessarily PDF viewer page numbers.</li>
+</ul>
+<h2 id="project-target-and-compatibility-policy">Project target and compatibility policy</h2>
+<p>The project owner selected <strong>Amiga GFA-BASIC 3.5</strong> as the normative compatibility target on 2026-11-04.</p>
+<p>This 1989 book is explicitly a source for Amiga GFA-BASIC 3.0, not 3.5. It is useful as a historical baseline and as a source for features that may be inherited, but it must not by itself be cited as proof of 3.5 behavior.</p>
+<p>For implementation and conformance work, classify each rule as one of:</p>
+<ol>
+<li><strong>Verified 3.5:</strong> directly supported by a 3.5-specific primary source or by a reproducible observation against the 3.5 interpreter/compiler.</li>
+<li><strong>Inherited candidate:</strong> documented for 3.0 and believed relevant to 3.5, but not yet confirmed for 3.5.</li>
+<li><strong>3.5 addition/change:</strong> documented or observed as introduced or changed in 3.5.</li>
+<li><strong>Unresolved:</strong> source identity, exact syntax, semantics, or version applicability is not established.</li>
+</ol>
+<p>Do not silently promote a 3.0 rule to verified 3.5. Keep language-core behavior separate from Amiga-specific runtime, OS/library, graphics, window, menu, and event APIs. Keep compiler and interpreter behavior distinct where the sources distinguish them.</p>
+<p>The next research priority is to obtain and identify an Amiga-specific GFA-BASIC 3.5 manual, release notes, and/or original distribution media. Use those sources to establish the 3.5 command/function inventory and version-specific differences. Runtime probes should record the exact 3.5 build and environment. Atari ST 3.5 material may be used only as a lead until Amiga applicability is independently confirmed.</p>
+<h2 id="applicability-and-edition-identity">Applicability and edition identity</h2>
+<p>The cover title is generic, but the first-edition foreword explicitly states that the book documents, tests, and explains all commands and functions of <strong>Amiga GFA-BASIC version 3.0</strong>. It is therefore a primary German-language source for the project's historical Amiga 3.0 baseline.</p>
+<p>The title/copyright pages identify the first edition as 1989, ISBN 3-89011-276-5, published by DATA BECKER. The foreword is dated 6 December 1988. Do not confuse this edition with the separate 1990 Amiga 3.x/V3.03 book (ISBN 3-89011-399-0) already catalogued as <code>AM-BOOK-DE-1990</code>.</p>
+<p>The scan's table of contents covers BASIC fundamentals, I/O, AmigaDOS and Exec libraries, program structure, strings, arithmetic, graphics, arrays/memory/pointers, program control, multitasking, debugging, windows/screens, menus, and event monitoring. The scan has 432 PDF pages; the book's printed pagination runs through the index and appendix.</p>
+<h2 id="access-and-rights-handling">Access and rights handling</h2>
+<p>The scan includes a 2020 digitization foreword by Uwe Litzkendorf stating that he agreed to the digitization and free online availability. The following page says the digital edition may not be resold, may only be passed on unchanged, permits printing individual pages for private use, and permits public presentations/excerpts only when they are not for financial gain. The original 1989 copyright page also contains a DATA BECKER all-rights-reserved notice.</p>
+<p>Treat the scan as a research source, not as project content. Do not commit the PDF, OCR dump, page images, or substantial verbatim passages. Commit only bibliographic metadata, concise original summaries, technical facts, and printed-page citations. If future redistribution or publication of excerpts is considered, obtain explicit rights clarification rather than inferring that all rights have expired.</p>
+<h2 id="initial-visual-verification">Initial visual verification</h2>
+<p>The PDF text layer was extracted locally and checked against rendered page images for the following pages. This is a targeted first pass, not a full manual audit.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:right">Printed page</th>
+<th style="text-align:right">PDF page in supplied scan</th>
+<th>Verified subject</th>
+<th>Initial result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right">front matter</td>
+<td style="text-align:right">7</td>
+<td>Edition and copyright</td>
+<td>1st edition 1989; ISBN 3-89011-276-5; DATA BECKER; original rights notice</td>
+</tr>
+<tr>
+<td style="text-align:right">front matter</td>
+<td style="text-align:right">9</td>
+<td>Foreword to first edition</td>
+<td>Explicitly identifies Amiga GFA-BASIC version 3.0 and the three authors</td>
+</tr>
+<tr>
+<td style="text-align:right">46–50</td>
+<td style="text-align:right">46–50</td>
+<td>Numeric, Boolean, and string variables</td>
+<td>Visual check completed; key type and storage rules recorded below</td>
+</tr>
+<tr>
+<td style="text-align:right">213–214</td>
+<td style="text-align:right">213–214</td>
+<td>Single-bit and bit-width functions</td>
+<td>Visual check completed; signatures and bit numbering recorded below</td>
+</tr>
+</tbody>
+</table>
+<h3 id="variable-and-value-model-printed-pp-4650">Variable and value model (printed pp. 46–50)</h3>
+<ul>
+<li>The book distinguishes numeric/value variables from alphanumeric/text/string variables.</li>
+<li>A real-valued numeric variable uses the bare variable name (no type suffix), occupies 8 bytes, and is described as providing up to 13 significant decimal digits. Assignments beyond that precision are rounded. The book also documents an exponent range on printed p. 47.</li>
+<li>Integer variables use the <code>%</code> suffix, occupy 4 bytes, and are documented with the signed range −2,147,483,648 through 2,147,483,647. The text also mentions 1-byte and 2-byte integer variants in GFA BASIC 3.0; their suffixes and exact ranges need a separate visual/source check.</li>
+<li>Boolean variables use the <code>!</code> suffix, occupy 2 bytes, and normalize assigned values to only 0 (false) or −1 (true); any nonzero assigned value becomes −1.</li>
+<li>String variables use the <code>$</code> suffix. The documented maximum length is 32,767 characters. Storage is proportional to the actual string length, plus a 6-byte descriptor per string variable. The descriptor stores the string address and length.</li>
+<li>The book explains −1 as the true value using 32-bit two's-complement representation. Do not substitute the more common BASIC convention of true = +1.</li>
+<li>The OCR text and rendered images agree for the points above. This verifies the cited rules as statements in this book; it does not yet prove that every interpreter build implements them identically.</li>
+</ul>
+<h3 id="bit-operations-printed-pp-213214">Bit operations (printed pp. 213–214)</h3>
+<p>The page images confirm these signatures and descriptions:</p>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Signature</th>
+<th>Source description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>BCHG</code></td>
+<td><code>Var=BCHG(Wert,Bit)</code></td>
+<td>Toggle the selected bit</td>
+</tr>
+<tr>
+<td><code>BCLR</code></td>
+<td><code>Var=BCLR(Wert,Bit)</code></td>
+<td>Clear the selected bit</td>
+</tr>
+<tr>
+<td><code>BSET</code></td>
+<td><code>Var=BSET(Wert,Bit)</code></td>
+<td>Set the selected bit</td>
+</tr>
+<tr>
+<td><code>BTST</code></td>
+<td><code>Var=BTST(Wert,Bit)</code></td>
+<td>Return −1 if selected bit is set, otherwise 0</td>
+</tr>
+<tr>
+<td><code>BYTE</code></td>
+<td><code>Var=BYTE(Wert)</code></td>
+<td>Return the low 8 bits unsigned</td>
+</tr>
+<tr>
+<td><code>CARD</code></td>
+<td><code>Var=CARD(Wert)</code></td>
+<td>Return the low 16 bits unsigned</td>
+</tr>
+<tr>
+<td><code>EQV</code></td>
+<td><code>Var=EQV(Wert1,Wert2)</code></td>
+<td>Logical equivalence operation</td>
+</tr>
+</tbody>
+</table>
+<p>Additional source details on printed p. 213: bit numbering starts at the right with bit 0; the text says values above bit 31 are not processed correctly, and values greater than the unsigned 32-bit maximum are not processed. The page describes the supported width as 32 bits. Keep these as documented limits; runtime probes are still needed to establish edge-case behavior precisely.</p>
+<h2 id="chaptertopic-map">Chapter/topic map</h2>
+<p>The table of contents and OCR text provide this initial map. Printed page numbers are the book's pagination.</p>
+<table>
+<thead>
+<tr>
+<th>Topic</th>
+<th style="text-align:right">Printed pages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Amiga and GFA-BASIC introduction</td>
+<td style="text-align:right">17–24</td>
+</tr>
+<tr>
+<td>BASIC fundamentals, variables, arrays, loops, comparisons</td>
+<td style="text-align:right">25–70</td>
+</tr>
+<tr>
+<td>Input/output, screen, disks, files, AmigaDOS, ports, printer, sound</td>
+<td style="text-align:right">71–140</td>
+</tr>
+<tr>
+<td>Program structure, declarations, procedures, assembler/C/PRG calls</td>
+<td style="text-align:right">141–188</td>
+</tr>
+<tr>
+<td>String operations</td>
+<td style="text-align:right">189–196</td>
+</tr>
+<tr>
+<td>Arithmetic, math, numeric/trigonometric functions, bit operations, random</td>
+<td style="text-align:right">197–220</td>
+</tr>
+<tr>
+<td>Graphics, drawing, display memory, animation</td>
+<td style="text-align:right">221–272</td>
+</tr>
+<tr>
+<td>Data conversion and number systems</td>
+<td style="text-align:right">273–284</td>
+</tr>
+<tr>
+<td>Arrays, memory, memory management, pointers, Exec library</td>
+<td style="text-align:right">285–324</td>
+</tr>
+<tr>
+<td>Program control, errors, date/time, multitasking, debugging</td>
+<td style="text-align:right">325–358</td>
+</tr>
+<tr>
+<td>Program/user interaction</td>
+<td style="text-align:right">359–370</td>
+</tr>
+<tr>
+<td>Window and screen programming</td>
+<td style="text-align:right">371–386</td>
+</tr>
+<tr>
+<td>Menus and event monitoring</td>
+<td style="text-align:right">387–404</td>
+</tr>
+<tr>
+<td>Appendices and index</td>
+<td style="text-align:right">405–end</td>
+</tr>
+</tbody>
+</table>
+<h2 id="research-implications-and-next-steps">Research implications and next steps</h2>
+<ol>
+<li>Keep <code>AM-BOOK-DE-1989</code> as a distinct 3.0 source identity. Keep it separate from the French translation (ISBN 2-86899-207-2) and the 1990 Amiga 3.x/V3.03 edition (ISBN 3-89011-399-0).</li>
+<li>Find and identify an Amiga GFA-BASIC 3.5 primary source before claiming 3.5 compatibility for any feature.</li>
+<li>Use the German 3.0 scan to cross-check OCR-sensitive syntax in the French source, especially punctuation, type suffixes, parameter order, and bit-operation examples; label the results as 3.0 until confirmed for 3.5.</li>
+<li>Continue page-image review across declarations, control flow, I/O, memory, pointers, and API sections. The initial review above does not make the whole book visually verified.</li>
+<li>Record source claims separately from executable observations. Build conformance probes only after a rule's exact syntax and expected result are clear, and record the exact 3.5 build used.</li>
+<li>Keep AmigaDOS/Exec/graphics/window/menu/event APIs distinct from the portable language core.</li>
+<li>Do not treat the 1989 interpreter 3.0 book as a complete specification for Amiga 3.5 or later compiler/runtime behavior.</li>
+</ol>
+<h2 id="citation-convention">Citation convention</h2>
+<p>Use citations in this form:</p>
+<p><code>AM-BOOK-DE-1989, Amiga GFA-BASIC 3.0, printed p. N or §N</code></p>
+<p>For visual verification, record both the printed page and (in private research notes, if needed) the corresponding PDF viewer page.</p>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>
