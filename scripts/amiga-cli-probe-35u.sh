@@ -99,12 +99,24 @@ env -u SHELLOPTS xvfb-run -a -s "-screen 0 1024x768x24 +extension GLX" bash -c '
   printf "SEND_KEY\\t96\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
   sleep 5
   printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-run-dialog.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-  printf "SEND_KEY\\t68\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+  # The AmigaOS "open allows" requester is a modal gadget; activate its
+  # RETURN button with the mouse rather than relying on keyboard focus.
+  # The pointer is near x=324,y=436 after the Merge interaction.
+  printf "SEND_MOUSE\\t160\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+  for _ in $(seq 1 5); do
+    printf "SEND_MOUSE\\t0\\t-112\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+    sleep 0.1
+  done
+  sleep 0.5
+  printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/open-allows-pointer.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+  printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
   sleep 0.2
-  printf "SEND_KEY\\t68\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+  printf "SEND_MOUSE\\t0\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+  sleep 2
+  printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-open-allows.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
   # Allow the BASIC runtime and filesystem to finish flushing the
   # interpreter-written output files before requesting emulator exit.
-  sleep 3
+  sleep 5
 
   kill -0 "$emulator_pid"
   printf "QUIT\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}" || true
@@ -131,7 +143,7 @@ for diagnostic in insert-floppy-ipc.txt list-floppies-ipc.txt stdin-save.LST; do
     printf "MISSING: %s\\n" "$diagnostic" > "artifacts/amiga-cli-probe/$diagnostic.missing"
   fi
 done
-for screenshot in editor-before-merge.png merge-dialog.png merge-file-row-pointer.png merge-file-selected.png after-shortcut.png merge-gadget-pointer.png after-merge.png after-run-dialog.png; do
+for screenshot in editor-before-merge.png merge-dialog.png merge-file-row-pointer.png merge-file-selected.png after-shortcut.png merge-gadget-pointer.png after-merge.png after-run-dialog.png open-allows-pointer.png after-open-allows.png; do
   test -s "artifacts/amiga-cli-probe/$screenshot"
 done
 # Amiga Kickstart screenshots use bright text on a saturated blue background.
