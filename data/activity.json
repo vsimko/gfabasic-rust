@@ -1,9 +1,25 @@
 {
   "schema_version": 1,
   "status": "fresh",
-  "generated_at": "2026-11-13T13:14:36.993427+00:00",
-  "last_successful_at": "2026-11-13T13:14:36.993427+00:00",
+  "generated_at": "2026-11-13T22:12:17.033094+00:00",
+  "last_successful_at": "2026-11-13T22:12:17.033094+00:00",
   "items": [
+    {
+      "type": "merged_pull_request",
+      "title": "test(amiga): expand 3.5U DATA pointer regression coverage",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/523",
+      "number": 523,
+      "timestamp": "2026-11-13T22:11:50Z",
+      "summary": "PR #523 merged"
+    },
+    {
+      "type": "commit",
+      "title": "test(amiga): expand 3.5U DATA pointer regression coverage (#523)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/68881829a6fafb54888af21500b7b9cd7c8b5bff",
+      "number": null,
+      "timestamp": "2026-11-13T22:11:49Z",
+      "summary": "Commit 6888182"
+    },
     {
       "type": "merged_pull_request",
       "title": "Document GFA BASIC 3.5 inherited statements from the interpreter addendum",
@@ -83,22 +99,6 @@
       "number": null,
       "timestamp": "2026-11-13T08:05:15Z",
       "summary": "Commit 34edc83"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "Run native Amiberry probes against GFA BASIC 3.5U",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/518",
-      "number": 518,
-      "timestamp": "2026-11-13T07:36:28Z",
-      "summary": "PR #518 merged"
-    },
-    {
-      "type": "commit",
-      "title": "Run native Amiberry probes against GFA BASIC 3.5U",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/3520c37ccaff38ce90c1f163d4ef3cb2af77181a",
-      "number": null,
-      "timestamp": "2026-11-13T07:36:28Z",
-      "summary": "Commit 3520c37"
     }
   ]
 }
