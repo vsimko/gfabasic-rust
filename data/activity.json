@@ -1,9 +1,25 @@
 {
   "schema_version": 1,
   "status": "fresh",
-  "generated_at": "2026-11-12T17:28:15.977011+00:00",
-  "last_successful_at": "2026-11-12T17:28:15.977011+00:00",
+  "generated_at": "2026-11-13T00:45:36.302990+00:00",
+  "last_successful_at": "2026-11-13T00:45:36.302990+00:00",
   "items": [
+    {
+      "type": "merged_pull_request",
+      "title": "Clarify pre-3.5 examples excluded from function evidence",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/512",
+      "number": 512,
+      "timestamp": "2026-11-13T00:45:13Z",
+      "summary": "PR #512 merged"
+    },
+    {
+      "type": "commit",
+      "title": "docs: qualify pre-3.5 trigonometric example evidence (#512)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/af2a577eb71b8f929278b8fa6f3fe8b0b0697e9b",
+      "number": null,
+      "timestamp": "2026-11-13T00:45:12Z",
+      "summary": "Commit af2a577"
+    },
     {
       "type": "merged_pull_request",
       "title": "Record CLS use in the GFA BASIC 3.5 addendum",
@@ -83,22 +99,6 @@
       "number": null,
       "timestamp": "2026-11-12T11:40:39Z",
       "summary": "Commit 0fc4b80"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "Audit inherited functions used by the GFA BASIC 3.5 addendum",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/505",
-      "number": 505,
-      "timestamp": "2026-11-12T11:18:08Z",
-      "summary": "PR #505 merged"
-    },
-    {
-      "type": "commit",
-      "title": "Audit inherited functions used by the GFA BASIC 3.5 addendum (#505)",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/6a9c23e0dca52d82de6c79051f621a00d9b27f36",
-      "number": null,
-      "timestamp": "2026-11-12T11:18:08Z",
-      "summary": "Commit 6a9c23e"
     }
   ]
 }
