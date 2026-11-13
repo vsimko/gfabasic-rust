@@ -163,6 +163,30 @@ fn digit_value(byte: u8) -> Option<u32> {
     }
 }
 
+/// Format a numeric value using the inherited GFA BASIC STR$ width/precision form.
+///
+/// The Amiga 3.5 addendum uses `STR$(x,g,n)` to describe MAT PRINT formatting
+/// (printed p. 13-3). The width/right-truncation rule and other overloads are
+/// inherited from the 3.0 base manual (printed p. 2-15), so this is a pragmatic
+/// runtime implementation rather than a claim of complete 3.5 conformance.
+pub fn str_format(value: f64, width: Option<usize>, decimals: Option<usize>) -> String {
+    let mut formatted = match decimals {
+        Some(precision) => format!("{:.*}", precision, value),
+        None => value.to_string(),
+    };
+
+    if let Some(width) = width {
+        if formatted.len() > width {
+            formatted.drain(..formatted.len() - width);
+        } else if formatted.len() < width {
+            let padding = " ".repeat(width - formatted.len());
+            formatted.insert_str(0, &padding);
+        }
+    }
+
+    formatted
+}
+
 /// Convert an integer expression to binary (Amiga GFA BASIC BIN$).
 ///
 /// An optional width pads the result with leading zeroes and must be 1..=32.
@@ -200,7 +224,7 @@ pub fn hex(value: i32, width: Option<usize>) -> String {
 
 #[cfg(test)]
 mod tests {
-    use super::{RadixFormatError, bin, hex, oct, val, val_length, val_with_length};
+    use super::{RadixFormatError, bin, hex, oct, str_format, val, val_length, val_with_length};
 
     #[test]
     fn val_parses_decimal_prefix_and_stops_at_first_invalid_byte() {
@@ -245,6 +269,20 @@ mod tests {
         assert_eq!(val(b"  "), 0.0);
         assert_eq!(val(b"word123"), 0.0);
         assert_eq!(val(b"&H"), 0.0);
+    }
+
+    #[test]
+    fn str_format_applies_documented_width_and_decimal_precision() {
+        assert_eq!(str_format(123.4567, Some(6), Some(2)), "123.46");
+        assert_eq!(str_format(std::f64::consts::PI, Some(5), Some(3)), "3.142");
+        assert_eq!(str_format(1.0, Some(7), Some(3)), "  1.000");
+        assert_eq!(str_format(123.0, None, None), "123");
+    }
+
+    #[test]
+    fn str_format_keeps_the_rightmost_bytes_when_width_is_too_small() {
+        assert_eq!(str_format(std::f64::consts::PI, Some(2), Some(2)), "14");
+        assert_eq!(str_format(123.0, Some(0), None), "");
     }
 
     #[test]
