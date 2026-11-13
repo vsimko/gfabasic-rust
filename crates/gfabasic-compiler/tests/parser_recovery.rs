@@ -505,11 +505,7 @@ fn parser_accepts_unary_negative_integer_assignments() {
         parse_document(source_id, source).expect("negative integer assignments should parse");
     assert_eq!(document.program.statements.len(), 3);
 
-    let expected = [
-        ("x", -1, "x=-1"),
-        ("y", -42, "LET y=-42"),
-        ("z", 7, "z=7"),
-    ];
+    let expected = [("x", -1, "x=-1"), ("y", -42, "LET y=-42"), ("z", 7, "z=7")];
     for (statement, (expected_name, expected_value, expected_text)) in
         document.program.statements.iter().zip(expected)
     {
@@ -529,8 +525,8 @@ fn parser_rejects_a_bare_unary_minus_and_recovers_at_the_next_line() {
     let mut sources = SourceMap::new();
     let source_id = sources.add_source("missing-negative-integer.LST", source);
 
-    let diagnostics = parse(source_id, source)
-        .expect_err("unary minus must be followed by an integer literal");
+    let diagnostics =
+        parse(source_id, source).expect_err("unary minus must be followed by an integer literal");
     assert_eq!(diagnostics.len(), 1);
     assert_eq!(diagnostics[0].code, "GFA-PARSE-0001");
     let span = diagnostics[0]
