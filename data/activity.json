@@ -1,9 +1,73 @@
 {
   "schema_version": 1,
   "status": "fresh",
-  "generated_at": "2026-11-13T07:34:53.815095+00:00",
-  "last_successful_at": "2026-11-13T07:34:53.815095+00:00",
+  "generated_at": "2026-11-13T11:56:24.306862+00:00",
+  "last_successful_at": "2026-11-13T11:56:24.306862+00:00",
   "items": [
+    {
+      "type": "merged_pull_request",
+      "title": "Run native GFA probes from the original distribution ADF",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/521",
+      "number": 521,
+      "timestamp": "2026-11-13T11:56:02Z",
+      "summary": "PR #521 merged"
+    },
+    {
+      "type": "commit",
+      "title": "Run native GFA probes from original distribution ADF",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/6bd0ddbac58a165aa33123462d4ad73053e50db0",
+      "number": null,
+      "timestamp": "2026-11-13T11:56:02Z",
+      "summary": "Commit 6bd0ddb"
+    },
+    {
+      "type": "merged_pull_request",
+      "title": "Extract GFA BASIC 3.52D from original zipped ADF",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/522",
+      "number": 522,
+      "timestamp": "2026-11-13T10:12:20Z",
+      "summary": "PR #522 merged"
+    },
+    {
+      "type": "commit",
+      "title": "Extract GFA BASIC 3.52D from original zipped ADF (#522)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/2ee49fac134ba34b2b03aedd13d807fe22ee61a7",
+      "number": null,
+      "timestamp": "2026-11-13T10:12:20Z",
+      "summary": "Commit 2ee49fa"
+    },
+    {
+      "type": "merged_pull_request",
+      "title": "Add isolated GFA BASIC 3.041U native probes",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/520",
+      "number": 520,
+      "timestamp": "2026-11-13T08:05:15Z",
+      "summary": "PR #520 merged"
+    },
+    {
+      "type": "commit",
+      "title": "Add isolated GFA BASIC 3.041U native probes (#520)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/34edc83c25230d346ddd61bd9e1387184a746dc7",
+      "number": null,
+      "timestamp": "2026-11-13T08:05:15Z",
+      "summary": "Commit 34edc83"
+    },
+    {
+      "type": "merged_pull_request",
+      "title": "Run native Amiberry probes against GFA BASIC 3.5U",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/518",
+      "number": 518,
+      "timestamp": "2026-11-13T07:36:28Z",
+      "summary": "PR #518 merged"
+    },
+    {
+      "type": "commit",
+      "title": "Run native Amiberry probes against GFA BASIC 3.5U",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/3520c37ccaff38ce90c1f163d4ef3cb2af77181a",
+      "number": null,
+      "timestamp": "2026-11-13T07:36:28Z",
+      "summary": "Commit 3520c37"
+    },
     {
       "type": "merged_pull_request",
       "title": "Inventory private Amiga GFA BASIC media candidates",
@@ -35,70 +99,6 @@
       "number": null,
       "timestamp": "2026-11-13T07:15:08Z",
       "summary": "Commit aebbc42"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "Implement GFA BASIC STR$ formatting helper",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/515",
-      "number": 515,
-      "timestamp": "2026-11-13T07:11:50Z",
-      "summary": "PR #515 merged"
-    },
-    {
-      "type": "commit",
-      "title": "Implement GFA BASIC STR$ formatting helper",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/139605b0c80d2efe6e2655f78ff2f3cbebeefca6",
-      "number": null,
-      "timestamp": "2026-11-13T07:11:50Z",
-      "summary": "Commit 139605b"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "Implement documented VAL shorthand radix prefixes",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/514",
-      "number": 514,
-      "timestamp": "2026-11-13T07:09:49Z",
-      "summary": "PR #514 merged"
-    },
-    {
-      "type": "commit",
-      "title": "Implement VAL shorthand radix prefixes",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/523733bb81db59ea89f42611a55ba12108860654",
-      "number": null,
-      "timestamp": "2026-11-13T07:09:48Z",
-      "summary": "Commit 523733b"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "Clarify the GFA BASIC 3.5 manual evidence boundary",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/513",
-      "number": 513,
-      "timestamp": "2026-11-13T06:32:27Z",
-      "summary": "PR #513 merged"
-    },
-    {
-      "type": "commit",
-      "title": "docs: clarify 3.5 manual evidence boundary (#513)",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/e6aabd7d6f436d03ad1ae7c4f75c238c071642d6",
-      "number": null,
-      "timestamp": "2026-11-13T06:32:27Z",
-      "summary": "Commit e6aabd7"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "Clarify pre-3.5 examples excluded from function evidence",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/512",
-      "number": 512,
-      "timestamp": "2026-11-13T00:45:13Z",
-      "summary": "PR #512 merged"
-    },
-    {
-      "type": "commit",
-      "title": "docs: qualify pre-3.5 trigonometric example evidence (#512)",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/af2a577eb71b8f929278b8fa6f3fe8b0b0697e9b",
-      "number": null,
-      "timestamp": "2026-11-13T00:45:12Z",
-      "summary": "Commit af2a577"
     }
   ]
 }
