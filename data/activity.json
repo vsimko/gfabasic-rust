@@ -1,9 +1,41 @@
 {
   "schema_version": 1,
   "status": "fresh",
-  "generated_at": "2026-11-13T11:56:24.306862+00:00",
-  "last_successful_at": "2026-11-13T11:56:24.306862+00:00",
+  "generated_at": "2026-11-13T13:14:36.993427+00:00",
+  "last_successful_at": "2026-11-13T13:14:36.993427+00:00",
   "items": [
+    {
+      "type": "merged_pull_request",
+      "title": "Document GFA BASIC 3.5 inherited statements from the interpreter addendum",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/507",
+      "number": 507,
+      "timestamp": "2026-11-13T13:14:20Z",
+      "summary": "PR #507 merged"
+    },
+    {
+      "type": "commit",
+      "title": "docs: audit GFA BASIC 3.5 inherited statements",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/8ed5eacd98bfb2e9459244dfd99d6bb24a5fa92d",
+      "number": null,
+      "timestamp": "2026-11-13T13:14:19Z",
+      "summary": "Commit 8ed5eac"
+    },
+    {
+      "type": "merged_pull_request",
+      "title": "Document automatic GFA BASIC 3.5U probe trigger",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/519",
+      "number": 519,
+      "timestamp": "2026-11-13T12:23:00Z",
+      "summary": "PR #519 merged"
+    },
+    {
+      "type": "commit",
+      "title": "Document automatic GFA BASIC 3.5U probe trigger",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/ec3b14d4dd7324e90835dc6603bdb23c5d759417",
+      "number": null,
+      "timestamp": "2026-11-13T12:22:59Z",
+      "summary": "Commit ec3b14d"
+    },
     {
       "type": "merged_pull_request",
       "title": "Run native GFA probes from the original distribution ADF",
@@ -67,38 +99,6 @@
       "number": null,
       "timestamp": "2026-11-13T07:36:28Z",
       "summary": "Commit 3520c37"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "Inventory private Amiga GFA BASIC media candidates",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/517",
-      "number": 517,
-      "timestamp": "2026-11-13T07:34:10Z",
-      "summary": "PR #517 merged"
-    },
-    {
-      "type": "commit",
-      "title": "Inventory private Amiga GFA BASIC media candidates",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/13f982071f541832409f0e2dae456fafebac00d5",
-      "number": null,
-      "timestamp": "2026-11-13T07:34:09Z",
-      "summary": "Commit 13f9820"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "Parse unary-negative integer assignments",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/516",
-      "number": 516,
-      "timestamp": "2026-11-13T07:15:09Z",
-      "summary": "PR #516 merged"
-    },
-    {
-      "type": "commit",
-      "title": "Parse unary-negative integer assignments",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/aebbc424331e88fea6340941a145f27d41f4a233",
-      "number": null,
-      "timestamp": "2026-11-13T07:15:08Z",
-      "summary": "Commit aebbc42"
     }
   ]
 }
