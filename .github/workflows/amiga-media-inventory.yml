@@ -2,6 +2,9 @@ name: Inventory private Amiga GFA BASIC media
 
 on:
   workflow_dispatch:
+  pull_request:
+    paths:
+      - ".github/workflows/amiga-media-inventory.yml"
   push:
     branches:
       - main
