@@ -43,7 +43,7 @@ jobs:
             --header "Accept: application/vnd.github.raw" \
             "https://api.github.com/repos/vsimko/gfabasic-private-assets/contents/$ZIP_PATH_ENCODED?ref=main" \
             --output "$RUNNER_TEMP/gfa-basic-3.5u.zip"
-          ADF_ENTRY="$(unzip -Z1 "$RUNNER_TEMP/gfa-basic-3.5u.zip" | grep -m1 -E '\.adf)"
+          ADF_ENTRY="$(unzip -Z1 "$RUNNER_TEMP/gfa-basic-3.5u.zip" | grep -m1 -E '\.adf$')"
           test -n "$ADF_ENTRY"
           unzip -p "$RUNNER_TEMP/gfa-basic-3.5u.zip" "$ADF_ENTRY" > "$RUNNER_TEMP/gfa-basic-3.5u.adf"
           xdftool "$RUNNER_TEMP/gfa-basic-3.5u.adf" read GFABasic amiga-volume/GFABasic
