@@ -1,6 +1,17 @@
 # AI agent and human-blocker policy
 
-This file is the repository-wide instruction entry point for AI coding agents. Read it before taking project-management or implementation actions. Before creating or editing Amiga GFA BASIC reference-interpreter probes, invoke the `amiga-gfa-basic-regression-testing` Agent Skill at `.agents/skills/amiga-gfa-basic-regression-testing/SKILL.md`, read [the probe-writing guide](docs/testing/amiga-gfa-basic-probes.md), and consult the applicable version-specific testing guide. The canonical documentation bundle is [`docs/index.md`](docs/index.md); follow its OKF v0.2 conventions for all documentation changes.
+This file is the repository-wide instruction entry point for AI coding agents. Read it before taking project-management or implementation actions. The canonical documentation bundle is [`docs/index.md`](docs/index.md); follow its OKF v0.2 conventions for all documentation changes. The project Agent Skills are indexed in [`.agents/skills/README.md`](.agents/skills/README.md).
+
+## Agent skill routing
+
+Before performing a matching task, read and follow its skill. Skills provide task procedures; the linked documentation remains the canonical source of project facts and policy.
+
+- For Amiga GFA BASIC reference-interpreter probes, .LST fixtures, or native Amiberry Merge + Run debugging, use [`amiga-gfa-basic-regression-testing`](.agents/skills/amiga-gfa-basic-regression-testing/SKILL.md) and [the probe-writing guide](docs/testing/amiga-gfa-basic-probes.md).
+- For API registry evidence reviews, semantic verification, or agent review packages/results, use [`api-evidence-verification`](.agents/skills/api-evidence-verification/SKILL.md) and [AI-assisted API verification](docs/architecture/AI-VERIFICATION.md).
+- For historical Amiga GFA BASIC manual/book research, OCR/page-image review, command/API extraction, or version applicability, use [`amiga-gfa-basic-documentation-research`](.agents/skills/amiga-gfa-basic-documentation-research/SKILL.md) and [the research index](docs/research/index.md).
+- For adding or editing conformance-corpus fixtures, sidecars, or manifest entries, use [`corpus-fixture-authoring`](.agents/skills/corpus-fixture-authoring/SKILL.md) and [the corpus contract](tests/corpus/README.md).
+
+If more than one task type applies, use all relevant skills. Do not treat a skill as a replacement for reading the linked source-of-truth documentation.
 
 ## Human actions are tracked as issues
 
