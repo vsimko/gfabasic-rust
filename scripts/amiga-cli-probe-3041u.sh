@@ -47,19 +47,9 @@ env -u SHELLOPTS xvfb-run -a -s "-screen 0 1024x768x24 +extension GLX" bash -c '
   sleep 3
   printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-dialog.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 
-  # Move from the Merge menu to the gfatest.LST row in the requester.
-  # about +61 screen px for dx=380 and +35 px for dy=70.
-  # Run #117 ended at (260,145), short of the gfatest.LST row center
-  # (335,238). Two bounded (230,93) steps should cover the remaining
-  # (+75,+93); verify the pointer screenshot before clicking.
-  for _ in 1 2 3; do
-    printf "SEND_MOUSE\\t380\\t70\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-    sleep 0.2
-  done
-  for _ in 1 2; do
-    printf "SEND_MOUSE\\t230\\t93\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-    sleep 0.2
-  done
+  # Move from the Merge menu click to the gfatest.LST row in the requester.
+  # On the 752x552 screen the row center is about (335,238).
+  printf "SEND_MOUSE\\t512\\t152\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
   sleep 0.5
   printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-file-row-pointer.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
   printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}" || true
