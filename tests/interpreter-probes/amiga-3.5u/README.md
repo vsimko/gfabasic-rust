@@ -10,7 +10,7 @@ This profile targets the exact Amiga GFA BASIC **3.5 U** interpreter:
 
 The native workflow extracts the single ADF from the corresponding private ZIP and prepares a working disk for Amiberry. It verifies the exact executable hash before execution. The private ZIP, source and modified ADFs, Kickstart ROM and commercial executable are never committed or uploaded. CI artifacts contain only hashes, disk listings, startup text, screenshots and textual test output.
 
-The native suite is an incremental smoke/regression batch. It currently covers FACT boundary values, integer arithmetic and precedence, FOR/NEXT, string concatenation/LEFT$, and the 3.5 addendum's DATA-pointer example: DATA, _DATA, DO WHILE DATA, READ, INC, DEC and FOR...DOWNTO. The latter probe follows the documented example on printed page 13-35 and checks that three DATA entries are traversed and summed (11 + 22 + 33 = 66).
+The native suite is an incremental smoke/regression batch. It currently covers FACT boundary values, integer arithmetic and precedence, FOR/NEXT, string concatenation/LEFT$, and the 3.5 addendum's DATA-pointer example: DATA, _DATA, DO WHILE DATA, READ, INC, DEC and FOR...DOWNTO. The latter probe follows the example on printed pages 13-34–13-35: it saves each DATA pointer, restores them in reverse order, and checks the documented reverse sequence (0, 1, 3242, 328, 24, 13, 9, 8, 7, 6, 5, 4, 3, 2, 1).
 
 Results are runtime observations specific to the exact 3.5U binary hash and emulator/Kickstart setup recorded in each workflow artifact. Manual-backed expectations and observed results remain distinct. This is not a claim of complete language conformance.
 
