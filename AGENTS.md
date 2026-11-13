@@ -1,6 +1,6 @@
 # AI agent and human-blocker policy
 
-This file is the repository-wide instruction entry point for AI coding agents. Read it before taking project-management or implementation actions. The canonical documentation bundle is [`docs/index.md`](docs/index.md); follow its OKF v0.2 conventions for all documentation changes.
+This file is the repository-wide instruction entry point for AI coding agents. Read it before taking project-management or implementation actions. Before creating or editing Amiga GFA BASIC reference-interpreter probes, also read [the probe-writing guide](docs/testing/amiga-gfa-basic-probes.md) and the applicable version-specific testing guide. The canonical documentation bundle is [`docs/index.md`](docs/index.md); follow its OKF v0.2 conventions for all documentation changes.
 
 ## Human actions are tracked as issues
 
