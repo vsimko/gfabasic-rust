@@ -1,9 +1,25 @@
 {
   "schema_version": 1,
   "status": "fresh",
-  "generated_at": "2026-11-13T00:45:36.302990+00:00",
-  "last_successful_at": "2026-11-13T00:45:36.302990+00:00",
+  "generated_at": "2026-11-13T06:32:58.176829+00:00",
+  "last_successful_at": "2026-11-13T06:32:58.176829+00:00",
   "items": [
+    {
+      "type": "merged_pull_request",
+      "title": "Clarify the GFA BASIC 3.5 manual evidence boundary",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/513",
+      "number": 513,
+      "timestamp": "2026-11-13T06:32:27Z",
+      "summary": "PR #513 merged"
+    },
+    {
+      "type": "commit",
+      "title": "docs: clarify 3.5 manual evidence boundary (#513)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/e6aabd7d6f436d03ad1ae7c4f75c238c071642d6",
+      "number": null,
+      "timestamp": "2026-11-13T06:32:27Z",
+      "summary": "Commit e6aabd7"
+    },
     {
       "type": "merged_pull_request",
       "title": "Clarify pre-3.5 examples excluded from function evidence",
@@ -83,22 +99,6 @@
       "number": null,
       "timestamp": "2026-11-12T17:08:50Z",
       "summary": "Commit fbebb2d"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "Confirm inherited functions in the German GFA BASIC 3.5 chapters",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/506",
-      "number": 506,
-      "timestamp": "2026-11-12T11:40:39Z",
-      "summary": "PR #506 merged"
-    },
-    {
-      "type": "commit",
-      "title": "Confirm inherited functions in the German GFA BASIC 3.5 chapters (#506)",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/0fc4b804e43e1d5227669e4a0b37f08f6b3ab47a",
-      "number": null,
-      "timestamp": "2026-11-12T11:40:39Z",
-      "summary": "Commit 0fc4b80"
     }
   ]
 }
