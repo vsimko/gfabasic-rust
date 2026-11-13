@@ -1,6 +1,7 @@
 # Architecture and engineering
 
-- [AI VERIFICATION](AI-VERIFICATION.md) - Documentation concepts in architecture.
+- [AI VERIFICATION](AI-VERIFICATION.md) - AI-assisted review of API declarations against source evidence.
+- [`api-evidence-verification` agent skill](../../.agents/skills/api-evidence-verification/SKILL.md) - Task procedure for preparing, performing, and validating evidence reviews.
 - [API PROFILES](API-PROFILES.md) - Documentation concepts in architecture.
 - [API REGISTRY](API-REGISTRY.md) - Documentation concepts in architecture.
 - [BENCHMARKING](BENCHMARKING.md) - Documentation concepts in architecture.

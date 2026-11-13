@@ -105,3 +105,19 @@ jobs:
         with:
           args: --verbose --no-progress --config .lychee.toml "./**/*.md"
           lycheeVersion: v0.24.2
+
+  agent-skills:
+    name: Agent Skills validation
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+
+      - name: Set up Python
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0
+        with:
+          python-version: "3.12"
+
+      - name: Validate Agent Skills
+        run: python scripts/validate_agent_skills.py

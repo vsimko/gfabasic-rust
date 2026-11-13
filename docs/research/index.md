@@ -1,5 +1,9 @@
 # Research and evidence
 
+## Related agent skill
+
+- [`amiga-gfa-basic-documentation-research`](../../.agents/skills/amiga-gfa-basic-documentation-research/SKILL.md) - Required procedure for source-led Amiga GFA BASIC manual research, evidence extraction, and version reconciliation.
+
 ## Documentation audit
 
 - [Amiga GFA BASIC documentation coverage audit](amiga-gfa-basic-documentation-audit.md) - Current source boundary, verified 3.5 coverage, remaining base-language gaps, and linked GitHub workstreams.
