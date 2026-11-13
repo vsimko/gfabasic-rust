@@ -636,6 +636,24 @@ impl Parser {
         self.expect(TokenKind::Equals, "'='")?;
         let function = self.advance_required("a supported assignment value")?;
         let function_name = match function.kind {
+            TokenKind::Minus => {
+                let literal = self.advance_required("an integer literal after unary '-'")?;
+                match literal.kind {
+                    TokenKind::Integer(value) => {
+                        return Ok(Statement::AssignInteger {
+                            name,
+                            value: -value,
+                            span: SourceSpan::new(self.source_id, start.start, literal.span.end),
+                        });
+                    }
+                    _ => {
+                        return Err(self.syntax_error(
+                            "expected an integer literal after unary '-'",
+                            literal.span,
+                        ));
+                    }
+                }
+            }
             TokenKind::Integer(value) => {
                 return Ok(Statement::AssignInteger {
                     name,
@@ -646,7 +664,7 @@ impl Parser {
             TokenKind::Identifier(name) => name,
             _ => {
                 return Err(self.syntax_error(
-                    "expected an integer literal or supported intrinsic after assignment",
+                    "expected an integer literal, unary-negative integer literal, or supported intrinsic after assignment",
                     function.span,
                 ));
             }
