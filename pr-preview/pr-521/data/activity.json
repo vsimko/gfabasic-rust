@@ -1,9 +1,25 @@
 {
   "schema_version": 1,
   "status": "fresh",
-  "generated_at": "2026-11-13T08:42:10.094957+00:00",
-  "last_successful_at": "2026-11-13T08:42:10.094957+00:00",
+  "generated_at": "2026-11-13T10:24:04.969910+00:00",
+  "last_successful_at": "2026-11-13T10:24:04.969910+00:00",
   "items": [
+    {
+      "type": "merged_pull_request",
+      "title": "Extract GFA BASIC 3.52D from original zipped ADF",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/522",
+      "number": 522,
+      "timestamp": "2026-11-13T10:12:20Z",
+      "summary": "PR #522 merged"
+    },
+    {
+      "type": "commit",
+      "title": "Extract GFA BASIC 3.52D from original zipped ADF (#522)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/2ee49fac134ba34b2b03aedd13d807fe22ee61a7",
+      "number": null,
+      "timestamp": "2026-11-13T10:12:20Z",
+      "summary": "Commit 2ee49fa"
+    },
     {
       "type": "merged_pull_request",
       "title": "Add isolated GFA BASIC 3.041U native probes",
@@ -83,22 +99,6 @@
       "number": null,
       "timestamp": "2026-11-13T07:11:50Z",
       "summary": "Commit 139605b"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "Implement documented VAL shorthand radix prefixes",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/514",
-      "number": 514,
-      "timestamp": "2026-11-13T07:09:49Z",
-      "summary": "PR #514 merged"
-    },
-    {
-      "type": "commit",
-      "title": "Implement VAL shorthand radix prefixes",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/523733bb81db59ea89f42611a55ba12108860654",
-      "number": null,
-      "timestamp": "2026-11-13T07:09:48Z",
-      "summary": "Commit 523733b"
     }
   ]
 }
