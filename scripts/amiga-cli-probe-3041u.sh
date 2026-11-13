@@ -36,14 +36,18 @@ env -u SHELLOPTS xvfb-run -a -s "-screen 0 1024x768x24 +extension GLX" bash -c '
   printf "LIST_FLOPPIES\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}" >"$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/list-floppies-ipc.txt"
   printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/editor-before-merge.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 
-  # Amiga raw keycode 0x51 (decimal 81) is F2, the Editor Merge command.
-  printf "SEND_KEY\\t81\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-  sleep 0.3
-  printf "SEND_KEY\\t81\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+  # Open the Merge requester by clicking the editor's Merge command.
+  # The menu is at (about 143,83) on the 752x552 test display; the
+  # cursor starts at (76,39), and IPC mouse deltas scale by ~0.38x/1.02y.
+  printf "SEND_MOUSE\\t171\\t43\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+  sleep 0.5
+  printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+  sleep 0.2
+  printf "SEND_MOUSE\\t0\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
   sleep 3
   printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-dialog.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 
-  # SEND_MOUSE uses relative dx/dy and the observed cursor scaling is
+  # Move from the Merge menu to the gfatest.LST row in the requester.
   # about +61 screen px for dx=380 and +35 px for dy=70.
   # Run #117 ended at (260,145), short of the gfatest.LST row center
   # (335,238). Two bounded (230,93) steps should cover the remaining
