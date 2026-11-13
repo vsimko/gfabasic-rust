@@ -49,6 +49,14 @@ env -u SHELLOPTS xvfb-run -a -s "-screen 0 1024x768x24 +extension GLX" bash -c '
   printf "SEND_KEY\\t77\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
   sleep 0.2
   printf "SEND_KEY\\t77\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+  sleep 0.2
+  printf "SEND_KEY\\t77\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+  sleep 0.2
+  printf "SEND_KEY\\t77\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+  sleep 0.2
+  printf "SEND_KEY\\t68\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+  sleep 0.2
+  printf "SEND_KEY\\t68\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
   sleep 0.5
   printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-file-selected.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 
