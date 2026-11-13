@@ -31,6 +31,7 @@
 - [Amiga GFA BASIC test output](amiga-gfa-test-output.md) - Native file-output observation and proposed batch result protocol.
 - [Amiga GFA BASIC commands observed in dqh-amiga](amiga-gfa-basic-dqh-source-inventory.md) - Constructs and direct OS/library calls observed in an external game source.
 - [Amiga emulator experiment lab](amiga-emulator-lab.md) - Proposed native interpreter experiment procedure.
+- [Amiga GFA BASIC media candidates](amiga-media-candidates.md) - Private disk-image inventory, candidate version mapping, and separate 3.5U/3.52/3.041 test profiles.
 - [Amiga GFA BASIC 3.5 interpreter probes](amiga-gfa-basic-35-lst-probes.md) - Manual-driven textual listing probe procedure.
 - [Amiga GFA BASIC 3.52 runtime baseline](amiga-gfa-basic-352-runtime-baseline.md) - Version-scoped runtime observations.
 - [Amiga GFA-BASIC binary analysis](amiga-gfa-basic-binary-analysis.md) - Reproducible binary analysis workflow.
