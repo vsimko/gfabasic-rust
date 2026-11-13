@@ -3,6 +3,7 @@
 This profile targets the exact Amiga GFA BASIC **3.5 U** interpreter:
 
 - Executable: `GFABasic`
+- Size: 135,956 bytes
 - SHA-256: `c5e9ffdb96b621307069d8f21a3282788386930bbc1ea679dfebe2caef5493ca`
 - Binary size and AmigaOS loadseg header are checked in CI before installation.
 
