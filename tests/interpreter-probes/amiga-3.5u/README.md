@@ -12,3 +12,5 @@ The native workflow extracts the single ADF from the corresponding private ZIP a
 Amiberry boots and runs the customized original disk. The private ZIP, source and modified ADFs, Kickstart ROM and commercial executable are never committed or uploaded. CI artifacts contain only hashes, disk listings, startup text, screenshots and textual test output.
 
 The current suite is a first smoke/regression batch covering FACT boundary values, integer arithmetic, FOR/NEXT, and string operations. Results are specific to the exact 3.5U binary hash and emulator/Kickstart setup recorded in the workflow artifact. This is runtime observation, not a claim of complete language conformance.
+
+The native workflow `.github/workflows/amiga-35u-native-merge-run.yml` runs this suite against the private 3.5U interpreter when this profile or its workflow changes on `main`. It verifies the source ZIP and extracted executable hashes before booting the emulator.
