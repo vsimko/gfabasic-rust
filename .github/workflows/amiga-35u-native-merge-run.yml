@@ -2,6 +2,8 @@ name: Amiga GFA BASIC 3.5U native Merge and Run
 
 on:
   push:
+    branches:
+      - main
     paths:
       - ".github/workflows/amiga-35u-native-merge-run.yml"
       - "tests/interpreter-probes/amiga-3.5u/**"
