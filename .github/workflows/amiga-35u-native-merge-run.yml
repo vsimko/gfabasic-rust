@@ -8,11 +8,11 @@ on:
       - ".github/workflows/amiga-35u-native-merge-run.yml"
       - "tests/interpreter-probes/amiga-3.5u/**"
       - "scripts/amiga-cli-probe-35u.sh"
-      - "scripts/amiga-cli-probe-35u.sh"
   pull_request:
     paths:
       - ".github/workflows/amiga-35u-native-merge-run.yml"
       - "tests/interpreter-probes/amiga-3.5u/**"
+      - "scripts/amiga-cli-probe-35u.sh"
       - "scripts/validate_gfatest_results.py"
   workflow_dispatch:
 
@@ -20,7 +20,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: amiga-35u-cli-probe-${{ github.event.pull_request.number || github.ref }}
+  group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
