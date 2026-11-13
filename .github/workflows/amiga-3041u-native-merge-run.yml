@@ -5,11 +5,11 @@ on:
     branches:
       - main
     paths:
-      - ".github/workflows/amiga-3041-native-merge-run.yml"
+      - ".github/workflows/amiga-3041u-native-merge-run.yml"
       - "tests/interpreter-probes/amiga-3.041u/**"
   pull_request:
     paths:
-      - ".github/workflows/amiga-3041-native-merge-run.yml"
+      - ".github/workflows/amiga-3041u-native-merge-run.yml"
       - "tests/interpreter-probes/amiga-3.041u/**"
       - "scripts/validate_gfatest_results.py"
   workflow_dispatch:
@@ -94,7 +94,7 @@ jobs:
 
       - name: Prepare CLI input and boot volume
         run: |
-          cp tests/interpreter-probes/amiga-3.041u/regression-suite.LST amiga-volume/factzero.LST
+          cp tests/interpreter-probes/amiga-3.041u/regression-suite.LST amiga-volume/gfatest.LST
           # Build a bootable AmigaDOS 1.x OFS floppy. Kickstart 1.3 has no
           # built-in Workbench/CLI disk, so the boot block and Startup-Sequence
           # must live on the same disk as the interpreter and textual listing.
@@ -103,12 +103,12 @@ jobs:
           cat > amiga-volume/S/Startup-Sequence <<'EOF'
           gfabasic
           EOF
-          xdftool artifacts/amiga-cli-probe/factzero.adf create + format GFABASIC3041 ofs + write amiga-volume/factzero.LST + write amiga-volume/gfabasic + write amiga-volume/S
-          xdftool artifacts/amiga-cli-probe/factzero.adf boot install boot1x
-          xdftool artifacts/amiga-cli-probe/factzero.adf info > artifacts/amiga-cli-probe/factzero-adf-info.txt
-          xdftool artifacts/amiga-cli-probe/factzero.adf list / all > artifacts/amiga-cli-probe/factzero-adf-list.txt
-          xdftool artifacts/amiga-cli-probe/factzero.adf boot show > artifacts/amiga-cli-probe/factzero-adf-boot.txt
-          cp amiga-volume/factzero.LST artifacts/amiga-cli-probe/factzero.LST
+          xdftool artifacts/amiga-cli-probe/gfatest.adf create + format GFABASIC3041 ofs + write amiga-volume/gfatest.LST + write amiga-volume/gfabasic + write amiga-volume/S
+          xdftool artifacts/amiga-cli-probe/gfatest.adf boot install boot1x
+          xdftool artifacts/amiga-cli-probe/gfatest.adf info > artifacts/amiga-cli-probe/gfatest-adf-info.txt
+          xdftool artifacts/amiga-cli-probe/gfatest.adf list / all > artifacts/amiga-cli-probe/gfatest-adf-list.txt
+          xdftool artifacts/amiga-cli-probe/gfatest.adf boot show > artifacts/amiga-cli-probe/gfatest-adf-boot.txt
+          cp amiga-volume/gfatest.LST artifacts/amiga-cli-probe/gfatest.LST
           cp amiga-volume/S/Startup-Sequence artifacts/amiga-cli-probe/Startup-Sequence.txt
           cat > "$RUNNER_TEMP/amiga-cli-probe.uae" <<EOF
           use_gui=no
@@ -122,7 +122,7 @@ jobs:
           gfx_height=512
           gfx_fullscreen=false
           sound_output=0
-          floppy0=$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/factzero.adf
+          floppy0=$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/gfatest.adf
           EOF
 
       - name: Merge textual LST in the GFA BASIC editor
@@ -133,7 +133,7 @@ jobs:
           env -u SHELLOPTS xvfb-run -a -s "-screen 0 1024x768x24 +extension GLX" bash -c '
             set +u
             set -eo pipefail
-            amiberry -G -f "$RUNNER_TEMP/amiga-cli-probe.uae" -0 "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/factzero.adf" --log >"$AMIBERRY_LOG" 2>&1 &
+            amiberry -G -f "$RUNNER_TEMP/amiga-cli-probe.uae" -0 "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/gfatest.adf" --log >"$AMIBERRY_LOG" 2>&1 &
             emulator_pid=$!
             cleanup() { kill "$emulator_pid" 2>/dev/null || true; wait "$emulator_pid" 2>/dev/null || true; }
             trap cleanup EXIT
@@ -146,7 +146,7 @@ jobs:
             test -n "$ipc_socket_path" || { cat "$AMIBERRY_LOG"; exit 1; }
             sleep 35
             # Insert and verify the test ADF through Amiberry IPC.
-            printf "INSERTFLOPPY\\t%s\\t0\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/factzero.adf" | timeout 5s nc -U -N "${ipc_socket_path:-}" >"$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/insert-floppy-ipc.txt"
+            printf "INSERTFLOPPY\\t%s\\t0\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/gfatest.adf" | timeout 5s nc -U -N "${ipc_socket_path:-}" >"$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/insert-floppy-ipc.txt"
             printf "LIST_FLOPPIES\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}" >"$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/list-floppies-ipc.txt"
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/editor-before-merge.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 
@@ -159,7 +159,7 @@ jobs:
 
             # SEND_MOUSE uses relative dx/dy and the observed cursor scaling is
             # about +61 screen px for dx=380 and +35 px for dy=70.
-            # Run #117 ended at (260,145), short of the factzero.LST row center
+            # Run #117 ended at (260,145), short of the gfatest.LST row center
             # (335,238). Two bounded (230,93) steps should cover the remaining
             # (+75,+93); verify the pointer screenshot before clicking.
             for _ in 1 2 3; do
@@ -191,7 +191,7 @@ jobs:
             tesseract "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-shortcut.png" stdout 2>/dev/null > "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-shortcut-ocr.txt"
             # Restore the exact calibrated Merge-gadget movement from the
             # green PR #343 workflow. The pointer is at the left edge of the
-            # requester after selecting factzero.LST; these relative moves
+            # requester after selecting gfatest.LST; these relative moves
             # place it on the Merge gadget center (~323,420).
             for _ in 1 2; do
               printf "SEND_MOUSE\\t-177\\t183\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
@@ -237,7 +237,7 @@ jobs:
               wait "$emulator_pid" || true
             fi
           '
-          xdftool artifacts/amiga-cli-probe/factzero.adf read GFATEST.OUT artifacts/amiga-cli-probe/gfatest-results.txt
+          xdftool artifacts/amiga-cli-probe/gfatest.adf read GFATEST.OUT artifacts/amiga-cli-probe/gfatest-results.txt
           cat artifacts/amiga-cli-probe/gfatest-results.txt
           for diagnostic in insert-floppy-ipc.txt list-floppies-ipc.txt stdin-save.LST; do
             if test -f "amiga-volume/$diagnostic"; then
@@ -334,7 +334,7 @@ jobs:
 
       - name: Prepare CLI input and boot volume
         run: |
-          cp tests/interpreter-probes/amiga-3.041u/regression-suite.LST amiga-volume/factzero.LST
+          cp tests/interpreter-probes/amiga-3.041u/regression-suite.LST amiga-volume/gfatest.LST
           # Build a bootable AmigaDOS 1.x OFS floppy. Kickstart 1.3 has no
           # built-in Workbench/CLI disk, so the boot block and Startup-Sequence
           # must live on the same disk as the interpreter and textual listing.
@@ -343,12 +343,12 @@ jobs:
           cat > amiga-volume/S/Startup-Sequence <<'EOF'
           gfabasic
           EOF
-          xdftool artifacts/amiga-cli-probe/factzero.adf create + format GFABASIC3041 ofs + write amiga-volume/factzero.LST + write amiga-volume/gfabasic + write amiga-volume/S
-          xdftool artifacts/amiga-cli-probe/factzero.adf boot install boot1x
-          xdftool artifacts/amiga-cli-probe/factzero.adf info > artifacts/amiga-cli-probe/factzero-adf-info.txt
-          xdftool artifacts/amiga-cli-probe/factzero.adf list / all > artifacts/amiga-cli-probe/factzero-adf-list.txt
-          xdftool artifacts/amiga-cli-probe/factzero.adf boot show > artifacts/amiga-cli-probe/factzero-adf-boot.txt
-          cp amiga-volume/factzero.LST artifacts/amiga-cli-probe/factzero.LST
+          xdftool artifacts/amiga-cli-probe/gfatest.adf create + format GFABASIC3041 ofs + write amiga-volume/gfatest.LST + write amiga-volume/gfabasic + write amiga-volume/S
+          xdftool artifacts/amiga-cli-probe/gfatest.adf boot install boot1x
+          xdftool artifacts/amiga-cli-probe/gfatest.adf info > artifacts/amiga-cli-probe/gfatest-adf-info.txt
+          xdftool artifacts/amiga-cli-probe/gfatest.adf list / all > artifacts/amiga-cli-probe/gfatest-adf-list.txt
+          xdftool artifacts/amiga-cli-probe/gfatest.adf boot show > artifacts/amiga-cli-probe/gfatest-adf-boot.txt
+          cp amiga-volume/gfatest.LST artifacts/amiga-cli-probe/gfatest.LST
           cp amiga-volume/S/Startup-Sequence artifacts/amiga-cli-probe/Startup-Sequence.txt
           cat > "$RUNNER_TEMP/amiga-cli-probe.uae" <<EOF
           use_gui=no
@@ -362,7 +362,7 @@ jobs:
           gfx_height=512
           gfx_fullscreen=false
           sound_output=0
-          floppy0=$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/factzero.adf
+          floppy0=$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/gfatest.adf
           EOF
 
       - name: Merge textual LST in the GFA BASIC editor
@@ -373,7 +373,7 @@ jobs:
           env -u SHELLOPTS xvfb-run -a -s "-screen 0 1024x768x24 +extension GLX" bash -c '
             set +u
             set -eo pipefail
-            amiberry -G -f "$RUNNER_TEMP/amiga-cli-probe.uae" -0 "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/factzero.adf" --log >"$AMIBERRY_LOG" 2>&1 &
+            amiberry -G -f "$RUNNER_TEMP/amiga-cli-probe.uae" -0 "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/gfatest.adf" --log >"$AMIBERRY_LOG" 2>&1 &
             emulator_pid=$!
             cleanup() { kill "$emulator_pid" 2>/dev/null || true; wait "$emulator_pid" 2>/dev/null || true; }
             trap cleanup EXIT
@@ -386,7 +386,7 @@ jobs:
             test -n "$ipc_socket_path" || { cat "$AMIBERRY_LOG"; exit 1; }
             sleep 35
             # Insert and verify the test ADF through Amiberry IPC.
-            printf "INSERTFLOPPY\\t%s\\t0\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/factzero.adf" | timeout 5s nc -U -N "${ipc_socket_path:-}" >"$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/insert-floppy-ipc.txt"
+            printf "INSERTFLOPPY\\t%s\\t0\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/gfatest.adf" | timeout 5s nc -U -N "${ipc_socket_path:-}" >"$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/insert-floppy-ipc.txt"
             printf "LIST_FLOPPIES\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}" >"$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/list-floppies-ipc.txt"
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/editor-before-merge.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 
@@ -399,7 +399,7 @@ jobs:
 
             # SEND_MOUSE uses relative dx/dy and the observed cursor scaling is
             # about +61 screen px for dx=380 and +35 px for dy=70.
-            # Run #117 ended at (260,145), short of the factzero.LST row center
+            # Run #117 ended at (260,145), short of the gfatest.LST row center
             # (335,238). Two bounded (230,93) steps should cover the remaining
             # (+75,+93); verify the pointer screenshot before clicking.
             for _ in 1 2 3; do
@@ -431,7 +431,7 @@ jobs:
             tesseract "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-shortcut.png" stdout 2>/dev/null > "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-shortcut-ocr.txt"
             # Restore the exact calibrated Merge-gadget movement from the
             # green PR #343 workflow. The pointer is at the left edge of the
-            # requester after selecting factzero.LST; these relative moves
+            # requester after selecting gfatest.LST; these relative moves
             # place it on the Merge gadget center (~323,420).
             for _ in 1 2; do
               printf "SEND_MOUSE\\t-177\\t183\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
@@ -477,7 +477,7 @@ jobs:
               wait "$emulator_pid" || true
             fi
           '
-          xdftool artifacts/amiga-cli-probe/factzero.adf read GFATEST.OUT artifacts/amiga-cli-probe/gfatest-results.txt
+          xdftool artifacts/amiga-cli-probe/gfatest.adf read GFATEST.OUT artifacts/amiga-cli-probe/gfatest-results.txt
           cat artifacts/amiga-cli-probe/gfatest-results.txt
           for diagnostic in insert-floppy-ipc.txt list-floppies-ipc.txt stdin-save.LST; do
             if test -f "amiga-volume/$diagnostic"; then
