@@ -133,7 +133,13 @@ jobs:
           xdftool "$WORKING_ADF" write "tests/interpreter-probes/amiga-3.5u/regression-suite.LST" gfatest.LST
           xdftool "$WORKING_ADF" list / all > artifacts/amiga-cli-probe/prepared-adf-layout.txt
           xdftool "$WORKING_ADF" boot show > artifacts/amiga-cli-probe/prepared-adf-boot.txt
-          diff -u artifacts/amiga-cli-probe/source-adf-boot.txt artifacts/amiga-cli-probe/prepared-adf-boot.txt
+          # The vendor 3.5U disk image has an invalid/empty boot block.
+          # Install the standard AmigaDOS 1.x boot block so our S:Startup-Sequence runs.
+          grep -F "bootable: False" artifacts/amiga-cli-probe/source-adf-boot.txt
+          xdftool "$WORKING_ADF" boot install boot1x
+          xdftool "$WORKING_ADF" boot show > artifacts/amiga-cli-probe/prepared-adf-boot.txt
+          grep -F "bootable: True" artifacts/amiga-cli-probe/prepared-adf-boot.txt
+          printf '%s\\n' "Installed standard AmigaDOS 1.x boot block; all other source ADF sectors retained except changed filesystem entries." > artifacts/amiga-cli-probe/bootblock-modification.txt
           test "$(wc -c < "$WORKING_ADF")" -eq "$(wc -c < "$SOURCE_ADF")"
           sha256sum "$WORKING_ADF" > artifacts/amiga-cli-probe/prepared-adf-sha256.txt
           cp "tests/interpreter-probes/amiga-3.5u/regression-suite.LST" artifacts/amiga-cli-probe/gfatest.LST
