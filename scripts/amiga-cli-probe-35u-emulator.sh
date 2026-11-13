@@ -15,10 +15,8 @@ sleep 1
 done
 test -n "$ipc_socket_path" || { cat "$AMIBERRY_LOG"; exit 1; }
 # Turbo mode removes emulated floppy latency for these unprotected ADF test disks.
-printf "SET_FLOPPY_SPEED\\t0\\n" | timeout 5s nc -U -N "$ipc_socket_path" >"$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/floppy-speed-set.txt"
-printf "GET_FLOPPY_SPEED\\n" | timeout 5s nc -U -N "$ipc_socket_path" >"$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/floppy-speed-get.txt"
-cat "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/floppy-speed-set.txt"
-cat "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/floppy-speed-get.txt"
+python3 scripts/amiberry-ipc.py "$ipc_socket_path" SET_FLOPPY_SPEED 0 | tee "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/floppy-speed-set.txt"
+python3 scripts/amiberry-ipc.py "$ipc_socket_path" GET_FLOPPY_SPEED | tee "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/floppy-speed-get.txt"
 grep -Eq "(^|[^0-9])0([^0-9]|$)" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/floppy-speed-get.txt" || { echo "Amiberry did not confirm turbo floppy speed"; exit 1; }
 sleep 35
 # Verify that the test disk (DF0) and untouched distribution disk (DF1) are mounted.
