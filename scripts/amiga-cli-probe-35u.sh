@@ -36,7 +36,7 @@ env -u SHELLOPTS xvfb-run -a -s "-screen 0 1024x768x24 +extension GLX" bash -c '
   printf "GET_FLOPPY_SPEED\\n" | timeout 5s nc -U -N "$ipc_socket_path" >"$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/floppy-speed-get.txt"
   cat "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/floppy-speed-set.txt"
   cat "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/floppy-speed-get.txt"
-  grep -Eq '(^|[^0-9])0([^0-9]|$)' "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/floppy-speed-get.txt" || { echo "Amiberry did not confirm turbo floppy speed"; exit 1; }
+  grep -Eq "(^|[^0-9])0([^0-9]|$)" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/floppy-speed-get.txt" || { echo "Amiberry did not confirm turbo floppy speed"; exit 1; }
   sleep 35
   # Verify that the test disk (DF0) and untouched distribution disk (DF1) are mounted.
   printf "INSERTFLOPPY\\t%s\\t0\\n" "$RUNNER_TEMP/gfatest.adf" | timeout 5s nc -U -N "${ipc_socket_path:-}" >"$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/insert-floppy-ipc.txt"
