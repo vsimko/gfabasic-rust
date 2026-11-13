@@ -8,9 +8,6 @@ DIM dp%(100)
 DATA 1,2,3,4,5,6,7,8,9
 DATA 13,24,328,3242,1,0
 
-OPEN "O",#1,"DF0:FACT.OUT"
-OPEN "O",#2,"DF0:GFATEST.OUT"
-
 REM 3.5 addendum pp. 13-34..13-35: save and restore DATA pointers.
 i%=0
 DO WHILE DATA
@@ -19,6 +16,10 @@ DO WHILE DATA
   READ a
 LOOP
 DEC i%
+
+REM Open output files only after the documented DATA-pointer scan.
+OPEN "O",#1,"DF0:FACT.OUT"
+OPEN "O",#2,"DF0:GFATEST.OUT"
 sum%=0
 FOR j%=i% DOWNTO 0
   _DATA=dp%(j%)
