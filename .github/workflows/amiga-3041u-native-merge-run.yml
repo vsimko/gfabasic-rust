@@ -102,6 +102,7 @@ jobs:
           mkdir -p "artifacts/amiga-cli-probe"
           sha256sum "$SOURCE_ADF" > "artifacts/amiga-cli-probe/source-adf-sha256.txt"
           xdftool "$SOURCE_ADF" list / all > "artifacts/amiga-cli-probe/source-adf-layout.txt"
+          xdftool "$SOURCE_ADF" boot show > "artifacts/amiga-cli-probe/source-adf-boot.txt"
           xdftool "$SOURCE_ADF" unpack "$UNPACK_ROOT"
           mapfile -t VOLUME_DIRS < <(find "$UNPACK_ROOT" -mindepth 1 -maxdepth 1 -type d -print)
           test "${#VOLUME_DIRS[@]}" -eq 1 || { echo "Expected one filesystem volume in the source ADF"; find "$UNPACK_ROOT" -maxdepth 2 -print; exit 1; }
@@ -132,6 +133,7 @@ jobs:
           xdftool "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/gfatest.adf" pack "$VOLUME_DIR"
           xdftool "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/gfatest.adf" list / all > "artifacts/amiga-cli-probe/prepared-adf-layout.txt"
           xdftool "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/gfatest.adf" boot show > "artifacts/amiga-cli-probe/prepared-adf-boot.txt"
+          diff -u "artifacts/amiga-cli-probe/source-adf-boot.txt" "artifacts/amiga-cli-probe/prepared-adf-boot.txt"
           sha256sum "artifacts/amiga-cli-probe/gfatest.adf" > "artifacts/amiga-cli-probe/prepared-adf-sha256.txt"
           cp "tests/interpreter-probes/amiga-3.041u/regression-suite.LST" "artifacts/amiga-cli-probe/gfatest.LST"
           grep -F "gfabasic" "artifacts/amiga-cli-probe/prepared-adf-layout.txt"
