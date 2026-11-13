@@ -21,7 +21,7 @@ def validate_skill(path: Path, root: Path, errors: list[str]) -> None:
     for line in match.group(1).splitlines():
         key, sep, value = line.partition(":")
         if sep:
-            fields[key.strip()] = value.strip().strip("\\"'")
+            fields[key.strip()] = value.strip().strip("'\"")
     expected = path.parent.name
     if fields.get("name") != expected:
         errors.append(f"{path.relative_to(root)}: frontmatter name must be {expected!r}")
