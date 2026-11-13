@@ -126,9 +126,8 @@ jobs:
             xdftool "$WORKING_ADF" delete S/Startup-Sequence
           fi
           cat > "$RUNNER_TEMP/Startup-Sequence" <<'EOF'
-          COPY DF0:gfatest.LST RAM:gfatest.LST
-          CD RAM:
-          SYS:GFABasic
+          CD DF0:
+          DF0:GFABasic
           EOF
           xdftool "$WORKING_ADF" write "$RUNNER_TEMP/Startup-Sequence" S/Startup-Sequence
           if xdftool "$WORKING_ADF" list / | grep -qi 'gfatest.LST'; then
@@ -152,8 +151,8 @@ jobs:
           grep -F "GFABasic" artifacts/amiga-cli-probe/prepared-adf-layout.txt
           grep -F "gfatest.LST" artifacts/amiga-cli-probe/prepared-adf-layout.txt
           grep -F "Startup-Sequence" artifacts/amiga-cli-probe/prepared-adf-layout.txt
-          grep -F "COPY DF0:gfatest.LST RAM:gfatest.LST" artifacts/amiga-cli-probe/Startup-Sequence.txt
-          grep -F "CD RAM:" artifacts/amiga-cli-probe/Startup-Sequence.txt
+          grep -F "CD DF0:" artifacts/amiga-cli-probe/Startup-Sequence.txt
+          grep -F "DF0:" artifacts/amiga-cli-probe/Startup-Sequence.txt
           cat artifacts/amiga-cli-probe/Startup-Sequence.txt
 
       - name: Merge textual LST in the GFA BASIC editor
