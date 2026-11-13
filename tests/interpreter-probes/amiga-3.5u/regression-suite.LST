@@ -2,8 +2,8 @@ REM GFA BASIC 3.5U native interpreter regression batch.
 REM Loaded as ASCII through the native Editor Merge (F2) command.
 REM This is a 3.5U runtime probe, not normative 3.5 conformance evidence.
 
-OPEN "0",#1,"DF0:FACT.OUT"
-OPEN "0",#2,"DF0:GFATEST.OUT"
+OPEN "O",#1,"DF0:FACT.OUT"
+OPEN "O",#2,"DF0:GFATEST.OUT"
 
 REM FACT boundary values.
 x = FACT(0)
