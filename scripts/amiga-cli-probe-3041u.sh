@@ -46,7 +46,7 @@ env -u SHELLOPTS xvfb-run -a -s "-screen 0 1024x768x24 +extension GLX" bash -c '
 
   # The requester already opens on DF0: the screenshot shows gfatest.LST
   # as the second entry. Do not switch to DF1 (which only lists the
-  # distribution's Startup-Sequence). Select the visible gfatest.LST row.
+  # distribution Startup-Sequence). Select the visible gfatest.LST row.
   # F2 leaves the pointer near (80,40); the file row is near (320,216).
   printf "SEND_MOUSE\\t240\\t176\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
   sleep 0.5
