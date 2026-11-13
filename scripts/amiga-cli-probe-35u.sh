@@ -43,8 +43,25 @@ env -u SHELLOPTS xvfb-run -a -s "-screen 0 1024x768x24 +extension GLX" bash -c '
   sleep 3
   printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-dialog.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 
-  # The gfatest.LST row center is about (335,238); pointer starts at (76,39).
-  printf "SEND_MOUSE\\t683\\t195\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+  # Select DF0 in the Merge requester to refresh the disk directory listing.
+  printf "SEND_MOUSE\\t683\\t100\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+  sleep 0.2
+  printf "SEND_MOUSE\\t683\\t100\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+  sleep 0.2
+  printf "SEND_MOUSE\\t683\\t100\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+  sleep 0.2
+  printf "SEND_MOUSE\\t400\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+  sleep 0.5
+  printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+  sleep 0.2
+  printf "SEND_MOUSE\\t0\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+  sleep 2
+  printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-drive-selected.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+
+  # Move to the gfatest.LST row center in the populated requester.
+  printf "SEND_MOUSE\\t-683\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+  sleep 0.2
+  printf "SEND_MOUSE\\t-370\\t6\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
   sleep 0.5
   printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-file-row-pointer.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
   printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
