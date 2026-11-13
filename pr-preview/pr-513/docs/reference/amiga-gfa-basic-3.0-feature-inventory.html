@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="This inventory records what the 3.0 sources say. It must not be used as a 3.5 language specification: every 3.0-only rule remains an inherited candidate until confirmed against the selected 3.5 interpreter manual.">
+  <title>Amiga GFA BASIC interpreter 3.0 — feature inventory (working draft) · GFA BASIC Rust documentation</title>
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body class="docs-site">
+  <header class="docs-header">
+    <a href="../../index.html">GFA BASIC Rust</a>
+    <span aria-hidden="true">/</span>
+    <a href="../index.html">Documentation</a>
+  </header>
+  <div class="docs-layout">
+    <nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home" href="index.html">Section index</a><ul><li><a href="README.html">GFA BASIC language reference notes</a></li><li><a href="amiga-gfa-api.html">Amiga GFA BASIC API reference — initial research inventory</a></li><li><a href="amiga-gfa-basic-3.0-feature-inventory.html">Amiga GFA BASIC interpreter 3.0 — feature inventory (working draft)</a></li><li><a href="amiga-gfa-basic-3.0.html">Amiga GFA BASIC 3.0 reference research notes</a></li><li><a href="amiga-gfa-basic-35-formatter.html">Amiga GFA BASIC 3.5 formatter</a></li><li><a href="../research/amiga-gfa-basic-35-primary-reference.html">Amiga GFA BASIC 3.5 primary reference</a></li><li><a href="../research/amiga-gfa-basic-35-addendum-inventory.html">Amiga GFA BASIC 3.5 addendum inventory</a></li><li><a href="../research/amiga-gfa-basic-documentation-audit.html">Documentation coverage audit</a></li><li><a href="atari-gfa-api.html">Atari ST GFA BASIC API reference — research draft</a></li><li><a href="atari-gfa-basic-3.0.html">Atari ST GFA BASIC V2.xx / V3.0 — preliminary language specification</a></li></ul></nav>
+    <main class="docs-content">
+      <article>
+        <h1>Amiga GFA BASIC interpreter 3.0 — feature inventory (working draft)</h1>
+        <p class="docs-meta"><span>Reference</span></p>
+        <h1 id="amiga-gfa-basic-interpreter-30-feature-inventory-working-draft">Amiga GFA BASIC interpreter 3.0 — feature inventory (working draft)</h1>
+<ul>
+<li>Status: Initial inventory; incomplete and not an implementation contract.</li>
+<li>Source scope: Amiga GFA BASIC interpreter 3.0; this is a historical source-specific inventory, not the selected project target.</li>
+<li>Current normative target: Amiga GFA BASIC interpreter 3.5 (see <a href="../architecture/adr/0009-initial-source-dialect-amiga-gfa-basic-3.5.html">ADR 0009</a>).</li>
+<li>Primary source: <code>AM-BOOK-FR-1989</code>, <em>Le livre du GFA Basic Amiga</em>, Bleek, Hecht, and Litzkendorf, French translation by Christian Frey, Data Becker / Micro Application, ©1989, ISBN 2-86899-207-2.</li>
+<li>Companion source: <code>AM-BOOK-DE-1990</code>, <em>Das große GFA-BASIC-Buch zum Amiga</em>, Data Becker, 1990, ISBN 3-89011-399-0. This edition describes the V3.03 interpreter and compiler material; do not merge its version-specific claims into the 3.0 baseline.</li>
+<li>Related policy: <a href="../architecture/DIALECTS.html">DIALECTS.md</a>, <a href="../architecture/adr/0009-initial-source-dialect-amiga-gfa-basic-3.5.html">ADR 0009</a>, superseded <a href="../architecture/adr/0008-initial-source-dialect-amiga-gfa-basic-3.0.html">ADR 0008</a>.</li>
+<li>3.5 source comparison: <a href="../research/amiga-gfa-basic-35-primary-reference.html">primary reference notes</a> and <a href="../research/amiga-gfa-basic-35-addendum-inventory.html">3.5 addendum inventory</a>.</li>
+<li>Detailed research notes: <a href="amiga-gfa-basic-3.0.html">amiga-gfa-basic-3.0.md</a>.</li>
+</ul>
+<p>This inventory records what the 3.0 sources say. It must not be used as a 3.5 language specification: every 3.0-only rule remains an inherited candidate until confirmed against the selected 3.5 interpreter manual.</p>
+<h2 id="evidence-conventions">Evidence conventions</h2>
+<ul>
+<li><strong>Text-backed</strong>: the identified Amiga source contains the statement at the cited printed page. OCR-derived punctuation/signatures may still need page-image inspection.</li>
+<li><strong>Needs visual check</strong>: OCR, symbols, exact signature, or translation may be ambiguous.</li>
+<li><strong>Topic identified</strong>: the chapter or example establishes that an area exists, but not its complete syntax or semantics.</li>
+<li><strong>Unresolved</strong>: available material does not establish the rule.</li>
+<li><strong>Observed</strong> is reserved for reproducible tests against a named interpreter build. No interpreter observations are claimed in this inventory.</li>
+</ul>
+<p>Do not transfer Atari ST rules to Amiga. The Atari ST V2.xx/V3.0 books and manual remain a separate research-only comparison profile. Do not treat the 1990 Amiga V3.03 book, 3.04 environment section, or 3.52 catalogue labels as evidence that a feature belongs to interpreter 3.0.</p>
+<h2 id="feature-inventory">Feature inventory</h2>
+<table>
+<thead>
+<tr>
+<th>Feature group</th>
+<th>Current Amiga 3.0 findings</th>
+<th>Evidence / status</th>
+<th>Remaining work</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Source organization and editor model</td>
+<td>The book describes a structural editor in which each command, statement, or function occupies its own program line; structured blocks are indented.</td>
+<td>Text-backed, introductory chapter; editor behavior must not automatically become a compiler lexical restriction.</td>
+<td>Establish whether physical line layout is a language requirement or editor convention; inspect line continuation and separators.</td>
+</tr>
+<tr>
+<td>Syntax notation and abbreviations</td>
+<td>Square brackets denote optional elements; braces can denote accepted abbreviations; ellipses represent statement sequences. The interpreter expands recognized abbreviations.</td>
+<td>Text-backed, introductory chapter. Complete abbreviation table not identified.</td>
+<td>Extract the full abbreviation rules and distinguish parser aliases from editor completion.</td>
+</tr>
+<tr>
+<td>Keywords and identifiers</td>
+<td>The book explicitly says Amiga GFA BASIC has no reserved words; variables may share spellings with instruction names. Labels end in a colon.</td>
+<td>Text-backed, printed pp. 4-43–4-45. Label/command ambiguity is described.</td>
+<td>Visually verify identifier character classes, case behavior, label grammar, and ambiguity resolution.</td>
+</tr>
+<tr>
+<td>Variable naming and type suffixes</td>
+<td>Suffixes listed: <code>%</code> integer, `</td>
+<td><code>byte,</code>&amp;<code>word,</code>!<code>Boolean,</code>$<code>string,</code>#<code>real;</code>#` may be omitted for real variables. Names start with a letter; OCR text for subsequent characters is damaged.</td>
+<td>Text-backed, printed pp. 4-43–4-45; character repertoire needs visual check.</td>
+</tr>
+<tr>
+<td>Numeric representation</td>
+<td>Real variables: 8 bytes and approximately 13 significant decimal digits. Integer variables: signed 32-bit range −2,147,483,648 to 2,147,483,647; 1-byte and 2-byte integer types are also mentioned.</td>
+<td>Text-backed, printed pp. 4-38–4-40.</td>
+<td>Verify rounding, overflow, conversion, and byte/word signedness with page images and interpreter probes.</td>
+</tr>
+<tr>
+<td>Boolean values</td>
+<td>False is 0; true is −1, described as all bits set in a two's-complement long word.</td>
+<td>Text-backed, printed pp. 4-38–4-40.</td>
+<td>Verify Boolean conversion and interaction with relational/logical operators.</td>
+</tr>
+<tr>
+<td>Arrays</td>
+<td>Arrays are a major language topic in the book (fundamentals and a later array chapter); introductory text mentions arrays among the language constructs.</td>
+<td>Topic identified; detailed bounds, dimensions, indexing, allocation, and string-array semantics not yet consolidated.</td>
+<td>Extract array declarations, dimensions, lower bounds, allocation, indexing, and errors with printed-page citations.</td>
+</tr>
+<tr>
+<td>Literals and expressions</td>
+<td>The book covers comparisons, precedence, numeric/string expressions, and conversion. Functions may appear in assignments, output expressions, tests, and as dummy arguments to <code>VOID</code>.</td>
+<td>Topic identified in introductory material and chapter map.</td>
+<td>Extract complete literal grammar, precedence table, evaluation order, and coercion rules.</td>
+</tr>
+<tr>
+<td>Arithmetic and comparison operators</td>
+<td>Arithmetic, comparisons, numeric/trigonometric functions, and precedence are covered in the language-core chapters. The operator hierarchy is now transcribed from the visually checked printed p. 3-2, including separate string-comparison and numeric-comparison rows.</td>
+<td>Text-backed, printed p. 3-2; token spellings are preserved exactly as printed and remain source-ambiguous pending 3.5 reconciliation.</td>
+<td>Verify token spellings and associativity against 3.5 evidence; extract integer/real behavior and edge cases.</td>
+</tr>
+<tr>
+<td>Bit operations</td>
+<td><code>BSET</code>, <code>BTST</code>, <code>BYTE</code>, <code>CARD</code>, <code>EQV</code>, <code>IMP</code>, shift/rotate families, <code>SWAP</code>, <code>WORD</code>, and <code>XOR</code> appear in the OCR inventory.</td>
+<td>Text-backed summaries, printed pp. 8-189–8-195; shift/rotate suffix glyphs and some signatures need visual check.</td>
+<td>Verify exact spellings, widths, signedness, parameter order, and edge cases.</td>
+</tr>
+<tr>
+<td>Control flow and loops</td>
+<td>Four loop families are documented: <code>FOR...NEXT</code>, <code>DO...LOOP</code>, <code>REPEAT...UNTIL</code>, and <code>WHILE...WEND</code>. <code>REPEAT...UNTIL</code> tests after the body; nested loop closers must reverse opening order; <code>EXIT IF</code> is identified as a conditional loop exit.</td>
+<td>Text-backed, printed pp. 4-45–4-50.</td>
+<td>Extract exact loop grammar, step/default rules, condition semantics, exit placement, and error behavior.</td>
+</tr>
+<tr>
+<td>Branching and labels</td>
+<td><code>GOTO</code> jumps to a label; labels end with a colon. The book describes <code>ON...GOSUB</code> procedure forms and says <code>GOSUB</code> can be omitted in a documented form.</td>
+<td>Text-backed introductory/structure notes; exact ON-family grammar remains incomplete.</td>
+<td>Extract <code>IF/ELSE/ENDIF</code>, <code>ON</code>, <code>GOTO</code>, <code>GOSUB</code>, <code>RETURN</code>, <code>EXIT</code>, and label edge cases.</td>
+</tr>
+<tr>
+<td>Procedures and user functions</td>
+<td>Procedures use <code>PROCEDURE</code>; user functions use <code>DEFFN</code>. The book illustrates procedure calls by name or with <code>@</code>, and function calls using <code>FN</code> or <code>@</code>.</td>
+<td>Text-backed, printed pp. 4-43–4-45.</td>
+<td>Extract parameter modes, typing, scope, recursion, return values, and lifetime.</td>
+</tr>
+<tr>
+<td>String operations</td>
+<td>A dedicated string operations/formatting chapter exists.</td>
+<td>Topic identified, printed pp. 167–174.</td>
+<td>Extract string operators, functions, indexing/slicing, encoding, length, and formatting semantics.</td>
+</tr>
+<tr>
+<td>Keyboard and text input</td>
+<td><code>FORM INPUT</code>, <code>INKEY$</code>, <code>INPUT</code>, <code>INPUT$(count[, #channel])</code>, and <code>LINE INPUT</code> are described.</td>
+<td>Text-backed summaries, printed pp. 5-61–5-67; exact optional punctuation should be visually checked.</td>
+<td>Verify prompt, delimiter, EOF, channel, and maximum-length behavior.</td>
+</tr>
+<tr>
+<td>File and device I/O</td>
+<td><code>OPEN</code> modes O/I/A/U/R; channel numbers 0–99; up to 100 open files; <code>BGET</code>, <code>BPUT</code>, <code>CLOSE</code>, <code>EOF</code>, <code>FIELD</code>, <code>GET</code>, <code>PUT</code>, <code>LOC</code>, <code>LOF</code>, <code>RECORD</code>, <code>RELSEEK</code>, <code>SEEK</code>, <code>STORE</code>, and <code>RECALL</code> are identified.</td>
+<td>Text-backed summaries, printed pp. 5-87–5-97.</td>
+<td>Verify record layout, EOF edge cases, file-pointer semantics, error codes, and host mapping.</td>
+</tr>
+<tr>
+<td>Amiga device interfaces</td>
+<td>The book lists <code>CON:</code>, <code>PRT:</code>, <code>PAR:</code>, <code>SER:</code>, <code>COM:</code>, <code>PIPE:</code>, <code>SPEAK:</code>, <code>RAW:</code>, <code>NEWCON:</code>, and <code>AUX:</code>.</td>
+<td>Text-backed, printed pp. 5-92–5-93; Amiga-specific API/device behavior.</td>
+<td>Identify which are interpreter-supported, OS-provided, or optional; document capability and failure behavior.</td>
+</tr>
+<tr>
+<td>Random functions</td>
+<td><code>RAND</code>, <code>RANDOM</code>, <code>RANDOMIZE</code>, and <code>RND</code> are present in the OCR inventory. The book distinguishes ranges/result types and deterministic reseeding.</td>
+<td>Text-backed, printed pp. 8-196–8-197; <code>RANDOM</code> spelling/signature and edge cases need visual check.</td>
+<td>Verify signatures, ranges, seed behavior, and generator reproducibility.</td>
+</tr>
+<tr>
+<td>Date/time and system functions</td>
+<td>Date/time, errors, multitasking, debugging, and program control are separate topics in the book.</td>
+<td>Topic identified, printed pp. 301–330.</td>
+<td>Extract each built-in and separate language core from Amiga OS/editor/runtime facilities.</td>
+</tr>
+<tr>
+<td>Memory and address operations</td>
+<td>Addresses are described essentially as 32-bit integers; memory, user memory, pointers, and Exec library have dedicated coverage.</td>
+<td>Topic identified; exact address/pointer semantics unresolved.</td>
+<td>Extract PEEK/POKE-like operations and layouts; do not map Amiga addresses to Linux pointers.</td>
+</tr>
+<tr>
+<td>Data and number conversion</td>
+<td>A dedicated data-conversion and number-systems chapter exists.</td>
+<td>Topic identified, printed pp. 247–258.</td>
+<td>Extract conversion functions, base notation, overflow, and representation.</td>
+</tr>
+<tr>
+<td>Graphics and drawing</td>
+<td>The book covers graphics definitions, primitives, lines/points, operations, graphics memory, and animation. Examples show <code>ELLIPSE</code>, <code>GRAPHMODE</code>, <code>OPENW</code>, <code>CLOSEW</code>; a separate 1990 Amiga edition corroborates <code>BOX</code>, <code>LINE</code>, <code>FILL</code>, <code>PLOT</code>, <code>DRAW TO</code> and GRAPHMODE values 1/3.</td>
+<td>Primary 3.0 topic map and examples; 1990 V3.03 source is a separate corroborating edition, not silently merged.</td>
+<td>Extract complete 3.0 command signatures, coordinate/state rules, resource ownership, and version applicability.</td>
+</tr>
+<tr>
+<td>Windows and screens</td>
+<td>Dedicated window and screen-management chapters exist; an example opens/closes a BASIC window.</td>
+<td>Topic identified, printed pp. 339–352; full signatures not extracted.</td>
+<td>Extract creation, selection, close, dimensions, display modes, ownership, and error semantics.</td>
+</tr>
+<tr>
+<td>Menus and events</td>
+<td>Dedicated menu and BASIC event-control chapters exist. A separately published 1993 GFA 3.0 example demonstrates MENU string arrays and ON MENU GOSUB.</td>
+<td>Manual topic identified, printed pp. 353–368; secondary example is corroborating only.</td>
+<td>Extract exact menu/event signatures, return values, callback ordering, and lifecycle from the Amiga 3.0 manual.</td>
+</tr>
+<tr>
+<td>Errors and diagnostics</td>
+<td>Appendix B lists GFA BASIC error messages; program-control/error chapter exists.</td>
+<td>Topic identified; full error catalogue and trigger semantics not inventoried.</td>
+<td>Extract error names/codes, trapping behavior, source/runtime context, and reproducibility.</td>
+</tr>
+<tr>
+<td>Compiler-specific behavior</td>
+<td>The 1990 German edition has a compiler chapter and distinguishes interpreter/compiler versions.</td>
+<td>Separate V3.03/compiler material; not the selected interpreter 3.0 language baseline.</td>
+<td>Keep compiler extensions and limitations in a separate versioned specification.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="cross-platform-and-version-guardrails">Cross-platform and version guardrails</h2>
+<ul>
+<li>Atari ST V2.xx/V3.0 is research-only. Its additional loop forms (such as DO-WHILE/DO-UNTIL and LOOP-WHILE/LOOP-UNTIL) are not established for Amiga 3.0 and must not be imported.</li>
+<li>The French 1989 book documents Amiga interpreter 3.0 and historical notes for later releases; its 3.04 environment section is not evidence that every 3.04 feature belongs to 3.0.</li>
+<li>The German 1990 book identifies V3.03 interpreter/compiler content. Cite it separately as <code>AM-BOOK-DE-1990</code>.</li>
+<li>Catalogue labels for Amiga 3.52 do not prove the interpreter component version or any 3.52 language feature.</li>
+</ul>
+<h2 id="next-extraction-priorities">Next extraction priorities</h2>
+<ol>
+<li>Extract the complete alphabetical command/function index if an applicable Amiga 3.0 source with that appendix can be located.</li>
+<li>Complete the core syntax, literals, precedence, arrays, and type-conversion tables from the Amiga 3.0 chapters.</li>
+<li>Finish statement and procedure/function signatures with printed-page citations.</li>
+<li>Extract strings, data conversion, date/time, and error catalogue entries.</li>
+<li>Continue I/O and memory semantics with exact edge cases.</li>
+<li>Extract graphics, windows, screens, menus, and event signatures separately as Amiga APIs.</li>
+<li>Manually compare OCR-sensitive syntax tables and symbols against page images before promoting them to verified registry entries.</li>
+<li>Build original, minimal candidate fixtures only when their syntax and expected behavior are tied to the exact source edition.</li>
+</ol>
+<h2 id="relationship-to-issues">Relationship to issues</h2>
+<ul>
+<li><a href="https://github.com/vsimko/gfabasic-rust/issues/19">#19</a>: feature inventory and compatibility matrix.</li>
+<li><a href="https://github.com/vsimko/gfabasic-rust/issues/20">#20</a>: lexical/syntax/type/expression reference.</li>
+<li><a href="https://github.com/vsimko/gfabasic-rust/issues/21">#21</a>: statements and control flow.</li>
+<li><a href="https://github.com/vsimko/gfabasic-rust/issues/22">#22</a>: built-in and mathematical functions.</li>
+<li><a href="https://github.com/vsimko/gfabasic-rust/issues/23">#23</a>: file, disk, data, and resource operations.</li>
+<li><a href="https://github.com/vsimko/gfabasic-rust/issues/24">#24</a>: Amiga platform API reference.</li>
+<li><a href="https://github.com/vsimko/gfabasic-rust/issues/42">#42</a>: independently authored conformance corpus.</li>
+</ul>
+<p>This file is a living research index. It intentionally records missing evidence rather than guessing. Acceptance requires further extraction, visual review where needed, and tests; the inventory is not a claim of compiler support.</p>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>
