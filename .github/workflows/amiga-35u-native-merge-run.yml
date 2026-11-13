@@ -124,7 +124,7 @@ jobs:
             xdftool "$WORKING_ADF" delete S/Startup-Sequence
           fi
           cat > "$RUNNER_TEMP/Startup-Sequence" <<'EOF'
-          GFABasic
+          SYS:GFABasic
           EOF
           xdftool "$WORKING_ADF" write "$RUNNER_TEMP/Startup-Sequence" S/Startup-Sequence
           if xdftool "$WORKING_ADF" list / | grep -qi 'gfatest.LST'; then
