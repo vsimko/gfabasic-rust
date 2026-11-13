@@ -92,38 +92,50 @@ jobs:
           command -v xdftool
           amiberry --version | tee artifacts/amiga-cli-probe/amiberry-version.txt
 
-      - name: Prepare CLI input and boot volume
+      - name: Customize the original 3.041u ADF with fresh interpreter and tests
         run: |
-          cp tests/interpreter-probes/amiga-3.041u/regression-suite.LST amiga-volume/gfatest.LST
-          # Build a bootable AmigaDOS 1.x OFS floppy. Kickstart 1.3 has no
-          # built-in Workbench/CLI disk, so the boot block and Startup-Sequence
-          # must live on the same disk as the interpreter and textual listing.
-          mkdir -p amiga-volume/S
-          cp amiga-volume/gfabasic amiga-volume/gfabasic.bin
-          cat > amiga-volume/S/Startup-Sequence <<'EOF'
+          set -euo pipefail
+          SOURCE_ADF="$RUNNER_TEMP/gfa-basic-3.041u.adf"
+          UNPACK_ROOT="$RUNNER_TEMP/3.041u-source-unpacked"
+          mkdir -p "artifacts/amiga-cli-probe"
+          sha256sum "$SOURCE_ADF" > "artifacts/amiga-cli-probe/source-adf-sha256.txt"
+          xdftool "$SOURCE_ADF" list / all > "artifacts/amiga-cli-probe/source-adf-layout.txt"
+          xdftool "$SOURCE_ADF" unpack "$UNPACK_ROOT"
+          mapfile -t VOLUME_DIRS < <(find "$UNPACK_ROOT" -mindepth 1 -maxdepth 1 -type d -print)
+          test "${#VOLUME_DIRS[@]}" -eq 1 || { echo "Expected one filesystem volume in the source ADF"; find "$UNPACK_ROOT" -maxdepth 2 -print; exit 1; }
+          VOLUME_DIR="${VOLUME_DIRS[0]}"
+          mapfile -t INTERPRETERS < <(find "$VOLUME_DIR" -type f -iname 'gfabasic' -print)
+          test "${#INTERPRETERS[@]}" -eq 1 || { echo "Expected exactly one gfabasic in the source ADF"; find "$VOLUME_DIR" -maxdepth 3 -type f -print; exit 1; }
+          INTERPRETER_PATH="${INTERPRETERS[0]}"
+          # Replace the binary in-place, retaining its original path and the
+          # rest of the distribution disk's directory structure and metadata.
+          cp "amiga-volume/gfabasic" "$INTERPRETER_PATH"
+          S_DIR="$(find "$VOLUME_DIR" -type d -iname S -print -quit)"
+          if test -z "$S_DIR"; then
+            S_DIR="$VOLUME_DIR/S"
+            mkdir -p "$S_DIR"
+          fi
+          OLD_STARTUP="$(find "$VOLUME_DIR" -type f -iname Startup-Sequence -print -quit)"
+          if test -n "$OLD_STARTUP"; then rm "$OLD_STARTUP"; fi
+          cat > "$S_DIR/Startup-Sequence" <<'EOF'
           gfabasic
           EOF
-          xdftool artifacts/amiga-cli-probe/gfatest.adf create + format GFABASIC3041 ofs + write amiga-volume/gfatest.LST + write amiga-volume/gfabasic + write amiga-volume/S
-          xdftool artifacts/amiga-cli-probe/gfatest.adf boot install boot1x
-          xdftool artifacts/amiga-cli-probe/gfatest.adf info > artifacts/amiga-cli-probe/gfatest-adf-info.txt
-          xdftool artifacts/amiga-cli-probe/gfatest.adf list / all > artifacts/amiga-cli-probe/gfatest-adf-list.txt
-          xdftool artifacts/amiga-cli-probe/gfatest.adf boot show > artifacts/amiga-cli-probe/gfatest-adf-boot.txt
-          cp amiga-volume/gfatest.LST artifacts/amiga-cli-probe/gfatest.LST
-          cp amiga-volume/S/Startup-Sequence artifacts/amiga-cli-probe/Startup-Sequence.txt
-          cat > "$RUNNER_TEMP/amiga-cli-probe.uae" <<EOF
-          use_gui=no
-          cpu_type=68000
-          chipset=ocs
-          kickstart_rom_file=$KICKSTART_ROM_PATH
-          chipmem_size=2
-          fastmem_size=8
-          bogomem_size=0
-          gfx_width=640
-          gfx_height=512
-          gfx_fullscreen=false
-          sound_output=0
-          floppy0=$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/gfatest.adf
-          EOF
+          cp "tests/interpreter-probes/amiga-3.041u/regression-suite.LST" "$VOLUME_DIR/gfatest.LST"
+          cp "$S_DIR/Startup-Sequence" "artifacts/amiga-cli-probe/Startup-Sequence.txt"
+          printf '%s\n' "$INTERPRETER_PATH" > "artifacts/amiga-cli-probe/interpreter-installed-path.txt"
+          printf '%s\n' "$VOLUME_DIR" > "artifacts/amiga-cli-probe/source-volume-name.txt"
+          # Repack the original disk filesystem. xdftool carries the original
+          # volume metadata and boot block forward; only the interpreter,
+          # Startup-Sequence and our regression listing are changed.
+          xdftool "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/gfatest.adf" pack "$VOLUME_DIR"
+          xdftool "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/gfatest.adf" list / all > "artifacts/amiga-cli-probe/prepared-adf-layout.txt"
+          xdftool "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/gfatest.adf" boot show > "artifacts/amiga-cli-probe/prepared-adf-boot.txt"
+          sha256sum "artifacts/amiga-cli-probe/gfatest.adf" > "artifacts/amiga-cli-probe/prepared-adf-sha256.txt"
+          cp "tests/interpreter-probes/amiga-3.041u/regression-suite.LST" "artifacts/amiga-cli-probe/gfatest.LST"
+          grep -F "gfabasic" "artifacts/amiga-cli-probe/prepared-adf-layout.txt"
+          grep -F "gfatest.LST" "artifacts/amiga-cli-probe/prepared-adf-layout.txt"
+          grep -F "Startup-Sequence" "artifacts/amiga-cli-probe/prepared-adf-layout.txt"
+          cat "artifacts/amiga-cli-probe/Startup-Sequence.txt"
 
       - name: Merge textual LST in the GFA BASIC editor
         run: |
