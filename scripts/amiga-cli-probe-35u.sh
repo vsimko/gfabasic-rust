@@ -58,10 +58,27 @@ env -u SHELLOPTS xvfb-run -a -s "-screen 0 1024x768x24 +extension GLX" bash -c '
   sleep 2
   printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-drive-selected.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 
-  # Move to the gfatest.LST row center in the populated requester.
-  printf "SEND_MOUSE\\t-683\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-  sleep 0.2
-  printf "SEND_MOUSE\\t-370\\t6\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+  # The requester lists entries alphabetically but its viewport only shows
+  # the first nine rows. gfatest.LST is below readme.gfa, so scroll the list.
+  # The cursor is at approximately (322,195) after the DF0 selection above;
+  # move it to the lower scrollbar arrow at approximately (249,389).
+  printf "SEND_MOUSE\\t-455\\t388\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+  sleep 0.5
+  for _ in $(seq 1 12); do
+    printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+    sleep 0.1
+    printf "SEND_MOUSE\\t0\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+    sleep 0.2
+  done
+  printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-list-scrolled.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+  tesseract "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-list-scrolled.png" stdout --psm 6 2>/dev/null > "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-list-scrolled-ocr.txt"
+  grep -Fqi 'gfatest.LST' "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-list-scrolled-ocr.txt" || {
+    echo "The Merge requester viewport does not show gfatest.LST after scrolling."
+    cat "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-list-scrolled-ocr.txt"
+    exit 1
+  }
+  # Select the verified visible gfatest.LST row at the bottom of the list.
+  printf "SEND_MOUSE\\t0\\t-35\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
   sleep 0.5
   printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-file-row-pointer.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
   printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
