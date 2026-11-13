@@ -44,7 +44,12 @@ jobs:
             "https://api.github.com/repos/vsimko/gfabasic-private-assets/contents/$ZIP_PATH_ENCODED?ref=main" \
             --output "$RUNNER_TEMP/gfa-basic-3.5u.zip"
           echo "004c20a73d1fe715112b5b2672138e7e7c9ea1e11f6900004e5466dc15382413  $RUNNER_TEMP/gfa-basic-3.5u.zip" | sha256sum --check
-          mapfile -t ADF_ENTRIES < <(unzip -Z1 "$RUNNER_TEMP/gfa-basic-3.5u.zip" | grep -i -E '\\.adf          xdftool "$RUNNER_TEMP/gfa-basic-3.5u.adf" read GFABasic amiga-volume/GFABasic
+          mapfile -t ADF_ENTRIES < <(unzip -Z1 "$RUNNER_TEMP/gfa-basic-3.5u.zip" | grep -i -E '\.adf$' || true)
+          test "${#ADF_ENTRIES[@]}" -eq 1 || { echo "Expected exactly one ADF in the private ZIP, found ${#ADF_ENTRIES[@]}"; unzip -Z1 "$RUNNER_TEMP/gfa-basic-3.5u.zip"; exit 1; }
+          ADF_ENTRY="${ADF_ENTRIES[0]}"
+          printf '%s\n' "$ADF_ENTRY" | tee artifacts/amiga-cli-probe/source-adf-entry.txt
+          unzip -p "$RUNNER_TEMP/gfa-basic-3.5u.zip" "$ADF_ENTRY" > "$RUNNER_TEMP/gfa-basic-3.5u.adf"
+          xdftool "$RUNNER_TEMP/gfa-basic-3.5u.adf" read GFABasic amiga-volume/GFABasic
           echo "c5e9ffdb96b621307069d8f21a3282788386930bbc1ea679dfebe2caef5493ca  amiga-volume/GFABasic" | sha256sum --check
           test "$(wc -c < amiga-volume/GFABasic)" -eq 135956
           printf '\x00\x00\x03\xf3' | cmp -n 4 - amiga-volume/GFABasic
