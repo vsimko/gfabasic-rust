@@ -68,10 +68,19 @@ def main() -> int:
             errors.append(f"{source.relative_to(root)} is missing")
             continue
         content = source.read_text(encoding="utf-8")
+        discovered = set()
+        for target in LINK_RE.findall(content):
+            parsed = urlsplit(target)
+            if parsed.scheme or target.startswith("#") or not parsed.path:
+                continue
+            candidate = (source.parent / unquote(parsed.path)).resolve()
+            discovered.add(candidate)
         for skill in skill_files:
-            rel = skill.relative_to(root).as_posix()
-            if rel not in content:
-                errors.append(f"{source.relative_to(root)} does not discover {rel}")
+            if skill.resolve() not in discovered:
+                errors.append(
+                    f"{source.relative_to(root)} does not link to "
+                    f"{skill.relative_to(root).as_posix()}"
+                )
 
     if errors:
         for error in errors:
