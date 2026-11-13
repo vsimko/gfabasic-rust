@@ -125,7 +125,6 @@ jobs:
             xdftool "$WORKING_ADF" delete S/Startup-Sequence
           fi
           cat > "$RUNNER_TEMP/Startup-Sequence" <<'EOF'
-          CD DF0:
           DF0:gfabasic
           EOF
           xdftool "$WORKING_ADF" write "$RUNNER_TEMP/Startup-Sequence" S/Startup-Sequence
@@ -145,7 +144,6 @@ jobs:
           grep -F "gfabasic" artifacts/amiga-cli-probe/prepared-adf-layout.txt
           grep -F "gfatest.LST" artifacts/amiga-cli-probe/prepared-adf-layout.txt
           grep -F "Startup-Sequence" artifacts/amiga-cli-probe/prepared-adf-layout.txt
-          grep -F "CD DF0:" artifacts/amiga-cli-probe/Startup-Sequence.txt
           grep -F "DF0:" artifacts/amiga-cli-probe/Startup-Sequence.txt
           cat artifacts/amiga-cli-probe/Startup-Sequence.txt
 
