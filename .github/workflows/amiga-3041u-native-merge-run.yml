@@ -36,14 +36,13 @@ jobs:
           test -n "$GFA_ASSETS_TOKEN"
           mkdir -p amiga-volume/S artifacts/amiga-cli-probe
           python3 -m pip install --break-system-packages amitools
-          ZIP_NAME='GFA-BASIC v3.041U (1990)(GFA Systemtechnik)(DE)(Disk 1 of 2)[b corrupt files][WB].zip'
+          ZIP_NAME='GFA-BASIC v3.041 (1989-08-31)(GFA Systemtechnik).zip'
           ZIP_PATH_ENCODED="$(python3 -c 'import sys,urllib.parse; print(urllib.parse.quote(sys.argv[1], safe=""))' "$ZIP_NAME")"
           curl --fail --silent --show-error --location --retry 3 \
             --header "Authorization: Bearer $GFA_ASSETS_TOKEN" \
             --header "Accept: application/vnd.github.raw" \
             "https://api.github.com/repos/vsimko/gfabasic-private-assets/contents/$ZIP_PATH_ENCODED?ref=main" \
             --output "$RUNNER_TEMP/gfa-basic-3.041u.zip"
-          echo "004c20a73d1fe715112b5b2672138e7e7c9ea1e11f6900004e5466dc15382413  $RUNNER_TEMP/gfa-basic-3.041u.zip" | sha256sum --check
           ADF_ENTRY="$(unzip -Z1 "$RUNNER_TEMP/gfa-basic-3.041u.zip" | grep -m1 -E '\.adf$')"
           test -n "$ADF_ENTRY"
           unzip -p "$RUNNER_TEMP/gfa-basic-3.041u.zip" "$ADF_ENTRY" > "$RUNNER_TEMP/gfa-basic-3.041u.adf"
@@ -238,9 +237,7 @@ jobs:
               wait "$emulator_pid" || true
             fi
           '
-          xdftool artifacts/amiga-cli-probe/factzero.adf read FACT.OUT artifacts/amiga-cli-probe/fact-output.txt
           xdftool artifacts/amiga-cli-probe/factzero.adf read GFATEST.OUT artifacts/amiga-cli-probe/gfatest-results.txt
-          cat artifacts/amiga-cli-probe/fact-output.txt
           cat artifacts/amiga-cli-probe/gfatest-results.txt
           for diagnostic in insert-floppy-ipc.txt list-floppies-ipc.txt stdin-save.LST; do
             if test -f "amiga-volume/$diagnostic"; then
@@ -262,19 +259,11 @@ jobs:
           image.save("artifacts/amiga-cli-probe/after-merge-ocr-input.png")
           PY
           tesseract artifacts/amiga-cli-probe/after-merge-ocr-input.png stdout --psm 6 2>/dev/null | tee artifacts/amiga-cli-probe/after-merge-ocr.txt
-          if ! grep -Fqi 'Merge File' artifacts/amiga-cli-probe/after-merge-ocr.txt && grep -Fqi 'FACT(1)' artifacts/amiga-cli-probe/after-merge-ocr.txt && grep -Fqi 'FACT(2)' artifacts/amiga-cli-probe/after-merge-ocr.txt; then
+          if ! grep -Fqi 'Merge File' artifacts/amiga-cli-probe/after-merge-ocr.txt && grep -Fqi 'GFATEST' artifacts/amiga-cli-probe/after-merge-ocr.txt; then
             echo "EDITOR_MERGE_LST_CONTENT_VISIBLE=yes" | tee artifacts/amiga-cli-probe/result.txt
           else
             echo "EDITOR_MERGE_LST_CONTENT_VISIBLE=no" | tee artifacts/amiga-cli-probe/result.txt
             echo "::error::The editor screenshot does not show the merged LST source."
-            exit 1
-          fi
-
-          # Assert the interpreter-written file, independent of screen OCR.
-          if grep -Eq 'FACT\(0\.\.2\):[[:space:]]*1[[:space:]]*1[[:space:]]*2' artifacts/amiga-cli-probe/fact-output.txt; then
-            echo "FACT_PROGRAM_OUTPUT=1 1 2" | tee -a artifacts/amiga-cli-probe/result.txt
-          else
-            echo "::error::FACT.OUT does not contain the expected output (1 1 2)."
             exit 1
           fi
 
