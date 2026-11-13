@@ -1,9 +1,73 @@
 {
   "schema_version": 1,
   "status": "fresh",
-  "generated_at": "2026-11-13T06:32:58.176829+00:00",
-  "last_successful_at": "2026-11-13T06:32:58.176829+00:00",
+  "generated_at": "2026-11-13T07:34:53.815095+00:00",
+  "last_successful_at": "2026-11-13T07:34:53.815095+00:00",
   "items": [
+    {
+      "type": "merged_pull_request",
+      "title": "Inventory private Amiga GFA BASIC media candidates",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/517",
+      "number": 517,
+      "timestamp": "2026-11-13T07:34:10Z",
+      "summary": "PR #517 merged"
+    },
+    {
+      "type": "commit",
+      "title": "Inventory private Amiga GFA BASIC media candidates",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/13f982071f541832409f0e2dae456fafebac00d5",
+      "number": null,
+      "timestamp": "2026-11-13T07:34:09Z",
+      "summary": "Commit 13f9820"
+    },
+    {
+      "type": "merged_pull_request",
+      "title": "Parse unary-negative integer assignments",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/516",
+      "number": 516,
+      "timestamp": "2026-11-13T07:15:09Z",
+      "summary": "PR #516 merged"
+    },
+    {
+      "type": "commit",
+      "title": "Parse unary-negative integer assignments",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/aebbc424331e88fea6340941a145f27d41f4a233",
+      "number": null,
+      "timestamp": "2026-11-13T07:15:08Z",
+      "summary": "Commit aebbc42"
+    },
+    {
+      "type": "merged_pull_request",
+      "title": "Implement GFA BASIC STR$ formatting helper",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/515",
+      "number": 515,
+      "timestamp": "2026-11-13T07:11:50Z",
+      "summary": "PR #515 merged"
+    },
+    {
+      "type": "commit",
+      "title": "Implement GFA BASIC STR$ formatting helper",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/139605b0c80d2efe6e2655f78ff2f3cbebeefca6",
+      "number": null,
+      "timestamp": "2026-11-13T07:11:50Z",
+      "summary": "Commit 139605b"
+    },
+    {
+      "type": "merged_pull_request",
+      "title": "Implement documented VAL shorthand radix prefixes",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/514",
+      "number": 514,
+      "timestamp": "2026-11-13T07:09:49Z",
+      "summary": "PR #514 merged"
+    },
+    {
+      "type": "commit",
+      "title": "Implement VAL shorthand radix prefixes",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/523733bb81db59ea89f42611a55ba12108860654",
+      "number": null,
+      "timestamp": "2026-11-13T07:09:48Z",
+      "summary": "Commit 523733b"
+    },
     {
       "type": "merged_pull_request",
       "title": "Clarify the GFA BASIC 3.5 manual evidence boundary",
@@ -35,70 +99,6 @@
       "number": null,
       "timestamp": "2026-11-13T00:45:12Z",
       "summary": "Commit af2a577"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "Record CLS use in the GFA BASIC 3.5 addendum",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/511",
-      "number": 511,
-      "timestamp": "2026-11-12T17:27:53Z",
-      "summary": "PR #511 merged"
-    },
-    {
-      "type": "commit",
-      "title": "research: record CLS use in the 3.5 addendum (#511)",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/e7b699075dbebb9f28d86aae37613400db78bd07",
-      "number": null,
-      "timestamp": "2026-11-12T17:27:52Z",
-      "summary": "Commit e7b6990"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "Record the @-prefixed procedure call used in a GFA BASIC 3.5 example",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/510",
-      "number": 510,
-      "timestamp": "2026-11-12T17:22:15Z",
-      "summary": "PR #510 merged"
-    },
-    {
-      "type": "commit",
-      "title": "research: record 3.5 @ procedure-call form (#510)",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/e2f198a7a1858bba3245d8f79426f43ce3bc227d",
-      "number": null,
-      "timestamp": "2026-11-12T17:22:15Z",
-      "summary": "Commit e2f198a"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "Audit additional inherited statements used by GFA BASIC 3.5 examples",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/509",
-      "number": 509,
-      "timestamp": "2026-11-12T17:17:41Z",
-      "summary": "PR #509 merged"
-    },
-    {
-      "type": "commit",
-      "title": "Audit additional inherited statements used by GFA BASIC 3.5 examples (#509)",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/4b217cfa7d326da3cb5f0b55a78f11ca9c1e35ac",
-      "number": null,
-      "timestamp": "2026-11-12T17:17:40Z",
-      "summary": "Commit 4b217cf"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "Audit inherited statement and operator forms in GFA BASIC 3.5 examples",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/508",
-      "number": 508,
-      "timestamp": "2026-11-12T17:08:51Z",
-      "summary": "PR #508 merged"
-    },
-    {
-      "type": "commit",
-      "title": "Audit inherited statement and operator forms in GFA BASIC 3.5 examples (#508)",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/fbebb2d07ae57c74217e8372b8afca42340e073a",
-      "number": null,
-      "timestamp": "2026-11-12T17:08:50Z",
-      "summary": "Commit fbebb2d"
     }
   ]
 }
