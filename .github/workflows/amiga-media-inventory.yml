@@ -149,5 +149,9 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh api --silent --method DELETE \
-            "repos/$GITHUB_REPOSITORY/actions/artifacts/14019035686"
+          artifact_api="repos/$GITHUB_REPOSITORY/actions/artifacts/14019035686"
+          if gh api "$artifact_api" >/dev/null 2>&1; then
+            gh api --silent --method DELETE "$artifact_api"
+          else
+            echo "The earlier artifact is already absent."
+          fi
