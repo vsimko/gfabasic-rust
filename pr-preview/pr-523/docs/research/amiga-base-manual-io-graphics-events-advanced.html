@@ -1,0 +1,513 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="This note covers Chapters 5, 6, 8, 9, and 10. Names and page locators below follow the printed contents and chapter headings. Compound headings are retained as groups where the contents page groups related forms. This…">
+  <title>Amiga GFA BASIC base-manual I/O, graphics, event, and advanced-programming extraction · GFA BASIC Rust documentation</title>
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body class="docs-site">
+  <header class="docs-header">
+    <a href="../../index.html">GFA BASIC Rust</a>
+    <span aria-hidden="true">/</span>
+    <a href="../index.html">Documentation</a>
+  </header>
+  <div class="docs-layout">
+    <nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home" href="index.html">Section index</a><ul><li><a href="amiga-gfa-basic-documentation-audit.html">Amiga GFA BASIC documentation coverage audit</a></li><li><a href="amiga-gfa-basic-command-catalogue.html">Amiga GFA BASIC command catalogue</a></li><li><a href="amiga-gfa-basic-german-book-command-api-extraction.html">German Amiga GFA-BASIC book: command and OS API extraction</a></li><li><a href="amiga-book-command-index-ocr-transcription.html">Appendix D — OCR transcription of the command index</a></li><li><a href="gfa-basic-command-index-ocr.html">GFA-BASIC command index — first-pass extraction</a></li><li><a href="amiga-gfa-basic-source-topic-index.html">Amiga GFA BASIC source and topic index</a></li><li><a href="amiga-book-515-page-extraction-audit.html">Amiga GFA-BASIC book — 515-page extraction audit</a></li><li><a href="amiga-book-chapters05-17-heading-harvest.html">Amiga book — command-heading harvest, chapters 5–17</a></li><li><a href="amiga-gfa-basic-functions.toml">Function inventory (117 unique names)</a></li><li><a href="amiga-gfa-basic-function-inventory.html">Amiga GFA BASIC 3.5 built-in function inventory</a></li><li><a href="amiga-base-manual-io-graphics-events-advanced.html">Amiga GFA BASIC base-manual I/O, graphics, event, and advanced-programming extraction</a></li><li><a href="amiga-base-manual-io-graphics-events-advanced-details.html">Amiga GFA BASIC base-manual I/O, graphics, event, and advanced-programming details</a></li><li><a href="amiga-base-manual-numeric-string-functions.html">Amiga GFA BASIC base-manual numeric and string function extraction</a></li><li><a href="amiga-gfa-basic-35-addendum-inventory.html">Amiga GFA-BASIC 3.5 interpreter addendum — extracted feature inventory</a></li><li><a href="amiga-gfa-basic-candidates.toml">3.5 candidate manifest</a></li><li><a href="amiga-gfa-basic-candidate-report.html">Amiga GFA BASIC 3.5 candidate verification report</a></li><li><a href="amiga-gfa-basic-language-population-policy.html">Amiga GFA BASIC language population policy</a></li><li><a href="amiga-gfa-basic-3.03-ocr-index.html">German Amiga GFA BASIC book: OCR index and edition notes</a></li><li><a href="amiga-runtime-ocr-audit.html">Amiga runtime workflow OCR audit</a></li><li><a href="README.html">Research materials</a></li><li><a href="amiga-gfa-test-output.html">Amiga GFA BASIC test output</a></li><li><a href="amiga-gfa-basic-dqh-source-inventory.html">Amiga GFA BASIC commands observed in dqh-amiga</a></li><li><a href="amiga-emulator-lab.html">Amiga emulator experiment lab</a></li><li><a href="amiga-media-candidates.html">Amiga GFA BASIC media candidates</a></li><li><a href="amiga-gfa-basic-35-lst-probes.html">Amiga GFA BASIC 3.5 interpreter probes from text listings</a></li><li><a href="amiga-gfa-basic-352-runtime-baseline.html">Amiga GFA BASIC 3.52 runtime baseline</a></li><li><a href="amiga-gfa-basic-binary-analysis.html">Amiga GFA-BASIC binary analysis</a></li><li><a href="amiga-base-manual-variable-array-conversion-functions.html">Amiga GFA BASIC base-manual variable, array, and conversion functions</a></li><li><a href="amiga-gfa-basic-chapter-7-program-handling-evidence.html">Amiga GFA BASIC Chapter 7 — program handling evidence</a></li><li><a href="amiga-gfa-basic-chapter-8-graphics-evidence.html">Amiga GFA BASIC Chapter 8 — graphics compatibility evidence</a></li><li><a href="amiga-gfa-basic-chapter-9-event-window-evidence.html">Amiga GFA BASIC Chapter 9 — event, menu, screen and window evidence</a></li><li><a href="amiga-gfa-basic-chapter-10-advanced-programming-evidence.html">Amiga GFA BASIC Chapter 10 — advanced programming evidence</a></li><li><a href="amiga-gfa-basic-chapter-11-system-routines-evidence.html">Amiga GFA BASIC Chapter 11 — system-routine evidence</a></li><li><a href="amiga-gfa-basic-chapter-12-appendices-index-evidence.html">Amiga GFA BASIC Chapter 12 — appendix and index evidence</a></li><li><a href="https://github.com/vsimko/gfabasic-rust/blob/main/scripts/validate_amiga_chapter_inventories.py">Chapter inventory validator</a></li><li><a href="amiga-gfa-basic-3.0-command-index.html">Amiga GFA BASIC 3.0 command index — grouped cross-check</a></li><li><a href="amiga-gfa-basic-3.0-statement-command-candidates.html">Amiga GFA BASIC 3.0 statement and command candidate catalogue</a></li><li><a href="amiga-gfa-basic-3.0-base-inventory.html">Amiga GFA BASIC 3.0 base-manual inventory</a></li><li><a href="amiga-gfa-basic-3.0-expressions-builtins-control-flow.html">Amiga GFA BASIC 3.0 expression, intrinsic and control-flow evidence</a></li><li><a href="amiga-gfa-basic-3.0-control-file-data-io.html">Amiga GFA BASIC 3.0 control, file and data I/O evidence</a></li><li><a href="amiga-gfa-basic-3.0-graphics-evidence.html">GFA BASIC 3.0 Amiga — graphics evidence</a></li><li><a href="amiga-gfa-basic-3.0-events-windows-evidence.html">GFA BASIC 3.0 Amiga — event, menu, screen and window evidence</a></li><li><a href="amiga-gfa-basic-3.0-system-routines-evidence.html">GFA BASIC 3.0 Amiga — operating-system routine evidence</a></li><li><a href="amiga-gfa-basic-3.0-advanced-programming-evidence.html">GFA BASIC 3.0 Amiga — advanced programming evidence</a></li><li><a href="amiga-gfa-basic-3.0-appendix-index-evidence.html">GFA BASIC 3.0 Amiga — appendix and command-index evidence</a></li><li><a href="amiga-gfa-basic-3.0-german-source-notes.html">German Amiga GFA BASIC 3.0 source — initial verification notes</a></li><li><a href="amiga-gfa-basic-3.0-procedure-error-details.html">GFA BASIC 3.0 Amiga — procedures, functions and error-flow evidence</a></li><li><a href="amiga-gfa-basic-3.0-screen-window-details.html">GFA BASIC 3.0 Amiga — screen and window command details</a></li><li><a href="amiga-gfa-basic-3.0-output-device-details.html">GFA BASIC 3.0 Amiga — output, cursor, mouse and sound evidence</a></li><li><a href="amiga-gfa-basic-3.0-menu-event-details.html">GFA BASIC 3.0 Amiga — menu and event details</a></li><li><a href="amiga-gfa-basic-3.0-bob-object-details.html">GFA BASIC 3.0 Amiga — BOB and OBJECT API evidence</a></li><li><a href="amiga-gfa-basic-3.0-source-format-editor-evidence.html">Amiga GFA BASIC 3.0 — source composition and editor evidence</a></li><li><a href="amiga-gfa-basic-35-primary-reference.html">Amiga GFA-BASIC 3.5 primary reference and target decision</a></li><li><a href="amiga-gfa-basic-35-german-book-crosscheck.html">Amiga GFA-BASIC 3.5 — independent German-book cross-check</a></li><li><a href="amiga-book-gfa35-chapter18-19-extraction.html">GFA-BASIC 3.5 additions documented in the Amiga book</a></li><li><a href="amiga-gfa-basic-35-editor-feature-audit.html">Amiga GFA BASIC 3.5 — editor feature audit</a></li><li><a href="amiga-gfa-basic-35-lexer-evidence.html">Amiga GFA BASIC 3.5 lexer evidence inventory</a></li><li><a href="amiga-gfa-basic-35-matrix-arithmetic-analysis-audit.html">Amiga GFA BASIC 3.5 — matrix arithmetic and analysis audit</a></li><li><a href="amiga-gfa-basic-35-matrix-io-copy-audit.html">Amiga GFA BASIC 3.5 — matrix I/O and copy declaration audit</a></li><li><a href="amiga-gfa-basic-35-five-declaration-audit.html">Amiga GFA BASIC 3.5 — five declaration-level audit blocks</a></li><li><a href="amiga-gfa-basic-35-five-more-declaration-audit.html">Amiga GFA BASIC 3.5 — five more declaration-level audit blocks</a></li><li><a href="amiga-gfa-basic-35-guru-declaration-audit.html">Amiga GFA BASIC 3.5 — GURU declaration audit</a></li><li><a href="atari-gfa-book-diskette.html">Atari GFA BASIC book diskette — source-corpus research notes</a></li><li><a href="atari-gfa-book-systematic-review.html">Systematic review of *Das große GFA-BASIC-Buch* (Atari ST)</a></li><li><a href="aminet-catalogue.html">Aminet GFA BASIC package survey</a></li><li><a href="gfalist-build-and-fixture-validation.html">gfalist build and fixture validation</a></li><li><a href="gfalist-format-vs-rust-frontend.html">gfalist format notes vs. the Rust frontend</a></li><li><a href="amiga-gfa-basic-35-base-function-use-audit.html">Amiga GFA BASIC 3.5 — inherited function evidence from both manuals</a></li><li><a href="amiga-gfa-basic-35-statement-operator-audit.html">Amiga GFA BASIC 3.5 — inherited statement and operator evidence</a></li><li><a href="amiga-gfa-basic-35-example-used-statements-audit.html">Amiga GFA BASIC 3.5 — inherited statements used in examples</a></li><li><a href="amiga-gfa-basic-35-base-statement-use-audit.html">Amiga GFA BASIC 3.5 — inherited statement evidence from the interpreter addendum</a></li></ul></nav>
+    <main class="docs-content">
+      <article>
+        <h1>Amiga GFA BASIC base-manual I/O, graphics, event, and advanced-programming extraction</h1>
+        <p class="docs-meta"><span>Research Note</span></p>
+        <h1 id="io-graphics-event-and-advanced-programming-forms">I/O, graphics, event, and advanced-programming forms</h1>
+<blockquote>
+<p>Source-derived chapter inventory from the 3.0 base text included in the supplied <em>GFA BASIC 3.5 Interpreter</em> manual. The manual's opening note says it was originally printed for version 3.0 and that Chapter 13 alone is the 3.5 addendum. Therefore, this extraction is evidence for the documented 3.0 base language, <strong>not by itself proof of availability or identical behavior in GFA BASIC 3.5</strong>.</p>
+</blockquote>
+<h2 id="scope-and-transcription-policy">Scope and transcription policy</h2>
+<p>This note covers Chapters 5, 6, 8, 9, and 10. Names and page locators below follow the printed contents and chapter headings. Compound headings are retained as groups where the contents page groups related forms. This is a heading-level extraction: it does not infer undocumented signatures or semantics from names alone. Printed page references are manual page labels, not PDF viewer page numbers.</p>
+<h2 id="chapter-5-input-and-output">Chapter 5 — Input and output</h2>
+<table>
+<thead>
+<tr>
+<th>Manual heading / forms</th>
+<th style="text-align:right">Printed pages</th>
+<th>Source scope</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>INKEY$</code></td>
+<td style="text-align:right">5-2</td>
+<td>Keyboard character input</td>
+</tr>
+<tr>
+<td><code>INPUT</code></td>
+<td style="text-align:right">5-3</td>
+<td>Interactive variable input</td>
+</tr>
+<tr>
+<td><code>LINE INPUT</code></td>
+<td style="text-align:right">5-5</td>
+<td>Line-oriented string input</td>
+</tr>
+<tr>
+<td><code>FORM INPUT</code></td>
+<td style="text-align:right">5-6</td>
+<td>Bounded string input</td>
+</tr>
+<tr>
+<td><code>PRINT</code></td>
+<td style="text-align:right">5-7</td>
+<td>Screen output and cursor positioning</td>
+</tr>
+<tr>
+<td><code>PRINT USING</code></td>
+<td style="text-align:right">5-9</td>
+<td>Formatted output</td>
+</tr>
+<tr>
+<td><code>MODE</code></td>
+<td style="text-align:right">5-11</td>
+<td>Numeric output formatting mode</td>
+</tr>
+<tr>
+<td><code>DEFNUM</code></td>
+<td style="text-align:right">5-12</td>
+<td>Default numeric output precision</td>
+</tr>
+<tr>
+<td><code>CRSCOL</code>, <code>CRSLIN</code>, <code>POS</code>, <code>TAB</code>, <code>HTAB</code>, <code>VTAB</code></td>
+<td style="text-align:right">5-13</td>
+<td>Cursor position and tabulation</td>
+</tr>
+<tr>
+<td><code>DATA</code>, <code>READ</code>, <code>RESTORE</code></td>
+<td style="text-align:right">5-15</td>
+<td>Reading constants embedded in a program</td>
+</tr>
+<tr>
+<td><code>MOUSE</code>, <code>MOUSEX</code>, <code>MOUSEY</code>, <code>MOUSEK</code></td>
+<td style="text-align:right">5-17</td>
+<td>Mouse position and button state</td>
+</tr>
+<tr>
+<td><code>LPRINT</code>, <code>LPOS</code></td>
+<td style="text-align:right">5-19</td>
+<td>Printer output and printer cursor position</td>
+</tr>
+<tr>
+<td><code>HARDCOPY</code></td>
+<td style="text-align:right">5-20</td>
+<td>Screen/window hardcopy</td>
+</tr>
+<tr>
+<td><code>SOUND</code>, <code>WAVE</code></td>
+<td style="text-align:right">5-22</td>
+<td>Sound output and waveform definition</td>
+</tr>
+</tbody>
+</table>
+<h2 id="chapter-6-disk-handling-and-file-organization">Chapter 6 — Disk handling and file organization</h2>
+<table>
+<thead>
+<tr>
+<th>Manual heading / forms</th>
+<th style="text-align:right">Printed pages</th>
+<th>Source scope</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>File specification</td>
+<td style="text-align:right">6-2</td>
+<td>Path and file naming conventions; explanatory section</td>
+</tr>
+<tr>
+<td>Random access</td>
+<td style="text-align:right">6-3</td>
+<td>Records and fields; explanatory section</td>
+</tr>
+<tr>
+<td><code>CHDIR</code>, <code>DIR$</code>, <code>DFREE</code></td>
+<td style="text-align:right">6-4</td>
+<td>Current directory and free disk space</td>
+</tr>
+<tr>
+<td><code>DIR</code>, <code>FILES</code></td>
+<td style="text-align:right">6-6</td>
+<td>Directory listings</td>
+</tr>
+<tr>
+<td><code>EXIST</code></td>
+<td style="text-align:right">6-7</td>
+<td>File existence test</td>
+</tr>
+<tr>
+<td><code>OPEN</code></td>
+<td style="text-align:right">6-8</td>
+<td>Open file/device channel</td>
+</tr>
+<tr>
+<td><code>LOF</code>, <code>LOC</code>, <code>EOF</code>, <code>CLOSE</code>, <code>TOUCH</code></td>
+<td style="text-align:right">6-9</td>
+<td>File length, position, end-of-file, closing, and timestamp</td>
+</tr>
+<tr>
+<td><code>NAME</code>, <code>RENAME</code>, <code>KILL</code></td>
+<td style="text-align:right">6-11</td>
+<td>Rename and delete files</td>
+</tr>
+<tr>
+<td><code>BLOAD</code>, <code>BSAVE</code>, <code>BGET</code>, <code>BPUT</code></td>
+<td style="text-align:right">6-12</td>
+<td>Binary file and memory transfer</td>
+</tr>
+<tr>
+<td><code>INP</code>, <code>OUT</code></td>
+<td style="text-align:right">6-13</td>
+<td>Byte input/output on an opened channel</td>
+</tr>
+<tr>
+<td><code>INPUT$()</code></td>
+<td style="text-align:right">6-14</td>
+<td>Read a character string from keyboard or channel</td>
+</tr>
+<tr>
+<td><code>INPUT#</code>, <code>LINE INPUT</code></td>
+<td style="text-align:right">6-15</td>
+<td>Read from a file channel</td>
+</tr>
+<tr>
+<td><code>PRINT#</code>, <code>WRITE#</code></td>
+<td style="text-align:right">6-16</td>
+<td>Write to a file channel</td>
+</tr>
+<tr>
+<td><code>STORE</code>, <code>RECALL</code></td>
+<td style="text-align:right">6-17</td>
+<td>Store/restore string-array data</td>
+</tr>
+<tr>
+<td><code>SEEK</code>, <code>RELSEEK</code></td>
+<td style="text-align:right">6-19</td>
+<td>Position a file data pointer</td>
+</tr>
+<tr>
+<td><code>FIELD</code></td>
+<td style="text-align:right">6-20</td>
+<td>Define fields in random-access records</td>
+</tr>
+<tr>
+<td><code>GET</code>, <code>PUT</code>, <code>RECORD</code></td>
+<td style="text-align:right">6-21</td>
+<td>Read/write random-access records</td>
+</tr>
+</tbody>
+</table>
+<h2 id="chapter-8-graphics">Chapter 8 — Graphics</h2>
+<table>
+<thead>
+<tr>
+<th>Manual heading / forms</th>
+<th style="text-align:right">Printed pages</th>
+<th>Source scope</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SETCOLOR</code></td>
+<td style="text-align:right">8-2</td>
+<td>Color register configuration</td>
+</tr>
+<tr>
+<td><code>DEFFILL</code></td>
+<td style="text-align:right">8-3</td>
+<td>Fill color, style, and pattern</td>
+</tr>
+<tr>
+<td><code>BOUNDARY</code></td>
+<td style="text-align:right">8-5</td>
+<td>Automatic fill boundary control</td>
+</tr>
+<tr>
+<td><code>DEFLINE</code></td>
+<td style="text-align:right">8-6</td>
+<td>Line style definition</td>
+</tr>
+<tr>
+<td><code>GRAPHMODE</code></td>
+<td style="text-align:right">8-7</td>
+<td>Graphics combination mode</td>
+</tr>
+<tr>
+<td><code>RASTPORT</code></td>
+<td style="text-align:right">8-8</td>
+<td>Select drawing rastport</td>
+</tr>
+<tr>
+<td><code>CLIP</code></td>
+<td style="text-align:right">8-9</td>
+<td>Clipping region and offset</td>
+</tr>
+<tr>
+<td><code>PLOT</code>, <code>LINE</code>, <code>DRAW</code></td>
+<td style="text-align:right">8-10</td>
+<td>Point, line, and relative/connected drawing</td>
+</tr>
+<tr>
+<td><code>DRAW</code>, <code>SETDRAW</code></td>
+<td style="text-align:right">8-12</td>
+<td>Drawing pattern and drawing state</td>
+</tr>
+<tr>
+<td><code>BOX</code>, <code>PBOX</code></td>
+<td style="text-align:right">8-15</td>
+<td>Outlined and filled rectangles</td>
+</tr>
+<tr>
+<td><code>CIRCLE</code>, <code>ELLIPSE</code></td>
+<td style="text-align:right">8-16</td>
+<td>Circle and ellipse drawing</td>
+</tr>
+<tr>
+<td><code>POLYLINE</code></td>
+<td style="text-align:right">8-17</td>
+<td>Connected line segments</td>
+</tr>
+<tr>
+<td><code>POINT</code></td>
+<td style="text-align:right">8-18</td>
+<td>Read a pixel/color value</td>
+</tr>
+<tr>
+<td><code>FILL</code></td>
+<td style="text-align:right">8-19</td>
+<td>Area filling</td>
+</tr>
+<tr>
+<td><code>CLS</code></td>
+<td style="text-align:right">8-20</td>
+<td>Clear graphics area</td>
+</tr>
+<tr>
+<td><code>TEXT</code></td>
+<td style="text-align:right">8-21</td>
+<td>Text output in graphics context</td>
+</tr>
+<tr>
+<td><code>GET</code>, <code>PUT</code></td>
+<td style="text-align:right">8-22</td>
+<td>Capture and restore image regions</td>
+</tr>
+<tr>
+<td><code>VSYNC</code></td>
+<td style="text-align:right">8-23</td>
+<td>Synchronize with vertical blank</td>
+</tr>
+<tr>
+<td><code>DISPLAY</code></td>
+<td style="text-align:right">8-24</td>
+<td>Display bitmap/image data</td>
+</tr>
+</tbody>
+</table>
+<h2 id="chapter-9-event-menu-screen-and-window-handling">Chapter 9 — Event, menu, screen, and window handling</h2>
+<table>
+<thead>
+<tr>
+<th>Manual heading / forms</th>
+<th style="text-align:right">Printed pages</th>
+<th>Source scope</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Event handling</td>
+<td style="text-align:right">9-2</td>
+<td>Introductory event-handling section</td>
+</tr>
+<tr>
+<td>Pull-down menus</td>
+<td style="text-align:right">9-3</td>
+<td>Introductory menu section</td>
+</tr>
+<tr>
+<td><code>MENU</code></td>
+<td style="text-align:right">9-4</td>
+<td>Menu definition</td>
+</tr>
+<tr>
+<td><code>MENU()</code></td>
+<td style="text-align:right">9-5</td>
+<td>Menu-related function/form as printed in the contents</td>
+</tr>
+<tr>
+<td><code>ON MENU</code></td>
+<td style="text-align:right">9-9</td>
+<td>Menu event handler</td>
+</tr>
+<tr>
+<td><code>ON MENU...GOSUB</code></td>
+<td style="text-align:right">9-10</td>
+<td>Menu event subroutine handler</td>
+</tr>
+<tr>
+<td><code>MENU KILL</code>, <code>MENU X,Y</code></td>
+<td style="text-align:right">9-12</td>
+<td>Menu removal and item positioning</td>
+</tr>
+<tr>
+<td>Screen commands</td>
+<td style="text-align:right">9-14</td>
+<td>Introductory screen-command section</td>
+</tr>
+<tr>
+<td><code>OPENS</code></td>
+<td style="text-align:right">9-17</td>
+<td>Open a screen</td>
+</tr>
+<tr>
+<td><code>CLOSES</code></td>
+<td style="text-align:right">9-19</td>
+<td>Close a screen</td>
+</tr>
+<tr>
+<td><code>FRONTS</code>, <code>BACKS</code></td>
+<td style="text-align:right">9-20</td>
+<td>Screen depth ordering</td>
+</tr>
+<tr>
+<td><code>MOVES</code></td>
+<td style="text-align:right">9-21</td>
+<td>Move a screen</td>
+</tr>
+<tr>
+<td><code>TITLES</code></td>
+<td style="text-align:right">9-22</td>
+<td>Set screen title</td>
+</tr>
+<tr>
+<td><code>SETSPEN</code></td>
+<td style="text-align:right">9-23</td>
+<td>Set screen detail/block pens</td>
+</tr>
+<tr>
+<td><code>SCREEN</code></td>
+<td style="text-align:right">9-24</td>
+<td>Screen index/address lookup</td>
+</tr>
+<tr>
+<td>Window commands</td>
+<td style="text-align:right">9-25</td>
+<td>Introductory window-command section</td>
+</tr>
+<tr>
+<td><code>OPENW</code>, <code>CLOSEW</code></td>
+<td style="text-align:right">9-26</td>
+<td>Open and close a window</td>
+</tr>
+<tr>
+<td><code>CLEARW</code>, <code>TITLEW</code>, <code>FRONTW</code>, <code>BACKW</code>, <code>FULLW</code></td>
+<td style="text-align:right">9-32</td>
+<td>Clear, title, depth, and sizing state</td>
+</tr>
+<tr>
+<td><code>MOVEW</code>, <code>SIZEW</code>, <code>LIMITW</code></td>
+<td style="text-align:right">9-33</td>
+<td>Move, resize, and constrain a window</td>
+</tr>
+<tr>
+<td><code>SETWPEN</code></td>
+<td style="text-align:right">9-34</td>
+<td>Set window detail/block pens</td>
+</tr>
+<tr>
+<td><code>WINDOW</code></td>
+<td style="text-align:right">9-35</td>
+<td>Window index/address lookup</td>
+</tr>
+<tr>
+<td><code>ALERT</code></td>
+<td style="text-align:right">9-36</td>
+<td>Alert requester</td>
+</tr>
+<tr>
+<td><code>FILESELECT</code></td>
+<td style="text-align:right">9-37</td>
+<td>File selector requester</td>
+</tr>
+</tbody>
+</table>
+<h2 id="chapter-10-advanced-programming">Chapter 10 — Advanced programming</h2>
+<table>
+<thead>
+<tr>
+<th>Manual heading / forms</th>
+<th style="text-align:right">Printed pages</th>
+<th>Source scope</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CLI call / <code>_dosCmd$</code></td>
+<td style="text-align:right">10-2</td>
+<td>Start GFA-BASIC from CLI and inspect command-line context</td>
+</tr>
+<tr>
+<td><code>EXEC</code></td>
+<td style="text-align:right">10-3</td>
+<td>Start a CLI process</td>
+</tr>
+<tr>
+<td>Library variables</td>
+<td style="text-align:right">10-4</td>
+<td>Library base variables (<code>DosBase</code>, <code>IntBase</code>, <code>GfxBase</code>, <code>LayersBase</code>)</td>
+</tr>
+<tr>
+<td><code>SPRITE</code></td>
+<td style="text-align:right">10-5</td>
+<td>Hardware sprite data, positioning, and enable/disable</td>
+</tr>
+<tr>
+<td><code>STICK</code>, <code>STRIG</code></td>
+<td style="text-align:right">10-7</td>
+<td>Joystick/mouse-port state</td>
+</tr>
+<tr>
+<td><code>SAY</code>, <code>TRANSLATE$()</code></td>
+<td style="text-align:right">10-9</td>
+<td>Speech output and phoneme translation</td>
+</tr>
+<tr>
+<td>FD-files</td>
+<td style="text-align:right">10-10</td>
+<td>Include/use Amiga function definition files; explanatory/program example</td>
+</tr>
+<tr>
+<td>Blitter objects</td>
+<td style="text-align:right">10-13</td>
+<td>BOB concept and setup; explanatory section</td>
+</tr>
+<tr>
+<td><code>OBJECT</code> command family</td>
+<td style="text-align:right">10-14</td>
+<td>BOB/object positioning, acceleration, clipping, enablement, and movement</td>
+</tr>
+</tbody>
+</table>
+<h2 id="version-and-classification-boundary">Version and classification boundary</h2>
+<p>The supplied English manual explicitly identifies Chapters 1–12 as the 3.0 base text and Chapter 13 as the 3.5 addendum. Accordingly:</p>
+<ul>
+<li>Entries in this note are source-attested in the manual's 3.0 base chapters.</li>
+<li>A heading in the contents is evidence that the manual documents the form, not a complete grammar or runtime test.</li>
+<li>This note does not promote any entry into the repository's confirmed 3.5 language-core inventory.</li>
+<li>Chapter 13 additions must be evaluated separately; absence from these base chapters does not prove absence from 3.5.</li>
+</ul>
+<h2 id="source-locator">Source locator</h2>
+<p><em>GFA BASIC 3.5 Interpreter</em>, GFA Data Media, first printed May 1990. The title/contents matter on PDF pp. 3–10 state that the manual was originally printed for version 3.0 and Chapter 13 is the 3.5 addendum. Chapter 5 begins at printed p. 5-1 (PDF p. 131); Chapter 6 at p. 6-1 (PDF p. 153); Chapter 8 at PDF p. 231; Chapter 9 at p. 9-1 (PDF p. 255); and Chapter 10 at p. 10-1 (PDF p. 295).</p>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>
