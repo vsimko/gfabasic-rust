@@ -132,6 +132,7 @@ jobs:
           xdftool "$WORKING_ADF" write "tests/interpreter-probes/amiga-3.041u/regression-suite.LST" gfatest.LST
           xdftool "$WORKING_ADF" list / all > artifacts/amiga-cli-probe/prepared-adf-layout.txt
           xdftool "$WORKING_ADF" boot show > artifacts/amiga-cli-probe/prepared-adf-boot.txt
+          grep -F "bootable: True" artifacts/amiga-cli-probe/source-adf-boot.txt
           diff -u artifacts/amiga-cli-probe/source-adf-boot.txt artifacts/amiga-cli-probe/prepared-adf-boot.txt
           test "$(wc -c < "$WORKING_ADF")" -eq "$(wc -c < "$SOURCE_ADF")"
           sha256sum "$WORKING_ADF" > artifacts/amiga-cli-probe/prepared-adf-sha256.txt
