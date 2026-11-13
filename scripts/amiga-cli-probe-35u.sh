@@ -36,34 +36,24 @@ env -u SHELLOPTS xvfb-run -a -s "-screen 0 1024x768x24 +extension GLX" bash -c '
   printf "LIST_FLOPPIES\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}" >"$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/list-floppies-ipc.txt"
   printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/editor-before-merge.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 
-  # F2 brings the GFA editor to the front on the Amiga desktop.
+  # F2 opens the native ASCII Merge requester (GFA BASIC editor shortcut).
   printf "SEND_KEY\\t81\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
   sleep 0.2
   printf "SEND_KEY\\t81\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-  sleep 1
-  # Open the Merge requester by clicking the GFA BASIC Merge command.
-  # The menu is at (about 143,83) on the 752x552 test display; the
-  # cursor starts at (76,39), and IPC mouse deltas scale by ~0.38x/1.02y.
-  printf "SEND_MOUSE\\t171\\t43\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-  sleep 0.5
-  printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-  sleep 0.2
-  printf "SEND_MOUSE\\t0\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
   sleep 3
   printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-dialog.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 
-  # Move from the Merge menu click to the gfatest.LST row in the requester.
-  # On the 752x552 screen the row center is about (335,238).
-  printf "SEND_MOUSE\\t512\\t152\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+  # The gfatest.LST row center is about (335,238); pointer starts at (76,39).
+  printf "SEND_MOUSE\\t683\\t195\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
   sleep 0.5
   printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-file-row-pointer.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-  printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}" || true
+  printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
   sleep 0.2
-  printf "SEND_MOUSE\\t0\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}" || true
+  printf "SEND_MOUSE\\t0\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
   sleep 0.5
   printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-file-selected.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 
-  # AmigaOS requester shortcut: Left-Amiga-V activates the left gadget (Merge).
+  # Left-Amiga-V activates the requester's Merge gadget.
   printf "SEND_KEY\\t102\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
   sleep 0.2
   printf "SEND_KEY\\t52\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
@@ -71,24 +61,9 @@ env -u SHELLOPTS xvfb-run -a -s "-screen 0 1024x768x24 +extension GLX" bash -c '
   printf "SEND_KEY\\t52\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
   sleep 0.2
   printf "SEND_KEY\\t102\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-  sleep 1
+  sleep 3
   printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-shortcut.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
   tesseract "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-shortcut.png" stdout 2>/dev/null > "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-shortcut-ocr.txt"
-  # Restore the exact calibrated Merge-gadget movement from the
-  # green PR #343 workflow. The pointer is at the left edge of the
-  # requester after selecting gfatest.LST; these relative moves
-  # place it on the Merge gadget center (~323,420).
-  for _ in 1 2; do
-    printf "SEND_MOUSE\\t-177\\t183\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-    sleep 0.2
-  done
-  printf "SEND_MOUSE\\t206\\t198\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-  sleep 0.5
-  printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-gadget-pointer.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-  printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-  sleep 0.2
-  printf "SEND_MOUSE\\t0\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-  sleep 3
   printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-merge.png" | timeout 5s nc -U -N "${ipc_socket_path:-}" || true
 
   # Native editor Run shortcut: Shift+F10 (Amiga raw keycodes).
