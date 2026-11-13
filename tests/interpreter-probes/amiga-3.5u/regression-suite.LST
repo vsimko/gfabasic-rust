@@ -8,8 +8,12 @@ DIM dp%(100)
 DATA 1,2,3,4,5,6,7,8,9
 DATA 13,24,328,3242,1,0
 
+REM Capture runtime output on the writable DF0 test disk.
+OPEN "O",#1,"DF0:FACT.OUT"
+OPEN "O",#2,"DF0:GFATEST.OUT"
+
 REM 3.5 addendum pp. 13-34..13-35: save and restore DATA pointers.
-PRINT "DATA-AVAILABLE-INITIAL:";DATA
+PRINT #1,"DATA-AVAILABLE-INITIAL:";DATA
 i%=0
 DO WHILE DATA
   dp%(i%)=_DATA
