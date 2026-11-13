@@ -1,5 +1,19 @@
 #!/usr/bin/env bash
 set -euo pipefail
+cat > "$RUNNER_TEMP/amiga-cli-probe.uae" <<EOF
+use_gui=no
+cpu_type=68000
+chipset=ocs
+kickstart_rom_file=$KICKSTART_ROM_PATH
+chipmem_size=2
+fastmem_size=8
+bogomem_size=0
+gfx_width=640
+gfx_height=512
+gfx_fullscreen=false
+sound_output=0
+floppy0=$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/gfatest.adf
+EOF
 export AMIBERRY_LOG="$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/amiberry.log"
 export SDL_AUDIODRIVER=dummy
 env -u SHELLOPTS xvfb-run -a -s "-screen 0 1024x768x24 +extension GLX" bash -c '
