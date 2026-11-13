@@ -49,5 +49,26 @@ ELSE
   PRINT #2,"GFATEST:strings:FAIL"
 ENDIF
 
+REM 3.5 addendum p. 13-35: DATA pointer, _DATA, INC/DEC and DOWNTO.
+DIM dp%(5)
+DATA 11,22,33
+i%=0
+DO WHILE DATA
+  dp%(i%)=_DATA
+  INC i%
+  READ a
+LOOP
+DEC i%
+sum%=0
+FOR j%=i% DOWNTO 0
+  sum%=sum%+dp%(j%)
+NEXT j%
+PRINT #1,"DATA-POINTER:";i%;sum%
+IF i%=2 AND sum%=66
+  PRINT #2,"GFATEST:data-pointer:PASS"
+ELSE
+  PRINT #2,"GFATEST:data-pointer:FAIL"
+ENDIF
+
 CLOSE #2
 CLOSE #1
