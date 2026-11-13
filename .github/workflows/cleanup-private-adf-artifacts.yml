@@ -1,0 +1,33 @@
+name: Remove legacy Amiga artifacts containing private ADFs
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/cleanup-private-adf-artifacts.yml"
+  workflow_dispatch:
+
+permissions:
+  actions: write
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete legacy native-run artifacts that included modified ADF images
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          for artifact_id in \
+            14021312295 14021199221 14021439041 14022560192 \
+            14021512356 14021477328 14021598784 14022010506 \
+            14021103575 14021552010 14021132791 14021992885
+          do
+            if gh api --method DELETE "repos/${GITHUB_REPOSITORY}/actions/artifacts/${artifact_id}" >/dev/null; then
+              echo "Deleted legacy artifact ${artifact_id}"
+            else
+              echo "Legacy artifact ${artifact_id} was already absent"
+            fi
+          done
