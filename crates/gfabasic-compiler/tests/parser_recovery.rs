@@ -494,22 +494,48 @@ fn parser_preserves_ast_spans_across_crlf_line_endings() {
 }
 
 #[test]
-fn parser_rejects_signed_integer_rhs_and_recovers_at_the_next_line() {
-    // The current MVP accepts only unsigned decimal integer tokens as direct
-    // assignment values. This guards the implementation boundary; it does not
-    // claim that signed literals are invalid in the Amiga dialect.
-    let source = "x=-1\nz=42\n";
+fn parser_accepts_unary_negative_integer_assignments() {
+    // Pragmatic support for a 3.0 base-manual expression form. The current
+    // 3.5 addendum does not independently specify the general unary grammar.
+    let source = "x=-1\nLET y=-42\nz=7\n";
     let mut sources = SourceMap::new();
     let source_id = sources.add_source("signed-integer-rhs.LST", source);
 
-    let diagnostics = parse(source_id, source)
-        .expect_err("a signed expression is outside the current integer-literal subset");
+    let document =
+        parse_document(source_id, source).expect("negative integer assignments should parse");
+    assert_eq!(document.program.statements.len(), 3);
 
+    let expected = [
+        ("x", -1, "x=-1"),
+        ("y", -42, "LET y=-42"),
+        ("z", 7, "z=7"),
+    ];
+    for (statement, (expected_name, expected_value, expected_text)) in
+        document.program.statements.iter().zip(expected)
+    {
+        let (name, value, span) = match statement {
+            Statement::AssignInteger { name, value, span } => (name, value, *span),
+            other => panic!("expected integer assignment, got {other:?}"),
+        };
+        assert_eq!(name, expected_name);
+        assert_eq!(*value, expected_value);
+        assert_eq!(&source[span.start..span.end], expected_text);
+    }
+}
+
+#[test]
+fn parser_rejects_a_bare_unary_minus_and_recovers_at_the_next_line() {
+    let source = "x=-\nz=42\n";
+    let mut sources = SourceMap::new();
+    let source_id = sources.add_source("missing-negative-integer.LST", source);
+
+    let diagnostics = parse(source_id, source)
+        .expect_err("unary minus must be followed by an integer literal");
     assert_eq!(diagnostics.len(), 1);
     assert_eq!(diagnostics[0].code, "GFA-PARSE-0001");
     let span = diagnostics[0]
         .primary_span
-        .expect("unsupported signed RHS has a source span");
-    assert_eq!(&source[span.start..span.end], "-");
-    assert_eq!(sources.slice(span), Some("-"));
+        .expect("incomplete negative assignment has a source span");
+    assert_eq!(&source[span.start..span.end], "\n");
+    assert_eq!(sources.slice(span), Some("\n"));
 }
