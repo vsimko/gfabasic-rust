@@ -32,6 +32,11 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
 
+      - name: Validate GitHub Actions and native probe shell scripts
+        run: |
+          go run github.com/rhysd/actionlint/cmd/actionlint@v1.7.7 .github/workflows/*.yml
+          bash -n scripts/amiga-cli-probe-3041u.sh scripts/amiga-cli-probe-35u.sh
+
       - name: Cache Rust toolchain
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
         with:
