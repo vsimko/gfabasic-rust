@@ -1,6 +1,7 @@
 REM GFA BASIC 3.041U native interpreter regression batch.
 REM Common 3.0-era language subset; loaded through native Editor Merge (F2).
 REM Runtime evidence applies only to the exact 3.041U executable hash.
+REM IMPORTANT: OPEN file mode is uppercase letter "O" (Output), NOT digit "0".
 
 OPEN "O",#1,"DF0:GFATEST.OUT"
 
