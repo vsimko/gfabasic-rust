@@ -1,30 +1,21 @@
 #!/usr/bin/env python3
-"""Validate Agent Skill metadata, discovery links, and declared source dependencies."""
+"""Validate Agent Skill metadata, local links, and discovery entries."""
 from __future__ import annotations
 
 import argparse
 import re
-import sys
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
 
-ROOT = Path(__file__).resolve().parents[1]
-SKILLS = ROOT / ".agents" / "skills"
-INDEX = SKILLS / "README.md"
-AGENTS = ROOT / "AGENTS.md"
 LINK_RE = re.compile(r"(?<!!)\[[^\]]*\]\(([^)]+)\)")
 FRONTMATTER_RE = re.compile(r"\A---\s*\n(.*?)\n---\s*\n", re.S)
 
 
-def fail(errors: list[str], message: str) -> None:
-    errors.append(message)
-
-
-def validate_skill(path: Path, errors: list[str]) -> None:
+def validate_skill(path: Path, root: Path, errors: list[str]) -> None:
     text = path.read_text(encoding="utf-8")
     match = FRONTMATTER_RE.match(text)
     if not match:
-        fail(errors, f"{path.relative_to(ROOT)}: missing YAML frontmatter")
+        errors.append(f"{path.relative_to(root)}: missing YAML frontmatter")
         return
     fields = {}
     for line in match.group(1).splitlines():
@@ -33,61 +24,54 @@ def validate_skill(path: Path, errors: list[str]) -> None:
             fields[key.strip()] = value.strip().strip("\\"'")
     expected = path.parent.name
     if fields.get("name") != expected:
-        fail(errors, f"{path.relative_to(ROOT)}: frontmatter name must be {expected!r}")
+        errors.append(f"{path.relative_to(root)}: frontmatter name must be {expected!r}")
     if not fields.get("description"):
-        fail(errors, f"{path.relative_to(ROOT)}: description is required")
+        errors.append(f"{path.relative_to(root)}: description is required")
     if not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", expected):
-        fail(errors, f"{path.relative_to(ROOT)}: directory name is not kebab-case")
+        errors.append(f"{path.relative_to(root)}: directory name is not kebab-case")
 
     for target in LINK_RE.findall(text):
         parsed = urlsplit(target)
-        if parsed.scheme or target.startswith(("#", "mailto:")):
+        if parsed.scheme or target.startswith("#"):
             continue
         linked = unquote(parsed.path)
         if not linked:
             continue
         resolved = (path.parent / linked).resolve()
         try:
-            resolved.relative_to(ROOT)
+            resolved.relative_to(root)
         except ValueError:
-            fail(errors, f"{path.relative_to(ROOT)}: link escapes repository: {target}")
+            errors.append(f"{path.relative_to(root)}: link escapes repository: {target}")
             continue
         if not resolved.exists():
-            fail(errors, f"{path.relative_to(ROOT)}: broken link: {target}")
+            errors.append(f"{path.relative_to(root)}: broken link: {target}")
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--root", type=Path, default=ROOT)
-    args = parser.parse_args()
-    root = args.root.resolve()
-    global ROOT, SKILLS, INDEX, AGENTS
-    ROOT = root
-    SKILLS = root / ".agents" / "skills"
-    INDEX = SKILLS / "README.md"
-    AGENTS = root / "AGENTS.md"
+    parser.add_argument("--root", type=Path, default=Path(__file__).resolve().parents[1])
+    root = parser.parse_args().root.resolve()
+    skills = root / ".agents" / "skills"
     errors: list[str] = []
 
-    if not SKILLS.is_dir():
+    if not skills.is_dir():
         print("ERROR: .agents/skills directory is missing")
         return 1
-    skill_files = sorted(p for p in SKILLS.glob("*/SKILL.md") if p.is_file())
+    skill_files = sorted(p for p in skills.glob("*/SKILL.md") if p.is_file())
     if not skill_files:
-        fail(errors, "no SKILL.md files found")
+        errors.append("no SKILL.md files found")
     for path in skill_files:
-        validate_skill(path, errors)
+        validate_skill(path, root, errors)
 
-    if not INDEX.is_file():
-        fail(errors, ".agents/skills/README.md is missing")
-    if not AGENTS.is_file():
-        fail(errors, "AGENTS.md is missing")
-    for source in (INDEX, AGENTS):
-        if source.is_file():
-            content = source.read_text(encoding="utf-8")
-            for skill in skill_files:
-                rel = skill.relative_to(root).as_posix()
-                if rel not in content:
-                    fail(errors, f"{source.relative_to(root)} does not discover {rel}")
+    for source in (skills / "README.md", root / "AGENTS.md"):
+        if not source.is_file():
+            errors.append(f"{source.relative_to(root)} is missing")
+            continue
+        content = source.read_text(encoding="utf-8")
+        for skill in skill_files:
+            rel = skill.relative_to(root).as_posix()
+            if rel not in content:
+                errors.append(f"{source.relative_to(root)} does not discover {rel}")
 
     if errors:
         for error in errors:
