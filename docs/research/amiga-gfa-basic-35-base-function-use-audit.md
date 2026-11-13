@@ -11,6 +11,8 @@ This audit compares all 117 identifiers in `amiga-gfa-basic-functions.toml` with
 
 A function call in a 3.5-specific example is direct documentary evidence that the shown call form is usable in the 3.5 interpreter. An explicit documentation reference is also evidence for the referenced form. Neither proves that every overload, edge case, numeric boundary, or error behavior from the 3.0 base chapter was revalidated. Each function retains its original `base-manual-3.0` source origin; 3.5 evidence is recorded separately.
 
+The English manual's front matter explicitly says that the book was originally printed for version 3.0 and that Chapter 13 is the addendum describing the extra features provided in version 3.5. Although the supplied software is GFA BASIC 3.5, Chapters 1–12 are therefore treated as 3.0 documentation, not as independent 3.5 confirmation. The German book's Chapter 18 introduction says that the following commands are new in 3.5 and that the old commands were fundamentally unchanged (with minor bug fixes and performance improvements). This is useful general historical context, but it does not restate individual function signatures or overloads; this audit promotes inherited functions only when a 3.5-specific example or explicit reference supplies function-level evidence.
+
 The German book identifies the material in Chapter 18 as new in version 3.5. Its Chapter 18 examples therefore provide independent 3.5 evidence for inherited functions that are not used in the English addendum.
 
 ## Directly evidenced inherited functions
