@@ -1,0 +1,88 @@
+{
+  "id": "gfa.language.matrix.mat-print",
+  "name": "MAT PRINT",
+  "kind": "statement",
+  "namespace": "language-core",
+  "category": "matrix-operations",
+  "availability": [
+    {
+      "dialect": "amiga-gfa-basic-interpreter",
+      "versions": [
+        "3.5"
+      ]
+    }
+  ],
+  "syntax": [
+    {
+      "form": "MAT PRINT [#channel,] array()[, g, n]",
+      "contexts": [
+        "statement"
+      ],
+      "arguments": [
+        {
+          "name": "channel",
+          "type": "optional output channel",
+          "required": false
+        },
+        {
+          "name": "array",
+          "type": "previously dimensioned one- or two-dimensional floating-point field",
+          "required": true,
+          "passing": "array"
+        },
+        {
+          "name": "g",
+          "type": "optional integer-expression formatting width",
+          "required": false
+        },
+        {
+          "name": "n",
+          "type": "optional integer-expression decimal places",
+          "required": false
+        }
+      ]
+    }
+  ],
+  "signature": {
+    "type": "no return value"
+  },
+  "semantics": {
+    "summary": "Outputs a vector on one row with comma-separated elements, or a matrix with a rowfeed after each row. Output may be redirected to a channel; optional g and n formatting follows STR$(x,g,n).",
+    "side-effects": [
+      "Writes formatted numeric output to the selected screen or output channel."
+    ],
+    "errors": []
+  },
+  "evidence": {
+    "source-scope": "amiga-3.5-addendum",
+    "status": "book-documented",
+    "sources": [
+      "AM-INTERPRETER-35"
+    ],
+    "printed-pages": [
+      "Chapter 13, printed pp. 13-5–13-6"
+    ],
+    "notes": [
+      "The optional channel and formatting arguments are documented in the addendum.",
+      "The printed page images were visually checked; this declaration is still marked book-documented because its behavior has not been independently cross-checked against a second primary witness or observed runtime."
+    ]
+  },
+  "implementation": {
+    "status": "not-implemented"
+  },
+  "support": [
+    {
+      "target": "x86_64-unknown-linux-gnu",
+      "classification": "unknown",
+      "conformance": "not-tested",
+      "tests": [],
+      "pending-reason": "No matrix output implementation or executable reference-interpreter conformance tests are registered."
+    }
+  ],
+  "docs": {
+    "path": "docs/research/amiga-gfa-basic-35-addendum-inventory.md",
+    "anchors": [
+      "3-linear-operations-on-numeric-fields"
+    ]
+  }
+}
