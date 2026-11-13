@@ -13,13 +13,14 @@ gfx_height=512
 gfx_fullscreen=false
 sound_output=0
 floppy0=$RUNNER_TEMP/gfatest.adf
+floppy1=$RUNNER_TEMP/gfa-basic-3.041u.adf
 EOF
 export AMIBERRY_LOG="$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/amiberry.log"
 export SDL_AUDIODRIVER=dummy
 env -u SHELLOPTS xvfb-run -a -s "-screen 0 1024x768x24 +extension GLX" bash -c '
   set +u
   set -eo pipefail
-  amiberry -G -f "$RUNNER_TEMP/amiga-cli-probe.uae" -0 "$RUNNER_TEMP/gfatest.adf" --log >"$AMIBERRY_LOG" 2>&1 &
+  amiberry -G -f "$RUNNER_TEMP/amiga-cli-probe.uae" -0 "$RUNNER_TEMP/gfatest.adf" -1 "$RUNNER_TEMP/gfa-basic-3.041u.adf" --log >"$AMIBERRY_LOG" 2>&1 &
   emulator_pid=$!
   cleanup() { kill "$emulator_pid" 2>/dev/null || true; wait "$emulator_pid" 2>/dev/null || true; }
   trap cleanup EXIT
@@ -31,7 +32,7 @@ env -u SHELLOPTS xvfb-run -a -s "-screen 0 1024x768x24 +extension GLX" bash -c '
   done
   test -n "$ipc_socket_path" || { cat "$AMIBERRY_LOG"; exit 1; }
   sleep 35
-  # Insert and verify the test ADF through Amiberry IPC.
+  # Verify that the test disk (DF0) and untouched distribution disk (DF1) are mounted.
   printf "INSERTFLOPPY\\t%s\\t0\\n" "$RUNNER_TEMP/gfatest.adf" | timeout 5s nc -U -N "${ipc_socket_path:-}" >"$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/insert-floppy-ipc.txt"
   printf "LIST_FLOPPIES\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}" >"$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/list-floppies-ipc.txt"
   printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/editor-before-merge.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
