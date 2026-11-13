@@ -44,16 +44,11 @@ env -u SHELLOPTS xvfb-run -a -s "-screen 0 1024x768x24 +extension GLX" bash -c '
   sleep 3
   printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-dialog.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 
-  # The requester already opens on DF0: the screenshot shows gfatest.LST
-  # as the second entry. Do not switch to DF1 (which only lists the
-  # distribution Startup-Sequence). Select the visible gfatest.LST row.
-  # F2 leaves the pointer near (80,40); the file row is near (320,216).
-  printf "SEND_MOUSE\\t240\\t176\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-  sleep 0.5
-  printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-file-row-pointer.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-  printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+  # DF0 is already selected and gfatest.LST is the second entry.
+  # Use the Amiga cursor-down key instead of fragile relative mouse motion.
+  printf "SEND_KEY\\t77\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
   sleep 0.2
-  printf "SEND_MOUSE\\t0\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+  printf "SEND_KEY\\t77\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
   sleep 0.5
   printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-file-selected.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 
