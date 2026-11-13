@@ -2,8 +2,6 @@ name: Amiga GFA BASIC 3.041U native Merge and Run
 
 on:
   push:
-    branches:
-      - main
     paths:
       - ".github/workflows/amiga-3041u-native-merge-run.yml"
       - "tests/interpreter-probes/amiga-3.041u/**"
@@ -18,10 +16,6 @@ on:
 
 permissions:
   contents: read
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
 
 jobs:
   cli-probe:
