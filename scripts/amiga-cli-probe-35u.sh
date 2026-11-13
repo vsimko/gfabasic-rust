@@ -97,8 +97,8 @@ env -u SHELLOPTS xvfb-run -a -s "-screen 0 1024x768x24 +extension GLX" bash -c '
     wait "$emulator_pid" || true
   fi
 '
-xdftool artifacts/amiga-cli-probe/gfatest.adf read FACT.OUT artifacts/amiga-cli-probe/fact-output.txt
-xdftool artifacts/amiga-cli-probe/gfatest.adf read GFATEST.OUT artifacts/amiga-cli-probe/gfatest-results.txt
+xdftool "$RUNNER_TEMP/gfatest.adf" read FACT.OUT artifacts/amiga-cli-probe/fact-output.txt
+xdftool "$RUNNER_TEMP/gfatest.adf" read GFATEST.OUT artifacts/amiga-cli-probe/gfatest-results.txt
 cat artifacts/amiga-cli-probe/fact-output.txt
 cat artifacts/amiga-cli-probe/gfatest-results.txt
 for diagnostic in insert-floppy-ipc.txt list-floppies-ipc.txt stdin-save.LST; do
