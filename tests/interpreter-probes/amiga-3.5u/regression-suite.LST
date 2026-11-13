@@ -3,6 +3,11 @@ REM Loaded as ASCII through the native Editor Merge (F2) command.
 REM This is a 3.5U runtime probe, not normative 3.5 conformance evidence.
 REM IMPORTANT: OPEN file mode is uppercase letter "O" (Output), NOT digit "0".
 
+REM 3.5 addendum pp. 13-34..13-35: save and restore DATA pointers.
+DIM dp%(100)
+DATA 1,2,3,4,5,6,7,8,9
+DATA 13,24,328,3242,1,0
+
 OPEN "O",#1,"DF0:FACT.OUT"
 OPEN "O",#2,"DF0:GFATEST.OUT"
 
@@ -50,22 +55,18 @@ ELSE
 ENDIF
 
 REM 3.5 addendum pp. 13-34..13-35: save and restore DATA pointers.
-DIM dp%(100)
-DATA 1,2,3,4,5,6,7,8,9
-DATA 13,24,328,3242,1,0
-PRINT #1,"DATA-INITIAL:";DATA;_DATA
 i%=0
 DO WHILE DATA
   dp%(i%)=_DATA
   INC i%
   READ a
 LOOP
-PRINT #1,"DATA-AFTER-SCAN:";i%;DATA;_DATA
 DEC i%
 sum%=0
 FOR j%=i% DOWNTO 0
   _DATA=dp%(j%)
   READ a
+  PRINT #1,"DATA-VALUE:";a
   sum%=sum%+a
 NEXT j%
 PRINT #1,"DATA-POINTER:";i%;sum%
