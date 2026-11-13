@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "status": "fresh",
+  "generated_at": "2026-11-13T07:42:25.768874+00:00",
+  "last_successful_at": "2026-11-13T07:42:25.768874+00:00",
+  "items": [
+    {
+      "type": "merged_pull_request",
+      "title": "Run native Amiberry probes against GFA BASIC 3.5U",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/518",
+      "number": 518,
+      "timestamp": "2026-11-13T07:36:28Z",
+      "summary": "PR #518 merged"
+    },
+    {
+      "type": "commit",
+      "title": "Run native Amiberry probes against GFA BASIC 3.5U",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/3520c37ccaff38ce90c1f163d4ef3cb2af77181a",
+      "number": null,
+      "timestamp": "2026-11-13T07:36:28Z",
+      "summary": "Commit 3520c37"
+    },
+    {
+      "type": "merged_pull_request",
+      "title": "Inventory private Amiga GFA BASIC media candidates",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/517",
+      "number": 517,
+      "timestamp": "2026-11-13T07:34:10Z",
+      "summary": "PR #517 merged"
+    },
+    {
+      "type": "commit",
+      "title": "Inventory private Amiga GFA BASIC media candidates",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/13f982071f541832409f0e2dae456fafebac00d5",
+      "number": null,
+      "timestamp": "2026-11-13T07:34:09Z",
+      "summary": "Commit 13f9820"
+    },
+    {
+      "type": "merged_pull_request",
+      "title": "Parse unary-negative integer assignments",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/516",
+      "number": 516,
+      "timestamp": "2026-11-13T07:15:09Z",
+      "summary": "PR #516 merged"
+    },
+    {
+      "type": "commit",
+      "title": "Parse unary-negative integer assignments",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/aebbc424331e88fea6340941a145f27d41f4a233",
+      "number": null,
+      "timestamp": "2026-11-13T07:15:08Z",
+      "summary": "Commit aebbc42"
+    },
+    {
+      "type": "merged_pull_request",
+      "title": "Implement GFA BASIC STR$ formatting helper",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/515",
+      "number": 515,
+      "timestamp": "2026-11-13T07:11:50Z",
+      "summary": "PR #515 merged"
+    },
+    {
+      "type": "commit",
+      "title": "Implement GFA BASIC STR$ formatting helper",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/139605b0c80d2efe6e2655f78ff2f3cbebeefca6",
+      "number": null,
+      "timestamp": "2026-11-13T07:11:50Z",
+      "summary": "Commit 139605b"
+    },
+    {
+      "type": "merged_pull_request",
+      "title": "Implement documented VAL shorthand radix prefixes",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/514",
+      "number": 514,
+      "timestamp": "2026-11-13T07:09:49Z",
+      "summary": "PR #514 merged"
+    },
+    {
+      "type": "commit",
+      "title": "Implement VAL shorthand radix prefixes",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/523733bb81db59ea89f42611a55ba12108860654",
+      "number": null,
+      "timestamp": "2026-11-13T07:09:48Z",
+      "summary": "Commit 523733b"
+    },
+    {
+      "type": "merged_pull_request",
+      "title": "Clarify the GFA BASIC 3.5 manual evidence boundary",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/513",
+      "number": 513,
+      "timestamp": "2026-11-13T06:32:27Z",
+      "summary": "PR #513 merged"
+    },
+    {
+      "type": "commit",
+      "title": "docs: clarify 3.5 manual evidence boundary (#513)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/e6aabd7d6f436d03ad1ae7c4f75c238c071642d6",
+      "number": null,
+      "timestamp": "2026-11-13T06:32:27Z",
+      "summary": "Commit e6aabd7"
+    }
+  ]
+}
