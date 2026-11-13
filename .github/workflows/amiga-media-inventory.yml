@@ -85,6 +85,56 @@ jobs:
             echo "No .adf files found in the uploaded ZIP archives." | tee artifacts/amiga-media-inventory/adf-filesystems.txt
           fi
 
+      - name: Extract and fingerprint interpreter and compiler candidates
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/amiga-media-inventory/executable-fingerprints
+          ADF_35U="$(find media/extracted/3.5U -type f -iname '*.adf' -print -quit)"
+          ADF_3041="$(find media/extracted/3.041 -type f -iname '*.adf' -print -quit)"
+          ADF_352_1="$(find media/extracted/3.52-disk1 -type f -iname '*.adf' -print -quit)"
+          ADF_352_2="$(find media/extracted/3.52-disk2 -type f -iname '*.adf' -print -quit)"
+
+          extract_and_report() {
+            local label="$1" image="$2" amiga_path="$3"
+            local output="artifacts/amiga-media-inventory/executable-fingerprints/$label"
+            mkdir -p "$output"
+            xdftool "$image" read "$amiga_path" "$output/$label"
+            {
+              echo "Candidate: $label"
+              echo "ADF: $image"
+              echo "Amiga path: $amiga_path"
+              wc -c "$output/$label"
+              sha256sum "$output/$label"
+              file "$output/$label"
+              printf 'Header bytes: '
+              od -An -tx1 -N4 "$output/$label"
+              echo "Version/component strings:"
+              strings -a "$output/$label" | grep -i -E 'GFA|BASIC|VERSION|3[.]0|3[.]5|3[.]52|INTERPRETER|COMPILER' | head -60 || true
+              echo
+            } >> artifacts/amiga-media-inventory/executable-fingerprints/REPORT.txt
+          }
+
+          extract_and_report "gfabasic-3.5u" "$ADF_35U" "GFABasic"
+          extract_and_report "gfabasro-3.5u" "$ADF_35U" "GFABasRo"
+          extract_and_report "gfa-bcom-3.5u" "$ADF_35U" "GFA_BCOM"
+          extract_and_report "gfabasic-3.041" "$ADF_3041" "gfabasic"
+          extract_and_report "gfabasro-3.041" "$ADF_3041" "gfabasro"
+          extract_and_report "gfabasic-3.52" "$ADF_352_1" "GFABasic"
+          extract_and_report "gfabasro-3.52" "$ADF_352_1" "GFABasRo"
+          extract_and_report "gfa-bcom-3.52" "$ADF_352_2" "GFA_BCOM"
+
+          # Record short identity-bearing documentation excerpts, not full manuals.
+          xdftool "$ADF_35U" type readme.gfa > "$RUNNER_TEMP/readme-3.5u.txt" || true
+          xdftool "$ADF_3041" type README.GFA > "$RUNNER_TEMP/readme-3.041.txt" || true
+          xdftool "$ADF_352_1" type README3.5.GFA > "$RUNNER_TEMP/readme-3.52-3.5.txt" || true
+          for readme in "$RUNNER_TEMP"/readme-*.txt; do
+            {
+              echo "===== $(basename "$readme") ====="
+              grep -i -E -C 1 'version|3[.]0|3[.]01|3[.]041|3[.]5|3[.]52|interpreter|compiler' "$readme" | head -100 || true
+              echo
+            } >> artifacts/amiga-media-inventory/executable-fingerprints/README-excerpts.txt
+          done
+
       - name: Publish metadata-only inventory artifact
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         with:
