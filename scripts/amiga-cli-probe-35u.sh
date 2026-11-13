@@ -42,7 +42,7 @@ image = ImageEnhance.Contrast(image).enhance(3)
 image.save("artifacts/amiga-cli-probe/after-merge-ocr-input.png")
 PY
 tesseract artifacts/amiga-cli-probe/after-merge-ocr-input.png stdout --psm 6 2>/dev/null | tee artifacts/amiga-cli-probe/after-merge-ocr.txt
-if ! grep -Fqi 'Merge File' artifacts/amiga-cli-probe/after-merge-ocr.txt && grep -Fqi 'FACT(1)' artifacts/amiga-cli-probe/after-merge-ocr.txt && grep -Fqi 'FACT(2)' artifacts/amiga-cli-probe/after-merge-ocr.txt; then
+if grep -Fqi 'DO WHILE' artifacts/amiga-cli-probe/after-merge-ocr.txt && grep -Fqi 'DATA' artifacts/amiga-cli-probe/after-merge-ocr.txt; then
   echo "EDITOR_MERGE_LST_CONTENT_VISIBLE=yes" | tee artifacts/amiga-cli-probe/result.txt
 else
   echo "EDITOR_MERGE_LST_CONTENT_VISIBLE=no" | tee artifacts/amiga-cli-probe/result.txt
