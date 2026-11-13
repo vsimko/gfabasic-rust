@@ -1,0 +1,157 @@
+name: Inventory private Amiga GFA BASIC media
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - ".github/workflows/amiga-media-inventory.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/amiga-media-inventory.yml"
+
+permissions:
+  contents: read
+  actions: write
+
+jobs:
+  inspect-private-media:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+
+      - name: Download and inventory private ZIP archives
+        env:
+          GFA_ASSETS_TOKEN: ${{ secrets.GFA_ASSETS_TOKEN }}
+        run: |
+          set -euo pipefail
+          test -n "$GFA_ASSETS_TOKEN"
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends unzip file
+          python3 -m pip install --break-system-packages amitools
+          mkdir -p media/{archives,extracted} artifacts/amiga-media-inventory
+          cat > "$RUNNER_TEMP/media.tsv" <<'EOF'
+          3.5U|GFA-BASIC v3.5U (1990)(GFA Systemtechnik)(DE)(Disk 1 of 2)[b corrupt files][WB].zip
+          3.041|GFA-BASIC v3.041 (1989-08-31)(GFA Systemtechnik).zip
+          3.52-disk1|GFA-BASIC v3.52 (1990)(GFA Systemtechnik)(DE)(Disk 1 of 2)[WB].zip
+          3.52-disk2|GFA-BASIC v3.52 (1990)(GFA Systemtechnik)(DE)(Disk 2 of 2).zip
+          EOF
+
+          while IFS='|' read -r label filename; do
+            encoded="$(python3 -c 'import sys,urllib.parse; print(urllib.parse.quote(sys.argv[1], safe=""))' "$filename")"
+            curl --fail --silent --show-error --location --retry 3 \
+              --header "Authorization: Bearer $GFA_ASSETS_TOKEN" \
+              --header "Accept: application/vnd.github.raw" \
+              "https://api.github.com/repos/vsimko/gfabasic-private-assets/contents/$encoded?ref=main" \
+              --output "media/archives/$label.zip"
+            printf '%s\t%s\t' "$label" "$filename" >> artifacts/amiga-media-inventory/archive-sha256.txt
+            sha256sum "media/archives/$label.zip" | cut -d' ' -f1 >> artifacts/amiga-media-inventory/archive-sha256.txt
+            mkdir -p "media/extracted/$label"
+            unzip -q "media/archives/$label.zip" -d "media/extracted/$label"
+            {
+              echo "## $label — $filename"
+              echo
+              echo '### ZIP entries'
+              unzip -Z1 "media/archives/$label.zip"
+              echo
+              echo '### Extracted files'
+              find "media/extracted/$label" -type f -printf '%P\t%s bytes\n' | sort
+              echo
+              echo '### File identification'
+              find "media/extracted/$label" -type f -print0 | xargs -0 -r file
+              echo
+            } >> artifacts/amiga-media-inventory/archive-contents.txt
+          done < "$RUNNER_TEMP/media.tsv"
+
+      - name: Inspect ADF filesystem contents
+        run: |
+          set -euo pipefail
+          {
+            while IFS= read -r -d '' image; do
+              echo "===== $image ====="
+              xdftool "$image" info || true
+              echo "--- root listing ---"
+              xdftool "$image" list / all || true
+              echo "--- boot block ---"
+              xdftool "$image" boot show || true
+              echo "--- likely version strings ---"
+              strings -a "$image" | grep -i -E 'GFA|BASIC|VERSION|3[.]0|3[.]5|3[.]52|INTERPRETER|COMPILER' | head -100 || true
+              echo
+            done < <(find media/extracted -type f -iname '*.adf' -print0 | sort -z)
+          } > artifacts/amiga-media-inventory/adf-filesystems.txt
+
+          if ! find media/extracted -type f -iname '*.adf' -print -quit | grep -q .; then
+            echo "No .adf files found in the uploaded ZIP archives." | tee artifacts/amiga-media-inventory/adf-filesystems.txt
+          fi
+
+      - name: Extract and fingerprint interpreter and compiler candidates
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/amiga-media-inventory/executable-fingerprints
+          ADF_35U="$(find media/extracted/3.5U -type f -iname '*.adf' -print -quit)"
+          ADF_3041="$(find media/extracted/3.041 -type f -iname '*.adf' -print -quit)"
+          ADF_352_1="$(find media/extracted/3.52-disk1 -type f -iname '*.adf' -print -quit)"
+          ADF_352_2="$(find media/extracted/3.52-disk2 -type f -iname '*.adf' -print -quit)"
+
+          extract_and_report() {
+            local label="$1" image="$2" amiga_path="$3"
+            local output="$RUNNER_TEMP/gfa-candidates/$label"
+            mkdir -p "$output"
+            xdftool "$image" read "$amiga_path" "$output/$label"
+            {
+              echo "Candidate: $label"
+              echo "ADF: $image"
+              echo "Amiga path: $amiga_path"
+              wc -c "$output/$label"
+              sha256sum "$output/$label"
+              file "$output/$label"
+              printf 'Header bytes: '
+              od -An -tx1 -N4 "$output/$label"
+              echo "Version/component strings:"
+              strings -a "$output/$label" | grep -i -E 'GFA|BASIC|VERSION|3[.]0|3[.]5|3[.]52|INTERPRETER|COMPILER' | head -60 || true
+              echo
+            } >> artifacts/amiga-media-inventory/executable-fingerprints/REPORT.txt
+          }
+
+          extract_and_report "gfabasic-3.5u" "$ADF_35U" "GFABasic"
+          extract_and_report "gfabasro-3.5u" "$ADF_35U" "GFABasRo"
+          extract_and_report "gfa-bcom-3.5u" "$ADF_35U" "GFA_BCOM"
+          extract_and_report "gfabasic-3.041" "$ADF_3041" "gfabasic"
+          extract_and_report "gfabasro-3.041" "$ADF_3041" "gfabasro"
+          extract_and_report "gfabasic-3.52" "$ADF_352_1" "GFABasic"
+          extract_and_report "gfabasro-3.52" "$ADF_352_1" "GFABasRo"
+          extract_and_report "gfa-bcom-3.52" "$ADF_352_2" "GFA_BCOM"
+
+          # Record short identity-bearing documentation excerpts, not full manuals.
+          xdftool "$ADF_35U" type readme.gfa > "$RUNNER_TEMP/readme-3.5u.txt" || true
+          xdftool "$ADF_3041" type README.GFA > "$RUNNER_TEMP/readme-3.041.txt" || true
+          xdftool "$ADF_352_1" type README3.5.GFA > "$RUNNER_TEMP/readme-3.52-3.5.txt" || true
+          for readme in "$RUNNER_TEMP"/readme-*.txt; do
+            {
+              echo "===== $(basename "$readme") ====="
+              grep -i -E -C 1 'version|3[.]0|3[.]01|3[.]041|3[.]5|3[.]52|interpreter|compiler' "$readme" | head -100 || true
+              echo
+            } >> artifacts/amiga-media-inventory/executable-fingerprints/README-excerpts.txt
+          done
+
+      - name: Publish metadata-only inventory artifact
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: amiga-media-inventory
+          path: artifacts/amiga-media-inventory/
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Remove earlier artifact containing extracted executable files
+        if: github.event_name == 'pull_request'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          artifact_api="repos/$GITHUB_REPOSITORY/actions/artifacts/14019035686"
+          if gh api "$artifact_api" >/dev/null 2>&1; then
+            gh api --silent --method DELETE "$artifact_api"
+          else
+            echo "The earlier artifact is already absent."
+          fi

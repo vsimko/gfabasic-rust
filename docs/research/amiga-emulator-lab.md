@@ -6,7 +6,7 @@ title: "Amiga emulator experiment lab"
 # Amiga emulator experiment lab
 
 - Tracking: [issue #66](https://github.com/vsimko/gfabasic-rust/issues/66).
-- Status: **procedure implemented and exercised against GFA BASIC 3.52; exact 3.5 interpreter validation remains blocked**.
+- Status: **3.5U and 3.52 media candidates are now available in the private assets repository; automated disk-image inventory and executable identification are pending**.
 - Purpose: define a repeatable and evidence-safe way to compare Amiga GFA BASIC interpreter/compiler behavior with the applicable manuals.
 - Non-goal: this document does not establish that an archive-labelled release is a particular interpreter or compiler version.
 
@@ -124,12 +124,16 @@ An “observed” result is not automatically a normative language rule. Keep th
 
 Historical initial status (2026-11-03): no GFA BASIC disk image had been obtained or executed at that point. This status was superseded by the automated workflow integration on `main` (2026-11-09).
 
-Current status (2026-11-10):
+Current status (2026-11-13):
 
 - The native Amiberry Merge + Run workflow is integrated on `main` through PR #382.
-- A private, version-identified GFA BASIC 3.52 interpreter and licensed Kickstart asset are provisioned at workflow runtime; the executable and ROM are not committed or uploaded.
-- The `FACT(0..2)` native editor Merge + Run probe passed and produced `1 1 2`; see the [3.52 runtime baseline](amiga-gfa-basic-352-runtime-baseline.md) and [issue #66](https://github.com/vsimko/gfabasic-rust/issues/66).
-- These observations are specific to 3.52 and do not establish behavior for the selected 3.5 target.
-- Exact 3.5 interpreter media/build remains the blocker for normative 3.5 runtime observations.
+- The private media inventory has identified and fingerprinted three separate Amiga interpreter binaries:
+  - GFA BASIC 3.5 U: 135,956 bytes, SHA-256 `c5e9ffdb96b621307069d8f21a3282788386930bbc1ea679dfebe2caef5493ca`, embedded identity `GFA-BASIC Version 3.5 U`.
+  - GFA BASIC 3.52 D: 136,548 bytes, SHA-256 `fd80f6093e8d0163856af5849121e945e37051a2ad2a9053aa1930021783d962`, same binary already used by the existing workflow.
+  - GFA BASIC 3.041 U: 125,092 bytes, SHA-256 `f5185db2dfc99af11a15570120f0c40df9f8ad201c28b43cc0894bfaa9562759`.
+- All three extracted executables have a valid AmigaOS loadseg header. The 3.5U filesystem is readable but its boot-block checksum is invalid; its archive is disk 1 of 2 and warns of corrupt files. The 3.041 filesystem and boot block are valid.
+- The 3.52 executable has already been exercised by the native Amiberry Merge + Run probe: `FACT(0..2)` produced `1 1 2`. These observations remain explicitly versioned as 3.52D.
+- The metadata-only inventory workflow downloads private ZIPs, records hashes, and extracts candidate executables only to the ephemeral runner workspace. The uploaded artifact contains text reports and hashes, never disk images or executable bytes.
+- Next step: add a separate 3.5U native probe profile using the extracted 3.5U binary on a fresh bootable working volume; keep the existing 3.52D profile unchanged and add 3.041U as a separate 3.0-era comparison.
 
-Continue with isolated probes against 3.52 only when clearly labelled, and add a separate 3.5 observation record if lawful access to the exact 3.5 interpreter becomes available.
+See [the Amiga media candidate register](amiga-media-candidates.md) and [issue #66](https://github.com/vsimko/gfabasic-rust/issues/66).
