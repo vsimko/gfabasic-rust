@@ -13,6 +13,7 @@ on:
 
 permissions:
   contents: read
+  actions: write
 
 jobs:
   inspect-private-media:
@@ -96,7 +97,7 @@ jobs:
 
           extract_and_report() {
             local label="$1" image="$2" amiga_path="$3"
-            local output="artifacts/amiga-media-inventory/executable-fingerprints/$label"
+            local output="$RUNNER_TEMP/gfa-candidates/$label"
             mkdir -p "$output"
             xdftool "$image" read "$amiga_path" "$output/$label"
             {
@@ -142,3 +143,11 @@ jobs:
           path: artifacts/amiga-media-inventory/
           if-no-files-found: error
           retention-days: 14
+
+      - name: Remove earlier artifact containing extracted executable files
+        if: github.event_name == 'pull_request'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api --silent --method DELETE \
+            "repos/$GITHUB_REPOSITORY/actions/artifacts/14019035686"
