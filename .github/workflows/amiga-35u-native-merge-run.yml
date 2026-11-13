@@ -91,52 +91,51 @@ jobs:
           command -v xdftool
           amiberry --version | tee artifacts/amiga-cli-probe/amiberry-version.txt
 
-      - name: Customize the original 3.5u ADF with fresh interpreter and tests
+      - name: Install the verified interpreter and our startup/tests into the original 3.5u ADF
         run: |
           set -euo pipefail
           SOURCE_ADF="$RUNNER_TEMP/gfa-basic-3.5u.adf"
-          UNPACK_ROOT="$RUNNER_TEMP/3.5u-source-unpacked"
-          mkdir -p "artifacts/amiga-cli-probe"
-          sha256sum "$SOURCE_ADF" > "artifacts/amiga-cli-probe/source-adf-sha256.txt"
-          xdftool "$SOURCE_ADF" list / all > "artifacts/amiga-cli-probe/source-adf-layout.txt"
-          xdftool "$SOURCE_ADF" boot show > "artifacts/amiga-cli-probe/source-adf-boot.txt"
-          xdftool "$SOURCE_ADF" unpack "$UNPACK_ROOT"
-          mapfile -t VOLUME_DIRS < <(find "$UNPACK_ROOT" -mindepth 1 -maxdepth 1 -type d -print)
-          test "${#VOLUME_DIRS[@]}" -eq 1 || { echo "Expected one filesystem volume in the source ADF"; find "$UNPACK_ROOT" -maxdepth 2 -print; exit 1; }
-          VOLUME_DIR="${VOLUME_DIRS[0]}"
-          mapfile -t INTERPRETERS < <(find "$VOLUME_DIR" -type f -iname 'GFABasic' -print)
-          test "${#INTERPRETERS[@]}" -eq 1 || { echo "Expected exactly one GFABasic in the source ADF"; find "$VOLUME_DIR" -maxdepth 3 -type f -print; exit 1; }
-          INTERPRETER_PATH="${INTERPRETERS[0]}"
-          # Replace the binary in-place, retaining its original path and the
-          # rest of the distribution disk's directory structure and metadata.
-          cp "amiga-volume/GFABasic" "$INTERPRETER_PATH"
-          S_DIR="$(find "$VOLUME_DIR" -type d -iname S -print -quit)"
-          if test -z "$S_DIR"; then
-            S_DIR="$VOLUME_DIR/S"
-            mkdir -p "$S_DIR"
+          WORKING_ADF="$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/gfatest.adf"
+          mkdir -p artifacts/amiga-cli-probe
+          sha256sum "$SOURCE_ADF" > artifacts/amiga-cli-probe/source-adf-sha256.txt
+          wc -c < "$SOURCE_ADF" > artifacts/amiga-cli-probe/source-adf-size.txt
+          xdftool "$SOURCE_ADF" list / all > artifacts/amiga-cli-probe/source-adf-layout.txt
+          xdftool "$SOURCE_ADF" boot show > artifacts/amiga-cli-probe/source-adf-boot.txt
+          # Start from the exact ADF extracted from the private ZIP. Do not
+          # format, synthesize, unpack or repack a replacement disk.
+          cp "$SOURCE_ADF" "$WORKING_ADF"
+          # Replace the original executable entry with the independently
+          # hash-verified executable extracted from that same source ADF.
+          xdftool "$WORKING_ADF" delete "GFABasic"
+          xdftool "$WORKING_ADF" write "amiga-volume/GFABasic" "GFABasic"
+          # Keep the original S directory if present; create it only if the
+          # distribution disk did not contain one.
+          if ! xdftool "$WORKING_ADF" list S > artifacts/amiga-cli-probe/source-s-directory.txt 2>&1; then
+            xdftool "$WORKING_ADF" makedir S
           fi
-          OLD_STARTUP="$(find "$VOLUME_DIR" -type f -iname Startup-Sequence -print -quit)"
-          if test -n "$OLD_STARTUP"; then rm "$OLD_STARTUP"; fi
-          cat > "$S_DIR/Startup-Sequence" <<'EOF'
+          if xdftool "$WORKING_ADF" list S | grep -qi 'Startup-Sequence'; then
+            xdftool "$WORKING_ADF" delete S/Startup-Sequence
+          fi
+          cat > "$RUNNER_TEMP/Startup-Sequence" <<'EOF'
           GFABasic
           EOF
-          cp "tests/interpreter-probes/amiga-3.5u/regression-suite.LST" "$VOLUME_DIR/gfatest.LST"
-          cp "$S_DIR/Startup-Sequence" "artifacts/amiga-cli-probe/Startup-Sequence.txt"
-          printf '%s\n' "$INTERPRETER_PATH" > "artifacts/amiga-cli-probe/interpreter-installed-path.txt"
-          printf '%s\n' "$VOLUME_DIR" > "artifacts/amiga-cli-probe/source-volume-name.txt"
-          # Repack the original disk filesystem. xdftool carries the original
-          # volume metadata and boot block forward; only the interpreter,
-          # Startup-Sequence and our regression listing are changed.
-          xdftool "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/gfatest.adf" pack "$VOLUME_DIR"
-          xdftool "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/gfatest.adf" list / all > "artifacts/amiga-cli-probe/prepared-adf-layout.txt"
-          xdftool "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/gfatest.adf" boot show > "artifacts/amiga-cli-probe/prepared-adf-boot.txt"
-          diff -u "artifacts/amiga-cli-probe/source-adf-boot.txt" "artifacts/amiga-cli-probe/prepared-adf-boot.txt"
-          sha256sum "artifacts/amiga-cli-probe/gfatest.adf" > "artifacts/amiga-cli-probe/prepared-adf-sha256.txt"
-          cp "tests/interpreter-probes/amiga-3.5u/regression-suite.LST" "artifacts/amiga-cli-probe/gfatest.LST"
-          grep -F "GFABasic" "artifacts/amiga-cli-probe/prepared-adf-layout.txt"
-          grep -F "gfatest.LST" "artifacts/amiga-cli-probe/prepared-adf-layout.txt"
-          grep -F "Startup-Sequence" "artifacts/amiga-cli-probe/prepared-adf-layout.txt"
-          cat "artifacts/amiga-cli-probe/Startup-Sequence.txt"
+          xdftool "$WORKING_ADF" write "$RUNNER_TEMP/Startup-Sequence" S/Startup-Sequence
+          if xdftool "$WORKING_ADF" list / | grep -qi 'gfatest.LST'; then
+            xdftool "$WORKING_ADF" delete gfatest.LST
+          fi
+          xdftool "$WORKING_ADF" write "tests/interpreter-probes/amiga-3.5u/regression-suite.LST" gfatest.LST
+          xdftool "$WORKING_ADF" list / all > artifacts/amiga-cli-probe/prepared-adf-layout.txt
+          xdftool "$WORKING_ADF" boot show > artifacts/amiga-cli-probe/prepared-adf-boot.txt
+          diff -u artifacts/amiga-cli-probe/source-adf-boot.txt artifacts/amiga-cli-probe/prepared-adf-boot.txt
+          test "$(wc -c < "$WORKING_ADF")" -eq "$(wc -c < "$SOURCE_ADF")"
+          sha256sum "$WORKING_ADF" > artifacts/amiga-cli-probe/prepared-adf-sha256.txt
+          cp "tests/interpreter-probes/amiga-3.5u/regression-suite.LST" artifacts/amiga-cli-probe/gfatest.LST
+          printf '%s\n' "GFABasic" > artifacts/amiga-cli-probe/interpreter-installed-path.txt
+          cp "$RUNNER_TEMP/Startup-Sequence" artifacts/amiga-cli-probe/Startup-Sequence.txt
+          grep -F "GFABasic" artifacts/amiga-cli-probe/prepared-adf-layout.txt
+          grep -F "gfatest.LST" artifacts/amiga-cli-probe/prepared-adf-layout.txt
+          grep -F "Startup-Sequence" artifacts/amiga-cli-probe/prepared-adf-layout.txt
+          cat artifacts/amiga-cli-probe/Startup-Sequence.txt
 
       - name: Merge textual LST in the GFA BASIC editor
         run: bash scripts/amiga-cli-probe-35u.sh
