@@ -1,0 +1,91 @@
+name: Inventory private Amiga GFA BASIC media
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - "research/amiga-disk-image-inventory"
+    paths:
+      - ".github/workflows/amiga-media-inventory.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  inspect-private-media:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+
+      - name: Download and inventory private ZIP archives
+        env:
+          GFA_ASSETS_TOKEN: ${{ secrets.GFA_ASSETS_TOKEN }}
+        run: |
+          set -euo pipefail
+          test -n "$GFA_ASSETS_TOKEN"
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends unzip file
+          python3 -m pip install --break-system-packages amitools
+          mkdir -p media/{archives,extracted} artifacts/amiga-media-inventory
+          cat > "$RUNNER_TEMP/media.tsv" <<'EOF'
+          3.5U|GFA-BASIC v3.5U (1990)(GFA Systemtechnik)(DE)(Disk 1 of 2)[b corrupt files][WB].zip
+          3.041|GFA-BASIC v3.041 (1989-08-31)(GFA Systemtechnik).zip
+          3.52-disk1|GFA-BASIC v3.52 (1990)(GFA Systemtechnik)(DE)(Disk 1 of 2)[WB].zip
+          3.52-disk2|GFA-BASIC v3.52 (1990)(GFA Systemtechnik)(DE)(Disk 2 of 2).zip
+          EOF
+
+          while IFS='|' read -r label filename; do
+            encoded="$(python3 -c 'import sys,urllib.parse; print(urllib.parse.quote(sys.argv[1], safe=""))' "$filename")"
+            curl --fail --silent --show-error --location --retry 3 \
+              --header "Authorization: Bearer $GFA_ASSETS_TOKEN" \
+              --header "Accept: application/vnd.github.raw" \
+              "https://api.github.com/repos/vsimko/gfabasic-private-assets/contents/$encoded?ref=main" \
+              --output "media/archives/$label.zip"
+            printf '%s\t%s\t' "$label" "$filename" >> artifacts/amiga-media-inventory/archive-sha256.txt
+            sha256sum "media/archives/$label.zip" | cut -d' ' -f1 >> artifacts/amiga-media-inventory/archive-sha256.txt
+            mkdir -p "media/extracted/$label"
+            unzip -q "media/archives/$label.zip" -d "media/extracted/$label"
+            {
+              echo "## $label — $filename"
+              echo
+              echo '### ZIP entries'
+              unzip -Z1 "media/archives/$label.zip"
+              echo
+              echo '### Extracted files'
+              find "media/extracted/$label" -type f -printf '%P\t%s bytes\n' | sort
+              echo
+              echo '### File identification'
+              find "media/extracted/$label" -type f -print0 | xargs -0 -r file
+              echo
+            } >> artifacts/amiga-media-inventory/archive-contents.txt
+          done < "$RUNNER_TEMP/media.tsv"
+
+      - name: Inspect ADF filesystem contents
+        run: |
+          set -euo pipefail
+          {
+            while IFS= read -r -d '' image; do
+              echo "===== $image ====="
+              xdftool "$image" info || true
+              echo "--- root listing ---"
+              xdftool "$image" list / all || true
+              echo "--- boot block ---"
+              xdftool "$image" boot show || true
+              echo "--- likely version strings ---"
+              strings -a "$image" | grep -i -E 'GFA|BASIC|VERSION|3[.]0|3[.]5|3[.]52|INTERPRETER|COMPILER' | head -100 || true
+              echo
+            done < <(find media/extracted -type f -iname '*.adf' -print0 | sort -z)
+          } > artifacts/amiga-media-inventory/adf-filesystems.txt
+
+          if ! find media/extracted -type f -iname '*.adf' -print -quit | grep -q .; then
+            echo "No .adf files found in the uploaded ZIP archives." | tee artifacts/amiga-media-inventory/adf-filesystems.txt
+          fi
+
+      - name: Publish metadata-only inventory artifact
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: amiga-media-inventory
+          path: artifacts/amiga-media-inventory/
+          if-no-files-found: error
+          retention-days: 14
