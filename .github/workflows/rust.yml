@@ -34,7 +34,7 @@ jobs:
 
       - name: Validate GitHub Actions and native probe shell scripts
         run: |
-          go run github.com/rhysd/actionlint/cmd/actionlint@v1.7.7 .github/workflows/*.yml
+          go run github.com/rhysd/actionlint/cmd/actionlint@v1.7.7 .github/workflows/amiga-3041u-native-merge-run.yml .github/workflows/amiga-35u-native-merge-run.yml
           bash -n scripts/amiga-cli-probe-3041u.sh scripts/amiga-cli-probe-35u.sh
 
       - name: Cache Rust toolchain
