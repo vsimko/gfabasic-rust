@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The first private-media inventory completed successfully on 2026-11-13. A follow-up extracted the candidate executables in the private workflow workspace, verified their AmigaOS loadseg headers, and recorded SHA-256 h…">
+  <title>Amiga GFA BASIC media candidates · GFA BASIC Rust documentation</title>
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body class="docs-site">
+  <header class="docs-header">
+    <a href="../../index.html">GFA BASIC Rust</a>
+    <span aria-hidden="true">/</span>
+    <a href="../index.html">Documentation</a>
+  </header>
+  <div class="docs-layout">
+    <nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home" href="index.html">Section index</a><ul><li><a href="amiga-gfa-basic-documentation-audit.html">Amiga GFA BASIC documentation coverage audit</a></li><li><a href="amiga-gfa-basic-command-catalogue.html">Amiga GFA BASIC command catalogue</a></li><li><a href="amiga-gfa-basic-german-book-command-api-extraction.html">German Amiga GFA-BASIC book: command and OS API extraction</a></li><li><a href="amiga-book-command-index-ocr-transcription.html">Appendix D — OCR transcription of the command index</a></li><li><a href="gfa-basic-command-index-ocr.html">GFA-BASIC command index — first-pass extraction</a></li><li><a href="amiga-gfa-basic-source-topic-index.html">Amiga GFA BASIC source and topic index</a></li><li><a href="amiga-book-515-page-extraction-audit.html">Amiga GFA-BASIC book — 515-page extraction audit</a></li><li><a href="amiga-book-chapters05-17-heading-harvest.html">Amiga book — command-heading harvest, chapters 5–17</a></li><li><a href="amiga-gfa-basic-functions.toml">Function inventory (117 unique names)</a></li><li><a href="amiga-gfa-basic-function-inventory.html">Amiga GFA BASIC 3.5 built-in function inventory</a></li><li><a href="amiga-base-manual-io-graphics-events-advanced.html">Amiga GFA BASIC base-manual I/O, graphics, event, and advanced-programming extraction</a></li><li><a href="amiga-base-manual-io-graphics-events-advanced-details.html">Amiga GFA BASIC base-manual I/O, graphics, event, and advanced-programming details</a></li><li><a href="amiga-base-manual-numeric-string-functions.html">Amiga GFA BASIC base-manual numeric and string function extraction</a></li><li><a href="amiga-gfa-basic-35-addendum-inventory.html">Amiga GFA-BASIC 3.5 interpreter addendum — extracted feature inventory</a></li><li><a href="amiga-gfa-basic-candidates.toml">3.5 candidate manifest</a></li><li><a href="amiga-gfa-basic-candidate-report.html">Amiga GFA BASIC 3.5 candidate verification report</a></li><li><a href="amiga-gfa-basic-language-population-policy.html">Amiga GFA BASIC language population policy</a></li><li><a href="amiga-gfa-basic-3.03-ocr-index.html">German Amiga GFA BASIC book: OCR index and edition notes</a></li><li><a href="amiga-runtime-ocr-audit.html">Amiga runtime workflow OCR audit</a></li><li><a href="README.html">Research materials</a></li><li><a href="amiga-gfa-test-output.html">Amiga GFA BASIC test output</a></li><li><a href="amiga-gfa-basic-dqh-source-inventory.html">Amiga GFA BASIC commands observed in dqh-amiga</a></li><li><a href="amiga-emulator-lab.html">Amiga emulator experiment lab</a></li><li><a href="amiga-media-candidates.html">Amiga GFA BASIC media candidates</a></li><li><a href="amiga-gfa-basic-35-lst-probes.html">Amiga GFA BASIC 3.5 interpreter probes from text listings</a></li><li><a href="amiga-gfa-basic-352-runtime-baseline.html">Amiga GFA BASIC 3.52 runtime baseline</a></li><li><a href="amiga-gfa-basic-binary-analysis.html">Amiga GFA-BASIC binary analysis</a></li><li><a href="amiga-base-manual-variable-array-conversion-functions.html">Amiga GFA BASIC base-manual variable, array, and conversion functions</a></li><li><a href="amiga-gfa-basic-chapter-7-program-handling-evidence.html">Amiga GFA BASIC Chapter 7 — program handling evidence</a></li><li><a href="amiga-gfa-basic-chapter-8-graphics-evidence.html">Amiga GFA BASIC Chapter 8 — graphics compatibility evidence</a></li><li><a href="amiga-gfa-basic-chapter-9-event-window-evidence.html">Amiga GFA BASIC Chapter 9 — event, menu, screen and window evidence</a></li><li><a href="amiga-gfa-basic-chapter-10-advanced-programming-evidence.html">Amiga GFA BASIC Chapter 10 — advanced programming evidence</a></li><li><a href="amiga-gfa-basic-chapter-11-system-routines-evidence.html">Amiga GFA BASIC Chapter 11 — system-routine evidence</a></li><li><a href="amiga-gfa-basic-chapter-12-appendices-index-evidence.html">Amiga GFA BASIC Chapter 12 — appendix and index evidence</a></li><li><a href="https://github.com/vsimko/gfabasic-rust/blob/main/scripts/validate_amiga_chapter_inventories.py">Chapter inventory validator</a></li><li><a href="amiga-gfa-basic-3.0-command-index.html">Amiga GFA BASIC 3.0 command index — grouped cross-check</a></li><li><a href="amiga-gfa-basic-3.0-statement-command-candidates.html">Amiga GFA BASIC 3.0 statement and command candidate catalogue</a></li><li><a href="amiga-gfa-basic-3.0-base-inventory.html">Amiga GFA BASIC 3.0 base-manual inventory</a></li><li><a href="amiga-gfa-basic-3.0-expressions-builtins-control-flow.html">Amiga GFA BASIC 3.0 expression, intrinsic and control-flow evidence</a></li><li><a href="amiga-gfa-basic-3.0-control-file-data-io.html">Amiga GFA BASIC 3.0 control, file and data I/O evidence</a></li><li><a href="amiga-gfa-basic-3.0-graphics-evidence.html">GFA BASIC 3.0 Amiga — graphics evidence</a></li><li><a href="amiga-gfa-basic-3.0-events-windows-evidence.html">GFA BASIC 3.0 Amiga — event, menu, screen and window evidence</a></li><li><a href="amiga-gfa-basic-3.0-system-routines-evidence.html">GFA BASIC 3.0 Amiga — operating-system routine evidence</a></li><li><a href="amiga-gfa-basic-3.0-advanced-programming-evidence.html">GFA BASIC 3.0 Amiga — advanced programming evidence</a></li><li><a href="amiga-gfa-basic-3.0-appendix-index-evidence.html">GFA BASIC 3.0 Amiga — appendix and command-index evidence</a></li><li><a href="amiga-gfa-basic-3.0-german-source-notes.html">German Amiga GFA BASIC 3.0 source — initial verification notes</a></li><li><a href="amiga-gfa-basic-3.0-procedure-error-details.html">GFA BASIC 3.0 Amiga — procedures, functions and error-flow evidence</a></li><li><a href="amiga-gfa-basic-3.0-screen-window-details.html">GFA BASIC 3.0 Amiga — screen and window command details</a></li><li><a href="amiga-gfa-basic-3.0-output-device-details.html">GFA BASIC 3.0 Amiga — output, cursor, mouse and sound evidence</a></li><li><a href="amiga-gfa-basic-3.0-menu-event-details.html">GFA BASIC 3.0 Amiga — menu and event details</a></li><li><a href="amiga-gfa-basic-3.0-bob-object-details.html">GFA BASIC 3.0 Amiga — BOB and OBJECT API evidence</a></li><li><a href="amiga-gfa-basic-3.0-source-format-editor-evidence.html">Amiga GFA BASIC 3.0 — source composition and editor evidence</a></li><li><a href="amiga-gfa-basic-35-primary-reference.html">Amiga GFA-BASIC 3.5 primary reference and target decision</a></li><li><a href="amiga-gfa-basic-35-german-book-crosscheck.html">Amiga GFA-BASIC 3.5 — independent German-book cross-check</a></li><li><a href="amiga-book-gfa35-chapter18-19-extraction.html">GFA-BASIC 3.5 additions documented in the Amiga book</a></li><li><a href="amiga-gfa-basic-35-editor-feature-audit.html">Amiga GFA BASIC 3.5 — editor feature audit</a></li><li><a href="amiga-gfa-basic-35-lexer-evidence.html">Amiga GFA BASIC 3.5 lexer evidence inventory</a></li><li><a href="amiga-gfa-basic-35-matrix-arithmetic-analysis-audit.html">Amiga GFA BASIC 3.5 — matrix arithmetic and analysis audit</a></li><li><a href="amiga-gfa-basic-35-matrix-io-copy-audit.html">Amiga GFA BASIC 3.5 — matrix I/O and copy declaration audit</a></li><li><a href="amiga-gfa-basic-35-five-declaration-audit.html">Amiga GFA BASIC 3.5 — five declaration-level audit blocks</a></li><li><a href="amiga-gfa-basic-35-five-more-declaration-audit.html">Amiga GFA BASIC 3.5 — five more declaration-level audit blocks</a></li><li><a href="amiga-gfa-basic-35-guru-declaration-audit.html">Amiga GFA BASIC 3.5 — GURU declaration audit</a></li><li><a href="atari-gfa-book-diskette.html">Atari GFA BASIC book diskette — source-corpus research notes</a></li><li><a href="atari-gfa-book-systematic-review.html">Systematic review of *Das große GFA-BASIC-Buch* (Atari ST)</a></li><li><a href="aminet-catalogue.html">Aminet GFA BASIC package survey</a></li><li><a href="gfalist-build-and-fixture-validation.html">gfalist build and fixture validation</a></li><li><a href="gfalist-format-vs-rust-frontend.html">gfalist format notes vs. the Rust frontend</a></li><li><a href="amiga-gfa-basic-35-base-function-use-audit.html">Amiga GFA BASIC 3.5 — inherited function evidence from both manuals</a></li><li><a href="amiga-gfa-basic-35-statement-operator-audit.html">Amiga GFA BASIC 3.5 — inherited statement and operator evidence</a></li><li><a href="amiga-gfa-basic-35-example-used-statements-audit.html">Amiga GFA BASIC 3.5 — inherited statements used in examples</a></li></ul></nav>
+    <main class="docs-content">
+      <article>
+        <h1>Amiga GFA BASIC media candidates</h1>
+        <p class="docs-meta"><span>Research Note</span></p>
+        <h1 id="amiga-gfa-basic-media-candidates">Amiga GFA BASIC media candidates</h1>
+<ul>
+<li>Tracking: <a href="https://github.com/vsimko/gfabasic-rust/issues/66">issue #66</a>.</li>
+<li>Private source repository: <code>vsimko/gfabasic-private-assets</code>.</li>
+<li>Inventory workflow: <a href="https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/amiga-media-inventory.yml">Amiga media inventory</a>.</li>
+<li>Last reviewed: 2026-11-13.</li>
+</ul>
+<h2 id="candidate-register">Candidate register</h2>
+<p>The first private-media inventory completed successfully on 2026-11-13. A follow-up extracted the candidate executables in the private workflow workspace, verified their AmigaOS loadseg headers, and recorded SHA-256 hashes. Only text metadata is retained as a workflow artifact; the extracted executable bytes are not published.</p>
+<table>
+<thead>
+<tr>
+<th>Private asset</th>
+<th>Filesystem and executable evidence</th>
+<th>Intended research role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GFA-BASIC v3.5U (1990)...(Disk 1 of 2)[b corrupt files][WB].zip</code></td>
+<td>ADF volume <code>GFA-DISK1</code>; contains <code>GFABasic</code> (135,956 bytes; SHA-256 <code>c5e9ffdb96b621307069d8f21a3282788386930bbc1ea679dfebe2caef5493ca</code>), <code>GFABasRo</code> (99,872 bytes; SHA-256 <code>5f4649c27635ecbfa1243646288ed7c23f8c8204408c68079feff4ba46de2cf6</code>), <code>GFA_BCOM</code> (89,480 bytes; SHA-256 <code>9f7f6e9161dfc0b025e12d14cd7eac901f9bd924b1a3bcd246708a009e47783e</code>), and a <code>libs</code> directory. The archive name warns of corrupt files and this is only disk 1 of 2. The filesystem is readable, although its boot-block checksum is invalid. The extracted interpreter is a valid AmigaOS loadseg executable and embeds “GFA-BASIC Version 3.5 U”; the compiler embeds “GFA-BASIC 3.5E Compiler”.</td>
+<td>Exact 3.5U interpreter candidate identified; runtime execution and disk 2 remain to be checked.</td>
+</tr>
+<tr>
+<td><code>GFA-BASIC v3.52 (1990)...(Disk 1 of 2)[WB].zip</code></td>
+<td>ADF volume <code>GFABASIC3.52</code>; contains <code>GFABasic</code> (136,548 bytes) and <code>GFABasRo</code> (100,464 bytes). The <code>GFABasic</code> is the same 136,548-byte binary as the existing private <code>GFABasic</code> (SHA-256 <code>fd80f6093e8d0163856af5849121e945e37051a2ad2a9053aa1930021783d962</code>) and embeds “GFA-BASIC Version 3.52 D”.</td>
+<td>Existing 3.52 interpreter baseline and strong later-version comparison profile for the 3.5 language target.</td>
+</tr>
+<tr>
+<td><code>GFA-BASIC v3.52 (1990)...(Disk 2 of 2).zip</code></td>
+<td>ADF volume <code>GFA_BCOM3.52</code>; contains <code>GFA_BCOM</code> (89,608 bytes; SHA-256 <code>ec31cf8b91e945f4eea90cf332b4fef4fe3246f59d7673733ec26a4d7fe49077</code>), libraries and linker support. The executable embeds “GFA-BASIC 3.52D Compiler”.</td>
+<td>Separate compiler profile; do not conflate it with the interpreter version.</td>
+</tr>
+<tr>
+<td><code>GFA-BASIC v3.041 (1989-08-31)(GFA Systemtechnik).zip</code></td>
+<td>ADF volume <code>GFABASIC</code>; contains <code>gfabasic</code> (125,092 bytes; SHA-256 <code>f5185db2dfc99af11a15570120f0c40df9f8ad201c28b43cc0894bfaa9562759</code>) and <code>gfabasro</code> (91,060 bytes; SHA-256 <code>11be94fd0c1c5b7306afccaae2bd716716bb58b698f28efc7f5929dcb3ffa353</code>). The extracted interpreter is a valid AmigaOS loadseg executable and embeds “GFA-BASIC Version 3.041 U”. Its boot block is valid.</td>
+<td>Identified Amiga GFA BASIC 3.041 interpreter candidate and practical 3.0-era baseline.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="version-interpretation">Version interpretation</h2>
+<p>The maintainer's pragmatic working model is supported in part by the disk contents:</p>
+<ul>
+<li>The extracted 3.5U interpreter embeds “GFA-BASIC Version 3.5 U”; this confirms the exact interpreter version identity from the disk image, not merely its archive filename.</li>
+<li>The existing 3.52 interpreter embeds “GFA-BASIC Version 3.52 D” and matches the binary already used by the project byte-for-byte. It remains a useful later-version comparison and pragmatic runtime target for the 3.5-era language specification.</li>
+<li>The v3.041 interpreter embeds “GFA-BASIC Version 3.041 U”, establishing a distinct 3.0-era baseline.</li>
+<li>The separate 3.52 disk 2 is the compiler distribution, with 3.52/3.52D strings. Interpreter and compiler version labels are not necessarily identical.</li>
+<li>The v3.041 image is an AmigaDOS disk with interpreter and run-only interpreter files; its README strings refer to version 3.041. It is a useful distinct 3.0-era reference.</li>
+<li>The 3.5U disk 1 contains the interpreter, run-only interpreter, and compiler; the extracted interpreter's own embedded version string confirms 3.5 U. The disk image is not bootable as supplied because its boot-block checksum is invalid, but its filesystem and executable files are readable.</li>
+</ul>
+<p>Recommended test profiles:</p>
+<ol>
+<li><strong>3.52 interpreter</strong> — primary practical runtime profile for the 3.5-era language target; continue the existing workflow and label every result 3.52.</li>
+<li><strong>3.5U interpreter</strong> — direct 3.5-era profile; execute the extracted binary and obtain/inspect disk 2 before claiming complete distribution coverage.</li>
+<li><strong>3.041 interpreter</strong> — 3.0-era comparison profile.</li>
+</ol>
+<p>Do not silently relabel a 3.52 observation as a 3.5U observation. Agreement between 3.52 and the 3.5 manuals is supporting compatibility evidence, not proof that every 3.5 and 3.52 behaviour is identical.</p>
+<h2 id="inventory-and-extraction-plan">Inventory and extraction plan</h2>
+<p>The metadata-only GitHub Actions workflow:</p>
+<ol>
+<li>Downloads the four ZIP archives from the private assets repository using <code>GFA_ASSETS_TOKEN</code>.</li>
+<li>Records SHA-256 hashes of the original ZIPs.</li>
+<li>Lists archive members and extracted files.</li>
+<li>Identifies ADF files and records filesystem metadata, root directory entries, boot block information, and likely embedded version strings.</li>
+<li>Publishes only text inventory reports as a short-lived Actions artifact; it does not publish the copyrighted disk images or extracted executable.</li>
+</ol>
+<p>After the initial inventory:</p>
+<ul>
+<li>The 3.5U, 3.041, and 3.52 ADF filesystems have been enumerated. Interpreter/compiler candidates were extracted to the ephemeral workflow workspace and fingerprinted; all identified executables have the AmigaOS loadseg header <code>00 00 03 f3</code>.</li>
+<li>The workflow records byte size, SHA-256, file type, header bytes, and version strings. Extracted binaries are kept under the runner's temporary directory and are not included in the uploaded artifact.</li>
+<li>Boot the 3.5U candidate under the same Amiberry/Kickstart profile as the existing 3.52 baseline where possible. Its invalid boot-block checksum may require copying the extracted interpreter onto a fresh working boot volume.</li>
+<li>Run the same small probe corpus against 3.5U, 3.52, and 3.041 and retain separate result directories.</li>
+<li>Obtain and inspect disk 2 of the 3.5U set before making claims about a complete distribution.</li>
+</ul>
+<h2 id="evidence-policy">Evidence policy</h2>
+<ul>
+<li>Archive filename and disk catalogue metadata are <strong>candidate identity evidence</strong>, not executable identity.</li>
+<li>A valid Amiga loadseg header and filesystem location help identify a binary, but do not by themselves prove its product version or whether it is interpreter/compiler/editor.</li>
+<li>A version banner/About screen plus matching disk provenance provides stronger component identity.</li>
+<li>Runtime output is observed evidence only for the exact executable hash, emulator, Kickstart, and disk setup recorded in that run.</li>
+<li>3.52 results can pragmatically guide implementation, but remain labelled 3.52. 3.5U runs should become the direct 3.5 evidence stream.</li>
+</ul>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>
