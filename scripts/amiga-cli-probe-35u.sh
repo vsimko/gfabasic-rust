@@ -70,7 +70,7 @@ env -u SHELLOPTS xvfb-run -a -s "-screen 0 1024x768x24 +extension GLX" bash -c '
   sleep 0.5
   printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-file-selected.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 
-  # Left-Amiga-V activates the requester's Merge gadget.
+  # Left-Amiga-V activates the Merge gadget in the requester.
   printf "SEND_KEY\\t102\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
   sleep 0.2
   printf "SEND_KEY\\t52\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
