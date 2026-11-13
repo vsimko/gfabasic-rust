@@ -1,0 +1,36 @@
+REM GFA BASIC 3.041U native interpreter regression batch.
+REM Common 3.0-era language subset; loaded through native Editor Merge (F2).
+REM Runtime evidence applies only to the exact 3.041U executable hash.
+
+OPEN "Output",#1,"DF0:GFATEST.OUT"
+
+REM Arithmetic precedence and grouping.
+a = 2 + 3 * 4
+b = (2 + 3) * 4
+IF a=14 AND b=20
+  PRINT #1,"GFATEST:arithmetic:PASS"
+ELSE
+  PRINT #1,"GFATEST:arithmetic:FAIL"
+ENDIF
+
+REM FOR/NEXT loop.
+sum = 0
+FOR i = 1 TO 4
+  sum = sum + i
+NEXT i
+IF sum=10
+  PRINT #1,"GFATEST:for-next:PASS"
+ELSE
+  PRINT #1,"GFATEST:for-next:FAIL"
+ENDIF
+
+REM String concatenation and LEFT$.
+s$ = "GFA" + " BASIC"
+t$ = LEFT$(s$,3)
+IF t$="GFA" AND s$="GFA BASIC"
+  PRINT #1,"GFATEST:strings:PASS"
+ELSE
+  PRINT #1,"GFATEST:strings:FAIL"
+ENDIF
+
+CLOSE #1
