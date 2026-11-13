@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - "research/amiga-disk-image-inventory"
+      - main
     paths:
       - ".github/workflows/amiga-media-inventory.yml"
 
