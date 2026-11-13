@@ -44,19 +44,21 @@ env -u SHELLOPTS xvfb-run -a -s "-screen 0 1024x768x24 +extension GLX" bash -c '
   sleep 3
   printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-dialog.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 
-  # DF0 is already selected and gfatest.LST is the second entry.
-  # Use the Amiga cursor-down key instead of fragile relative mouse motion.
-  printf "SEND_KEY\\t77\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+  # DF0 is already selected. Move the pointer from the top-left corner
+  # to the visible gfatest.LST row (about x=340,y=211 in the screenshot).
+  # Amiberry applies a bounded relative delta per IPC event, so split motion.
+  for _ in $(seq 1 4); do
+    printf "SEND_MOUSE\\t240\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+    sleep 0.1
+  done
+  printf "SEND_MOUSE\\t0\\t176\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+  sleep 0.1
+  printf "SEND_MOUSE\\t0\\t112\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+  sleep 0.5
+  printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-file-row-pointer.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+  printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
   sleep 0.2
-  printf "SEND_KEY\\t77\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-  sleep 0.2
-  printf "SEND_KEY\\t77\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-  sleep 0.2
-  printf "SEND_KEY\\t77\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-  sleep 0.2
-  printf "SEND_KEY\\t68\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-  sleep 0.2
-  printf "SEND_KEY\\t68\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+  printf "SEND_MOUSE\\t0\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
   sleep 0.5
   printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-file-selected.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 
