@@ -27,23 +27,25 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
 
-      - name: Download and verify private GFA BASIC interpreter
+      - name: Download and extract the original 3.52D disk image
         env:
           GFA_ASSETS_TOKEN: ${{ secrets.GFA_ASSETS_TOKEN }}
         run: |
           set -euo pipefail
           test -n "$GFA_ASSETS_TOKEN"
           mkdir -p amiga-volume/S artifacts/amiga-cli-probe
+          ARCHIVE_NAME='GFA-BASIC v3.52 (1990)(GFA Systemtechnik)(DE)(Disk 1 of 2)[WB].zip'
+          ARCHIVE_PATH_ENCODED="$(jq -rn --arg path "$ARCHIVE_NAME" '$path | @uri')"
           curl --fail --silent --show-error --location --retry 3 \
             --header "Authorization: Bearer $GFA_ASSETS_TOKEN" \
             --header "Accept: application/vnd.github.raw" \
-            "https://api.github.com/repos/vsimko/gfabasic-private-assets/contents/GFABasic?ref=main" \
-            --output amiga-volume/GFABasic
-          echo "fd80f6093e8d0163856af5849121e945e37051a2ad2a9053aa1930021783d962  amiga-volume/GFABasic" | sha256sum --check
-          test "$(wc -c < amiga-volume/GFABasic)" -eq 136548
-          printf '\x00\x00\x03\xf3' | cmp -n 4 - amiga-volume/GFABasic
-          file amiga-volume/GFABasic | tee artifacts/amiga-cli-probe/binary-info.txt
-          strings -a amiga-volume/GFABasic | grep -i -E 'MERGE|SAVE|LIST|DOSCMD|GFA.BASIC' | head -80 > artifacts/amiga-cli-probe/binary-strings.txt || true
+            "https://api.github.com/repos/vsimko/gfabasic-private-assets/contents/$ARCHIVE_PATH_ENCODED?ref=main" \
+            --output "$RUNNER_TEMP/gfa-basic-3.52d-disk1.zip"
+          mapfile -t ADF_MEMBERS < <(unzip -Z1 "$RUNNER_TEMP/gfa-basic-3.52d-disk1.zip" | grep -iE '\\.adf$')
+          test "${#ADF_MEMBERS[@]}" -eq 1 || { printf 'Expected exactly one ADF in archive, found %s\\n' "${#ADF_MEMBERS[@]}"; unzip -Z1 "$RUNNER_TEMP/gfa-basic-3.52d-disk1.zip"; exit 1; }
+          unzip -p "$RUNNER_TEMP/gfa-basic-3.52d-disk1.zip" "${ADF_MEMBERS[0]}" > artifacts/amiga-cli-probe/gfa-basic-3.52d-disk1.adf
+          test "$(wc -c < artifacts/amiga-cli-probe/gfa-basic-3.52d-disk1.adf)" -eq 901120
+          printf '%s\\n' "${ADF_MEMBERS[0]}" > artifacts/amiga-cli-probe/source-adf-member.txt
 
       - name: Download original Amiga Kickstart ROM
         env:
@@ -78,10 +80,20 @@ jobs:
           curl -fsSL https://packages.amiberry.com/gpg.key | sudo tee /usr/share/keyrings/amiberry-archive-keyring.gpg >/dev/null
           echo "deb [arch=amd64 signed-by=/usr/share/keyrings/amiberry-archive-keyring.gpg] https://packages.amiberry.com/apt noble main" | sudo tee /etc/apt/sources.list.d/amiberry.list >/dev/null
           sudo apt-get update
-          sudo apt-get install -y --no-install-recommends amiberry xvfb netcat-openbsd tesseract-ocr python3-pip python3-pil
+          sudo apt-get install -y --no-install-recommends amiberry xvfb netcat-openbsd tesseract-ocr python3-pip python3-pil unzip
           python3 -m pip install --break-system-packages amitools
           command -v xdftool
           amiberry --version | tee artifacts/amiga-cli-probe/amiberry-version.txt
+
+      - name: Extract and verify interpreter from the original ADF
+        run: |
+          set -euo pipefail
+          xdftool artifacts/amiga-cli-probe/gfa-basic-3.52d-disk1.adf read GFABasic amiga-volume/GFABasic
+          echo "fd80f6093e8d0163856af5849121e945e37051a2ad2a9053aa1930021783d962  amiga-volume/GFABasic" | sha256sum --check
+          test "$(wc -c < amiga-volume/GFABasic)" -eq 136548
+          printf '\\x00\\x00\\x03\\xf3' | cmp -n 4 - amiga-volume/GFABasic
+          file amiga-volume/GFABasic | tee artifacts/amiga-cli-probe/binary-info.txt
+          strings -a amiga-volume/GFABasic | grep -i -E 'MERGE|SAVE|LIST|DOSCMD|GFA.BASIC' | head -80 > artifacts/amiga-cli-probe/binary-strings.txt || true
 
       - name: Prepare CLI input and boot volume
         run: |
