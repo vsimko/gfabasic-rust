@@ -1,104 +1,104 @@
 {
   "schema_version": 1,
   "status": "fresh",
-  "generated_at": "2026-11-12T11:55:11.187168+00:00",
-  "last_successful_at": "2026-11-12T11:55:11.187168+00:00",
+  "generated_at": "2026-11-13T13:12:00.973288+00:00",
+  "last_successful_at": "2026-11-13T13:12:00.973288+00:00",
   "items": [
     {
       "type": "merged_pull_request",
-      "title": "Confirm inherited functions in the German GFA BASIC 3.5 chapters",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/506",
-      "number": 506,
-      "timestamp": "2026-11-12T11:40:39Z",
-      "summary": "PR #506 merged"
+      "title": "Document automatic GFA BASIC 3.5U probe trigger",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/519",
+      "number": 519,
+      "timestamp": "2026-11-13T12:23:00Z",
+      "summary": "PR #519 merged"
     },
     {
       "type": "commit",
-      "title": "Confirm inherited functions in the German GFA BASIC 3.5 chapters (#506)",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/0fc4b804e43e1d5227669e4a0b37f08f6b3ab47a",
+      "title": "Document automatic GFA BASIC 3.5U probe trigger",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/ec3b14d4dd7324e90835dc6603bdb23c5d759417",
       "number": null,
-      "timestamp": "2026-11-12T11:40:39Z",
-      "summary": "Commit 0fc4b80"
+      "timestamp": "2026-11-13T12:22:59Z",
+      "summary": "Commit ec3b14d"
     },
     {
       "type": "merged_pull_request",
-      "title": "Audit inherited functions used by the GFA BASIC 3.5 addendum",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/505",
-      "number": 505,
-      "timestamp": "2026-11-12T11:18:08Z",
-      "summary": "PR #505 merged"
+      "title": "Run native GFA probes from the original distribution ADF",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/521",
+      "number": 521,
+      "timestamp": "2026-11-13T11:56:02Z",
+      "summary": "PR #521 merged"
     },
     {
       "type": "commit",
-      "title": "Audit inherited functions used by the GFA BASIC 3.5 addendum (#505)",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/6a9c23e0dca52d82de6c79051f621a00d9b27f36",
+      "title": "Run native GFA probes from original distribution ADF",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/6bd0ddbac58a165aa33123462d4ad73053e50db0",
       "number": null,
-      "timestamp": "2026-11-12T11:18:08Z",
-      "summary": "Commit 6a9c23e"
+      "timestamp": "2026-11-13T11:56:02Z",
+      "summary": "Commit 6bd0ddb"
     },
     {
       "type": "merged_pull_request",
-      "title": "Guard the Amiga 3.5 built-in function registry boundary",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/503",
-      "number": 503,
-      "timestamp": "2026-11-12T10:53:59Z",
-      "summary": "PR #503 merged"
+      "title": "Extract GFA BASIC 3.52D from original zipped ADF",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/522",
+      "number": 522,
+      "timestamp": "2026-11-13T10:12:20Z",
+      "summary": "PR #522 merged"
     },
     {
       "type": "commit",
-      "title": "Guard the Amiga 3.5 built-in function registry boundary (#503)",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/c3ac92dcd210ab1eff149942ff10e5f6decefa2d",
+      "title": "Extract GFA BASIC 3.52D from original zipped ADF (#522)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/2ee49fac134ba34b2b03aedd13d807fe22ee61a7",
       "number": null,
-      "timestamp": "2026-11-12T10:53:59Z",
-      "summary": "Commit c3ac92d"
+      "timestamp": "2026-11-13T10:12:20Z",
+      "summary": "Commit 2ee49fa"
     },
     {
       "type": "merged_pull_request",
-      "title": "Enforce function inventory version evidence boundaries",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/504",
-      "number": 504,
-      "timestamp": "2026-11-12T10:51:02Z",
-      "summary": "PR #504 merged"
+      "title": "Add isolated GFA BASIC 3.041U native probes",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/520",
+      "number": 520,
+      "timestamp": "2026-11-13T08:05:15Z",
+      "summary": "PR #520 merged"
     },
     {
       "type": "commit",
-      "title": "Enforce function inventory version evidence boundaries",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/ce7308882f46e213713d9eeb63ece1ae09d7e3b6",
+      "title": "Add isolated GFA BASIC 3.041U native probes (#520)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/34edc83c25230d346ddd61bd9e1387184a746dc7",
       "number": null,
-      "timestamp": "2026-11-12T10:51:02Z",
-      "summary": "Commit ce73088"
+      "timestamp": "2026-11-13T08:05:15Z",
+      "summary": "Commit 34edc83"
     },
     {
       "type": "merged_pull_request",
-      "title": "Record independent German 3.5 evidence in candidate manifest",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/502",
-      "number": 502,
-      "timestamp": "2026-11-12T07:02:00Z",
-      "summary": "PR #502 merged"
+      "title": "Run native Amiberry probes against GFA BASIC 3.5U",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/518",
+      "number": 518,
+      "timestamp": "2026-11-13T07:36:28Z",
+      "summary": "PR #518 merged"
     },
     {
       "type": "commit",
-      "title": "Record independent German 3.5 evidence in candidate manifest (#502)",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/5715532865689332806c110b4adcfe3ab4a5fd66",
+      "title": "Run native Amiberry probes against GFA BASIC 3.5U",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/3520c37ccaff38ce90c1f163d4ef3cb2af77181a",
       "number": null,
-      "timestamp": "2026-11-12T07:01:59Z",
-      "summary": "Commit 5715532"
+      "timestamp": "2026-11-13T07:36:28Z",
+      "summary": "Commit 3520c37"
     },
     {
       "type": "merged_pull_request",
-      "title": "[Research] Complete remaining Chapter 2 memory command evidence",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/501",
-      "number": 501,
-      "timestamp": "2026-11-11T22:12:57Z",
-      "summary": "PR #501 merged"
+      "title": "Inventory private Amiga GFA BASIC media candidates",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/517",
+      "number": 517,
+      "timestamp": "2026-11-13T07:34:10Z",
+      "summary": "PR #517 merged"
     },
     {
       "type": "commit",
-      "title": "[Research] Complete remaining Chapter 2 memory command evidence (#501)",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/135ae00535cfb1ba65806fb759e5dc8723067bb9",
+      "title": "Inventory private Amiga GFA BASIC media candidates",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/13f982071f541832409f0e2dae456fafebac00d5",
       "number": null,
-      "timestamp": "2026-11-11T22:12:56Z",
-      "summary": "Commit 135ae00"
+      "timestamp": "2026-11-13T07:34:09Z",
+      "summary": "Commit 13f9820"
     }
   ]
 }
