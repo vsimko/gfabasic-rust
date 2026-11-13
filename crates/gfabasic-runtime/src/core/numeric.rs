@@ -74,34 +74,44 @@ pub fn val_with_length(input: &[u8]) -> (f64, usize) {
         return (0.0, 0);
     }
 
-    if input[start] == b'&' && start + 1 < input.len() {
-        let radix = match input[start + 1].to_ascii_uppercase() {
-            b'H' => 16_u32,
-            b'X' => 2_u32,
-            b'O' => 8_u32,
-            _ => 0,
-        };
-        if radix != 0 {
-            let mut index = start + 2;
-            let mut value = 0.0;
-            let mut digits = 0;
-            while index < input.len() {
-                let Some(digit) = digit_value(input[index]) else {
-                    break;
-                };
-                if digit >= radix {
-                    break;
-                }
-                value = value * f64::from(radix) + f64::from(digit);
-                digits += 1;
-                index += 1;
-            }
-            return if digits == 0 {
-                (0.0, 0)
-            } else {
-                (sign * value, index - token_start)
+    // The Amiga base manual documents both ampersand radix prefixes
+    // (&H, &X, &O) and the shorthand hexadecimal/binary forms ($ and %).
+    // These inherited forms remain 3.0-source candidates unless separately
+    // confirmed for the selected 3.5 interpreter.
+    let (radix, prefix_length) = match input[start] {
+        b'&' if start + 1 < input.len() => (
+            match input[start + 1].to_ascii_uppercase() {
+                b'H' => 16_u32,
+                b'X' => 2_u32,
+                b'O' => 8_u32,
+                _ => 0,
+            },
+            2,
+        ),
+        b'$' => (16_u32, 1),
+        b'%' => (2_u32, 1),
+        _ => (0, 0),
+    };
+    if radix != 0 {
+        let mut index = start + prefix_length;
+        let mut value = 0.0;
+        let mut digits = 0;
+        while index < input.len() {
+            let Some(digit) = digit_value(input[index]) else {
+                break;
             };
+            if digit >= radix {
+                break;
+            }
+            value = value * f64::from(radix) + f64::from(digit);
+            digits += 1;
+            index += 1;
         }
+        return if digits == 0 {
+            (0.0, 0)
+        } else {
+            (sign * value, index - token_start)
+        };
     }
 
     let number_start = start;
@@ -215,6 +225,18 @@ mod tests {
         assert_eq!(val_length(b"&HFFtail"), 4);
         assert_eq!(val_length(b"word123"), 0);
         assert_eq!(val_with_length(b"3.00 dollars"), (3.0, 4));
+    }
+
+    #[test]
+    fn val_accepts_documented_shorthand_hexadecimal_and_binary_prefixes() {
+        // These examples are present in the 3.0 base-manual VAL section.
+        // They are implemented pragmatically, not asserted as 3.5 conformance.
+        assert_eq!(val(b"$AA"), 170.0);
+        assert_eq!(val(b"%10101010"), 170.0);
+        assert_eq!(val_with_length(b"$AA-tail"), (170.0, 3));
+        assert_eq!(val_with_length(b"%10101010tail"), (170.0, 9));
+        assert_eq!(val(b"$"), 0.0);
+        assert_eq!(val(b"%"), 0.0);
     }
 
     #[test]
