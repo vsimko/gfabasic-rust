@@ -41,9 +41,11 @@ jobs:
             --header "Accept: application/vnd.github.raw" \
             "https://api.github.com/repos/vsimko/gfabasic-private-assets/contents/$ARCHIVE_PATH_ENCODED?ref=main" \
             --output "$RUNNER_TEMP/gfa-basic-3.52d-disk1.zip"
-          mapfile -t ADF_MEMBERS < <(unzip -Z1 "$RUNNER_TEMP/gfa-basic-3.52d-disk1.zip" | grep -iE '[.]adf$')
-          test "${#ADF_MEMBERS[@]}" -eq 1 || { printf 'Expected exactly one ADF in archive, found %s\n' "${#ADF_MEMBERS[@]}"; unzip -Z1 "$RUNNER_TEMP/gfa-basic-3.52d-disk1.zip"; exit 1; }
-          unzip -p "$RUNNER_TEMP/gfa-basic-3.52d-disk1.zip" "${ADF_MEMBERS[0]}" > artifacts/amiga-cli-probe/gfa-basic-3.52d-disk1.adf
+          mkdir -p "$RUNNER_TEMP/gfa-basic-3.52d-disk1"
+          unzip -q "$RUNNER_TEMP/gfa-basic-3.52d-disk1.zip" -d "$RUNNER_TEMP/gfa-basic-3.52d-disk1"
+          mapfile -d '' -t ADF_MEMBERS < <(find "$RUNNER_TEMP/gfa-basic-3.52d-disk1" -type f -iname '*.adf' -print0)
+          test "${#ADF_MEMBERS[@]}" -eq 1 || { printf 'Expected exactly one ADF in archive, found %s\n' "${#ADF_MEMBERS[@]}"; find "$RUNNER_TEMP/gfa-basic-3.52d-disk1" -type f -print; exit 1; }
+          cp "${ADF_MEMBERS[0]}" artifacts/amiga-cli-probe/gfa-basic-3.52d-disk1.adf
           test "$(wc -c < artifacts/amiga-cli-probe/gfa-basic-3.52d-disk1.adf)" -eq 901120
           printf '%s\n' "${ADF_MEMBERS[0]}" > artifacts/amiga-cli-probe/source-adf-member.txt
 
