@@ -82,7 +82,7 @@ class StaticDashboardTests(unittest.TestCase):
         self.assertIn("Linux x86-64", page)
         self.assertIn("Workspace", page)
         self.assertIn("Implemented 3.5 addendum API", page)
-        self.assertIn("0 / 28", page)
+        self.assertIn("0 / 36", page)
         self.assertIn("not the complete Amiga GFA BASIC 3.5 language API", page)
         self.assertIn("Roadmap progress", page)
         self.assertIn("Phase 1 · Foundation", page)
