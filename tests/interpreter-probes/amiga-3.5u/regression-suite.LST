@@ -77,6 +77,21 @@ ELSE
   PRINT #2,"GFATEST:strings:FAIL"
 ENDIF
 
+
+REM 3.5 addendum pp. 13-26..13-27: determinant of a square matrix.
+DIM detm(2,2)
+detm(1,1)=1
+detm(1,2)=2
+detm(2,1)=3
+detm(2,2)=4
+MAT DET detvalue=detm()
+PRINT #1,"MAT-DET:";detvalue
+IF detvalue=-2
+  PRINT #2,"GFATEST:matrix-det:PASS"
+ELSE
+  PRINT #2,"GFATEST:matrix-det:FAIL"
+ENDIF
+
 CLOSE #2
 CLOSE #1
 END
