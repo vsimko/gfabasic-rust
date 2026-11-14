@@ -7,6 +7,28 @@ from scripts.pr_gate import WORKFLOWS, expected_workflows
 
 
 FUZZ_WORKFLOW = ".github/workflows/fuzz.yml"
+NATIVE_WORKFLOW = ".github/workflows/amiga-35u-native-merge-run.yml"
+
+class NativeInterpreterProbePathTests(unittest.TestCase):
+    def test_profile_files_select_native_workflow_without_unrelated_fuzzing(self):
+        for path in (
+            "tests/interpreter-probes/amiga-3.5u/README.md",
+            "tests/interpreter-probes/amiga-3.5u/expected-ids.txt",
+            "tests/interpreter-probes/amiga-3.5u/regression-suite.LST",
+        ):
+            with self.subTest(path=path):
+                selected = expected_workflows([path])
+                self.assertIn(NATIVE_WORKFLOW, selected)
+                self.assertNotIn(FUZZ_WORKFLOW, selected)
+
+    def test_native_workflow_paths_match_pr_gate_classification(self):
+        root = Path(__file__).resolve().parents[2]
+        workflow_path = root / ".github" / "workflows" / "amiga-35u-native-merge-run.yml"
+        workflow = yaml.load(workflow_path.read_text(encoding="utf-8"), Loader=yaml.BaseLoader)
+        configured_paths = set(workflow["on"]["pull_request"]["paths"])
+        self.assertEqual(configured_paths, set(WORKFLOWS[NATIVE_WORKFLOW]))
+
+
 
 
 class FuzzWorkflowPathTests(unittest.TestCase):
