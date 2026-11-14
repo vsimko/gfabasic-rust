@@ -13,3 +13,5 @@ dqh-control-flow
 dqh-screen-window-lifecycle
 dqh-graphics-primitives
 dqh-clear-window
+dqh-get-put
+dqh-display-fronts
