@@ -42,10 +42,12 @@ sleep 0.5
 printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-file-selected.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 
 # The selected-row screenshot places the pointer near x=320,y=218.
-# Move to the center of the Merge gadget (about x=323,y=420), then click it.
-printf "SEND_MOUSE\\t0\\t112\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-sleep 0.1
-printf "SEND_MOUSE\\t0\\t90\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+# Move to the center of the Merge gadget (about x=323,y=420).
+# Amiberry bounds each relative mouse event; use repeated small increments.
+for _ in $(seq 1 4); do
+printf "SEND_MOUSE\\t0\\t50\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+sleep 0.15
+done
 sleep 0.3
 printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-gadget-pointer.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
