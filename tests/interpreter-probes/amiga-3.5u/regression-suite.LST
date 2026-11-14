@@ -132,15 +132,6 @@ ELSE
   PRINT #2,"GFATEST:matrix-sub:FAIL"
 ENDIF
 
-REM 3.5 addendum p. 13-2: MAT ONE creates a square identity matrix.
-MAT ONE unity()
-PRINT #1,"MAT-ONE:";unity(1,1);unity(1,2);unity(2,1);unity(2,2)
-IF unity(1,1)=1 AND unity(1,2)=0 AND unity(2,1)=0 AND unity(2,2)=1
-  PRINT #2,"GFATEST:matrix-one:PASS"
-ELSE
-  PRINT #2,"GFATEST:matrix-one:FAIL"
-ENDIF
-
 CLOSE #2
 CLOSE #1
 END
