@@ -6,6 +6,8 @@ on:
       - "experiment/amiga-cli-stdin-probe"
     paths:
       - ".github/workflows/amiga-native-merge-run.yml"
+      - "tests/interpreter-probes/amiga-3.52/**"
+      - "scripts/validate_gfatest_results.py"
   pull_request:
     paths:
       - ".github/workflows/amiga-native-merge-run.yml"
@@ -295,6 +297,8 @@ jobs:
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         with:
           name: amiga-gfa-basic-3.52-native-merge-run
-          path: artifacts/amiga-cli-probe/
+          path: |
+            artifacts/amiga-cli-probe/
+            !artifacts/amiga-cli-probe/*.adf
           if-no-files-found: warn
           retention-days: 7
