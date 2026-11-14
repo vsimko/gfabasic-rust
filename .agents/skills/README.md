@@ -4,7 +4,8 @@ Task-specific procedures for AI agents working in this repository. Read the matc
 
 | Skill | Use when | Canonical companion documentation |
 |---|---|---|
-| [amiga-gfa-basic-regression-testing](amiga-gfa-basic-regression-testing/SKILL.md) | Creating/debugging .LST probes and running native Amiberry Merge + Run tests | [Probe-writing guide](../../docs/testing/amiga-gfa-basic-probes.md) |
+| [amiga-gfa-basic-regression-testing](amiga-gfa-basic-regression-testing/SKILL.md) | Creating/debugging .LST probes and validating GFA BASIC behavior in native runs | [Probe-writing guide](../../docs/testing/amiga-gfa-basic-probes.md) |
+| [amiberry-emulator-control](amiberry-emulator-control/SKILL.md) | Amiberry process/configuration, UAE setup, IPC, input automation, screenshots, and emulator-level diagnostics | Existing Amiberry workflows and harness scripts under [scripts](../../scripts/) and [.github/workflows](../../.github/workflows/) |
 | [api-evidence-verification](api-evidence-verification/SKILL.md) | Reviewing API declarations, semantics, evidence packages, and review results | [AI-assisted API verification](../../docs/architecture/AI-VERIFICATION.md), [API registry](../../docs/architecture/API-REGISTRY.md) |
 | [amiga-gfa-basic-documentation-research](amiga-gfa-basic-documentation-research/SKILL.md) | Researching manuals, OCR, source provenance, API extraction, and version applicability | [Research index](../../docs/research/index.md), [source register](../../docs/reference-sources.md) |
 | [corpus-fixture-authoring](corpus-fixture-authoring/SKILL.md) | Adding/editing corpus fixtures, sidecars, manifest entries, and crosswalks | [Corpus contract](../../tests/corpus/README.md), [testing strategy](../../docs/architecture/TESTING.md) |
