@@ -34,7 +34,7 @@ jobs:
 
       - name: Validate every GitHub Actions workflow
         run: |
-          mapfile -t workflow_files < <(find .github/workflows -type f \\( -name '*.yml' -o -name '*.yaml' \\) -print | sort)
+          mapfile -t workflow_files < <(find .github/workflows -type f \( -name '*.yml' -o -name '*.yaml' \) -print | sort)
           test "${#workflow_files[@]}" -gt 0
           go run github.com/rhysd/actionlint/cmd/actionlint@v1.7.7 "${workflow_files[@]}"
 
