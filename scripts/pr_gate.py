@@ -29,7 +29,8 @@ WORKFLOWS = {
         ".github/workflows/rust.yml",
     ),
     ".github/workflows/fuzz.yml": (
-        ".github/workflows/fuzz.yml", "crates/gfabasic-compiler/src/source.rs",
+        ".github/workflows/fuzz.yml", "Cargo.toml", "Cargo.lock",
+        "crates/gfabasic-compiler/**", "crates/gfabasic-runtime/**",
         "docs/architecture/FUZZING.md", "fuzz/**", "rust-toolchain.toml",
     ),
     ".github/workflows/security-audit.yml": (
