@@ -20,7 +20,7 @@ Used heavily by DQH and suitable for exact result assertions:
 - Control flow: `IF/ELSE/ENDIF`, `SELECT/CASE/ENDSELECT`, `FOR/NEXT`, `WHILE/WEND`, `REPEAT/UNTIL`, `DO/LOOP`, `ON ... GOSUB`, `GOTO`, `GOSUB/RETURN`, `EXIT`.
 - Data/storage: `DIM`, indexed arrays, `DATA/READ`, `ERASE`, `LOCAL`, `CLR`, `INC`, `DEC`, `ADD`, `SUB`, `MUL`.
 
-The native probe now includes exact-result checks for DQH numeric/string primitives and WHILE, REPEAT and SELECT control flow.
+The native probe includes exact-result checks for DQH numeric/string primitives and WHILE, REPEAT and SELECT control flow.
 
 ## Priority 2 — graphics and screen/window lifecycle
 
@@ -29,7 +29,7 @@ Core to the game loop and rendering:
 - Drawing: `COLOR`, `SETCOLOR`, `BOX`, `PBOX`, `PCIRCLE`, `LINE`, `PLOT`, `GET`, `PUT`, `SCROLL`.
 - Screen/window: `OPENS`, `OPENW`, `CLEARW`, `CLOSEW`, `CLOSES`, `SCREEN()`, `WINDOW()`, `FRONTS`, `DISPLAY`, `RASTPORT`, `SETWPEN`, `SETSPEN`.
 
-Next tests should run in a dedicated native graphics fixture, use fixed palette and geometry, and verify command completion plus screenshot evidence. Avoid coupling pixel-level assertions to OCR.
+The first native graphics probe now checks fixed palette/geometry readback for PLOT, LINE, BOX, PBOX and PCIRCLE, plus screen/window address round-trips and CLEARW/CLOSEW/CLOSES lifecycle. It does not yet cover GET/PUT, SCROLL, FRONTS, DISPLAY or RASTPORT. Graphics expectations cite the supplied GFA BASIC 3.5 Interpreter manual's inherited base chapters (printed pp. 8-2, 8-10, 8-15–8-18, 9-17–9-20, 9-23–9-27, 9-32, 9-34–9-35); those chapters identify their original scope as GFA BASIC 3.0 Amiga, so the 3.5U run is retained as a separate runtime observation.
 
 ## Priority 3 — input, files and memory
 
@@ -50,6 +50,6 @@ DQH contains many project-defined procedures/functions (movement, menus, animati
 ## Follow-up
 
 1. Expand Priority 1 tests for remaining operators and branch forms.
-2. Add a graphics/window lifecycle fixture for Priority 2.
+2. Complete graphics coverage for GET/PUT, SCROLL, FRONTS, DISPLAY and RASTPORT.
 3. Add deterministic file and memory fixtures for Priority 3.
 4. Add scripted input and isolated OS integration tests for Priorities 3–4.
