@@ -21,7 +21,7 @@ class StaticDashboardTests(unittest.TestCase):
                 "source_dialect": "Amiga GFA BASIC 3.5",
             },
             "workspace_packages": [{"name": "compiler", "path": "crates/compiler"}],
-            "api_progress": {"implemented": 0, "total": 28, "percent": 0, "population": "Confirmed 3.5 addendum declarations only."},
+            "api_progress": {"implemented": 0, "total": 36, "percent": 0, "population": "Confirmed 3.5 addendum declarations only."},
             "roadmap_progress": [
                 {
                     "number": 1,
