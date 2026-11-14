@@ -3,3 +3,4 @@ arithmetic
 for-next
 strings
 data-pointer
+combinatorics
