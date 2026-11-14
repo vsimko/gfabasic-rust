@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The repository contains implementation code, architecture documents, research inventories, a roadmap, CI workflows, and a GitHub Pages site. These sources can drift apart. Validation must be cheap, deterministic, unde…">
+  <title>ADR 0013: Repository consistency validation · GFA BASIC Rust documentation</title>
+  <link rel="stylesheet" href="../../../styles.css">
+</head>
+<body class="docs-site">
+  <header class="docs-header">
+    <a href="../../../index.html">GFA BASIC Rust</a>
+    <span aria-hidden="true">/</span>
+    <a href="../../index.html">Documentation</a>
+  </header>
+  <div class="docs-layout">
+    <nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home" href="index.html">Section index</a><ul><li><a href="0001-documentation-and-architecture-records.html">ADR 0001: Documentation and architecture decision records</a></li><li><a href="0002-initial-rust-workspace.html">ADR 0002: Initial Rust workspace crate boundaries</a></li><li><a href="0003-target-model.html">ADR 0003: Host and compilation target model</a></li><li><a href="0004-api-profile-model.html">ADR 0004: API profile model</a></li><li><a href="0005-cli-and-project-configuration.html">ADR 0005: CLI and project configuration</a></li><li><a href="0006-api-registry.html">ADR 0006: API declaration registry</a></li><li><a href="0007-compiler-pipeline-and-ir.html">ADR 0007: Compiler pipeline and typed IR boundaries</a></li><li><a href="0008-initial-source-dialect-amiga-gfa-basic-3.0.html">ADR 0008: Initial source dialect — Amiga GFA BASIC interpreter 3.0</a></li><li><a href="0009-initial-source-dialect-amiga-gfa-basic-3.5.html">ADR 0009: Initial source dialect — Amiga GFA BASIC interpreter 3.5</a></li><li><a href="0010-versioning-and-compatibility-lifecycle.html">ADR 0010: Versioning and compatibility lifecycle</a></li><li><a href="0011-amiga-35-linux-sdl3-product-scope.html">ADR 0011: Product scope — Amiga GFA BASIC 3.5 to Linux x86-64 with SDL3</a></li><li><a href="0012-language-server-and-editor-integration.html">ADR 0012: Language server and editor integration</a></li><li><a href="0013-repository-consistency-validation.html">ADR 0013: Repository consistency validation</a></li><li><a href="0014-implementation-dashboard.html">ADR 0014: Repository implementation dashboard</a></li><li><a href="0015-listing-first-compiler-input.html">ADR 0015: Listing-first compiler input</a></li><li><a href="TEMPLATE.html">ADR NNNN: Title</a></li><li><a href="0016-okf-v02-documentation-bundle.html">ADR 0016: OKF v0.2 documentation bundle</a></li></ul></nav>
+    <main class="docs-content">
+      <article>
+        <h1>ADR 0013: Repository consistency validation</h1>
+        <p class="docs-meta"><span>Architecture Decision Record</span></p>
+        <h1 id="adr-0013-repository-consistency-validation">ADR 0013: Repository consistency validation</h1>
+<ul>
+<li>Status: Accepted</li>
+<li>Date: 2026-11-06</li>
+<li>Decision makers: Project maintainers</li>
+</ul>
+<h2 id="context">Context</h2>
+<p>The repository contains implementation code, architecture documents, research inventories, a roadmap, CI workflows, and a GitHub Pages site. These sources can drift apart. Validation must be cheap, deterministic, understandable, and must not become a second source of project truth.</p>
+<h2 id="decision">Decision</h2>
+<p>The initial tooling uses Python 3 standard library only, JSON rule files, a small explicit validator with a fixed set of check types, and standard-library unittest tests. No package installation is required. No YAML parser, Pydantic, pytest, Node.js, dynamic evaluation, shell execution from rules, arbitrary imports, or embedded executable code is permitted.</p>
+<p>Each rule has a stable unique ID, description, enabled flag, severity, check type, check-specific parameters, and an evidence/source-of-truth reference. The rule file is the editable inventory; Python defines the finite set of safe check types. Tuning an existing rule must not require editing the validator.</p>
+<p>Validation distinguishes evidence from inference. A passing consistency check is not proof that a language feature or compiler component is implemented. Unknown status must remain explicitly unknown.</p>
+<p>The rule format and maintenance process are documented in <a href="../VALIDATION.html">VALIDATION.md</a>. New check types require a concrete use case, tests, and documentation.</p>
+<h2 id="alternatives-considered">Alternatives considered</h2>
+<ul>
+<li>YAML: more comfortable for some edits, but requires a third-party parser; JSON is available in the standard library.</li>
+<li>Pydantic/jsonschema: richer schema validation, but adds dependency and installation overhead for a small schema.</li>
+<li>pytest: richer test experience, but unittest is sufficient and dependency-free.</li>
+<li>General-purpose rule engine/plugins: unnecessary abstraction and execution complexity.</li>
+<li>Python-coded rules: flexible but makes routine edits require code changes and permits arbitrary execution.</li>
+</ul>
+<h2 id="consequences">Consequences</h2>
+<ul>
+<li>CI needs only Python 3; no pip installation or dependency cache.</li>
+<li>Rule edits are ordinary JSON changes, reviewed separately from validator code.</li>
+<li>The fixed check catalog intentionally limits expressiveness; new capabilities require code, tests, and docs.</li>
+<li>The generator and validator may share a project model later, but descriptive text must not silently become authoritative status.</li>
+<li>Checks remain deterministic, offline, and limited to explicitly selected repository files.</li>
+</ul>
+<h2 id="evidence-and-references">Evidence and references</h2>
+<ul>
+<li>Python standard library: json, argparse, pathlib, unittest.</li>
+<li>Existing repository architecture and evidence policy in <a href="../README.html">../README.md</a>.</li>
+<li>Follow-up validator: <a href="https://github.com/vsimko/gfabasic-rust/issues/249">#249</a>.</li>
+<li>Project data generator: <a href="https://github.com/vsimko/gfabasic-rust/issues/250">#250</a>.</li>
+</ul>
+<h2 id="supersedes-superseded-by">Supersedes / superseded by</h2>
+<p>None.</p>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>
