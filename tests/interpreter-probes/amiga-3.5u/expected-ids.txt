@@ -8,3 +8,5 @@ matrix-inv
 matrix-add
 matrix-sub
 special-vars-clear
+dqh-core-primitives
+dqh-control-flow
