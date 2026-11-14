@@ -10,6 +10,7 @@ Before performing a matching task, read and follow its skill. Skills provide tas
 - For API registry evidence reviews, semantic verification, or agent review packages/results, use [`api-evidence-verification`](.agents/skills/api-evidence-verification/SKILL.md) and [AI-assisted API verification](docs/architecture/AI-VERIFICATION.md).
 - For historical Amiga GFA BASIC manual/book research, OCR/page-image review, command/API extraction, or version applicability, use [`amiga-gfa-basic-documentation-research`](.agents/skills/amiga-gfa-basic-documentation-research/SKILL.md) and [the research index](docs/research/index.md).
 - For adding or editing conformance-corpus fixtures, sidecars, or manifest entries, use [`corpus-fixture-authoring`](.agents/skills/corpus-fixture-authoring/SKILL.md) and [the corpus contract](tests/corpus/README.md).
+- For reviewing or debugging GitHub Actions workflows, triggers, permissions, artifacts, or CI failures, use [`github-actions-workflow-maintenance`](.agents/skills/github-actions-workflow-maintenance/SKILL.md).
 
 If more than one task type applies, use all relevant skills. Do not treat a skill as a replacement for reading the linked source-of-truth documentation.
 
