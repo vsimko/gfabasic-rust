@@ -4,7 +4,7 @@ REM This is a 3.5U runtime probe, not normative 3.5 conformance evidence.
 REM IMPORTANT: OPEN file mode is uppercase letter "O" (Output), NOT digit "0".
 
 REM 3.5 addendum pp. 13-34..13-35: save and restore DATA pointers.
-DIM dp%(100),detm(2,2)
+DIM dp%(100),detm(2,2),invsrc(2,2),invm(2,2),invcheck(2,2)
 REM Capture runtime output on the writable DF0 test disk.
 OPEN "O",#1,"DF0:FACT.OUT"
 OPEN "O",#2,"DF0:GFATEST.OUT"
@@ -77,7 +77,6 @@ ELSE
   PRINT #2,"GFATEST:strings:FAIL"
 ENDIF
 
-
 REM 3.5 addendum pp. 13-26..13-27: determinant of a square matrix.
 detm(1,1)=1
 detm(1,2)=2
@@ -89,6 +88,22 @@ IF detvalue=-2
   PRINT #2,"GFATEST:matrix-det:PASS"
 ELSE
   PRINT #2,"GFATEST:matrix-det:FAIL"
+ENDIF
+
+REM 3.5 addendum p. 13-30: invert a square matrix into a same-type matrix.
+REM The inverse of [[1,2],[3,4]] is [[-2,1],[1.5,-0.5]].
+invsrc(1,1)=1
+invsrc(1,2)=2
+invsrc(2,1)=3
+invsrc(2,2)=4
+MAT INV invm()=invsrc()
+MAT MUL invcheck()=invm()*invsrc()
+PRINT #1,"MAT-INV:";invm(1,1);invm(1,2);invm(2,1);invm(2,2)
+PRINT #1,"MAT-INV-PRODUCT:";invcheck(1,1);invcheck(1,2);invcheck(2,1);invcheck(2,2)
+IF invcheck(1,1)>0.99 AND invcheck(1,1)<1.01 AND invcheck(1,2)>-0.01 AND invcheck(1,2)<0.01 AND invcheck(2,1)>-0.01 AND invcheck(2,1)<0.01 AND invcheck(2,2)>0.99 AND invcheck(2,2)<1.01
+  PRINT #2,"GFATEST:matrix-inv:PASS"
+ELSE
+  PRINT #2,"GFATEST:matrix-inv:FAIL"
 ENDIF
 
 CLOSE #2
