@@ -44,7 +44,9 @@ printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-f
 # The selected-row screenshot places the pointer near x=320,y=218.
 # Move to the center of the Merge gadget (about x=323,y=420).
 # Amiberry bounds each relative mouse event; use repeated small increments.
-for _ in $(seq 1 4); do
+# SEND_MOUSE relative Y is scaled by the emulator; eight 50-unit steps
+# move the pointer from the selected row to the Merge gadget center.
+for _ in $(seq 1 8); do
 printf "SEND_MOUSE\\t0\\t50\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 sleep 0.15
 done
