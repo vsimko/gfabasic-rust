@@ -35,7 +35,7 @@ sum%=0
 FOR j%=i% DOWNTO 0
   _DATA=dp%(j%)
   READ dataval
-  PRINT #1,"DATA-VALUE:";a
+  PRINT #1,"DATA-VALUE:";dataval
   sum%=sum%+dataval
 NEXT j%
 PRINT #1,"DATA-POINTER:";i%;sum%
