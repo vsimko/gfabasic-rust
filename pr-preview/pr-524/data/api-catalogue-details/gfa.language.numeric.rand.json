@@ -1,0 +1,70 @@
+{
+  "id": "gfa.language.numeric.rand",
+  "name": "RAND",
+  "kind": "function",
+  "namespace": "language-core",
+  "category": "inherited-functions-3-5-evidence",
+  "availability": [
+    {
+      "dialect": "amiga-gfa-basic-interpreter",
+      "versions": [
+        "3.5"
+      ]
+    }
+  ],
+  "syntax": [
+    {
+      "form": "RAND(integer-expression)",
+      "contexts": [
+        "expression"
+      ],
+      "arguments": [
+        {
+          "name": "y",
+          "type": "integer expression",
+          "required": true
+        }
+      ]
+    }
+  ],
+  "signature": {
+    "returns": "integer"
+  },
+  "semantics": {
+    "summary": "Returns a random 16-bit integer in the range from 0 to y-1; the 3.5 addendum example uses RAND(10) as a matrix element value.",
+    "side-effects": [],
+    "errors": []
+  },
+  "evidence": {
+    "source-scope": "amiga-3.5-addendum",
+    "status": "book-documented",
+    "sources": [
+      "AM-INTERPRETER-35"
+    ],
+    "printed-pages": [
+      "Chapter 13, printed p. 13-2",
+      "Base-manual function definition, printed pp. 4-17–4-18 (3.0-origin semantics only)"
+    ],
+    "notes": [
+      "The 3.5 example directly demonstrates the one-argument RAND(10) form. The result range and 16-bit description come from the 3.0 base-manual definition; distribution, seed behavior, and other random functions are not reconfirmed by this occurrence."
+    ]
+  },
+  "implementation": {
+    "status": "not-implemented"
+  },
+  "support": [
+    {
+      "target": "x86_64-unknown-linux-gnu",
+      "classification": "unknown",
+      "conformance": "not-tested",
+      "tests": [],
+      "pending-reason": "No registered runtime implementation or executable 3.5 reference-interpreter conformance test."
+    }
+  ],
+  "docs": {
+    "path": "docs/research/amiga-gfa-basic-35-base-function-use-audit.md",
+    "anchors": [
+      "directly-evidenced-inherited-functions"
+    ]
+  }
+}

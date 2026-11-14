@@ -1,0 +1,72 @@
+{
+  "id": "gfa.language.numeric.rnd",
+  "name": "RND",
+  "kind": "function",
+  "namespace": "language-core",
+  "category": "inherited-functions-3-5-evidence",
+  "availability": [
+    {
+      "dialect": "amiga-gfa-basic-interpreter",
+      "versions": [
+        "3.5"
+      ]
+    }
+  ],
+  "syntax": [
+    {
+      "form": "RND(arithmetic-expression)",
+      "contexts": [
+        "expression"
+      ],
+      "arguments": [
+        {
+          "name": "x",
+          "type": "arithmetic expression",
+          "required": true
+        }
+      ]
+    }
+  ],
+  "signature": {
+    "returns": "real number"
+  },
+  "semantics": {
+    "summary": "Returns a random real number; the 3.5 Chapter 18 example uses RND(1) inside INT(RND(1)*5).",
+    "side-effects": [
+      "Advances the random-number generator state."
+    ],
+    "errors": []
+  },
+  "evidence": {
+    "source-scope": "amiga-3.5-addendum",
+    "status": "book-documented",
+    "sources": [
+      "AM-BOOK-DE-1990"
+    ],
+    "printed-pages": [
+      "Chapter 18, printed p. 458",
+      "Base-manual function definition, printed pp. 4-17–4-18 (3.0-origin range/argument notes only)"
+    ],
+    "notes": [
+      "The 3.5-labelled example directly demonstrates the one-argument form. The 3.0 base text says the optional parameter has no meaning and describes a [0,1) result; this detailed range/parameter behavior is not independently restated in Chapter 18. RANDOM and RANDOMIZE are not confirmed by this occurrence."
+    ]
+  },
+  "implementation": {
+    "status": "not-implemented"
+  },
+  "support": [
+    {
+      "target": "x86_64-unknown-linux-gnu",
+      "classification": "unknown",
+      "conformance": "not-tested",
+      "tests": [],
+      "pending-reason": "No registered runtime implementation or executable 3.5 reference-interpreter conformance test."
+    }
+  ],
+  "docs": {
+    "path": "docs/research/amiga-gfa-basic-35-base-function-use-audit.md",
+    "anchors": [
+      "directly-evidenced-inherited-functions"
+    ]
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "id": "gfa.language.numeric.int",
+  "name": "INT",
+  "kind": "function",
+  "namespace": "language-core",
+  "category": "inherited-functions-3-5-evidence",
+  "availability": [
+    {
+      "dialect": "amiga-gfa-basic-interpreter",
+      "versions": [
+        "3.5"
+      ]
+    }
+  ],
+  "syntax": [
+    {
+      "form": "INT(arithmetic-expression)",
+      "contexts": [
+        "expression"
+      ],
+      "arguments": [
+        {
+          "name": "x",
+          "type": "arithmetic expression",
+          "required": true
+        }
+      ]
+    }
+  ],
+  "signature": {
+    "returns": "integer"
+  },
+  "semantics": {
+    "summary": "Converts a numeric expression to an integer; the 3.5 Chapter 18 example uses INT(RND(1)*5).",
+    "side-effects": [],
+    "errors": []
+  },
+  "evidence": {
+    "source-scope": "amiga-3.5-addendum",
+    "status": "book-documented",
+    "sources": [
+      "AM-BOOK-DE-1990"
+    ],
+    "printed-pages": [
+      "Chapter 18, printed p. 458",
+      "Base-manual function definition, printed p. 4-13 (3.0-origin rounding rule only)"
+    ],
+    "notes": [
+      "Only the one-argument form is demonstrated in 3.5 material. The floor behavior for negative fractional values is documented in the 3.0 base text but is not independently restated in Chapter 18."
+    ]
+  },
+  "implementation": {
+    "status": "not-implemented"
+  },
+  "support": [
+    {
+      "target": "x86_64-unknown-linux-gnu",
+      "classification": "unknown",
+      "conformance": "not-tested",
+      "tests": [],
+      "pending-reason": "No registered runtime implementation or executable 3.5 reference-interpreter conformance test."
+    }
+  ],
+  "docs": {
+    "path": "docs/research/amiga-gfa-basic-35-base-function-use-audit.md",
+    "anchors": [
+      "directly-evidenced-inherited-functions"
+    ]
+  }
+}

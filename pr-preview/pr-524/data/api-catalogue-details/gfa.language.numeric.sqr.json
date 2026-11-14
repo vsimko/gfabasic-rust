@@ -1,0 +1,70 @@
+{
+  "id": "gfa.language.numeric.sqr",
+  "name": "SQR",
+  "kind": "function",
+  "namespace": "language-core",
+  "category": "inherited-functions-3-5-evidence",
+  "availability": [
+    {
+      "dialect": "amiga-gfa-basic-interpreter",
+      "versions": [
+        "3.5"
+      ]
+    }
+  ],
+  "syntax": [
+    {
+      "form": "SQR(arithmetic-expression)",
+      "contexts": [
+        "expression"
+      ],
+      "arguments": [
+        {
+          "name": "x",
+          "type": "arithmetic expression",
+          "required": true
+        }
+      ]
+    }
+  ],
+  "signature": {
+    "returns": "real number"
+  },
+  "semantics": {
+    "summary": "Returns the square root of a numeric expression; the 3.5 Chapter 18 vector-normalization example uses SQR(l).",
+    "side-effects": [],
+    "errors": []
+  },
+  "evidence": {
+    "source-scope": "amiga-3.5-addendum",
+    "status": "book-documented",
+    "sources": [
+      "AM-BOOK-DE-1990"
+    ],
+    "printed-pages": [
+      "Chapter 18, printed p. 473",
+      "Base-manual function definition, printed p. 4-8 (3.0-origin negative-input error note only)"
+    ],
+    "notes": [
+      "Only the one-argument form is demonstrated in 3.5 material. The negative-input error behavior is documented in the 3.0 base text but is not independently restated in Chapter 18."
+    ]
+  },
+  "implementation": {
+    "status": "not-implemented"
+  },
+  "support": [
+    {
+      "target": "x86_64-unknown-linux-gnu",
+      "classification": "unknown",
+      "conformance": "not-tested",
+      "tests": [],
+      "pending-reason": "No registered runtime implementation or executable 3.5 reference-interpreter conformance test."
+    }
+  ],
+  "docs": {
+    "path": "docs/research/amiga-gfa-basic-35-base-function-use-audit.md",
+    "anchors": [
+      "directly-evidenced-inherited-functions"
+    ]
+  }
+}
