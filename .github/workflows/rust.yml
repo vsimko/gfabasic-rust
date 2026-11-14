@@ -32,10 +32,18 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
 
-      - name: Validate GitHub Actions and native probe shell scripts
+      - name: Validate every GitHub Actions workflow
         run: |
-          go run github.com/rhysd/actionlint/cmd/actionlint@v1.7.7 .github/workflows/amiga-3041u-native-merge-run.yml .github/workflows/amiga-35u-native-merge-run.yml .github/workflows/cleanup-private-adf-artifacts.yml
-          bash -n scripts/amiga-cli-probe-3041u.sh scripts/amiga-cli-probe-35u.sh
+          mapfile -t workflow_files < <(find .github/workflows -type f \\( -name '*.yml' -o -name '*.yaml' \\) -print | sort)
+          test "${#workflow_files[@]}" -gt 0
+          go run github.com/rhysd/actionlint/cmd/actionlint@v1.7.7 "${workflow_files[@]}"
+
+      - name: Check shell syntax in repository scripts
+        run: |
+          mapfile -t shell_files < <(find scripts -type f -name '*.sh' -print | sort)
+          if [ "${#shell_files[@]}" -gt 0 ]; then
+            bash -n "${shell_files[@]}"
+          fi
 
       - name: Cache Rust toolchain
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
