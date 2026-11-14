@@ -5,7 +5,8 @@ REM IMPORTANT: OPEN file mode is uppercase letter "O" (Output), NOT digit "0".
 
 REM 3.5 addendum pp. 13-34..13-35: save and restore DATA pointers.
 DIM dp%(100),detm(2,2),invsrc(2,2),invm(2,2),invcheck(2,2)
-DIM unity(2,2),addleft(2,2),addright(2,2),addresult(2,2),subresult(2,2)
+DIM addleft(2,2),addright(2,2),addresult(2,2),subresult(2,2)
+DIM unity(2,2)
 REM Execute MAT ONE before opening output files to isolate the matrix operation.
 MAT ONE unity()
 REM Capture runtime output on the writable DF0 test disk.
