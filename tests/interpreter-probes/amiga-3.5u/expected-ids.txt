@@ -7,4 +7,3 @@ matrix-det
 matrix-inv
 matrix-add
 matrix-sub
-matrix-one
