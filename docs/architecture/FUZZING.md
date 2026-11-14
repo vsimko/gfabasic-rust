@@ -79,7 +79,7 @@ Do not use a low recursion limit as a substitute for correct parser design. Deep
 
 For each available harness and stable target interface:
 
-1. Run bounded smoke fuzzing on pull requests that change the frontend, fuzz harnesses, fuzz dictionaries, or relevant corpus seeds.
+1. Run bounded smoke fuzzing only when a pull request changes a path in the trigger matrix below. The matrix covers the source-loader target's build and runtime dependency closure, its harness and corpus, and the fuzz policy/workflow itself.
 2. Keep smoke execution separate from formatting, compilation, and deterministic unit tests so failures identify the responsible stage.
 3. Run longer campaigns on a schedule and on manual dispatch. Do not make every pull request run a long campaign.
 4. Preserve the fuzzer engine, version, target, seed, command, elapsed time, and relevant toolchain details for each failure.
