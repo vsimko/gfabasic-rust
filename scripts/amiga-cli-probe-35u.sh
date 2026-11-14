@@ -54,11 +54,13 @@ else
   exit 1
 fi
 
-# Assert the interpreter-written file, independent of screen OCR.
-if grep -Eq 'FACT\(0\.\.2\):[[:space:]]*1[[:space:]]*1[[:space:]]*2' artifacts/amiga-cli-probe/fact-output.txt; then
-  echo "FACT_PROGRAM_OUTPUT=1 1 2" | tee -a artifacts/amiga-cli-probe/result.txt
+# The marker is written before MAT ONE. Its absence means the program
+# failed during startup/setup; its presence with no result isolates the hold.
+if grep -Fq 'BEFORE-MAT-ONE' artifacts/amiga-cli-probe/fact-output.txt && \
+   grep -Eq 'MAT-ONE:[[:space:]]*1[[:space:]]*0[[:space:]]*0[[:space:]]*0[[:space:]]*1[[:space:]]*0[[:space:]]*0[[:space:]]*0[[:space:]]*1' artifacts/amiga-cli-probe/fact-output.txt; then
+  echo "MAT_ONE_PROGRAM_OUTPUT=identity-3x3" | tee -a artifacts/amiga-cli-probe/result.txt
 else
-  echo "::error::FACT.OUT does not contain the expected output (1 1 2)."
+  echo "::error::FACT.OUT does not contain the pre-MAT-ONE marker and 3x3 identity result."
   exit 1
 fi
 
