@@ -42,44 +42,21 @@ jobs:
             echo "::error::GFA_ASSETS_TOKEN is not configured."
             exit 1
           }
-          mkdir -p dist/amiga/gfa-basic-3.52 analysis-input analysis-output
+          mkdir -p analysis-input analysis-output
           curl --fail --silent --show-error --location --retry 3 \
             --header "Authorization: Bearer $GFA_ASSETS_TOKEN" \
             --header "Accept: application/vnd.github.raw" \
             "https://api.github.com/repos/vsimko/gfabasic-private-assets/contents/GFABasic?ref=main" \
-            --output dist/amiga/gfa-basic-3.52/GFABasic
+            --output analysis-input/GFABasic
 
       - name: Verify binary identity and Amiga executable header
         run: |
           set -euo pipefail
-          cd dist/amiga/gfa-basic-3.52
+          cd analysis-input
           echo "fd80f6093e8d0163856af5849121e945e37051a2ad2a9053aa1930021783d962  GFABasic" | sha256sum --check
           test "$(wc -c < GFABasic)" -eq 136548
           printf '\x00\x00\x03\xf3' | cmp -n 4 - GFABasic
           file GFABasic || true
-          cp GFABasic "$GITHUB_WORKSPACE/analysis-input/GFABasic"
-
-      - name: Package emulator input
-        run: |
-          set -euo pipefail
-          cat > dist/amiga/gfa-basic-3.52/README.txt <<'EOF'
-          GFA BASIC 3.52 Amiga interpreter
-          Source: private repository vsimko/gfabasic-private-assets, path GFABasic
-          SHA-256: fd80f6093e8d0163856af5849121e945e37051a2ad2a9053aa1930021783d962
-          Version scope: 3.52 (1990), not the project's normative 3.5 target.
-          This package contains the interpreter executable only. A legally usable
-          Amiga Kickstart/OS environment and emulator configuration are separate
-          prerequisites; this workflow does not bundle ROMs or disk images.
-          EOF
-          tar -czf "$GITHUB_WORKSPACE/dist/gfa-basic-3.52-amiga.tar.gz" -C dist/amiga gfa-basic-3.52
-
-      - name: Upload verified emulator input
-        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
-        with:
-          name: gfa-basic-3.52-amiga
-          path: dist/gfa-basic-3.52-amiga.tar.gz
-          if-no-files-found: error
-          retention-days: 7
 
       - name: Install Java and analysis utilities
         run: |
