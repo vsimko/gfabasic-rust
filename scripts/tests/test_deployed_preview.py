@@ -71,7 +71,7 @@ def main():
     assert not missing_classes, f"Missing generated dashboard/roadmap HTML: {sorted(missing_classes)}"
 
     for text in ("Implementation dashboard", "CI &amp; supply-chain health", "Conformance suite", "NOT CONFIGURED", "Project maturity", "Product target",
-                 "Workspace", "Implemented 3.5 addendum API", "0 / 28",
+                 "Workspace", "Implemented 3.5 addendum API", "0 / 36",
                  "not the complete Amiga GFA BASIC 3.5 language API",
                  "Roadmap progress", "Implementation states"):
         assert text in html, f"Missing expected dashboard content: {text}"
