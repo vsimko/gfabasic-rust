@@ -32,9 +32,7 @@
   },
   "semantics": {
     "summary": "Returns a random real number; the 3.5 Chapter 18 example uses RND(1) inside INT(RND(1)*5).",
-    "side-effects": [
-      "Advances the random-number generator state."
-    ],
+    "side-effects": [],
     "errors": []
   },
   "evidence": {
