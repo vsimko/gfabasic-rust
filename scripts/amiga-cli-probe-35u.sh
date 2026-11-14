@@ -42,16 +42,20 @@ image = ImageEnhance.Contrast(image).enhance(3)
 image.save("artifacts/amiga-cli-probe/after-merge-ocr-input.png")
 PY
 tesseract artifacts/amiga-cli-probe/after-merge-ocr-input.png stdout --psm 6 2>/dev/null | tee artifacts/amiga-cli-probe/after-merge-ocr.txt
-if grep -Fqi 'DO WHILE' artifacts/amiga-cli-probe/after-merge-ocr.txt && grep -Fqi 'DATA' artifacts/amiga-cli-probe/after-merge-ocr.txt; then
-  echo "EDITOR_MERGE_LST_CONTENT_VISIBLE=yes" | tee artifacts/amiga-cli-probe/result.txt
+# The editor displays only the current viewport; the first screen does not
+# contain later DO WHILE/DATA fixtures. Require several visible BASIC REM
+# lines instead of searching for tokens that may be below the fold.
+REM_LINES="$(grep -Eic '^REM([[:space:]]|$)' artifacts/amiga-cli-probe/after-merge-ocr.txt || true)"
+if test "$REM_LINES" -ge 5; then
+  echo "EDITOR_MERGE_LST_CONTENT_VISIBLE=yes (OCR REM lines: $REM_LINES)" | tee artifacts/amiga-cli-probe/result.txt
 else
-  echo "EDITOR_MERGE_LST_CONTENT_VISIBLE=no" | tee artifacts/amiga-cli-probe/result.txt
-  echo "::error::The editor screenshot does not show the merged LST source."
+  echo "EDITOR_MERGE_LST_CONTENT_VISIBLE=no (OCR REM lines: $REM_LINES)" | tee artifacts/amiga-cli-probe/result.txt
+  echo "::error::The editor screenshot does not show enough merged LST source."
   exit 1
 fi
 
 # Assert the interpreter-written file, independent of screen OCR.
-if grep -Eq 'FACT\(0\.\.2\):[[:space:]]*1[[:space:]]*1[[:space:]]*2' artifacts/amiga-cli-probe/fact-output.txt; then
+if grep -Eq 'FACT\\(0\\.\\.2\\):[[:space:]]*1[[:space:]]*1[[:space:]]*2' artifacts/amiga-cli-probe/fact-output.txt; then
   echo "FACT_PROGRAM_OUTPUT=1 1 2" | tee -a artifacts/amiga-cli-probe/result.txt
 else
   echo "::error::FACT.OUT does not contain the expected output (1 1 2)."
