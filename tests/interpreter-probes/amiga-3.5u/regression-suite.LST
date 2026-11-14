@@ -5,7 +5,7 @@ REM IMPORTANT: OPEN file mode is uppercase letter "O" (Output), NOT digit "0".
 
 REM 3.5 addendum pp. 13-34..13-35: save and restore DATA pointers.
 DIM dp%(100),detm(2,2),invsrc(2,2),invm(2,2),invcheck(2,2)
-DIM addleft(2,2),addright(2,2),addresult(2,2),subresult(2,2)
+DIM addleft(2,2),addright(2,2),addresult(2,2),subresult(2,2),onem(3,3)
 REM Capture runtime output on the writable DF0 test disk.
 OPEN "O",#1,"DF0:FACT.OUT"
 OPEN "O",#2,"DF0:GFATEST.OUT"
@@ -130,6 +130,15 @@ IF subresult(1,1)=-4 AND subresult(1,2)=-4 AND subresult(2,1)=-4 AND subresult(2
   PRINT #2,"GFATEST:matrix-sub:PASS"
 ELSE
   PRINT #2,"GFATEST:matrix-sub:FAIL"
+ENDIF
+
+REM 3.5 addendum p. 13-2: generate the identity matrix from a square matrix.
+MAT ONE onem()
+PRINT #1,"MAT-ONE:";onem(1,1);onem(1,2);onem(1,3);onem(2,1);onem(2,2);onem(2,3);onem(3,1);onem(3,2);onem(3,3)
+IF onem(1,1)=1 AND onem(1,2)=0 AND onem(1,3)=0 AND onem(2,1)=0 AND onem(2,2)=1 AND onem(2,3)=0 AND onem(3,1)=0 AND onem(3,2)=0 AND onem(3,3)=1
+  PRINT #2,"GFATEST:matrix-one:PASS"
+ELSE
+  PRINT #2,"GFATEST:matrix-one:FAIL"
 ENDIF
 
 CLOSE #2
