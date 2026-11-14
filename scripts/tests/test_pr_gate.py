@@ -1,6 +1,9 @@
 import unittest
+from pathlib import Path
 
-from scripts.pr_gate import expected_workflows
+import yaml
+
+from scripts.pr_gate import WORKFLOWS, expected_workflows
 
 
 FUZZ_WORKFLOW = ".github/workflows/fuzz.yml"
@@ -48,9 +51,17 @@ class FuzzWorkflowPathTests(unittest.TestCase):
             "site/src/pages/index.astro",
             "bench/source_loader.rs",
             "api/amiga/3.5/functions.json",
+            "scripts/pr_gate.py",
         ):
             with self.subTest(path=path):
                 self.assert_fuzz_not_selected(path)
+
+    def test_workflow_paths_match_pr_gate_classification(self):
+        root = Path(__file__).resolve().parents[2]
+        workflow_path = root / ".github" / "workflows" / "fuzz.yml"
+        workflow = yaml.load(workflow_path.read_text(encoding="utf-8"), Loader=yaml.BaseLoader)
+        configured_paths = tuple(workflow["on"]["pull_request"]["paths"])
+        self.assertEqual(configured_paths, WORKFLOWS[FUZZ_WORKFLOW])
 
     def test_mixed_pull_request_selects_fuzz_only_for_relevant_paths(self):
         self.assertIn(
