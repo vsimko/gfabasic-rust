@@ -115,6 +115,8 @@ ELSE
   PRINT #2,"GFATEST:matrix-one:FAIL"
 ENDIF
 
+END
+
 REM 3.5 addendum pp. 13-16..13-19: element-wise matrix addition and subtraction.
 addleft(1,1)=1
 addleft(1,2)=2
