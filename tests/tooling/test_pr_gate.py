@@ -23,8 +23,12 @@ class PullRequestGateTests(unittest.TestCase):
                 ".github/workflows/rust.yml",
                 ".github/workflows/security-audit.yml",
                 ".github/workflows/release-sbom.yml",
+                ".github/workflows/fuzz.yml",
             },
         )
+
+    def test_root_cargo_manifest_change_selects_fuzzing(self):
+        self.assertIn(".github/workflows/fuzz.yml", expected_workflows(["Cargo.toml"]))
 
     def test_source_loader_change_selects_rust_fuzz_and_benchmarks(self):
         self.assertEqual(
