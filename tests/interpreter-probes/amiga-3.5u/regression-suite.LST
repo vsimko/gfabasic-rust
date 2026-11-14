@@ -20,6 +20,45 @@ ELSE
   PRINT #2,"GFATEST:special-vars-clear:FAIL"
 ENDIF
 
+REM DQH-Amiga core language: numeric, string, loop and branch primitives.
+REM These deterministic operations occur throughout dqh-amiga/dqh.lst.
+n1=ABS(-7)
+n2=INT(12.9)
+n3=MIN(4,9)
+n4=SGN(-3)
+s1$=UPPER$("devil")
+s2$=LEFT$("HOUSE",3)
+s3$=MID$("QUEER",2,3)
+s4$=STRING$(3,32)
+n5=ASC(CHR$(65))
+n6=CVI(MKI$(1234))
+PRINT #1,"DQH-CORE:";n1;n2;n3;n4;n5;n6;LEN(s1$);LEN(s2$);LEN(s3$);LEN(s4$)
+IF n1=7 AND n2=12 AND n3=4 AND n4=-1 AND n5=65 AND n6=1234 AND s1$="DEVIL" AND s2$="HOU" AND s3$="UEE" AND LEN(s4$)=3
+  PRINT #2,"GFATEST:dqh-core-primitives:PASS"
+ELSE
+  PRINT #2,"GFATEST:dqh-core-primitives:FAIL"
+ENDIF
+
+REM DQH-Amiga control flow: WHILE/WEND, REPEAT/UNTIL and SELECT/CASE.
+n%=0
+WHILE n%<3
+  INC n%
+WEND
+REPEAT
+  INC n%
+UNTIL n%=5
+SELECT n%
+CASE 5
+  n%=n%+10
+CASE ELSE
+  n%=-1
+ENDSELECT
+IF n%=15
+  PRINT #2,"GFATEST:dqh-control-flow:PASS"
+ELSE
+  PRINT #2,"GFATEST:dqh-control-flow:FAIL"
+ENDIF
+
 REM 3.5 addendum pp. 13-34..13-35: save and restore DATA pointers.
 RESTORE
 PRINT #1,"DATA-AVAILABLE-INITIAL:";_DATA
