@@ -50,7 +50,7 @@ fi
 
 # Assert the interpreter-written file, independent of screen OCR. PRINT
 # concatenates adjacent numeric expressions, so 1, 1, 2 is emitted as 112.
-if grep -Eq 'FACT\\(0\\.\\.2\\):[[:space:]]*1[[:space:]]*1[[:space:]]*2' artifacts/amiga-cli-probe/fact-output.txt; then
+if grep -Eq 'FACT\(0\.\.2\):[[:space:]]*1[[:space:]]*1[[:space:]]*2' artifacts/amiga-cli-probe/fact-output.txt; then
   echo "FACT_PROGRAM_OUTPUT=1 1 2" | tee -a artifacts/amiga-cli-probe/result.txt
 else
   echo "::error::FACT.OUT does not contain the expected output (1 1 2)."
