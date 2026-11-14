@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "status": "fresh",
+  "generated_at": "2026-11-14T22:05:54.210262+00:00",
+  "last_successful_at": "2026-11-14T22:05:54.210262+00:00",
+  "items": [
+    {
+      "type": "merged_pull_request",
+      "title": "test(amiga): cover DQH graphics and screen lifecycle",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/540",
+      "number": 540,
+      "timestamp": "2026-11-14T22:04:01Z",
+      "summary": "PR #540 merged"
+    },
+    {
+      "type": "commit",
+      "title": "test(amiga): cover DQH graphics and screen lifecycle",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/28bbf3fd96655e8830b898015003416459be851e",
+      "number": null,
+      "timestamp": "2026-11-14T22:04:01Z",
+      "summary": "Commit 28bbf3f"
+    },
+    {
+      "type": "merged_pull_request",
+      "title": "test(amiga): prioritize DQH-used GFA BASIC commands",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/539",
+      "number": 539,
+      "timestamp": "2026-11-14T14:55:00Z",
+      "summary": "PR #539 merged"
+    },
+    {
+      "type": "commit",
+      "title": "test(amiga): prioritize DQH-used GFA BASIC commands",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/38f2171af573af637cc81b3fadabda7959fe33cf",
+      "number": null,
+      "timestamp": "2026-11-14T14:55:00Z",
+      "summary": "Commit 38f2171"
+    },
+    {
+      "type": "merged_pull_request",
+      "title": "test(amiga): probe 3.5 special variables across CLEAR",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/538",
+      "number": 538,
+      "timestamp": "2026-11-14T14:36:50Z",
+      "summary": "PR #538 merged"
+    },
+    {
+      "type": "commit",
+      "title": "test(amiga): probe 3.5 special variables across CLEAR",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/44619a59025e405851221363e57825267bceb21f",
+      "number": null,
+      "timestamp": "2026-11-14T14:36:49Z",
+      "summary": "Commit 44619a5"
+    },
+    {
+      "type": "merged_pull_request",
+      "title": "test(amiga): add native 3.5U matrix operation probes",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/534",
+      "number": 534,
+      "timestamp": "2026-11-14T13:00:57Z",
+      "summary": "PR #534 merged"
+    },
+    {
+      "type": "commit",
+      "title": "test(amiga): add native 3.5U matrix operation probes",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/eef03446286f8842d08776ee820a35a033853f95",
+      "number": null,
+      "timestamp": "2026-11-14T13:00:57Z",
+      "summary": "Commit eef0344"
+    },
+    {
+      "type": "merged_pull_request",
+      "title": "[CI] Scope PR fuzz smoke to source-loader changes",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/533",
+      "number": 533,
+      "timestamp": "2026-11-14T11:53:46Z",
+      "summary": "PR #533 merged"
+    },
+    {
+      "type": "commit",
+      "title": "ci(fuzz): scope PR smoke to relevant paths",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/5c747ab6c3a0e908070123a3575268cd50fe32a9",
+      "number": null,
+      "timestamp": "2026-11-14T11:53:46Z",
+      "summary": "Commit 5c747ab"
+    },
+    {
+      "type": "merged_pull_request",
+      "title": "test(amiga): expand 3.5U DATA pointer regression coverage",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/523",
+      "number": 523,
+      "timestamp": "2026-11-13T22:11:50Z",
+      "summary": "PR #523 merged"
+    },
+    {
+      "type": "commit",
+      "title": "test(amiga): expand 3.5U DATA pointer regression coverage (#523)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/68881829a6fafb54888af21500b7b9cd7c8b5bff",
+      "number": null,
+      "timestamp": "2026-11-13T22:11:49Z",
+      "summary": "Commit 6888182"
+    }
+  ]
+}

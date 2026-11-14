@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The checked-in declarative registry is the canonical source for declaration metadata used by parsing/semantic analysis, API profile selection, runtime mapping, reference documentation, and conformance tests.">
+  <title>API registry and declaration source of truth · GFA BASIC Rust documentation</title>
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body class="docs-site">
+  <header class="docs-header">
+    <a href="../../index.html">GFA BASIC Rust</a>
+    <span aria-hidden="true">/</span>
+    <a href="../index.html">Documentation</a>
+  </header>
+  <div class="docs-layout">
+    <nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home" href="index.html">Section index</a><ul><li><a href="AI-VERIFICATION.html">AI-assisted API verification</a></li><li><a href="https://github.com/vsimko/gfabasic-rust/blob/main/.agents/skills/api-evidence-verification/SKILL.md">`api-evidence-verification` agent skill</a></li><li><a href="API-PROFILES.html">API profiles</a></li><li><a href="API-REGISTRY.html">API registry and declaration source of truth</a></li><li><a href="BENCHMARKING.html">Performance benchmarks and profiling strategy</a></li><li><a href="CI.html">GitHub Actions workflow architecture</a></li><li><a href="CLI-AND-CONFIG.html">CLI, configuration, and build artifacts</a></li><li><a href="COMPATIBILITY-MATRIX.html">Current compatibility matrix</a></li><li><a href="DIAGNOSTICS.html">Diagnostics and compatibility reporting</a></li><li><a href="DIALECTS.html">Dialects, versions, and compatibility policy</a></li><li><a href="FORMATTER.html">Formatter style and current support</a></li><li><a href="FUZZING.html">Frontend fuzzing and robustness strategy</a></li><li><a href="GOALS.html">Project goals and compatibility objectives</a></li><li><a href="IMPLEMENTATION-DASHBOARD.html">Implementation dashboard</a></li><li><a href="LANGUAGE-TOOLING.html">Language tooling and editor integration</a></li><li><a href="MEMORY.html">Memory model and hardware access</a></li><li><a href="MVP-vertical-slice.html">First compiler vertical slice — proposed boundary</a></li><li><a href="PIPELINE-AND-IR.html">Compiler pipeline and intermediate representation</a></li><li><a href="README.html">README</a></li><li><a href="RELEASES.html">Release, artifact, and reproducible-build policy</a></li><li><a href="RUNTIME.html">Runtime architecture</a></li><li><a href="SECURITY.html">Dependency and supply-chain security</a></li><li><a href="TARGETS.html">Host and target model</a></li><li><a href="TESTING.html">Compatibility testing and release criteria</a></li><li><a href="VALIDATION.html">Repository consistency validation</a></li><li><a href="VERSIONING.html">Versioning and compatibility lifecycle</a></li><li><a href="WEBSITE_PREVIEWS.html">Website previews for pull requests</a></li><li><a href="WORKSPACE.html">Rust workspace and dependency policy</a></li><li><a href="adr/index.html">Architecture decisions</a></li></ul></nav>
+    <main class="docs-content">
+      <article>
+        <h1>API registry and declaration source of truth</h1>
+        <p class="docs-meta"><span>Architecture</span></p>
+        <h1 id="api-registry-and-declaration-source-of-truth">API registry and declaration source of truth</h1>
+<ul>
+<li>Status: <strong>Accepted by <a href="adr/0006-api-registry.html">ADR 0006</a>.</strong> The v1 JSON Schema, Python validator, validator unit tests, and documentation CI check are implemented. The registry currently contains one unsupported Atari ST TIMER research declaration and a 28-entry Amiga GFA BASIC 3.5 addendum catalogue. The Amiga entries are book-documented, not implemented as complete runtime features, and have unknown Linux support. Runtime handler resolution is implemented and CI-validated under #115; only FACT, VARIAT, and COMBIN have partial typed registrations, without a claim of Linux support or interpreter conformance. The OKF v0.2 documentation bundle and static Markdown-to-HTML generator are implemented separately; they do not replace the API registry's structured schema or generate API declarations from prose.</li>
+<li>Tracking: <a href="https://github.com/vsimko/gfabasic-rust/issues/12">issue #12</a>, <a href="https://github.com/vsimko/gfabasic-rust/issues/55">metadata validation #55 (completed)</a>.</li>
+</ul>
+<h2 id="1-purpose-and-ownership">1. Purpose and ownership</h2>
+<p>The checked-in declarative registry is the canonical source for declaration metadata used by parsing/semantic analysis, API profile selection, runtime mapping, reference documentation, and conformance tests.</p>
+<p>A registry entry is evidence-backed metadata. Its presence does not mean that the feature is implemented, safe, or supported.</p>
+<ul>
+<li>The registry owns stable declaration identity, spelling, syntax, type/signature metadata, dialect/version/profile availability, evidence, support state, runtime handler IDs, test IDs, and documentation links.</li>
+<li>Rust code implements behavior behind stable registry IDs. It must not independently redefine spelling, syntax availability, signatures, or profile membership.</li>
+<li>Tests remain independent fixtures linked from the registry. Expected results must not be generated by the implementation being tested.</li>
+<li>Generated reference pages may be produced from registry metadata plus authored explanatory material. Generated files must be reproducible and must not be manually edited.</li>
+<li>Research-only, disputed, unknown, unsupported, and unsafe-disabled entries are allowed when their state is explicit.</li>
+</ul>
+<h2 id="2-canonical-format-and-layout">2. Canonical format and layout</h2>
+<p>Use TOML as the canonical source format. Use one file per logical module/API group, with a versioned schema.</p>
+<pre><code class="language-text">api/
+├── schema/
+│   └── registry-v1.json
+└── registry/
+    ├── language-core/
+    │   └── &lt;module&gt;.toml
+    ├── amiga/
+    │   └── &lt;module&gt;.toml
+    └── atari-st/
+        └── &lt;module&gt;.toml
+</code></pre>
+<p>Each file declares schema-version = 1 and contains one or more declaration records. JSON Schema validates the parsed TOML data model; TOML remains the human-edited canonical source. Schema versions are independent of compiler product versions and runtime ABI versions.</p>
+<p>Do not put Amiga or Atari declarations in the language-core namespace. Do not create a core API profile: the language core is not a selectable platform API profile.</p>
+<h2 id="3-stable-identity-and-availability">3. Stable identity and availability</h2>
+<p>A declaration ID is globally unique, stable across spelling corrections, and independent of version. Use lowercase dot-separated identifiers:</p>
+<ul>
+<li>gfa.language.&lt;module&gt;.&lt;name&gt; for language-core declarations.</li>
+<li>gfa.amiga.&lt;module&gt;.&lt;name&gt; for Amiga API declarations.</li>
+<li>gfa.atari-st.&lt;module&gt;.&lt;name&gt; for Atari ST API declarations.</li>
+</ul>
+<p>The declaration record must identify exact source dialect, version availability, and required API profile. Version ranges must use the normalized syntax accepted by the registry schema. Do not use broad labels such as 2.x unless the source evidence explicitly supports the whole range.</p>
+<p>A platform API declaration is available only when its required profile is selected. The output target does not enable or disable a source API profile.</p>
+<h2 id="4-required-declaration-model">4. Required declaration model</h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Required</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>Yes</td>
+<td>Stable globally unique identity</td>
+</tr>
+<tr>
+<td>name</td>
+<td>Yes</td>
+<td>Canonical source spelling</td>
+</tr>
+<tr>
+<td>kind</td>
+<td>Yes</td>
+<td>Statement, function, procedure, operator, special form, constant, variable, or structure</td>
+</tr>
+<tr>
+<td>syntax</td>
+<td>Yes</td>
+<td>Structured grammar alternatives and contexts</td>
+</tr>
+<tr>
+<td>availability</td>
+<td>Yes</td>
+<td>Source dialect, exact versions, and required profile</td>
+</tr>
+<tr>
+<td>signature</td>
+<td>Yes</td>
+<td>Ordered parameters, optionality, passing mode, type, and return type</td>
+</tr>
+<tr>
+<td>semantics</td>
+<td>Yes</td>
+<td>Contract, side effects, errors, resource lifecycle, and edge cases</td>
+</tr>
+<tr>
+<td>evidence</td>
+<td>Yes</td>
+<td>Source ID, edition, page/section, evidence state, and notes</td>
+</tr>
+<tr>
+<td>implementation</td>
+<td>Yes</td>
+<td>Implementation state, stable handler ID when applicable, and scope notes that explain partial prototypes or limitations</td>
+</tr>
+<tr>
+<td>support</td>
+<td>Yes</td>
+<td>Per-target support and conformance state</td>
+</tr>
+<tr>
+<td>tests</td>
+<td>Yes</td>
+<td>Test IDs or explicit pending reason</td>
+</tr>
+<tr>
+<td>docs</td>
+<td>Yes</td>
+<td>Canonical reference path and section anchors</td>
+</tr>
+</tbody>
+</table>
+<p>Do not reduce syntax to a display string. The model must express statement/expression context, overloads, optional/repeated arguments, argument passing modes, type suffixes, and special grammar that is not an ordinary function call.</p>
+<p>The type vocabulary must distinguish documented source-language types, arrays, pointers/addresses, procedures/functions, target-specific records, and unresolved/opaque values. Never substitute host Rust types for historical GFA BASIC storage semantics without evidence.</p>
+<p>Documentation references are repository-local. <code>docs.path</code> must be a canonical repository-relative POSIX path to a regular file under the repository root. Absolute paths, dot/dot-dot or empty components, backslashes, and symlink components are rejected; registry validation must never resolve documentation anchors from arbitrary host files.</p>
+<h2 id="5-evidence-implementation-and-support-are-separate">5. Evidence, implementation, and support are separate</h2>
+<p>Do not use one overloaded status field. Each record has independent dimensions.</p>
+<p><strong>Evidence status</strong> describes the source basis: unknown, inferred, disputed, book-documented, primary-reference-cross-checked, or runtime-observed.</p>
+<p><strong>Implementation status</strong> describes code: not-implemented, partial, implemented, or unsafe-disabled.</p>
+<p><strong>Support classification</strong> describes the declared target behavior: supported, partial, adapter-backed, emulated, unsupported, unsafe-disabled, or unknown.</p>
+<p><strong>Conformance status</strong> describes tests: not-tested, passing, failing, or not-applicable.</p>
+<p>A well-documented hardware operation may remain unsafe-disabled. A runtime implementation does not establish historical language conformance. A passing unit test does not establish source-language support unless it is linked to a documented rule or trusted reference behavior.</p>
+<h2 id="6-illustrative-declaration">6. Illustrative declaration</h2>
+<p>This TOML example illustrates the accepted data model only. It is not an accepted language declaration or an implementation claim.</p>
+<pre><code class="language-toml">schema-version = 1
+
+[[declarations]]
+id = &quot;gfa.atari-st.time.timer&quot;
+name = &quot;TIMER&quot;
+kind = &quot;function&quot;
+
+[[declarations.availability]]
+dialect = &quot;atari-st-gfa-basic&quot;
+versions = [&quot;3.0&quot;]
+profile = &quot;atari-st&quot;
+
+[[declarations.syntax]]
+form = &quot;call&quot;
+contexts = [&quot;expression&quot;]
+arguments = []
+
+[declarations.signature]
+returns = &quot;integer&quot;
+
+[declarations.semantics]
+summary = &quot;Returns elapsed system ticks.&quot;
+side-effects = []
+errors = []
+
+[declarations.evidence]
+status = &quot;book-documented&quot;
+sources = [&quot;ATARI-GFA3-UM-1988&quot;]
+printed-pages = [&quot;chapter 12, pp. 393-452&quot;]
+notes = [&quot;Verify OCR-sensitive details against the page image before accepting the exact contract.&quot;]
+
+[declarations.implementation]
+status = &quot;not-implemented&quot;
+
+[[declarations.support]]
+target = &quot;x86_64-unknown-linux-gnu&quot;
+classification = &quot;unsupported&quot;
+conformance = &quot;not-tested&quot;
+tests = []
+
+[declarations.docs]
+path = &quot;docs/reference/atari-gfa-basic-3.0.md&quot;
+anchors = []
+</code></pre>
+<h2 id="7-version-and-profile-matching">7. Version and profile matching</h2>
+<ul>
+<li>Dialect identity and API profile are separate.</li>
+<li>Version availability is explicit and evidence-backed.</li>
+<li>A declaration requiring atari-st is unavailable when that profile is not selected, even if the output target is Linux.</li>
+<li>Profile dependencies must be explicit and source-backed.</li>
+<li>Conflicting visible names across enabled profiles must produce deterministic diagnostics; never resolve silently by file order.</li>
+<li>Version-specific overloads remain separate syntax alternatives or separate declarations linked by a shared concept ID.</li>
+<li>Amiga and Atari ST records remain separate even where historical ports share spelling or implementation lineage.</li>
+</ul>
+<h2 id="8-validation-rules">8. Validation rules</h2>
+<p>The implemented validator in <code>scripts/validate_api_registry.py</code> and its unit tests currently check:</p>
+<ol>
+<li>JSON Schema structure, required fields, value types, and enumerated status values.</li>
+<li>Namespace prefixes and the required Amiga/Atari profile assignment.</li>
+<li>Duplicate stable declaration IDs.</li>
+<li>Conflicting declaration names for the same dialect/version unless declarations share an explicit overload group.</li>
+<li>Source IDs against the source register.</li>
+<li>Documentation paths and heading anchors.</li>
+<li>Test stable fixture IDs against the sidecar metadata of manifest-listed conformance-corpus entries.</li>
+<li>The presence of a handler ID on implemented or partial declarations.</li>
+<li>Primary/observed evidence, an implementation, passing conformance tests, and documentation anchors before a declaration can claim supported/partial/adapter-backed/emulated support.</li>
+<li>A handler ID for partial, adapter-backed, or emulated support.</li>
+</ol>
+<p>The validator does not yet resolve handler IDs to Rust symbols or runtime registrations. It also does not generate reference pages or compare generated output with checked-in pages. The schema and validator do not yet enforce all semantic constraints described by the architecture, including argument ordering rules, full version-range semantics, complete dialect/profile identifier registries, or syntax collision analysis across all enabled profile combinations. Treat those as open work, not implemented guarantees.</p>
+<p>The current registry has one research-status Atari ST <code>TIMER</code> declaration and an 28-entry Amiga 3.5 addendum catalogue. The Amiga records are explicitly documented but have no complete implementation or registered executable conformance tests; their Linux support remains unknown. The combinatorics prototype is restricted to literal expressions and is recorded in implementation notes, not promoted to complete support. Existing matrix corpus entries are research-only. MAT INV remains explicitly disputed because the command summary and detailed example reverse the operand direction. Language constructs are kept under <code>language-core/</code>; only Amiga-specific display, window, and GURU operations remain in the Amiga profile. No declaration currently claims support.</p>
+<h2 id="9-documentation-generation">9. Documentation generation</h2>
+<p>The registry is canonical for structured facts. Reference pages may combine generated tables/signatures with authored explanatory text, source citations, and examples.</p>
+<ul>
+<li>Generated sections must be clearly marked and reproducible.</li>
+<li>Hand-authored semantic explanations remain reviewable source material; they must not be overwritten by a generator.</li>
+<li>A generated page must retain the registry ID and source provenance.</li>
+<li>CI must detect stale generated output once the generator exists.</li>
+<li>Copyrighted manual text, scans, and substantial extracts must never be copied into generated documentation.</li>
+</ul>
+<h2 id="10-ownership-and-workflow">10. Ownership and workflow</h2>
+<ol>
+<li>Research records a candidate and source pages in the relevant reference.</li>
+<li>Add a registry record with evidence status such as inferred, disputed, or book-documented.</li>
+<li>Review spelling, syntax, types, version/profile availability, and semantics.</li>
+<li>Add an independent conformance fixture or record why testing is deferred.</li>
+<li>Link an implementation only after its handler exists.</li>
+<li>Validate schema, conflicts, evidence, docs, handler mappings, and tests.</li>
+<li>Mark evidence as cross-checked only after primary-source review; mark support as supported only after compatible behavior and conformance tests pass.</li>
+<li>Review registry changes with the corresponding language/API documentation and issue.</li>
+</ol>
+<p>Acceptance of a registry record does not mean implementation is complete. The registry schema itself is versioned and changes require migration notes.</p>
+<h2 id="11-implementation-boundary">11. Implementation boundary</h2>
+<p>ADR 0006 accepts TOML as the canonical registry format, the directory structure above, the stable ID convention, and the separated evidence/implementation/support/conformance model. The v1 JSON Schema, Python validator, validator tests, and CI invocation are implemented. The schema allows implementation notes so partial prototypes and known limitations can be represented without overstating support. The registry contains one unsupported Atari ST TIMER declaration, 24 language-core declarations, and four Amiga 3.5 platform declarations; no declaration currently claims supported target behavior, and no runtime handler mapping or documentation generator is implemented. The presence of a research record is not a compiler or runtime feature claim.</p>
+<p>Tracking: <a href="https://github.com/vsimko/gfabasic-rust/issues/12">issue #12</a>, <a href="https://github.com/vsimko/gfabasic-rust/issues/55">metadata validation #55 (completed)</a>, <a href="https://github.com/vsimko/gfabasic-rust/issues/115">runtime handler resolution #115</a>, <a href="https://github.com/vsimko/gfabasic-rust/issues/42">conformance corpus #42</a>.</p>
+<h2 id="evidence-and-status-invariants">Evidence and status invariants</h2>
+<p>The validator requires printed-page locators for book-documented and primary-reference-cross-checked declarations, explicit reasons for unknown/unsupported target support and non-passing conformance, and conflict notes for disputed evidence. Disputed evidence cannot claim an implemented behavior, supported target behavior, or passing conformance. Inferred/unknown evidence cannot claim supported target behavior. These checks enforce consistency of recorded claims; they do not prove that a cited page was interpreted correctly.</p>
+<p>The public API progress view is generated from the canonical registry by <code>scripts/generate_api_catalogue.py</code>. Its JSON is generated during production and PR-preview builds, not maintained by hand. The view exposes independent evidence, implementation, target-support, and conformance counts and filters declarations by domain/status; it deliberately avoids a misleading aggregate implementation percentage.</p>
+<h3 id="version-scoped-evidence">Version-scoped evidence</h3>
+<p>The evidence record includes an optional source-scope field. Amiga declarations claiming version 3.5 must set it to <code>amiga-3.5-addendum</code>; <code>base-manual-3.0</code> alone cannot justify 3.5 availability. This prevents a declaration from being promoted solely because Chapters 2–12 occur in the same PDF as the 3.5 addendum. A 3.0 baseline inventory is maintained separately until 3.5 applicability is confirmed.</p>
+<p>The website payload is split into a compact static index (<code>site/data/api-catalogue.json</code>) and one static JSON detail per declaration (<code>site/data/api-catalogue-details/&lt;id&gt;.json</code>). The browser renders only category and declaration names from the index; full detail DOM and its static file request are deferred until a declaration is expanded. Both payload layers are generated from TOML at build time and checked for deterministic output in CI. Runtime operation requires only static hosting.</p>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>

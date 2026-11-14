@@ -1,0 +1,263 @@
+{
+  "repository": "vsimko/gfabasic-rust",
+  "generated_at": "2026-11-14T22:05:51.389060Z",
+  "freshness_threshold_hours": 168,
+  "workflows": [
+    {
+      "name": "Documentation checks",
+      "file": "docs.yml",
+      "note": "Markdown, JavaScript, API registry, corpus metadata and local-link validation.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/docs.yml",
+      "state": "success",
+      "latest": {
+        "id": 43646229013,
+        "name": "Documentation checks",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "tests/dqh-graphics-blit-priority",
+        "created_at": "2026-11-14T22:05:30Z",
+        "updated_at": "2026-11-14T22:05:49Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43646229013",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43646229013,
+        "name": "Documentation checks",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "tests/dqh-graphics-blit-priority",
+        "created_at": "2026-11-14T22:05:30Z",
+        "updated_at": "2026-11-14T22:05:49Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43646229013",
+        "age_hours": 0,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Rust checks",
+      "file": "rust.yml",
+      "note": "Formatting, Clippy, workspace tests/build and formatter fixtures.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/rust.yml",
+      "state": "in_progress",
+      "latest": {
+        "id": 43646229040,
+        "name": "Rust checks",
+        "status": "in_progress",
+        "event": "pull_request",
+        "branch": "tests/dqh-graphics-blit-priority",
+        "created_at": "2026-11-14T22:05:30Z",
+        "updated_at": "2026-11-14T22:05:33Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43646229040",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43643632395,
+        "name": "Rust checks",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "research/35u-mat-one-isolation",
+        "created_at": "2026-11-14T21:35:31Z",
+        "updated_at": "2026-11-14T21:36:01Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43643632395",
+        "age_hours": 0,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Security audit",
+      "file": "security-audit.yml",
+      "note": "RustSec audits for workspace, fuzz and benchmark lockfiles.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/security-audit.yml",
+      "state": "in_progress",
+      "latest": {
+        "id": 43646229110,
+        "name": "Security audit",
+        "status": "in_progress",
+        "event": "pull_request",
+        "branch": "tests/dqh-graphics-blit-priority",
+        "created_at": "2026-11-14T22:05:30Z",
+        "updated_at": "2026-11-14T22:05:34Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43646229110",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43643632401,
+        "name": "Security audit",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "research/35u-mat-one-isolation",
+        "created_at": "2026-11-14T21:35:31Z",
+        "updated_at": "2026-11-14T21:35:57Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43643632401",
+        "age_hours": 0,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Source-loader fuzzing",
+      "file": "fuzz.yml",
+      "note": "Fuzzes the source loader only; lexer/parser fuzzing is not configured.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/fuzz.yml",
+      "state": "success",
+      "latest": {
+        "id": 43591976572,
+        "name": "Fuzzing",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "ci/525-path-filtered-pr-fuzz",
+        "created_at": "2026-11-14T11:51:13Z",
+        "updated_at": "2026-11-14T11:53:23Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43591976572",
+        "age_hours": 10,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43591976572,
+        "name": "Fuzzing",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "ci/525-path-filtered-pr-fuzz",
+        "created_at": "2026-11-14T11:51:13Z",
+        "updated_at": "2026-11-14T11:53:23Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43591976572",
+        "age_hours": 10,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Benchmarks",
+      "file": "benchmarks.yml",
+      "note": "Source-loading benchmark; pull requests validate compilation without recording measurements.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/benchmarks.yml",
+      "state": "in_progress",
+      "latest": {
+        "id": 43646229032,
+        "name": "Benchmarks",
+        "status": "in_progress",
+        "event": "pull_request",
+        "branch": "tests/dqh-graphics-blit-priority",
+        "created_at": "2026-11-14T22:05:30Z",
+        "updated_at": "2026-11-14T22:05:34Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43646229032",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43643632398,
+        "name": "Benchmarks",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "research/35u-mat-one-isolation",
+        "created_at": "2026-11-14T21:35:31Z",
+        "updated_at": "2026-11-14T21:35:54Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43643632398",
+        "age_hours": 0,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Release SBOM",
+      "file": "release-sbom.yml",
+      "note": "Validates PR SBOMs and uploads on published releases; release attachment is unproven until a release runs.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/release-sbom.yml",
+      "state": "in_progress",
+      "latest": {
+        "id": 43646228998,
+        "name": "Release SBOM",
+        "status": "in_progress",
+        "event": "pull_request",
+        "branch": "tests/dqh-graphics-blit-priority",
+        "created_at": "2026-11-14T22:05:30Z",
+        "updated_at": "2026-11-14T22:05:34Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43646228998",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43643632403,
+        "name": "Release SBOM",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "research/35u-mat-one-isolation",
+        "created_at": "2026-11-14T21:35:31Z",
+        "updated_at": "2026-11-14T21:35:46Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43643632403",
+        "age_hours": 0,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "GitHub Pages",
+      "file": "pages.yml",
+      "note": "Builds and publishes the static production website.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/pages.yml",
+      "state": "success",
+      "latest": {
+        "id": 43646096445,
+        "name": "Deploy GitHub Pages",
+        "status": "success",
+        "event": "push",
+        "branch": "main",
+        "created_at": "2026-11-14T22:04:04Z",
+        "updated_at": "2026-11-14T22:04:36Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43646096445",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43646096445,
+        "name": "Deploy GitHub Pages",
+        "status": "success",
+        "event": "push",
+        "branch": "main",
+        "created_at": "2026-11-14T22:04:04Z",
+        "updated_at": "2026-11-14T22:04:36Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43646096445",
+        "age_hours": 0,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Pull request preview",
+      "file": "pr-preview.yml",
+      "note": "Builds and smoke-tests same-repository pull request previews.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/pr-preview.yml",
+      "state": "in_progress",
+      "latest": {
+        "id": 43646229053,
+        "name": "Pull request website preview",
+        "status": "in_progress",
+        "event": "pull_request",
+        "branch": "tests/dqh-graphics-blit-priority",
+        "created_at": "2026-11-14T22:05:30Z",
+        "updated_at": "2026-11-14T22:05:35Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43646229053",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43646096874,
+        "name": "Pull request website preview",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "tests/dqh-graphics-screen-priority",
+        "created_at": "2026-11-14T22:04:04Z",
+        "updated_at": "2026-11-14T22:04:22Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43646096874",
+        "age_hours": 0,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Conformance suite",
+      "file": "conformance.yml",
+      "note": "No dedicated compiler conformance workflow is configured.",
+      "state": "not-configured",
+      "latest": null,
+      "last_success": null
+    }
+  ]
+}
