@@ -1,4 +1,5 @@
 REM Minimal GFA BASIC 3.5U MAT ONE probe for issue #537.
+REM Output marker BEFORE-MAT-ONE distinguishes setup failure from MAT ONE failure.
 REM Manual reference: GFA-BASIC 3.5 Interpreter, addendum p. 13-2.
 DIM a(3,3)
 OPEN "O",#1,"DF0:FACT.OUT"
