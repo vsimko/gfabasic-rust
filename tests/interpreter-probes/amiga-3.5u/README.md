@@ -15,3 +15,7 @@ The native suite prioritizes deterministic GFA BASIC features used by Devil's Qu
 Results are runtime observations specific to the exact 3.5U binary hash and emulator/Kickstart setup recorded in each workflow artifact. Manual-backed expectations and observed results remain distinct. This is not a claim of complete language conformance.
 
 The native workflow `.github/workflows/amiga-35u-native-merge-run.yml` runs this suite against the private 3.5U interpreter when this profile or its workflow changes on `main`. It verifies the source ZIP and extracted executable hashes before booting the emulator.
+
+## MAT ONE isolation experiment (#537)
+
+A branch-only follow-up probe uses the addendum's own `a()` example with a square 3x3 array and explicitly executes `MAT BASE 1` immediately before `MAT ONE a()`. The existing scalar/DATA variable `a` was renamed within this probe so it does not share a name with the matrix. This experiment is not part of the passing `main` regression suite unless the exact native 3.5U run completes successfully.
