@@ -32,8 +32,6 @@ done
 for screenshot in editor-before-merge.png merge-dialog.png merge-file-row-pointer.png merge-file-selected.png after-shortcut.png merge-gadget-pointer.png after-merge.png after-run-dialog.png after-run.png; do
   test -s "artifacts/amiga-cli-probe/$screenshot"
 done
-# Amiga Kickstart screenshots use bright text on a saturated blue background.
-# Normalize/invert/upscale before OCR; default Tesseract silently missed the source text.
 python3 - <<'PY'
 from PIL import Image, ImageOps, ImageEnhance
 image = Image.open("artifacts/amiga-cli-probe/after-merge.png").convert("L")
@@ -42,15 +40,15 @@ image = ImageEnhance.Contrast(image).enhance(3)
 image.save("artifacts/amiga-cli-probe/after-merge-ocr-input.png")
 PY
 tesseract artifacts/amiga-cli-probe/after-merge-ocr-input.png stdout --psm 6 2>/dev/null | tee artifacts/amiga-cli-probe/after-merge-ocr.txt
-# The editor displays only the current viewport; the first screen does not
-# contain later DO WHILE/DATA fixtures. Require several visible BASIC REM
-# lines instead of searching for tokens that may be below the fold.
-REM_LINES="$(grep -Eic '^REM([[:space:]]|$)' artifacts/amiga-cli-probe/after-merge-ocr.txt || true)"
-if test "$REM_LINES" -ge 5; then
-  echo "EDITOR_MERGE_LST_CONTENT_VISIBLE=yes (OCR REM lines: $REM_LINES)" | tee artifacts/amiga-cli-probe/result.txt
+# This minimal fixture intentionally has no REM block. Verify source-specific
+# tokens from the visible editor viewport instead of the old broad-suite gate.
+if grep -Fq 'BEFORE-MAT-ONE' artifacts/amiga-cli-probe/after-merge-ocr.txt && \
+   grep -Fq 'GFATEST' artifacts/amiga-cli-probe/after-merge-ocr.txt && \
+   grep -Fq 'END' artifacts/amiga-cli-probe/after-merge-ocr.txt; then
+  echo "EDITOR_MERGE_LST_CONTENT_VISIBLE=yes (minimal MAT ONE source)" | tee artifacts/amiga-cli-probe/result.txt
 else
-  echo "EDITOR_MERGE_LST_CONTENT_VISIBLE=no (OCR REM lines: $REM_LINES)" | tee artifacts/amiga-cli-probe/result.txt
-  echo "::error::The editor screenshot does not show enough merged LST source."
+  echo "EDITOR_MERGE_LST_CONTENT_VISIBLE=no (minimal MAT ONE source)" | tee artifacts/amiga-cli-probe/result.txt
+  echo "::error::The editor screenshot does not show the merged MAT ONE diagnostic."
   exit 1
 fi
 
@@ -64,9 +62,6 @@ else
   exit 1
 fi
 
-# Validate one interpreter-emitted terminal record for every requested
-# fixture. The BASIC program performs each assertion before writing
-# PASS/FAIL; the host only validates collection completeness.
 python3 scripts/validate_gfatest_results.py \
   --expected-ids tests/interpreter-probes/amiga-3.5u/expected-ids.txt \
   --results artifacts/amiga-cli-probe/gfatest-results.txt
