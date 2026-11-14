@@ -1,6 +1,6 @@
 {
   "repository": "vsimko/gfabasic-rust",
-  "generated_at": "2026-11-14T15:44:37.366980Z",
+  "generated_at": "2026-11-14T16:09:17.419526Z",
   "freshness_threshold_hours": 168,
   "workflows": [
     {
@@ -8,28 +8,28 @@
       "file": "docs.yml",
       "note": "Markdown, JavaScript, API registry, corpus metadata and local-link validation.",
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/docs.yml",
-      "state": "in_progress",
+      "state": "success",
       "latest": {
-        "id": 43611782566,
-        "name": "Documentation checks",
-        "status": "in_progress",
-        "event": "pull_request",
-        "branch": "tests/dqh-graphics-screen-priority",
-        "created_at": "2026-11-14T15:44:23Z",
-        "updated_at": "2026-11-14T15:44:27Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43611782566",
-        "age_hours": 0,
-        "freshness": "fresh"
-      },
-      "last_success": {
-        "id": 43609235721,
+        "id": 43613996625,
         "name": "Documentation checks",
         "status": "success",
         "event": "pull_request",
         "branch": "tests/dqh-graphics-screen-priority",
-        "created_at": "2026-11-14T15:15:57Z",
-        "updated_at": "2026-11-14T15:16:21Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43609235721",
+        "created_at": "2026-11-14T16:08:53Z",
+        "updated_at": "2026-11-14T16:09:16Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43613996625",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43613996625,
+        "name": "Documentation checks",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "tests/dqh-graphics-screen-priority",
+        "created_at": "2026-11-14T16:08:53Z",
+        "updated_at": "2026-11-14T16:09:16Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43613996625",
         "age_hours": 0,
         "freshness": "fresh"
       }
@@ -41,26 +41,26 @@
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/rust.yml",
       "state": "in_progress",
       "latest": {
-        "id": 43611782543,
+        "id": 43613996652,
         "name": "Rust checks",
         "status": "in_progress",
         "event": "pull_request",
         "branch": "tests/dqh-graphics-screen-priority",
-        "created_at": "2026-11-14T15:44:23Z",
-        "updated_at": "2026-11-14T15:44:27Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43611782543",
+        "created_at": "2026-11-14T16:08:53Z",
+        "updated_at": "2026-11-14T16:09:06Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43613996652",
         "age_hours": 0,
         "freshness": "fresh"
       },
       "last_success": {
-        "id": 43609235697,
+        "id": 43611782543,
         "name": "Rust checks",
         "status": "success",
         "event": "pull_request",
         "branch": "tests/dqh-graphics-screen-priority",
-        "created_at": "2026-11-14T15:15:57Z",
-        "updated_at": "2026-11-14T15:16:34Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43609235697",
+        "created_at": "2026-11-14T15:44:23Z",
+        "updated_at": "2026-11-14T15:44:52Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43611782543",
         "age_hours": 0,
         "freshness": "fresh"
       }
@@ -72,26 +72,26 @@
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/security-audit.yml",
       "state": "in_progress",
       "latest": {
-        "id": 43611782538,
+        "id": 43613996646,
         "name": "Security audit",
         "status": "in_progress",
         "event": "pull_request",
         "branch": "tests/dqh-graphics-screen-priority",
-        "created_at": "2026-11-14T15:44:23Z",
-        "updated_at": "2026-11-14T15:44:27Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43611782538",
+        "created_at": "2026-11-14T16:08:53Z",
+        "updated_at": "2026-11-14T16:09:00Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43613996646",
         "age_hours": 0,
         "freshness": "fresh"
       },
       "last_success": {
-        "id": 43609235730,
+        "id": 43611782538,
         "name": "Security audit",
         "status": "success",
         "event": "pull_request",
         "branch": "tests/dqh-graphics-screen-priority",
-        "created_at": "2026-11-14T15:15:57Z",
-        "updated_at": "2026-11-14T15:16:18Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43609235730",
+        "created_at": "2026-11-14T15:44:23Z",
+        "updated_at": "2026-11-14T15:44:45Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43611782538",
         "age_hours": 0,
         "freshness": "fresh"
       }
@@ -111,7 +111,7 @@
         "created_at": "2026-11-14T11:51:13Z",
         "updated_at": "2026-11-14T11:53:23Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43591976572",
-        "age_hours": 3,
+        "age_hours": 4,
         "freshness": "fresh"
       },
       "last_success": {
@@ -123,7 +123,7 @@
         "created_at": "2026-11-14T11:51:13Z",
         "updated_at": "2026-11-14T11:53:23Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43591976572",
-        "age_hours": 3,
+        "age_hours": 4,
         "freshness": "fresh"
       }
     },
@@ -134,26 +134,26 @@
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/benchmarks.yml",
       "state": "in_progress",
       "latest": {
-        "id": 43611782633,
+        "id": 43613996758,
         "name": "Benchmarks",
         "status": "in_progress",
         "event": "pull_request",
         "branch": "tests/dqh-graphics-screen-priority",
-        "created_at": "2026-11-14T15:44:23Z",
-        "updated_at": "2026-11-14T15:44:27Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43611782633",
+        "created_at": "2026-11-14T16:08:53Z",
+        "updated_at": "2026-11-14T16:09:08Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43613996758",
         "age_hours": 0,
         "freshness": "fresh"
       },
       "last_success": {
-        "id": 43609235743,
+        "id": 43611782633,
         "name": "Benchmarks",
         "status": "success",
         "event": "pull_request",
         "branch": "tests/dqh-graphics-screen-priority",
-        "created_at": "2026-11-14T15:15:57Z",
-        "updated_at": "2026-11-14T15:16:21Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43609235743",
+        "created_at": "2026-11-14T15:44:23Z",
+        "updated_at": "2026-11-14T15:44:47Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43611782633",
         "age_hours": 0,
         "freshness": "fresh"
       }
@@ -165,26 +165,26 @@
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/release-sbom.yml",
       "state": "success",
       "latest": {
-        "id": 43611782525,
+        "id": 43613996642,
         "name": "Release SBOM",
         "status": "success",
         "event": "pull_request",
         "branch": "tests/dqh-graphics-screen-priority",
-        "created_at": "2026-11-14T15:44:23Z",
-        "updated_at": "2026-11-14T15:44:37Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43611782525",
+        "created_at": "2026-11-14T16:08:53Z",
+        "updated_at": "2026-11-14T16:09:17Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43613996642",
         "age_hours": 0,
         "freshness": "fresh"
       },
       "last_success": {
-        "id": 43611782525,
+        "id": 43613996642,
         "name": "Release SBOM",
         "status": "success",
         "event": "pull_request",
         "branch": "tests/dqh-graphics-screen-priority",
-        "created_at": "2026-11-14T15:44:23Z",
-        "updated_at": "2026-11-14T15:44:37Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43611782525",
+        "created_at": "2026-11-14T16:08:53Z",
+        "updated_at": "2026-11-14T16:09:17Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43613996642",
         "age_hours": 0,
         "freshness": "fresh"
       }
@@ -204,7 +204,7 @@
         "created_at": "2026-11-14T14:55:03Z",
         "updated_at": "2026-11-14T14:55:24Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43607343033",
-        "age_hours": 0,
+        "age_hours": 1,
         "freshness": "fresh"
       },
       "last_success": {
@@ -216,7 +216,7 @@
         "created_at": "2026-11-14T14:55:03Z",
         "updated_at": "2026-11-14T14:55:24Z",
         "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43607343033",
-        "age_hours": 0,
+        "age_hours": 1,
         "freshness": "fresh"
       }
     },
@@ -227,26 +227,26 @@
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/pr-preview.yml",
       "state": "in_progress",
       "latest": {
-        "id": 43611782532,
+        "id": 43613996611,
         "name": "Pull request website preview",
         "status": "in_progress",
         "event": "pull_request",
         "branch": "tests/dqh-graphics-screen-priority",
-        "created_at": "2026-11-14T15:44:23Z",
-        "updated_at": "2026-11-14T15:44:27Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43611782532",
+        "created_at": "2026-11-14T16:08:53Z",
+        "updated_at": "2026-11-14T16:09:04Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43613996611",
         "age_hours": 0,
         "freshness": "fresh"
       },
       "last_success": {
-        "id": 43609235710,
+        "id": 43611782532,
         "name": "Pull request website preview",
         "status": "success",
         "event": "pull_request",
         "branch": "tests/dqh-graphics-screen-priority",
-        "created_at": "2026-11-14T15:15:57Z",
-        "updated_at": "2026-11-14T15:16:41Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43609235710",
+        "created_at": "2026-11-14T15:44:23Z",
+        "updated_at": "2026-11-14T15:44:49Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43611782532",
         "age_hours": 0,
         "freshness": "fresh"
       }
