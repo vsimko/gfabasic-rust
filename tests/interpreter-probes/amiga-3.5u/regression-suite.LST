@@ -171,8 +171,11 @@ REPEAT
 UNTIL n%=5
 SELECT n%
 CASE 5
-  n%=n%+10
+  n%=15
+DEFAULT
+  n%=-1
 ENDSELECT
+PRINT #1,"DQH-CONTROL-FLOW:";n%
 IF n%=15
   PRINT #2,"GFATEST:dqh-control-flow:PASS"
 ELSE
@@ -185,14 +188,17 @@ OPENS 1,0,0,320,200,5,0
 OPENW 0
 SETSPEN 1,0
 SETWPEN 1,0
-screenaddr&=SCREEN(1)
-windowaddr&=WINDOW(0)
-IF screenaddr&<>0 AND SCREEN(screenaddr&)=1 AND windowaddr&<>0 AND WINDOW(windowaddr&)=0
+screenaddr=SCREEN(1)
+windowaddr=WINDOW(0)
+PRINT #1,"DQH-SCREEN-ADDR:";screenaddr
+PRINT #1,"DQH-WINDOW-ADDR:";windowaddr
+IF screenaddr<>0 AND SCREEN(screenaddr)=1 AND windowaddr<>0 AND WINDOW(windowaddr)=0
   PRINT #2,"GFATEST:dqh-screen-window-lifecycle:PASS"
 ELSE
   PRINT #2,"GFATEST:dqh-screen-window-lifecycle:FAIL"
 ENDIF
 
+PRINT #1,"DQH-SCREEN-WINDOW-OK"
 SETCOLOR 1,15,0,0
 COLOR 1
 PLOT 10,10
