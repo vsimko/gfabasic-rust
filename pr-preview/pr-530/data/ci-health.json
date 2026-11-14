@@ -1,0 +1,263 @@
+{
+  "repository": "vsimko/gfabasic-rust",
+  "generated_at": "2026-11-14T09:31:51.693402Z",
+  "freshness_threshold_hours": 168,
+  "workflows": [
+    {
+      "name": "Documentation checks",
+      "file": "docs.yml",
+      "note": "Markdown, JavaScript, API registry, corpus metadata and local-link validation.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/docs.yml",
+      "state": "in_progress",
+      "latest": {
+        "id": 43580960210,
+        "name": "Documentation checks",
+        "status": "in_progress",
+        "event": "pull_request",
+        "branch": "chore/workflow-and-agent-skill-hardening",
+        "created_at": "2026-11-14T09:31:34Z",
+        "updated_at": "2026-11-14T09:31:46Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43580960210",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43580762966,
+        "name": "Documentation checks",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "research/35u-matrix-det-probe",
+        "created_at": "2026-11-14T09:29:12Z",
+        "updated_at": "2026-11-14T09:29:39Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43580762966",
+        "age_hours": 0,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Rust checks",
+      "file": "rust.yml",
+      "note": "Formatting, Clippy, workspace tests/build and formatter fixtures.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/rust.yml",
+      "state": "failure",
+      "latest": {
+        "id": 43580960199,
+        "name": "Rust checks",
+        "status": "failure",
+        "event": "pull_request",
+        "branch": "chore/workflow-and-agent-skill-hardening",
+        "created_at": "2026-11-14T09:31:34Z",
+        "updated_at": "2026-11-14T09:31:44Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43580960199",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43580762994,
+        "name": "Rust checks",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "research/35u-matrix-det-probe",
+        "created_at": "2026-11-14T09:29:12Z",
+        "updated_at": "2026-11-14T09:29:47Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43580762994",
+        "age_hours": 0,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Security audit",
+      "file": "security-audit.yml",
+      "note": "RustSec audits for workspace, fuzz and benchmark lockfiles.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/security-audit.yml",
+      "state": "in_progress",
+      "latest": {
+        "id": 43580960236,
+        "name": "Security audit",
+        "status": "in_progress",
+        "event": "pull_request",
+        "branch": "chore/workflow-and-agent-skill-hardening",
+        "created_at": "2026-11-14T09:31:34Z",
+        "updated_at": "2026-11-14T09:31:38Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43580960236",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43580762922,
+        "name": "Security audit",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "research/35u-matrix-det-probe",
+        "created_at": "2026-11-14T09:29:12Z",
+        "updated_at": "2026-11-14T09:29:39Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43580762922",
+        "age_hours": 0,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Source-loader fuzzing",
+      "file": "fuzz.yml",
+      "note": "Fuzzes the source loader only; lexer/parser fuzzing is not configured.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/fuzz.yml",
+      "state": "in_progress",
+      "latest": {
+        "id": 43580960211,
+        "name": "Fuzzing",
+        "status": "in_progress",
+        "event": "pull_request",
+        "branch": "chore/workflow-and-agent-skill-hardening",
+        "created_at": "2026-11-14T09:31:34Z",
+        "updated_at": "2026-11-14T09:31:39Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43580960211",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43580762929,
+        "name": "Fuzzing",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "research/35u-matrix-det-probe",
+        "created_at": "2026-11-14T09:29:12Z",
+        "updated_at": "2026-11-14T09:30:57Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43580762929",
+        "age_hours": 0,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Benchmarks",
+      "file": "benchmarks.yml",
+      "note": "Source-loading benchmark; pull requests validate compilation without recording measurements.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/benchmarks.yml",
+      "state": "in_progress",
+      "latest": {
+        "id": 43580960265,
+        "name": "Benchmarks",
+        "status": "in_progress",
+        "event": "pull_request",
+        "branch": "chore/workflow-and-agent-skill-hardening",
+        "created_at": "2026-11-14T09:31:34Z",
+        "updated_at": "2026-11-14T09:31:38Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43580960265",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43580762924,
+        "name": "Benchmarks",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "research/35u-matrix-det-probe",
+        "created_at": "2026-11-14T09:29:12Z",
+        "updated_at": "2026-11-14T09:29:55Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43580762924",
+        "age_hours": 0,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Release SBOM",
+      "file": "release-sbom.yml",
+      "note": "Validates PR SBOMs and uploads on published releases; release attachment is unproven until a release runs.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/release-sbom.yml",
+      "state": "in_progress",
+      "latest": {
+        "id": 43580960263,
+        "name": "Release SBOM",
+        "status": "in_progress",
+        "event": "pull_request",
+        "branch": "chore/workflow-and-agent-skill-hardening",
+        "created_at": "2026-11-14T09:31:34Z",
+        "updated_at": "2026-11-14T09:31:38Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43580960263",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43580762923,
+        "name": "Release SBOM",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "research/35u-matrix-det-probe",
+        "created_at": "2026-11-14T09:29:12Z",
+        "updated_at": "2026-11-14T09:29:31Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43580762923",
+        "age_hours": 0,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "GitHub Pages",
+      "file": "pages.yml",
+      "note": "Builds and publishes the static production website.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/pages.yml",
+      "state": "success",
+      "latest": {
+        "id": 43517262621,
+        "name": "Deploy GitHub Pages",
+        "status": "success",
+        "event": "push",
+        "branch": "main",
+        "created_at": "2026-11-13T22:11:52Z",
+        "updated_at": "2026-11-13T22:12:27Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43517262621",
+        "age_hours": 11,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43517262621,
+        "name": "Deploy GitHub Pages",
+        "status": "success",
+        "event": "push",
+        "branch": "main",
+        "created_at": "2026-11-13T22:11:52Z",
+        "updated_at": "2026-11-13T22:12:27Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43517262621",
+        "age_hours": 11,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Pull request preview",
+      "file": "pr-preview.yml",
+      "note": "Builds and smoke-tests same-repository pull request previews.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/pr-preview.yml",
+      "state": "in_progress",
+      "latest": {
+        "id": 43580960272,
+        "name": "Pull request website preview",
+        "status": "in_progress",
+        "event": "pull_request",
+        "branch": "chore/workflow-and-agent-skill-hardening",
+        "created_at": "2026-11-14T09:31:34Z",
+        "updated_at": "2026-11-14T09:31:39Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43580960272",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43580762991,
+        "name": "Pull request website preview",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "research/35u-matrix-det-probe",
+        "created_at": "2026-11-14T09:29:12Z",
+        "updated_at": "2026-11-14T09:29:43Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43580762991",
+        "age_hours": 0,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Conformance suite",
+      "file": "conformance.yml",
+      "note": "No dedicated compiler conformance workflow is configured.",
+      "state": "not-configured",
+      "latest": null,
+      "last_success": null
+    }
+  ]
+}
