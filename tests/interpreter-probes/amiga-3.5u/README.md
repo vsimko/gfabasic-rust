@@ -10,7 +10,7 @@ This profile targets the exact Amiga GFA BASIC **3.5 U** interpreter:
 
 The native workflow extracts the single ADF from the corresponding private ZIP and prepares a working disk for Amiberry. It verifies the exact executable hash before execution. The private ZIP, source and modified ADFs, Kickstart ROM and commercial executable are never committed or uploaded. CI artifacts contain only hashes, disk listings, startup text, screenshots and textual test output.
 
-The native suite prioritizes deterministic GFA BASIC features used by Devil's Queer House (DQH): ABS, INT, MIN, SGN, ASC, CHR$, CVI, MKI$, LEFT$, MID$, LEN, STRING$, UPPER$, WHILE/WEND, REPEAT/UNTIL, SELECT/CASE, arithmetic, FOR/NEXT, strings and DATA-pointer handling. It also covers FACT boundary values, `_0`/`_9` surviving CLEAR, and MAT DET, MAT INV, MAT ADD and MAT SUB. This is an initial prioritized subset, not complete DQH command coverage.
+This branch temporarily replaces the broad suite with a minimal native diagnostic for issue #537. It opens the two output files, writes a marker before `MAT ONE`, runs the manual's 3x3 `a()` example, and records all nine resulting elements. The marker distinguishes a failure before program execution from a hold at or after `MAT ONE`.
 
 Results are runtime observations specific to the exact 3.5U binary hash and emulator/Kickstart setup recorded in each workflow artifact. Manual-backed expectations and observed results remain distinct. This is not a claim of complete language conformance.
 
