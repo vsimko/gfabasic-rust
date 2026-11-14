@@ -1,9 +1,25 @@
 {
   "schema_version": 1,
   "status": "fresh",
-  "generated_at": "2026-11-14T14:55:17.851849+00:00",
-  "last_successful_at": "2026-11-14T14:55:17.851849+00:00",
+  "generated_at": "2026-11-14T22:04:26.808202+00:00",
+  "last_successful_at": "2026-11-14T22:04:26.808202+00:00",
   "items": [
+    {
+      "type": "merged_pull_request",
+      "title": "test(amiga): cover DQH graphics and screen lifecycle",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/540",
+      "number": 540,
+      "timestamp": "2026-11-14T22:04:01Z",
+      "summary": "PR #540 merged"
+    },
+    {
+      "type": "commit",
+      "title": "test(amiga): cover DQH graphics and screen lifecycle",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/28bbf3fd96655e8830b898015003416459be851e",
+      "number": null,
+      "timestamp": "2026-11-14T22:04:01Z",
+      "summary": "Commit 28bbf3f"
+    },
     {
       "type": "merged_pull_request",
       "title": "test(amiga): prioritize DQH-used GFA BASIC commands",
@@ -83,22 +99,6 @@
       "number": null,
       "timestamp": "2026-11-13T22:11:49Z",
       "summary": "Commit 6888182"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "Document GFA BASIC 3.5 inherited statements from the interpreter addendum",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/507",
-      "number": 507,
-      "timestamp": "2026-11-13T13:14:20Z",
-      "summary": "PR #507 merged"
-    },
-    {
-      "type": "commit",
-      "title": "docs: audit GFA BASIC 3.5 inherited statements",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/8ed5eacd98bfb2e9459244dfd99d6bb24a5fa92d",
-      "number": null,
-      "timestamp": "2026-11-13T13:14:19Z",
-      "summary": "Commit 8ed5eac"
     }
   ]
 }
