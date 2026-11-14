@@ -4,3 +4,4 @@ for-next
 strings
 data-pointer
 matrix-det
+matrix-inv
