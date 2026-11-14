@@ -41,14 +41,18 @@ printf "SEND_MOUSE\\t0\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 sleep 0.5
 printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-file-selected.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 
-# From the selected LST row (y≈216), move to the Merge gadget center (y≈364).
-printf "SEND_MOUSE\\t0\\t112\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-sleep 0.1
-printf "SEND_MOUSE\\t0\\t36\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-sleep 0.5
-printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-gadget-pointer.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+# Double-click the gfatest.LST row to activate the editor's native
+# file-list default action. The selected-row screenshot places the pointer
+# near x=320,y=210; move it to the row center at about x=340,y=160.
+printf "SEND_MOUSE\\t40\\t-96\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+sleep 0.3
+printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-row-double-click.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-sleep 0.2
+sleep 0.15
+printf "SEND_MOUSE\\t0\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+sleep 0.15
+printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+sleep 0.15
 printf "SEND_MOUSE\\t0\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 sleep 3
 printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-shortcut.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
