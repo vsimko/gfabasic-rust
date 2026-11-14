@@ -34,7 +34,7 @@ jobs:
           set -euo pipefail
           test -n "$GFA_ASSETS_TOKEN"
           mkdir -p amiga-volume/S artifacts/amiga-cli-probe
-          printf 'GFA BASIC 3.52 (private CI runtime; see docs/research/amiga-gfa-basic-352-runtime-baseline.md)\\n' > artifacts/amiga-cli-probe/interpreter-version.txt
+          printf 'GFA BASIC 3.52 (private CI runtime; see docs/research/amiga-gfa-basic-352-runtime-baseline.md)\n' > artifacts/amiga-cli-probe/interpreter-version.txt
           ARCHIVE_NAME='GFA-BASIC v3.52 (1990)(GFA Systemtechnik)(DE)(Disk 1 of 2)[WB].zip'
           ARCHIVE_PATH_ENCODED="$(jq -rn --arg path "$ARCHIVE_NAME" '$path | @uri')"
           curl --fail --silent --show-error --location --retry 3 \\
@@ -125,7 +125,7 @@ jobs:
           xdftool "$RUNNER_TEMP/gfa-basic-3.52d-disk1.adf" read GFABasic amiga-volume/GFABasic
           echo "fd80f6093e8d0163856af5849121e945e37051a2ad2a9053aa1930021783d962  amiga-volume/GFABasic" | sha256sum --check
           test "$(wc -c < amiga-volume/GFABasic)" -eq 136548
-          printf '\\x00\\x00\\x03\\xf3' | cmp -n 4 - amiga-volume/GFABasic
+          printf '\x00\x00\x03\xf3' | cmp -n 4 - amiga-volume/GFABasic
           file amiga-volume/GFABasic | tee artifacts/amiga-cli-probe/binary-info.txt
           strings -a amiga-volume/GFABasic | grep -i -E 'MERGE|SAVE|LIST|DOSCMD|GFA.BASIC' | head -80 > artifacts/amiga-cli-probe/binary-strings.txt || true
 
