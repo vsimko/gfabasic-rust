@@ -1,0 +1,263 @@
+{
+  "repository": "vsimko/gfabasic-rust",
+  "generated_at": "2026-11-14T11:37:51.424131Z",
+  "freshness_threshold_hours": 168,
+  "workflows": [
+    {
+      "name": "Documentation checks",
+      "file": "docs.yml",
+      "note": "Markdown, JavaScript, API registry, corpus metadata and local-link validation.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/docs.yml",
+      "state": "queued",
+      "latest": {
+        "id": 43590914185,
+        "name": "Documentation checks",
+        "status": "queued",
+        "event": "pull_request",
+        "branch": "research/35u-matrix-ops-probe",
+        "created_at": "2026-11-14T11:37:29Z",
+        "updated_at": "2026-11-14T11:37:29Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43590914185",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43584513157,
+        "name": "Documentation checks",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "research/35u-matrix-inverse-probe",
+        "created_at": "2026-11-14T10:16:49Z",
+        "updated_at": "2026-11-14T10:17:16Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43584513157",
+        "age_hours": 1,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Rust checks",
+      "file": "rust.yml",
+      "note": "Formatting, Clippy, workspace tests/build and formatter fixtures.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/rust.yml",
+      "state": "queued",
+      "latest": {
+        "id": 43590914204,
+        "name": "Rust checks",
+        "status": "queued",
+        "event": "pull_request",
+        "branch": "research/35u-matrix-ops-probe",
+        "created_at": "2026-11-14T11:37:29Z",
+        "updated_at": "2026-11-14T11:37:29Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43590914204",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43584513185,
+        "name": "Rust checks",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "research/35u-matrix-inverse-probe",
+        "created_at": "2026-11-14T10:16:49Z",
+        "updated_at": "2026-11-14T10:17:23Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43584513185",
+        "age_hours": 1,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Security audit",
+      "file": "security-audit.yml",
+      "note": "RustSec audits for workspace, fuzz and benchmark lockfiles.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/security-audit.yml",
+      "state": "queued",
+      "latest": {
+        "id": 43590914173,
+        "name": "Security audit",
+        "status": "queued",
+        "event": "pull_request",
+        "branch": "research/35u-matrix-ops-probe",
+        "created_at": "2026-11-14T11:37:29Z",
+        "updated_at": "2026-11-14T11:37:29Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43590914173",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43584513152,
+        "name": "Security audit",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "research/35u-matrix-inverse-probe",
+        "created_at": "2026-11-14T10:16:49Z",
+        "updated_at": "2026-11-14T10:17:16Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43584513152",
+        "age_hours": 1,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Source-loader fuzzing",
+      "file": "fuzz.yml",
+      "note": "Fuzzes the source loader only; lexer/parser fuzzing is not configured.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/fuzz.yml",
+      "state": "in_progress",
+      "latest": {
+        "id": 43590914142,
+        "name": "Fuzzing",
+        "status": "in_progress",
+        "event": "pull_request",
+        "branch": "research/35u-matrix-ops-probe",
+        "created_at": "2026-11-14T11:37:29Z",
+        "updated_at": "2026-11-14T11:37:33Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43590914142",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43584513159,
+        "name": "Fuzzing",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "research/35u-matrix-inverse-probe",
+        "created_at": "2026-11-14T10:16:49Z",
+        "updated_at": "2026-11-14T10:18:41Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43584513159",
+        "age_hours": 1,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Benchmarks",
+      "file": "benchmarks.yml",
+      "note": "Source-loading benchmark; pull requests validate compilation without recording measurements.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/benchmarks.yml",
+      "state": "in_progress",
+      "latest": {
+        "id": 43590914103,
+        "name": "Benchmarks",
+        "status": "in_progress",
+        "event": "pull_request",
+        "branch": "research/35u-matrix-ops-probe",
+        "created_at": "2026-11-14T11:37:29Z",
+        "updated_at": "2026-11-14T11:37:47Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43590914103",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43584513177,
+        "name": "Benchmarks",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "research/35u-matrix-inverse-probe",
+        "created_at": "2026-11-14T10:16:49Z",
+        "updated_at": "2026-11-14T10:17:17Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43584513177",
+        "age_hours": 1,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Release SBOM",
+      "file": "release-sbom.yml",
+      "note": "Validates PR SBOMs and uploads on published releases; release attachment is unproven until a release runs.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/release-sbom.yml",
+      "state": "in_progress",
+      "latest": {
+        "id": 43590914121,
+        "name": "Release SBOM",
+        "status": "in_progress",
+        "event": "pull_request",
+        "branch": "research/35u-matrix-ops-probe",
+        "created_at": "2026-11-14T11:37:29Z",
+        "updated_at": "2026-11-14T11:37:33Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43590914121",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43584513120,
+        "name": "Release SBOM",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "research/35u-matrix-inverse-probe",
+        "created_at": "2026-11-14T10:16:49Z",
+        "updated_at": "2026-11-14T10:17:46Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43584513120",
+        "age_hours": 1,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "GitHub Pages",
+      "file": "pages.yml",
+      "note": "Builds and publishes the static production website.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/pages.yml",
+      "state": "success",
+      "latest": {
+        "id": 43517262621,
+        "name": "Deploy GitHub Pages",
+        "status": "success",
+        "event": "push",
+        "branch": "main",
+        "created_at": "2026-11-13T22:11:52Z",
+        "updated_at": "2026-11-13T22:12:27Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43517262621",
+        "age_hours": 13,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43517262621,
+        "name": "Deploy GitHub Pages",
+        "status": "success",
+        "event": "push",
+        "branch": "main",
+        "created_at": "2026-11-13T22:11:52Z",
+        "updated_at": "2026-11-13T22:12:27Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43517262621",
+        "age_hours": 13,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Pull request preview",
+      "file": "pr-preview.yml",
+      "note": "Builds and smoke-tests same-repository pull request previews.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/pr-preview.yml",
+      "state": "in_progress",
+      "latest": {
+        "id": 43590914160,
+        "name": "Pull request website preview",
+        "status": "in_progress",
+        "event": "pull_request",
+        "branch": "research/35u-matrix-ops-probe",
+        "created_at": "2026-11-14T11:37:29Z",
+        "updated_at": "2026-11-14T11:37:33Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43590914160",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43584513138,
+        "name": "Pull request website preview",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "research/35u-matrix-inverse-probe",
+        "created_at": "2026-11-14T10:16:49Z",
+        "updated_at": "2026-11-14T10:17:57Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43584513138",
+        "age_hours": 1,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Conformance suite",
+      "file": "conformance.yml",
+      "note": "No dedicated compiler conformance workflow is configured.",
+      "state": "not-configured",
+      "latest": null,
+      "last_success": null
+    }
+  ]
+}
