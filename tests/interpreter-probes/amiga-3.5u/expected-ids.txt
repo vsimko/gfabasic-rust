@@ -5,3 +5,6 @@ strings
 data-pointer
 matrix-det
 matrix-inv
+matrix-one
+matrix-add
+matrix-sub
