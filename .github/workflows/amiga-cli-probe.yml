@@ -42,12 +42,6 @@ jobs:
             --header "Accept: application/vnd.github.raw" \
             "https://api.github.com/repos/vsimko/gfabasic-private-assets/contents/$ARCHIVE_PATH_ENCODED?ref=main" \
             --output "$RUNNER_TEMP/gfa-basic-3.52d-disk1.zip"
-          mkdir -p "$RUNNER_TEMP/gfa-basic-3.52d-disk1"
-          unzip -q "$RUNNER_TEMP/gfa-basic-3.52d-disk1.zip" -d "$RUNNER_TEMP/gfa-basic-3.52d-disk1"
-          mapfile -d '' -t ADF_MEMBERS < <(find "$RUNNER_TEMP/gfa-basic-3.52d-disk1" -type f -iname '*.adf' -print0)
-          test "${#ADF_MEMBERS[@]}" -eq 1 || { echo "Expected exactly one ADF in private archive, found ${#ADF_MEMBERS[@]}"; exit 1; }
-          cp "${ADF_MEMBERS[0]}" "$RUNNER_TEMP/gfa-basic-3.52d-disk1.adf"
-
       - name: Download original Amiga Kickstart ROM
         env:
           GFA_ASSETS_TOKEN: ${{ secrets.GFA_ASSETS_TOKEN }}
@@ -109,7 +103,7 @@ jobs:
           # Recreate APT's unprivileged download directory after cache restore.
           sudo install -d -o _apt -g root -m 0700 /var/lib/apt/lists/partial
           sudo apt-get -o Acquire::Languages=none update
-          sudo apt-get install -y --no-install-recommends amiberry xvfb netcat-openbsd tesseract-ocr python3-pip python3-pil
+          sudo apt-get install -y --no-install-recommends amiberry xvfb netcat-openbsd tesseract-ocr python3-pip python3-pil unzip
           # Build the wheelhouse only on a cache miss. Cache hits install fully
           # offline, avoiding repeated PyPI index and package downloads.
           if ! compgen -G '.cache/amitools-wheelhouse/*.whl' > /dev/null; then
@@ -122,6 +116,11 @@ jobs:
       - name: Extract and verify interpreter from private ADF
         run: |
           set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/gfa-basic-3.52d-disk1"
+          unzip -q "$RUNNER_TEMP/gfa-basic-3.52d-disk1.zip" -d "$RUNNER_TEMP/gfa-basic-3.52d-disk1"
+          mapfile -d '' -t ADF_MEMBERS < <(find "$RUNNER_TEMP/gfa-basic-3.52d-disk1" -type f -iname '*.adf' -print0)
+          test "${#ADF_MEMBERS[@]}" -eq 1 || { echo "Expected exactly one ADF in private archive, found ${#ADF_MEMBERS[@]}"; exit 1; }
+          cp "${ADF_MEMBERS[0]}" "$RUNNER_TEMP/gfa-basic-3.52d-disk1.adf"
           xdftool "$RUNNER_TEMP/gfa-basic-3.52d-disk1.adf" read GFABasic amiga-volume/GFABasic
           echo "fd80f6093e8d0163856af5849121e945e37051a2ad2a9053aa1930021783d962  amiga-volume/GFABasic" | sha256sum --check
           test "$(wc -c < amiga-volume/GFABasic)" -eq 136548
