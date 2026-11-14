@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Build a deterministic compiler and runtime in Rust for Commodore Amiga GFA BASIC interpreter 3.5, producing native Linux x86-64 executables. The project is not a universal BASIC compiler and does not target multiple G…">
+  <title>Project goals and compatibility objectives · GFA BASIC Rust documentation</title>
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body class="docs-site">
+  <header class="docs-header">
+    <a href="../../index.html">GFA BASIC Rust</a>
+    <span aria-hidden="true">/</span>
+    <a href="../index.html">Documentation</a>
+  </header>
+  <div class="docs-layout">
+    <nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home" href="index.html">Section index</a><ul><li><a href="AI-VERIFICATION.html">AI-assisted API verification</a></li><li><a href="https://github.com/vsimko/gfabasic-rust/blob/main/.agents/skills/api-evidence-verification/SKILL.md">`api-evidence-verification` agent skill</a></li><li><a href="API-PROFILES.html">API profiles</a></li><li><a href="API-REGISTRY.html">API registry and declaration source of truth</a></li><li><a href="BENCHMARKING.html">Performance benchmarks and profiling strategy</a></li><li><a href="CI.html">GitHub Actions workflow architecture</a></li><li><a href="CLI-AND-CONFIG.html">CLI, configuration, and build artifacts</a></li><li><a href="COMPATIBILITY-MATRIX.html">Current compatibility matrix</a></li><li><a href="DIAGNOSTICS.html">Diagnostics and compatibility reporting</a></li><li><a href="DIALECTS.html">Dialects, versions, and compatibility policy</a></li><li><a href="FORMATTER.html">Formatter style and current support</a></li><li><a href="FUZZING.html">Frontend fuzzing and robustness strategy</a></li><li><a href="GOALS.html">Project goals and compatibility objectives</a></li><li><a href="IMPLEMENTATION-DASHBOARD.html">Implementation dashboard</a></li><li><a href="LANGUAGE-TOOLING.html">Language tooling and editor integration</a></li><li><a href="MEMORY.html">Memory model and hardware access</a></li><li><a href="MVP-vertical-slice.html">First compiler vertical slice — proposed boundary</a></li><li><a href="PIPELINE-AND-IR.html">Compiler pipeline and intermediate representation</a></li><li><a href="README.html">README</a></li><li><a href="RELEASES.html">Release, artifact, and reproducible-build policy</a></li><li><a href="RUNTIME.html">Runtime architecture</a></li><li><a href="SECURITY.html">Dependency and supply-chain security</a></li><li><a href="TARGETS.html">Host and target model</a></li><li><a href="TESTING.html">Compatibility testing and release criteria</a></li><li><a href="VALIDATION.html">Repository consistency validation</a></li><li><a href="VERSIONING.html">Versioning and compatibility lifecycle</a></li><li><a href="WEBSITE_PREVIEWS.html">Website previews for pull requests</a></li><li><a href="WORKSPACE.html">Rust workspace and dependency policy</a></li><li><a href="adr/index.html">Architecture decisions</a></li></ul></nav>
+    <main class="docs-content">
+      <article>
+        <h1>Project goals and compatibility objectives</h1>
+        <p class="docs-meta"><span>Architecture</span></p>
+        <h1 id="project-goals-and-compatibility-objectives">Project goals and compatibility objectives</h1>
+<ul>
+<li>Status: <strong>Accepted product scope</strong>; see <a href="adr/0011-amiga-35-linux-sdl3-product-scope.html">ADR 0011</a>.</li>
+</ul>
+<h2 id="purpose">Purpose</h2>
+<p>Build a deterministic compiler and runtime in Rust for <strong>Commodore Amiga GFA BASIC interpreter 3.5</strong>, producing native <strong>Linux x86-64</strong> executables. The project is not a universal BASIC compiler and does not target multiple GFA BASIC dialects.</p>
+<h2 id="sole-supported-product-target">Sole supported product target</h2>
+<ul>
+<li>Source language: Amiga GFA BASIC interpreter 3.5 only.</li>
+<li>Output: Linux x86-64, GNU ABI, ELF 64-bit.</li>
+<li>Native code generation: LLVM.</li>
+<li>Linux graphics, windowing, and input: SDL3 behind project-owned runtime interfaces.</li>
+<li>The compiler must be deterministic and must not require an LLM or network access.</li>
+</ul>
+<p>SDL3 is a platform adapter, not part of language semantics, the lexer, parser, or target-independent IR. Programs that do not use SDL-backed platform functionality should not acquire an unnecessary SDL3 runtime dependency.</p>
+<h2 id="compatibility-dimensions">Compatibility dimensions</h2>
+<p>Do not use an unqualified “GFA BASIC compatible” claim. Report syntax, static semantics, language runtime, Amiga API behavior, observable program behavior, and Linux binary/toolchain behavior separately. Every claim must identify Amiga GFA BASIC 3.5, evidence status, implementation status, and known deviations.</p>
+<p>The Amiga 3.5 interpreter manual is the primary normative source. Rules found only in Amiga 3.0/3.03 material are inherited candidates and must be confirmed for 3.5 before implementation or conformance claims.</p>
+<h2 id="explicit-non-goals">Explicit non-goals</h2>
+<ul>
+<li>Atari ST GFA BASIC, including Atari ST 3.0 and 3.5.</li>
+<li>Amiga GFA BASIC versions other than interpreter 3.5 as supported source dialects.</li>
+<li>Other BASIC dialects.</li>
+<li>Windows, macOS, BSD, other Linux architectures, non-Linux output, and cross-compilation.</li>
+<li>Additional graphics or platform frameworks in place of SDL3.</li>
+<li>Reproducing Amiga hardware or operating-system behavior that cannot be represented or reasonably emulated on Linux.</li>
+<li>Implementing every historical API regardless of evidence or feasibility.</li>
+<li>Requiring an LLM or network service in the compilation path.</li>
+<li>Generated Rust as the primary output.</li>
+</ul>
+<p>Historical manuals and Atari research may remain in the repository as archival context. They do not create support commitments or authorize implementation of another dialect/profile. Unsupported, ambiguous, or unavailable constructs must produce explicit diagnostics; they must never be silently ignored or assigned semantics from another BASIC dialect.</p>
+<h2 id="architecture-constraints">Architecture constraints</h2>
+<ul>
+<li>Keep Amiga GFA BASIC 3.5 language semantics independent of Linux and SDL3.</li>
+<li>Keep target-independent IR free of OS, ABI, and SDL3 details.</li>
+<li>Put Amiga API compatibility behavior behind project-owned runtime interfaces.</li>
+<li>Put SDL3 calls only in the Linux platform adapter.</li>
+<li>Select and link only runtime components required by a generated program.</li>
+<li>Keep LLVM behind the backend boundary.</li>
+</ul>
+<p>Tracking: <a href="https://github.com/vsimko/gfabasic-rust/issues/2">issue #2</a>, <a href="https://github.com/vsimko/gfabasic-rust/issues/3">issue #3</a>, and <a href="adr/0011-amiga-35-linux-sdl3-product-scope.html">ADR 0011</a>.</p>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>

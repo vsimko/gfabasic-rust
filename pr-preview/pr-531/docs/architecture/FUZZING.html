@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Fuzzing is intended to find implementation defects when the future source frontend receives malformed, unusual, deeply nested, or adversarial input. It complements unit, property-based, regression, and manual-derived …">
+  <title>Frontend fuzzing and robustness strategy · GFA BASIC Rust documentation</title>
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body class="docs-site">
+  <header class="docs-header">
+    <a href="../../index.html">GFA BASIC Rust</a>
+    <span aria-hidden="true">/</span>
+    <a href="../index.html">Documentation</a>
+  </header>
+  <div class="docs-layout">
+    <nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home" href="index.html">Section index</a><ul><li><a href="AI-VERIFICATION.html">AI-assisted API verification</a></li><li><a href="https://github.com/vsimko/gfabasic-rust/blob/main/.agents/skills/api-evidence-verification/SKILL.md">`api-evidence-verification` agent skill</a></li><li><a href="API-PROFILES.html">API profiles</a></li><li><a href="API-REGISTRY.html">API registry and declaration source of truth</a></li><li><a href="BENCHMARKING.html">Performance benchmarks and profiling strategy</a></li><li><a href="CI.html">GitHub Actions workflow architecture</a></li><li><a href="CLI-AND-CONFIG.html">CLI, configuration, and build artifacts</a></li><li><a href="COMPATIBILITY-MATRIX.html">Current compatibility matrix</a></li><li><a href="DIAGNOSTICS.html">Diagnostics and compatibility reporting</a></li><li><a href="DIALECTS.html">Dialects, versions, and compatibility policy</a></li><li><a href="FORMATTER.html">Formatter style and current support</a></li><li><a href="FUZZING.html">Frontend fuzzing and robustness strategy</a></li><li><a href="GOALS.html">Project goals and compatibility objectives</a></li><li><a href="IMPLEMENTATION-DASHBOARD.html">Implementation dashboard</a></li><li><a href="LANGUAGE-TOOLING.html">Language tooling and editor integration</a></li><li><a href="MEMORY.html">Memory model and hardware access</a></li><li><a href="MVP-vertical-slice.html">First compiler vertical slice — proposed boundary</a></li><li><a href="PIPELINE-AND-IR.html">Compiler pipeline and intermediate representation</a></li><li><a href="README.html">README</a></li><li><a href="RELEASES.html">Release, artifact, and reproducible-build policy</a></li><li><a href="RUNTIME.html">Runtime architecture</a></li><li><a href="SECURITY.html">Dependency and supply-chain security</a></li><li><a href="TARGETS.html">Host and target model</a></li><li><a href="TESTING.html">Compatibility testing and release criteria</a></li><li><a href="VALIDATION.html">Repository consistency validation</a></li><li><a href="VERSIONING.html">Versioning and compatibility lifecycle</a></li><li><a href="WEBSITE_PREVIEWS.html">Website previews for pull requests</a></li><li><a href="WORKSPACE.html">Rust workspace and dependency policy</a></li><li><a href="adr/index.html">Architecture decisions</a></li></ul></nav>
+    <main class="docs-content">
+      <article>
+        <h1>Frontend fuzzing and robustness strategy</h1>
+        <p class="docs-meta"><span>Architecture</span></p>
+        <h1 id="frontend-fuzzing-and-robustness-strategy">Frontend fuzzing and robustness strategy</h1>
+<ul>
+<li>Status: Source-loader fuzz target and bounded CI campaign are implemented; lexer/parser targets remain pending.</li>
+<li>Tracking: <a href="https://github.com/vsimko/gfabasic-rust/issues/43">strategy #43 (completed)</a>; <a href="https://github.com/vsimko/gfabasic-rust/issues/118">implementation #118</a>.</li>
+</ul>
+<h2 id="goals-and-non-goals">Goals and non-goals</h2>
+<p>Fuzzing is intended to find implementation defects when the future source frontend receives malformed, unusual, deeply nested, or adversarial input. It complements unit, property-based, regression, and manual-derived conformance tests; it does not establish language conformance by itself.</p>
+<p>The fuzz targets must be usable without the project LLVM backend, SDL3, an Amiga/Atari emulator, or network access. They must not execute generated programs or invoke external interpreters as part of an ordinary fuzz iteration.</p>
+<p>Fuzzing must not define new GFA BASIC syntax or semantics. A crash-free parser is not proof that it accepts the right language, and a fuzzer-generated input is not a normative language example.</p>
+<h2 id="target-boundaries">Target boundaries</h2>
+<p>Create separate targets when the corresponding frontend boundary exists and can be invoked without unrelated system dependencies. The names below are logical target names, not existing Cargo targets.</p>
+<table>
+<thead>
+<tr>
+<th>Logical target</th>
+<th>Input</th>
+<th>Main robustness properties</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Source loading</td>
+<td>Bounded bytes passed through the generic strict UTF-8 transport helper; dialect encoding remains separate</td>
+<td>No panic on malformed input; bounded allocation; stable source identity and diagnostics</td>
+</tr>
+<tr>
+<td>Lexer</td>
+<td>Source text using the selected dialect/version configuration</td>
+<td>No panic or hang; token spans remain within source bounds; repeated runs are deterministic</td>
+</tr>
+<tr>
+<td>Parser</td>
+<td>Source text or a stable token-stream entry point</td>
+<td>No panic or hang; malformed input produces controlled diagnostics; nesting cannot cause uncontrolled resource exhaustion</td>
+</tr>
+<tr>
+<td>Expressions and statements</td>
+<td>Source fragments parsed through the ordinary frontend entry point</td>
+<td>Robust precedence, delimiter, nesting, and recovery paths without inventing acceptance rules</td>
+</tr>
+<tr>
+<td>Labels and declarations</td>
+<td>Source fragments exercising declaration/name-resolution boundaries once those contracts exist</td>
+<td>No unexpected panic; diagnostics retain valid source locations</td>
+</tr>
+<tr>
+<td>Source composition</td>
+<td>Project-local files and include inputs, only after composition semantics are specified</td>
+<td>No access outside the test sandbox; deterministic resolution; bounded file count and total input</td>
+</tr>
+</tbody>
+</table>
+<p>Do not expose unstable internal parser functions solely to satisfy a fuzzer. Prefer public or crate-internal frontend entry points that exercise the same path used by normal compilation.</p>
+<p>A target must state its selected dialect/version and configuration. Until the first dialect and its lexical/source-encoding rules are accepted, byte-level source-loader behavior remains an open contract.</p>
+<h2 id="input-corpora-and-dictionaries">Input corpora and dictionaries</h2>
+<p>Keep fuzzing inputs separate from the manual-derived conformance corpus:</p>
+<ul>
+<li>Fuzzer seed corpora belong under <code>fuzz/corpus/&lt;target&gt;/</code> when a harness is introduced.</li>
+<li>Minimized defect reproducers promoted to permanent regression coverage belong under <code>tests/regression/fuzz/&lt;target&gt;/</code> (or the owning crate's test-fixture directory once the workspace layout is accepted).</li>
+<li>Generated crash, timeout, and temporary artifact output belongs in an ignored local/build-artifact directory. Do not commit untriaged fuzzer output wholesale.</li>
+<li>Keep the existing <code>tests/corpus/</code> for dialect/version-scoped research and conformance fixtures. Do not mix mutation artifacts into it.</li>
+</ul>
+<p>Start with small synthetic inputs and only those language fragments whose spelling and role have adequate source evidence. A verified manual excerpt may be used as a seed only when its retention and redistribution are permitted. The existing research-only Amiga 3.0 candidate fixtures are not automatically authoritative seeds or expected-behavior oracles; review their evidence and provenance first.</p>
+<p>A mutation dictionary may contain keywords, operators, delimiters, and type suffixes only when they are supported by the selected dialect/version evidence. Record the source for each dictionary set. Do not populate a dictionary from guesses, third-party extensions, or another platform's dialect without explicit cross-checking.</p>
+<h2 id="required-invariants">Required invariants</h2>
+<p>Every target should check the properties that are meaningful for its boundary:</p>
+<ul>
+<li>Arbitrary malformed input must not cause an unexpected Rust panic, abort, or process crash.</li>
+<li>Processing must terminate within the configured fuzzing resource budget; hangs and pathological slowdowns are defects to triage.</li>
+<li>Memory and recursion growth must be bounded by implementation safeguards and the external job budget. Fuzz harness limits are operational safeguards, not GFA BASIC language limits.</li>
+<li>Repeating the same input with the same configuration must produce deterministic tokens, parse results, or diagnostics, as applicable.</li>
+<li>Any emitted source span must be within the corresponding source buffer and must not overflow when offsets are combined.</li>
+<li>Error recovery must not loop forever or repeatedly emit the same diagnostic without progress.</li>
+<li>If source composition is eventually fuzzed, all filesystem access must remain inside an isolated temporary project root. Symlink and path traversal cases must be included in the adversarial set.</li>
+</ul>
+<p>Do not assert that every arbitrary input is valid or that malformed input must receive a particular diagnostic unless that behavior is part of an accepted frontend contract.</p>
+<h2 id="resource-budgets">Resource budgets</h2>
+<p>Use explicit limits so fuzzing is useful in CI and cannot consume an unbounded runner allocation. The following are initial proposed harness budgets, not compiler input limits or language restrictions:</p>
+<table>
+<thead>
+<tr>
+<th>Mode</th>
+<th style="text-align:right">Proposed execution budget</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pull-request smoke</td>
+<td style="text-align:right">Up to 30 seconds per target, at most 2 minutes total fuzz execution</td>
+<td>Catch obvious crashes and hangs quickly</td>
+</tr>
+<tr>
+<td>Scheduled/manual campaign</td>
+<td style="text-align:right">Start at 10 minutes per target; increase after measuring runner cost and coverage</td>
+<td>Explore deeper input combinations</td>
+</tr>
+<tr>
+<td>Individual input</td>
+<td style="text-align:right">Use the fuzzer's per-input timeout where supported; begin with 1 second and tune from measurements</td>
+<td>Isolate pathological cases</td>
+</tr>
+<tr>
+<td>Input size</td>
+<td style="text-align:right">Begin with a 1 MiB maximum generated input and adjust using real source-size requirements</td>
+<td>Prevent oversized mutations from dominating the campaign</td>
+</tr>
+</tbody>
+</table>
+<p>Give the fuzzer process a bounded execution time and configure a separate outer CI timeout that includes tool installation and compilation. The current source-loader workflow uses a 15-minute outer job limit.</p>
+<p>Do not use a low recursion limit as a substitute for correct parser design. Deep nesting should be tested deliberately; a stack overflow or uncontrolled memory growth is a defect, while any supported-language nesting limit must be separately specified and tested.</p>
+<h2 id="ci-execution-policy">CI execution policy</h2>
+<p>For each available harness and stable target interface:</p>
+<ol>
+<li>Run bounded smoke fuzzing on pull requests that change the frontend, fuzz harnesses, fuzz dictionaries, or relevant corpus seeds.</li>
+<li>Keep smoke execution separate from formatting, compilation, and deterministic unit tests so failures identify the responsible stage.</li>
+<li>Run longer campaigns on a schedule and on manual dispatch. Do not make every pull request run a long campaign.</li>
+<li>Preserve the fuzzer engine, version, target, seed, command, elapsed time, and relevant toolchain details for each failure.</li>
+<li>Do not introduce a coverage-percentage gate before a repeatable baseline exists. First collect and review coverage trends.</li>
+<li>Treat a timeout, crash, sanitizer finding, or unexpected panic as a failed fuzz job. Do not silently retry until green; retain the original failure artifact for triage.</li>
+</ol>
+<p>The engine and toolchain are selected for the source-loader target; see Current implementation below. Add further targets only when their ordinary compiler entry points and input contracts are stable.</p>
+<h2 id="failure-triage-and-regression-workflow">Failure triage and regression workflow</h2>
+<p>For each reproducible failure:</p>
+<ol>
+<li>Preserve the original failing input and record the target, dialect/version configuration, fuzzer/engine version, seed, command, and failure mode.</li>
+<li>Minimize the input with the selected engine without changing the failure classification.</li>
+<li>Determine whether the failure is a compiler defect, an invalid harness assumption, an unresolved language question, or an environment/tooling failure.</li>
+<li>If it is an implementation defect, create or update a focused issue and add the smallest permitted reproducer to the regression suite.</li>
+<li>Keep the regression test independent of the fuzzer runtime so it can run in the ordinary deterministic test suite.</li>
+<li>Link the regression fixture to the issue and document any required evidence. Do not mark a syntax case as invalid merely because it is absent from the current reference inventory.</li>
+</ol>
+<p>Do not commit ROMs, disk images, copyrighted sample collections, secrets, host paths, or large raw crash corpora. Follow the source-provenance and redistribution rules in <a href="../reference-sources.html">the reference-source register</a>.</p>
+<h2 id="current-implementation">Current implementation</h2>
+<p>The first target is the generic source-loader byte boundary. It exercises
+<code>SourceMap::add_utf8_bytes</code>, which is also used by the filesystem loader.
+It checks strict UTF-8 rejection, source-map immutability on decode failure,
+source identity, line indexing, and valid line/column boundaries. This is a
+transport-level UTF-8 test only: it does <strong>not</strong> assert that Amiga GFA BASIC
+source files use UTF-8, and it does not test MERGE/include behavior.</p>
+<p>The selected engine is AFL++ through the Rust <code>afl</code> and <code>cargo-afl</code>
+integration, both pinned to version <code>0.18.2</code>. Their published package
+manifests declare Apache-2.0, which is in the approved dependency allowlist.
+The fuzz workspace is separate from the normal Cargo workspace so its
+fuzz-only dependencies do not enter ordinary builds. CI uses the project's
+pinned stable Rust 1.99.1 toolchain on Linux x86-64; this engine does not
+require switching the project toolchain to nightly.</p>
+<p>CI runs a 30-second smoke campaign on relevant pull requests and a 10-minute
+campaign on the weekly schedule or manual dispatch. Both modes cap individual
+inputs at 1 MiB, use a 1-second per-input timeout and a 256 MiB target memory
+limit, and run under a 15-minute job timeout. The workflow uploads a portable tarball containing raw AFL++ output, attempted
+minimized crash/hang inputs, and target/toolchain/corpus metadata, plus the
+committed fuzz-workspace lockfile, for seven days. It records the commit, corpus checksums, campaign limits, and
+frontend stages explicitly skipped because their entry points are not ready.
+On GitHub-hosted runners it bypasses AFL++'s core-pattern preflight because the
+runner routes core dumps through an external handler; crash and hang output
+files are still checked and retained. No language dictionary is used until its tokens
+are supported by the selected dialect evidence.</p>
+<p>Local usage and corpus handling are documented in <a href="https://github.com/vsimko/gfabasic-rust/blob/main/fuzz/README.md"><code>fuzz/README.md</code></a>.
+Fuzzer output is local/generated data; do not commit it. Minimize any crash or
+hang and promote a permitted reproducer into the deterministic regression
+suite before treating it as fixed.</p>
+<h2 id="remaining-implementation-decisions">Remaining implementation decisions</h2>
+<ul>
+<li>Add a lexer target after the selected Amiga GFA BASIC interpreter 3.5 lexical rules and token entry point are sufficiently specified in #46. Treat 3.0/3.03 rules only as inherited candidates until confirmed against 3.5.</li>
+<li>Add a parser target after the parser/AST entry point exists in #47.</li>
+<li>Add source-composition fuzzing only after #120 defines deterministic resolution and filesystem sandbox rules.</li>
+<li>Establish useful coverage baselines before adding coverage-percentage gates.</li>
+</ul>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>
