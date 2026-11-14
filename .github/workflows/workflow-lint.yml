@@ -45,7 +45,8 @@ jobs:
         run: |
           mapfile -t workflow_files < <(find .github/workflows -type f \( -name '*.yml' -o -name '*.yaml' \) -print | sort)
           test "${#workflow_files[@]}" -gt 0
-          go run github.com/rhysd/actionlint/cmd/actionlint@v1.7.7 "${workflow_files[@]}"
+          # Ignore ShellCheck SC2016 (intentional single-quoted child script) and SC2317 (cleanup invoked by trap).
+          go run github.com/rhysd/actionlint/cmd/actionlint@v1.7.7 -ignore SC2016 -ignore SC2317 "${workflow_files[@]}"
 
       - name: Check shell syntax in repository scripts
         run: |
