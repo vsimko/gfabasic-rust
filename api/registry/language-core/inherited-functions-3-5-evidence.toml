@@ -1,0 +1,355 @@
+schema-version = 1
+
+# Narrow inherited-function slice: only call forms directly used or
+# explicitly referenced in 3.5-labelled addendum/book material. The base
+# chapter remains 3.0-origin evidence and does not establish other overloads.
+[[declarations]]
+id = "gfa.language.numeric.rand"
+name = "RAND"
+kind = "function"
+
+[[declarations.availability]]
+dialect = "amiga-gfa-basic-interpreter"
+versions = ["3.5"]
+
+[[declarations.syntax]]
+form = "RAND(integer-expression)"
+contexts = ["expression"]
+arguments = [{ name = "y", type = "integer expression", required = true }]
+
+[declarations.signature]
+returns = "integer"
+
+[declarations.semantics]
+summary = "Returns a random 16-bit integer in the range from 0 to y-1; the 3.5 addendum example uses RAND(10) as a matrix element value."
+side-effects = []
+errors = []
+
+[declarations.evidence]
+source-scope = "amiga-3.5-addendum"
+status = "book-documented"
+sources = ["AM-INTERPRETER-35"]
+printed-pages = ["Chapter 13, printed p. 13-2", "Base-manual function definition, printed pp. 4-17–4-18 (3.0-origin semantics only)"]
+notes = ["The 3.5 example directly demonstrates the one-argument RAND(10) form. The result range and 16-bit description come from the 3.0 base-manual definition; distribution, seed behavior, and other random functions are not reconfirmed by this occurrence."]
+
+[declarations.implementation]
+status = "not-implemented"
+
+[[declarations.support]]
+target = "x86_64-unknown-linux-gnu"
+classification = "unknown"
+conformance = "not-tested"
+tests = []
+pending-reason = "No registered runtime implementation or executable 3.5 reference-interpreter conformance test."
+
+[declarations.docs]
+path = "docs/research/amiga-gfa-basic-35-base-function-use-audit.md"
+anchors = ["directly-evidenced-inherited-functions"]
+
+[[declarations]]
+id = "gfa.language.string.str"
+name = "STR$"
+kind = "function"
+
+[[declarations.availability]]
+dialect = "amiga-gfa-basic-interpreter"
+versions = ["3.5"]
+
+[[declarations.syntax]]
+form = "STR$(arithmetic-expression, arithmetic-expression, arithmetic-expression)"
+contexts = ["expression"]
+arguments = [
+  { name = "x", type = "arithmetic expression", required = true },
+  { name = "y", type = "arithmetic expression", required = true },
+  { name = "z", type = "arithmetic expression", required = true },
+]
+
+[declarations.signature]
+returns = "string"
+
+[declarations.semantics]
+summary = "Converts a numeric value to a string; the 3.5 MAT PRINT description explicitly references the three-argument formatting form STR$(x,g,n)."
+side-effects = []
+errors = []
+
+[declarations.evidence]
+source-scope = "amiga-3.5-addendum"
+status = "book-documented"
+sources = ["AM-INTERPRETER-35", "AM-BOOK-DE-1990"]
+printed-pages = ["English addendum, Chapter 13, printed p. 13-3", "German 3.5 Chapter 18, printed p. 457", "Base-manual function definition, printed p. 2-15 (3.0-origin syntax/semantics only)"]
+notes = ["The 3.5 source explicitly references STR$(x,g,n); the German 3.5 chapter independently corroborates the formatting reference. The one- and two-argument forms are not independently restated in 3.5 material."]
+
+[declarations.implementation]
+status = "not-implemented"
+
+[[declarations.support]]
+target = "x86_64-unknown-linux-gnu"
+classification = "unknown"
+conformance = "not-tested"
+tests = []
+pending-reason = "No registered runtime implementation or executable 3.5 reference-interpreter conformance test."
+
+[declarations.docs]
+path = "docs/research/amiga-gfa-basic-35-base-function-use-audit.md"
+anchors = ["directly-evidenced-inherited-functions"]
+
+[[declarations]]
+id = "gfa.language.numeric.succ"
+name = "SUCC"
+kind = "function"
+
+[[declarations.availability]]
+dialect = "amiga-gfa-basic-interpreter"
+versions = ["3.5"]
+
+[[declarations.syntax]]
+form = "SUCC(integer-expression)"
+contexts = ["expression"]
+arguments = [{ name = "i", type = "integer expression", required = true }]
+
+[declarations.signature]
+returns = "integer"
+
+[declarations.semantics]
+summary = "Returns the successor of the supplied integer value; the 3.5 matrix-copy example uses SUCC(i%)."
+side-effects = []
+errors = []
+
+[declarations.evidence]
+source-scope = "amiga-3.5-addendum"
+status = "book-documented"
+sources = ["AM-INTERPRETER-35"]
+printed-pages = ["Chapter 13, printed p. 13-5", "Base-manual function definition, printed p. 4-11 (3.0-origin numeric semantics only)"]
+notes = ["Only the integer-expression form SUCC(i%) is directly demonstrated in 3.5 material. The string overload described in the 3.0 base text is not independently confirmed for 3.5."]
+
+[declarations.implementation]
+status = "not-implemented"
+
+[[declarations.support]]
+target = "x86_64-unknown-linux-gnu"
+classification = "unknown"
+conformance = "not-tested"
+tests = []
+pending-reason = "No registered runtime implementation or executable 3.5 reference-interpreter conformance test."
+
+[declarations.docs]
+path = "docs/research/amiga-gfa-basic-35-base-function-use-audit.md"
+anchors = ["directly-evidenced-inherited-functions"]
+
+[[declarations]]
+id = "gfa.language.string.string"
+name = "STRING$"
+kind = "function"
+
+[[declarations.availability]]
+dialect = "amiga-gfa-basic-interpreter"
+versions = ["3.5"]
+
+[[declarations.syntax]]
+form = "STRING$(integer-expression, string-expression)"
+contexts = ["expression"]
+arguments = [
+  { name = "count", type = "integer expression", required = true },
+  { name = "value", type = "string expression", required = true },
+]
+
+[declarations.signature]
+returns = "string"
+
+[declarations.semantics]
+summary = "Creates a string by repeating the supplied string value count times; the 3.5 matrix example uses STRING$(n, \"-\") for separator lines."
+side-effects = []
+errors = []
+
+[declarations.evidence]
+source-scope = "amiga-3.5-addendum"
+status = "book-documented"
+sources = ["AM-INTERPRETER-35"]
+printed-pages = ["Chapter 13, printed p. 13-21", "Base-manual function definition, printed p. 4-32 (3.0-origin overload details only)"]
+notes = ["The 3.5 example directly demonstrates the string-expression second argument. The numeric character-code overload and the documented count boundary are not independently demonstrated in 3.5 material."]
+
+[declarations.implementation]
+status = "not-implemented"
+
+[[declarations.support]]
+target = "x86_64-unknown-linux-gnu"
+classification = "unknown"
+conformance = "not-tested"
+tests = []
+pending-reason = "No registered runtime implementation or executable 3.5 reference-interpreter conformance test."
+
+[declarations.docs]
+path = "docs/research/amiga-gfa-basic-35-base-function-use-audit.md"
+anchors = ["directly-evidenced-inherited-functions"]
+
+[[declarations]]
+id = "gfa.language.string.hex"
+name = "HEX$"
+kind = "function"
+
+[[declarations.availability]]
+dialect = "amiga-gfa-basic-interpreter"
+versions = ["3.5"]
+
+[[declarations.syntax]]
+form = "HEX$(integer-expression)"
+contexts = ["expression"]
+arguments = [{ name = "x", type = "integer expression", required = true }]
+
+[declarations.signature]
+returns = "string"
+
+[declarations.semantics]
+summary = "Converts an integer value to its hexadecimal string representation; the 3.5 GURU example calls HEX$(GURU)."
+side-effects = []
+errors = []
+
+[declarations.evidence]
+source-scope = "amiga-3.5-addendum"
+status = "book-documented"
+sources = ["AM-INTERPRETER-35"]
+printed-pages = ["Chapter 13, printed p. 13-36", "Base-manual function definition, printed p. 2-14 (3.0-origin semantics only)"]
+notes = ["Only the one-argument form is demonstrated in 3.5 material. The optional width argument and exact formatting edge cases remain unconfirmed for 3.5."]
+
+[declarations.implementation]
+status = "not-implemented"
+
+[[declarations.support]]
+target = "x86_64-unknown-linux-gnu"
+classification = "unknown"
+conformance = "not-tested"
+tests = []
+pending-reason = "No registered runtime implementation or executable 3.5 reference-interpreter conformance test."
+
+[declarations.docs]
+path = "docs/research/amiga-gfa-basic-35-base-function-use-audit.md"
+anchors = ["directly-evidenced-inherited-functions"]
+
+[[declarations]]
+id = "gfa.language.numeric.rnd"
+name = "RND"
+kind = "function"
+
+[[declarations.availability]]
+dialect = "amiga-gfa-basic-interpreter"
+versions = ["3.5"]
+
+[[declarations.syntax]]
+form = "RND(arithmetic-expression)"
+contexts = ["expression"]
+arguments = [{ name = "x", type = "arithmetic expression", required = true }]
+
+[declarations.signature]
+returns = "real number"
+
+[declarations.semantics]
+summary = "Returns a random real number; the 3.5 Chapter 18 example uses RND(1) inside INT(RND(1)*5)."
+side-effects = []
+errors = []
+
+[declarations.evidence]
+source-scope = "amiga-3.5-addendum"
+status = "book-documented"
+sources = ["AM-BOOK-DE-1990"]
+printed-pages = ["Chapter 18, printed p. 458", "Base-manual function definition, printed pp. 4-17–4-18 (3.0-origin range/argument notes only)"]
+notes = ["The 3.5-labelled example directly demonstrates the one-argument form. The 3.0 base text says the optional parameter has no meaning and describes a [0,1) result; this detailed range/parameter behavior is not independently restated in Chapter 18. RANDOM and RANDOMIZE are not confirmed by this occurrence."]
+
+[declarations.implementation]
+status = "not-implemented"
+
+[[declarations.support]]
+target = "x86_64-unknown-linux-gnu"
+classification = "unknown"
+conformance = "not-tested"
+tests = []
+pending-reason = "No registered runtime implementation or executable 3.5 reference-interpreter conformance test."
+
+[declarations.docs]
+path = "docs/research/amiga-gfa-basic-35-base-function-use-audit.md"
+anchors = ["directly-evidenced-inherited-functions"]
+
+[[declarations]]
+id = "gfa.language.numeric.int"
+name = "INT"
+kind = "function"
+
+[[declarations.availability]]
+dialect = "amiga-gfa-basic-interpreter"
+versions = ["3.5"]
+
+[[declarations.syntax]]
+form = "INT(arithmetic-expression)"
+contexts = ["expression"]
+arguments = [{ name = "x", type = "arithmetic expression", required = true }]
+
+[declarations.signature]
+returns = "integer"
+
+[declarations.semantics]
+summary = "Converts a numeric expression to an integer; the 3.5 Chapter 18 example uses INT(RND(1)*5)."
+side-effects = []
+errors = []
+
+[declarations.evidence]
+source-scope = "amiga-3.5-addendum"
+status = "book-documented"
+sources = ["AM-BOOK-DE-1990"]
+printed-pages = ["Chapter 18, printed p. 458", "Base-manual function definition, printed p. 4-13 (3.0-origin rounding rule only)"]
+notes = ["Only the one-argument form is demonstrated in 3.5 material. The floor behavior for negative fractional values is documented in the 3.0 base text but is not independently restated in Chapter 18."]
+
+[declarations.implementation]
+status = "not-implemented"
+
+[[declarations.support]]
+target = "x86_64-unknown-linux-gnu"
+classification = "unknown"
+conformance = "not-tested"
+tests = []
+pending-reason = "No registered runtime implementation or executable 3.5 reference-interpreter conformance test."
+
+[declarations.docs]
+path = "docs/research/amiga-gfa-basic-35-base-function-use-audit.md"
+anchors = ["directly-evidenced-inherited-functions"]
+
+[[declarations]]
+id = "gfa.language.numeric.sqr"
+name = "SQR"
+kind = "function"
+
+[[declarations.availability]]
+dialect = "amiga-gfa-basic-interpreter"
+versions = ["3.5"]
+
+[[declarations.syntax]]
+form = "SQR(arithmetic-expression)"
+contexts = ["expression"]
+arguments = [{ name = "x", type = "arithmetic expression", required = true }]
+
+[declarations.signature]
+returns = "real number"
+
+[declarations.semantics]
+summary = "Returns the square root of a numeric expression; the 3.5 Chapter 18 vector-normalization example uses SQR(l)."
+side-effects = []
+errors = []
+
+[declarations.evidence]
+source-scope = "amiga-3.5-addendum"
+status = "book-documented"
+sources = ["AM-BOOK-DE-1990"]
+printed-pages = ["Chapter 18, printed p. 473", "Base-manual function definition, printed p. 4-8 (3.0-origin negative-input error note only)"]
+notes = ["Only the one-argument form is demonstrated in 3.5 material. The negative-input error behavior is documented in the 3.0 base text but is not independently restated in Chapter 18."]
+
+[declarations.implementation]
+status = "not-implemented"
+
+[[declarations.support]]
+target = "x86_64-unknown-linux-gnu"
+classification = "unknown"
+conformance = "not-tested"
+tests = []
+pending-reason = "No registered runtime implementation or executable 3.5 reference-interpreter conformance test."
+
+[declarations.docs]
+path = "docs/research/amiga-gfa-basic-35-base-function-use-audit.md"
+anchors = ["directly-evidenced-inherited-functions"]

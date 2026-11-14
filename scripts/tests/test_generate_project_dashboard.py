@@ -21,7 +21,7 @@ class StaticDashboardTests(unittest.TestCase):
                 "source_dialect": "Amiga GFA BASIC 3.5",
             },
             "workspace_packages": [{"name": "compiler", "path": "crates/compiler"}],
-            "api_progress": {"implemented": 0, "total": 28, "percent": 0, "population": "Confirmed 3.5 addendum declarations only."},
+            "api_progress": {"implemented": 0, "total": 36, "percent": 0, "population": "Confirmed 3.5 addendum declarations only."},
             "roadmap_progress": [
                 {
                     "number": 1,
@@ -82,7 +82,7 @@ class StaticDashboardTests(unittest.TestCase):
         self.assertIn("Linux x86-64", page)
         self.assertIn("Workspace", page)
         self.assertIn("Implemented 3.5 addendum API", page)
-        self.assertIn("0 / 28", page)
+        self.assertIn("0 / 36", page)
         self.assertIn("not the complete Amiga GFA BASIC 3.5 language API", page)
         self.assertIn("Roadmap progress", page)
         self.assertIn("Phase 1 · Foundation", page)
@@ -156,7 +156,7 @@ versions = ["3.0"]
 
     def test_repository_addendum_population_is_explicit_and_scoped(self):
         result = GENERATOR.load_addendum_api_progress(ROOT)
-        self.assertEqual(result["total"], 28)
+        self.assertEqual(result["total"], 36)
         self.assertEqual(result["implemented"], 0)
 
     def test_dashboard_renderer_escapes_repository_content(self):
