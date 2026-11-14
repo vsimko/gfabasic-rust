@@ -80,6 +80,26 @@ Do not use a low recursion limit as a substitute for correct parser design. Deep
 For each available harness and stable target interface:
 
 1. Run bounded smoke fuzzing only when a pull request changes a path in the trigger matrix below. The matrix covers the source-loader target's build and runtime dependency closure, its harness and corpus, and the fuzz policy/workflow itself.
+### Pull-request path trigger matrix
+
+The bounded PR campaign is triggered by changes to any of these paths:
+
+| Path | Reason |
+|---|---|
+| `.github/workflows/fuzz.yml` | Fuzz execution strategy and limits |
+| `Cargo.toml`, `Cargo.lock`, `rust-toolchain.toml` | Workspace resolution and compiler toolchain |
+| `crates/gfabasic-compiler/**` | The fuzz harness builds and links the compiler crate containing the source map |
+| `crates/gfabasic-runtime/**` | Workspace path dependency compiled with the compiler crate |
+| `fuzz/**` | Harness, corpus, fuzz manifest, and fuzz lockfile |
+| `docs/architecture/FUZZING.md` | The accepted fuzzing policy and trigger contract |
+
+Changes outside this matrix do not start PR fuzzing by themselves. In particular,
+documentation outside this policy file, website content, benchmarks, and
+API-registry-only changes are excluded. If one of those changes also modifies
+a path listed above, the listed path still triggers fuzzing. The stable
+`pr-gate` uses the same path classification when deciding whether to wait
+for the fuzz workflow.
+
 2. Keep smoke execution separate from formatting, compilation, and deterministic unit tests so failures identify the responsible stage.
 3. Run longer campaigns on a schedule and on manual dispatch. Do not make every pull request run a long campaign.
 4. Preserve the fuzzer engine, version, target, seed, command, elapsed time, and relevant toolchain details for each failure.
