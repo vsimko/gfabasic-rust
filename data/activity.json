@@ -1,9 +1,25 @@
 {
   "schema_version": 1,
   "status": "fresh",
-  "generated_at": "2026-11-14T11:54:09.226216+00:00",
-  "last_successful_at": "2026-11-14T11:54:09.226216+00:00",
+  "generated_at": "2026-11-14T13:01:18.314663+00:00",
+  "last_successful_at": "2026-11-14T13:01:18.314663+00:00",
   "items": [
+    {
+      "type": "merged_pull_request",
+      "title": "test(amiga): add native 3.5U matrix operation probes",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/534",
+      "number": 534,
+      "timestamp": "2026-11-14T13:00:57Z",
+      "summary": "PR #534 merged"
+    },
+    {
+      "type": "commit",
+      "title": "test(amiga): add native 3.5U matrix operation probes",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/eef03446286f8842d08776ee820a35a033853f95",
+      "number": null,
+      "timestamp": "2026-11-14T13:00:57Z",
+      "summary": "Commit eef0344"
+    },
     {
       "type": "merged_pull_request",
       "title": "[CI] Scope PR fuzz smoke to source-loader changes",
@@ -83,22 +99,6 @@
       "number": null,
       "timestamp": "2026-11-13T11:56:02Z",
       "summary": "Commit 6bd0ddb"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "Extract GFA BASIC 3.52D from original zipped ADF",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/522",
-      "number": 522,
-      "timestamp": "2026-11-13T10:12:20Z",
-      "summary": "PR #522 merged"
-    },
-    {
-      "type": "commit",
-      "title": "Extract GFA BASIC 3.52D from original zipped ADF (#522)",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/2ee49fac134ba34b2b03aedd13d807fe22ee61a7",
-      "number": null,
-      "timestamp": "2026-11-13T10:12:20Z",
-      "summary": "Commit 2ee49fa"
     }
   ]
 }
