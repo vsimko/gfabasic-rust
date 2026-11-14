@@ -6,6 +6,8 @@ on:
       - "experiment/amiga-cli-stdin-probe"
     paths:
       - ".github/workflows/amiga-native-merge-run.yml"
+      - "tests/interpreter-probes/amiga-3.52/**"
+      - "scripts/validate_gfatest_results.py"
   pull_request:
     paths:
       - ".github/workflows/amiga-native-merge-run.yml"
