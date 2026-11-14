@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Primary source: supplied GFA-BASIC 3.5 Interpreter PDF, Chapter 11, “System calls”, printed pages 11-2–11-92 (PDF pages 312–402). The manual states that the interpreter permits direct calls to operating-system routine…">
+  <title>Amiga GFA BASIC Chapter 11 — system-routine evidence · GFA BASIC Rust documentation</title>
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body class="docs-site">
+  <header class="docs-header">
+    <a href="../../index.html">GFA BASIC Rust</a>
+    <span aria-hidden="true">/</span>
+    <a href="../index.html">Documentation</a>
+  </header>
+  <div class="docs-layout">
+    <nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home" href="index.html">Section index</a><ul><li><a href="https://github.com/vsimko/gfabasic-rust/blob/main/.agents/skills/amiga-gfa-basic-documentation-research/SKILL.md">`amiga-gfa-basic-documentation-research`</a></li><li><a href="amiga-gfa-basic-documentation-audit.html">Amiga GFA BASIC documentation coverage audit</a></li><li><a href="amiga-gfa-basic-command-catalogue.html">Amiga GFA BASIC command catalogue</a></li><li><a href="amiga-gfa-basic-german-book-command-api-extraction.html">German Amiga GFA-BASIC book: command and OS API extraction</a></li><li><a href="amiga-book-command-index-ocr-transcription.html">Appendix D — OCR transcription of the command index</a></li><li><a href="gfa-basic-command-index-ocr.html">GFA-BASIC command index — first-pass extraction</a></li><li><a href="amiga-gfa-basic-source-topic-index.html">Amiga GFA BASIC source and topic index</a></li><li><a href="amiga-book-515-page-extraction-audit.html">Amiga GFA-BASIC book — 515-page extraction audit</a></li><li><a href="amiga-book-chapters05-17-heading-harvest.html">Amiga book — command-heading harvest, chapters 5–17</a></li><li><a href="amiga-gfa-basic-functions.toml">Function inventory (117 unique names)</a></li><li><a href="amiga-gfa-basic-function-inventory.html">Amiga GFA BASIC 3.5 built-in function inventory</a></li><li><a href="amiga-base-manual-io-graphics-events-advanced.html">Amiga GFA BASIC base-manual I/O, graphics, event, and advanced-programming extraction</a></li><li><a href="amiga-base-manual-io-graphics-events-advanced-details.html">Amiga GFA BASIC base-manual I/O, graphics, event, and advanced-programming details</a></li><li><a href="amiga-base-manual-numeric-string-functions.html">Amiga GFA BASIC base-manual numeric and string function extraction</a></li><li><a href="amiga-gfa-basic-35-addendum-inventory.html">Amiga GFA-BASIC 3.5 interpreter addendum — extracted feature inventory</a></li><li><a href="amiga-gfa-basic-candidates.toml">3.5 candidate manifest</a></li><li><a href="amiga-gfa-basic-candidate-report.html">Amiga GFA BASIC 3.5 candidate verification report</a></li><li><a href="amiga-gfa-basic-language-population-policy.html">Amiga GFA BASIC language population policy</a></li><li><a href="amiga-gfa-basic-3.03-ocr-index.html">German Amiga GFA BASIC book: OCR index and edition notes</a></li><li><a href="amiga-runtime-ocr-audit.html">Amiga runtime workflow OCR audit</a></li><li><a href="README.html">Research materials</a></li><li><a href="amiga-gfa-test-output.html">Amiga GFA BASIC test output</a></li><li><a href="amiga-gfa-basic-dqh-source-inventory.html">Amiga GFA BASIC commands observed in dqh-amiga</a></li><li><a href="amiga-emulator-lab.html">Amiga emulator experiment lab</a></li><li><a href="amiga-media-candidates.html">Amiga GFA BASIC media candidates</a></li><li><a href="amiga-gfa-basic-35-lst-probes.html">Amiga GFA BASIC 3.5 interpreter probes from text listings</a></li><li><a href="amiga-gfa-basic-352-runtime-baseline.html">Amiga GFA BASIC 3.52 runtime baseline</a></li><li><a href="amiga-gfa-basic-binary-analysis.html">Amiga GFA-BASIC binary analysis</a></li><li><a href="amiga-base-manual-variable-array-conversion-functions.html">Amiga GFA BASIC base-manual variable, array, and conversion functions</a></li><li><a href="amiga-gfa-basic-chapter-7-program-handling-evidence.html">Amiga GFA BASIC Chapter 7 — program handling evidence</a></li><li><a href="amiga-gfa-basic-chapter-8-graphics-evidence.html">Amiga GFA BASIC Chapter 8 — graphics compatibility evidence</a></li><li><a href="amiga-gfa-basic-chapter-9-event-window-evidence.html">Amiga GFA BASIC Chapter 9 — event, menu, screen and window evidence</a></li><li><a href="amiga-gfa-basic-chapter-10-advanced-programming-evidence.html">Amiga GFA BASIC Chapter 10 — advanced programming evidence</a></li><li><a href="amiga-gfa-basic-chapter-11-system-routines-evidence.html">Amiga GFA BASIC Chapter 11 — system-routine evidence</a></li><li><a href="amiga-gfa-basic-chapter-12-appendices-index-evidence.html">Amiga GFA BASIC Chapter 12 — appendix and index evidence</a></li><li><a href="https://github.com/vsimko/gfabasic-rust/blob/main/scripts/validate_amiga_chapter_inventories.py">Chapter inventory validator</a></li><li><a href="amiga-gfa-basic-3.0-command-index.html">Amiga GFA BASIC 3.0 command index — grouped cross-check</a></li><li><a href="amiga-gfa-basic-3.0-statement-command-candidates.html">Amiga GFA BASIC 3.0 statement and command candidate catalogue</a></li><li><a href="amiga-gfa-basic-3.0-base-inventory.html">Amiga GFA BASIC 3.0 base-manual inventory</a></li><li><a href="amiga-gfa-basic-3.0-expressions-builtins-control-flow.html">Amiga GFA BASIC 3.0 expression, intrinsic and control-flow evidence</a></li><li><a href="amiga-gfa-basic-3.0-control-file-data-io.html">Amiga GFA BASIC 3.0 control, file and data I/O evidence</a></li><li><a href="amiga-gfa-basic-3.0-graphics-evidence.html">GFA BASIC 3.0 Amiga — graphics evidence</a></li><li><a href="amiga-gfa-basic-3.0-events-windows-evidence.html">GFA BASIC 3.0 Amiga — event, menu, screen and window evidence</a></li><li><a href="amiga-gfa-basic-3.0-system-routines-evidence.html">GFA BASIC 3.0 Amiga — operating-system routine evidence</a></li><li><a href="amiga-gfa-basic-3.0-advanced-programming-evidence.html">GFA BASIC 3.0 Amiga — advanced programming evidence</a></li><li><a href="amiga-gfa-basic-3.0-appendix-index-evidence.html">GFA BASIC 3.0 Amiga — appendix and command-index evidence</a></li><li><a href="amiga-gfa-basic-3.0-german-source-notes.html">German Amiga GFA BASIC 3.0 source — initial verification notes</a></li><li><a href="amiga-gfa-basic-3.0-procedure-error-details.html">GFA BASIC 3.0 Amiga — procedures, functions and error-flow evidence</a></li><li><a href="amiga-gfa-basic-3.0-screen-window-details.html">GFA BASIC 3.0 Amiga — screen and window command details</a></li><li><a href="amiga-gfa-basic-3.0-output-device-details.html">GFA BASIC 3.0 Amiga — output, cursor, mouse and sound evidence</a></li><li><a href="amiga-gfa-basic-3.0-menu-event-details.html">GFA BASIC 3.0 Amiga — menu and event details</a></li><li><a href="amiga-gfa-basic-3.0-bob-object-details.html">GFA BASIC 3.0 Amiga — BOB and OBJECT API evidence</a></li><li><a href="amiga-gfa-basic-3.0-source-format-editor-evidence.html">Amiga GFA BASIC 3.0 — source composition and editor evidence</a></li><li><a href="amiga-gfa-basic-35-primary-reference.html">Amiga GFA-BASIC 3.5 primary reference and target decision</a></li><li><a href="amiga-gfa-basic-35-german-book-crosscheck.html">Amiga GFA-BASIC 3.5 — independent German-book cross-check</a></li><li><a href="amiga-book-gfa35-chapter18-19-extraction.html">GFA-BASIC 3.5 additions documented in the Amiga book</a></li><li><a href="amiga-gfa-basic-35-editor-feature-audit.html">Amiga GFA BASIC 3.5 — editor feature audit</a></li><li><a href="amiga-gfa-basic-35-lexer-evidence.html">Amiga GFA BASIC 3.5 lexer evidence inventory</a></li><li><a href="amiga-gfa-basic-35-matrix-arithmetic-analysis-audit.html">Amiga GFA BASIC 3.5 — matrix arithmetic and analysis audit</a></li><li><a href="amiga-gfa-basic-35-matrix-io-copy-audit.html">Amiga GFA BASIC 3.5 — matrix I/O and copy declaration audit</a></li><li><a href="amiga-gfa-basic-35-five-declaration-audit.html">Amiga GFA BASIC 3.5 — five declaration-level audit blocks</a></li><li><a href="amiga-gfa-basic-35-five-more-declaration-audit.html">Amiga GFA BASIC 3.5 — five more declaration-level audit blocks</a></li><li><a href="amiga-gfa-basic-35-guru-declaration-audit.html">Amiga GFA BASIC 3.5 — GURU declaration audit</a></li><li><a href="atari-gfa-book-diskette.html">Atari GFA BASIC book diskette — source-corpus research notes</a></li><li><a href="atari-gfa-book-systematic-review.html">Systematic review of *Das große GFA-BASIC-Buch* (Atari ST)</a></li><li><a href="aminet-catalogue.html">Aminet GFA BASIC package survey</a></li><li><a href="gfalist-build-and-fixture-validation.html">gfalist build and fixture validation</a></li><li><a href="gfalist-format-vs-rust-frontend.html">gfalist format notes vs. the Rust frontend</a></li><li><a href="amiga-gfa-basic-35-base-function-use-audit.html">Amiga GFA BASIC 3.5 — inherited function evidence from both manuals</a></li><li><a href="amiga-gfa-basic-35-statement-operator-audit.html">Amiga GFA BASIC 3.5 — inherited statement and operator evidence</a></li><li><a href="amiga-gfa-basic-35-example-used-statements-audit.html">Amiga GFA BASIC 3.5 — inherited statements used in examples</a></li><li><a href="amiga-gfa-basic-35-base-statement-use-audit.html">Amiga GFA BASIC 3.5 — inherited statement evidence from the interpreter addendum</a></li></ul></nav>
+    <main class="docs-content">
+      <article>
+        <h1>Amiga GFA BASIC Chapter 11 — system-routine evidence</h1>
+        <p class="docs-meta"><span>Research Note</span></p>
+        <h1 id="amiga-gfa-basic-chapter-11-system-routine-evidence">Amiga GFA BASIC Chapter 11 — system-routine evidence</h1>
+<h2 id="scope-and-version-boundary">Scope and version boundary</h2>
+<p>Primary source: supplied <em>GFA-BASIC 3.5 Interpreter</em> PDF, Chapter 11, “System calls”, printed pages 11-2–11-92 (PDF pages 312–402). The manual states that the interpreter permits direct calls to operating-system routines, automatically formats/corrects their syntax and indentation, and reduces descriptions to the most important aspects. It warns that invalid input is intercepted by the interpreter but error handling is left to the operating system (GURU). It also says that system functions with BASIC-command equivalents are performed using the operating-system routine (printed p. 11-2).</p>
+<p>The supplied manual identifies Chapters 1–12 as original 3.0 material and Chapter 13 as the 3.5 addendum. Chapter 11 is therefore <strong>3.0 base-manual evidence</strong>, not independent proof that every listed routine is supported by 3.5.</p>
+<p>Printed page labels below are primary locators; PDF viewer page numbers are secondary.</p>
+<h2 id="chapter-11-inventory">Chapter 11 inventory</h2>
+<table>
+<thead>
+<tr>
+<th>Area</th>
+<th>Construct / source spelling</th>
+<th>Source-described behavior and constraints</th>
+<th style="text-align:right">Printed pages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Exec library</td>
+<td>Exec-Library routines: <code>AllocMem</code>, <code>AvailMem</code>, <code>FreeMem</code>, <code>AllocSignal</code>, <code>FindTask</code>, <code>SetTaskPri</code>, <code>Forbid</code>, <code>Permit</code>, <code>OpenLibrary</code>, <code>CloseLibrary</code>, message-port and device calls</td>
+<td>Low-level task, signal, memory, library, device, interrupt, message-port and linked-list operations. Parameters are generally integer expressions representing system-structure addresses; return values vary by routine.</td>
+<td style="text-align:right">11-3–11-23</td>
+</tr>
+<tr>
+<td>Graphics library</td>
+<td>Graphics-Library routines: <code>AllocRaster</code>, <code>Draw</code>, <code>DrawCircle</code>, <code>Flood</code>, <code>LoadRGB4</code>, <code>LoadView</code>, <code>Move</code>, <code>RectFill</code>, <code>SetAPen</code>, <code>SetBPen</code>, <code>SetDrMd</code>, <code>SetFont</code>, <code>SetRGB4</code>, <code>Text</code>, <code>WritePixel</code></td>
+<td>Amiga raster, viewport, color-map, drawing, text, sprite/gel, blitter and region operations. These are direct OS graphics calls, distinct from GFA BASIC's Chapter 8 graphics statements.</td>
+<td style="text-align:right">11-24–11-53</td>
+</tr>
+<tr>
+<td>Workbench library</td>
+<td>Workbench-Library routines: <code>BumpRevision</code>, <code>CloseWorkBench</code>, <code>FindToolTypes</code>, <code>FreeDiskObject</code>, <code>GetDiskObject</code>, <code>GetIcon</code>, <code>OpenWorkBench</code>, <code>PutDiskObject</code>, <code>PutWBObject</code>, <code>WBenchToBack</code>, <code>WBenchToFront</code></td>
+<td>Workbench integration, icon/disk-object and tool-type operations. The short group is not a general replacement for the BASIC file or window command layers.</td>
+<td style="text-align:right">11-54–11-57</td>
+</tr>
+<tr>
+<td>Intuition library</td>
+<td>Intuition-Library routines: <code>ActivateWindow</code>, <code>AddGadget</code>, <code>BeginRefresh</code>, <code>ClearMenuStrip</code>, <code>CloseWindow</code>, <code>DisplayBeep</code>, <code>EndRequest</code>, <code>ModifyProp</code>, <code>OnMenu</code>, <code>OpenScreen</code>, <code>OpenWindow</code>, <code>RefreshWindowFrame</code>, <code>SetWindowTitles</code>, <code>WindowToBack</code>, <code>WindowToFront</code></td>
+<td>GUI screens, windows, gadgets, requesters, menus, pointer and event/message handling. Calls use Intuition structure addresses and are distinct from GFA BASIC's higher-level Chapter 9/10 commands.</td>
+<td style="text-align:right">11-58–11-75</td>
+</tr>
+<tr>
+<td>DiskFont library</td>
+<td>DiskFont-Library routines: <code>AvailFonts</code>, <code>OpenFont</code></td>
+<td>Disk-font discovery and opening font structures. The manual gives this library a separate, short section.</td>
+<td style="text-align:right">11-76–11-77</td>
+</tr>
+<tr>
+<td>Layers library</td>
+<td>Layers-Library routines: <code>AttemptLockLayerRom</code>, <code>CreateUpfrontLayer</code>, <code>FattenLayerInfo</code>, <code>InitLayers</code>, <code>LockLayer</code>, <code>MoveLayer</code>, <code>ScrollLayer</code>, <code>SizeLayer</code>, <code>UnlockLayer</code>, <code>WhichLayer</code></td>
+<td>Layer creation, locking, movement, scrolling, sizing and layer-information management. The text includes ROM-specific lock variants; do not collapse them into one generic lock operation.</td>
+<td style="text-align:right">11-78–11-84</td>
+</tr>
+<tr>
+<td>DOS library</td>
+<td>DOS-Library routines: <code>Close</code>, <code>CreateDir</code>, <code>CurrentDir</code>, <code>DateStamp</code>, <code>Delay</code>, <code>DeleteFile</code>, <code>Execute</code>, <code>Examine</code>, <code>ExNext</code>, <code>Exit</code>, <code>Info</code>, <code>IoErr</code>, <code>LoadSeg</code>, <code>Lock</code>, <code>Open</code>, <code>Read</code>, <code>Rename</code>, <code>Seek</code>, <code>SetComment</code>, <code>SetProtection</code>, <code>UnLoadSeg</code>, <code>UnLock</code>, <code>WaitForChar</code>, <code>Write</code></td>
+<td>AmigaDOS file handles, byte I/O, directory traversal, locks, metadata, process/CLI execution and segment loading. The source describes FileHandle, Lock and FileInfoBlock addresses and documents return values per routine.</td>
+<td style="text-align:right">11-85–11-92</td>
+</tr>
+</tbody>
+</table>
+<p>The names above are a representative family inventory, not a complete transcription of every routine entry or signature. The chapter's separate operating-system function table in Appendix 12 (beginning at printed p. 12-19) is an index, not a substitute for the per-routine parameter descriptions.</p>
+<h2 id="35-addendum-reconciliation">3.5 addendum reconciliation</h2>
+<p>The 3.5 addendum inventory does not establish the Chapter 11 library catalogue as a new 3.5 feature set. Chapter 13 separately documents the <code>GURU</code> statement and <code>GURU</code> function (printed pp. 13-36–13-37 in the supplied interpreter manual); those are 3.5 evidence and must not be confused with the Chapter 11 library calls or treated as confirmation of all 3.0 system routines.</p>
+<p>No Chapter 11 library routine should be promoted to confirmed 3.5 support solely because it appears in this base chapter. Absence from the addendum is an evidence gap, not proof of runtime absence.</p>
+<h2 id="352-runtime-evidence">3.52 runtime evidence</h2>
+<p>The repository's tracked native 3.52 regression batch contains <code>fact-zero</code>, <code>arithmetic</code>, <code>for-next</code> and <code>strings</code>. These probes do not exercise direct Exec, Graphics, Workbench, Intuition, DiskFont, Layers or DOS library calls. No retained 3.52 runtime observation for this Chapter 11 API surface is currently recorded.</p>
+<h2 id="classification-and-safety-boundary">Classification and safety boundary</h2>
+<ul>
+<li>Keep these routines in an Amiga OS API namespace, separate from BASIC language keywords, statements and built-in functions.</li>
+<li>Treat structure pointers, register-level calling conventions, NUL-terminated OS strings and OS-owned resources as ABI concerns; this chapter's abbreviated descriptions are not a complete ABI specification.</li>
+<li>The Chapter 10 <code>_DosBase</code>, <code>_IntBase</code>, <code>_GfxBase</code> and <code>_LayersBase</code> variables and FD/<code>RCALL</code> wrappers provide related calling context (printed pp. 10-4 and 10-10–10-12), not evidence that arbitrary calls are safe.</li>
+<li>Preserve the manual's explicit GURU/error-handling warning. Do not infer host-independent or Linux behavior from Amiga library calls.</li>
+<li>Verify exact signatures and structure layouts against the relevant Amiga system documentation and controlled interpreter observations before implementation.</li>
+</ul>
+<h2 id="related-repository-evidence">Related repository evidence</h2>
+<ul>
+<li><a href="amiga-gfa-basic-3.0-system-routines-evidence.html">Existing Chapter 11 system-routine summary</a></li>
+<li><a href="amiga-gfa-basic-chapter-10-advanced-programming-evidence.html">Chapter 10 advanced programming evidence</a></li>
+<li><a href="amiga-gfa-basic-35-addendum-inventory.html">Amiga 3.5 addendum inventory</a></li>
+<li><a href="amiga-gfa-basic-german-book-command-api-extraction.html">German book command and Amiga OS API extraction</a></li>
+<li><a href="https://github.com/vsimko/gfabasic-rust/blob/main/tests/interpreter-probes/amiga-3.52/regression-suite.LST">Native 3.52 regression batch</a></li>
+<li><a href="https://github.com/vsimko/gfabasic-rust/issues/42">Issue #42 — reference and conformance corpus</a></li>
+<li><a href="https://github.com/vsimko/gfabasic-rust/issues/307">Issue #307 — evidence-based compatibility metrics</a></li>
+</ul>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>

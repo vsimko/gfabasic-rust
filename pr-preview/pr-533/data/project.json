@@ -1,0 +1,498 @@
+{
+  "schema_version": 2,
+  "source_revision": "4a08dee8b0507b35561edfe5e8f31da32362406a",
+  "project": {
+    "name": "gfabasic-rust",
+    "language": "Rust",
+    "source_dialect": "Amiga GFA BASIC interpreter 3.5",
+    "target": "Linux x86-64",
+    "maturity": "experimental",
+    "maturity_evidence": [
+      "README.md#current-scope-and-limitations",
+      "ROADMAP.md#current-project-state"
+    ]
+  },
+  "components": [
+    {
+      "id": "compiler-frontend-prototype",
+      "name": "Compiler frontend prototype",
+      "status": "prototype",
+      "rationale": "The frontend accepts only the documented FACT, VARIAT and COMBIN assignments followed by PRINT; it is not a general GFA BASIC parser.",
+      "evidence": [
+        "README.md#experimental-prototype",
+        "crates/gfabasic-compiler/src/frontend.rs",
+        "crates/gfabasic-compiler/src/prototype.rs"
+      ],
+      "related_issues": [
+        46
+      ]
+    },
+    {
+      "id": "typed-ir-prototype",
+      "name": "Typed project IR",
+      "status": "prototype",
+      "rationale": "Typed IR construction and verification exist for the narrow prototype; the general semantic and lowering contract is not implemented.",
+      "evidence": [
+        "docs/architecture/PIPELINE-AND-IR.md",
+        "crates/gfabasic-compiler/src/ir.rs"
+      ],
+      "related_issues": [
+        3
+      ]
+    },
+    {
+      "id": "general-language-semantics",
+      "name": "General language semantics",
+      "status": "research",
+      "rationale": "Version-specific language rules remain evidence-gated; research and candidate corpus entries are not implementation.",
+      "evidence": [
+        "docs/architecture/PIPELINE-AND-IR.md",
+        "docs/architecture/TESTING.md",
+        "tests/corpus/README.md"
+      ],
+      "related_issues": [
+        3,
+        46
+      ]
+    },
+    {
+      "id": "cli",
+      "name": "Compiler CLI",
+      "status": "partial",
+      "rationale": "Help, version, the subset formatter and the narrow prototype build command exist; project loading, general checking and production compilation do not.",
+      "evidence": [
+        "docs/architecture/CLI-AND-CONFIG.md",
+        "crates/gfabasic-compiler/src/cli.rs"
+      ],
+      "related_issues": [
+        9,
+        12
+      ]
+    },
+    {
+      "id": "formatter",
+      "name": "Source formatter",
+      "status": "partial",
+      "rationale": "Formatting is implemented only for syntax accepted by the current frontend; unsupported constructs are rejected.",
+      "evidence": [
+        "docs/architecture/FORMATTER.md",
+        "crates/gfabasic-compiler/src/formatter.rs"
+      ],
+      "related_issues": [
+        208
+      ]
+    },
+    {
+      "id": "language-server",
+      "name": "Language server",
+      "status": "partial",
+      "rationale": "The dependency-free LSP adapter supports document lifecycle and shared-frontend diagnostics; formatting, navigation, completion and rename are not implemented.",
+      "evidence": [
+        "crates/gfabasic-lsp/README.md",
+        "crates/gfabasic-lsp/src/lib.rs",
+        "docs/architecture/adr/0012-language-server-and-editor-integration.md"
+      ],
+      "related_issues": [
+        209,
+        210,
+        211
+      ]
+    },
+    {
+      "id": "llvm-backend",
+      "name": "LLVM backend",
+      "status": "planned",
+      "rationale": "LLVM is the intended production backend; no LLVM backend implementation or binding is selected.",
+      "evidence": [
+        "docs/architecture/adr/0007-compiler-pipeline-and-ir.md",
+        "ROADMAP.md"
+      ],
+      "related_issues": []
+    },
+    {
+      "id": "generated-runtime",
+      "name": "Generated-program runtime",
+      "status": "planned",
+      "rationale": "The runtime crate establishes an architectural placeholder; generated-program runtime behavior and a stable runtime ABI are not implemented.",
+      "evidence": [
+        "docs/architecture/RUNTIME.md",
+        "crates/gfabasic-runtime/src/lib.rs"
+      ],
+      "related_issues": [
+        8
+      ]
+    },
+    {
+      "id": "linux-platform",
+      "name": "Linux platform adapter",
+      "status": "planned",
+      "rationale": "The platform crate defines the intended adapter boundary; Linux services and SDL3 integration are not implemented.",
+      "evidence": [
+        "docs/architecture/RUNTIME.md",
+        "crates/gfabasic-platform-linux/src/lib.rs"
+      ],
+      "related_issues": []
+    },
+    {
+      "id": "testing-conformance",
+      "name": "Testing and dialect conformance",
+      "status": "partial",
+      "rationale": "Unit and prototype smoke tests plus a metadata-validated evidence corpus exist; no general corpus runner or full dialect conformance suite exists.",
+      "evidence": [
+        "docs/architecture/TESTING.md",
+        "tests/corpus/README.md",
+        ".github/workflows/rust.yml",
+        ".github/workflows/fuzz.yml"
+      ],
+      "related_issues": [
+        42,
+        116
+      ]
+    },
+    {
+      "id": "release-tooling",
+      "name": "Release and supply-chain tooling",
+      "status": "partial",
+      "rationale": "PR SBOM validation and a release-event SBOM attachment workflow exist; compiler packaging and a complete release workflow do not.",
+      "evidence": [
+        "docs/architecture/RELEASES.md",
+        ".github/workflows/release-sbom.yml"
+      ],
+      "related_issues": [
+        40,
+        39
+      ]
+    }
+  ],
+  "roadmap_progress": [
+    {
+      "number": 0,
+      "name": "Maintain a trustworthy project baseline",
+      "description": "Keep the architecture, documentation, and research evidence internally consistent. Do not add speculative usage instructions.",
+      "completed": 10,
+      "total": 10,
+      "percent": 100,
+      "status": "complete",
+      "issue_links": [
+        {
+          "label": "#1",
+          "url": "https://github.com/vsimko/gfabasic-rust/issues/1"
+        },
+        {
+          "label": "#2",
+          "url": "https://github.com/vsimko/gfabasic-rust/issues/2"
+        },
+        {
+          "label": "#4",
+          "url": "https://github.com/vsimko/gfabasic-rust/issues/4"
+        },
+        {
+          "label": "#6",
+          "url": "https://github.com/vsimko/gfabasic-rust/issues/6"
+        },
+        {
+          "label": "#9",
+          "url": "https://github.com/vsimko/gfabasic-rust/issues/9"
+        },
+        {
+          "label": "#11",
+          "url": "https://github.com/vsimko/gfabasic-rust/issues/11"
+        },
+        {
+          "label": "#12",
+          "url": "https://github.com/vsimko/gfabasic-rust/issues/12"
+        },
+        {
+          "label": "#14",
+          "url": "https://github.com/vsimko/gfabasic-rust/issues/14"
+        },
+        {
+          "label": "#16",
+          "url": "https://github.com/vsimko/gfabasic-rust/issues/16"
+        },
+        {
+          "label": "#112",
+          "url": "https://github.com/vsimko/gfabasic-rust/issues/112"
+        }
+      ]
+    },
+    {
+      "number": 1,
+      "name": "Establish an evidence-backed first language subset",
+      "description": "Choose a precise dialect/version and document only source-verified syntax and semantics. This phase is the prerequisite for parser and runtime behavior.",
+      "completed": 1,
+      "total": 8,
+      "percent": 12,
+      "status": "in-progress",
+      "issue_links": [
+        {
+          "label": "#3",
+          "url": "https://github.com/vsimko/gfabasic-rust/issues/3"
+        },
+        {
+          "label": "#19",
+          "url": "https://github.com/vsimko/gfabasic-rust/issues/19"
+        },
+        {
+          "label": "#20",
+          "url": "https://github.com/vsimko/gfabasic-rust/issues/20"
+        },
+        {
+          "label": "#21",
+          "url": "https://github.com/vsimko/gfabasic-rust/issues/21"
+        },
+        {
+          "label": "#22",
+          "url": "https://github.com/vsimko/gfabasic-rust/issues/22"
+        },
+        {
+          "label": "#23",
+          "url": "https://github.com/vsimko/gfabasic-rust/issues/23"
+        },
+        {
+          "label": "#24",
+          "url": "https://github.com/vsimko/gfabasic-rust/issues/24"
+        },
+        {
+          "label": "#25",
+          "url": "https://github.com/vsimko/gfabasic-rust/issues/25"
+        },
+        {
+          "label": "#42",
+          "url": "https://github.com/vsimko/gfabasic-rust/issues/42"
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "name": "Build a minimal vertical compiler slice",
+      "description": "Implement the smallest useful source-to-native-executable path for the accepted subset. Keep frontend and IR independent of LLVM and SDL3.",
+      "completed": 1,
+      "total": 12,
+      "percent": 8,
+      "status": "in-progress",
+      "issue_links": [
+        {
+          "label": "#45",
+          "url": "https://github.com/vsimko/gfabasic-rust/issues/45"
+        },
+        {
+          "label": "#120",
+          "url": "https://github.com/vsimko/gfabasic-rust/issues/120"
+        },
+        {
+          "label": "#121",
+          "url": "https://github.com/vsimko/gfabasic-rust/issues/121"
+        },
+        {
+          "label": "#46",
+          "url": "https://github.com/vsimko/gfabasic-rust/issues/46"
+        },
+        {
+          "label": "#47",
+          "url": "https://github.com/vsimko/gfabasic-rust/issues/47"
+        },
+        {
+          "label": "#48",
+          "url": "https://github.com/vsimko/gfabasic-rust/issues/48"
+        },
+        {
+          "label": "#208",
+          "url": "https://github.com/vsimko/gfabasic-rust/issues/208"
+        },
+        {
+          "label": "#209",
+          "url": "https://github.com/vsimko/gfabasic-rust/issues/209"
+        },
+        {
+          "label": "#50",
+          "url": "https://github.com/vsimko/gfabasic-rust/issues/50"
+        },
+        {
+          "label": "#111",
+          "url": "https://github.com/vsimko/gfabasic-rust/issues/111"
+        },
+        {
+          "label": "#51",
+          "url": "https://github.com/vsimko/gfabasic-rust/issues/51"
+        },
+        {
+          "label": "#113",
+          "url": "https://github.com/vsimko/gfabasic-rust/issues/113"
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "name": "Add platform APIs and robustness",
+      "description": "Only implement platform behavior backed by accepted references and tests.",
+      "completed": 1,
+      "total": 7,
+      "percent": 14,
+      "status": "in-progress",
+      "issue_links": [
+        {
+          "label": "#52",
+          "url": "https://github.com/vsimko/gfabasic-rust/issues/52"
+        },
+        {
+          "label": "#53",
+          "url": "https://github.com/vsimko/gfabasic-rust/issues/53"
+        },
+        {
+          "label": "#54",
+          "url": "https://github.com/vsimko/gfabasic-rust/issues/54"
+        },
+        {
+          "label": "#115",
+          "url": "https://github.com/vsimko/gfabasic-rust/issues/115"
+        },
+        {
+          "label": "#56",
+          "url": "https://github.com/vsimko/gfabasic-rust/issues/56"
+        },
+        {
+          "label": "#43",
+          "url": "https://github.com/vsimko/gfabasic-rust/issues/43"
+        },
+        {
+          "label": "#118",
+          "url": "https://github.com/vsimko/gfabasic-rust/issues/118"
+        },
+        {
+          "label": "#46",
+          "url": "https://github.com/vsimko/gfabasic-rust/issues/46"
+        },
+        {
+          "label": "#47",
+          "url": "https://github.com/vsimko/gfabasic-rust/issues/47"
+        },
+        {
+          "label": "#60",
+          "url": "https://github.com/vsimko/gfabasic-rust/issues/60"
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "name": "Release readiness",
+      "description": "A release must publish an explicit support matrix and known deviations. Do not publish binaries or compatibility claims before the build and test gates exist.",
+      "completed": 4,
+      "total": 13,
+      "percent": 31,
+      "status": "in-progress",
+      "issue_links": [
+        {
+          "label": "#39",
+          "url": "https://github.com/vsimko/gfabasic-rust/issues/39"
+        },
+        {
+          "label": "#40",
+          "url": "https://github.com/vsimko/gfabasic-rust/issues/40"
+        },
+        {
+          "label": "#62",
+          "url": "https://github.com/vsimko/gfabasic-rust/issues/62"
+        },
+        {
+          "label": "#116",
+          "url": "https://github.com/vsimko/gfabasic-rust/issues/116"
+        },
+        {
+          "label": "#126",
+          "url": "https://github.com/vsimko/gfabasic-rust/issues/126"
+        },
+        {
+          "label": "#113",
+          "url": "https://github.com/vsimko/gfabasic-rust/issues/113"
+        },
+        {
+          "label": "#115",
+          "url": "https://github.com/vsimko/gfabasic-rust/issues/115"
+        },
+        {
+          "label": "#304",
+          "url": "https://github.com/vsimko/gfabasic-rust/issues/304"
+        },
+        {
+          "label": "#305",
+          "url": "https://github.com/vsimko/gfabasic-rust/issues/305"
+        },
+        {
+          "label": "#306",
+          "url": "https://github.com/vsimko/gfabasic-rust/issues/306"
+        },
+        {
+          "label": "#307",
+          "url": "https://github.com/vsimko/gfabasic-rust/issues/307"
+        },
+        {
+          "label": "#308",
+          "url": "https://github.com/vsimko/gfabasic-rust/issues/308"
+        },
+        {
+          "label": "#309",
+          "url": "https://github.com/vsimko/gfabasic-rust/issues/309"
+        },
+        {
+          "label": "#310",
+          "url": "https://github.com/vsimko/gfabasic-rust/issues/310"
+        }
+      ]
+    }
+  ],
+  "roadmap_blockers": [
+    {
+      "summary": "The initial dialect/version is selected (Amiga GFA BASIC interpreter 3.5); 3.0/3.03 rules remain inherited candidates until confirmed for 3.5, and feature-level source evidence still gates language semantics, parser acceptance criteria, and conformance claims.",
+      "issue_links": []
+    },
+    {
+      "summary": "Source manager, lexer, parser, semantic analysis and typed IR are sequential dependencies for the first compiler path.",
+      "issue_links": []
+    },
+    {
+      "summary": "LLVM backend and runtime integration depend on a stable typed IR and runtime ABI.",
+      "issue_links": []
+    },
+    {
+      "summary": "Platform APIs depend on verified profile declarations; Amiga and Atari ST evidence must not be conflated.",
+      "issue_links": []
+    },
+    {
+      "summary": "A user quick start and installation guide depend on a working, tested CLI and distributable build.",
+      "issue_links": []
+    },
+    {
+      "summary": "The generic source-loader fuzz target is implemented; lexer/parser fuzz targets depend on stable frontend entry points and source contracts.",
+      "issue_links": []
+    },
+    {
+      "summary": "Release packaging depends on successful end-to-end builds and explicit runtime dependency policy.",
+      "issue_links": []
+    }
+  ],
+  "workspace_packages": [
+    {
+      "name": "gfabasic-compiler",
+      "path": "crates/gfabasic-compiler"
+    },
+    {
+      "name": "gfabasic-runtime",
+      "path": "crates/gfabasic-runtime"
+    },
+    {
+      "name": "gfabasic-platform-linux",
+      "path": "crates/gfabasic-platform-linux"
+    },
+    {
+      "name": "gfabasic-lsp",
+      "path": "crates/gfabasic-lsp"
+    }
+  ],
+  "api_progress": {
+    "implemented": 0,
+    "total": 28,
+    "percent": 0,
+    "population": "Explicitly documented interpreter declarations from the Amiga 3.5 addendum only; includes language-core and Amiga platform declarations. Excludes inherited 3.0 base-manual features, editor-only changes, compiler-only features, and Atari ST declarations."
+  }
+}
