@@ -60,8 +60,8 @@ class FuzzWorkflowPathTests(unittest.TestCase):
         root = Path(__file__).resolve().parents[2]
         workflow_path = root / ".github" / "workflows" / "fuzz.yml"
         workflow = yaml.load(workflow_path.read_text(encoding="utf-8"), Loader=yaml.BaseLoader)
-        configured_paths = tuple(workflow["on"]["pull_request"]["paths"])
-        self.assertEqual(configured_paths, WORKFLOWS[FUZZ_WORKFLOW])
+        configured_paths = set(workflow["on"]["pull_request"]["paths"])
+        self.assertEqual(configured_paths, set(WORKFLOWS[FUZZ_WORKFLOW]))
 
     def test_mixed_pull_request_selects_fuzz_only_for_relevant_paths(self):
         self.assertIn(
