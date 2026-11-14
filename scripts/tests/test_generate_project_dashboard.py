@@ -156,7 +156,7 @@ versions = ["3.0"]
 
     def test_repository_addendum_population_is_explicit_and_scoped(self):
         result = GENERATOR.load_addendum_api_progress(ROOT)
-        self.assertEqual(result["total"], 28)
+        self.assertEqual(result["total"], 36)
         self.assertEqual(result["implemented"], 0)
 
     def test_dashboard_renderer_escapes_repository_content(self):
