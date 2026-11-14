@@ -37,10 +37,10 @@ jobs:
           printf 'GFA BASIC 3.52 (private CI runtime; see docs/research/amiga-gfa-basic-352-runtime-baseline.md)\n' > artifacts/amiga-cli-probe/interpreter-version.txt
           ARCHIVE_NAME='GFA-BASIC v3.52 (1990)(GFA Systemtechnik)(DE)(Disk 1 of 2)[WB].zip'
           ARCHIVE_PATH_ENCODED="$(jq -rn --arg path "$ARCHIVE_NAME" '$path | @uri')"
-          curl --fail --silent --show-error --location --retry 3 \\
-            --header "Authorization: Bearer $GFA_ASSETS_TOKEN" \\
-            --header "Accept: application/vnd.github.raw" \\
-            "https://api.github.com/repos/vsimko/gfabasic-private-assets/contents/$ARCHIVE_PATH_ENCODED?ref=main" \\
+          curl --fail --silent --show-error --location --retry 3 \
+            --header "Authorization: Bearer $GFA_ASSETS_TOKEN" \
+            --header "Accept: application/vnd.github.raw" \
+            "https://api.github.com/repos/vsimko/gfabasic-private-assets/contents/$ARCHIVE_PATH_ENCODED?ref=main" \
             --output "$RUNNER_TEMP/gfa-basic-3.52d-disk1.zip"
           mkdir -p "$RUNNER_TEMP/gfa-basic-3.52d-disk1"
           unzip -q "$RUNNER_TEMP/gfa-basic-3.52d-disk1.zip" -d "$RUNNER_TEMP/gfa-basic-3.52d-disk1"
