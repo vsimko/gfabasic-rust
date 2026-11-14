@@ -43,8 +43,8 @@ printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-f
 
 # Double-click the gfatest.LST row to activate the editor's native
 # file-list default action. The selected-row screenshot places the pointer
-# near x=320,y=210; move it to the row center at about x=340,y=160.
-printf "SEND_MOUSE\\t40\\t-96\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+# near x=320,y=218; move slightly right to the row center at about x=350,y=216.
+printf "SEND_MOUSE\\t54\\t-4\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 sleep 0.3
 printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-row-double-click.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
