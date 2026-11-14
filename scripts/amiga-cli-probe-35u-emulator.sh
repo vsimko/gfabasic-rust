@@ -12,26 +12,18 @@ if [ -n "$ipc_socket_path" ]; then break; fi
 sleep 1
 done
 test -n "$ipc_socket_path" || { cat "$AMIBERRY_LOG"; exit 1; }
-# Turbo mode removes emulated floppy latency for these unprotected ADF test disks.
 python3 scripts/amiberry-ipc.py "$ipc_socket_path" SET_FLOPPY_SPEED 0 | tee "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/floppy-speed-set.txt"
 python3 scripts/amiberry-ipc.py "$ipc_socket_path" GET_FLOPPY_SPEED | tee "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/floppy-speed-get.txt"
 grep -Eq "(^|[^0-9])0([^0-9]|$)" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/floppy-speed-get.txt" || { echo "Amiberry did not confirm turbo floppy speed"; exit 1; }
 sleep 35
-# Verify that the test disk (DF0) and untouched distribution disk (DF1) are mounted.
 printf "INSERTFLOPPY\\t%s\\t0\\n" "$RUNNER_TEMP/gfatest.adf" | timeout 5s nc -U -N "${ipc_socket_path:-}" >"$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/insert-floppy-ipc.txt"
 printf "LIST_FLOPPIES\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}" >"$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/list-floppies-ipc.txt"
 printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/editor-before-merge.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-
-# F2 opens the native ASCII Merge requester (GFA BASIC editor shortcut).
 printf "SEND_KEY\\t81\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 sleep 0.2
 printf "SEND_KEY\\t81\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 sleep 3
 printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-dialog.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-
-# DF0 is already selected. Move the pointer from the top-left corner
-# to the visible gfatest.LST row (about x=340,y=211 in the screenshot).
-# Amiberry applies a bounded relative delta per IPC event, so split motion.
 for _ in $(seq 1 4); do
 printf "SEND_MOUSE\\t240\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 sleep 0.1
@@ -49,29 +41,24 @@ printf "SEND_MOUSE\\t0\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 sleep 0.5
 printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-file-selected.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 
-# The LST row is selected. Move down to the Merge gadget and click it.
-for _ in $(seq 1 3); do
-printf "SEND_MOUSE\\t0\\t112\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-sleep 0.1
+# The selected-row screenshot places the pointer near x=320,y=218.
+# Move to the center of the Merge gadget (about x=323,y=420).
+# Amiberry bounds each relative mouse event; use repeated small increments.
+# SEND_MOUSE relative Y is scaled by the emulator; eight 50-unit steps
+# move the pointer from the selected row to the Merge gadget center.
+for _ in $(seq 1 8); do
+printf "SEND_MOUSE\\t0\\t50\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+sleep 0.15
 done
-printf "SEND_MOUSE\\t0\\t48\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-sleep 0.1
-printf "SEND_MOUSE\\t0\\t48\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-sleep 0.5
+sleep 0.3
 printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-gadget-pointer.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 sleep 0.2
 printf "SEND_MOUSE\\t0\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-sleep 0.3
-printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-sleep 0.2
-printf "SEND_MOUSE\\t0\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-sleep 3
+sleep 4
 printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-shortcut.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 tesseract "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-shortcut.png" stdout 2>/dev/null > "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-shortcut-ocr.txt"
 printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-merge.png" | timeout 5s nc -U -N "${ipc_socket_path:-}" || true
-
-# Native editor Run shortcut: Shift+F10 (Amiga raw keycodes).
 printf "SEND_KEY\\t96\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 sleep 0.2
 printf "SEND_KEY\\t89\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
@@ -81,18 +68,11 @@ sleep 0.2
 printf "SEND_KEY\\t96\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 sleep 5
 printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-run-dialog.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-# Capture the running editor/runtime after invoking Run. Output mode "O"
-# should create the DF0 result files without an interactive requester.
 sleep 8
 printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-run.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-# Allow the BASIC runtime and filesystem to finish flushing the
-# interpreter-written output files before requesting emulator exit.
 sleep 5
-
 kill -0 "$emulator_pid"
 printf "QUIT\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}" || true
-# QUIT is asynchronous. Wait for Amiberry to close the floppy
-# cleanly; the EXIT trap is only a timeout fallback.
 for attempt in $(seq 1 10); do
 if ! kill -0 "$emulator_pid" 2>/dev/null; then break; fi
 sleep 1
