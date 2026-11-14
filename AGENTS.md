@@ -6,7 +6,8 @@ This file is the repository-wide instruction entry point for AI coding agents. R
 
 Before performing a matching task, read and follow its skill. Skills provide task procedures; the linked documentation remains the canonical source of project facts and policy.
 
-- For Amiga GFA BASIC reference-interpreter probes, .LST fixtures, or native Amiberry Merge + Run debugging, use [`amiga-gfa-basic-regression-testing`](.agents/skills/amiga-gfa-basic-regression-testing/SKILL.md) and [the probe-writing guide](docs/testing/amiga-gfa-basic-probes.md).
+- For Amiga GFA BASIC reference-interpreter probes, .LST fixtures, language behavior, or Merge + Run result diagnosis, use [`amiga-gfa-basic-regression-testing`](.agents/skills/amiga-gfa-basic-regression-testing/SKILL.md) and [the probe-writing guide](docs/testing/amiga-gfa-basic-probes.md).
+- For Amiberry process lifecycle, UAE configuration, IPC, input automation, screenshots, or emulator-level failures, use [`amiberry-emulator-control`](.agents/skills/amiberry-emulator-control/SKILL.md). This skill deliberately stops at the emulator boundary; use the regression-testing skill for guest GFA BASIC behavior.
 - For API registry evidence reviews, semantic verification, or agent review packages/results, use [`api-evidence-verification`](.agents/skills/api-evidence-verification/SKILL.md) and [AI-assisted API verification](docs/architecture/AI-VERIFICATION.md).
 - For historical Amiga GFA BASIC manual/book research, OCR/page-image review, command/API extraction, or version applicability, use [`amiga-gfa-basic-documentation-research`](.agents/skills/amiga-gfa-basic-documentation-research/SKILL.md) and [the research index](docs/research/index.md).
 - For adding or editing conformance-corpus fixtures, sidecars, or manifest entries, use [`corpus-fixture-authoring`](.agents/skills/corpus-fixture-authoring/SKILL.md) and [the corpus contract](tests/corpus/README.md).
