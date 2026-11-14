@@ -50,8 +50,6 @@ UNTIL n%=5
 SELECT n%
 CASE 5
   n%=n%+10
-CASE ELSE
-  n%=-1
 ENDSELECT
 IF n%=15
   PRINT #2,"GFATEST:dqh-control-flow:PASS"
