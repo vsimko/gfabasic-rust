@@ -1,9 +1,25 @@
 {
   "schema_version": 1,
   "status": "fresh",
-  "generated_at": "2026-11-13T22:12:17.033094+00:00",
-  "last_successful_at": "2026-11-13T22:12:17.033094+00:00",
+  "generated_at": "2026-11-14T11:54:09.226216+00:00",
+  "last_successful_at": "2026-11-14T11:54:09.226216+00:00",
   "items": [
+    {
+      "type": "merged_pull_request",
+      "title": "[CI] Scope PR fuzz smoke to source-loader changes",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/533",
+      "number": 533,
+      "timestamp": "2026-11-14T11:53:46Z",
+      "summary": "PR #533 merged"
+    },
+    {
+      "type": "commit",
+      "title": "ci(fuzz): scope PR smoke to relevant paths",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/5c747ab6c3a0e908070123a3575268cd50fe32a9",
+      "number": null,
+      "timestamp": "2026-11-14T11:53:46Z",
+      "summary": "Commit 5c747ab"
+    },
     {
       "type": "merged_pull_request",
       "title": "test(amiga): expand 3.5U DATA pointer regression coverage",
@@ -83,22 +99,6 @@
       "number": null,
       "timestamp": "2026-11-13T10:12:20Z",
       "summary": "Commit 2ee49fa"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "Add isolated GFA BASIC 3.041U native probes",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/520",
-      "number": 520,
-      "timestamp": "2026-11-13T08:05:15Z",
-      "summary": "PR #520 merged"
-    },
-    {
-      "type": "commit",
-      "title": "Add isolated GFA BASIC 3.041U native probes (#520)",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/34edc83c25230d346ddd61bd9e1387184a746dc7",
-      "number": null,
-      "timestamp": "2026-11-13T08:05:15Z",
-      "summary": "Commit 34edc83"
     }
   ]
 }
