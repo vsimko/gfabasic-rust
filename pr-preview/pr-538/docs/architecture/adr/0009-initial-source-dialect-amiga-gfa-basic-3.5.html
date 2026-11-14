@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The project needs one bounded, normative source-language target before dialect-specific lexer, parser, semantic, and conformance work can be treated as implementation requirements. ADR 0008 initially selected Amiga GF…">
+  <title>ADR 0009: Initial source dialect — Amiga GFA BASIC interpreter 3.5 · GFA BASIC Rust documentation</title>
+  <link rel="stylesheet" href="../../../styles.css">
+</head>
+<body class="docs-site">
+  <header class="docs-header">
+    <a href="../../../index.html">GFA BASIC Rust</a>
+    <span aria-hidden="true">/</span>
+    <a href="../../index.html">Documentation</a>
+  </header>
+  <div class="docs-layout">
+    <nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home" href="index.html">Section index</a><ul><li><a href="0001-documentation-and-architecture-records.html">ADR 0001: Documentation and architecture decision records</a></li><li><a href="0002-initial-rust-workspace.html">ADR 0002: Initial Rust workspace crate boundaries</a></li><li><a href="0003-target-model.html">ADR 0003: Host and compilation target model</a></li><li><a href="0004-api-profile-model.html">ADR 0004: API profile model</a></li><li><a href="0005-cli-and-project-configuration.html">ADR 0005: CLI and project configuration</a></li><li><a href="0006-api-registry.html">ADR 0006: API declaration registry</a></li><li><a href="0007-compiler-pipeline-and-ir.html">ADR 0007: Compiler pipeline and typed IR boundaries</a></li><li><a href="0008-initial-source-dialect-amiga-gfa-basic-3.0.html">ADR 0008: Initial source dialect — Amiga GFA BASIC interpreter 3.0</a></li><li><a href="0009-initial-source-dialect-amiga-gfa-basic-3.5.html">ADR 0009: Initial source dialect — Amiga GFA BASIC interpreter 3.5</a></li><li><a href="0010-versioning-and-compatibility-lifecycle.html">ADR 0010: Versioning and compatibility lifecycle</a></li><li><a href="0011-amiga-35-linux-sdl3-product-scope.html">ADR 0011: Product scope — Amiga GFA BASIC 3.5 to Linux x86-64 with SDL3</a></li><li><a href="0012-language-server-and-editor-integration.html">ADR 0012: Language server and editor integration</a></li><li><a href="0013-repository-consistency-validation.html">ADR 0013: Repository consistency validation</a></li><li><a href="0014-implementation-dashboard.html">ADR 0014: Repository implementation dashboard</a></li><li><a href="0015-listing-first-compiler-input.html">ADR 0015: Listing-first compiler input</a></li><li><a href="TEMPLATE.html">ADR NNNN: Title</a></li><li><a href="0016-okf-v02-documentation-bundle.html">ADR 0016: OKF v0.2 documentation bundle</a></li></ul></nav>
+    <main class="docs-content">
+      <article>
+        <h1>ADR 0009: Initial source dialect — Amiga GFA BASIC interpreter 3.5</h1>
+        <p class="docs-meta"><span>Architecture Decision Record</span></p>
+        <h1 id="adr-0009-initial-source-dialect-amiga-gfa-basic-interpreter-35">ADR 0009: Initial source dialect — Amiga GFA BASIC interpreter 3.5</h1>
+<ul>
+<li>Status: Accepted</li>
+<li>Date: 2026-11-04</li>
+<li>Decision makers: Project maintainer</li>
+<li>Tracking: <a href="https://github.com/vsimko/gfabasic-rust/issues/3">issue #3</a></li>
+<li>Supersedes: <a href="0008-initial-source-dialect-amiga-gfa-basic-3.0.html">ADR 0008</a></li>
+</ul>
+<h2 id="context">Context</h2>
+<p>The project needs one bounded, normative source-language target before dialect-specific lexer, parser, semantic, and conformance work can be treated as implementation requirements. ADR 0008 initially selected Amiga GFA BASIC interpreter 3.0 using the 1989 Amiga reference book available at that time.</p>
+<p>Subsequent source acquisition identified a separate Amiga GFA BASIC 3.5 Interpreter manual. Its introduction identifies the included software as GFA BASIC 3.5 and explains that the manual was originally printed for version 3.0 with a 3.5 addendum. The addendum and further-new-commands chapter provide version-specific 3.5 evidence. The repository maintainer explicitly selected Amiga GFA BASIC 3.5 as the normative target in the 2026-11-04 decision recorded on issue #65.</p>
+<p>Historical Amiga 3.0 and 3.03 books remain useful, but they do not independently establish that every documented rule is unchanged in 3.5. Interpreter and compiler product versions must also remain distinct: contemporary evidence lists interpreter 3.51 and compiler 3.52 as separate products.</p>
+<h2 id="decision">Decision</h2>
+<ol>
+<li>The first normative source-language target is <strong>Commodore Amiga GFA BASIC interpreter 3.5</strong>.</li>
+<li>Use the Amiga GFA BASIC 3.5 Interpreter manual, including its version-specific addenda, as the primary normative source for 3.5-specific syntax and behavior.</li>
+<li>A rule documented only in a 3.0 or 3.03 source is an <strong>inherited candidate</strong>, not automatically a verified 3.5 rule. Confirm its applicability to 3.5 before making it an implementation or conformance requirement.</li>
+<li>Keep Amiga and Atari ST dialects separate. Atari ST GFA BASIC V2.xx/V3.0 and Atari ST 3.5 material remain research-only for this initial target; do not use them to fill gaps in Amiga evidence.</li>
+<li>Keep language dialect/version, platform API profile, build host, and output target as separate configuration dimensions. Selecting the Amiga source dialect does not implicitly select or implement an Amiga API profile.</li>
+<li>Identify the selected source dialect and version explicitly. Do not infer it from the output target, file extension, or source contents.</li>
+<li>Distinguish the Amiga 3.5 interpreter from later interpreter/compiler versions and from archive-catalogue labels. Do not treat an uninspected 3.51/3.52-labelled disk image as proof of a particular executable component version.</li>
+<li>This decision selects the normative research and implementation target; it does <strong>not</strong> claim that the compiler, runtime, API profile, or any GFA BASIC feature is implemented or conformant.</li>
+<li>Where 3.5 evidence is absent, ambiguous, OCR-sensitive, or contradicted by a 3.0/3.03 source, behavior remains unresolved until checked against the applicable 3.5 source or reproducible compatibility evidence.</li>
+</ol>
+<h2 id="alternatives-considered">Alternatives considered</h2>
+<ul>
+<li><strong>Amiga GFA BASIC interpreter 3.0 first:</strong> superseded. It was the initial bounded target under ADR 0008, but the maintainer subsequently selected 3.5 after the version-specific interpreter manual became available.</li>
+<li><strong>Amiga GFA BASIC interpreter 3.51 or 3.52:</strong> not selected. Contemporary commercial evidence distinguishes interpreter 3.51 from compiler 3.52, while archive catalogue labels do not establish the component version of the actual disk contents.</li>
+<li><strong>Amiga and Atari ST together:</strong> rejected for the initial target to avoid silently conflating platform-specific syntax and semantics.</li>
+<li><strong>Defer all dialect selection:</strong> rejected because downstream research and implementation need one normative source target.</li>
+</ul>
+<h2 id="consequences">Consequences</h2>
+<ul>
+<li>Dialect-specific research, lexer/parser requirements, and the first conformance inventory must prioritize Amiga GFA BASIC interpreter 3.5.</li>
+<li>The 1989 Amiga 3.0 book and 1990 Amiga 3.03 reference remain historical and supplementary sources. Each inherited rule needs explicit 3.5 confirmation.</li>
+<li>The 3.5 interpreter manual and its addenda must be indexed with exact printed/PDF page references; OCR-sensitive syntax must be checked against page images. The initial lexer-specific evidence inventory is <a href="../../research/amiga-gfa-basic-35-lexer-evidence.html">Amiga GFA BASIC 3.5 lexer evidence</a>; it separates the verified Chapter 14 special names from inherited 3.0/V3.03 candidates and unresolved source-format rules.</li>
+<li>Atari ST evidence remains non-normative for the initial compiler target.</li>
+<li>API profile selection, runtime behavior, and output target remain independent decisions.</li>
+<li>The compatibility matrix must distinguish the selected 3.5 target from historical 3.0/3.03 research, implementation status, and conformance status.</li>
+<li>Issue #3 remains open until feature-level evidence, the compatibility policy, explicit dialect selection, and diagnostic acceptance criteria are complete.</li>
+</ul>
+<h2 id="evidence-and-references">Evidence and references</h2>
+<ul>
+<li>The maintainer's explicit 3.5 target decision is recorded in <a href="https://github.com/vsimko/gfabasic-rust/issues/65">issue #65</a> (2026-11-04).</li>
+<li>The supplied <em>GFA BASIC 3.5 Interpreter</em> manual identifies the included software as GFA BASIC 3.5 and contains the 3.5-specific addenda. Its source inventory and extracted feature notes are tracked in <a href="https://github.com/vsimko/gfabasic-rust/pull/160">PR #160</a>; the manual itself is not committed.</li>
+<li>The 1989 German Amiga book explicitly documents interpreter 3.0. It remains a historical baseline, not sole proof of 3.5 behavior; see <a href="../../reference/amiga-gfa-basic-3.0.html">the Amiga 3.0 research notes</a>.</li>
+<li>The 1990 German Amiga book's main command reference identifies interpreter V3.03 despite its title's “up to 3.5” wording. Keep its interpreter and compiler coverage separate; see <a href="../../reference-sources.html">the source register</a>.</li>
+<li>Contemporary <em>Amiga Magazine</em> evidence lists interpreter 3.51 and compiler 3.52 separately; it is historical commercial evidence, not a language specification.</li>
+<li>Atari ST research is separately recorded in <a href="../../reference/atari-gfa-basic-3.0.html">the Atari ST GFA BASIC V2.xx/V3.0 notes</a> and must not be transferred to Amiga.</li>
+</ul>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>
