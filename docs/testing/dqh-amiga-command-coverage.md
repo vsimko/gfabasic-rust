@@ -1,3 +1,8 @@
+---
+type: "Testing Evidence"
+title: "DQH-Amiga command coverage priorities"
+---
+
 # DQH-Amiga command coverage priorities
 
 ## Source and method
