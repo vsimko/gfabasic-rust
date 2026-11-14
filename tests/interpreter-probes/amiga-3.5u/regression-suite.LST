@@ -5,6 +5,7 @@ REM IMPORTANT: OPEN file mode is uppercase letter "O" (Output), NOT digit "0".
 
 REM 3.5 addendum pp. 13-34..13-35: save and restore DATA pointers.
 DIM dp%(100),detm(2,2),invsrc(2,2),invm(2,2),invcheck(2,2)
+DIM unity(2,2),addleft(2,2),addright(2,2),addresult(2,2),subresult(2,2)
 REM Capture runtime output on the writable DF0 test disk.
 OPEN "O",#1,"DF0:FACT.OUT"
 OPEN "O",#2,"DF0:GFATEST.OUT"
@@ -104,6 +105,38 @@ IF invcheck(1,1)>0.99 AND invcheck(1,1)<1.01 AND invcheck(1,2)>-0.01 AND invchec
   PRINT #2,"GFATEST:matrix-inv:PASS"
 ELSE
   PRINT #2,"GFATEST:matrix-inv:FAIL"
+ENDIF
+
+REM 3.5 addendum p. 13-2: MAT ONE creates a square identity matrix.
+MAT ONE unity()
+IF unity(1,1)=1 AND unity(1,2)=0 AND unity(2,1)=0 AND unity(2,2)=1
+  PRINT #2,"GFATEST:matrix-one:PASS"
+ELSE
+  PRINT #2,"GFATEST:matrix-one:FAIL"
+ENDIF
+
+REM 3.5 addendum pp. 13-16..13-19: element-wise matrix addition and subtraction.
+addleft(1,1)=1
+addleft(1,2)=2
+addleft(2,1)=3
+addleft(2,2)=4
+addright(1,1)=5
+addright(1,2)=6
+addright(2,1)=7
+addright(2,2)=8
+MAT ADD addresult()=addleft()+addright()
+MAT SUB subresult()=addleft()-addright()
+PRINT #1,"MAT-ADD:";addresult(1,1);addresult(1,2);addresult(2,1);addresult(2,2)
+PRINT #1,"MAT-SUB:";subresult(1,1);subresult(1,2);subresult(2,1);subresult(2,2)
+IF addresult(1,1)=6 AND addresult(1,2)=8 AND addresult(2,1)=10 AND addresult(2,2)=12
+  PRINT #2,"GFATEST:matrix-add:PASS"
+ELSE
+  PRINT #2,"GFATEST:matrix-add:FAIL"
+ENDIF
+IF subresult(1,1)=-4 AND subresult(1,2)=-4 AND subresult(2,1)=-4 AND subresult(2,2)=-4
+  PRINT #2,"GFATEST:matrix-sub:PASS"
+ELSE
+  PRINT #2,"GFATEST:matrix-sub:FAIL"
 ENDIF
 
 CLOSE #2
