@@ -1,0 +1,58 @@
+name: Workflow and agent-skill validation
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/**"
+      - ".agents/skills/**"
+      - "AGENTS.md"
+      - "scripts/**/*.sh"
+      - "scripts/validate_agent_skills.py"
+      - ".github/workflows/workflow-lint.yml"
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/**"
+      - ".agents/skills/**"
+      - "AGENTS.md"
+      - "scripts/**/*.sh"
+      - "scripts/validate_agent_skills.py"
+      - ".github/workflows/workflow-lint.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: workflow-lint-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  workflow-and-skill-lint:
+    name: Validate all workflows and agent skills
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+
+      - name: Set up Python
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0
+        with:
+          python-version: "3.12"
+
+      - name: Validate every GitHub Actions workflow
+        run: |
+          mapfile -t workflow_files < <(find .github/workflows -type f \\( -name '*.yml' -o -name '*.yaml' \\) -print | sort)
+          test "${#workflow_files[@]}" -gt 0
+          go run github.com/rhysd/actionlint/cmd/actionlint@v1.7.7 "${workflow_files[@]}"
+
+      - name: Check shell syntax in repository scripts
+        run: |
+          mapfile -t shell_files < <(find scripts -type f -name '*.sh' -print | sort)
+          if [ "${#shell_files[@]}" -gt 0 ]; then
+            bash -n "${shell_files[@]}"
+          fi
+
+      - name: Validate Agent Skills and discovery links
+        run: python scripts/validate_agent_skills.py
