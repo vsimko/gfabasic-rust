@@ -34,6 +34,24 @@ ELSE
   PRINT #2,"GFATEST:data-pointer:FAIL"
 ENDIF
 
+REM 3.5 addendum pp. 13-20..13-21: rectangular matrix product.
+REM 2x3 matrix of ones multiplied by a 3x2 DATA matrix gives two rows of 3,5.
+DIM ma(2,2),mb(2,3),mc(3,2)
+MAT SET mb()=1
+mc(1,1)=1
+mc(1,2)=2
+mc(2,1)=-3
+mc(2,2)=4
+mc(3,1)=5
+mc(3,2)=-1
+MAT MUL ma()=mb()*mc()
+PRINT #1,"MAT-MUL:";ma(1,1);ma(1,2);ma(2,1);ma(2,2)
+IF ma(1,1)=3 AND ma(1,2)=5 AND ma(2,1)=3 AND ma(2,2)=5
+  PRINT #2,"GFATEST:matrix-mul:PASS"
+ELSE
+  PRINT #2,"GFATEST:matrix-mul:FAIL"
+ENDIF
+
 REM FACT boundary values.
 x = FACT(0)
 y = FACT(1)
