@@ -55,7 +55,7 @@ conformance = "not-tested"
         from scripts.generate_api_catalogue import ROOT
         data = json.loads(render(ROOT))
         self.assertGreaterEqual(data["counts"]["total"], 29)
-        self.assertEqual(data["counts"]["by_namespace"]["language-core"], 24)
+        self.assertEqual(data["counts"]["by_namespace"]["language-core"], 32)
         self.assertEqual(data["counts"]["by_namespace"]["amiga"], 4)
         self.assertEqual(data["counts"]["by_namespace"]["atari-st"], 1)
         self.assertEqual(data["counts"]["by_evidence_status"].get("disputed", 0), 0)
