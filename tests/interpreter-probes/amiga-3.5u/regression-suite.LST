@@ -45,6 +45,17 @@ ELSE
   PRINT #2,"GFATEST:fact-zero:FAIL"
 ENDIF
 
+REM 3.5 addendum pp. 13-32..13-33: combinatorics example.
+comb_fact = FACT(6)
+comb_variat = VARIAT(6,2)
+comb_combin = COMBIN(6,2)
+PRINT #1,"COMBINATORICS:";comb_fact;comb_variat;comb_combin
+IF comb_fact=720 AND comb_variat=30 AND comb_combin=15
+  PRINT #2,"GFATEST:combinatorics:PASS"
+ELSE
+  PRINT #2,"GFATEST:combinatorics:FAIL"
+ENDIF
+
 REM Integer arithmetic and operator precedence.
 a = 2 + 3 * 4
 b = (2 + 3) * 4
