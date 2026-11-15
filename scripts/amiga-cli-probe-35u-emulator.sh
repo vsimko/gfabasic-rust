@@ -59,13 +59,24 @@ sleep 4
 printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-shortcut.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 tesseract "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-shortcut.png" stdout 2>/dev/null > "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-shortcut-ocr.txt"
 printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-merge.png" | timeout 5s nc -U -N "${ipc_socket_path:-}" || true
-printf "SEND_KEY\\t96\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+
+# Click the editor's visible Run gadget rather than relying on the Amiga-key
+# shortcut, which can leave the listing open without starting the program.
+# After Merge the calibrated pointer is near x=320,y=415 at 1024x768.
+# Four bounded horizontal moves reach x~=560; fourteen vertical moves reach y~=65.
+for _ in $(seq 1 4); do
+printf "SEND_MOUSE\\t240\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+sleep 0.1
+done
+for _ in $(seq 1 14); do
+printf "SEND_MOUSE\\t0\\t-50\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+sleep 0.1
+done
+sleep 0.3
+printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/run-gadget-pointer.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 sleep 0.2
-printf "SEND_KEY\\t89\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-sleep 0.2
-printf "SEND_KEY\\t89\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-sleep 0.2
-printf "SEND_KEY\\t96\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+printf "SEND_MOUSE\\t0\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 sleep 5
 printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-run-dialog.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 sleep 8
