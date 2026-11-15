@@ -63,11 +63,13 @@ printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-m
 # Click the editor's visible Run gadget rather than relying on the Amiga-key
 # shortcut, which can leave the listing open without starting the program.
 # After Merge the calibrated pointer is near x=320,y=415 at 1024x768.
-# Four bounded horizontal moves reach x~=560; fourteen vertical moves reach y~=65.
-for _ in $(seq 1 4); do
+# Five bounded horizontal moves plus a short correction reach x~=630; fourteen vertical moves reach y~=65.
+for _ in $(seq 1 5); do
 printf "SEND_MOUSE\\t240\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 sleep 0.1
 done
+printf "SEND_MOUSE\\t40\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+sleep 0.1
 for _ in $(seq 1 14); do
 printf "SEND_MOUSE\\t0\\t-50\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 sleep 0.1
