@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Issue #14 requires a single, machine-validatable documentation source with metadata, discoverable navigation, generated website pages, and CI/deployment integration. The issue identifies Google&#x27;s Open Knowledge Format…">
+  <title>ADR 0016: OKF v0.2 documentation bundle · GFA BASIC Rust documentation</title>
+  <link rel="stylesheet" href="../../../styles.css">
+</head>
+<body class="docs-site">
+  <header class="docs-header">
+    <a href="../../../index.html">GFA BASIC Rust</a>
+    <span aria-hidden="true">/</span>
+    <a href="../../index.html">Documentation</a>
+  </header>
+  <div class="docs-layout">
+    <nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home" href="index.html">Section index</a><ul><li><a href="0001-documentation-and-architecture-records.html">ADR 0001: Documentation and architecture decision records</a></li><li><a href="0002-initial-rust-workspace.html">ADR 0002: Initial Rust workspace crate boundaries</a></li><li><a href="0003-target-model.html">ADR 0003: Host and compilation target model</a></li><li><a href="0004-api-profile-model.html">ADR 0004: API profile model</a></li><li><a href="0005-cli-and-project-configuration.html">ADR 0005: CLI and project configuration</a></li><li><a href="0006-api-registry.html">ADR 0006: API declaration registry</a></li><li><a href="0007-compiler-pipeline-and-ir.html">ADR 0007: Compiler pipeline and typed IR boundaries</a></li><li><a href="0008-initial-source-dialect-amiga-gfa-basic-3.0.html">ADR 0008: Initial source dialect — Amiga GFA BASIC interpreter 3.0</a></li><li><a href="0009-initial-source-dialect-amiga-gfa-basic-3.5.html">ADR 0009: Initial source dialect — Amiga GFA BASIC interpreter 3.5</a></li><li><a href="0010-versioning-and-compatibility-lifecycle.html">ADR 0010: Versioning and compatibility lifecycle</a></li><li><a href="0011-amiga-35-linux-sdl3-product-scope.html">ADR 0011: Product scope — Amiga GFA BASIC 3.5 to Linux x86-64 with SDL3</a></li><li><a href="0012-language-server-and-editor-integration.html">ADR 0012: Language server and editor integration</a></li><li><a href="0013-repository-consistency-validation.html">ADR 0013: Repository consistency validation</a></li><li><a href="0014-implementation-dashboard.html">ADR 0014: Repository implementation dashboard</a></li><li><a href="0015-listing-first-compiler-input.html">ADR 0015: Listing-first compiler input</a></li><li><a href="TEMPLATE.html">ADR NNNN: Title</a></li><li><a href="0016-okf-v02-documentation-bundle.html">ADR 0016: OKF v0.2 documentation bundle</a></li></ul></nav>
+    <main class="docs-content">
+      <article>
+        <h1>ADR 0016: OKF v0.2 documentation bundle</h1>
+        <p class="docs-meta"><span>Architecture Decision Record</span></p>
+        <h1 id="adr-0016-okf-v02-documentation-bundle">ADR 0016: OKF v0.2 documentation bundle</h1>
+<ul>
+<li>Status: Accepted</li>
+<li>Date: 2026-11-09</li>
+<li>Supersedes: The unresolved-OKF statement in ADR 0001</li>
+</ul>
+<h2 id="context">Context</h2>
+<p>Issue #14 requires a single, machine-validatable documentation source with metadata, discoverable navigation, generated website pages, and CI/deployment integration. The issue identifies Google's <a href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md">Open Knowledge Format specification v0.2</a>. The earlier ADR 0001 treated OKF as unidentified; that statement is now obsolete. The project must preserve useful Markdown content and links, avoid a second source tree, and keep domain-specific machine-readable API declarations separate.</p>
+<h2 id="decision">Decision</h2>
+<ol>
+<li>Adopt Google Open Knowledge Format v0.2 for the canonical human-readable documentation bundle rooted at <code>docs/</code>.</li>
+<li>Keep UTF-8 Markdown as the editable concept format. Every non-reserved Markdown concept has parseable YAML frontmatter and a non-empty string <code>type</code>. Use <code>title</code> for display and add optional metadata only when it is accurate and useful.</li>
+<li>Make <code>docs/index.md</code> the sole bundle root index; its frontmatter declares <code>okf_version: &quot;0.2&quot;</code>. Use nested reserved <code>index.md</code> files for progressive-disclosure navigation. Reserved index files do not carry ordinary concept frontmatter. A reserved <code>log.md</code>, if introduced, is a newest-first chronological update log.</li>
+<li>Preserve existing concept paths and content where practical. Do not create a parallel <code>knowledge/</code> tree, duplicate concept text in website sources, or scrape prose to generate API declarations. The structured API registry remains authoritative for API metadata.</li>
+<li>Enforce the OKF conformance floor and repository navigation invariants with <code>scripts/validate_okf.py</code>: metadata parsing and shapes, reserved-file structure, local links and anchors, complete directory indexes, duplicate canonical paths, and reachability from the root index.</li>
+<li>Generate the static documentation website from the canonical concepts using <code>scripts/generate_docs_site.py</code>. Disable raw HTML, rewrite internal links to generated pages, use concept metadata for titles, use index files for navigation order, and derive a short page summary from metadata or the concept body.</li>
+<li>Treat concepts with <code>status: draft</code> as non-publishable. Publish <code>status: deprecated</code> concepts with a visible warning; an omitted status follows OKF's default of <code>stable</code>.</li>
+<li>Keep generated HTML build-only under <code>site/docs/</code>. Run validation and generation in PR checks, PR previews, and main-branch production deployment. Documentation-only changes must trigger production deployment; previews are cleaned up when their PR closes. Production and preview smoke tests verify the generated documentation.</li>
+</ol>
+<h2 id="alternatives-considered">Alternatives considered</h2>
+<ul>
+<li>Markdown without a documented metadata/navigation contract: rejected because it does not provide the requested machine-readable bundle and metadata validation.</li>
+<li>A parallel <code>knowledge/</code> directory: rejected because it duplicates concepts and creates competing sources of truth.</li>
+<li>A separate CMS or hosted authoring service: rejected because contributors must be able to review and edit source offline in normal Git workflows.</li>
+<li>Generating API declarations from prose: rejected because the API registry has a separate schema and validation contract.</li>
+</ul>
+<h2 id="consequences">Consequences</h2>
+<ul>
+<li>The existing documentation remains readable as Markdown in GitHub and can be published as static HTML without requiring a hosted authoring service.</li>
+<li>New concepts must include frontmatter and be linked from their directory index; every concept must be reachable from <code>docs/index.md</code>.</li>
+<li>The validator is intentionally stricter than OKF's permissive minimum where needed for reliable repository navigation. Unknown extension fields remain accepted.</li>
+<li>Generated pages are reproducible build output and must never be edited directly.</li>
+<li>ADR 0001 remains historically accurate for its original decision date, but its claim that OKF is unidentified is superseded by this ADR.</li>
+</ul>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>
