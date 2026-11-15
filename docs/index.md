@@ -40,6 +40,5 @@ This is the canonical OKF v0.2 documentation bundle for gfabasic-rust. Markdown 
 - [User guides](user/) - User-facing guidance.
 - [Testing guides](testing/) - Reference interpreter and testing material.
 - [Amiga GFA BASIC probe-writing guide](testing/amiga-gfa-basic-probes.md) - Rules for version-specific native interpreter probes.
-- [DQH-Amiga command coverage priorities](testing/dqh-amiga-command-coverage.md) - Interpreter commands prioritized from the DQH Amiga game source.
 - [Agent Skills](../.agents/skills/README.md) - Task-specific procedures for AI coding agents.
 - [Templates](templates/) - Reusable documentation structures.
