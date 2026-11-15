@@ -38,19 +38,19 @@
 <tbody>
 <tr>
 <td><code>RAND</code></td>
-<td>English interpreter addendum, p. 13-2</td>
+<td>English interpreter addendum, p. 13-3</td>
 <td><code>RAND(10)</code> populates elements of a floating-point matrix in the <code>MAT SET</code> example.</td>
 <td>Distribution details, seed behavior, and other random functions are not restated.</td>
 </tr>
 <tr>
 <td><code>STR$</code></td>
-<td>English interpreter addendum, p. 13-3; German book, p. 457</td>
+<td>English interpreter addendum, p. 13-4; German book, p. 457</td>
 <td>The <code>MAT PRINT</code> description explicitly refers to <code>STR$(x,g,n)</code> formatting; the German book independently corroborates the formatting reference.</td>
 <td>The one- and two-argument base-manual forms are not independently restated.</td>
 </tr>
 <tr>
 <td><code>SUCC</code></td>
-<td>English interpreter addendum, p. 13-5</td>
+<td>English interpreter addendum, p. 13-6</td>
 <td>A matrix-copy example assigns values using <code>SUCC(i%)</code>.</td>
 <td>The string overload is not independently demonstrated.</td>
 </tr>
@@ -96,6 +96,60 @@
 <p>Together with the four functions explicitly introduced by the English addendum (<code>FACT</code>, <code>VARIAT</code>, <code>COMBIN</code>, and <code>GURU</code>), these are twelve function identifiers with direct 3.5 documentary evidence. The four explicit additions remain a distinct category; the eight inherited functions are not reclassified as 3.5 additions.</p>
 <p>No other base-manual function identifier was promoted by this pass. Lack of an occurrence in the audited 3.5 material is not evidence of removal or incompatibility. No runtime-conformance or Rust-implementation claim is made.</p>
 <p>See also <code>amiga-gfa-basic-functions.toml</code>, <code>amiga-gfa-basic-candidates.toml</code>, and the generated <code>amiga-gfa-basic-candidate-report.md</code>.</p>
+<h2 id="registry-declaration-crosswalk">Registry declaration crosswalk</h2>
+<p>The narrow, directly evidenced call forms are represented by the following language-core declarations. The IDs identify the evidenced form, not every historical overload documented in the 3.0 base text.</p>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Stable registry ID</th>
+<th>3.5 witness</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>RAND</code></td>
+<td><code>gfa.language.numeric.rand</code></td>
+<td>English addendum, p. 13-3</td>
+</tr>
+<tr>
+<td><code>STR$</code></td>
+<td><code>gfa.language.string.str</code></td>
+<td>English addendum, p. 13-4; German 3.5 book, p. 457</td>
+</tr>
+<tr>
+<td><code>SUCC</code></td>
+<td><code>gfa.language.numeric.succ</code></td>
+<td>English addendum, p. 13-6</td>
+</tr>
+<tr>
+<td><code>STRING$</code></td>
+<td><code>gfa.language.string.string</code></td>
+<td>English addendum, p. 13-21</td>
+</tr>
+<tr>
+<td><code>HEX$</code></td>
+<td><code>gfa.language.string.hex</code></td>
+<td>English addendum, p. 13-36</td>
+</tr>
+<tr>
+<td><code>RND</code></td>
+<td><code>gfa.language.numeric.rnd</code></td>
+<td>German 3.5 book, Chapter 18, p. 458</td>
+</tr>
+<tr>
+<td><code>INT</code></td>
+<td><code>gfa.language.numeric.int</code></td>
+<td>German 3.5 book, Chapter 18, p. 458</td>
+</tr>
+<tr>
+<td><code>SQR</code></td>
+<td><code>gfa.language.numeric.sqr</code></td>
+<td>German 3.5 book, Chapter 18, p. 473</td>
+</tr>
+</tbody>
+</table>
+<p>The registry retains the original 3.0 base-manual source locators only as provenance for detailed descriptions. The 3.5 witness is separately recorded in each declaration. In particular, the registry does not promote undocumented overloads, numeric boundaries, error behavior, or seed/distribution semantics based on the 3.0 base text. These declarations are documentary evidence only: implementation is not claimed and conformance remains untested.</p>
 
       </article>
     </main>

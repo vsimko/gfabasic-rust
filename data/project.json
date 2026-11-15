@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "source_revision": "ade88657cca1dd3de674be6ecb3d8728995eddec",
+  "source_revision": "2d20658ecfca5ba5a6034e721871a0bf89e94475",
   "project": {
     "name": "gfabasic-rust",
     "language": "Rust",
@@ -491,7 +491,7 @@
   ],
   "api_progress": {
     "implemented": 0,
-    "total": 28,
+    "total": 33,
     "percent": 0,
     "population": "Explicitly documented interpreter declarations from the Amiga 3.5 addendum only; includes language-core and Amiga platform declarations. Excludes inherited 3.0 base-manual features, editor-only changes, compiler-only features, and Atari ST declarations."
   }

@@ -1,9 +1,25 @@
 {
   "schema_version": 1,
   "status": "fresh",
-  "generated_at": "2026-11-15T12:52:17.589748+00:00",
-  "last_successful_at": "2026-11-15T12:52:17.589748+00:00",
+  "generated_at": "2026-11-15T12:59:42.694800+00:00",
+  "last_successful_at": "2026-11-15T12:59:42.694800+00:00",
   "items": [
+    {
+      "type": "merged_pull_request",
+      "title": "feat(api): register inherited functions evidenced in GFA BASIC 3.5",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/524",
+      "number": 524,
+      "timestamp": "2026-11-15T12:59:26Z",
+      "summary": "PR #524 merged"
+    },
+    {
+      "type": "commit",
+      "title": "feat(api): register inherited functions evidenced in GFA BASIC 3.5 (#524)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/2d20658ecfca5ba5a6034e721871a0bf89e94475",
+      "number": null,
+      "timestamp": "2026-11-15T12:59:26Z",
+      "summary": "Commit 2d20658"
+    },
     {
       "type": "merged_pull_request",
       "title": "Remove DQH-Amiga references",
@@ -83,22 +99,6 @@
       "number": null,
       "timestamp": "2026-11-15T12:18:29Z",
       "summary": "Commit 3915ebb"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "test(amiga): cover DQH graphics and screen lifecycle",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/540",
-      "number": 540,
-      "timestamp": "2026-11-14T22:04:01Z",
-      "summary": "PR #540 merged"
-    },
-    {
-      "type": "commit",
-      "title": "test(amiga): cover DQH graphics and screen lifecycle",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/28bbf3fd96655e8830b898015003416459be851e",
-      "number": null,
-      "timestamp": "2026-11-14T22:04:01Z",
-      "summary": "Commit 28bbf3f"
     }
   ]
 }
