@@ -17,3 +17,4 @@ dqh-get-put
 dqh-display-fronts
 matrix-transpose
 combinatorics
+matrix-mul
