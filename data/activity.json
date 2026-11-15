@@ -1,9 +1,41 @@
 {
   "schema_version": 1,
   "status": "fresh",
-  "generated_at": "2026-11-15T12:18:47.617727+00:00",
-  "last_successful_at": "2026-11-15T12:18:47.617727+00:00",
+  "generated_at": "2026-11-15T12:28:06.583885+00:00",
+  "last_successful_at": "2026-11-15T12:28:06.583885+00:00",
   "items": [
+    {
+      "type": "merged_pull_request",
+      "title": "Add GFA BASIC 3.5U MAT TRANS regression probe",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/528",
+      "number": 528,
+      "timestamp": "2026-11-15T12:27:42Z",
+      "summary": "PR #528 merged"
+    },
+    {
+      "type": "commit",
+      "title": "Add GFA BASIC 3.5U MAT TRANS regression probe (#528)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/d2b64ddde05adaffc87b0445f4cd890a3ae4e85f",
+      "number": null,
+      "timestamp": "2026-11-15T12:27:42Z",
+      "summary": "Commit d2b64dd"
+    },
+    {
+      "type": "merged_pull_request",
+      "title": "Harden workflow validation and agent skills",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/530",
+      "number": 530,
+      "timestamp": "2026-11-15T12:19:38Z",
+      "summary": "PR #530 merged"
+    },
+    {
+      "type": "commit",
+      "title": "Harden workflow validation and agent skills (#530)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/f9495141817f01f771ee1df4cd770b97cb6e353e",
+      "number": null,
+      "timestamp": "2026-11-15T12:19:37Z",
+      "summary": "Commit f949514"
+    },
     {
       "type": "merged_pull_request",
       "title": "test(amiga): cover DQH graphics transfer and display",
@@ -67,38 +99,6 @@
       "number": null,
       "timestamp": "2026-11-14T14:36:49Z",
       "summary": "Commit 44619a5"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "test(amiga): add native 3.5U matrix operation probes",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/534",
-      "number": 534,
-      "timestamp": "2026-11-14T13:00:57Z",
-      "summary": "PR #534 merged"
-    },
-    {
-      "type": "commit",
-      "title": "test(amiga): add native 3.5U matrix operation probes",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/eef03446286f8842d08776ee820a35a033853f95",
-      "number": null,
-      "timestamp": "2026-11-14T13:00:57Z",
-      "summary": "Commit eef0344"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "[CI] Scope PR fuzz smoke to source-loader changes",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/533",
-      "number": 533,
-      "timestamp": "2026-11-14T11:53:46Z",
-      "summary": "PR #533 merged"
-    },
-    {
-      "type": "commit",
-      "title": "ci(fuzz): scope PR smoke to relevant paths",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/5c747ab6c3a0e908070123a3575268cd50fe32a9",
-      "number": null,
-      "timestamp": "2026-11-14T11:53:46Z",
-      "summary": "Commit 5c747ab"
     }
   ]
 }
