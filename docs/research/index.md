@@ -33,7 +33,6 @@
 - [Amiga runtime workflow OCR audit](amiga-runtime-ocr-audit.md) - Inventory of both still-triggerable emulator workflows and their scripts; separates the native post-merge OCR gate from legacy diagnostic-only screenshot transcripts.
 - [Research overview](README.md) - Research scope, source policy, and remaining work.
 - [Amiga GFA BASIC test output](amiga-gfa-test-output.md) - Native file-output observation and proposed batch result protocol.
-- [Amiga GFA BASIC commands observed in dqh-amiga](amiga-gfa-basic-dqh-source-inventory.md) - Constructs and direct OS/library calls observed in an external game source.
 - [Amiga emulator experiment lab](amiga-emulator-lab.md) - Proposed native interpreter experiment procedure.
 - [Amiga GFA BASIC media candidates](amiga-media-candidates.md) - Private disk-image inventory, candidate version mapping, and separate 3.5U/3.52/3.041 test profiles.
 - [Amiga GFA BASIC 3.5 interpreter probes](amiga-gfa-basic-35-lst-probes.md) - Manual-driven textual listing probe procedure.
