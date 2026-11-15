@@ -1,9 +1,25 @@
 {
   "schema_version": 1,
   "status": "fresh",
-  "generated_at": "2026-11-15T12:43:53.864997+00:00",
-  "last_successful_at": "2026-11-15T12:43:53.864997+00:00",
+  "generated_at": "2026-11-15T12:52:17.589748+00:00",
+  "last_successful_at": "2026-11-15T12:52:17.589748+00:00",
   "items": [
+    {
+      "type": "merged_pull_request",
+      "title": "Remove DQH-Amiga references",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/543",
+      "number": 543,
+      "timestamp": "2026-11-15T12:52:02Z",
+      "summary": "PR #543 merged"
+    },
+    {
+      "type": "commit",
+      "title": "Remove DQH-Amiga references (#543)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/ade88657cca1dd3de674be6ecb3d8728995eddec",
+      "number": null,
+      "timestamp": "2026-11-15T12:52:01Z",
+      "summary": "Commit ade8865"
+    },
     {
       "type": "merged_pull_request",
       "title": "[Research] Probe GFA BASIC 3.5U combinatorics functions",
@@ -83,22 +99,6 @@
       "number": null,
       "timestamp": "2026-11-14T22:04:01Z",
       "summary": "Commit 28bbf3f"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "test(amiga): prioritize DQH-used GFA BASIC commands",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/539",
-      "number": 539,
-      "timestamp": "2026-11-14T14:55:00Z",
-      "summary": "PR #539 merged"
-    },
-    {
-      "type": "commit",
-      "title": "test(amiga): prioritize DQH-used GFA BASIC commands",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/38f2171af573af637cc81b3fadabda7959fe33cf",
-      "number": null,
-      "timestamp": "2026-11-14T14:55:00Z",
-      "summary": "Commit 38f2171"
     }
   ]
 }
