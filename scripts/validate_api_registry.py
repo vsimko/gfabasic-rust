@@ -216,11 +216,12 @@ def validate_registry(root: Path = ROOT) -> list[str]:
             source_scope = evidence.get("source-scope")
             if amiga_35_declaration and source_scope not in {
                 "amiga-3.5-addendum",
+                "amiga-3.5-book-chapter",
                 "runtime-observation",
             }:
                 errors.append(
                     f"{path}: {declaration_id}: Amiga 3.5 declarations require "
-                    "3.5-addendum or runtime-observation evidence scope"
+                    "3.5 addendum, explicitly 3.5-labelled book chapter, or runtime-observation evidence scope"
                 )
             for source_id in evidence.get("sources", []):
                 if source_id not in source_ids:

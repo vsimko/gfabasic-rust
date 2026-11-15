@@ -19,9 +19,9 @@ The German book identifies the material in Chapter 18 as new in version 3.5. Its
 
 | Function | 3.5 source and page | What the source demonstrates | What remains unconfirmed |
 |---|---|---|---|
-| `RAND` | English interpreter addendum, p. 13-2 | `RAND(10)` populates elements of a floating-point matrix in the `MAT SET` example. | Distribution details, seed behavior, and other random functions are not restated. |
-| `STR$` | English interpreter addendum, p. 13-3; German book, p. 457 | The `MAT PRINT` description explicitly refers to `STR$(x,g,n)` formatting; the German book independently corroborates the formatting reference. | The one- and two-argument base-manual forms are not independently restated. |
-| `SUCC` | English interpreter addendum, p. 13-5 | A matrix-copy example assigns values using `SUCC(i%)`. | The string overload is not independently demonstrated. |
+| `RAND` | English interpreter addendum, p. 13-3 | `RAND(10)` populates elements of a floating-point matrix in the `MAT SET` example. | Distribution details, seed behavior, and other random functions are not restated. |
+| `STR$` | English interpreter addendum, p. 13-4; German book, p. 457 | The `MAT PRINT` description explicitly refers to `STR$(x,g,n)` formatting; the German book independently corroborates the formatting reference. | The one- and two-argument base-manual forms are not independently restated. |
+| `SUCC` | English interpreter addendum, p. 13-6 | A matrix-copy example assigns values using `SUCC(i%)`. | The string overload is not independently demonstrated. |
 | `STRING$` | English interpreter addendum, p. 13-21 | Matrix examples use `STRING$(n, "-")` to print separator lines. | The numeric character-code overload is not independently demonstrated. |
 | `HEX$` | English interpreter addendum, p. 13-36 | The GURU error-handler example prints `HEX$(GURU)`. | The optional width argument is not independently demonstrated. |
 | `RND` | German book, Chapter 18, p. 458 | The matrix example uses `RND(1)` inside `INT(RND(1)*5)`. | Only the one-argument form is demonstrated; `RANDOM` and `RANDOMIZE` are not confirmed by this occurrence. |
@@ -47,3 +47,21 @@ Together with the four functions explicitly introduced by the English addendum (
 No other base-manual function identifier was promoted by this pass. Lack of an occurrence in the audited 3.5 material is not evidence of removal or incompatibility. No runtime-conformance or Rust-implementation claim is made.
 
 See also `amiga-gfa-basic-functions.toml`, `amiga-gfa-basic-candidates.toml`, and the generated `amiga-gfa-basic-candidate-report.md`.
+
+
+## Registry declaration crosswalk
+
+The narrow, directly evidenced call forms are represented by the following language-core declarations. The IDs identify the evidenced form, not every historical overload documented in the 3.0 base text.
+
+| Function | Stable registry ID | 3.5 witness |
+|---|---|---|
+| `RAND` | `gfa.language.numeric.rand` | English addendum, p. 13-3 |
+| `STR$` | `gfa.language.string.str` | English addendum, p. 13-4; German 3.5 book, p. 457 |
+| `SUCC` | `gfa.language.numeric.succ` | English addendum, p. 13-6 |
+| `STRING$` | `gfa.language.string.string` | English addendum, p. 13-21 |
+| `HEX$` | `gfa.language.string.hex` | English addendum, p. 13-36 |
+| `RND` | `gfa.language.numeric.rnd` | German 3.5 book, Chapter 18, p. 458 |
+| `INT` | `gfa.language.numeric.int` | German 3.5 book, Chapter 18, p. 458 |
+| `SQR` | `gfa.language.numeric.sqr` | German 3.5 book, Chapter 18, p. 473 |
+
+The registry retains the original 3.0 base-manual source locators only as provenance for detailed descriptions. The 3.5 witness is separately recorded in each declaration. In particular, the registry does not promote undocumented overloads, numeric boundaries, error behavior, or seed/distribution semantics based on the 3.0 base text. These declarations are documentary evidence only: implementation is not claimed and conformance remains untested.
