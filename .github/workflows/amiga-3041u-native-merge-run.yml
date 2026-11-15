@@ -8,6 +8,7 @@ on:
       - ".github/workflows/amiga-3041u-native-merge-run.yml"
       - "tests/interpreter-probes/amiga-3.041u/**"
       - "scripts/amiga-cli-probe-3041u.sh"
+      - "scripts/validate_gfatest_results.py"
   pull_request:
     paths:
       - ".github/workflows/amiga-3041u-native-merge-run.yml"

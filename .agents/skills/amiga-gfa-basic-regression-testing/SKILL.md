@@ -67,6 +67,26 @@ These are observations for that exact 3.5U addendum example and fixture, not uni
 6. On failure, reduce the fixture to the smallest reproducer and compare it with the manual statement by statement.
 7. Fix the test or implementation according to the evidence, then rerun the native workflow. A target probe is validated only when its native run is green.
 
+#### Failure isolation
+
+Do not jump from a missing host-side file to a language-runtime conclusion:
+
+1. Confirm the workflow checked out the intended commit and prepared the exact fixture.
+2. Confirm private assets were downloaded and verified, the expected executable was extracted, and the configured Kickstart ROM is present.
+3. Confirm the prepared ADF contains the listing at the expected path and the configured DF0/DF1 assignments match the program's paths.
+4. Inspect the Amiberry log and screenshots around Merge, Run, and program completion. OCR is supporting evidence only; inspect the image when OCR is ambiguous.
+5. Check successful output-file opens, exact file numbers, drive prefixes, output names, and reachable CLOSE statements.
+6. Distinguish a missing output file from an existing file whose contents fail validation. Preserve the raw file listing and emulator diagnostics before changing the test.
+7. Only after the program is shown to have run should a wrong or missing result record be treated as evidence about the tested language behavior.
+
+When a new probe adds arrays, matrices, DATA statements, or other stateful features:
+
+- Keep the probe isolated and initialize every input explicitly.
+- Avoid relying on DATA pointer state left by earlier tests; use explicit assignments when testing matrix operations.
+- Check the manual for declaration placement, identifier rules, command spelling, argument order, and source/destination shape before writing expected results.
+- Add one new construct at a time. Keep diagnostic output separate from the GFATEST pass/fail protocol.
+- Do not move declarations or rewrite a working test merely because a later output file is absent; first establish where execution stopped.
+
 ### 6. Report precisely
 
 In the PR description or test notes, state:

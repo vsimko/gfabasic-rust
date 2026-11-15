@@ -13,10 +13,11 @@ on:
 
 permissions:
   contents: read
-  actions: write
 
 jobs:
   inspect-private-media:
+    permissions:
+      contents: read
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
@@ -144,8 +145,16 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 
+  cleanup-legacy-artifact:
+    name: Remove legacy artifact with extracted executables
+    if: github.event_name == 'pull_request'
+    needs: inspect-private-media
+    runs-on: ubuntu-24.04
+    permissions:
+      actions: write
+      contents: read
+    steps:
       - name: Remove earlier artifact containing extracted executable files
-        if: github.event_name == 'pull_request'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |

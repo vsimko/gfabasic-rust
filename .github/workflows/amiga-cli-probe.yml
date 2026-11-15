@@ -6,6 +6,7 @@ on:
       - ".github/workflows/amiga-cli-probe.yml"
       - "scripts/ci/**"
       - "tests/interpreter-probes/amiga-3.5/regression-suite.LST"
+      - "scripts/validate_gfatest_results.py"
   workflow_dispatch:
 
 permissions:
@@ -33,18 +34,14 @@ jobs:
           set -euo pipefail
           test -n "$GFA_ASSETS_TOKEN"
           mkdir -p amiga-volume/S artifacts/amiga-cli-probe
-          printf 'GFA BASIC 3.52 (private CI runtime; see docs/research/amiga-gfa-basic-352-runtime-baseline.md)\\n' > artifacts/amiga-cli-probe/interpreter-version.txt
+          printf 'GFA BASIC 3.52 (private CI runtime; see docs/research/amiga-gfa-basic-352-runtime-baseline.md)\n' > artifacts/amiga-cli-probe/interpreter-version.txt
+          ARCHIVE_NAME='GFA-BASIC v3.52 (1990)(GFA Systemtechnik)(DE)(Disk 1 of 2)[WB].zip'
+          ARCHIVE_PATH_ENCODED="$(jq -rn --arg path "$ARCHIVE_NAME" '$path | @uri')"
           curl --fail --silent --show-error --location --retry 3 \
             --header "Authorization: Bearer $GFA_ASSETS_TOKEN" \
             --header "Accept: application/vnd.github.raw" \
-            "https://api.github.com/repos/vsimko/gfabasic-private-assets/contents/GFABasic?ref=main" \
-            --output amiga-volume/GFABasic
-          echo "fd80f6093e8d0163856af5849121e945e37051a2ad2a9053aa1930021783d962  amiga-volume/GFABasic" | sha256sum --check
-          test "$(wc -c < amiga-volume/GFABasic)" -eq 136548
-          printf '\x00\x00\x03\xf3' | cmp -n 4 - amiga-volume/GFABasic
-          file amiga-volume/GFABasic | tee artifacts/amiga-cli-probe/binary-info.txt
-          strings -a amiga-volume/GFABasic | grep -i -E 'MERGE|SAVE|LIST|DOSCMD|GFA.BASIC' | head -80 > artifacts/amiga-cli-probe/binary-strings.txt || true
-
+            "https://api.github.com/repos/vsimko/gfabasic-private-assets/contents/$ARCHIVE_PATH_ENCODED?ref=main" \
+            --output "$RUNNER_TEMP/gfa-basic-3.52d-disk1.zip"
       - name: Download original Amiga Kickstart ROM
         env:
           GFA_ASSETS_TOKEN: ${{ secrets.GFA_ASSETS_TOKEN }}
@@ -106,7 +103,7 @@ jobs:
           # Recreate APT's unprivileged download directory after cache restore.
           sudo install -d -o _apt -g root -m 0700 /var/lib/apt/lists/partial
           sudo apt-get -o Acquire::Languages=none update
-          sudo apt-get install -y --no-install-recommends amiberry xvfb netcat-openbsd tesseract-ocr python3-pip python3-pil
+          sudo apt-get install -y --no-install-recommends amiberry xvfb netcat-openbsd tesseract-ocr python3-pip python3-pil unzip
           # Build the wheelhouse only on a cache miss. Cache hits install fully
           # offline, avoiding repeated PyPI index and package downloads.
           if ! compgen -G '.cache/amitools-wheelhouse/*.whl' > /dev/null; then
@@ -115,6 +112,21 @@ jobs:
           python3 -m pip install --break-system-packages --no-index --find-links .cache/amitools-wheelhouse amitools
           command -v xdftool
           amiberry --version | tee artifacts/amiga-cli-probe/amiberry-version.txt
+
+      - name: Extract and verify interpreter from private ADF
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/gfa-basic-3.52d-disk1"
+          unzip -q "$RUNNER_TEMP/gfa-basic-3.52d-disk1.zip" -d "$RUNNER_TEMP/gfa-basic-3.52d-disk1"
+          mapfile -d '' -t ADF_MEMBERS < <(find "$RUNNER_TEMP/gfa-basic-3.52d-disk1" -type f -iname '*.adf' -print0)
+          test "${#ADF_MEMBERS[@]}" -eq 1 || { echo "Expected exactly one ADF in private archive, found ${#ADF_MEMBERS[@]}"; exit 1; }
+          cp "${ADF_MEMBERS[0]}" "$RUNNER_TEMP/gfa-basic-3.52d-disk1.adf"
+          xdftool "$RUNNER_TEMP/gfa-basic-3.52d-disk1.adf" read GFABasic amiga-volume/GFABasic
+          echo "fd80f6093e8d0163856af5849121e945e37051a2ad2a9053aa1930021783d962  amiga-volume/GFABasic" | sha256sum --check
+          test "$(wc -c < amiga-volume/GFABasic)" -eq 136548
+          printf '\x00\x00\x03\xf3' | cmp -n 4 - amiga-volume/GFABasic
+          file amiga-volume/GFABasic | tee artifacts/amiga-cli-probe/binary-info.txt
+          strings -a amiga-volume/GFABasic | grep -i -E 'MERGE|SAVE|LIST|DOSCMD|GFA.BASIC' | head -80 > artifacts/amiga-cli-probe/binary-strings.txt || true
 
       - name: Prepare CLI input and boot volume
         run: |
@@ -169,6 +181,8 @@ jobs:
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         with:
           name: amiga-gfa-basic-regression-and-tokenized-save
-          path: artifacts/amiga-cli-probe/
+          path: |
+            artifacts/amiga-cli-probe/
+            !artifacts/amiga-cli-probe/*.adf
           if-no-files-found: warn
           retention-days: 7
