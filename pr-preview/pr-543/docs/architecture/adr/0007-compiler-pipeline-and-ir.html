@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The compiler needs a stable boundary between dialect-specific frontend semantics and target-specific code generation. The initial output target is Linux x86-64 and LLVM is the planned backend, but the frontend and int…">
+  <title>ADR 0007: Compiler pipeline and typed IR boundaries · GFA BASIC Rust documentation</title>
+  <link rel="stylesheet" href="../../../styles.css">
+</head>
+<body class="docs-site">
+  <header class="docs-header">
+    <a href="../../../index.html">GFA BASIC Rust</a>
+    <span aria-hidden="true">/</span>
+    <a href="../../index.html">Documentation</a>
+  </header>
+  <div class="docs-layout">
+    <nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home" href="index.html">Section index</a><ul><li><a href="0001-documentation-and-architecture-records.html">ADR 0001: Documentation and architecture decision records</a></li><li><a href="0002-initial-rust-workspace.html">ADR 0002: Initial Rust workspace crate boundaries</a></li><li><a href="0003-target-model.html">ADR 0003: Host and compilation target model</a></li><li><a href="0004-api-profile-model.html">ADR 0004: API profile model</a></li><li><a href="0005-cli-and-project-configuration.html">ADR 0005: CLI and project configuration</a></li><li><a href="0006-api-registry.html">ADR 0006: API declaration registry</a></li><li><a href="0007-compiler-pipeline-and-ir.html">ADR 0007: Compiler pipeline and typed IR boundaries</a></li><li><a href="0008-initial-source-dialect-amiga-gfa-basic-3.0.html">ADR 0008: Initial source dialect — Amiga GFA BASIC interpreter 3.0</a></li><li><a href="0009-initial-source-dialect-amiga-gfa-basic-3.5.html">ADR 0009: Initial source dialect — Amiga GFA BASIC interpreter 3.5</a></li><li><a href="0010-versioning-and-compatibility-lifecycle.html">ADR 0010: Versioning and compatibility lifecycle</a></li><li><a href="0011-amiga-35-linux-sdl3-product-scope.html">ADR 0011: Product scope — Amiga GFA BASIC 3.5 to Linux x86-64 with SDL3</a></li><li><a href="0012-language-server-and-editor-integration.html">ADR 0012: Language server and editor integration</a></li><li><a href="0013-repository-consistency-validation.html">ADR 0013: Repository consistency validation</a></li><li><a href="0014-implementation-dashboard.html">ADR 0014: Repository implementation dashboard</a></li><li><a href="0015-listing-first-compiler-input.html">ADR 0015: Listing-first compiler input</a></li><li><a href="TEMPLATE.html">ADR NNNN: Title</a></li><li><a href="0016-okf-v02-documentation-bundle.html">ADR 0016: OKF v0.2 documentation bundle</a></li></ul></nav>
+    <main class="docs-content">
+      <article>
+        <h1>ADR 0007: Compiler pipeline and typed IR boundaries</h1>
+        <p class="docs-meta"><span>Architecture Decision Record</span></p>
+        <h1 id="adr-0007-compiler-pipeline-and-typed-ir-boundaries">ADR 0007: Compiler pipeline and typed IR boundaries</h1>
+<ul>
+<li>Status: Accepted</li>
+<li>Date: 2026-11-04</li>
+<li>Decision makers: Project maintainers</li>
+</ul>
+<h2 id="context">Context</h2>
+<p>The compiler needs a stable boundary between dialect-specific frontend semantics and target-specific code generation. The initial output target is Linux x86-64 and LLVM is the planned backend, but the frontend and intermediate representation must not depend on Linux, SDL3, or LLVM implementation types.</p>
+<p>The dialect/version research is not complete. The compiler therefore needs an architecture that can preserve unresolved source distinctions and prevent an unverified construct from acquiring guessed semantics. The runtime ABI and detailed memory model are separate decisions.</p>
+<h2 id="decision">Decision</h2>
+<ol>
+<li>Use explicit compiler stages: source loading, lexing, parsing, name resolution, semantic analysis, typed project IR lowering, target/API lowering, backend code generation, object generation/linking, and artifact reporting.</li>
+<li>Keep source syntax and source spans in the AST, and retain a lossless token/trivia stream or CST alongside semantic syntax. Expose them together as one parsed-document result so consumers cannot accidentally pair an AST with a different source stream. Preserve original spelling and trivia through source spans; resolve dialect-specific meaning during semantic analysis. Do not delegate language semantics to LLVM.</li>
+<li>Resolve names into stable, document-local symbol identities with declaration/reference spans before semantic lowering. Keep unresolved or ambiguous names diagnostic; do not substitute textual matching. Make the project-owned IR typed, target-independent, and explicitly structured around basic blocks and terminators. Represent conversions, calls, memory operations, and source provenance explicitly.</li>
+<li>Require IR verification before backend code generation. Invalid semantic or IR states must produce diagnostics and must not produce an executable.</li>
+<li>Keep LLVM IR and LLVM-specific types inside the backend. The frontend and project IR must build and test without LLVM or SDL3.</li>
+<li>Preserve source provenance through lowering and optimization so backend and runtime diagnostics can be mapped to original source locations.</li>
+<li>Keep backend selection and target-specific lowering separate from source dialect and API-profile selection.</li>
+<li>Do not select an LLVM version or Rust binding yet. Before adding one, evaluate LLVM/Rust compatibility, maintenance cadence, unsafe FFI surface, native build reproducibility, platform support, license, and security-update policy. Record the selected versions and binding in a follow-up ADR after a clean CI build and a verified IR-to-object prototype.</li>
+</ol>
+<p>The exact GFA BASIC type inventory, source control-flow mapping, pointer semantics, and runtime-call ABI remain governed by the dialect, memory, and runtime decisions. This ADR defines the compiler boundary; it does not guess those semantics.</p>
+<h2 id="alternatives-considered">Alternatives considered</h2>
+<h3 id="lower-source-ast-directly-to-llvm-ir">Lower source AST directly to LLVM IR</h3>
+<p>This would couple language semantics to LLVM types and APIs, make frontend tests depend on LLVM, and make another backend difficult to add. Rejected.</p>
+<h3 id="use-llvm-ir-as-the-canonical-project-ir">Use LLVM IR as the canonical project IR</h3>
+<p>LLVM IR is target/code-generation oriented and does not express the project's source provenance, compatibility classifications, or profile-level runtime operations as a stable project-owned contract. Rejected.</p>
+<h3 id="create-a-separate-ir-for-every-target">Create a separate IR for every target</h3>
+<p>This would duplicate semantic lowering and make it harder to compare behavior across targets. Use one target-independent project IR and explicit target/API lowering instead. Rejected.</p>
+<h3 id="select-an-llvm-binding-during-workspace-bootstrap">Select an LLVM binding during workspace bootstrap</h3>
+<p>No verified LLVM version, native package source, or clean-build strategy has been evaluated. Selecting a binding now would add an unvalidated native dependency to the workspace. Deferred.</p>
+<h2 id="consequences">Consequences</h2>
+<ul>
+<li>The frontend and IR can be developed and tested without LLVM or SDL3.</li>
+<li>Lossless token/trivia data remains available to formatting and editor tooling through the parsed-document result; the semantic AST is not required to carry formatting trivia itself.</li>
+<li>The backend consumes a verified semantic model rather than defining language behavior.</li>
+<li>The initial symbol index is explicitly prototype-scoped; it does not establish general Amiga GFA BASIC 3.5 declaration, case, scope, or type rules.</li>
+<li>Additional backends can be added without redesigning source parsing and semantic analysis.</li>
+<li>IR verification and source-provenance preservation become required compiler contracts.</li>
+<li>The LLVM binding and exact release remain open until dependency and CI evaluation is complete.</li>
+<li>Dialect-specific types, GOTO/GOSUB behavior, pointer semantics, and runtime ABI must be resolved by their respective evidence-backed decisions before implementation.</li>
+</ul>
+<h2 id="evidence-and-references">Evidence and references</h2>
+<ul>
+<li><a href="../PIPELINE-AND-IR.html">Compiler pipeline and IR specification</a>.</li>
+<li><a href="../DIALECTS.html">Dialect/version policy</a>, <a href="https://github.com/vsimko/gfabasic-rust/issues/3">issue #3</a>.</li>
+<li><a href="../MEMORY.html">Memory model</a>, <a href="https://github.com/vsimko/gfabasic-rust/issues/8">issue #8</a>.</li>
+<li><a href="../RUNTIME.html">Runtime architecture</a>, <a href="https://github.com/vsimko/gfabasic-rust/issues/7">issue #7</a>.</li>
+<li><a href="../WORKSPACE.html">Workspace boundaries</a>, <a href="0002-initial-rust-workspace.html">ADR 0002</a>.</li>
+<li><a href="https://github.com/vsimko/gfabasic-rust/issues/50">LLVM backend implementation</a>.</li>
+</ul>
+<h2 id="supersedes-superseded-by">Supersedes / superseded by</h2>
+<p>None.</p>
+<h2 id="prototype-implementation-note-2026-11-05">Prototype implementation note (2026-11-05)</h2>
+<p>The first narrow implementation now exercises the intended boundary end to end for the evidence-backed Amiga 3.5 combinatorics subset: frontend AST → project-owned <code>ConstI64</code>/<code>Print</code> IR → verifier → temporary C emitter → host <code>cc</code> executable. The verifier enforces unique definitions and definition-before-use. This small prototype does not satisfy the complete general IR shape described above: it has no basic blocks, terminators, general expressions, calls, memory operations, or dialect-wide type system. Its <code>i64</code> representation and intrinsic bounds are implementation limits only. LLVM remains deferred pending the evaluation specified in this ADR.</p>
+<h2 id="amiga-35-addendum-special-lexemes-2026-11-05">Amiga 3.5 addendum special lexemes (2026-11-05)</h2>
+<p>The lossless lexer recognizes the exact special names explicitly documented in the selected Amiga GFA BASIC 3.5 interpreter addendum: <code>_DATA</code>, <code>_DATA=</code>, and the special variables <code>_0</code> through <code>_9</code>. In the supplied 469-page <code>GFA_Basic_3.5_Interpreter.pdf</code>, these appear in Chapter 13 on printed pp. 13-34–13-35 (<code>_DATA</code>/<code>_DATA=</code> on p. 13-34; <code>_0</code>…<code>_9</code> on p. 13-35). The separately catalogued combined 3.0 + 3.5 update scan numbers the corresponding material as Chapter 14, printed pp. 14-5–14-6. The lexer represents <code>_DATA</code> and each numbered name as an identifier candidate, with the assignment character tokenized separately and all original source spelling retained by byte spans.</p>
+<p>This is a deliberately closed lexical exception, not a general rule for underscore-prefixed identifiers and not a case-insensitivity decision. Other spellings such as <code>_foo</code>, <code>_10</code>, <code>_DATA2</code>, and lowercase <code>_data</code> remain lexical diagnostics until the Amiga 3.5 source evidence establishes broader rules. The parser and semantic model do not yet claim support for these special variables or DATA-pointer operations; this increment only makes their verified spellings available in the lossless token stream.</p>
+<p>Evidence inventory: <a href="../../research/amiga-gfa-basic-35-addendum-inventory.html">Amiga GFA BASIC 3.5 addendum</a>; see also the <a href="../../research/amiga-gfa-basic-35-lexer-evidence.html">lexer evidence matrix</a>. The regression suite checks that each exact documented spelling is recognized at end-of-input and remains delimited from existing punctuation; adjacent unverified suffixes are rejected as a whole rather than accepted as a partial special-name prefix. These are boundary tests, not claims about the broader identifier grammar. This increment does not close issue #46; comments, strings/DATA payloads, general identifiers, encoding, line endings, and the remaining operator grammar are still unresolved.</p>
+<h2 id="formatter-implementation-note-2026-11-05">Formatter implementation note (2026-11-05)</h2>
+<p>The first formatter library increment is exposed independently as <code>gfabasic_compiler::formatter::format_source</code>. It validates the entire source with <code>parse_document</code> before returning output, then copies token spelling from original source spans while canonicalizing only whitespace and line boundaries for the currently supported FACT/VARIAT/COMBIN/PRINT subset. It preserves identifier and literal spelling exactly, uses LF and one final newline, and returns diagnostics for unsupported syntax. Comments, string/DATA payloads, broader identifiers, and richer grammar remain unsupported until lossless lexical and grammar evidence is available. The formatter library has no file-writing, CLI, LLVM, runtime, or SDL dependency. The shared CLI and atomic-write behavior are documented in the 2026-11-06 implementation note below; LSP integration remains tracked under #209.</p>
+<h2 id="formatter-cli-implementation-note-2026-11-06">Formatter CLI implementation note (2026-11-06)</h2>
+<p>The formatter library remains the single formatting implementation. The <code>gfabasic fmt</code> CLI writes to stdout by default, supports check-only mode, an explicit output path, and explicitly requested in-place formatting. File destinations are replaced through a sibling temporary file and rename; formatting or source diagnostics return before any write. These CLI capabilities do not expand the supported grammar: comments, string/DATA payloads, broader identifiers, and nested constructs remain rejected until the Amiga 3.5 lexer/parser represent them losslessly. The formatter preserves all accepted token spelling, including mixed-language and Slovak identifiers; it does not case-fold, transliterate, or Unicode-normalize names.</p>
+<h2 id="lexer-evidence-audit-2026-11-06">Lexer evidence audit (2026-11-06)</h2>
+<p>A focused re-audit of the supplied 3.5 Interpreter manual confirms the strict source boundary: the book identifies the bundled software as 3.5 but states that its base text was originally printed for 3.0 and that Chapter 13 is the 3.5 addendum. Editor case/abbreviation handling (printed pp. 1-7–1-8), one-command-per-line and remark behavior (p. 1-8), variable-name/suffix rules (pp. 2-2–2-3), quoted-string examples (pp. 1-4 and 5-7), numeric-prefix descriptions (pp. 2-16 and 5-15–5-16), and REM/inline-! comments (pp. 7-34–7-35) remain inherited 3.0 candidates. None is promoted to a general Amiga 3.5 lexer rule by the 3.5 addendum examples.</p>
+<p>The lexer implementation gate therefore remains unchanged: accept only the existing narrow prototype syntax plus the exact addendum spellings _DATA and _0…_9; split _DATA= into _DATA and =; preserve source bytes/spans/trivia; reject unverified underscore lookalikes as whole tokens; and do not infer case folding, general identifiers, string escaping, comment syntax, numeric prefixes, or operator coverage. The evidence inventory records the audit and the corresponding positive/negative regression gate. No implementation behavior is broadened by this audit; issue #46 remains open.</p>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>
