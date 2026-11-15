@@ -32,8 +32,6 @@ done
 for screenshot in editor-before-merge.png merge-dialog.png merge-file-row-pointer.png merge-file-selected.png after-shortcut.png merge-gadget-pointer.png after-merge.png after-run-dialog.png after-run.png; do
   test -s "artifacts/amiga-cli-probe/$screenshot"
 done
-# Preserve OCR as diagnostic evidence only. After execution the editor may
-# redraw/clear its source pane, so OCR cannot prove whether MERGE succeeded.
 python3 - <<'PY'
 from PIL import Image, ImageOps, ImageEnhance
 image = Image.open("artifacts/amiga-cli-probe/after-merge.png").convert("L")
@@ -42,24 +40,28 @@ image = ImageEnhance.Contrast(image).enhance(3)
 image.save("artifacts/amiga-cli-probe/after-merge-ocr-input.png")
 PY
 tesseract artifacts/amiga-cli-probe/after-merge-ocr-input.png stdout --psm 6 2>/dev/null | tee artifacts/amiga-cli-probe/after-merge-ocr.txt
-if grep -Fqi 'DO WHILE' artifacts/amiga-cli-probe/after-merge-ocr.txt && grep -Fqi 'DATA' artifacts/amiga-cli-probe/after-merge-ocr.txt; then
-  echo "EDITOR_MERGE_LST_CONTENT_VISIBLE=yes" | tee artifacts/amiga-cli-probe/result.txt
+# This minimal fixture intentionally has no REM block. Verify source-specific
+# tokens from the visible editor viewport instead of the old broad-suite gate.
+if grep -Fq 'BEFORE-MAT-ONE' artifacts/amiga-cli-probe/after-merge-ocr.txt && \
+   grep -Fq 'GFATEST' artifacts/amiga-cli-probe/after-merge-ocr.txt && \
+   grep -Fq 'END' artifacts/amiga-cli-probe/after-merge-ocr.txt; then
+  echo "EDITOR_MERGE_LST_CONTENT_VISIBLE=yes (minimal MAT ONE source)" | tee artifacts/amiga-cli-probe/result.txt
 else
-  echo "EDITOR_MERGE_LST_CONTENT_VISIBLE=no (diagnostic only; native output is authoritative)" | tee artifacts/amiga-cli-probe/result.txt
-fi
-
-# Assert the interpreter-written file, independent of screen OCR. PRINT
-# concatenates adjacent numeric expressions, so 1, 1, 2 is emitted as 112.
-if grep -Eq 'FACT\(0\.\.2\):[[:space:]]*1[[:space:]]*1[[:space:]]*2' artifacts/amiga-cli-probe/fact-output.txt; then
-  echo "FACT_PROGRAM_OUTPUT=1 1 2" | tee -a artifacts/amiga-cli-probe/result.txt
-else
-  echo "::error::FACT.OUT does not contain the expected output (1 1 2)."
+  echo "EDITOR_MERGE_LST_CONTENT_VISIBLE=no (minimal MAT ONE source)" | tee artifacts/amiga-cli-probe/result.txt
+  echo "::error::The editor screenshot does not show the merged MAT ONE diagnostic."
   exit 1
 fi
 
-# Validate one interpreter-emitted terminal record for every requested
-# fixture. The BASIC program performs each assertion before writing
-# PASS/FAIL; the host only validates collection completeness.
+# The marker is written before MAT ONE. Its absence means the program
+# failed during startup/setup; its presence with no result isolates the hold.
+if grep -Fq 'BEFORE-MAT-ONE' artifacts/amiga-cli-probe/fact-output.txt && \
+   grep -Eq 'MAT-ONE:[[:space:]]*1[[:space:]]*0[[:space:]]*0[[:space:]]*0[[:space:]]*1[[:space:]]*0[[:space:]]*0[[:space:]]*0[[:space:]]*1' artifacts/amiga-cli-probe/fact-output.txt; then
+  echo "MAT_ONE_PROGRAM_OUTPUT=identity-3x3" | tee -a artifacts/amiga-cli-probe/result.txt
+else
+  echo "::error::FACT.OUT does not contain the pre-MAT-ONE marker and 3x3 identity result."
+  exit 1
+fi
+
 python3 scripts/validate_gfatest_results.py \
   --expected-ids tests/interpreter-probes/amiga-3.5u/expected-ids.txt \
   --results artifacts/amiga-cli-probe/gfatest-results.txt
