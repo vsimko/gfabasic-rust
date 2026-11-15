@@ -19,6 +19,13 @@ WORKFLOWS = {
         ".github/workflows/amiga-35u-native-merge-run.yml",
         "tests/interpreter-probes/amiga-3.5u/**",
         "scripts/amiga-cli-probe-35u.sh",
+        "scripts/amiga-cli-probe-35u-emulator.sh",
+        "scripts/validate_gfatest_results.py",
+    ),
+    ".github/workflows/amiga-3041u-native-merge-run.yml": (
+        ".github/workflows/amiga-3041u-native-merge-run.yml",
+        "tests/interpreter-probes/amiga-3.041u/**",
+        "scripts/amiga-cli-probe-3041u.sh",
         "scripts/validate_gfatest_results.py",
     ),
     ".github/workflows/docs.yml": (
@@ -155,7 +162,16 @@ def main() -> int:
         os.environ.get("GITHUB_API_URL", "https://api.github.com"),
         args.repository,
     )
-    files = api.paginated(f"/pulls/{args.pull_request}/files", "files")
+    pull = api.get(f"/pulls/{args.pull_request}")
+    base_ref = str(pull["base"]["ref"])
+    compare_ref = (
+        f"/compare/{urllib.parse.quote(base_ref, safe='')}..."
+        f"{urllib.parse.quote(args.head_sha, safe='')}"
+    )
+    # The PR files endpoint can include commits already merged into the base
+    # when a long-lived PR's base has advanced. Compare against the current
+    # base ref so inherited changes do not spuriously require unrelated runs.
+    files = api.paginated(compare_ref, "files")
     paths = [item["filename"] for item in files]
     expected = expected_workflows(paths)
     print("Changed paths:")
