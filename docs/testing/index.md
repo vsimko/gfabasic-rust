@@ -2,7 +2,6 @@
 
 - [Amiga Reference Interpreter](amiga-reference-interpreter.md) - Documentation concepts in testing.
 - [Writing Amiga GFA BASIC reference-interpreter probes](amiga-gfa-basic-probes.md) - Version-specific probe setup, DATA pointer lessons, output handling, and native validation.
-- [DQH-Amiga command coverage priorities](dqh-amiga-command-coverage.md) - Prioritized interpreter command inventory derived from the DQH game source.
 
 ## Related agent skill
 
