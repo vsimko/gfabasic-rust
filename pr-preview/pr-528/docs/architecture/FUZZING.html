@@ -133,7 +133,51 @@
 <h2 id="ci-execution-policy">CI execution policy</h2>
 <p>For each available harness and stable target interface:</p>
 <ol>
-<li>Run bounded smoke fuzzing on pull requests that change the frontend, fuzz harnesses, fuzz dictionaries, or relevant corpus seeds.</li>
+<li>Run bounded smoke fuzzing only when a pull request changes a path in the trigger matrix below. The matrix covers the source-loader target's build and runtime dependency closure, its harness and corpus, and the fuzz policy/workflow itself.</li>
+</ol>
+<h3 id="pull-request-path-trigger-matrix">Pull-request path trigger matrix</h3>
+<p>The bounded PR campaign is triggered by changes to any of these paths:</p>
+<table>
+<thead>
+<tr>
+<th>Path</th>
+<th>Reason</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.github/workflows/fuzz.yml</code></td>
+<td>Fuzz execution strategy and limits</td>
+</tr>
+<tr>
+<td><code>Cargo.toml</code>, <code>Cargo.lock</code>, <code>rust-toolchain.toml</code></td>
+<td>Workspace resolution and compiler toolchain</td>
+</tr>
+<tr>
+<td><code>crates/gfabasic-compiler/**</code></td>
+<td>The fuzz harness builds and links the compiler crate containing the source map</td>
+</tr>
+<tr>
+<td><code>crates/gfabasic-runtime/**</code></td>
+<td>Workspace path dependency compiled with the compiler crate</td>
+</tr>
+<tr>
+<td><code>fuzz/**</code></td>
+<td>Harness, corpus, fuzz manifest, and fuzz lockfile</td>
+</tr>
+<tr>
+<td><code>docs/architecture/FUZZING.md</code></td>
+<td>The accepted fuzzing policy and trigger contract</td>
+</tr>
+</tbody>
+</table>
+<p>Changes outside this matrix do not start PR fuzzing by themselves. In particular,
+documentation outside this policy file, website content, benchmarks, and
+API-registry-only changes are excluded. If one of those changes also modifies
+a path listed above, the listed path still triggers fuzzing. The stable
+<code>pr-gate</code> uses the same path classification when deciding whether to wait
+for the fuzz workflow.</p>
+<ol start="2">
 <li>Keep smoke execution separate from formatting, compilation, and deterministic unit tests so failures identify the responsible stage.</li>
 <li>Run longer campaigns on a schedule and on manual dispatch. Do not make every pull request run a long campaign.</li>
 <li>Preserve the fuzzer engine, version, target, seed, command, elapsed time, and relevant toolchain details for each failure.</li>
