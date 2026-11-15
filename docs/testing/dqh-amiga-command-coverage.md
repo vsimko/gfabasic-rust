@@ -29,7 +29,7 @@ Core to the game loop and rendering:
 - Drawing: `COLOR`, `SETCOLOR`, `BOX`, `PBOX`, `PCIRCLE`, `LINE`, `PLOT`, `GET`, `PUT`, `SCROLL`.
 - Screen/window: `OPENS`, `OPENW`, `CLEARW`, `CLOSEW`, `CLOSES`, `SCREEN()`, `WINDOW()`, `FRONTS`, `DISPLAY`, `RASTPORT`, `SETWPEN`, `SETSPEN`.
 
-The first native graphics probe now checks fixed palette/geometry readback for PLOT, LINE, BOX, PBOX and PCIRCLE, plus screen/window address round-trips and CLEARW/CLOSEW/CLOSES lifecycle. It does not yet cover GET/PUT, SCROLL, FRONTS, DISPLAY or RASTPORT. Graphics expectations cite the supplied GFA BASIC 3.5 Interpreter manual's inherited base chapters (printed pp. 8-2, 8-10, 8-15–8-18, 9-17–9-20, 9-23–9-27, 9-32, 9-34–9-35); those chapters identify their original scope as GFA BASIC 3.0 Amiga, so the 3.5U run is retained as a separate runtime observation.
+The native probes now check fixed palette/geometry readback for PLOT, LINE, BOX, PBOX and PCIRCLE; screen/window address round-trips and CLEARW/CLOSEW/CLOSES lifecycle; and GET/PUT transfer by clearing a captured rectangle and verifying its pixels after PUT. DISPLAY OFF/ON and FRONTS are exercised as command-completion probes. GET/PUT, DISPLAY and FRONTS expectations cite the supplied GFA BASIC 3.5 Interpreter manual's inherited base chapters (printed pp. 8-21–8-24 and 9-20); those chapters identify their original scope as GFA BASIC 3.0 Amiga, so the 3.5U run is retained as a separate runtime observation. RASTPORT is deferred because the manual warns that incorrect setup can crash the system (p. 8-8). The DQH inventory's SCROLL label is not yet treated as a standalone BASIC command: the manual documents the Amiga API ScrollRaster separately, which needs an isolated API fixture.
 
 ## Priority 3 — input, files and memory
 
@@ -50,6 +50,6 @@ DQH contains many project-defined procedures/functions (movement, menus, animati
 ## Follow-up
 
 1. Expand Priority 1 tests for remaining operators and branch forms.
-2. Complete graphics coverage for GET/PUT, SCROLL, FRONTS, DISPLAY and RASTPORT.
+2. Add isolated ScrollRaster API coverage; investigate RASTPORT only with guarded setup and cleanup.
 3. Add deterministic file and memory fixtures for Priority 3.
 4. Add scripted input and isolated OS integration tests for Priorities 3–4.
