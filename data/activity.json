@@ -1,9 +1,25 @@
 {
   "schema_version": 1,
   "status": "fresh",
-  "generated_at": "2026-11-15T12:28:06.583885+00:00",
-  "last_successful_at": "2026-11-15T12:28:06.583885+00:00",
+  "generated_at": "2026-11-15T12:43:53.864997+00:00",
+  "last_successful_at": "2026-11-15T12:43:53.864997+00:00",
   "items": [
+    {
+      "type": "merged_pull_request",
+      "title": "[Research] Probe GFA BASIC 3.5U combinatorics functions",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/526",
+      "number": 526,
+      "timestamp": "2026-11-15T12:43:29Z",
+      "summary": "PR #526 merged"
+    },
+    {
+      "type": "commit",
+      "title": "[Research] Probe GFA BASIC 3.5U combinatorics functions (#526)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/0ecb27e2d15e5a94b466b3355f5678746e99a633",
+      "number": null,
+      "timestamp": "2026-11-15T12:43:29Z",
+      "summary": "Commit 0ecb27e"
+    },
     {
       "type": "merged_pull_request",
       "title": "Add GFA BASIC 3.5U MAT TRANS regression probe",
@@ -83,22 +99,6 @@
       "number": null,
       "timestamp": "2026-11-14T14:55:00Z",
       "summary": "Commit 38f2171"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "test(amiga): probe 3.5 special variables across CLEAR",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/538",
-      "number": 538,
-      "timestamp": "2026-11-14T14:36:50Z",
-      "summary": "PR #538 merged"
-    },
-    {
-      "type": "commit",
-      "title": "test(amiga): probe 3.5 special variables across CLEAR",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/44619a59025e405851221363e57825267bceb21f",
-      "number": null,
-      "timestamp": "2026-11-14T14:36:49Z",
-      "summary": "Commit 44619a5"
     }
   ]
 }
