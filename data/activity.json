@@ -1,9 +1,25 @@
 {
   "schema_version": 1,
   "status": "fresh",
-  "generated_at": "2026-11-14T22:04:26.808202+00:00",
-  "last_successful_at": "2026-11-14T22:04:26.808202+00:00",
+  "generated_at": "2026-11-15T12:18:47.617727+00:00",
+  "last_successful_at": "2026-11-15T12:18:47.617727+00:00",
   "items": [
+    {
+      "type": "merged_pull_request",
+      "title": "test(amiga): cover DQH graphics transfer and display",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/542",
+      "number": 542,
+      "timestamp": "2026-11-15T12:18:29Z",
+      "summary": "PR #542 merged"
+    },
+    {
+      "type": "commit",
+      "title": "test(amiga): cover DQH graphics transfer and display (#542)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/3915ebbdd72269abd6fd57de9e57a3887827c0e0",
+      "number": null,
+      "timestamp": "2026-11-15T12:18:29Z",
+      "summary": "Commit 3915ebb"
+    },
     {
       "type": "merged_pull_request",
       "title": "test(amiga): cover DQH graphics and screen lifecycle",
@@ -83,22 +99,6 @@
       "number": null,
       "timestamp": "2026-11-14T11:53:46Z",
       "summary": "Commit 5c747ab"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "test(amiga): expand 3.5U DATA pointer regression coverage",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/523",
-      "number": 523,
-      "timestamp": "2026-11-13T22:11:50Z",
-      "summary": "PR #523 merged"
-    },
-    {
-      "type": "commit",
-      "title": "test(amiga): expand 3.5U DATA pointer regression coverage (#523)",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/68881829a6fafb54888af21500b7b9cd7c8b5bff",
-      "number": null,
-      "timestamp": "2026-11-13T22:11:49Z",
-      "summary": "Commit 6888182"
     }
   ]
 }
