@@ -50,13 +50,25 @@ else
   exit 1
 fi
 
-# Assert the interpreter-written file, independent of screen OCR.
-if grep -Eq 'FACT\(0\.\.2\):[[:space:]]*1[[:space:]]*1[[:space:]]*2' artifacts/amiga-cli-probe/fact-output.txt; then
-  echo "FACT_PROGRAM_OUTPUT=1 1 2" | tee -a artifacts/amiga-cli-probe/result.txt
-else
-  echo "::error::FACT.OUT does not contain the expected output (1 1 2)."
-  exit 1
-fi
+# Assert the interpreter-written values, independent of screen OCR.
+# GFA BASIC's numeric PRINT formatting can include decimal fractions and
+# variable spacing, so parse the three values rather than matching one layout.
+python3 - <<'PY'
+import math
+import re
+from pathlib import Path
+
+text = Path("artifacts/amiga-cli-probe/fact-output.txt").read_text(errors="replace")
+line = next((line for line in text.splitlines() if "FACT(0..2):" in line), None)
+if line is None:
+    raise SystemExit("FACT.OUT has no FACT(0..2) record")
+tail = line.split("FACT(0..2):", 1)[1]
+values = [float(value) for value in re.findall(r"[-+]?(?:\d+\.?\d*|\.\d+)(?:[Ee][-+]?\d+)?", tail)]
+if len(values) != 3 or any(not math.isclose(a, b, rel_tol=1e-6, abs_tol=1e-6) for a, b in zip(values, (1, 1, 2))):
+    raise SystemExit(f"FACT(0..2) expected (1, 1, 2), observed {values!r}")
+print("FACT_PROGRAM_OUTPUT=1 1 2")
+PY
+echo "FACT_PROGRAM_OUTPUT=1 1 2" | tee -a artifacts/amiga-cli-probe/result.txt
 
 # Validate one interpreter-emitted terminal record for every requested
 # fixture. The BASIC program performs each assertion before writing
