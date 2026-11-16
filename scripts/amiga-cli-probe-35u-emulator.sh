@@ -75,7 +75,7 @@ target_y = int(target["top"]) + int(target["height"]) / 2
 # The red cursor sprite's bounding-box center is offset from its click
 # hotspot. Aim the hotspot at the filename, not the sprite center.
 target_x += 10
-target_y += 15
+target_y += 0
 # SEND_MOUSE has different effective scales on the two axes:
 # X is approximately 0.5, while Y is approximately 0.25.
 raw_dx = round((target_x - pointer_x) * 2)
