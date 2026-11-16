@@ -57,6 +57,20 @@ For the tested GFA BASIC 3.5U DATA-pointer addendum example:
 
 These are observations for that exact 3.5U addendum example and fixture, not universal claims about all GFA BASIC versions or complete DATA semantics. Consult the guide and manual before reusing them.
 
+### Identify the running interpreter version
+
+Use the version shown by the running editor, not the disk or archive filename.
+
+1. Open the GFA-BASIC editor in Amiberry.
+2. Press the right mouse button to open the editor menu.
+3. Capture a screenshot with the menu open.
+4. OCR the screenshot and read the first menu item in the upper-left corner; it displays the running GFA-BASIC interpreter version.
+5. Record the exact text and preserve the screenshot as evidence. If OCR is uncertain, inspect or crop the upper-left menu area and transcribe it manually.
+
+Use this procedure whenever the executable version is uncertain or a test result must be tied to an exact interpreter version. Disk labels and archive names are not substitutes for inspecting the running editor.
+
+**Interpretation of the `==>` editor prefix:** In the manually observed reference editor, an imported `.LST` statement prefixed with `==>` is an unsupported or unrecognized command. The editor can retain and display the statement after MERGE, while attempting to execute it can fail later with a runtime `syntax error ==> program aborted`. Therefore, successful MERGE or a visible source line does not establish that the command is supported. Inspect the prefix before Run and record both the editor screenshot and any runtime error. Treat this as observed behavior for the tested interpreter, not a universal rule for every GFA-BASIC release.
+
 ### 5. Run and diagnose the native test
 
 1. Run the native Merge + Run workflow for the exact target interpreter.
