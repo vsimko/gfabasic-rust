@@ -70,9 +70,10 @@ if not matches:
 target = max(matches, key=lambda w: int(w["width"]) * int(w["height"]))
 target_x = int(target["left"]) + int(target["width"]) / 2
 target_y = int(target["top"]) + int(target["height"]) / 2
-# SEND_MOUSE is scaled by approximately 0.5 on this Xvfb/Amiberry setup.
+# SEND_MOUSE has different effective scales on the two axes:
+# X is approximately 0.5, while Y is approximately 0.25.
 raw_dx = round((target_x - pointer_x) * 2)
-raw_dy = round((target_y - pointer_y) * 2)
+raw_dy = round((target_y - pointer_y) * 4)
 with open(output_path, "w", encoding="ascii") as output:
     output.write(f"{raw_dx} {raw_dy}\n")
 print(
