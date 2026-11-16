@@ -52,7 +52,7 @@ Use only commands confirmed by the installed Amiberry IPC implementation/version
 
 ### Identify the guest interpreter version
 
-When a GFA-BASIC test needs an exact interpreter-version record, follow the **Identify the running interpreter version** procedure in the regression-testing skill: open the editor menu with the right mouse button, capture a screenshot, and OCR the first menu item in the upper-left corner. Preserve the screenshot and exact version text with the test evidence. Do not infer the running version from the disk or archive label.
+When a GFA-BASIC test needs an exact interpreter-version record, follow the **Identify the running interpreter version** procedure in the regression-testing skill: press and keep holding the right mouse button, capture the screenshot while it remains held, then OCR the first menu item in the upper-left corner. Releasing the button closes the menu, so do not release it until the screenshot has been captured. Preserve the screenshot and exact version text with the test evidence. Do not infer the running version from the disk or archive label.
 
 ## Failure isolation
 
