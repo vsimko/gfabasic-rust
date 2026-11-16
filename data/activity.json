@@ -1,9 +1,25 @@
 {
   "schema_version": 1,
   "status": "fresh",
-  "generated_at": "2026-11-16T22:51:20.883760+00:00",
-  "last_successful_at": "2026-11-16T22:51:20.883760+00:00",
+  "generated_at": "2026-11-16T23:32:35.606674+00:00",
+  "last_successful_at": "2026-11-16T23:32:35.606674+00:00",
   "items": [
+    {
+      "type": "merged_pull_request",
+      "title": "test(amiga): add native 3.5U MAT ONE probe",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/535",
+      "number": 535,
+      "timestamp": "2026-11-16T23:32:09Z",
+      "summary": "PR #535 merged"
+    },
+    {
+      "type": "commit",
+      "title": "test(amiga): add native 3.5U MAT ONE probe (#535)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/de28378eb4eb3448bc504bed423290a1e0eebd5e",
+      "number": null,
+      "timestamp": "2026-11-16T23:32:08Z",
+      "summary": "Commit de28378"
+    },
     {
       "type": "merged_pull_request",
       "title": "test(amiga): add deterministic Merge input guards",
@@ -83,22 +99,6 @@
       "number": null,
       "timestamp": "2026-11-16T12:55:19Z",
       "summary": "Commit a6b0ecd"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "Use year-neutral identifier for German GFA BASIC source",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/550",
-      "number": 550,
-      "timestamp": "2026-11-16T12:29:59Z",
-      "summary": "PR #550 merged"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "Revert accidental direct-to-main PDF index changes",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/548",
-      "number": 548,
-      "timestamp": "2026-11-16T10:45:01Z",
-      "summary": "PR #548 merged"
     }
   ]
 }
