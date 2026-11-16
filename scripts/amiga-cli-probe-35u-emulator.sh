@@ -34,11 +34,61 @@ printf "SEND_MOUSE\\t0\\t112\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}
 sleep 0.1
 printf "SEND_MOUSE\\t0\\t112\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 sleep 0.5
-# The preceding movement already leaves the pointer at the file-list
-# row height (about y=160). Move only ~15 px right to the center of
-# gfatest.LST (about x=330,y=160); do not move down into the blank rows.
-# Relative SEND_MOUSE deltas are scaled by roughly one half on this setup.
-printf "SEND_MOUSE\\t30\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+# Dialog placement varies between emulator sessions. Capture the current
+# pointer and OCR the actual gfatest.LST row instead of assuming fixed Y.
+printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-file-row-uncalibrated.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+python3 - "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-file-row-uncalibrated.png" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/mouse-correction.txt" <<'PY'
+import csv
+import subprocess
+import sys
+from PIL import Image
+import numpy as np
+
+image_path, output_path = sys.argv[1:]
+image = Image.open(image_path).convert("RGB")
+pixels = np.asarray(image)
+red = (
+    (pixels[:, :, 0] > 150)
+    & (pixels[:, :, 0] > pixels[:, :, 1] * 1.4)
+    & (pixels[:, :, 0] > pixels[:, :, 2] * 1.4)
+)
+ys, xs = np.where(red)
+if not len(xs):
+    raise SystemExit("Could not locate the red Amiberry mouse pointer")
+pointer_x = (int(xs.min()) + int(xs.max())) / 2
+pointer_y = (int(ys.min()) + int(ys.max())) / 2
+
+tsv = subprocess.check_output(
+    ["tesseract", image_path, "stdout", "--psm", "6", "tsv"],
+    text=True,
+)
+words = list(csv.DictReader(tsv.splitlines(), delimiter="\\t"))
+matches = [w for w in words if "gfatest" in w["text"].lower()]
+if not matches:
+    raise SystemExit("OCR could not locate gfatest.LST in the Merge dialog")
+target = max(matches, key=lambda w: int(w["width"]) * int(w["height"]))
+target_x = int(target["left"]) + int(target["width"]) / 2
+target_y = int(target["top"]) + int(target["height"]) / 2
+# SEND_MOUSE is scaled by approximately 0.5 on this Xvfb/Amiberry setup.
+raw_dx = round((target_x - pointer_x) * 2)
+raw_dy = round((target_y - pointer_y) * 2)
+with open(output_path, "w", encoding="ascii") as output:
+    output.write(f"{raw_dx} {raw_dy}\\n")
+print(
+    f"Merge row center=({target_x:.1f},{target_y:.1f}), "
+    f"pointer=({pointer_x:.1f},{pointer_y:.1f}), "
+    f"raw correction=({raw_dx},{raw_dy})"
+)
+PY
+read mouse_dx mouse_dy < "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/mouse-correction.txt"
+while (( mouse_dx != 0 || mouse_dy != 0 )); do
+  step_x=$(( mouse_dx > 240 ? 240 : mouse_dx < -240 ? -240 : mouse_dx ))
+  step_y=$(( mouse_dy > 240 ? 240 : mouse_dy < -240 ? -240 : mouse_dy ))
+  printf "SEND_MOUSE\\t%s\\t%s\\t0\\n" "$step_x" "$step_y" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+  mouse_dx=$(( mouse_dx - step_x ))
+  mouse_dy=$(( mouse_dy - step_y ))
+  sleep 0.15
+done
 sleep 0.3
 printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-file-row-target.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 # Amiberry mouse button 1 is left-button down; release between clicks.
