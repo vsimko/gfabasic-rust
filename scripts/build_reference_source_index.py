@@ -34,7 +34,7 @@ def previous_manifest(base_sha: str | None) -> dict[str, Any]:
 
 
 def source_map(manifest: dict[str, Any]) -> dict[str, dict[str, Any]]:
-    sources = manifest.get("sources")
+    sources = manifest.get("sources", [])
     if not isinstance(sources, list):
         raise ValueError("Manifest must contain a 'sources' array")
     result: dict[str, dict[str, Any]] = {}
@@ -107,7 +107,7 @@ def main() -> None:
     index_path = Path("references/source-index.json")
     existing = read_json(index_path)
     existing_docs = {d["source_id"]: d for d in existing.get("documents", [])}
-    if not existing_docs:
+    if not previous or not existing_docs:
         changed = set(current)
     else:
         changed = {
