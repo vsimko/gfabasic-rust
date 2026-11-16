@@ -1,4 +1,4 @@
-name: Amiga GFA BASIC 3.5U native Merge and Run
+name: Amiga GFA BASIC 3.52 native Merge and Run
 
 on:
   push:
@@ -29,7 +29,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
 
-      - name: Download and extract private GFA BASIC 3.5U interpreter
+      - name: Download and verify private GFA-BASIC 3.52 ZIP (mounted directly)
         env:
           GFA_ASSETS_TOKEN: ${{ secrets.GFA_ASSETS_TOKEN }}
         run: |
@@ -37,33 +37,28 @@ jobs:
           test -n "$GFA_ASSETS_TOKEN"
           mkdir -p amiga-volume/S artifacts/amiga-cli-probe
           python3 -m pip install --break-system-packages amitools
-          ZIP_NAME='GFA-BASIC v3.5U (1990)(GFA Systemtechnik)(DE)(Disk 1 of 2)[b corrupt files][WB].zip'
+          ZIP_NAME='GFA-BASIC v3.52 (1990)(GFA Systemtechnik)(DE)(Disk 1 of 2)[WB].zip'
           ZIP_PATH_ENCODED="$(python3 -c 'import sys,urllib.parse; print(urllib.parse.quote(sys.argv[1], safe=""))' "$ZIP_NAME")"
           curl --fail --silent --show-error --location --retry 3 \
             --header "Authorization: Bearer $GFA_ASSETS_TOKEN" \
             --header "Accept: application/vnd.github.raw" \
             "https://api.github.com/repos/vsimko/gfabasic-private-assets/contents/$ZIP_PATH_ENCODED?ref=main" \
-            --output "$RUNNER_TEMP/gfa-basic-3.5u.zip"
-          echo "004c20a73d1fe715112b5b2672138e7e7c9ea1e11f6900004e5466dc15382413  $RUNNER_TEMP/gfa-basic-3.5u.zip" | sha256sum --check
-          mapfile -t ADF_ENTRIES < <(unzip -Z1 "$RUNNER_TEMP/gfa-basic-3.5u.zip" | grep -i -E '\.adf$' || true)
-          test "${#ADF_ENTRIES[@]}" -eq 1 || { echo "Expected exactly one ADF in the private ZIP, found ${#ADF_ENTRIES[@]}"; unzip -Z1 "$RUNNER_TEMP/gfa-basic-3.5u.zip"; exit 1; }
-          ADF_ENTRY="${ADF_ENTRIES[0]}"
-          printf '%s\n' "$ADF_ENTRY" | tee artifacts/amiga-cli-probe/source-adf-entry.txt
-          python3 - "$RUNNER_TEMP/gfa-basic-3.5u.zip" "$ADF_ENTRY" "$RUNNER_TEMP/gfa-basic-3.5u.adf" <<'PY'
-          import shutil
+            --output "$RUNNER_TEMP/gfa-basic-3.52.zip"
+          python3 - "$RUNNER_TEMP/gfa-basic-3.52.zip" <<'PY'
+          import hashlib
+          import pathlib
           import sys
-          import zipfile
-          with zipfile.ZipFile(sys.argv[1]) as archive:
-              with archive.open(sys.argv[2]) as source, open(sys.argv[3], "wb") as target:
-                  shutil.copyfileobj(source, target)
+          path = pathlib.Path(sys.argv[1])
+          data = path.read_bytes()
+          blob_sha = hashlib.sha1(b"blob " + str(len(data)).encode() + b"\0" + data).hexdigest()
+          expected = "3c14e037559c2c2e1c0ae96088a7a7689594e4f5"
+          if blob_sha != expected:
+              raise SystemExit(f"Unexpected GFA-BASIC 3.52 ZIP Git blob SHA: {blob_sha}")
+          print(f"GFA_BASIC_ZIP_GIT_BLOB_SHA={blob_sha}")
+          print(f"GFA_BASIC_ZIP_SIZE={len(data)}")
           PY
-          xdftool "$RUNNER_TEMP/gfa-basic-3.5u.adf" read GFABasic amiga-volume/GFABasic
-          echo "c5e9ffdb96b621307069d8f21a3282788386930bbc1ea679dfebe2caef5493ca  amiga-volume/GFABasic" | sha256sum --check
-          test "$(wc -c < amiga-volume/GFABasic)" -eq 135956
-          printf '\x00\x00\x03\xf3' | cmp -n 4 - amiga-volume/GFABasic
-          file amiga-volume/GFABasic | tee artifacts/amiga-cli-probe/binary-info.txt
-          strings -a amiga-volume/GFABasic | grep -i -E 'GFA.BASIC|Version 3.5 U|MERGE|SAVE|LIST' | head -80 > artifacts/amiga-cli-probe/binary-strings.txt || true
-          sha256sum "$RUNNER_TEMP/gfa-basic-3.5u.adf" > artifacts/amiga-cli-probe/source-adf-sha256.txt
+          printf '%s\n' "$ZIP_NAME" > artifacts/amiga-cli-probe/interpreter-zip-name.txt
+          sha256sum "$RUNNER_TEMP/gfa-basic-3.52.zip" > artifacts/amiga-cli-probe/interpreter-zip-sha256.txt
 
       - name: Download original Amiga Kickstart ROM
         env:
@@ -103,18 +98,14 @@ jobs:
           command -v xdftool
           amiberry --version | tee artifacts/amiga-cli-probe/amiberry-version.txt
 
-      - name: Prepare DF0 test disk and preserve the original GFA BASIC disk in DF1
+      - name: Prepare writable DF0 test disk; mount original GFA-BASIC 3.52 ZIP read-only in DF1
         run: |
           set -euo pipefail
-          SOURCE_ADF="$RUNNER_TEMP/gfa-basic-3.5u.adf"
           TEST_ADF="$RUNNER_TEMP/gfatest.adf"
           mkdir -p artifacts/amiga-cli-probe
-          sha256sum "$SOURCE_ADF" > artifacts/amiga-cli-probe/source-adf-sha256.txt
-          wc -c < "$SOURCE_ADF" > artifacts/amiga-cli-probe/source-adf-size.txt
-          xdftool "$SOURCE_ADF" list / all > artifacts/amiga-cli-probe/source-adf-layout.txt
-          xdftool "$SOURCE_ADF" boot show > artifacts/amiga-cli-probe/source-adf-boot.txt
-          # DF1 remains the byte-for-byte original distribution ADF.
-          # DF0 is a separate, writable, bootable test disk.
+          # The original 3.52 distribution ZIP is mounted directly as DF1.
+          # Amiberry opens the compressed floppy read-only; do not extract or
+          # rewrite the commercial disk image.
           xdftool "$TEST_ADF" create
           xdftool "$TEST_ADF" format GFATEST ofs
           xdftool "$TEST_ADF" makedir S
@@ -129,12 +120,11 @@ jobs:
           grep -F "bootable: True" artifacts/amiga-cli-probe/prepared-adf-boot.txt
           sha256sum "$TEST_ADF" > artifacts/amiga-cli-probe/prepared-adf-sha256.txt
           cp "tests/interpreter-probes/amiga-3.5u/regression-suite.LST" artifacts/amiga-cli-probe/gfatest.LST
-          printf '%s\\n' "DF1:GFABasic" > artifacts/amiga-cli-probe/interpreter-installed-path.txt
+          printf '%s\n' "DF1:GFABasic (GFA-BASIC 3.52 ZIP, read-only)" > artifacts/amiga-cli-probe/interpreter-installed-path.txt
           cp "$RUNNER_TEMP/Startup-Sequence" artifacts/amiga-cli-probe/Startup-Sequence.txt
           grep -F "gfatest.LST" artifacts/amiga-cli-probe/prepared-adf-layout.txt
           grep -F "Startup-Sequence" artifacts/amiga-cli-probe/prepared-adf-layout.txt
           grep -F "DF1:GFABasic" artifacts/amiga-cli-probe/Startup-Sequence.txt
-          test "$(wc -c < "$SOURCE_ADF")" -eq "$(wc -c < "$RUNNER_TEMP/gfa-basic-3.5u.adf")"
 
       - name: Merge textual LST in the GFA BASIC editor
         run: bash scripts/amiga-cli-probe-35u.sh
@@ -144,7 +134,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         with:
-          name: amiga-gfa-basic-3.5u-native-merge-run
+          name: amiga-gfa-basic-3.52-native-merge-run
           path: |
             artifacts/amiga-cli-probe/
             !artifacts/amiga-cli-probe/*.adf

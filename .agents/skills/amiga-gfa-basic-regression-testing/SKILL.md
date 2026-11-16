@@ -55,16 +55,14 @@ Use this skill when working on regression probes for the original Amiga GFA BASI
 - Do not infer a language/runtime defect from a missing output file. First check file-open errors, drive mapping, emulator logs/screenshots, and whether the program completed.
 
 ### 4. Identify the running interpreter version
-
 Use the version shown by the running editor, not the disk or archive filename.
-
 1. Open the GFA-BASIC editor in Amiberry.
 2. Press and keep holding the right mouse button to open the editor menu.
 3. While the right mouse button is still held down, capture the screenshot. Do not release it before or during capture.
 4. Read the first menu item in the upper-left corner. OCR is supporting evidence; inspect/crop the screenshot and transcribe it manually if uncertain.
 5. Preserve the screenshot and exact version text with the test evidence.
 
-### 5. Run and diagnose the native test
+### 5. Merge an LST file in the native editor
 
 1. Run the native Merge + Run workflow for the exact target interpreter version.
 2. Run the same applicable probe on other reference versions when assets and workflows are available.
@@ -73,7 +71,7 @@ Use the version shown by the running editor, not the disk or archive filename.
 5. Compare results with version-specific expectations. Record confirmed cross-version behavior as `DIFFERENT`; do not treat it as a failure unless that version's own expected behavior is contradicted.
 6. On failure, reduce the fixture to the smallest reproducer and compare it with the manual statement by statement.
 
-### 6. Report precisely
+### 7. Report precisely
 
 In the PR description or test notes, state:
 
