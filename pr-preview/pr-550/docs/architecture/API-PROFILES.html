@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The language core contains constructs that do not depend on a platform API. It belongs to Amiga GFA BASIC interpreter 3.5 and is not an API profile.">
+  <title>API profiles · GFA BASIC Rust documentation</title>
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body class="docs-site">
+  <header class="docs-header">
+    <a href="../../index.html">GFA BASIC Rust</a>
+    <span aria-hidden="true">/</span>
+    <a href="../index.html">Documentation</a>
+  </header>
+  <div class="docs-layout">
+    <nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home" href="index.html">Section index</a><ul><li><a href="AI-VERIFICATION.html">AI-assisted API verification</a></li><li><a href="https://github.com/vsimko/gfabasic-rust/blob/main/.agents/skills/api-evidence-verification/SKILL.md">`api-evidence-verification` agent skill</a></li><li><a href="API-PROFILES.html">API profiles</a></li><li><a href="API-REGISTRY.html">API registry and declaration source of truth</a></li><li><a href="BENCHMARKING.html">Performance benchmarks and profiling strategy</a></li><li><a href="CI.html">GitHub Actions workflow architecture</a></li><li><a href="CLI-AND-CONFIG.html">CLI, configuration, and build artifacts</a></li><li><a href="COMPATIBILITY-MATRIX.html">Current compatibility matrix</a></li><li><a href="DIAGNOSTICS.html">Diagnostics and compatibility reporting</a></li><li><a href="DIALECTS.html">Dialects, versions, and compatibility policy</a></li><li><a href="FORMATTER.html">Formatter style and current support</a></li><li><a href="FUZZING.html">Frontend fuzzing and robustness strategy</a></li><li><a href="GOALS.html">Project goals and compatibility objectives</a></li><li><a href="IMPLEMENTATION-DASHBOARD.html">Implementation dashboard</a></li><li><a href="LANGUAGE-TOOLING.html">Language tooling and editor integration</a></li><li><a href="MEMORY.html">Memory model and hardware access</a></li><li><a href="MVP-vertical-slice.html">First compiler vertical slice — proposed boundary</a></li><li><a href="PIPELINE-AND-IR.html">Compiler pipeline and intermediate representation</a></li><li><a href="README.html">README</a></li><li><a href="RELEASES.html">Release, artifact, and reproducible-build policy</a></li><li><a href="RUNTIME.html">Runtime architecture</a></li><li><a href="SECURITY.html">Dependency and supply-chain security</a></li><li><a href="TARGETS.html">Host and target model</a></li><li><a href="TESTING.html">Compatibility testing and release criteria</a></li><li><a href="VALIDATION.html">Repository consistency validation</a></li><li><a href="VERSIONING.html">Versioning and compatibility lifecycle</a></li><li><a href="WEBSITE_PREVIEWS.html">Website previews for pull requests</a></li><li><a href="WORKSPACE.html">Rust workspace and dependency policy</a></li><li><a href="adr/index.html">Architecture decisions</a></li></ul></nav>
+    <main class="docs-content">
+      <article>
+        <h1>API profiles</h1>
+        <p class="docs-meta"><span>Architecture</span></p>
+        <h1 id="api-profiles">API profiles</h1>
+<ul>
+<li>Status: <strong>The sole product API profile is Amiga GFA BASIC interpreter 3.5.</strong> Product scope is fixed by <a href="adr/0011-amiga-35-linux-sdl3-product-scope.html">ADR 0011</a>. Individual declarations and runtime behavior remain evidence-gated.</li>
+</ul>
+<h2 id="separation">Separation</h2>
+<p>The <strong>language core</strong> contains constructs that do not depend on a platform API. It belongs to Amiga GFA BASIC interpreter 3.5 and is not an API profile.</p>
+<p>The product includes one platform API compatibility layer:</p>
+<ul>
+<li><code>amiga</code> — Amiga GFA BASIC 3.5 API declarations and behavior, implemented by a compatibility runtime on Linux where evidence and feasibility permit.</li>
+</ul>
+<p>The Linux output target does not make the program an Amiga executable. It means the generated Linux program may reproduce verified Amiga API behavior through project-owned runtime interfaces.</p>
+<p>Atari ST API declarations may remain in archival research or registry material for provenance, but Atari ST is not a product profile, must not be selectable for product builds, and must not be marked supported. Other API profiles are out of scope.</p>
+<h2 id="selection-and-target">Selection and target</h2>
+<ul>
+<li>The source dialect is fixed to Amiga GFA BASIC interpreter 3.5.</li>
+<li>The product API profile is fixed to Amiga.</li>
+<li>The output target is fixed to Linux x86-64, GNU ABI, ELF 64-bit.</li>
+<li>Configuration must reject unsupported dialects, versions, profiles, and target triples with actionable diagnostics.</li>
+<li>Do not infer Amiga API semantics from Linux/SDL3 behavior; SDL3 is only the platform implementation mechanism.</li>
+</ul>
+<p>Illustrative configuration:</p>
+<pre><code class="language-toml">[source]
+dialect = &quot;amiga-gfa-basic&quot;
+version = &quot;3.5&quot;
+
+[api]
+profiles = [&quot;amiga&quot;]
+
+[target]
+triple = &quot;x86_64-unknown-linux-gnu&quot;
+</code></pre>
+<p>The identifier spelling above is illustrative until the compiler configuration schema is implemented. It does not authorize alternate values.</p>
+<h2 id="declaration-lifecycle">Declaration lifecycle</h2>
+<p>An API declaration is not supported merely because it is present in a registry. Before exposure as supported, it must identify:</p>
+<ul>
+<li>Amiga GFA BASIC interpreter 3.5 applicability;</li>
+<li>source reference, edition, page/section, and evidence status;</li>
+<li>syntax/signature and semantic contract;</li>
+<li>Linux runtime mapping and capability status;</li>
+<li>conformance/regression tests and documentation reference.</li>
+</ul>
+<p>Research-only, disputed, unknown, and unimplemented declarations must remain visibly classified and must not be accepted as supported behavior.</p>
+<h2 id="runtime-boundary">Runtime boundary</h2>
+<p>Amiga API semantics belong in project-owned runtime modules. Linux/SDL3 is an implementation adapter behind the runtime contract. The compiler frontend and target-independent IR must not depend on SDL3. Unsupported Amiga hardware/OS behavior must be classified and diagnosed rather than guessed.</p>
+<h2 id="implemented-registry-and-remaining-configuration-work">Implemented registry and remaining configuration work</h2>
+<p>The canonical TOML declaration inventory is maintained under <a href="https://github.com/vsimko/gfabasic-rust/blob/main/api/registry/README.md"><code>api/registry/</code></a>. Its schema, validator, generated public catalogue, and runtime-handler requirement checks are implemented. The Amiga 3.5 addendum catalogue currently contains 24 language-core declarations and four Amiga-profile declarations; this is a bounded addendum inventory, not a complete Amiga API.</p>
+<p>The project-file/CLI configuration parser and its frozen serialization contract remain unimplemented (see <a href="CLI-AND-CONFIG.html">CLI and configuration</a> and issue #9). Runtime capability encoding and per-declaration Linux mappings also remain incomplete. Registry presence and typed handler registration do not establish Linux support or interpreter conformance.</p>
+<p>Tracking: <a href="https://github.com/vsimko/gfabasic-rust/issues/5">issue #5</a>, <a href="https://github.com/vsimko/gfabasic-rust/issues/12">registry #12</a>, <a href="https://github.com/vsimko/gfabasic-rust/issues/9">CLI #9</a>, and <a href="https://github.com/vsimko/gfabasic-rust/issues/53">Amiga runtime #53</a>.</p>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>
