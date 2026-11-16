@@ -1,9 +1,25 @@
 {
   "schema_version": 1,
   "status": "fresh",
-  "generated_at": "2026-11-16T10:41:01.255704+00:00",
-  "last_successful_at": "2026-11-16T10:41:01.255704+00:00",
+  "generated_at": "2026-11-16T10:45:21.283871+00:00",
+  "last_successful_at": "2026-11-16T10:45:21.283871+00:00",
   "items": [
+    {
+      "type": "merged_pull_request",
+      "title": "Revert accidental direct-to-main PDF index changes",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/548",
+      "number": 548,
+      "timestamp": "2026-11-16T10:45:01Z",
+      "summary": "PR #548 merged"
+    },
+    {
+      "type": "commit",
+      "title": "Revert accidental direct-to-main PDF index changes (#548)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/da1acc76c0c4ca2c0b707a80623351c74c75aba3",
+      "number": null,
+      "timestamp": "2026-11-16T10:45:01Z",
+      "summary": "Commit da1acc7"
+    },
     {
       "type": "commit",
       "title": "Fix newline in generated source index",
@@ -83,22 +99,6 @@
       "number": null,
       "timestamp": "2026-11-15T12:43:29Z",
       "summary": "Commit 0ecb27e"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "Add GFA BASIC 3.5U MAT TRANS regression probe",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/528",
-      "number": 528,
-      "timestamp": "2026-11-15T12:27:42Z",
-      "summary": "PR #528 merged"
-    },
-    {
-      "type": "commit",
-      "title": "Add GFA BASIC 3.5U MAT TRANS regression probe (#528)",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/d2b64ddde05adaffc87b0445f4cd890a3ae4e85f",
-      "number": null,
-      "timestamp": "2026-11-15T12:27:42Z",
-      "summary": "Commit d2b64dd"
     }
   ]
 }
