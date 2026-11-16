@@ -1,5 +1,0 @@
-DATA 10, 20, 30
-DATA 40, 50, 60
-DIM a(2, 3)
-MAT READ a()
-PRINT a(2, 2)
