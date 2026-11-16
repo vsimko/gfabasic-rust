@@ -17,6 +17,24 @@ floppy1=$RUNNER_TEMP/gfa-basic-3.5u.adf
 EOF
 export AMIBERRY_LOG="$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/amiberry.log"
 export SDL_AUDIODRIVER=dummy
+
+# Fail closed unless the prepared DF0 contains the exact staged listing.
+# The editor Merge step is a separate boundary; this proves only the disk input.
+mkdir -p artifacts/amiga-cli-probe
+staged_listing="tests/interpreter-probes/amiga-3.5u/regression-suite.LST"
+prepared_listing="artifacts/amiga-cli-probe/gfatest-from-df0.LST"
+expected_hash="$(sha256sum "$staged_listing" | awk '{print $1}')"
+printf '%s  %s\\n' "$expected_hash" "$staged_listing" > artifacts/amiga-cli-probe/staged-listing.sha256
+xdftool "$RUNNER_TEMP/gfatest.adf" read gfatest.LST "$prepared_listing"
+actual_hash="$(sha256sum "$prepared_listing" | awk '{print $1}')"
+printf '%s  %s\\n' "$actual_hash" "$prepared_listing" > artifacts/amiga-cli-probe/df0-listing.sha256
+if ! cmp -s "$staged_listing" "$prepared_listing"; then
+  echo "::error::DF0 gfatest.LST differs from the staged regression fixture; refusing to launch Amiberry."
+  diff -u "$staged_listing" "$prepared_listing" || true
+  exit 1
+fi
+echo "DF0_LISTING_BYTE_MATCH=PASS" | tee artifacts/amiga-cli-probe/source-validation.txt
+
 env -u SHELLOPTS xvfb-run -a -s "-screen 0 1024x768x24 +extension GLX" bash scripts/amiga-cli-probe-35u-emulator.sh
 
 if xdftool "$RUNNER_TEMP/gfatest.adf" read FACT.OUT artifacts/amiga-cli-probe/fact-output.txt; then
