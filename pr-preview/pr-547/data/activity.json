@@ -1,9 +1,25 @@
 {
   "schema_version": 1,
   "status": "fresh",
-  "generated_at": "2026-11-16T12:53:52.061447+00:00",
-  "last_successful_at": "2026-11-16T12:53:52.061447+00:00",
+  "generated_at": "2026-11-16T13:13:17.533033+00:00",
+  "last_successful_at": "2026-11-16T13:13:17.533033+00:00",
   "items": [
+    {
+      "type": "merged_pull_request",
+      "title": "Add PR-based public PDF source and text index",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/549",
+      "number": 549,
+      "timestamp": "2026-11-16T12:55:21Z",
+      "summary": "PR #549 merged"
+    },
+    {
+      "type": "commit",
+      "title": "Add PR-based public PDF source and text index",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/a6b0ecdcb14e68bad3174f9d114b15063d6aa27d",
+      "number": null,
+      "timestamp": "2026-11-16T12:55:19Z",
+      "summary": "Commit a6b0ecd"
+    },
     {
       "type": "merged_pull_request",
       "title": "Use year-neutral identifier for German GFA BASIC source",
@@ -83,22 +99,6 @@
       "number": 543,
       "timestamp": "2026-11-15T12:52:02Z",
       "summary": "PR #543 merged"
-    },
-    {
-      "type": "commit",
-      "title": "Remove DQH-Amiga references (#543)",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/ade88657cca1dd3de674be6ecb3d8728995eddec",
-      "number": null,
-      "timestamp": "2026-11-15T12:52:01Z",
-      "summary": "Commit ade8865"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "[Research] Probe GFA BASIC 3.5U combinatorics functions",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/526",
-      "number": 526,
-      "timestamp": "2026-11-15T12:43:29Z",
-      "summary": "PR #526 merged"
     }
   ]
 }
