@@ -1,6 +1,9 @@
-REM Editor token probe for GFA BASIC 3.5U / issue #537.
-REM Compare full command and documented short form without executing MAT ONE.
-PRINT "TOKEN-PROBE-BEGIN"
+REM GFA BASIC 3.5U MAT ONE abbreviation probe / issue #537.
+REM The manual (printed p. 13-2) documents M O a() as the short form.
+OPEN "O",#1,"DF0:FACT.OUT"
+PRINT #1,"BEFORE-MAT-ONE"
 DIM a(3,3)
-MAT ONE a()
-PRINT "TOKEN-PROBE-AFTER-ONE"
+M O a()
+PRINT #1,"AFTER-MAT-ONE"
+MAT PRINT #1,a()
+CLOSE #1
