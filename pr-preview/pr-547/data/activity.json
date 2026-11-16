@@ -1,9 +1,41 @@
 {
   "schema_version": 1,
   "status": "fresh",
-  "generated_at": "2026-11-16T08:52:33.721302+00:00",
-  "last_successful_at": "2026-11-16T08:52:33.721302+00:00",
+  "generated_at": "2026-11-16T11:32:17.232666+00:00",
+  "last_successful_at": "2026-11-16T11:32:17.232666+00:00",
   "items": [
+    {
+      "type": "merged_pull_request",
+      "title": "Revert accidental direct-to-main PDF index changes",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/548",
+      "number": 548,
+      "timestamp": "2026-11-16T10:45:01Z",
+      "summary": "PR #548 merged"
+    },
+    {
+      "type": "commit",
+      "title": "Revert accidental direct-to-main PDF index changes (#548)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/da1acc76c0c4ca2c0b707a80623351c74c75aba3",
+      "number": null,
+      "timestamp": "2026-11-16T10:45:01Z",
+      "summary": "Commit da1acc7"
+    },
+    {
+      "type": "commit",
+      "title": "Fix newline in generated source index",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/a680d63a4c5379e22e50c6120a3a31723aa336be",
+      "number": null,
+      "timestamp": "2026-11-16T10:40:28Z",
+      "summary": "Commit a680d63"
+    },
+    {
+      "type": "commit",
+      "title": "Add public PDF source locator index workflow",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/28b381c52eb948ffc37c0223fc26e64dc36a3446",
+      "number": null,
+      "timestamp": "2026-11-16T10:39:55Z",
+      "summary": "Commit 28b381c"
+    },
     {
       "type": "merged_pull_request",
       "title": "[Research] Probe GFA BASIC 3.5U matrix multiplication",
@@ -67,38 +99,6 @@
       "number": null,
       "timestamp": "2026-11-15T12:43:29Z",
       "summary": "Commit 0ecb27e"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "Add GFA BASIC 3.5U MAT TRANS regression probe",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/528",
-      "number": 528,
-      "timestamp": "2026-11-15T12:27:42Z",
-      "summary": "PR #528 merged"
-    },
-    {
-      "type": "commit",
-      "title": "Add GFA BASIC 3.5U MAT TRANS regression probe (#528)",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/d2b64ddde05adaffc87b0445f4cd890a3ae4e85f",
-      "number": null,
-      "timestamp": "2026-11-15T12:27:42Z",
-      "summary": "Commit d2b64dd"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "Harden workflow validation and agent skills",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/530",
-      "number": 530,
-      "timestamp": "2026-11-15T12:19:38Z",
-      "summary": "PR #530 merged"
-    },
-    {
-      "type": "commit",
-      "title": "Harden workflow validation and agent skills (#530)",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/f9495141817f01f771ee1df4cd770b97cb6e353e",
-      "number": null,
-      "timestamp": "2026-11-15T12:19:37Z",
-      "summary": "Commit f949514"
     }
   ]
 }
