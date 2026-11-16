@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
-"""Build a source index with page locators and explicitly permitted extracted text."""
+"""Build a copyright-safe source index containing metadata and page locators only."""
 from __future__ import annotations
+
 import argparse
 import hashlib
 import json
 from pathlib import Path
+
 from pypdf import PdfReader
+
 
 def sha256(path: Path) -> str:
     digest = hashlib.sha256()
@@ -14,8 +17,8 @@ def sha256(path: Path) -> str:
             digest.update(chunk)
     return digest.hexdigest()
 
-def build(path: Path, source_id: str, source_url: str, *, include_text: bool = False,
-          rights_basis: str | None = None) -> dict:
+
+def build(path: Path, source_id: str, source_url: str) -> dict:
     if not path.is_file() or path.stat().st_size == 0:
         raise ValueError(f"Missing or empty PDF: {path}")
     reader = PdfReader(str(path), strict=False)
@@ -26,23 +29,19 @@ def build(path: Path, source_id: str, source_url: str, *, include_text: bool = F
     pages = len(reader.pages)
     if pages < 1:
         raise ValueError(f"No pages in {path}")
-    document = {
-        "source_id": source_id, "title": title, "source_url": source_url,
-        "filename": path.name, "sha256": sha256(path), "page_count": pages,
+    return {
+        "source_id": source_id,
+        "title": title,
+        "source_url": source_url,
+        "filename": path.name,
+        "sha256": sha256(path),
+        "page_count": pages,
         "page_locators": [
             {"pdf_page": number, "anchor": f"pdf-page-{number:04d}"}
             for number in range(1, pages + 1)
         ],
-        "text_extraction": "included" if include_text else "not-included",
     }
-    if rights_basis:
-        document["rights_basis"] = rights_basis
-    if include_text:
-        document["page_text"] = [
-            {"pdf_page": number, "text": page.extract_text() or ""}
-            for number, page in enumerate(reader.pages, start=1)
-        ]
-    return document
+
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
@@ -54,23 +53,20 @@ def main() -> None:
     args = parser.parse_args()
     documents = [
         build(args.english, "AM-INTERPRETER-35", args.english_url),
-        build(
-            args.german, "AM-BOOK-DE", args.german_url, include_text=True,
-            rights_basis=(
-                "Amiga-News reported on 2026-09-03 that the 1989 title is offered "
-                "free with the authors' permission; project maintainer confirms "
-                "this permission basis for text extraction and inclusion."
-            ),
-        ),
+        build(args.german, "AM-BOOK-DE", args.german_url),
     ]
     payload = {
-        "format_version": 2,
+        "format_version": 1,
         "generated_by": "scripts/build_reference_source_index.py",
-        "purpose": "Bibliographic metadata, page locators, and permitted per-page extracted text",
+        "purpose": "Bibliographic metadata and page locators only; no extracted page text",
         "documents": documents,
     }
     args.output.parent.mkdir(parents=True, exist_ok=True)
-    args.output.write_text(json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    args.output.write_text(
+        json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+
 
 if __name__ == "__main__":
     main()
