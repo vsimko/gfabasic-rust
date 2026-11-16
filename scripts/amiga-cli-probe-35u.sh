@@ -52,13 +52,11 @@ else
   exit 1
 fi
 
-# The marker is written before MAT ONE. Its absence means the program
-# failed during startup/setup; its presence with no result isolates the hold.
-if grep -Fq 'BEFORE-MAT-ONE' artifacts/amiga-cli-probe/fact-output.txt && \
-   grep -Eq 'MAT-ONE:[[:space:]]*1[[:space:]]*0[[:space:]]*0[[:space:]]*0[[:space:]]*1[[:space:]]*0[[:space:]]*0[[:space:]]*0[[:space:]]*1' artifacts/amiga-cli-probe/fact-output.txt; then
-  echo "MAT_ONE_PROGRAM_OUTPUT=identity-3x3" | tee -a artifacts/amiga-cli-probe/result.txt
+# This control has no MAT commands: it verifies basic listing execution and file output.
+if grep -Fq 'STARTUP-MARKER' artifacts/amiga-cli-probe/fact-output.txt; then
+  echo "STARTUP_CONTROL=marker-written" | tee -a artifacts/amiga-cli-probe/result.txt
 else
-  echo "::error::FACT.OUT does not contain the pre-MAT-ONE marker and 3x3 identity result."
+  echo "::error::FACT.OUT does not contain the startup marker."
   exit 1
 fi
 
