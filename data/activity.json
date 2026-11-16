@@ -1,9 +1,17 @@
 {
   "schema_version": 1,
   "status": "fresh",
-  "generated_at": "2026-11-16T10:40:20.019111+00:00",
-  "last_successful_at": "2026-11-16T10:40:20.019111+00:00",
+  "generated_at": "2026-11-16T10:41:01.255704+00:00",
+  "last_successful_at": "2026-11-16T10:41:01.255704+00:00",
   "items": [
+    {
+      "type": "commit",
+      "title": "Fix newline in generated source index",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/a680d63a4c5379e22e50c6120a3a31723aa336be",
+      "number": null,
+      "timestamp": "2026-11-16T10:40:28Z",
+      "summary": "Commit a680d63"
+    },
     {
       "type": "commit",
       "title": "Add public PDF source locator index workflow",
@@ -91,14 +99,6 @@
       "number": null,
       "timestamp": "2026-11-15T12:27:42Z",
       "summary": "Commit d2b64dd"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "Harden workflow validation and agent skills",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/530",
-      "number": 530,
-      "timestamp": "2026-11-15T12:19:38Z",
-      "summary": "PR #530 merged"
     }
   ]
 }
