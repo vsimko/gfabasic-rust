@@ -17,6 +17,20 @@ Use this guide when writing or changing .LST regression programs for the origina
 4. Check how the native harness starts the program, assigns drives, captures output, and detects completion. Read the matching workflow and existing passing .LST probes.
 5. Keep the fixture minimal. Add one behavior at a time and write diagnostic values before asserting them.
 
+## Identify the running interpreter version
+
+Use the version shown by the running editor, not the disk or archive filename.
+
+1. Open the GFA-BASIC editor in Amiberry.
+2. Press the right mouse button to open the editor menu.
+3. Capture a screenshot with the menu open.
+4. OCR the screenshot and read the first menu item in the upper-left corner; it displays the running GFA-BASIC interpreter version.
+5. Record the exact text and preserve the screenshot as evidence. If OCR is uncertain, inspect or crop the upper-left menu area and transcribe it manually.
+
+Use this procedure whenever the executable version is uncertain or a test result must be tied to an exact interpreter version. Disk labels and archive names are not substitutes for inspecting the running editor.
+
+**Interpretation of the `==>` editor prefix:** In the manually observed reference editor, an imported `.LST` statement prefixed with `==>` is an unsupported or unrecognized command. The editor can retain and display the statement after MERGE, while attempting to execute it can fail later with a runtime `syntax error ==> program aborted`. Therefore, successful MERGE or a visible source line does not establish that the command is supported. Inspect the prefix before Run and record both the editor screenshot and any runtime error. Treat this as observed behavior for the tested interpreter, not a universal rule for every GFA-BASIC release.
+
 ## DATA pointer probes (3.5U)
 
 The native probe for the 3.5U addendum DATA-pointer example exposed setup details that must be preserved:
