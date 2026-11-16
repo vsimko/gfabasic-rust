@@ -1,9 +1,25 @@
 {
   "schema_version": 1,
   "status": "fresh",
-  "generated_at": "2026-11-16T21:48:44.351567+00:00",
-  "last_successful_at": "2026-11-16T21:48:44.351567+00:00",
+  "generated_at": "2026-11-16T22:51:20.883760+00:00",
+  "last_successful_at": "2026-11-16T22:51:20.883760+00:00",
   "items": [
+    {
+      "type": "merged_pull_request",
+      "title": "test(amiga): add deterministic Merge input guards",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/553",
+      "number": 553,
+      "timestamp": "2026-11-16T22:51:00Z",
+      "summary": "PR #553 merged"
+    },
+    {
+      "type": "commit",
+      "title": "test(amiga): add deterministic Merge input guards (#553)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/ca25402d653d5833127e1c491510155544ad3e54",
+      "number": null,
+      "timestamp": "2026-11-16T22:50:59Z",
+      "summary": "Commit ca25402"
+    },
     {
       "type": "merged_pull_request",
       "title": "docs: define multi-version Amiga GFA-BASIC conformance policy",
@@ -83,22 +99,6 @@
       "number": 548,
       "timestamp": "2026-11-16T10:45:01Z",
       "summary": "PR #548 merged"
-    },
-    {
-      "type": "commit",
-      "title": "Revert accidental direct-to-main PDF index changes (#548)",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/da1acc76c0c4ca2c0b707a80623351c74c75aba3",
-      "number": null,
-      "timestamp": "2026-11-16T10:45:01Z",
-      "summary": "Commit da1acc7"
-    },
-    {
-      "type": "commit",
-      "title": "Fix newline in generated source index",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/a680d63a4c5379e22e50c6120a3a31723aa336be",
-      "number": null,
-      "timestamp": "2026-11-16T10:40:28Z",
-      "summary": "Commit a680d63"
     }
   ]
 }
