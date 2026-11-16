@@ -78,7 +78,7 @@ tesseract "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-merge.png" stdout 2
 
 # OCR is not proof of source identity, but a recognized contradictory token is
 # sufficient reason to stop. In particular, do not run when MAT SET is shown
-# for the M O / MAT ONE probe; preserve the screenshot for manual inspection.
+# for the full MAT ONE probe; preserve the screenshot for manual inspection.
 if grep -Eiq 'MAT[[:space:]]+SET' "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-merge-ocr.txt"; then
   echo "MERGE_EDITOR_TOKEN_CONTRADICTION=MAT_SET" | tee "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-validation.txt"
   echo "Editor OCR shows MAT SET for the MAT ONE abbreviation probe; refusing to run an unverified listing."
