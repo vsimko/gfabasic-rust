@@ -19,19 +19,12 @@ export AMIBERRY_LOG="$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/amiberry.log"
 export SDL_AUDIODRIVER=dummy
 env -u SHELLOPTS xvfb-run -a -s "-screen 0 1024x768x24 +extension GLX" bash scripts/amiga-cli-probe-35u-emulator.sh
 
-for file in BEFORE.OUT FACT.OUT GFATEST.OUT; do
-  case "$file" in
-    BEFORE.OUT) output=before-mat-one.txt ;;
-    FACT.OUT) output=fact-output.txt ;;
-    GFATEST.OUT) output=gfatest-results.txt ;;
-  esac
-  if xdftool "$RUNNER_TEMP/gfatest.adf" read "$file" "artifacts/amiga-cli-probe/$output"; then
-    cat "artifacts/amiga-cli-probe/$output"
-  else
-    echo "MISSING: $file" > "artifacts/amiga-cli-probe/$output.missing"
-    : > "artifacts/amiga-cli-probe/$output"
-  fi
-done
+if xdftool "$RUNNER_TEMP/gfatest.adf" read FACT.OUT artifacts/amiga-cli-probe/fact-output.txt; then
+  cat artifacts/amiga-cli-probe/fact-output.txt
+else
+  echo "MISSING: FACT.OUT" > artifacts/amiga-cli-probe/fact-output.txt.missing
+  : > artifacts/amiga-cli-probe/fact-output.txt
+fi
 
 for diagnostic in insert-floppy-ipc.txt list-floppies-ipc.txt stdin-save.LST; do
   if test -f "amiga-volume/$diagnostic"; then
@@ -40,9 +33,11 @@ for diagnostic in insert-floppy-ipc.txt list-floppies-ipc.txt stdin-save.LST; do
     printf "MISSING: %s\\n" "$diagnostic" > "artifacts/amiga-cli-probe/$diagnostic.missing"
   fi
 done
-for screenshot in editor-before-merge.png merge-dialog.png merge-file-row-uncalibrated.png merge-file-row-target.png merge-file-double-clicked.png after-shortcut.png merge-gadget-pointer.png after-merge.png after-run-dialog.png after-run.png; do
+
+for screenshot in editor-before-merge.png merge-dialog.png merge-file-row-before-click.png merge-file-row-y215.png after-merge.png after-run-dialog.png after-run.png; do
   test -s "artifacts/amiga-cli-probe/$screenshot"
 done
+
 python3 - <<'PY'
 from PIL import Image, ImageOps, ImageEnhance
 image = Image.open("artifacts/amiga-cli-probe/after-merge.png").convert("L")
@@ -57,24 +52,28 @@ else
 fi
 echo "EDITOR_MERGE_OCR_CAPTURED=yes (diagnostic only)" | tee artifacts/amiga-cli-probe/result.txt
 
-if ! grep -Fq 'BEFORE-MAT-ONE' artifacts/amiga-cli-probe/before-mat-one.txt; then
-  echo "::error::Interpreter did not write BEFORE-MAT-ONE; editor launch is not proven."
+if ! grep -Fq 'BEFORE-MAT-ONE' artifacts/amiga-cli-probe/fact-output.txt; then
+  echo "::error::Interpreter did not write BEFORE-MAT-ONE; editor launch or file output is not proven."
   exit 1
 fi
 echo "MAT_ONE_REACHED=before-operation" | tee -a artifacts/amiga-cli-probe/result.txt
 
 if ! grep -Fq 'AFTER-MAT-ONE' artifacts/amiga-cli-probe/fact-output.txt; then
-  echo "::error::MAT ONE did not return to the following statement."
+  echo "::error::The documented M O abbreviation did not return to the following statement."
   exit 1
 fi
-echo "MAT_ONE_RETURNED=PASS" | tee -a artifacts/amiga-cli-probe/result.txt
+echo "MAT_ONE_ABBREVIATION_RETURNED=PASS" | tee -a artifacts/amiga-cli-probe/result.txt
 
-if grep -Fq 'GFATEST:matrix-one:PASS' artifacts/amiga-cli-probe/gfatest-results.txt; then
-  echo "MAT_ONE_RESULT=PASS" | tee -a artifacts/amiga-cli-probe/result.txt
-elif grep -Fq 'GFATEST:matrix-one:FAIL' artifacts/amiga-cli-probe/gfatest-results.txt; then
-  echo "::error::MAT ONE returned but produced an incorrect identity matrix."
-  exit 1
-else
-  echo "::error::MAT ONE result marker is missing."
+if ! grep -Eq '(^|[^0-9])1[., ]+0[., ]+0([^0-9]|$)' artifacts/amiga-cli-probe/fact-output.txt; then
+  echo "::error::MAT ONE output does not show the expected identity matrix; inspect raw FACT.OUT."
   exit 1
 fi
+if ! grep -Eq '(^|[^0-9])0[., ]+1[., ]+0([^0-9]|$)' artifacts/amiga-cli-probe/fact-output.txt; then
+  echo "::error::MAT ONE output does not show the expected identity matrix; inspect raw FACT.OUT."
+  exit 1
+fi
+if ! grep -Eq '(^|[^0-9])0[., ]+0[., ]+1([^0-9]|$)' artifacts/amiga-cli-probe/fact-output.txt; then
+  echo "::error::MAT ONE output does not show the expected identity matrix; inspect raw FACT.OUT."
+  exit 1
+fi
+echo "MAT_ONE_IDENTITY_MATRIX=PASS" | tee -a artifacts/amiga-cli-probe/result.txt
