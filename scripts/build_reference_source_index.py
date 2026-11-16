@@ -58,7 +58,7 @@ def main() -> None:
 
     documents = [
         build(args.english, "AM-INTERPRETER-35", args.english_url),
-        build(args.german, "AM-BOOK-DE-1989", args.german_url),
+        build(args.german, "AM-BOOK-DE", args.german_url),
     ]
     payload = {
         "format_version": 1,
