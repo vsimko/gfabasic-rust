@@ -30,6 +30,20 @@
 <li>Check how the native harness starts the program, assigns drives, captures output, and detects completion. Read the matching workflow and existing passing .LST probes.</li>
 <li>Keep the fixture minimal. Add one behavior at a time and write diagnostic values before asserting them.</li>
 </ol>
+<h2 id="native-editor-merging-an-lst-file">Native editor: merging an LST file</h2>
+<p>For the current Amiberry 3.5U native Merge + Run harness, the verified sequence is:</p>
+<ol>
+<li>Open the editor's Merge file requester with the harness's existing menu/key sequence.</li>
+<li>Take a screenshot while the requester is open. Verify the intended <code>.LST</code> file row and the pointer's horizontal alignment over that row.</li>
+<li>Keep the pointer's X coordinate unchanged. Move only Y to <strong>215 px</strong>, which is the <code>gfatest.LST</code> row in the current emulator/window layout. The IPC relative Y correction is approximately four raw units per screen pixel.</li>
+<li>Capture the pre-click screenshot with the pointer on the row.</li>
+<li>Double-click without moving the pointer: left-button down, release, down, release.</li>
+<li>Wait for the requester to close and capture the editor. Confirm the merged listing is visible.</li>
+<li>Compare the editor contents with the exact staged <code>.LST</code> file before running. Check significant tokens literally; e.g. <code>MAT ONE a()</code> is not equivalent evidence to <code>MAT SET a()</code>. OCR is only supporting evidence—inspect the screenshot if a token is unclear.</li>
+<li>Once the merged source is confirmed, start Run with <strong>Shift+F10</strong>. In the current Amiberry IPC harness, press left Shift raw keycode <code>0x60</code> (96), press F10 <code>0x59</code> (89), release F10, then release Shift. Do not click an estimated Run-gadget coordinate.</li>
+<li>Save screenshots before the double-click, after Merge, and after Run as diagnostic artifacts.</li>
+</ol>
+<p>The Y=215 coordinate is specific to the current harness layout and must be revalidated if the emulator/window layout changes. A closed requester or visible listing proves that Merge completed, but not that the intended source was merged unchanged. If the editor shows a different token or statement, stop before diagnosing runtime behavior. Compare the prepared disk's source file, the staged fixture, and the editor display; record the discrepancy without assuming whether fixture preparation, tokenization, or display/OCR caused it.</p>
 <h2 id="data-pointer-probes-35u">DATA pointer probes (3.5U)</h2>
 <p>The native probe for the 3.5U addendum DATA-pointer example exposed setup details that must be preserved:</p>
 <ul>
@@ -52,6 +66,7 @@
 <h2 id="required-validation-loop">Required validation loop</h2>
 <ol>
 <li>Run the exact native Merge + Run workflow for the target interpreter version.</li>
+<li>Verify the merged editor contents against the staged .LST before interpreting any Run result.</li>
 <li>If the output file is missing, inspect the emulator log/screenshot and verify file opens, drive assignment, and program completion first.</li>
 <li>If output exists, inspect raw FACT.OUT and GFATEST.OUT; do not rely only on the workflow summary.</li>
 <li>Compare every diagnostic value and result ID with the documented expectation.</li>
