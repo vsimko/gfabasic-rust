@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Detailed decisions remain open until the corresponding research and review are complete. The existence of a document does not mean that its issue is resolved.">
+  <title>README · GFA BASIC Rust documentation</title>
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body class="docs-site">
+  <header class="docs-header">
+    <a href="../../index.html">GFA BASIC Rust</a>
+    <span aria-hidden="true">/</span>
+    <a href="../index.html">Documentation</a>
+  </header>
+  <div class="docs-layout">
+    <nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home" href="index.html">Section index</a><ul><li><a href="AI-VERIFICATION.html">AI-assisted API verification</a></li><li><a href="https://github.com/vsimko/gfabasic-rust/blob/main/.agents/skills/api-evidence-verification/SKILL.md">`api-evidence-verification` agent skill</a></li><li><a href="API-PROFILES.html">API profiles</a></li><li><a href="API-REGISTRY.html">API registry and declaration source of truth</a></li><li><a href="BENCHMARKING.html">Performance benchmarks and profiling strategy</a></li><li><a href="CI.html">GitHub Actions workflow architecture</a></li><li><a href="CLI-AND-CONFIG.html">CLI, configuration, and build artifacts</a></li><li><a href="COMPATIBILITY-MATRIX.html">Current compatibility matrix</a></li><li><a href="DIAGNOSTICS.html">Diagnostics and compatibility reporting</a></li><li><a href="DIALECTS.html">Dialects, versions, and compatibility policy</a></li><li><a href="FORMATTER.html">Formatter style and current support</a></li><li><a href="FUZZING.html">Frontend fuzzing and robustness strategy</a></li><li><a href="GOALS.html">Project goals and compatibility objectives</a></li><li><a href="IMPLEMENTATION-DASHBOARD.html">Implementation dashboard</a></li><li><a href="LANGUAGE-TOOLING.html">Language tooling and editor integration</a></li><li><a href="MEMORY.html">Memory model and hardware access</a></li><li><a href="MVP-vertical-slice.html">First compiler vertical slice — proposed boundary</a></li><li><a href="PIPELINE-AND-IR.html">Compiler pipeline and intermediate representation</a></li><li><a href="README.html">README</a></li><li><a href="RELEASES.html">Release, artifact, and reproducible-build policy</a></li><li><a href="RUNTIME.html">Runtime architecture</a></li><li><a href="SECURITY.html">Dependency and supply-chain security</a></li><li><a href="TARGETS.html">Host and target model</a></li><li><a href="TESTING.html">Compatibility testing and release criteria</a></li><li><a href="VALIDATION.html">Repository consistency validation</a></li><li><a href="VERSIONING.html">Versioning and compatibility lifecycle</a></li><li><a href="WEBSITE_PREVIEWS.html">Website previews for pull requests</a></li><li><a href="WORKSPACE.html">Rust workspace and dependency policy</a></li><li><a href="adr/index.html">Architecture decisions</a></li></ul></nav>
+    <main class="docs-content">
+      <article>
+        <h1>README</h1>
+        <p class="docs-meta"><span>Architecture</span></p>
+        <h2 id="architecture-documents">Architecture documents</h2>
+<table>
+<thead>
+<tr>
+<th>Topic</th>
+<th>Scope</th>
+<th>Document</th>
+<th>Tracking</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Implementation dashboard</td>
+<td>Static maintainer dashboard, source-of-truth boundaries, progress states, evidence metrics, generation and freshness</td>
+<td><a href="IMPLEMENTATION-DASHBOARD.html">IMPLEMENTATION-DASHBOARD.md</a>; <a href="adr/0014-implementation-dashboard.html">ADR 0014</a></td>
+<td><a href="https://github.com/vsimko/gfabasic-rust/issues/304">#304</a>–<a href="https://github.com/vsimko/gfabasic-rust/issues/310">#310</a></td>
+</tr>
+<tr>
+<td>Repository consistency validation</td>
+<td>Deterministic Python/JSON checks for drift between repository sources</td>
+<td><a href="VALIDATION.html">VALIDATION.md</a>; <a href="adr/0013-repository-consistency-validation.html">ADR 0013</a></td>
+<td>architecture <a href="https://github.com/vsimko/gfabasic-rust/issues/248">#248</a>, validator <a href="https://github.com/vsimko/gfabasic-rust/issues/249">#249</a>, website generator <a href="https://github.com/vsimko/gfabasic-rust/issues/250">#250</a></td>
+</tr>
+<tr>
+<td>Website previews</td>
+<td>Per-PR preview URLs and automatic cleanup after PR closure</td>
+<td><a href="WEBSITE_PREVIEWS.html">WEBSITE_PREVIEWS.md</a></td>
+<td></td>
+</tr>
+<tr>
+<td>Topic</td>
+<td>Scope</td>
+<td>Document</td>
+<td>Tracking</td>
+</tr>
+<tr>
+<td>---</td>
+<td>---</td>
+<td>---</td>
+<td>---</td>
+</tr>
+<tr>
+<td>Project goals and compatibility</td>
+<td>Purpose, non-goals, compatibility dimensions</td>
+<td><a href="GOALS.html">GOALS.md</a></td>
+<td><a href="https://github.com/vsimko/gfabasic-rust/issues/2">#2</a></td>
+</tr>
+<tr>
+<td>Dialects and versions</td>
+<td>Source dialect identity and version-specific rules</td>
+<td><a href="DIALECTS.html">DIALECTS.md</a>; <a href="../research/amiga-gfa-basic-35-lexer-evidence.html">Amiga 3.5 lexer evidence inventory</a>; <a href="adr/0009-initial-source-dialect-amiga-gfa-basic-3.5.html">ADR 0009</a>; <a href="adr/0008-initial-source-dialect-amiga-gfa-basic-3.0.html">superseded ADR 0008</a>; <a href="../reference/amiga-gfa-basic-3.0.html">Amiga GFA BASIC 3.0 historical research</a>; <a href="../reference/atari-gfa-basic-3.0.html">Atari ST GFA BASIC V2.xx/V3.0 research draft</a></td>
+<td><a href="https://github.com/vsimko/gfabasic-rust/issues/3">#3</a></td>
+</tr>
+<tr>
+<td>Product scope</td>
+<td>Sole dialect, API profile, Linux x86-64 target, and SDL3 boundary</td>
+<td><a href="adr/0011-amiga-35-linux-sdl3-product-scope.html">ADR 0011</a></td>
+<td><a href="https://github.com/vsimko/gfabasic-rust/issues/3">#3</a>, <a href="https://github.com/vsimko/gfabasic-rust/issues/4">#4</a></td>
+</tr>
+<tr>
+<td>Target model</td>
+<td>Host/target distinction and target capabilities</td>
+<td><a href="TARGETS.html">TARGETS.md</a>; <a href="adr/0003-target-model.html">ADR 0003</a></td>
+<td><a href="https://github.com/vsimko/gfabasic-rust/issues/4">#4</a></td>
+</tr>
+<tr>
+<td>API profiles</td>
+<td>Amiga GFA BASIC 3.5 API compatibility only; Atari ST research is archival and unsupported</td>
+<td><a href="API-PROFILES.html">API-PROFILES.md</a>; <a href="adr/0004-api-profile-model.html">ADR 0004</a>; <a href="../reference/amiga-gfa-api.html">Amiga API research draft</a>; <a href="../reference/atari-gfa-api.html">Atari ST API research draft</a></td>
+<td><a href="https://github.com/vsimko/gfabasic-rust/issues/5">#5</a>, <a href="https://github.com/vsimko/gfabasic-rust/issues/24">#24</a>, <a href="https://github.com/vsimko/gfabasic-rust/issues/25">#25</a></td>
+</tr>
+<tr>
+<td>Language tooling and editor integration</td>
+<td><a href="LANGUAGE-TOOLING.html">LANGUAGE-TOOLING.md</a>; <a href="adr/0012-language-server-and-editor-integration.html">ADR 0012</a></td>
+<td>Shared compiler frontend, LSP server, editor client boundaries, and refactoring safety</td>
+<td><a href="https://github.com/vsimko/gfabasic-rust/issues/209">#209</a>, <a href="https://github.com/vsimko/gfabasic-rust/issues/210">#210</a>, <a href="https://github.com/vsimko/gfabasic-rust/issues/211">#211</a></td>
+</tr>
+<tr>
+<td>Compiler pipeline and IR</td>
+<td>Frontend stages, semantic analysis, typed IR, LLVM boundary</td>
+<td><a href="PIPELINE-AND-IR.html">PIPELINE-AND-IR.md</a>; <a href="adr/0007-compiler-pipeline-and-ir.html">ADR 0007</a></td>
+<td><a href="https://github.com/vsimko/gfabasic-rust/issues/6">#6</a></td>
+</tr>
+<tr>
+<td>Source formatting</td>
+<td>Lossless, evidence-gated formatter library and canonical style for the implemented subset</td>
+<td><a href="FORMATTER.html">FORMATTER.md</a></td>
+<td><a href="https://github.com/vsimko/gfabasic-rust/issues/208">#208</a></td>
+</tr>
+<tr>
+<td>Language server and editor integration</td>
+<td>Shared compiler frontend, LSP lifecycle, UTF-16 positions, versioned edits, capability gates</td>
+<td><a href="adr/0012-language-server-and-editor-integration.html">ADR 0012</a> (proposed)</td>
+<td><a href="https://github.com/vsimko/gfabasic-rust/issues/209">#209</a></td>
+</tr>
+<tr>
+<td>Diagnostics and compatibility reporting</td>
+<td>Stable diagnostic codes, source locations, support outcomes, migration guidance</td>
+<td><a href="DIAGNOSTICS.html">DIAGNOSTICS.md</a></td>
+<td><a href="https://github.com/vsimko/gfabasic-rust/issues/26">#26</a></td>
+</tr>
+<tr>
+<td>Runtime</td>
+<td>Runtime layers and SDL3 adapter boundary</td>
+<td><a href="RUNTIME.html">RUNTIME.md</a></td>
+<td><a href="https://github.com/vsimko/gfabasic-rust/issues/7">#7</a></td>
+</tr>
+<tr>
+<td>Memory model</td>
+<td>Storage, pointers, hardware access, safety policy</td>
+<td><a href="MEMORY.html">MEMORY.md</a></td>
+<td><a href="https://github.com/vsimko/gfabasic-rust/issues/8">#8</a></td>
+</tr>
+<tr>
+<td>CLI and configuration</td>
+<td>Commands, TOML project schema, precedence, diagnostics, output artifacts</td>
+<td><a href="CLI-AND-CONFIG.html">CLI-AND-CONFIG.md</a>; <a href="adr/0005-cli-and-project-configuration.html">ADR 0005</a></td>
+<td><a href="https://github.com/vsimko/gfabasic-rust/issues/9">#9</a></td>
+</tr>
+<tr>
+<td>Compatibility testing</td>
+<td>Test taxonomy, fixtures, conformance, deterministic behavior, release criteria</td>
+<td><a href="TESTING.html">TESTING.md</a>; <a href="https://github.com/vsimko/gfabasic-rust/blob/main/tests/corpus/README.md">corpus conventions</a></td>
+<td><a href="https://github.com/vsimko/gfabasic-rust/issues/10">#10</a>, <a href="https://github.com/vsimko/gfabasic-rust/issues/41">#41</a>, <a href="https://github.com/vsimko/gfabasic-rust/issues/42">#42</a>, <a href="https://github.com/vsimko/gfabasic-rust/issues/43">#43</a></td>
+</tr>
+<tr>
+<td>Compatibility matrix</td>
+<td>Current dialect/version/profile/target support status</td>
+<td><a href="COMPATIBILITY-MATRIX.html">COMPATIBILITY-MATRIX.md</a></td>
+<td><a href="https://github.com/vsimko/gfabasic-rust/issues/10">#10</a>, <a href="https://github.com/vsimko/gfabasic-rust/issues/58">#58</a></td>
+</tr>
+<tr>
+<td>Frontend fuzzing</td>
+<td>Fuzz targets, corpus separation, resource budgets, and CI policy</td>
+<td><a href="FUZZING.html">FUZZING.md</a></td>
+<td>strategy <a href="https://github.com/vsimko/gfabasic-rust/issues/43">#43</a>, implementation <a href="https://github.com/vsimko/gfabasic-rust/issues/118">#118</a></td>
+</tr>
+<tr>
+<td>Rust workspace</td>
+<td>Crate/module boundaries and dependency policy</td>
+<td><a href="WORKSPACE.html">WORKSPACE.md</a></td>
+<td><a href="https://github.com/vsimko/gfabasic-rust/issues/11">#11</a></td>
+</tr>
+<tr>
+<td>API registry</td>
+<td>Canonical TOML declarations, evidence/support states, schema validation</td>
+<td><a href="API-REGISTRY.html">API-REGISTRY.md</a>; <a href="adr/0006-api-registry.html">ADR 0006</a></td>
+<td><a href="https://github.com/vsimko/gfabasic-rust/issues/12">#12</a>, metadata validation <a href="https://github.com/vsimko/gfabasic-rust/issues/55">#55</a> (complete), runtime handler resolution <a href="https://github.com/vsimko/gfabasic-rust/issues/115">#115</a></td>
+</tr>
+<tr>
+<td>Versioning and compatibility lifecycle</td>
+<td>Compiler releases, schema versions, runtime ABI, deprecation</td>
+<td><a href="VERSIONING.html">VERSIONING.md</a>; <a href="adr/0010-versioning-and-compatibility-lifecycle.html">ADR 0010</a></td>
+<td><a href="https://github.com/vsimko/gfabasic-rust/issues/58">#58</a></td>
+</tr>
+<tr>
+<td>Performance benchmarks</td>
+<td>Compiler, generated-program, runtime, and build measurements</td>
+<td><a href="BENCHMARKING.html">BENCHMARKING.md</a></td>
+<td><a href="https://github.com/vsimko/gfabasic-rust/issues/60">#60</a></td>
+</tr>
+<tr>
+<td>Release and artifacts</td>
+<td>Tag triggers, validation gates, artifact metadata, checksums, provenance, reproducibility</td>
+<td><a href="RELEASES.html">RELEASES.md</a></td>
+<td><a href="https://github.com/vsimko/gfabasic-rust/issues/40">#40</a></td>
+</tr>
+</tbody>
+</table>
+<p>Detailed decisions remain open until the corresponding research and review are complete. The existence of a document does not mean that its issue is resolved.</p>
+<h2 id="intended-compiler-pipeline">Intended compiler pipeline</h2>
+<p>The proposed pipeline is:</p>
+<ol>
+<li>Load source files and preserve source identity.</li>
+<li>Tokenize source using the selected dialect and version.</li>
+<li>Parse tokens into an AST with source spans.</li>
+<li>Resolve names and declarations.</li>
+<li>Perform type checking and semantic analysis.</li>
+<li>Lower valid constructs into a typed, target-independent project IR.</li>
+<li>Perform target- or API-specific lowering where required.</li>
+<li>Generate LLVM IR and verify it.</li>
+<li>Generate native object code and link the selected runtime.</li>
+<li>Report diagnostics and build artifacts.</li>
+</ol>
+<p>The frontend and project-owned IR must remain independent of SDL3 and of the initial output target. Semantic analysis belongs to the compiler, not LLVM. This pipeline is an architectural direction; interfaces and exact representations remain open.</p>
+<h2 id="dependency-boundaries">Dependency boundaries</h2>
+<ul>
+<li>Language parsing must not depend on platform API implementation details.</li>
+<li>The project-owned IR must not expose SDL3 or Linux-specific types.</li>
+<li>The compiler must depend on stable project-owned runtime interfaces, not call SDL3 directly from generated code.</li>
+<li>Frontend and IR work should be testable without LLVM or SDL3 installed.</li>
+<li>Platform API profiles must not silently alter language-core semantics.</li>
+<li>No language/API feature may be claimed as supported without a dialect/version-specific reference and an implementation/test status.</li>
+</ul>
+<h2 id="decision-records">Decision records</h2>
+<p>Use numbered Architecture Decision Records in <a href="adr/index.html">adr/</a>. Each record states context, decision, status, alternatives, consequences, and evidence. An accepted ADR can be superseded by a later ADR; do not silently rewrite the historical rationale. The <a href="adr/TEMPLATE.html">ADR template</a> defines the required structure.</p>
+<h2 id="glossary">Glossary</h2>
+<ul>
+<li><strong>Dialect</strong>: a defined GFA BASIC language variant associated with a platform and/or release.</li>
+<li><strong>Version</strong>: a specific release of a dialect.</li>
+<li><strong>Language core</strong>: language syntax and semantics not tied to a platform API.</li>
+<li><strong>API profile</strong>: a selectable set of platform-specific declarations and behavior.</li>
+<li><strong>Host</strong>: the machine and environment on which the compiler runs.</li>
+<li><strong>Target</strong>: the machine and ABI for which the compiler generates output.</li>
+<li><strong>Runtime</strong>: project-owned support code used by generated programs.</li>
+<li><strong>Backend</strong>: the component that translates project IR into target code.</li>
+<li><strong>Compatibility</strong>: a measured degree of agreement with a specified source dialect/version and API profile, not a blanket claim.</li>
+<li><strong>Conformance test</strong>: a test that compares compiler or runtime behavior with a documented rule or trusted reference implementation.</li>
+</ul>
+<h2 id="open-questions">Open questions</h2>
+<ul>
+<li>Which 3.0/3.03 language rules are inherited by Amiga GFA BASIC 3.5, and which require explicit 3.5 confirmation or page-image verification?</li>
+<li>Which Amiga and Atari ST manual editions are authoritative for each profile?</li>
+<li>What is the exact documentation format requirement referred to as “OKF” in issue #14?</li>
+<li>Which LLVM version and Rust binding are suitable for the chosen Rust toolchain?</li>
+<li>Which compiler components justify separate Cargo crates?</li>
+<li>Which runtime operations require software emulation rather than direct platform adapters?</li>
+</ul>
+<p>Record evidence and decisions in the relevant issue and ADR before claiming closure.</p>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>
