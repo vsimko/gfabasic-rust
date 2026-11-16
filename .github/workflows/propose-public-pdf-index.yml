@@ -1,6 +1,10 @@
-name: Propose public PDF source and text index
+name: Refresh public PDF source index
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - "references/pdf-sources.json"
   workflow_dispatch:
 
 permissions:
@@ -12,9 +16,9 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  propose-index:
+  refresh-index:
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       - name: Check out repository
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
@@ -26,59 +30,25 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Install PDF metadata reader
+      - name: Install PDF reader
         run: python -m pip install --disable-pip-version-check "pypdf==6.1.3"
 
-      - name: Download reference PDFs to ephemeral runner storage
+      - name: Build index for changed manifest sources
         env:
-          ENGLISH_URL: https://ia803204.us.archive.org/16/items/gfa-basic-3.5-interpreter/GFA_Basic_3.5_Interpreter.pdf
-          GERMAN_URL: https://retro-commodore.eu/files/downloads/amigamanuals-xiik.net/eBooks/Das%20Grosse%20Buch%20zu%20GFA-Basic%20Amiga%20%28OCR%29%20-%20eBook-DE.pdf
-        run: |
-          set -euo pipefail
-          mkdir -p "$RUNNER_TEMP/gfa-reference-input"
-          curl --fail --location --retry 3 --retry-all-errors "$ENGLISH_URL" \
-            --output "$RUNNER_TEMP/gfa-reference-input/GFA_Basic_3.5_Interpreter.pdf"
-          curl --fail --location --retry 3 --retry-all-errors "$GERMAN_URL" \
-            --output "$RUNNER_TEMP/gfa-reference-input/Das-Grosse-Buch-zu-GFA-BASIC-Amiga.pdf"
-          for pdf in "$RUNNER_TEMP"/gfa-reference-input/*.pdf; do
-            test -s "$pdf"
-            test "$(head -c 5 "$pdf")" = "%PDF-"
-          done
-
-      - name: Build and validate source index with permitted German book text
+          BASE_SHA: ${{ github.event.before }}
         run: |
           set -euo pipefail
           python scripts/build_reference_source_index.py \
-            --english "$RUNNER_TEMP/gfa-reference-input/GFA_Basic_3.5_Interpreter.pdf" \
-            --german "$RUNNER_TEMP/gfa-reference-input/Das-Grosse-Buch-zu-GFA-BASIC-Amiga.pdf" \
-            --english-url "https://ia803204.us.archive.org/16/items/gfa-basic-3.5-interpreter/GFA_Basic_3.5_Interpreter.pdf" \
-            --german-url "https://retro-commodore.eu/files/downloads/amigamanuals-xiik.net/eBooks/Das%20Grosse%20Buch%20zu%20GFA-Basic%20Amiga%20%28OCR%29%20-%20eBook-DE.pdf" \
-            --output references/source-index.json
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          data = json.loads(Path("references/source-index.json").read_text(encoding="utf-8"))
-          assert len(data["documents"]) == 2
-          for document in data["documents"]:
-              assert document["page_count"] > 0
-              assert len(document["sha256"]) == 64
-              assert len(document["page_locators"]) == document["page_count"]
-              assert all(set(page) == {"pdf_page", "anchor"} for page in document["page_locators"])
-              if document["source_id"] == "AM-INTERPRETER-35":
-                  assert "page_text" not in document
-              if document["source_id"] == "AM-BOOK-DE":
-                  assert len(document["page_text"]) == document["page_count"]
-                  assert all(set(page) == {"pdf_page", "text"} for page in document["page_text"])
-                  assert document["rights_basis"]
-          print("Validated source index:", [(d["source_id"], d["page_count"]) for d in data["documents"]])
-          PY
+            --manifest references/pdf-sources.json \
+            --base-sha "${BASE_SHA:-}" \
+            --output "$RUNNER_TEMP/source-index.json"
+          test -s "$RUNNER_TEMP/source-index.json"
 
       - name: Propose index through a pull request
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          rm -rf "$RUNNER_TEMP/gfa-reference-input"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           branch="automation/public-pdf-source-index"
@@ -89,12 +59,13 @@ jobs:
             git switch --create "$branch" origin/main
           fi
           git reset --hard origin/main
+          cp "$RUNNER_TEMP/source-index.json" references/source-index.json
           git add references/source-index.json
           if git diff --cached --quiet; then
             echo "Source index is already current."
             exit 0
           fi
-          git commit -m "Refresh public GFA BASIC source locator index"
+          git commit -m "Refresh public GFA BASIC source index"
           git push --force-with-lease origin "$branch"
           if gh pr view "$branch" --json number >/dev/null 2>&1; then
             echo "Updated existing source-index pull request."
@@ -102,6 +73,6 @@ jobs:
             gh pr create \
               --base main \
               --head "$branch" \
-              --title "Refresh public GFA BASIC source locator index" \
-              --body "Updates bibliographic metadata, PDF hashes, page counts, and page locators. Includes page-by-page extracted text only for the 1989 German book, based on the reported authors' permission and the maintainer's recorded decision. The English interpreter manual remains locator-only. Source PDFs are downloaded to ephemeral runner storage and are not committed."
+              --title "Refresh public GFA BASIC source index" \
+              --body "Updates the generated source index from references/pdf-sources.json. Only sources whose manifest entries changed are downloaded and re-extracted. Source PDFs remain outside the repository; extracted text is included only where the manifest records the project-approved rights basis."
           fi

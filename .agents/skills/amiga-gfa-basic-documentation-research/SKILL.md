@@ -78,6 +78,7 @@ Run only validators relevant to the files changed; consult their documented comm
 - Do not include extracted text from historical sources unless the exact edition has a documented redistribution basis and a project-owner policy exception.
 - The documented exception for the 1989 German GFA-BASIC Amiga book permits per-page extracted text in `references/source-index.json`, based on the authors' permission reported by Amiga-News and confirmed by the project maintainer. Preserve page locators and provenance. This exception does not apply to other editions.
 - The English GFA BASIC 3.5 interpreter manual remains locator-only until a separate redistribution basis is recorded.
+- Maintain PDF source metadata and URLs in `references/pdf-sources.json`; the generated `references/source-index.json` is updated by the manifest-triggered workflow. Never add source PDFs to the repository.
 - Retain bibliographic metadata, concise citations, lawful provenance, original analysis, and independently authored fixtures.
 - Do not claim that documentation proves implementation, Linux support, or interpreter execution.
 - Do not claim completeness from an index, catalogue, partial chapter extraction, or OCR-only review.
