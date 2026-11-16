@@ -1,1 +1,10 @@
+fact-zero
+arithmetic
+for-next
+strings
+data-pointer
+matrix-det
+matrix-inv
+matrix-add
+matrix-sub
 matrix-one
