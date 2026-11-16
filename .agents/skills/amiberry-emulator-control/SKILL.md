@@ -29,6 +29,7 @@ This skill covers the emulator boundary only. It does not define how to write GF
 - Obtain ROMs and commercial interpreter media only through the repository's private-asset process. Verify expected size and checksums where the workflow provides them.
 - Keep original distribution media separate from writable test media when the test requires it. Record drive assignments (DF0/DF1) and the guest-visible paths expected by the program.
 - Inspect prepared ADF contents and bootability with the repository's existing `amitools/xdftool` workflow before launching Amiberry.
+- **Amiberry can mount a ZIP archive containing an ADF directly as a floppy image.** When the ZIP contains a supported floppy image, pass the ZIP path as the drive image (for example, `-1 /path/to/distribution-disk.zip`); Amiberry opens the compressed floppy read-only/write-protected. Do not extract the ADF merely to mount it, and do not rewrite commercial distribution media. Keep a separate writable ADF in another drive for test output. Verify the mounted drive and guest-visible behavior in the exact Amiberry version used by CI; do not generalize to arbitrary ZIP contents or other emulator versions without evidence.
 - Never upload or commit commercial binaries, Kickstart ROMs, or disk images. Follow workflow artifact exclusions and licensing boundaries.
 
 ## IPC and input automation
