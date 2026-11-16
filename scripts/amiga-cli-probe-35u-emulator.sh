@@ -72,6 +72,10 @@ if not matches:
 target = max(matches, key=lambda w: float(w["conf"]))
 target_x = int(target["left"]) + int(target["width"]) / 2
 target_y = int(target["top"]) + int(target["height"]) / 2
+# The red cursor sprite's bounding-box center is offset from its click
+# hotspot. Aim the hotspot at the filename, not the sprite center.
+target_x += 10
+target_y += 15
 # SEND_MOUSE has different effective scales on the two axes:
 # X is approximately 0.5, while Y is approximately 0.25.
 raw_dx = round((target_x - pointer_x) * 2)
@@ -95,15 +99,15 @@ while (( mouse_dx != 0 || mouse_dy != 0 )); do
 done
 sleep 0.3
 printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-file-row-target.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-# Amiberry mouse button 1 is left-button down; release between clicks.
-for click in 1 2; do
+# A single click selects the filename. A double-click can enter the
+# S directory because the cursor sprite center is not its click hotspot.
 printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 sleep 0.15
 printf "SEND_MOUSE\\t0\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-sleep 0.2
-done
 sleep 0.5
 printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-file-double-clicked.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+
+}"
 
 # The selected-row screenshot places the pointer near x=320,y=218.
 # Move to the center of the Merge gadget (about x=323,y=420).
