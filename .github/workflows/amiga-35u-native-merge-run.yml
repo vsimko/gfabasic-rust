@@ -5,17 +5,17 @@ on:
     branches:
       - main
     paths:
-      - ".github/workflows/amiga-352-native-merge-run.yml"
+      - ".github/workflows/amiga-35u-native-merge-run.yml"
       - "tests/interpreter-probes/amiga-3.52/**"
-      - "scripts/amiga-cli-probe-352.sh"
-      - "scripts/amiga-cli-probe-352-emulator.sh"
+      - "scripts/amiga-cli-probe-35u.sh"
+      - "scripts/amiga-cli-probe-35u-emulator.sh"
       - "scripts/validate_gfatest_results.py"
   pull_request:
     paths:
-      - ".github/workflows/amiga-352-native-merge-run.yml"
+      - ".github/workflows/amiga-35u-native-merge-run.yml"
       - "tests/interpreter-probes/amiga-3.52/**"
-      - "scripts/amiga-cli-probe-352.sh"
-      - "scripts/amiga-cli-probe-352-emulator.sh"
+      - "scripts/amiga-cli-probe-35u.sh"
+      - "scripts/amiga-cli-probe-35u-emulator.sh"
       - "scripts/validate_gfatest_results.py"
   workflow_dispatch:
 
@@ -50,14 +50,14 @@ jobs:
           import sys
           path = pathlib.Path(sys.argv[1])
           data = path.read_bytes()
-          blob_sha = hashlib.sha1(b"blob " + str(len(data)).encode() + b"\\0" + data).hexdigest()
+          blob_sha = hashlib.sha1(b"blob " + str(len(data)).encode() + b"\0" + data).hexdigest()
           expected = "3c14e037559c2c2e1c0ae96088a7a7689594e4f5"
           if blob_sha != expected:
               raise SystemExit(f"Unexpected GFA-BASIC 3.52 ZIP Git blob SHA: {blob_sha}")
           print(f"GFA_BASIC_ZIP_GIT_BLOB_SHA={blob_sha}")
           print(f"GFA_BASIC_ZIP_SIZE={len(data)}")
           PY
-          printf '%s\\n' "$ZIP_NAME" > artifacts/amiga-cli-probe/interpreter-zip-name.txt
+          printf '%s\n' "$ZIP_NAME" > artifacts/amiga-cli-probe/interpreter-zip-name.txt
           sha256sum "$RUNNER_TEMP/gfa-basic-3.52.zip" > artifacts/amiga-cli-probe/interpreter-zip-sha256.txt
 
       - name: Download original Amiga Kickstart ROM
@@ -120,14 +120,14 @@ jobs:
           grep -F "bootable: True" artifacts/amiga-cli-probe/prepared-adf-boot.txt
           sha256sum "$TEST_ADF" > artifacts/amiga-cli-probe/prepared-adf-sha256.txt
           cp "tests/interpreter-probes/amiga-3.52/regression-suite.LST" artifacts/amiga-cli-probe/gfatest.LST
-          printf '%s\\n' "DF1:GFABasic (GFA-BASIC 3.52 ZIP, read-only)" > artifacts/amiga-cli-probe/interpreter-installed-path.txt
+          printf '%s\n' "DF1:GFABasic (GFA-BASIC 3.52 ZIP, read-only)" > artifacts/amiga-cli-probe/interpreter-installed-path.txt
           cp "$RUNNER_TEMP/Startup-Sequence" artifacts/amiga-cli-probe/Startup-Sequence.txt
           grep -F "gfatest.LST" artifacts/amiga-cli-probe/prepared-adf-layout.txt
           grep -F "Startup-Sequence" artifacts/amiga-cli-probe/prepared-adf-layout.txt
           grep -F "DF1:GFABasic" artifacts/amiga-cli-probe/Startup-Sequence.txt
 
       - name: Merge textual LST in the GFA BASIC editor
-        run: bash scripts/amiga-cli-probe-352.sh
+        run: bash scripts/amiga-cli-probe-35u.sh
 
 
       - name: Upload diagnostic evidence (never upload commercial binary)
