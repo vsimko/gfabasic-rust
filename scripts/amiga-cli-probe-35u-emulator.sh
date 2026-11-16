@@ -55,7 +55,7 @@ if not red_y:
 pointer_y = min(red_y)
 raw_dy = round((215 - pointer_y) * 4)
 with open(sys.argv[2], "w", encoding="ascii") as output:
-    output.write(f"{raw_dy}\\n")
+    output.write(str(raw_dy) + chr(10))
 print(f"Keeping X unchanged; pointer Y={pointer_y}, target Y=215, raw Y correction={raw_dy}")
 PY
 read mouse_dy < "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/mouse-y-correction.txt"
