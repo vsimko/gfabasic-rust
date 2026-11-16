@@ -10,6 +10,6 @@ This profile targets the exact Amiga GFA BASIC **3.5 U** interpreter:
 
 The native workflow extracts the single ADF from the corresponding private ZIP and prepares a working disk for Amiberry. It verifies the exact executable hash before execution. The private ZIP, source and modified ADFs, Kickstart ROM and commercial executable are never committed or uploaded. CI artifacts contain only hashes, disk listings, startup text, screenshots and textual test output.
 
-This branch temporarily replaces the broad suite with a launch-control probe for issue #537. It opens the two output files, writes a marker to each, closes them and exits. It contains no array or MAT command. A successful result proves that the editor's Run path can execute a trivial listing and write to the test disk; failure leaves the MAT ONE investigation unresolved.
+This branch temporarily replaces the broad suite with a launch-control probe for issue #537. The listing is merged through the native Editor and Run path. It writes a marker before `MAT ONE`, then checks the documented 3x3 identity matrix. Its setup follows the supplied *GFA-BASIC 3.5 Interpreter* addendum example on printed p. 13-2: `DIM a(3,3)`, `MAT ONE a()`, `MAT PRINT a()`. It intentionally does not insert `MAT SET` or `MAT BASE`; neither is part of that example, and the addendum says the default MAT BASE is 1.
 
 Results are runtime observations specific to the exact 3.5U binary hash and emulator/Kickstart setup recorded in each workflow artifact. This is not a claim of complete language conformance.
