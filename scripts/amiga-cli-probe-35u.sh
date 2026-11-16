@@ -21,7 +21,7 @@ export SDL_AUDIODRIVER=dummy
 # Fail closed unless the prepared DF0 contains the exact staged listing.
 # The editor Merge step is a separate boundary; this proves only the disk input.
 mkdir -p artifacts/amiga-cli-probe
-staged_listing="tests/interpreter-probes/amiga-3.52/regression-suite.LST"
+staged_listing="tests/interpreter-probes/amiga-3.5u/regression-suite.LST"
 prepared_listing="artifacts/amiga-cli-probe/gfatest-from-df0.LST"
 expected_hash="$(sha256sum "$staged_listing" | awk '{print $1}')"
 printf '%s  %s\\n' "$expected_hash" "$staged_listing" > artifacts/amiga-cli-probe/staged-listing.sha256
