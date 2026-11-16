@@ -76,6 +76,16 @@ sleep 1
 printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-merge.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 tesseract "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-merge.png" stdout 2>/dev/null > "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-merge-ocr.txt"
 
+# OCR is not proof of source identity, but a recognized contradictory token is
+# sufficient reason to stop. In particular, do not run when MAT SET is shown
+# for the M O / MAT ONE probe; preserve the screenshot for manual inspection.
+if grep -Eiq 'MAT[[:space:]]+SET' "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-merge-ocr.txt"; then
+  echo "MERGE_EDITOR_TOKEN_CONTRADICTION=MAT_SET" | tee "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-validation.txt"
+  echo "Editor OCR shows MAT SET for the MAT ONE abbreviation probe; refusing to run an unverified listing."
+  exit 1
+fi
+echo "MERGE_EDITOR_OCR_NO_KNOWN_CONTRADICTION=PASS (not proof of source identity)" | tee "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-validation.txt"
+
 # Run the merged listing with Shift+F10 (Amiga raw keycodes: LShift=0x60,
 # F10=0x59). Press the modifier first and release it last.
 printf "SEND_KEY\\t96\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
