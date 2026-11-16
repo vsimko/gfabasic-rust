@@ -11,7 +11,7 @@ Use this guide when writing or changing .LST regression programs for the origina
 
 ## Interpreter version strategy
 
-The project uses three reference versions. See [ADR 0015](../architecture/adr/0015-multi-version-amiga-gfa-basic-conformance.md) and [issue #557](https://github.com/vsimko/gfabasic-rust/issues/557).
+The project uses three reference versions. See [ADR 0017](../architecture/adr/0017-multi-version-amiga-gfa-basic-conformance.md) and [issue #557](https://github.com/vsimko/gfabasic-rust/issues/557).
 
 | Version | Role |
 |---|---|
