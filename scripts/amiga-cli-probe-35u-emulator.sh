@@ -74,7 +74,18 @@ sleep 0.10
 printf "SEND_MOUSE\\t0\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 sleep 1
 printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-merge.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-tesseract "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-merge.png" stdout 2>/dev/null > "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-merge-ocr.txt"
+# Amiga Kickstart uses bright text on a saturated blue background. Normalize
+# it before OCR; raw Tesseract frequently misses the editor source entirely.
+python3 - "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-merge.png" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-merge-ocr-input.png" <<'PY'
+from PIL import Image, ImageOps, ImageEnhance
+import sys
+
+image = Image.open(sys.argv[1]).convert("L")
+image = ImageOps.invert(image).resize((image.width * 3, image.height * 3))
+image = ImageEnhance.Contrast(image).enhance(3)
+image.save(sys.argv[2])
+PY
+tesseract "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-merge-ocr-input.png" stdout --psm 6 2>/dev/null | tee "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-merge-ocr.txt"
 
 # OCR is not proof of source identity, but a recognized contradictory token is
 # sufficient reason to stop. In particular, do not run when MAT SET is shown
