@@ -32,7 +32,7 @@ jobs:
       - name: Download reference PDFs to ephemeral runner storage
         env:
           ENGLISH_URL: https://ia803204.us.archive.org/16/items/gfa-basic-3.5-interpreter/GFA_Basic_3.5_Interpreter.pdf
-          GERMAN_URL: https://retro-commodore.eu/files/downloads/amigamanuals-xiik.net/eBooks/Das%20Grosse%20Buch%20zu%20GFA-Basic%20Amiga%20%28OCR%29%20-%20eBook-DE.pdf
+          GERMAN_URL: http://ebook.pixas.de/ccdown/click.php?id=2
         run: |
           set -euo pipefail
           mkdir -p "$RUNNER_TEMP/gfa-reference-input"
@@ -52,7 +52,7 @@ jobs:
             --english "$RUNNER_TEMP/gfa-reference-input/GFA_Basic_3.5_Interpreter.pdf" \
             --german "$RUNNER_TEMP/gfa-reference-input/Das-Grosse-Buch-zu-GFA-BASIC-Amiga.pdf" \
             --english-url "https://ia803204.us.archive.org/16/items/gfa-basic-3.5-interpreter/GFA_Basic_3.5_Interpreter.pdf" \
-            --german-url "https://retro-commodore.eu/files/downloads/amigamanuals-xiik.net/eBooks/Das%20Grosse%20Buch%20zu%20GFA-Basic%20Amiga%20%28OCR%29%20-%20eBook-DE.pdf" \
+            --german-url "http://ebook.pixas.de/ccdown/click.php?id=2" \
             --output references/source-index.json
           python - <<'PY'
           import json
