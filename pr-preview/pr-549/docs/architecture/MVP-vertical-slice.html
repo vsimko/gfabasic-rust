@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Status: partially implemented as an experimental FACT/PRINT frontend and native bootstrap prototype; not a complete compiler feature or conformance claim.">
+  <title>First compiler vertical slice — proposed boundary · GFA BASIC Rust documentation</title>
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body class="docs-site">
+  <header class="docs-header">
+    <a href="../../index.html">GFA BASIC Rust</a>
+    <span aria-hidden="true">/</span>
+    <a href="../index.html">Documentation</a>
+  </header>
+  <div class="docs-layout">
+    <nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home" href="index.html">Section index</a><ul><li><a href="AI-VERIFICATION.html">AI-assisted API verification</a></li><li><a href="https://github.com/vsimko/gfabasic-rust/blob/main/.agents/skills/api-evidence-verification/SKILL.md">`api-evidence-verification` agent skill</a></li><li><a href="API-PROFILES.html">API profiles</a></li><li><a href="API-REGISTRY.html">API registry and declaration source of truth</a></li><li><a href="BENCHMARKING.html">Performance benchmarks and profiling strategy</a></li><li><a href="CI.html">GitHub Actions workflow architecture</a></li><li><a href="CLI-AND-CONFIG.html">CLI, configuration, and build artifacts</a></li><li><a href="COMPATIBILITY-MATRIX.html">Current compatibility matrix</a></li><li><a href="DIAGNOSTICS.html">Diagnostics and compatibility reporting</a></li><li><a href="DIALECTS.html">Dialects, versions, and compatibility policy</a></li><li><a href="FORMATTER.html">Formatter style and current support</a></li><li><a href="FUZZING.html">Frontend fuzzing and robustness strategy</a></li><li><a href="GOALS.html">Project goals and compatibility objectives</a></li><li><a href="IMPLEMENTATION-DASHBOARD.html">Implementation dashboard</a></li><li><a href="LANGUAGE-TOOLING.html">Language tooling and editor integration</a></li><li><a href="MEMORY.html">Memory model and hardware access</a></li><li><a href="MVP-vertical-slice.html">First compiler vertical slice — proposed boundary</a></li><li><a href="PIPELINE-AND-IR.html">Compiler pipeline and intermediate representation</a></li><li><a href="README.html">README</a></li><li><a href="RELEASES.html">Release, artifact, and reproducible-build policy</a></li><li><a href="RUNTIME.html">Runtime architecture</a></li><li><a href="SECURITY.html">Dependency and supply-chain security</a></li><li><a href="TARGETS.html">Host and target model</a></li><li><a href="TESTING.html">Compatibility testing and release criteria</a></li><li><a href="VALIDATION.html">Repository consistency validation</a></li><li><a href="VERSIONING.html">Versioning and compatibility lifecycle</a></li><li><a href="WEBSITE_PREVIEWS.html">Website previews for pull requests</a></li><li><a href="WORKSPACE.html">Rust workspace and dependency policy</a></li><li><a href="adr/index.html">Architecture decisions</a></li></ul></nav>
+    <main class="docs-content">
+      <article>
+        <h1>First compiler vertical slice — proposed boundary</h1>
+        <p class="docs-meta"><span>Architecture</span></p>
+        <h1 id="first-compiler-vertical-slice-proposed-boundary">First compiler vertical slice — proposed boundary</h1>
+<p><strong>Status:</strong> partially implemented as an experimental FACT/PRINT frontend and native bootstrap prototype; not a complete compiler feature or conformance claim.</p>
+<p><strong>Normative source dialect:</strong> Commodore Amiga GFA BASIC interpreter 3.5 (ADR 0009).</p>
+<h2 id="candidate-program">Candidate program</h2>
+<p>The smallest useful end-to-end candidate currently in the corpus is:</p>
+<pre><code class="language-basic">x=FACT(0)
+y=FACT(1)
+z=FACT(2)
+PRINT x,y,z
+</code></pre>
+<p>Fixture: <code>tests/corpus/amiga/3.5/combinatorics/fact-zero.bas</code>.</p>
+<h2 id="evidence">Evidence</h2>
+<ul>
+<li>The supplied 3.5 update explicitly lists <code>x=FACT(n)</code>, with <code>n</code> an integer expression and <code>x</code> an arithmetic expression (printed p. 14-1).</li>
+<li>The same page defines factorial and explicitly states <code>0! = 1</code> (printed p. 14-1).</li>
+<li>The following page demonstrates assignment from <code>FACT(n)</code> and output using <code>PRINT x,y,z</code> (printed p. 14-2).</li>
+<li>The independently authored fixture is marked page-image-verified. It has not been run on the original interpreter.</li>
+</ul>
+<h2 id="proposed-implementation-boundary">Proposed implementation boundary</h2>
+<ol>
+<li>One explicitly selected Amiga GFA BASIC 3.5 dialect configuration.</li>
+<li>Three numeric variable assignments (<code>x</code>, <code>y</code>, and <code>z</code>).</li>
+<li>Integer literals <code>0</code>, <code>1</code>, and <code>2</code>.</li>
+<li>Calls to the built-in <code>FACT</code> with integer-expression arguments.</li>
+<li>A comma-separated <code>PRINT</code> list for the assigned numeric values.</li>
+<li>Deterministic output and process exit status on Linux x86-64.</li>
+</ol>
+<p>No SDL3, graphics, Amiga API, file I/O, arrays, matrices, procedures, source composition, or other built-ins are required.</p>
+<h2 id="evidence-sufficiency-and-remaining-uncertainty">Evidence sufficiency and remaining uncertainty</h2>
+<p>The selected program's required syntax is demonstrated directly in the 3.5 addendum, so this narrow slice does not need to promote unrelated 3.0-only grammar:</p>
+<ul>
+<li>Printed p. 14-1 gives the <code>FACT(n)</code> signature, specifies an integer-expression argument, defines the factorial result, and explicitly states <code>0! = 1</code>.</li>
+<li>Printed p. 14-2 demonstrates assignments to <code>x</code>, <code>y</code>, and <code>z</code> from built-in functions, followed by the comma-separated <code>PRINT x,y,z</code> statement. Its example uses multiple numeric literals and one statement per source line.</li>
+<li>The fixture changes the example values and uses only the documented <code>FACT</code> function; it is independently authored.</li>
+</ul>
+<p>The manual does not define an exact whitespace contract for the rendered numeric output in this example. The end-to-end test asserts the ordered numeric values while treating runs of output whitespace as separators; it does not assert a stricter formatting guarantee.</p>
+<p>No further base-manual grammar review is a prerequisite for this specific source slice. Interpreter execution would strengthen confidence but remains separately blocked by lawful access to the original 3.5 interpreter under #66.</p>
+<h2 id="pipeline-work-required">Pipeline work required</h2>
+<ul>
+<li>[x] Frontend: narrow lexer/parser, AST, and source-span diagnostics for the demonstrated FACT/PRINT shape.</li>
+<li>[x] Prototype-level checks: variable binding, use-before-assignment, reassignment rejection, and FACT argument subset validation. General semantic analysis remains unimplemented.</li>
+<li>[ ] IR: a small typed representation for the value, intrinsic call, and output.</li>
+<li>[x] Bootstrap backend: temporary C/<code>cc</code> bridge emits a native host executable; this is not the planned LLVM backend.</li>
+<li>[x] Tests: frontend positive/negative tests and an end-to-end executable test; general IR/conformance tests remain pending.</li>
+</ul>
+<p>The frontend currently parses the narrow FACT/PRINT subset and emits source-located lexical/syntax/unsupported diagnostics. A temporary C/<code>cc</code> bridge produces a native host executable for the fixture. General semantic analysis, typed project IR, the LLVM backend, and runtime remain unimplemented. The bootstrap path is not a claim of original-interpreter conformance.</p>
+<h2 id="acceptance">Acceptance</h2>
+<p>The vertical slice is complete only when a clean Linux x86-64 runner can compile the fixture, execute the generated program independently of the compiler process, assert the numeric result and exit status, and reject an unsupported construct with a stable diagnostic. CI must run the end-to-end test.</p>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>
