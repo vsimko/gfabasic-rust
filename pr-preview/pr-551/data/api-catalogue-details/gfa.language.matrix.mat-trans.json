@@ -1,0 +1,79 @@
+{
+  "id": "gfa.language.matrix.mat-trans",
+  "name": "MAT TRANS",
+  "kind": "statement",
+  "namespace": "language-core",
+  "category": "math-and-matrix",
+  "availability": [
+    {
+      "dialect": "amiga-gfa-basic-interpreter",
+      "versions": [
+        "3.5"
+      ]
+    }
+  ],
+  "syntax": [
+    {
+      "form": "MAT TRANS destination() [= source()]",
+      "contexts": [
+        "statement"
+      ],
+      "arguments": [
+        {
+          "name": "destination",
+          "type": "previously dimensioned one- or two-dimensional floating-point field",
+          "required": true,
+          "passing": "array"
+        },
+        {
+          "name": "source",
+          "type": "previously dimensioned one- or two-dimensional floating-point field",
+          "required": false,
+          "passing": "array"
+        }
+      ]
+    }
+  ],
+  "signature": {
+    "type": "no return value"
+  },
+  "semantics": {
+    "summary": "Transposes a square matrix in place when the source is omitted, or copies the transpose of source into destination.",
+    "side-effects": [
+      "Mutates the destination field; the in-place form also reads and rewrites the same field."
+    ],
+    "errors": []
+  },
+  "evidence": {
+    "source-scope": "amiga-3.5-addendum",
+    "status": "book-documented",
+    "sources": [
+      "AM-INTERPRETER-35"
+    ],
+    "printed-pages": [
+      "Chapter 13, printed pp. 13-19–13-20"
+    ],
+    "notes": [
+      "The two-operand form requires compatible reversed dimensions; if source is n×m, destination must be m×n.",
+      "A page-image-verified research fixture exists but is not an executable conformance test."
+    ]
+  },
+  "implementation": {
+    "status": "not-implemented"
+  },
+  "support": [
+    {
+      "target": "x86_64-unknown-linux-gnu",
+      "classification": "unknown",
+      "conformance": "not-tested",
+      "tests": [],
+      "pending-reason": "A research fixture exists but the matrix runtime and executable conformance harness are not implemented."
+    }
+  ],
+  "docs": {
+    "path": "docs/research/amiga-gfa-basic-35-addendum-inventory.md",
+    "anchors": [
+      "3-linear-operations-on-numeric-fields"
+    ]
+  }
+}

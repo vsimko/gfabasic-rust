@@ -1,0 +1,263 @@
+{
+  "repository": "vsimko/gfabasic-rust",
+  "generated_at": "2026-11-16T13:03:55.579070Z",
+  "freshness_threshold_hours": 168,
+  "workflows": [
+    {
+      "name": "Documentation checks",
+      "file": "docs.yml",
+      "note": "Markdown, JavaScript, API registry, corpus metadata and local-link validation.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/docs.yml",
+      "state": "in_progress",
+      "latest": {
+        "id": 43872159996,
+        "name": "Documentation checks",
+        "status": "in_progress",
+        "event": "pull_request",
+        "branch": "feature/pdf-source-manifest-trigger",
+        "created_at": "2026-11-16T13:03:28Z",
+        "updated_at": "2026-11-16T13:03:38Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43872159996",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43870945364,
+        "name": "Documentation checks",
+        "status": "success",
+        "event": "push",
+        "branch": "main",
+        "created_at": "2026-11-16T12:55:24Z",
+        "updated_at": "2026-11-16T12:55:54Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43870945364",
+        "age_hours": 0,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Rust checks",
+      "file": "rust.yml",
+      "note": "Formatting, Clippy, workspace tests/build and formatter fixtures.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/rust.yml",
+      "state": "in_progress",
+      "latest": {
+        "id": 43872159643,
+        "name": "Rust checks",
+        "status": "in_progress",
+        "event": "pull_request",
+        "branch": "feature/pdf-source-manifest-trigger",
+        "created_at": "2026-11-16T13:03:28Z",
+        "updated_at": "2026-11-16T13:03:33Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43872159643",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43870635797,
+        "name": "Rust checks",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "research/35u-mat-one-launch-control",
+        "created_at": "2026-11-16T12:53:22Z",
+        "updated_at": "2026-11-16T12:53:51Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43870635797",
+        "age_hours": 0,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Security audit",
+      "file": "security-audit.yml",
+      "note": "RustSec audits for workspace, fuzz and benchmark lockfiles.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/security-audit.yml",
+      "state": "success",
+      "latest": {
+        "id": 43872159641,
+        "name": "Security audit",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "feature/pdf-source-manifest-trigger",
+        "created_at": "2026-11-16T13:03:28Z",
+        "updated_at": "2026-11-16T13:03:55Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43872159641",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43872159641,
+        "name": "Security audit",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "feature/pdf-source-manifest-trigger",
+        "created_at": "2026-11-16T13:03:28Z",
+        "updated_at": "2026-11-16T13:03:55Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43872159641",
+        "age_hours": 0,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Source-loader fuzzing",
+      "file": "fuzz.yml",
+      "note": "Fuzzes the source loader only; lexer/parser fuzzing is not configured.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/fuzz.yml",
+      "state": "success",
+      "latest": {
+        "id": 43869239724,
+        "name": "Fuzzing",
+        "status": "success",
+        "event": "schedule",
+        "branch": "main",
+        "created_at": "2026-11-16T12:44:02Z",
+        "updated_at": "2026-11-16T12:55:36Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43869239724",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43869239724,
+        "name": "Fuzzing",
+        "status": "success",
+        "event": "schedule",
+        "branch": "main",
+        "created_at": "2026-11-16T12:44:02Z",
+        "updated_at": "2026-11-16T12:55:36Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43869239724",
+        "age_hours": 0,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Benchmarks",
+      "file": "benchmarks.yml",
+      "note": "Source-loading benchmark; pull requests validate compilation without recording measurements.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/benchmarks.yml",
+      "state": "in_progress",
+      "latest": {
+        "id": 43872159520,
+        "name": "Benchmarks",
+        "status": "in_progress",
+        "event": "pull_request",
+        "branch": "feature/pdf-source-manifest-trigger",
+        "created_at": "2026-11-16T13:03:28Z",
+        "updated_at": "2026-11-16T13:03:33Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43872159520",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43870635703,
+        "name": "Benchmarks",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "research/35u-mat-one-launch-control",
+        "created_at": "2026-11-16T12:53:22Z",
+        "updated_at": "2026-11-16T12:53:49Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43870635703",
+        "age_hours": 0,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Release SBOM",
+      "file": "release-sbom.yml",
+      "note": "Validates PR SBOMs and uploads on published releases; release attachment is unproven until a release runs.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/release-sbom.yml",
+      "state": "in_progress",
+      "latest": {
+        "id": 43872159993,
+        "name": "Release SBOM",
+        "status": "in_progress",
+        "event": "pull_request",
+        "branch": "feature/pdf-source-manifest-trigger",
+        "created_at": "2026-11-16T13:03:28Z",
+        "updated_at": "2026-11-16T13:03:32Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43872159993",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43870635722,
+        "name": "Release SBOM",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "research/35u-mat-one-launch-control",
+        "created_at": "2026-11-16T12:53:22Z",
+        "updated_at": "2026-11-16T12:53:35Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43870635722",
+        "age_hours": 0,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "GitHub Pages",
+      "file": "pages.yml",
+      "note": "Builds and publishes the static production website.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/pages.yml",
+      "state": "success",
+      "latest": {
+        "id": 43870943263,
+        "name": "Deploy GitHub Pages",
+        "status": "success",
+        "event": "push",
+        "branch": "main",
+        "created_at": "2026-11-16T12:55:24Z",
+        "updated_at": "2026-11-16T12:55:50Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43870943263",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43870943263,
+        "name": "Deploy GitHub Pages",
+        "status": "success",
+        "event": "push",
+        "branch": "main",
+        "created_at": "2026-11-16T12:55:24Z",
+        "updated_at": "2026-11-16T12:55:50Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43870943263",
+        "age_hours": 0,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Pull request preview",
+      "file": "pr-preview.yml",
+      "note": "Builds and smoke-tests same-repository pull request previews.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/pr-preview.yml",
+      "state": "in_progress",
+      "latest": {
+        "id": 43872159911,
+        "name": "Pull request website preview",
+        "status": "in_progress",
+        "event": "pull_request",
+        "branch": "feature/pdf-source-manifest-trigger",
+        "created_at": "2026-11-16T13:03:28Z",
+        "updated_at": "2026-11-16T13:03:33Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43872159911",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43870943136,
+        "name": "Pull request website preview",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "feature/public-pdf-source-index-pr",
+        "created_at": "2026-11-16T12:55:24Z",
+        "updated_at": "2026-11-16T12:55:45Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43870943136",
+        "age_hours": 0,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Conformance suite",
+      "file": "conformance.yml",
+      "note": "No dedicated compiler conformance workflow is configured.",
+      "state": "not-configured",
+      "latest": null,
+      "last_success": null
+    }
+  ]
+}
