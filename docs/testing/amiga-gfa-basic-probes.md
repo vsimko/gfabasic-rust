@@ -30,6 +30,18 @@ Use these outcomes per probe/version:
 
 A maintainer-reported example motivating this policy is `M O a()`: reported as `MAT SET a()` in 3.5 and `MAT ONE a()` in 3.52. Treat it as reported evidence until exact-version screenshots/native runs are preserved.
 
+## Verify native editor Merge
+
+For a probe that depends on editor shortcut expansion (for example `M O identity()`), distinguish editor behavior from an explicitly typed runtime command such as `MAT ONE identity()`.
+
+1. Capture the Merge requester and confirm the exact `.LST` filename selected.
+2. After Merge, capture the editor and inspect the source statement itself before running.
+3. Compare the displayed statement with the staged fixture byte-for-byte where possible; OCR is supporting evidence only.
+4. If the editor shows a changed or unrecognized token, stop before Run and preserve the screenshot and source fixture. Do not attribute a later runtime error to the interpreter until the Merge discrepancy is understood.
+5. Run with the workflow's verified key sequence only after the source is confirmed. Do not reuse mouse coordinates from a different emulator layout.
+
+A successful Merge operation does not establish that a statement was expanded or accepted correctly.
+
 ## Before writing a probe
 
 1. Identify the exact interpreter version and platform under test. Do not transfer observations between 3.0, 3.5, 3.5U, and 3.52 without evidence.
