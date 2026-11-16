@@ -82,11 +82,18 @@ if ! grep -Fq 'AFTER-MAT-ONE' artifacts/amiga-cli-probe/fact-output.txt; then
 fi
 echo "MAT_ONE_RETURNED=PASS" | tee -a artifacts/amiga-cli-probe/result.txt
 
-for row in '1 0 0' '0 1 0' '0 0 1'; do
-  normalized="$(printf '%s' "$row" | tr ' ' '.*')"
-  if ! grep -Eq "$normalized" artifacts/amiga-cli-probe/fact-output.txt; then
-    echo "::error::MAT ONE output does not show the expected identity matrix row ($row); inspect raw FACT.OUT."
-    exit 1
-  fi
-done
+python3 - <<'PY'
+from pathlib import Path
+rows = []
+for line in Path("artifacts/amiga-cli-probe/fact-output.txt").read_text().splitlines():
+    fields = line.split()
+    if len(fields) == 3:
+        try:
+            rows.append(tuple(float(value) for value in fields))
+        except ValueError:
+            continue
+expected = [(1, 0, 0), (0, 1, 0), (0, 0, 1)]
+if rows != expected:
+    raise SystemExit(f"MAT ONE output is not the 3x3 identity matrix: {rows!r}")
+PY
 echo "MAT_ONE_IDENTITY_MATRIX=PASS" | tee -a artifacts/amiga-cli-probe/result.txt
