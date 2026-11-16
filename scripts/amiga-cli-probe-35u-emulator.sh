@@ -64,10 +64,12 @@ tsv = subprocess.check_output(
     text=True,
 )
 words = list(csv.DictReader(tsv.splitlines(), delimiter="\t"))
-matches = [w for w in words if "gfatest" in w["text"].lower()]
+matches = [w for w in words if "lst" in w["text"].lower()]
 if not matches:
-    raise SystemExit("OCR could not locate gfatest.LST in the Merge dialog")
-target = max(matches, key=lambda w: int(w["width"]) * int(w["height"]))
+    raise SystemExit("OCR could not locate the LST filename extension in the Merge dialog")
+# Tesseract splits gfatest.LST into two words on this screen. Match the
+# distinctive LST token, not the larger GFATEST: path field at the bottom.
+target = max(matches, key=lambda w: float(w["conf"]))
 target_x = int(target["left"]) + int(target["width"]) / 2
 target_y = int(target["top"]) + int(target["height"]) / 2
 # SEND_MOUSE has different effective scales on the two axes:
