@@ -76,8 +76,10 @@ target_y = int(target["top"]) + int(target["height"]) / 2
 # Aim the arrow-tip hotspot directly at the center of the filename row.
 # SEND_MOUSE has different effective scales on the two axes:
 # X is approximately 0.5, while Y is approximately 0.25.
-raw_dx = round((target_x - pointer_x) * 2)
-raw_dy = round((target_y - pointer_y) * 4)
+# Keep the current horizontal position as requested; calibrate only Y
+# to the agreed screenshot coordinate (210 px).
+raw_dx = 0
+raw_dy = round((210 - pointer_y) * 4)
 with open(output_path, "w", encoding="ascii") as output:
     output.write(f"{raw_dx} {raw_dy}\n")
 print(
