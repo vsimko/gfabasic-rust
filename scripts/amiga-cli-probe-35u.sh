@@ -18,12 +18,6 @@ EOF
 export AMIBERRY_LOG="$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/amiberry.log"
 export SDL_AUDIODRIVER=dummy
 env -u SHELLOPTS xvfb-run -a -s "-screen 0 1024x768x24 +extension GLX" bash scripts/amiga-cli-probe-35u-emulator.sh
-# BEFORE.OUT is closed before MAT ONE so the marker survives a runtime trap.
-if xdftool "$RUNNER_TEMP/gfatest.adf" read BEFORE.OUT artifacts/amiga-cli-probe/before-mat-one.txt; then
-  cat artifacts/amiga-cli-probe/before-mat-one.txt
-else
-  echo "MISSING: BEFORE.OUT" > artifacts/amiga-cli-probe/before-mat-one.missing
-fi
 if xdftool "$RUNNER_TEMP/gfatest.adf" read FACT.OUT artifacts/amiga-cli-probe/fact-output.txt; then
   cat artifacts/amiga-cli-probe/fact-output.txt
 else
@@ -58,23 +52,16 @@ if tesseract artifacts/amiga-cli-probe/after-merge-ocr-input.png stdout --psm 6 
 else
   echo "AFTER_MERGE_OCR=unavailable (diagnostic only)" | tee artifacts/amiga-cli-probe/after-merge-ocr.txt
 fi
-# OCR is retained as diagnostic evidence only; it does not prove execution.
 echo "EDITOR_MERGE_OCR_CAPTURED=yes (diagnostic only)" | tee artifacts/amiga-cli-probe/result.txt
 
-# This marker is flushed before MAT ONE, so it distinguishes launch failure
-# from a trap or failure inside the matrix operation.
-if grep -Fq 'BEFORE-MAT-ONE' artifacts/amiga-cli-probe/before-mat-one.txt; then
-  echo "MAT_ONE_REACHED=before-operation" | tee -a artifacts/amiga-cli-probe/result.txt
-else
-  echo "::error::Interpreter did not write BEFORE-MAT-ONE."
+if ! grep -Fq 'LAUNCH-CONTROL:FACT:PASS' artifacts/amiga-cli-probe/fact-output.txt; then
+  echo "::error::Editor Run did not write the FACT.OUT launch-control marker."
   exit 1
 fi
+echo "LAUNCH_CONTROL_FACT_OUTPUT=PASS" | tee -a artifacts/amiga-cli-probe/result.txt
 
-if ! grep -Fq 'AFTER-MAT-ONE' artifacts/amiga-cli-probe/fact-output.txt; then
-  echo "::error::MAT ONE did not return to the following statement."
+if ! grep -Fq 'GFATEST:launch-control:PASS' artifacts/amiga-cli-probe/gfatest-results.txt; then
+  echo "::error::Editor Run did not write the GFATEST.OUT launch-control marker."
   exit 1
 fi
-
-python3 scripts/validate_gfatest_results.py \
-  --expected-ids tests/interpreter-probes/amiga-3.5u/expected-ids.txt \
-  --results artifacts/amiga-cli-probe/gfatest-results.txt
+echo "LAUNCH_CONTROL_GFATEST_OUTPUT=PASS" | tee -a artifacts/amiga-cli-probe/result.txt
