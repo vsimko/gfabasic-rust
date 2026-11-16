@@ -34,51 +34,78 @@ printf "SEND_MOUSE\\t0\\t112\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}
 sleep 0.1
 printf "SEND_MOUSE\\t0\\t112\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 sleep 0.5
-printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-file-row-pointer.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-sleep 0.2
-printf "SEND_MOUSE\\t0\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-sleep 0.5
-printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-file-selected.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+# The file row is at the fixed Amiga screen coordinate Y=215 px.
+# Keep the existing X position: the pointer is already over gfatest.LST.
+# SEND_MOUSE relative Y is scaled by approximately 0.25.
+printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-file-row-before-click.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+python3 - "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-file-row-before-click.png" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/mouse-y-correction.txt" <<'PY'
+from PIL import Image
+import sys
 
-# The selected-row screenshot places the pointer near x=320,y=218.
-# Move to the center of the Merge gadget (about x=323,y=420).
-# Amiberry bounds each relative mouse event; use repeated small increments.
-# SEND_MOUSE relative Y is scaled by the emulator; eight 50-unit steps
-# move the pointer from the selected row to the Merge gadget center.
-for _ in $(seq 1 8); do
-printf "SEND_MOUSE\\t0\\t50\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-sleep 0.15
-done
+image = Image.open(sys.argv[1]).convert("RGB")
+pixels = image.load()
+red_y = []
+for y in range(image.height):
+    for x in range(image.width):
+        red, green, blue = pixels[x, y]
+        if red > 150 and red > green * 1.4 and red > blue * 1.4:
+            red_y.append(y)
+if not red_y:
+    raise SystemExit("Could not locate the red Amiberry mouse pointer")
+pointer_y = min(red_y)
+raw_dy = round((215 - pointer_y) * 4)
+with open(sys.argv[2], "w", encoding="ascii") as output:
+    output.write(str(raw_dy) + chr(10))
+print(f"Keeping X unchanged; pointer Y={pointer_y}, target Y=215, raw Y correction={raw_dy}")
+PY
+read mouse_dy < "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/mouse-y-correction.txt"
+if (( mouse_dy != 0 )); then
+  printf "SEND_MOUSE\\t0\\t%s\\t0\\n" "$mouse_dy" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+fi
 sleep 0.3
-printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-gadget-pointer.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-file-row-y215.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+# Double-click gfatest.LST at the existing X position and fixed Y=215 px.
 printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-sleep 0.2
+sleep 0.10
 printf "SEND_MOUSE\\t0\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-sleep 4
-printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-shortcut.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-tesseract "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-shortcut.png" stdout 2>/dev/null > "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-shortcut-ocr.txt"
-printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-merge.png" | timeout 5s nc -U -N "${ipc_socket_path:-}" || true
+sleep 0.10
+printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+sleep 0.10
+printf "SEND_MOUSE\\t0\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+sleep 1
+printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-merge.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+# Amiga Kickstart uses bright text on a saturated blue background. Normalize
+# it before OCR; raw Tesseract frequently misses the editor source entirely.
+python3 - "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-merge.png" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-merge-ocr-input.png" <<'PY'
+from PIL import Image, ImageOps, ImageEnhance
+import sys
 
-# Click the editor's visible Run gadget rather than relying on the Amiga-key
-# shortcut, which can leave the listing open without starting the program.
-# After Merge the calibrated pointer is near x=320,y=415 at 1024x768.
-# Five bounded horizontal moves plus a short correction reach x~=630; fourteen vertical moves reach y~=65.
-for _ in $(seq 1 5); do
-printf "SEND_MOUSE\\t240\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+image = Image.open(sys.argv[1]).convert("L")
+image = ImageOps.invert(image).resize((image.width * 3, image.height * 3))
+image = ImageEnhance.Contrast(image).enhance(3)
+image.save(sys.argv[2])
+PY
+tesseract "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-merge-ocr-input.png" stdout --psm 6 2>/dev/null | tee "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-merge-ocr.txt"
+
+# OCR is not proof of source identity, but a recognized contradictory token is
+# sufficient reason to stop. In particular, do not run when MAT SET is shown
+# for the full MAT ONE probe; preserve the screenshot for manual inspection.
+if grep -Eiq 'MAT[[:space:]]+SET' "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-merge-ocr.txt"; then
+  echo "MERGE_EDITOR_TOKEN_CONTRADICTION=MAT_SET" | tee "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-validation.txt"
+  echo "Editor OCR shows MAT SET for the MAT ONE abbreviation probe; refusing to run an unverified listing."
+  exit 1
+fi
+echo "MERGE_EDITOR_OCR_NO_KNOWN_CONTRADICTION=PASS (not proof of source identity)" | tee "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-validation.txt"
+
+# Run the merged listing with Shift+F10 (Amiga raw keycodes: LShift=0x60,
+# F10=0x59). Press the modifier first and release it last.
+printf "SEND_KEY\\t96\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 sleep 0.1
-done
-printf "SEND_MOUSE\\t40\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+printf "SEND_KEY\\t89\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 sleep 0.1
-for _ in $(seq 1 14); do
-printf "SEND_MOUSE\\t0\\t-50\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+printf "SEND_KEY\\t89\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 sleep 0.1
-done
-sleep 0.3
-printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/run-gadget-pointer.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-sleep 0.2
-printf "SEND_MOUSE\\t0\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+printf "SEND_KEY\\t96\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 sleep 5
 printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-run-dialog.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 sleep 8

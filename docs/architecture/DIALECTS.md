@@ -9,15 +9,15 @@ title: "Dialects, versions, and compatibility policy"
 
 ## Sole normative target
 
-The compiler targets **Amiga GFA BASIC interpreter 3.5 only**. This is the sole supported source dialect/version, not merely the first item in a multi-dialect roadmap. The supplied 3.5 Interpreter manual and its version-specific addenda are the primary normative sources.
+The compiler targets **Amiga GFA BASIC interpreter 3.5**, with **Amiga interpreter 3.52 accepted as a compatibility-validation version**. GFA-BASIC 3.5 remains the normative language specification; 3.52 is not a second normative dialect. This is the sole supported source dialect/version, not merely the first item in a multi-dialect roadmap. The supplied 3.5 Interpreter manual and its version-specific addenda are the primary normative sources.
 
 The 1989 Amiga book documents interpreter 3.0, while the 1990 German Amiga book's main command reference identifies interpreter V3.03. Treat rules found only in those earlier references as inherited candidates until their applicability to 3.5 is confirmed. The 3.5 manual's version-specific material is primary for 3.5 additions and changes.
 
-Atari ST GFA BASIC V2.xx/V3.0 and Atari ST 3.5 are not supported targets and must not be implemented as alternate dialects or API profiles. Existing Atari material may remain as historical research, but it must not be used to fill gaps in Amiga evidence or expand product scope. Other Amiga interpreter/compiler releases, including 3.51/3.52, are also outside the supported source-version contract.
+Atari ST GFA BASIC V2.xx/V3.0 and Atari ST 3.5 are not supported targets and must not be implemented as alternate dialects or API profiles. Existing Atari material may remain as historical research, but it must not be used to fill gaps in Amiga evidence or expand product scope. Amiga interpreter 3.52 may be used for compatibility validation because manual testing indicates it behaves nearly identically to 3.5 for the tested features. Keep 3.52 observations explicitly version-labelled; do not assume complete equivalence without feature-level evidence. Amiga 3.51 and compiler 3.52 are not included by this allowance.
 
 ## Required identity
 
-Every source compilation must identify Amiga GFA BASIC interpreter 3.5 explicitly, either through a fixed product default or an explicit configuration field. Do not infer dialect/version from the output target, file extension, or source contents. There is no dialect-selection matrix because only one source dialect is in scope.
+Every source compilation must identify the Amiga GFA BASIC 3.5 language contract explicitly. Compatibility tests may additionally identify interpreter 3.52 as the executing reference version. Do not infer either identity from output target, file extension, or source contents. Do not infer dialect/version from the output target, file extension, or source contents. There is no dialect-selection matrix because only one source dialect is in scope.
 
 ## Evidence rules
 
@@ -35,7 +35,7 @@ Encoding and line endings; identifiers and case rules; keywords; comments; state
 
 ## Required feature record
 
-Each feature should include a stable identifier, Amiga 3.5 applicability, syntax, semantics and edge cases, source citation, evidence status, implementation status, conformance tests, and known deviations.
+Each feature should include a stable identifier, Amiga 3.5 applicability (and any observed 3.52 compatibility), syntax, semantics and edge cases, source citation, evidence status, implementation status, conformance tests, and known deviations.
 
 ## Diagnostics
 
