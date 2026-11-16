@@ -63,7 +63,7 @@ tsv = subprocess.check_output(
     ["tesseract", image_path, "stdout", "--psm", "6", "tsv"],
     text=True,
 )
-words = list(csv.DictReader(tsv.splitlines(), delimiter="\\t"))
+words = list(csv.DictReader(tsv.splitlines(), delimiter="\t"))
 matches = [w for w in words if "gfatest" in w["text"].lower()]
 if not matches:
     raise SystemExit("OCR could not locate gfatest.LST in the Merge dialog")
@@ -74,7 +74,7 @@ target_y = int(target["top"]) + int(target["height"]) / 2
 raw_dx = round((target_x - pointer_x) * 2)
 raw_dy = round((target_y - pointer_y) * 2)
 with open(output_path, "w", encoding="ascii") as output:
-    output.write(f"{raw_dx} {raw_dy}\\n")
+    output.write(f"{raw_dx} {raw_dy}\n")
 print(
     f"Merge row center=({target_x:.1f},{target_y:.1f}), "
     f"pointer=({pointer_x:.1f},{pointer_y:.1f}), "
