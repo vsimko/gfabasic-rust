@@ -14,13 +14,12 @@
     {
       "source_id": "AM-BOOK-DE",
       "title": "Das große Buch zu GFA BASIC Amiga",
-      "url": "https://retro-commodore.eu/files/downloads/amigamanuals-xiik.net/eBooks/Das%20Grosse%20Buch%20zu%20GFA-Basic%20Amiga%20%28OCR%29%20-%20eBook-DE.pdf",
+      "url": "https://archive.org/download/das-grosse-buch-zu-gfa-basic-amiga/Das_grosse_Buch_zu_GFA_BASIC_AMIGA%20%28Data%20Becker%29.pdf",
       "filename": "Das-Grosse-Buch-zu-GFA-BASIC-Amiga.pdf",
       "platform": "Amiga",
       "edition": "1989",
       "include_text": true,
-      "enabled": false,
-      "pending_reason": "The previously recorded download URL returned HTTP 404. Set enabled to true after updating url to a verified direct PDF URL.",
+      "enabled": true,
       "rights_basis": "Amiga-News reported on 2026-09-03 that the 1989 title is offered free with the authors' permission; project maintainer confirms this permission basis for text extraction and inclusion."
     }
   ]
