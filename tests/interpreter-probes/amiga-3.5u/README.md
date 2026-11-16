@@ -10,12 +10,6 @@ This profile targets the exact Amiga GFA BASIC **3.5 U** interpreter:
 
 The native workflow extracts the single ADF from the corresponding private ZIP and prepares a working disk for Amiberry. It verifies the exact executable hash before execution. The private ZIP, source and modified ADFs, Kickstart ROM and commercial executable are never committed or uploaded. CI artifacts contain only hashes, disk listings, startup text, screenshots and textual test output.
 
-This branch temporarily replaces the broad suite with a minimal native diagnostic for issue #537. It opens the two output files, writes a marker before `MAT ONE`, runs the manual's 3x3 `a()` example, and records all nine resulting elements. The marker distinguishes a failure before program execution from a hold at or after `MAT ONE`.
+This branch temporarily replaces the broad suite with a launch-control probe for issue #537. It opens the two output files, writes a marker to each, closes them and exits. It contains no array or MAT command. A successful result proves that the editor's Run path can execute a trivial listing and write to the test disk; failure leaves the MAT ONE investigation unresolved.
 
-Results are runtime observations specific to the exact 3.5U binary hash and emulator/Kickstart setup recorded in each workflow artifact. Manual-backed expectations and observed results remain distinct. This is not a claim of complete language conformance.
-
-The native workflow `.github/workflows/amiga-35u-native-merge-run.yml` runs this suite against the private 3.5U interpreter when this profile or its workflow changes on `main`. It verifies the source ZIP and extracted executable hashes before booting the emulator.
-
-## MAT ONE isolation experiment (#537)
-
-A branch-only follow-up probe uses the addendum's own `a()` example with a square 3x3 array and explicitly executes `MAT BASE 1` immediately before `MAT ONE a()`. The existing scalar/DATA variable `a` was renamed within this probe so it does not share a name with the matrix. This experiment is not part of the passing `main` regression suite unless the exact native 3.5U run completes successfully.
+Results are runtime observations specific to the exact 3.5U binary hash and emulator/Kickstart setup recorded in each workflow artifact. This is not a claim of complete language conformance.
