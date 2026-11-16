@@ -45,7 +45,7 @@ jobs:
             test "$(head -c 5 "$pdf")" = "%PDF-"
           done
 
-      - name: Build and validate source index with permitted German book text
+      - name: Build and validate locator-only source index
         run: |
           set -euo pipefail
           python scripts/build_reference_source_index.py \
@@ -64,13 +64,9 @@ jobs:
               assert len(document["sha256"]) == 64
               assert len(document["page_locators"]) == document["page_count"]
               assert all(set(page) == {"pdf_page", "anchor"} for page in document["page_locators"])
-              if document["source_id"] == "AM-INTERPRETER-35":
-                  assert "page_text" not in document
-              if document["source_id"] == "AM-BOOK-DE":
-                  assert len(document["page_text"]) == document["page_count"]
-                  assert all(set(page) == {"pdf_page", "text"} for page in document["page_text"])
-                  assert document["rights_basis"]
-          print("Validated source index:", [(d["source_id"], d["page_count"]) for d in data["documents"]])
+              assert not ({"page_text", "rights_basis", "text"} & set(document))
+          assert "page text" in data["purpose"].lower()
+          print("Validated locator-only source index:", [(d["source_id"], d["page_count"]) for d in data["documents"]])
           PY
 
       - name: Propose index through a pull request
@@ -103,5 +99,5 @@ jobs:
               --base main \
               --head "$branch" \
               --title "Refresh public GFA BASIC source locator index" \
-              --body "Updates bibliographic metadata, PDF hashes, page counts, and page locators. Includes page-by-page extracted text only for the 1989 German book, based on the reported authors' permission and the maintainer's recorded decision. The English interpreter manual remains locator-only. Source PDFs are downloaded to ephemeral runner storage and are not committed."
+              --body "Updates bibliographic metadata, PDF hashes, page counts, and page locators only. No PDF, OCR, extracted page text, or book content is committed. Source PDFs are downloaded to ephemeral runner storage and removed before the locator-only index is proposed."
           fi
