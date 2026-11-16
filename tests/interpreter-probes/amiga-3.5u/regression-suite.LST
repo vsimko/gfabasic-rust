@@ -1,5 +1,6 @@
 REM Isolated MAT ONE probe for issue #537.
-REM The editor Merge/Run path is independently verified by the launch-control run.
+REM Matches the GFA BASIC 3.5 Interpreter addendum example (p. 13-2).
+REM No MAT SET or MAT BASE: the documented example needs only DIM and MAT ONE.
 OPEN "O",#1,"DF0:BEFORE.OUT"
 PRINT #1,"BEFORE-MAT-ONE"
 CLOSE #1
