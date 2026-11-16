@@ -1,9 +1,25 @@
 {
   "schema_version": 1,
   "status": "fresh",
-  "generated_at": "2026-11-16T20:52:53.889927+00:00",
-  "last_successful_at": "2026-11-16T20:52:53.889927+00:00",
+  "generated_at": "2026-11-16T21:48:44.351567+00:00",
+  "last_successful_at": "2026-11-16T21:48:44.351567+00:00",
   "items": [
+    {
+      "type": "merged_pull_request",
+      "title": "docs: define multi-version Amiga GFA-BASIC conformance policy",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/558",
+      "number": 558,
+      "timestamp": "2026-11-16T21:48:11Z",
+      "summary": "PR #558 merged"
+    },
+    {
+      "type": "commit",
+      "title": "docs: define multi-version Amiga GFA-BASIC conformance policy (#558)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/035dfe7a000efbcb86eb98d14f3dc1393249c0b9",
+      "number": null,
+      "timestamp": "2026-11-16T21:48:11Z",
+      "summary": "Commit 035dfe7"
+    },
     {
       "type": "merged_pull_request",
       "title": "Document GFA-BASIC editor diagnostics",
@@ -83,22 +99,6 @@
       "number": null,
       "timestamp": "2026-11-16T10:40:28Z",
       "summary": "Commit a680d63"
-    },
-    {
-      "type": "commit",
-      "title": "Add public PDF source locator index workflow",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/28b381c52eb948ffc37c0223fc26e64dc36a3446",
-      "number": null,
-      "timestamp": "2026-11-16T10:39:55Z",
-      "summary": "Commit 28b381c"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "[Research] Probe GFA BASIC 3.5U matrix multiplication",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/527",
-      "number": 527,
-      "timestamp": "2026-11-15T13:08:26Z",
-      "summary": "PR #527 merged"
     }
   ]
 }
