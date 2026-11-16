@@ -50,6 +50,10 @@ Use only commands confirmed by the installed Amiberry IPC implementation/version
 - Prefer semantic IPC operations over mouse-coordinate automation. When GUI interaction is unavoidable, take screenshots before and after each significant action and verify the visible state before proceeding.
 - Never treat OCR alone as proof that a requester or editor state is correct; inspect screenshots when OCR is ambiguous.
 
+### Identify the guest interpreter version
+
+When a GFA-BASIC test needs an exact interpreter-version record, follow the **Identify the running interpreter version** procedure in the regression-testing skill: press and keep holding the right mouse button, capture the screenshot while it remains held, then OCR the first menu item in the upper-left corner. Releasing the button closes the menu, so do not release it until the screenshot has been captured. Preserve the screenshot and exact version text with the test evidence. Do not infer the running version from the disk or archive label.
+
 ## Failure isolation
 
 Diagnose in layers and preserve evidence before changing automation:

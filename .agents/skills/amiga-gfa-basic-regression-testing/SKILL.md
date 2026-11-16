@@ -55,9 +55,7 @@ Use this skill when working on regression probes for the original Amiga GFA BASI
 - Do not infer a language/runtime defect from a missing output file. First check file-open errors, drive mapping, emulator logs/screenshots, and whether the program completed.
 
 ### 4. Identify the running interpreter version
-
 Use the version shown by the running editor, not the disk or archive filename.
-
 1. Open the GFA-BASIC editor in Amiberry.
 2. Press and keep holding the right mouse button to open the editor menu.
 3. While the right mouse button is still held down, capture the screenshot. Do not release it before or during capture.
@@ -65,24 +63,6 @@ Use the version shown by the running editor, not the disk or archive filename.
 5. Preserve the screenshot and exact version text with the test evidence.
 
 ### 5. Merge an LST file in the native editor
-
-For the current Amiberry 3.5U native Merge + Run harness, use this verified input sequence. The pixel coordinate is specific to the current emulator/window layout; re-check the screenshot if that layout changes.
-
-1. Open the editor's Merge file requester using the harness's existing menu/key sequence.
-2. Capture a screenshot with the requester open. Confirm that the intended `.LST` filename is visible and that the mouse pointer is horizontally over its row.
-3. **Do not move the pointer horizontally.** In the current harness, keep X unchanged and place the pointer at screen Y=215 px, the `gfatest.LST` row. The IPC relative mouse Y correction is approximately four raw units per screen pixel.
-4. Capture the pre-click screenshot with the pointer on the filename row.
-5. Double-click in place: send left-button down, release, then left-button down, release, with no additional X/Y movement between clicks.
-6. Wait for the requester to close, then capture the post-Merge editor screenshot. Confirm that the listing is actually present in the editor.
-7. Compare the displayed/recognized source with the exact staged `.LST` fixture before running. Check significant tokens and statements literally (for example, `MAT ONE a()` must not be accepted as `MAT SET a()`). OCR is only a hint; inspect the screenshot when a token is ambiguous.
-8. Before launching Amiberry, the host harness must extract `gfatest.LST` from the prepared DF0 ADF and compare it byte-for-byte with the staged fixture. A mismatch is a hard failure. This proves the disk input only; it does not prove what the editor loaded.
-8a. For the current `M O` / MAT ONE probe, recognized `MAT SET` in the post-Merge OCR is a known contradiction and must stop the run. OCR is only a fail-closed contradiction detector; a clean result is not proof of source identity. Preserve the screenshot for inspection.
-9. Only after the Merge content has no known contradiction, run with **Shift+F10**. In the current Amiberry IPC harness, press left Shift raw keycode `0x60` (decimal 96), press F10 `0x59` (decimal 89), release F10, then release Shift. Do not try to start Run by clicking an estimated Run-gadget coordinate.
-9. Capture screenshots before the double-click, after Merge, and after Run. Preserve them with the emulator log and OCR output as diagnostic artifacts.
-
-A closed requester or a visible listing proves only that Merge completed; it does not prove that the intended source text was merged unchanged. If the post-Merge editor shows a different token or statement from the staged file, stop before interpreting Run behavior. Compare the source file on the prepared disk, its bytes/text before launch, and the editor display. Record the discrepancy without guessing whether it came from fixture preparation, tokenization, or display/OCR.
-
-### 6. Run and diagnose the native test
 
 1. Run the native Merge + Run workflow for the exact target interpreter version.
 2. Run the same applicable probe on other reference versions when assets and workflows are available.

@@ -53,24 +53,6 @@ Use this procedure whenever the executable version is uncertain or a test result
 
 **Interpretation of the `==>` editor prefix:** In the manually observed reference editor, an imported `.LST` statement prefixed with `==>` is an unsupported or unrecognized command. The editor can retain and display the statement after MERGE, while attempting to execute it can fail later with a runtime `syntax error ==> program aborted`. Therefore, successful MERGE or a visible source line does not establish that the command is supported. Inspect the prefix before Run and record both the editor screenshot and any runtime error. Treat this as observed behavior for the tested interpreter, not a universal rule for every GFA-BASIC release.
 
-## Native editor: merging an LST file
-
-For the current Amiberry 3.5U native Merge + Run harness, the verified sequence is:
-
-1. Open the editor's Merge file requester with the harness's existing menu/key sequence.
-2. Take a screenshot while the requester is open. Verify the intended `.LST` file row and the pointer's horizontal alignment over that row.
-3. Keep the pointer's X coordinate unchanged. Move only Y to **215 px**, which is the `gfatest.LST` row in the current emulator/window layout. The IPC relative Y correction is approximately four raw units per screen pixel.
-4. Capture the pre-click screenshot with the pointer on the row.
-5. Double-click without moving the pointer: left-button down, release, down, release.
-6. Wait for the requester to close and capture the editor. Confirm the merged listing is visible.
-7. Compare the editor contents with the exact staged `.LST` file before running. Check significant tokens literally; e.g. `MAT ONE a()` is not equivalent evidence to `MAT SET a()`. OCR is only supporting evidence—inspect the screenshot if a token is unclear.
-8. Before launching Amiberry, extract `gfatest.LST` from the prepared DF0 ADF and compare it byte-for-byte with the staged fixture. Keep both SHA-256 values and the extracted file as artifacts. This verifies disk preparation, not editor Merge.
-9. After Merge, use OCR only to detect known contradictions. For the current `M O` / MAT ONE probe, recognized `MAT SET` is a hard stop before Run; preserve the screenshot and inspect it manually. A clean OCR result does not prove byte identity or semantic correctness.
-10. Only after the merged source has no known contradiction may the harness start Run with **Shift+F10**. In the current Amiberry IPC harness, press left Shift raw keycode `0x60` (96), press F10 `0x59` (89), release F10, then release Shift. Do not click an estimated Run-gadget coordinate.
-9. Save screenshots before the double-click, after Merge, and after Run as diagnostic artifacts.
-
-The Y=215 coordinate is specific to the current harness layout and must be revalidated if the emulator/window layout changes. A closed requester or visible listing proves that Merge completed, but not that the intended source was merged unchanged. If the editor shows a different token or statement, stop before diagnosing runtime behavior. Compare the prepared disk's source file, the staged fixture, and the editor display; record the discrepancy without assuming whether fixture preparation, tokenization, or display/OCR caused it.
-
 ## DATA pointer probes (3.5U)
 
 The native probe for the 3.5U addendum DATA-pointer example exposed setup details that must be preserved:
