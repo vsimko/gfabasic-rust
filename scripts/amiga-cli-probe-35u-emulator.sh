@@ -34,72 +34,37 @@ printf "SEND_MOUSE\\t0\\t112\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}
 sleep 0.1
 printf "SEND_MOUSE\\t0\\t112\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 sleep 0.5
-# Dialog placement varies between emulator sessions. Capture the current
-# pointer and OCR the actual gfatest.LST row instead of assuming fixed Y.
-printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-file-row-uncalibrated.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-python3 - "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-file-row-uncalibrated.png" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/mouse-correction.txt" <<'PY'
-import csv
-import subprocess
-import sys
+# The file row is at the fixed Amiga screen coordinate Y=215 px.
+# Keep the existing X position: the pointer is already over gfatest.LST.
+# SEND_MOUSE relative Y is scaled by approximately 0.25.
+printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-file-row-before-click.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+python3 - "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-file-row-before-click.png" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/mouse-y-correction.txt" <<'PY'
 from PIL import Image
+import sys
 
-image_path, output_path = sys.argv[1:]
-image = Image.open(image_path).convert("RGB")
+image = Image.open(sys.argv[1]).convert("RGB")
 pixels = image.load()
-red_x = []
 red_y = []
 for y in range(image.height):
     for x in range(image.width):
         red, green, blue = pixels[x, y]
         if red > 150 and red > green * 1.4 and red > blue * 1.4:
-            red_x.append(x)
             red_y.append(y)
-if not red_x:
+if not red_y:
     raise SystemExit("Could not locate the red Amiberry mouse pointer")
-# The Amiga pointer hotspot is the arrow tip at the top-left, not its center.
-pointer_x = min(red_x)
 pointer_y = min(red_y)
-
-tsv = subprocess.check_output(
-    ["tesseract", image_path, "stdout", "--psm", "6", "tsv"],
-    text=True,
-)
-words = list(csv.DictReader(tsv.splitlines(), delimiter="\t"))
-matches = [w for w in words if "lst" in w["text"].lower()]
-if not matches:
-    raise SystemExit("OCR could not locate the LST filename extension in the Merge dialog")
-# Tesseract splits gfatest.LST into two words on this screen. Match the
-# distinctive LST token, not the larger GFATEST: path field at the bottom.
-target = max(matches, key=lambda w: float(w["conf"]))
-target_x = int(target["left"]) + int(target["width"]) / 2
-target_y = int(target["top"]) + int(target["height"]) / 2
-# Aim the arrow-tip hotspot directly at the OCR-detected filename row.
-# SEND_MOUSE has different effective scales on the two axes:
-# X is approximately 0.5, while Y is approximately 0.25.
-# Calibrate both axes from the measured pointer hotspot to the actual
-# filename-row center; never use a fixed screen coordinate.
-raw_dx = round((target_x - pointer_x) * 2)
-raw_dy = round((target_y - pointer_y) * 4)
-with open(output_path, "w", encoding="ascii") as output:
-    output.write(f"{raw_dx} {raw_dy}\n")
-print(
-    f"Merge row center=({target_x:.1f},{target_y:.1f}), "
-    f"pointer=({pointer_x:.1f},{pointer_y:.1f}), "
-    f"raw correction=({raw_dx},{raw_dy})"
-)
+raw_dy = round((215 - pointer_y) * 4)
+with open(sys.argv[2], "w", encoding="ascii") as output:
+    output.write(f"{raw_dy}\\n")
+print(f"Keeping X unchanged; pointer Y={pointer_y}, target Y=215, raw Y correction={raw_dy}")
 PY
-read mouse_dx mouse_dy < "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/mouse-correction.txt"
-while (( mouse_dx != 0 || mouse_dy != 0 )); do
-  step_x=$(( mouse_dx > 240 ? 240 : mouse_dx < -240 ? -240 : mouse_dx ))
-  step_y=$(( mouse_dy > 240 ? 240 : mouse_dy < -240 ? -240 : mouse_dy ))
-  printf "SEND_MOUSE\\t%s\\t%s\\t0\\n" "$step_x" "$step_y" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-  mouse_dx=$(( mouse_dx - step_x ))
-  mouse_dy=$(( mouse_dy - step_y ))
-  sleep 0.15
-done
+read mouse_dy < "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/mouse-y-correction.txt"
+if (( mouse_dy != 0 )); then
+  printf "SEND_MOUSE\\t0\\t%s\\t0\\n" "$mouse_dy" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+fi
 sleep 0.3
-printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-file-row-target.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-# Double-click the filename using the Amiga pointer arrow-tip hotspot.
+printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-file-row-y215.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+# Double-click gfatest.LST at the existing X position and fixed Y=215 px.
 printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 sleep 0.10
 printf "SEND_MOUSE\\t0\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
@@ -107,48 +72,19 @@ sleep 0.10
 printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 sleep 0.10
 printf "SEND_MOUSE\\t0\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-sleep 0.5
-printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-file-double-clicked.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+sleep 1
+printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-merge.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+tesseract "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-merge.png" stdout 2>/dev/null > "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-merge-ocr.txt"
 
-
-# The selected-row screenshot places the pointer near x=320,y=218.
-# Move to the center of the Merge gadget (about x=323,y=420).
-# Amiberry bounds each relative mouse event; use repeated small increments.
-# SEND_MOUSE relative Y is scaled by the emulator; eight 50-unit steps
-# move the pointer from the selected row to the Merge gadget center.
-for _ in $(seq 1 8); do
-printf "SEND_MOUSE\\t0\\t50\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-sleep 0.15
-done
-sleep 0.3
-printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-gadget-pointer.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-sleep 0.2
-printf "SEND_MOUSE\\t0\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-sleep 4
-printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-shortcut.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-tesseract "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-shortcut.png" stdout 2>/dev/null > "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-shortcut-ocr.txt"
-printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-merge.png" | timeout 5s nc -U -N "${ipc_socket_path:-}" || true
-
-# Click the editor's visible Run gadget rather than relying on the Amiga-key
-# shortcut, which can leave the listing open without starting the program.
-# After Merge the calibrated pointer is near x=320,y=415 at 1024x768.
-# Five bounded horizontal moves plus a short correction reach x~=630; fourteen vertical moves reach y~=65.
-for _ in $(seq 1 5); do
-printf "SEND_MOUSE\\t240\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+# Run the merged listing with Shift+F10 (Amiga raw keycodes: LShift=0x60,
+# F10=0x59). Press the modifier first and release it last.
+printf "SEND_KEY\\t96\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 sleep 0.1
-done
-printf "SEND_MOUSE\\t40\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+printf "SEND_KEY\\t89\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 sleep 0.1
-for _ in $(seq 1 14); do
-printf "SEND_MOUSE\\t0\\t-50\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+printf "SEND_KEY\\t89\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 sleep 0.1
-done
-sleep 0.3
-printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/run-gadget-pointer.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-sleep 0.2
-printf "SEND_MOUSE\\t0\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+printf "SEND_KEY\\t96\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 sleep 5
 printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-run-dialog.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 sleep 8
