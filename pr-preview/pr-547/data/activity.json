@@ -1,9 +1,73 @@
 {
   "schema_version": 1,
   "status": "fresh",
-  "generated_at": "2026-11-16T14:37:48.824939+00:00",
-  "last_successful_at": "2026-11-16T14:37:48.824939+00:00",
+  "generated_at": "2026-11-16T23:50:55.303467+00:00",
+  "last_successful_at": "2026-11-16T23:50:55.303467+00:00",
   "items": [
+    {
+      "type": "merged_pull_request",
+      "title": "test(amiga): expand 3.5 regression suite on 3.52",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/535",
+      "number": 535,
+      "timestamp": "2026-11-16T23:32:09Z",
+      "summary": "PR #535 merged"
+    },
+    {
+      "type": "commit",
+      "title": "test(amiga): add native 3.5U MAT ONE probe (#535)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/de28378eb4eb3448bc504bed423290a1e0eebd5e",
+      "number": null,
+      "timestamp": "2026-11-16T23:32:08Z",
+      "summary": "Commit de28378"
+    },
+    {
+      "type": "merged_pull_request",
+      "title": "test(amiga): add deterministic Merge input guards",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/553",
+      "number": 553,
+      "timestamp": "2026-11-16T22:51:00Z",
+      "summary": "PR #553 merged"
+    },
+    {
+      "type": "commit",
+      "title": "test(amiga): add deterministic Merge input guards (#553)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/ca25402d653d5833127e1c491510155544ad3e54",
+      "number": null,
+      "timestamp": "2026-11-16T22:50:59Z",
+      "summary": "Commit ca25402"
+    },
+    {
+      "type": "merged_pull_request",
+      "title": "docs: define multi-version Amiga GFA-BASIC conformance policy",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/558",
+      "number": 558,
+      "timestamp": "2026-11-16T21:48:11Z",
+      "summary": "PR #558 merged"
+    },
+    {
+      "type": "commit",
+      "title": "docs: define multi-version Amiga GFA-BASIC conformance policy (#558)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/035dfe7a000efbcb86eb98d14f3dc1393249c0b9",
+      "number": null,
+      "timestamp": "2026-11-16T21:48:11Z",
+      "summary": "Commit 035dfe7"
+    },
+    {
+      "type": "merged_pull_request",
+      "title": "Document GFA-BASIC editor diagnostics",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/555",
+      "number": 555,
+      "timestamp": "2026-11-16T20:52:25Z",
+      "summary": "PR #555 merged"
+    },
+    {
+      "type": "commit",
+      "title": "Document GFA-BASIC editor diagnostics (#555)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/e4a4255258fa19cc40ef0e599af13f4bcba79456",
+      "number": null,
+      "timestamp": "2026-11-16T20:52:25Z",
+      "summary": "Commit e4a4255"
+    },
     {
       "type": "merged_pull_request",
       "title": "Keep public PDF source index locator-only",
@@ -35,70 +99,6 @@
       "number": null,
       "timestamp": "2026-11-16T12:55:19Z",
       "summary": "Commit a6b0ecd"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "Use year-neutral identifier for German GFA BASIC source",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/550",
-      "number": 550,
-      "timestamp": "2026-11-16T12:29:59Z",
-      "summary": "PR #550 merged"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "Revert accidental direct-to-main PDF index changes",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/548",
-      "number": 548,
-      "timestamp": "2026-11-16T10:45:01Z",
-      "summary": "PR #548 merged"
-    },
-    {
-      "type": "commit",
-      "title": "Revert accidental direct-to-main PDF index changes (#548)",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/da1acc76c0c4ca2c0b707a80623351c74c75aba3",
-      "number": null,
-      "timestamp": "2026-11-16T10:45:01Z",
-      "summary": "Commit da1acc7"
-    },
-    {
-      "type": "commit",
-      "title": "Fix newline in generated source index",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/a680d63a4c5379e22e50c6120a3a31723aa336be",
-      "number": null,
-      "timestamp": "2026-11-16T10:40:28Z",
-      "summary": "Commit a680d63"
-    },
-    {
-      "type": "commit",
-      "title": "Add public PDF source locator index workflow",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/28b381c52eb948ffc37c0223fc26e64dc36a3446",
-      "number": null,
-      "timestamp": "2026-11-16T10:39:55Z",
-      "summary": "Commit 28b381c"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "[Research] Probe GFA BASIC 3.5U matrix multiplication",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/527",
-      "number": 527,
-      "timestamp": "2026-11-15T13:08:26Z",
-      "summary": "PR #527 merged"
-    },
-    {
-      "type": "commit",
-      "title": "[Research] Probe GFA BASIC 3.5U matrix multiplication (#527)",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/3d5e09882e85725a1577678a8b2fe4372d6b2f50",
-      "number": null,
-      "timestamp": "2026-11-15T13:08:25Z",
-      "summary": "Commit 3d5e098"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "feat(api): register inherited functions evidenced in GFA BASIC 3.5",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/524",
-      "number": 524,
-      "timestamp": "2026-11-15T12:59:26Z",
-      "summary": "PR #524 merged"
     }
   ]
 }
