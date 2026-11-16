@@ -18,18 +18,21 @@ EOF
 export AMIBERRY_LOG="$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/amiberry.log"
 export SDL_AUDIODRIVER=dummy
 env -u SHELLOPTS xvfb-run -a -s "-screen 0 1024x768x24 +extension GLX" bash scripts/amiga-cli-probe-35u-emulator.sh
-if xdftool "$RUNNER_TEMP/gfatest.adf" read FACT.OUT artifacts/amiga-cli-probe/fact-output.txt; then
-  cat artifacts/amiga-cli-probe/fact-output.txt
-else
-  echo "MISSING: FACT.OUT" > artifacts/amiga-cli-probe/fact-output.missing
-  : > artifacts/amiga-cli-probe/fact-output.txt
-fi
-if xdftool "$RUNNER_TEMP/gfatest.adf" read GFATEST.OUT artifacts/amiga-cli-probe/gfatest-results.txt; then
-  cat artifacts/amiga-cli-probe/gfatest-results.txt
-else
-  echo "MISSING: GFATEST.OUT" > artifacts/amiga-cli-probe/gfatest-results.missing
-  : > artifacts/amiga-cli-probe/gfatest-results.txt
-fi
+
+for file in BEFORE.OUT FACT.OUT GFATEST.OUT; do
+  case "$file" in
+    BEFORE.OUT) output=before-mat-one.txt ;;
+    FACT.OUT) output=fact-output.txt ;;
+    GFATEST.OUT) output=gfatest-results.txt ;;
+  esac
+  if xdftool "$RUNNER_TEMP/gfatest.adf" read "$file" "artifacts/amiga-cli-probe/$output"; then
+    cat "artifacts/amiga-cli-probe/$output"
+  else
+    echo "MISSING: $file" > "artifacts/amiga-cli-probe/$output.missing"
+    : > "artifacts/amiga-cli-probe/$output"
+  fi
+done
+
 for diagnostic in insert-floppy-ipc.txt list-floppies-ipc.txt stdin-save.LST; do
   if test -f "amiga-volume/$diagnostic"; then
     cp "amiga-volume/$diagnostic" "artifacts/amiga-cli-probe/$diagnostic"
@@ -54,14 +57,24 @@ else
 fi
 echo "EDITOR_MERGE_OCR_CAPTURED=yes (diagnostic only)" | tee artifacts/amiga-cli-probe/result.txt
 
-if ! grep -Fq 'LAUNCH-CONTROL:FACT:PASS' artifacts/amiga-cli-probe/fact-output.txt; then
-  echo "::error::Editor Run did not write the FACT.OUT launch-control marker."
+if ! grep -Fq 'BEFORE-MAT-ONE' artifacts/amiga-cli-probe/before-mat-one.txt; then
+  echo "::error::Interpreter did not write BEFORE-MAT-ONE; editor launch is not proven."
   exit 1
 fi
-echo "LAUNCH_CONTROL_FACT_OUTPUT=PASS" | tee -a artifacts/amiga-cli-probe/result.txt
+echo "MAT_ONE_REACHED=before-operation" | tee -a artifacts/amiga-cli-probe/result.txt
 
-if ! grep -Fq 'GFATEST:launch-control:PASS' artifacts/amiga-cli-probe/gfatest-results.txt; then
-  echo "::error::Editor Run did not write the GFATEST.OUT launch-control marker."
+if ! grep -Fq 'AFTER-MAT-ONE' artifacts/amiga-cli-probe/fact-output.txt; then
+  echo "::error::MAT ONE did not return to the following statement."
   exit 1
 fi
-echo "LAUNCH_CONTROL_GFATEST_OUTPUT=PASS" | tee -a artifacts/amiga-cli-probe/result.txt
+echo "MAT_ONE_RETURNED=PASS" | tee -a artifacts/amiga-cli-probe/result.txt
+
+if grep -Fq 'GFATEST:matrix-one:PASS' artifacts/amiga-cli-probe/gfatest-results.txt; then
+  echo "MAT_ONE_RESULT=PASS" | tee -a artifacts/amiga-cli-probe/result.txt
+elif grep -Fq 'GFATEST:matrix-one:FAIL' artifacts/amiga-cli-probe/gfatest-results.txt; then
+  echo "::error::MAT ONE returned but produced an incorrect identity matrix."
+  exit 1
+else
+  echo "::error::MAT ONE result marker is missing."
+  exit 1
+fi
