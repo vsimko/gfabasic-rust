@@ -56,8 +56,9 @@ for y in range(image.height):
             red_y.append(y)
 if not red_x:
     raise SystemExit("Could not locate the red Amiberry mouse pointer")
-pointer_x = (min(red_x) + max(red_x)) / 2
-pointer_y = (min(red_y) + max(red_y)) / 2
+# The Amiga pointer hotspot is the arrow tip at the top-left, not its center.
+pointer_x = min(red_x)
+pointer_y = min(red_y)
 
 tsv = subprocess.check_output(
     ["tesseract", image_path, "stdout", "--psm", "6", "tsv"],
@@ -72,10 +73,7 @@ if not matches:
 target = max(matches, key=lambda w: float(w["conf"]))
 target_x = int(target["left"]) + int(target["width"]) / 2
 target_y = int(target["top"]) + int(target["height"]) / 2
-# The red cursor sprite's bounding-box center is offset from its click
-# hotspot. Aim the hotspot at the filename, not the sprite center.
-target_x += 10
-target_y += 8
+# Aim the arrow-tip hotspot directly at the center of the filename row.
 # SEND_MOUSE has different effective scales on the two axes:
 # X is approximately 0.5, while Y is approximately 0.25.
 raw_dx = round((target_x - pointer_x) * 2)
@@ -99,10 +97,13 @@ while (( mouse_dx != 0 || mouse_dy != 0 )); do
 done
 sleep 0.3
 printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-file-row-target.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-# A single click selects the filename. A double-click can enter the
-# S directory because the cursor sprite center is not its click hotspot.
+# Double-click the filename using the Amiga pointer arrow-tip hotspot.
 printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-sleep 0.15
+sleep 0.10
+printf "SEND_MOUSE\\t0\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+sleep 0.10
+printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+sleep 0.10
 printf "SEND_MOUSE\\t0\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 sleep 0.5
 printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-file-double-clicked.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
