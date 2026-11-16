@@ -34,9 +34,9 @@ printf "SEND_MOUSE\\t0\\t112\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}
 sleep 0.1
 printf "SEND_MOUSE\\t0\\t112\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 sleep 0.5
-# The gfatest.LST row is at screenshot Y=160 px (the pointer starts near
-# Y=212). Keep the existing X position, which is already over the filename.
-# SEND_MOUSE relative Y is scaled by approximately 0.25.
+# The gfatest.LST row is at screenshot Y=215 px. Keep the existing X
+# position, which is already over the filename. SEND_MOUSE relative Y is
+# scaled by approximately 0.25.
 printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-file-row-before-click.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 python3 - "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-file-row-before-click.png" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/mouse-y-correction.txt" <<'PY'
 from PIL import Image
@@ -53,7 +53,7 @@ for y in range(image.height):
 if not red_y:
     raise SystemExit("Could not locate the red Amiberry mouse pointer")
 pointer_y = min(red_y)
-raw_dy = round((160 - pointer_y) * 4)
+raw_dy = round((215 - pointer_y) * 4)
 with open(sys.argv[2], "w", encoding="ascii") as output:
     output.write(str(raw_dy) + chr(10))
 print(f"Keeping X unchanged; pointer Y={pointer_y}, target Y=215, raw Y correction={raw_dy}")
@@ -64,7 +64,7 @@ if (( mouse_dy != 0 )); then
 fi
 sleep 0.3
 printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-file-row-y215.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-# Double-click the gfatest.LST row at screenshot Y=160 px.
+# Double-click the gfatest.LST row at screenshot Y=215 px.
 printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 sleep 0.10
 printf "SEND_MOUSE\\t0\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
@@ -87,15 +87,21 @@ image.save(sys.argv[2])
 PY
 tesseract "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-merge-ocr-input.png" stdout --psm 6 2>/dev/null | tee "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-merge-ocr.txt"
 
-# OCR is not proof of source identity, but a recognized contradictory token is
-# sufficient reason to stop. In particular, do not run when MAT SET is shown
-# for the full MAT ONE probe; preserve the screenshot for manual inspection.
-if grep -Eiq 'MAT[[:space:]]+SET' "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-merge-ocr.txt"; then
-  echo "MERGE_EDITOR_TOKEN_CONTRADICTION=MAT_SET" | tee "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-validation.txt"
-  echo "Editor OCR shows MAT SET for the MAT ONE abbreviation probe; refusing to run an unverified listing."
+# Require evidence that the requester closed and the intended listing is
+# visible in the editor before sending Shift+F10. OCR is only a guard; preserve
+# the screenshot for manual inspection and fail closed on ambiguous results.
+if grep -Eiq 'Merge File|MAT[[:space:]]+SET' "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-merge-ocr.txt"; then
+  echo "MERGE_EDITOR_STATE=FAIL (requester still open or contradictory MAT SET)" | tee "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-validation.txt"
+  echo "The Merge requester is still visible or OCR found MAT SET; refusing to run."
   exit 1
 fi
-echo "MERGE_EDITOR_OCR_NO_KNOWN_CONTRADICTION=PASS (not proof of source identity)" | tee "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-validation.txt"
+if ! grep -Eiq 'MAT[[:space:]]+ONE' "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-merge-ocr.txt" ||
+   ! grep -Eiq 'BEFORE.?MAT.?ONE' "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-merge-ocr.txt"; then
+  echo "MERGE_EDITOR_STATE=UNCONFIRMED (expected LST source text not visible)" | tee "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-validation.txt"
+  echo "The expected LST source is not confirmed in the editor; refusing to send Shift+F10."
+  exit 1
+fi
+echo "MERGE_EDITOR_STATE=PASS (expected LST source text visible; OCR is supporting evidence)" | tee "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-validation.txt"
 
 # Run the merged listing with Shift+F10 (Amiga raw keycodes: LShift=0x60,
 # F10=0x59). Press the modifier first and release it last.
