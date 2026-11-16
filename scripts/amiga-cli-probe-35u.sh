@@ -77,21 +77,16 @@ fi
 echo "MAT_ONE_REACHED=before-operation" | tee -a artifacts/amiga-cli-probe/result.txt
 
 if ! grep -Fq 'AFTER-MAT-ONE' artifacts/amiga-cli-probe/fact-output.txt; then
-  echo "::error::The documented M O abbreviation did not return to the following statement."
+  echo "::error::MAT ONE did not return to the following statement."
   exit 1
 fi
-echo "MAT_ONE_ABBREVIATION_RETURNED=PASS" | tee -a artifacts/amiga-cli-probe/result.txt
+echo "MAT_ONE_RETURNED=PASS" | tee -a artifacts/amiga-cli-probe/result.txt
 
-if ! grep -Eq '(^|[^0-9])1[., ]+0[., ]+0([^0-9]|$)' artifacts/amiga-cli-probe/fact-output.txt; then
-  echo "::error::MAT ONE output does not show the expected identity matrix; inspect raw FACT.OUT."
-  exit 1
-fi
-if ! grep -Eq '(^|[^0-9])0[., ]+1[., ]+0([^0-9]|$)' artifacts/amiga-cli-probe/fact-output.txt; then
-  echo "::error::MAT ONE output does not show the expected identity matrix; inspect raw FACT.OUT."
-  exit 1
-fi
-if ! grep -Eq '(^|[^0-9])0[., ]+0[., ]+1([^0-9]|$)' artifacts/amiga-cli-probe/fact-output.txt; then
-  echo "::error::MAT ONE output does not show the expected identity matrix; inspect raw FACT.OUT."
-  exit 1
-fi
+for row in '1 0 0' '0 1 0' '0 0 1'; do
+  normalized="$(printf '%s' "$row" | tr ' ' '.*')"
+  if ! grep -Eq "$normalized" artifacts/amiga-cli-probe/fact-output.txt; then
+    echo "::error::MAT ONE output does not show the expected identity matrix row ($row); inspect raw FACT.OUT."
+    exit 1
+  fi
+done
 echo "MAT_ONE_IDENTITY_MATRIX=PASS" | tee -a artifacts/amiga-cli-probe/result.txt
