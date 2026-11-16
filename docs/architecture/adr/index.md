@@ -17,3 +17,4 @@
 - [0015 Listing First Compiler Input](0015-listing-first-compiler-input.md) - Documentation concepts in architecture / adr.
 - [ADR template](TEMPLATE.md) - Documentation concepts in architecture / adr.
 - [OKF v0.2 Documentation Bundle](0016-okf-v02-documentation-bundle.md) - Adopt the canonical documentation format, validation, website generation, and deployment rules.
+- [0017 Multi-version Amiga GFA-BASIC conformance baseline](0017-multi-version-amiga-gfa-basic-conformance.md) - Primary 3.52 reference baseline with 3.5/3.5U and 3.0 compatibility comparisons.

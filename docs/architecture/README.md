@@ -10,6 +10,10 @@ title: "README"
 | Implementation dashboard | Static maintainer dashboard, source-of-truth boundaries, progress states, evidence metrics, generation and freshness | [IMPLEMENTATION-DASHBOARD.md](IMPLEMENTATION-DASHBOARD.md); [ADR 0014](adr/0014-implementation-dashboard.md) | [#304](https://github.com/vsimko/gfabasic-rust/issues/304)–[#310](https://github.com/vsimko/gfabasic-rust/issues/310) |
 | Repository consistency validation | Deterministic Python/JSON checks for drift between repository sources | [VALIDATION.md](VALIDATION.md); [ADR 0013](adr/0013-repository-consistency-validation.md) | architecture [#248](https://github.com/vsimko/gfabasic-rust/issues/248), validator [#249](https://github.com/vsimko/gfabasic-rust/issues/249), website generator [#250](https://github.com/vsimko/gfabasic-rust/issues/250) |
 | Website previews | Per-PR preview URLs and automatic cleanup after PR closure | [WEBSITE_PREVIEWS.md](WEBSITE_PREVIEWS.md) |
+| Multi-version Amiga GFA-BASIC conformance | 3.52 primary baseline with 3.5/3.5U and 3.0 comparison results | [ADR 0017](adr/0017-multi-version-amiga-gfa-basic-conformance.md); [probe-writing guide](../testing/amiga-gfa-basic-probes.md) | [#557](https://github.com/vsimko/gfabasic-rust/issues/557) |
+
+## Project architecture and compatibility
+
 | Topic | Scope | Document | Tracking |
 |---|---|---|---|
 | Project goals and compatibility | Purpose, non-goals, compatibility dimensions | [GOALS.md](GOALS.md) | [#2](https://github.com/vsimko/gfabasic-rust/issues/2) |
@@ -20,7 +24,6 @@ title: "README"
 | Language tooling and editor integration | [LANGUAGE-TOOLING.md](LANGUAGE-TOOLING.md); [ADR 0012](adr/0012-language-server-and-editor-integration.md) | Shared compiler frontend, LSP server, editor client boundaries, and refactoring safety | [#209](https://github.com/vsimko/gfabasic-rust/issues/209), [#210](https://github.com/vsimko/gfabasic-rust/issues/210), [#211](https://github.com/vsimko/gfabasic-rust/issues/211) |
 | Compiler pipeline and IR | Frontend stages, semantic analysis, typed IR, LLVM boundary | [PIPELINE-AND-IR.md](PIPELINE-AND-IR.md); [ADR 0007](adr/0007-compiler-pipeline-and-ir.md) | [#6](https://github.com/vsimko/gfabasic-rust/issues/6) |
 | Source formatting | Lossless, evidence-gated formatter library and canonical style for the implemented subset | [FORMATTER.md](FORMATTER.md) | [#208](https://github.com/vsimko/gfabasic-rust/issues/208) |
-| Language server and editor integration | Shared compiler frontend, LSP lifecycle, UTF-16 positions, versioned edits, capability gates | [ADR 0012](adr/0012-language-server-and-editor-integration.md) (proposed) | [#209](https://github.com/vsimko/gfabasic-rust/issues/209) |
 | Diagnostics and compatibility reporting | Stable diagnostic codes, source locations, support outcomes, migration guidance | [DIAGNOSTICS.md](DIAGNOSTICS.md) | [#26](https://github.com/vsimko/gfabasic-rust/issues/26) |
 | Runtime | Runtime layers and SDL3 adapter boundary | [RUNTIME.md](RUNTIME.md) | [#7](https://github.com/vsimko/gfabasic-rust/issues/7) |
 | Memory model | Storage, pointers, hardware access, safety policy | [MEMORY.md](MEMORY.md) | [#8](https://github.com/vsimko/gfabasic-rust/issues/8) |
