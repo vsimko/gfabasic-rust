@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Compiler parsing/semantic analysis, API profile selection, runtime mapping, reference documentation, and conformance tests need a consistent declaration identity and metadata model. Duplicating spellings, signatures, …">
+  <title>ADR 0006: API declaration registry · GFA BASIC Rust documentation</title>
+  <link rel="stylesheet" href="../../../styles.css">
+</head>
+<body class="docs-site">
+  <header class="docs-header">
+    <a href="../../../index.html">GFA BASIC Rust</a>
+    <span aria-hidden="true">/</span>
+    <a href="../../index.html">Documentation</a>
+  </header>
+  <div class="docs-layout">
+    <nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home" href="index.html">Section index</a><ul><li><a href="0001-documentation-and-architecture-records.html">ADR 0001: Documentation and architecture decision records</a></li><li><a href="0002-initial-rust-workspace.html">ADR 0002: Initial Rust workspace crate boundaries</a></li><li><a href="0003-target-model.html">ADR 0003: Host and compilation target model</a></li><li><a href="0004-api-profile-model.html">ADR 0004: API profile model</a></li><li><a href="0005-cli-and-project-configuration.html">ADR 0005: CLI and project configuration</a></li><li><a href="0006-api-registry.html">ADR 0006: API declaration registry</a></li><li><a href="0007-compiler-pipeline-and-ir.html">ADR 0007: Compiler pipeline and typed IR boundaries</a></li><li><a href="0008-initial-source-dialect-amiga-gfa-basic-3.0.html">ADR 0008: Initial source dialect — Amiga GFA BASIC interpreter 3.0</a></li><li><a href="0009-initial-source-dialect-amiga-gfa-basic-3.5.html">ADR 0009: Initial source dialect — Amiga GFA BASIC interpreter 3.5</a></li><li><a href="0010-versioning-and-compatibility-lifecycle.html">ADR 0010: Versioning and compatibility lifecycle</a></li><li><a href="0011-amiga-35-linux-sdl3-product-scope.html">ADR 0011: Product scope — Amiga GFA BASIC 3.5 to Linux x86-64 with SDL3</a></li><li><a href="0012-language-server-and-editor-integration.html">ADR 0012: Language server and editor integration</a></li><li><a href="0013-repository-consistency-validation.html">ADR 0013: Repository consistency validation</a></li><li><a href="0014-implementation-dashboard.html">ADR 0014: Repository implementation dashboard</a></li><li><a href="0015-listing-first-compiler-input.html">ADR 0015: Listing-first compiler input</a></li><li><a href="TEMPLATE.html">ADR NNNN: Title</a></li><li><a href="0016-okf-v02-documentation-bundle.html">ADR 0016: OKF v0.2 documentation bundle</a></li></ul></nav>
+    <main class="docs-content">
+      <article>
+        <h1>ADR 0006: API declaration registry</h1>
+        <p class="docs-meta"><span>Architecture Decision Record</span></p>
+        <h1 id="adr-0006-api-declaration-registry">ADR 0006: API declaration registry</h1>
+<ul>
+<li>Status: Accepted</li>
+<li>Date: 2026-11-04</li>
+</ul>
+<h2 id="context">Context</h2>
+<p>Compiler parsing/semantic analysis, API profile selection, runtime mapping, reference documentation, and conformance tests need a consistent declaration identity and metadata model. Duplicating spellings, signatures, version availability, and profile membership across Rust code and documentation would create drift. Research entries also need to be representable without implying implementation or support.</p>
+<h2 id="decision">Decision</h2>
+<ol>
+<li>Use a checked-in declarative registry as the canonical source for structured language/API declaration metadata.</li>
+<li>Use TOML as the canonical editable format, with a versioned JSON Schema for the parsed data model.</li>
+<li>Store files under api/registry/language-core/, api/registry/amiga/, and api/registry/atari-st/, grouped by logical module. Store schema definitions under api/schema/.</li>
+<li>Give every declaration a stable globally unique, lowercase dot-separated ID: gfa.language.<em>, gfa.amiga.</em>, or gfa.atari-st.*. IDs are independent of spelling and version.</li>
+<li>Keep source dialect/version, API profile, output target, evidence state, implementation state, support classification, and conformance state as separate fields.</li>
+<li>Require structured syntax, signature, semantic contract, source provenance, implementation mapping, target support, tests, and documentation links. Research-only records may explicitly defer implementation/tests but cannot claim support.</li>
+<li>Rust code implements behavior behind stable registry IDs; it must not independently redefine source spelling, syntax availability, signatures, or profile membership.</li>
+<li>Tests remain independent fixtures. The registry links to tests but must not generate expected results from the implementation under test.</li>
+<li>Generate reference metadata from the registry where useful. Generated sections must be reproducible, clearly marked, and must not overwrite authored explanation or source citations.</li>
+<li>Validate duplicate IDs/names, overlapping availability, profile conflicts, schema validity, handler mappings, evidence, test IDs, and documentation anchors. Support claims require primary evidence and passing conformance tests.</li>
+</ol>
+<p>The normative detail is maintained in <a href="../API-REGISTRY.html">API-REGISTRY.md</a>. The registry validator and generated-reference checks are implementation work under #55.</p>
+<h2 id="alternatives-considered">Alternatives considered</h2>
+<ul>
+<li>YAML or JSON as the canonical editable format: rejected in favor of TOML, which is familiar in Rust tooling and supports comments while retaining structured arrays/tables.</li>
+<li>Rust source as the only source of truth: rejected because it duplicates reference metadata and makes research-only declarations difficult to represent.</li>
+<li>Documentation pages as the canonical source: rejected because they are not a robust machine-readable input for compiler validation and code mapping.</li>
+<li>One record per source spelling without version/profile metadata: rejected because historical dialects and profiles may differ or conflict.</li>
+<li>A single overloaded status field: rejected because source evidence, implementation, support, and conformance are independent dimensions.</li>
+<li>Generating conformance expectations from registry/runtime implementation: rejected because it would make tests circular.</li>
+</ul>
+<h2 id="consequences">Consequences</h2>
+<ul>
+<li>CLI, parser, runtime, documentation generation, and conformance tooling must consume the same stable declaration IDs.</li>
+<li>The registry schema and compiler/runtime versions evolve independently.</li>
+<li>The validator must permit explicit research-only entries while preventing unsupported claims.</li>
+<li>Changes to canonical TOML records require schema validation and review of generated docs/tests.</li>
+<li>The registry model is accepted; no schema, registry file, validator, generator, or declaration is implemented by this ADR.</li>
+</ul>
+<h2 id="references">References</h2>
+<ul>
+<li><a href="../API-REGISTRY.html">API registry specification</a></li>
+<li><a href="../API-PROFILES.html">API profile model</a></li>
+<li><a href="../CLI-AND-CONFIG.html">CLI and project configuration</a></li>
+<li><a href="../VERSIONING.html">Versioning policy</a></li>
+<li><a href="https://github.com/vsimko/gfabasic-rust/issues/12">Issue #12</a></li>
+<li><a href="https://github.com/vsimko/gfabasic-rust/issues/55">Issue #55</a></li>
+</ul>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>
