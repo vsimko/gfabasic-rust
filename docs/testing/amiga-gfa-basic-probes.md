@@ -22,8 +22,8 @@ Use this guide when writing or changing .LST regression programs for the origina
 Use the version shown by the running editor, not the disk or archive filename.
 
 1. Open the GFA-BASIC editor in Amiberry.
-2. Press the right mouse button to open the editor menu.
-3. Capture a screenshot with the menu open.
+2. Press and keep holding the right mouse button to open the editor menu.
+3. While the right mouse button is still held down, capture the screenshot. Do not release it before or during capture: releasing the button closes the menu, so the screenshot would no longer show the version.
 4. OCR the screenshot and read the first menu item in the upper-left corner; it displays the running GFA-BASIC interpreter version.
 5. Record the exact text and preserve the screenshot as evidence. If OCR is uncertain, inspect or crop the upper-left menu area and transcribe it manually.
 
