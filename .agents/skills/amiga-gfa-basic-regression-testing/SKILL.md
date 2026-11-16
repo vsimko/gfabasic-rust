@@ -1,18 +1,28 @@
 ---
 name: amiga-gfa-basic-regression-testing
-description: Create, debug, and validate regression probes for original Amiga GFA BASIC reference interpreters. Use when editing .LST fixtures, investigating native Amiberry Merge + Run failures, or validating version-specific language behavior.
+description: Create, debug, and validate version-specific probes for original Amiga GFA BASIC reference interpreters 3.0, 3.5/3.5U, and 3.52. Use when editing .LST fixtures, investigating native Amiberry Merge + Run behavior, or comparing language behavior across releases.
 ---
 
 # Amiga GFA BASIC regression testing
 
-Use this skill when working on regression probes for the original Amiga GFA BASIC interpreters in this repository.
+Use this skill when working on regression probes for the original Amiga GFA BASIC interpreters.
 
 ## Required context
 
 1. Read `AGENTS.md` and follow the repository agent workflow.
 2. Read [the probe-writing guide](../../../docs/testing/amiga-gfa-basic-probes.md).
-3. Read the applicable version-specific testing guide and inspect the native workflow that will execute the probe.
-4. Identify the exact interpreter version, platform, binary/asset source, and manual edition. Never assume that observations transfer between GFA BASIC 3.0, 3.5, 3.5U, and 3.52.
+3. Read [ADR 0017](../../../docs/architecture/adr/0017-multi-version-amiga-gfa-basic-conformance.md).
+4. Read the applicable version-specific testing guide and inspect the native workflow that will execute the probe.
+5. Identify the exact interpreter version, platform, binary/asset source, and manual edition. Never assume that observations transfer between GFA BASIC 3.0, 3.5, 3.5U, and 3.52.
+
+## Version policy
+
+- GFA BASIC 3.52 is the primary reference baseline and default expected behavior for current development.
+- GFA BASIC 3.5/3.5U and 3.0 are compatibility comparison versions.
+- Run the same applicable probe against all versions when the licensed assets and native harness are available.
+- Keep one result per exact interpreter version. Do not infer one version's behavior from another.
+- Use `PASS`, `FAIL`, `DIFFERENT`, and `UNTESTED` per probe/version. A verified version difference is not automatically a defect. Missing assets or unavailable runs are `UNTESTED`, never PASS.
+- Separate manual-documented behavior, directly observed behavior, and unverified assumptions.
 
 ## Procedure
 
@@ -21,14 +31,14 @@ Use this skill when working on regression probes for the original Amiga GFA BASI
 - Find the relevant example in the matching primary manual.
 - Record the manual edition and printed page numbers (not only PDF page indices).
 - Preserve statement order and control flow from the manual unless the test explicitly exercises a variation.
-- Separate three kinds of evidence in notes and test comments: manual-documented behavior, behavior observed in the reference interpreter, and unverified assumptions.
+- Where possible, reuse one probe across versions. If version-specific syntax/setup requires variants, explain why the test intent remains equivalent.
 
 ### 2. Inspect the harness before changing a fixture
 
 - Find the workflow/job that performs native Merge + Run for the target interpreter.
 - Check drive assignments, working directory, input listing placement, output capture, completion detection, and expected result format.
 - Inspect existing passing probes for the same interpreter and harness.
-- Keep the probe minimal and add one behavior at a time.
+- Keep the fixture minimal and add one behavior at a time.
 
 ### 3. Write a diagnostic probe
 
@@ -44,18 +54,15 @@ Use this skill when working on regression probes for the original Amiga GFA BASI
 - Use the exact drive/path expected by the workflow, close files, and ensure normal execution reaches the close statements.
 - Do not infer a language/runtime defect from a missing output file. First check file-open errors, drive mapping, emulator logs/screenshots, and whether the program completed.
 
-### 4. Apply version-specific knowledge carefully
+### 4. Identify the running interpreter version
 
-For the tested GFA BASIC 3.5U DATA-pointer addendum example:
+Use the version shown by the running editor, not the disk or archive filename.
 
-- Place DATA declarations after the executable body, following END, as in the tested fixture.
-- Execute RESTORE before the first DATA availability check/read.
-- Use `_DATA` to inspect or save the DATA pointer. Do not substitute the DATA availability expression for `_DATA` in the `DO WHILE` guard.
-- Save pointer positions before READ and restore them with `_DATA=...` before reading again.
-- The documented reverse traversal uses `FOR ... DOWNTO`.
-- The tested fixture's reverse sequence is `0, 1, 3242, 328, 24, 13, 9, 8, 7, 6, 5, 4, 3, 2, 1`.
-
-These are observations for that exact 3.5U addendum example and fixture, not universal claims about all GFA BASIC versions or complete DATA semantics. Consult the guide and manual before reusing them.
+1. Open the GFA-BASIC editor in Amiberry.
+2. Press and keep holding the right mouse button to open the editor menu.
+3. While the right mouse button is still held down, capture the screenshot. Do not release it before or during capture.
+4. Read the first menu item in the upper-left corner. OCR is supporting evidence; inspect/crop the screenshot and transcribe it manually if uncertain.
+5. Preserve the screenshot and exact version text with the test evidence.
 
 ### 5. Merge an LST file in the native editor
 
@@ -77,43 +84,23 @@ A closed requester or a visible listing proves only that Merge completed; it doe
 
 ### 6. Run and diagnose the native test
 
-1. Run the native Merge + Run workflow for the exact target interpreter.
-2. Wait for the workflow and relevant job to finish; do not report a change as validated while the run is still pending.
-3. If the expected output file is missing, inspect the emulator log/screenshot, file opens, drive assignment, and program completion first.
-4. If output exists, inspect the raw diagnostic and result files, not only the workflow summary.
-5. Compare every diagnostic value and result identifier with the manual-derived expectation.
+1. Run the native Merge + Run workflow for the exact target interpreter version.
+2. Run the same applicable probe on other reference versions when assets and workflows are available.
+3. Wait for each workflow and relevant job to finish; do not report pending work as validated.
+4. Inspect raw diagnostic and result files, not only the workflow summary.
+5. Compare results with version-specific expectations. Record confirmed cross-version behavior as `DIFFERENT`; do not treat it as a failure unless that version's own expected behavior is contradicted.
 6. On failure, reduce the fixture to the smallest reproducer and compare it with the manual statement by statement.
-7. Fix the test or implementation according to the evidence, then rerun the native workflow. A target probe is validated only when its native run is green.
-
-#### Failure isolation
-
-Do not jump from a missing host-side file to a language-runtime conclusion:
-
-1. Confirm the workflow checked out the intended commit and prepared the exact fixture.
-2. Confirm private assets were downloaded and verified, the expected executable was extracted, and the configured Kickstart ROM is present.
-3. Confirm the prepared ADF contains the listing at the expected path and the configured DF0/DF1 assignments match the program's paths.
-4. Inspect the Amiberry log and screenshots around Merge, Run, and program completion. OCR is supporting evidence only; inspect the image when OCR is ambiguous.
-5. Check successful output-file opens, exact file numbers, drive prefixes, output names, and reachable CLOSE statements.
-6. Distinguish a missing output file from an existing file whose contents fail validation. Preserve the raw file listing and emulator diagnostics before changing the test.
-7. Only after the program is shown to have run should a wrong or missing result record be treated as evidence about the tested language behavior.
-
-When a new probe adds arrays, matrices, DATA statements, or other stateful features:
-
-- Keep the probe isolated and initialize every input explicitly.
-- Avoid relying on DATA pointer state left by earlier tests; use explicit assignments when testing matrix operations.
-- Check the manual for declaration placement, identifier rules, command spelling, argument order, and source/destination shape before writing expected results.
-- Add one new construct at a time. Keep diagnostic output separate from the GFATEST pass/fail protocol.
-- Do not move declarations or rewrite a working test merely because a later output file is absent; first establish where execution stopped.
 
 ### 7. Report precisely
 
 In the PR description or test notes, state:
 
-- exact interpreter version and platform;
+- exact interpreter version and platform for each run;
 - manual edition and printed page references;
-- what the probe verifies and its expected values;
+- probe intent and version-specific expected values;
 - native workflow/run evidence;
-- any limitations or unresolved assumptions.
+- per-version outcome (`PASS`, `FAIL`, `DIFFERENT`, or `UNTESTED`);
+- limitations or unresolved assumptions.
 
 Do not describe a single probe as complete language conformance.
 
