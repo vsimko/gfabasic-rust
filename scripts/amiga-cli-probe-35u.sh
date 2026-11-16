@@ -39,7 +39,11 @@ image = ImageOps.invert(image).resize((image.width * 3, image.height * 3))
 image = ImageEnhance.Contrast(image).enhance(3)
 image.save("artifacts/amiga-cli-probe/after-merge-ocr-input.png")
 PY
-tesseract artifacts/amiga-cli-probe/after-merge-ocr-input.png stdout --psm 6 2>/dev/null | tee artifacts/amiga-cli-probe/after-merge-ocr.txt
+if tesseract artifacts/amiga-cli-probe/after-merge-ocr-input.png stdout --psm 6 2>/dev/null | tee artifacts/amiga-cli-probe/after-merge-ocr.txt; then
+  echo "AFTER_MERGE_OCR=available"
+else
+  echo "AFTER_MERGE_OCR=unavailable (diagnostic only)" | tee artifacts/amiga-cli-probe/after-merge-ocr.txt
+fi
 # OCR is retained as diagnostic evidence only. Its output is unreliable for
 # punctuation and short source tokens; a fresh disk plus interpreter-written
 # STARTUP-MARKER below is the authoritative proof that the listing ran.
