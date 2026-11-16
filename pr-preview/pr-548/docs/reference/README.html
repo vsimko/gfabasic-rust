@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="This directory contains original research notes and technical summaries. These documents are version- and platform-scoped. They are not interchangeable specifications.">
+  <title>GFA BASIC language reference notes · GFA BASIC Rust documentation</title>
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body class="docs-site">
+  <header class="docs-header">
+    <a href="../../index.html">GFA BASIC Rust</a>
+    <span aria-hidden="true">/</span>
+    <a href="../index.html">Documentation</a>
+  </header>
+  <div class="docs-layout">
+    <nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home" href="index.html">Section index</a><ul><li><a href="README.html">GFA BASIC language reference notes</a></li><li><a href="amiga-gfa-api.html">Amiga GFA BASIC API reference — initial research inventory</a></li><li><a href="amiga-gfa-basic-3.0-feature-inventory.html">Amiga GFA BASIC interpreter 3.0 — feature inventory (working draft)</a></li><li><a href="amiga-gfa-basic-3.0.html">Amiga GFA BASIC 3.0 reference research notes</a></li><li><a href="amiga-gfa-basic-35-formatter.html">Amiga GFA BASIC 3.5 formatter</a></li><li><a href="../research/amiga-gfa-basic-35-primary-reference.html">Amiga GFA BASIC 3.5 primary reference</a></li><li><a href="../research/amiga-gfa-basic-35-addendum-inventory.html">Amiga GFA BASIC 3.5 addendum inventory</a></li><li><a href="../research/amiga-gfa-basic-documentation-audit.html">Documentation coverage audit</a></li><li><a href="atari-gfa-api.html">Atari ST GFA BASIC API reference — research draft</a></li><li><a href="atari-gfa-basic-3.0.html">Atari ST GFA BASIC V2.xx / V3.0 — preliminary language specification</a></li></ul></nav>
+    <main class="docs-content">
+      <article>
+        <h1>GFA BASIC language reference notes</h1>
+        <p class="docs-meta"><span>Reference</span></p>
+        <h1 id="gfa-basic-language-reference-notes">GFA BASIC language reference notes</h1>
+<p>This directory contains original research notes and technical summaries. These documents are version- and platform-scoped. They are not interchangeable specifications.</p>
+<table>
+<thead>
+<tr>
+<th>Document</th>
+<th>Platform and version</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="amiga-gfa-basic-35-formatter.html">Amiga GFA BASIC 3.5 formatter</a></td>
+<td>Amiga, interpreter 3.5</td>
+<td>Prototype scope, canonical style, CLI behavior, and evidence-gated limitations</td>
+</tr>
+<tr>
+<td><a href="atari-gfa-basic-3.0.html">Atari ST GFA BASIC V2.xx / V3.0</a></td>
+<td>Atari ST, V2.xx/V3.0</td>
+<td>Preliminary research draft; not an accepted compiler dialect</td>
+</tr>
+<tr>
+<td><a href="atari-gfa-api.html">Atari ST API reference</a></td>
+<td>Atari ST, V2.xx/V3.0</td>
+<td>Initial API inventory; signatures and runtime behavior require validation</td>
+</tr>
+<tr>
+<td><a href="../research/atari-gfa-book-systematic-review.html">Systematic Atari book review</a></td>
+<td>Atari ST, V2.xx/V3.0</td>
+<td>First pass complete for all 24 chapters; validation and page-image checks pending</td>
+</tr>
+<tr>
+<td><a href="../research/amiga-gfa-basic-german-book-command-api-extraction.html">German Amiga GFA-BASIC book command/API extraction</a></td>
+<td>Amiga, DATA BECKER 1990</td>
+<td>Historical 3.0/3.03 command and OS API research, cross-checked against the English 3.5 addendum; preserve the book's stated version scope</td>
+</tr>
+<tr>
+<td><a href="../research/amiga-gfa-basic-35-primary-reference.html">Amiga GFA BASIC 3.5 primary reference</a></td>
+<td>Amiga, interpreter 3.5</td>
+<td>Primary manual identified; explicitly marked 3.5 editor update and addendum page images reviewed. The base 3.0 chapters remain historical evidence unless separately confirmed for 3.5</td>
+</tr>
+<tr>
+<td><a href="../research/amiga-gfa-basic-35-addendum-inventory.html">Amiga GFA BASIC 3.5 addendum inventory</a></td>
+<td>Amiga, interpreter 3.5</td>
+<td>Explicit 3.5 addendum extraction with page-image review; <code>MAT INV destination()=source()</code> is resolved from the detailed definition/example (printed p. 13-30), overriding the reversed summary typo on p. 13-16. Runtime edge cases remain untested</td>
+</tr>
+<tr>
+<td><a href="../research/amiga-gfa-basic-3.0-german-source-notes.html">German Amiga GFA BASIC 3.0 source notes</a></td>
+<td>Amiga, interpreter 3.0</td>
+<td>Primary source; front matter and selected pages visually checked; historical evidence, not proof of 3.5 behavior</td>
+</tr>
+<tr>
+<td><a href="amiga-gfa-basic-3.0.html">Amiga GFA BASIC 3.0</a></td>
+<td>Amiga, interpreter 3.0</td>
+<td>Historical language/API research notes; not the selected 3.5 target</td>
+</tr>
+<tr>
+<td><a href="amiga-gfa-basic-3.0-feature-inventory.html">Amiga GFA BASIC 3.0 feature inventory</a></td>
+<td>Amiga, interpreter 3.0</td>
+<td>Historical feature inventory; incomplete and not a 3.5 implementation contract</td>
+</tr>
+<tr>
+<td><a href="../research/amiga-gfa-basic-3.03-ocr-index.html">German Amiga GFA BASIC book OCR index</a></td>
+<td>Amiga, German 1990 edition</td>
+<td>OCR-derived chapter map; version applicability disputed between 3.0 and 3.03; not normative yet</td>
+</tr>
+<tr>
+<td><a href="amiga-gfa-api.html">Amiga GFA API reference</a></td>
+<td>Amiga, interpreter 3.0</td>
+<td>Historical 3.0 API evidence; not the selected 3.5 API contract; signatures and applicability require review</td>
+</tr>
+<tr>
+<td><a href="../research/atari-gfa-book-diskette.html">Atari book diskette corpus</a></td>
+<td>Atari ST, examples accompanying the 1988 book</td>
+<td>Static corpus analysis; examples are not normative specifications</td>
+</tr>
+<tr>
+<td><a href="../research/amiga-emulator-lab.html">Amiga emulator experiment lab</a></td>
+<td>Amiga, emulator-based research procedure</td>
+<td>Native Amiberry Merge + Run workflow integrated on <code>main</code>; one 3.52 FACT probe passed. Exact 3.5 validation remains blocked; see the <a href="../research/amiga-gfa-basic-352-runtime-baseline.html">3.52 runtime baseline</a></td>
+</tr>
+</tbody>
+</table>
+<h2 id="rules-for-using-these-notes">Rules for using these notes</h2>
+<ul>
+<li>Keep Atari ST and Amiga syntax/API evidence separate.</li>
+<li>Keep each fact tied to its source edition, version, platform, and printed page.</li>
+<li>Treat later releases as separate compatibility targets until checked.</li>
+<li>Do not infer compiler support from the presence of documentation.</li>
+<li>Use original explanations and independently authored tests. Do not add scans or substantial manual reproductions.</li>
+<li>See <a href="../reference-sources.html">the source register</a>, <a href="../architecture/DIALECTS.html">dialect policy</a>, and the <a href="../research/amiga-gfa-basic-documentation-audit.html">documentation audit</a>.</li>
+</ul>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>
