@@ -50,6 +50,9 @@ WORKFLOWS = {
         "Cargo.toml", "Cargo.lock", "**/Cargo.toml", "**/Cargo.lock",
         "rust-toolchain.toml", "audit.toml", ".github/workflows/security-audit.yml",
     ),
+    ".github/workflows/workflow-lint.yml": (
+        ".github/workflows/**", ".github/skills/**",
+    ),
     ".github/workflows/benchmarks.yml": (
         ".github/workflows/benchmarks.yml", ".github/workflows/security-audit.yml",
         "bench/**", "crates/gfabasic-compiler/src/source.rs",
