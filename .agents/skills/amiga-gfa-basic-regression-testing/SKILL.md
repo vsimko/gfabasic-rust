@@ -57,7 +57,23 @@ For the tested GFA BASIC 3.5U DATA-pointer addendum example:
 
 These are observations for that exact 3.5U addendum example and fixture, not universal claims about all GFA BASIC versions or complete DATA semantics. Consult the guide and manual before reusing them.
 
-### 5. Run and diagnose the native test
+### 5. Merge an LST file in the native editor
+
+For the current Amiberry 3.5U native Merge + Run harness, use this verified input sequence. The pixel coordinate is specific to the current emulator/window layout; re-check the screenshot if that layout changes.
+
+1. Open the editor's Merge file requester using the harness's existing menu/key sequence.
+2. Capture a screenshot with the requester open. Confirm that the intended `.LST` filename is visible and that the mouse pointer is horizontally over its row.
+3. **Do not move the pointer horizontally.** In the current harness, keep X unchanged and place the pointer at screen Y=215 px, the `gfatest.LST` row. The IPC relative mouse Y correction is approximately four raw units per screen pixel.
+4. Capture the pre-click screenshot with the pointer on the filename row.
+5. Double-click in place: send left-button down, release, then left-button down, release, with no additional X/Y movement between clicks.
+6. Wait for the requester to close, then capture the post-Merge editor screenshot. Confirm that the listing is actually present in the editor.
+7. Compare the displayed/recognized source with the exact staged `.LST` fixture before running. Check significant tokens and statements literally (for example, `MAT ONE a()` must not be accepted as `MAT SET a()`). OCR is only a hint; inspect the screenshot when a token is ambiguous.
+8. Only after the Merge content is confirmed, run with **Shift+F10**. In the current Amiberry IPC harness, press left Shift raw keycode `0x60` (decimal 96), press F10 `0x59` (decimal 89), release F10, then release Shift. Do not try to start Run by clicking an estimated Run-gadget coordinate.
+9. Capture screenshots before the double-click, after Merge, and after Run. Preserve them with the emulator log and OCR output as diagnostic artifacts.
+
+A closed requester or a visible listing proves only that Merge completed; it does not prove that the intended source text was merged unchanged. If the post-Merge editor shows a different token or statement from the staged file, stop before interpreting Run behavior. Compare the source file on the prepared disk, its bytes/text before launch, and the editor display. Record the discrepancy without guessing whether it came from fixture preparation, tokenization, or display/OCR.
+
+### 6. Run and diagnose the native test
 
 1. Run the native Merge + Run workflow for the exact target interpreter.
 2. Wait for the workflow and relevant job to finish; do not report a change as validated while the run is still pending.
@@ -87,7 +103,7 @@ When a new probe adds arrays, matrices, DATA statements, or other stateful featu
 - Add one new construct at a time. Keep diagnostic output separate from the GFATEST pass/fail protocol.
 - Do not move declarations or rewrite a working test merely because a later output file is absent; first establish where execution stopped.
 
-### 6. Report precisely
+### 7. Report precisely
 
 In the PR description or test notes, state:
 
