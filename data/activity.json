@@ -1,9 +1,25 @@
 {
   "schema_version": 1,
   "status": "fresh",
-  "generated_at": "2026-11-16T12:55:41.555758+00:00",
-  "last_successful_at": "2026-11-16T12:55:41.555758+00:00",
+  "generated_at": "2026-11-16T14:26:37.263504+00:00",
+  "last_successful_at": "2026-11-16T14:26:37.263504+00:00",
   "items": [
+    {
+      "type": "merged_pull_request",
+      "title": "Keep public PDF source index locator-only",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/552",
+      "number": 552,
+      "timestamp": "2026-11-16T14:26:05Z",
+      "summary": "PR #552 merged"
+    },
+    {
+      "type": "commit",
+      "title": "Keep public PDF index locator-only (#552)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/c5c908d736e0acfb07ee5426ecb7046ce5ae0939",
+      "number": null,
+      "timestamp": "2026-11-16T14:26:05Z",
+      "summary": "Commit c5c908d"
+    },
     {
       "type": "merged_pull_request",
       "title": "Add PR-based public PDF source and text index",
@@ -83,22 +99,6 @@
       "number": 524,
       "timestamp": "2026-11-15T12:59:26Z",
       "summary": "PR #524 merged"
-    },
-    {
-      "type": "commit",
-      "title": "feat(api): register inherited functions evidenced in GFA BASIC 3.5 (#524)",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/2d20658ecfca5ba5a6034e721871a0bf89e94475",
-      "number": null,
-      "timestamp": "2026-11-15T12:59:26Z",
-      "summary": "Commit 2d20658"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "Remove DQH-Amiga references",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/543",
-      "number": 543,
-      "timestamp": "2026-11-15T12:52:02Z",
-      "summary": "PR #543 merged"
     }
   ]
 }
