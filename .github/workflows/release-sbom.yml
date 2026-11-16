@@ -1,0 +1,137 @@
+name: Release SBOM
+
+on:
+  pull_request:
+  release:
+    types:
+      - published
+
+# PR validation is read-only. Only the release publication job overrides this
+# permission to upload the validated SBOM to the corresponding GitHub Release.
+permissions:
+  contents: read
+
+concurrency:
+  group: release-sbom-${{ github.event.release.tag_name || github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    if: github.event_name == 'pull_request'
+    name: Validate workspace SBOM
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - name: Check out pull request
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+
+      - name: Cache Rust toolchain
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+        with:
+          path: |
+            ~/.rustup/toolchains/1.99.1-x86_64-unknown-linux-gnu
+            ~/.rustup/update-hashes
+          key: ${{ runner.os }}-rustup-1.99.1-minimal
+
+      - name: Cache cargo-sbom and Cargo registry
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+        with:
+          path: |
+            ~/.cargo/bin/cargo-sbom
+            ~/.cargo/registry
+            ~/.cargo/git
+          key: ${{ runner.os }}-cargo-sbom-0.10.0-rust-1.99.1
+
+      - name: Install pinned Rust toolchain
+        run: |
+          rustup toolchain install 1.99.1 --profile minimal
+          rustup default 1.99.1
+
+      - name: Install pinned cargo-sbom
+        run: |
+          if ! command -v cargo-sbom >/dev/null 2>&1; then
+            cargo install --locked cargo-sbom --version 0.10.0
+          fi
+
+      - name: Verify locked workspace metadata
+        run: cargo metadata --locked --format-version 1 > cargo-metadata.json
+
+      - name: Generate SPDX 2.3 SBOM for the complete workspace
+        run: cargo sbom --output-format spdx_json_2_3 > workspace.spdx.json
+
+      - name: Validate SPDX version and workspace package coverage
+        shell: bash
+        run: |
+          set -euo pipefail
+          jq -e '
+            .spdxVersion == "SPDX-2.3"
+            and ([.packages[].name] as $names
+              | ["gfabasic-compiler", "gfabasic-runtime", "gfabasic-platform-linux", "gfabasic-lsp"]
+              | all(. as $required | $names | index($required) != null))
+          ' workspace.spdx.json > /dev/null
+
+  publish:
+    if: github.event_name == 'release'
+    name: Publish workspace SBOM
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    steps:
+      - name: Check out release tag
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ github.event.release.tag_name }}
+
+      - name: Cache Rust toolchain
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+        with:
+          path: |
+            ~/.rustup/toolchains/1.99.1-x86_64-unknown-linux-gnu
+            ~/.rustup/update-hashes
+          key: ${{ runner.os }}-rustup-1.99.1-minimal
+
+      - name: Cache cargo-sbom and Cargo registry
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+        with:
+          path: |
+            ~/.cargo/bin/cargo-sbom
+            ~/.cargo/registry
+            ~/.cargo/git
+          key: ${{ runner.os }}-cargo-sbom-0.10.0-rust-1.99.1
+
+      - name: Install pinned Rust toolchain
+        run: |
+          rustup toolchain install 1.99.1 --profile minimal
+          rustup default 1.99.1
+
+      - name: Install pinned cargo-sbom
+        run: |
+          if ! command -v cargo-sbom >/dev/null 2>&1; then
+            cargo install --locked cargo-sbom --version 0.10.0
+          fi
+
+      - name: Verify locked workspace metadata
+        run: cargo metadata --locked --format-version 1 > cargo-metadata.json
+
+      - name: Generate SPDX 2.3 SBOM for the complete workspace
+        run: cargo sbom --output-format spdx_json_2_3 > workspace.spdx.json
+
+      - name: Validate SPDX version and workspace package coverage
+        shell: bash
+        run: |
+          set -euo pipefail
+          jq -e '
+            .spdxVersion == "SPDX-2.3"
+            and ([.packages[].name] as $names
+              | ["gfabasic-compiler", "gfabasic-runtime", "gfabasic-platform-linux", "gfabasic-lsp"]
+              | all(. as $required | $names | index($required) != null))
+          ' workspace.spdx.json > /dev/null
+
+      - name: Attach SBOM to the GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: gh release upload "$RELEASE_TAG" workspace.spdx.json --clobber

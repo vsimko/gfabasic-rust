@@ -1,0 +1,3999 @@
+[
+  {
+    "entry": 1030,
+    "name": "FUN_00000406",
+    "size": 4,
+    "file": "function_00000406_FUN_00000406.c",
+    "decompiled": true
+  },
+  {
+    "entry": 1046,
+    "name": "FUN_00000416",
+    "size": 20,
+    "file": "function_00000416_FUN_00000416.c",
+    "decompiled": true
+  },
+  {
+    "entry": 1086,
+    "name": "FUN_0000043e",
+    "size": 234,
+    "file": "function_0000043E_FUN_0000043e.c",
+    "decompiled": true
+  },
+  {
+    "entry": 1364,
+    "name": "FUN_00000554",
+    "size": 46,
+    "file": "function_00000554_FUN_00000554.c",
+    "decompiled": true
+  },
+  {
+    "entry": 1434,
+    "name": "FUN_0000059a",
+    "size": 32,
+    "file": "function_0000059A_FUN_0000059a.c",
+    "decompiled": true
+  },
+  {
+    "entry": 1474,
+    "name": "FUN_000005c2",
+    "size": 4,
+    "file": "function_000005C2_FUN_000005c2.c",
+    "decompiled": true
+  },
+  {
+    "entry": 1514,
+    "name": "FUN_000005ea",
+    "size": 68,
+    "file": "function_000005EA_FUN_000005ea.c",
+    "decompiled": true
+  },
+  {
+    "entry": 1522,
+    "name": "FUN_000005f2",
+    "size": 97,
+    "file": "function_000005F2_FUN_000005f2.c",
+    "decompiled": true
+  },
+  {
+    "entry": 1654,
+    "name": "FUN_00000676",
+    "size": 442,
+    "file": "function_00000676_FUN_00000676.c",
+    "decompiled": true
+  },
+  {
+    "entry": 1936,
+    "name": "FUN_00000790",
+    "size": 10,
+    "file": "function_00000790_FUN_00000790.c",
+    "decompiled": true
+  },
+  {
+    "entry": 1946,
+    "name": "FUN_0000079a",
+    "size": 30,
+    "file": "function_0000079A_FUN_0000079a.c",
+    "decompiled": true
+  },
+  {
+    "entry": 2284,
+    "name": "FUN_000008ec",
+    "size": 1,
+    "file": "function_000008EC_FUN_000008ec.c",
+    "decompiled": true
+  },
+  {
+    "entry": 2324,
+    "name": "FUN_00000914",
+    "size": 250,
+    "file": "function_00000914_FUN_00000914.c",
+    "decompiled": true
+  },
+  {
+    "entry": 2586,
+    "name": "FUN_00000a1a",
+    "size": 10,
+    "file": "function_00000A1A_FUN_00000a1a.c",
+    "decompiled": true
+  },
+  {
+    "entry": 2598,
+    "name": "FUN_00000a26",
+    "size": 20,
+    "file": "function_00000A26_FUN_00000a26.c",
+    "decompiled": true
+  },
+  {
+    "entry": 2822,
+    "name": "FUN_00000b06",
+    "size": 54,
+    "file": "function_00000B06_FUN_00000b06.c",
+    "decompiled": true
+  },
+  {
+    "entry": 2834,
+    "name": "FUN_00000b12",
+    "size": 38,
+    "file": "function_00000B12_FUN_00000b12.c",
+    "decompiled": true
+  },
+  {
+    "entry": 2924,
+    "name": "FUN_00000b6c",
+    "size": 44,
+    "file": "function_00000B6C_FUN_00000b6c.c",
+    "decompiled": true
+  },
+  {
+    "entry": 2972,
+    "name": "FUN_00000b9c",
+    "size": 6,
+    "file": "function_00000B9C_FUN_00000b9c.c",
+    "decompiled": true
+  },
+  {
+    "entry": 2978,
+    "name": "FUN_00000ba2",
+    "size": 60,
+    "file": "function_00000BA2_FUN_00000ba2.c",
+    "decompiled": true
+  },
+  {
+    "entry": 3112,
+    "name": "FUN_00000c28",
+    "size": 100,
+    "file": "function_00000C28_FUN_00000c28.c",
+    "decompiled": true
+  },
+  {
+    "entry": 3184,
+    "name": "FUN_00000c70",
+    "size": 12,
+    "file": "function_00000C70_FUN_00000c70.c",
+    "decompiled": true
+  },
+  {
+    "entry": 3224,
+    "name": "FUN_00000c98",
+    "size": 62,
+    "file": "function_00000C98_FUN_00000c98.c",
+    "decompiled": true
+  },
+  {
+    "entry": 3798,
+    "name": "FUN_00000ed6",
+    "size": 32,
+    "file": "function_00000ED6_FUN_00000ed6.c",
+    "decompiled": true
+  },
+  {
+    "entry": 3840,
+    "name": "FUN_00000f00",
+    "size": 46,
+    "file": "function_00000F00_FUN_00000f00.c",
+    "decompiled": true
+  },
+  {
+    "entry": 3920,
+    "name": "FUN_00000f50",
+    "size": 8,
+    "file": "function_00000F50_FUN_00000f50.c",
+    "decompiled": true
+  },
+  {
+    "entry": 4290,
+    "name": "FUN_000010c2",
+    "size": 296,
+    "file": "function_000010C2_FUN_000010c2.c",
+    "decompiled": true
+  },
+  {
+    "entry": 4580,
+    "name": "thunk_FUN_0000043e",
+    "size": 4,
+    "file": "function_000011E4_thunk_FUN_0000043e.c",
+    "decompiled": true
+  },
+  {
+    "entry": 5366,
+    "name": "FUN_000014f6",
+    "size": 98,
+    "file": "function_000014F6_FUN_000014f6.c",
+    "decompiled": true
+  },
+  {
+    "entry": 5528,
+    "name": "FUN_00001598",
+    "size": 6,
+    "file": "function_00001598_FUN_00001598.c",
+    "decompiled": true
+  },
+  {
+    "entry": 5550,
+    "name": "FUN_000015ae",
+    "size": 18,
+    "file": "function_000015AE_FUN_000015ae.c",
+    "decompiled": true
+  },
+  {
+    "entry": 5648,
+    "name": "FUN_00001610",
+    "size": 310,
+    "file": "function_00001610_FUN_00001610.c",
+    "decompiled": true
+  },
+  {
+    "entry": 6832,
+    "name": "FUN_00001ab0",
+    "size": 8,
+    "file": "function_00001AB0_FUN_00001ab0.c",
+    "decompiled": true
+  },
+  {
+    "entry": 6872,
+    "name": "FUN_00001ad8",
+    "size": 8,
+    "file": "function_00001AD8_FUN_00001ad8.c",
+    "decompiled": true
+  },
+  {
+    "entry": 6880,
+    "name": "FUN_00001ae0",
+    "size": 86,
+    "file": "function_00001AE0_FUN_00001ae0.c",
+    "decompiled": true
+  },
+  {
+    "entry": 7356,
+    "name": "FUN_00001cbc",
+    "size": 214,
+    "file": "function_00001CBC_FUN_00001cbc.c",
+    "decompiled": true
+  },
+  {
+    "entry": 7544,
+    "name": "thunk_FUN_0000ceb0",
+    "size": 6,
+    "file": "function_00001D78_thunk_FUN_0000ceb0.c",
+    "decompiled": true
+  },
+  {
+    "entry": 7550,
+    "name": "FUN_00001d7e",
+    "size": 220,
+    "file": "function_00001D7E_FUN_00001d7e.c",
+    "decompiled": true
+  },
+  {
+    "entry": 7798,
+    "name": "FUN_00001e76",
+    "size": 44,
+    "file": "function_00001E76_FUN_00001e76.c",
+    "decompiled": true
+  },
+  {
+    "entry": 7896,
+    "name": "FUN_00001ed8",
+    "size": 20,
+    "file": "function_00001ED8_FUN_00001ed8.c",
+    "decompiled": true
+  },
+  {
+    "entry": 10062,
+    "name": "FUN_0000274e",
+    "size": 40,
+    "file": "function_0000274E_FUN_0000274e.c",
+    "decompiled": true
+  },
+  {
+    "entry": 10102,
+    "name": "FUN_00002776",
+    "size": 2,
+    "file": "function_00002776_FUN_00002776.c",
+    "decompiled": false
+  },
+  {
+    "entry": 10104,
+    "name": "FUN_00002778",
+    "size": 30,
+    "file": "function_00002778_FUN_00002778.c",
+    "decompiled": false
+  },
+  {
+    "entry": 14000,
+    "name": "FUN_000036b0",
+    "size": 8,
+    "file": "function_000036B0_FUN_000036b0.c",
+    "decompiled": true
+  },
+  {
+    "entry": 14040,
+    "name": "FUN_000036d8",
+    "size": 13,
+    "file": "function_000036D8_FUN_000036d8.c",
+    "decompiled": true
+  },
+  {
+    "entry": 14054,
+    "name": "FUN_000036e6",
+    "size": 28,
+    "file": "function_000036E6_FUN_000036e6.c",
+    "decompiled": true
+  },
+  {
+    "entry": 14082,
+    "name": "thunk_FUN_0000383c",
+    "size": 4,
+    "file": "function_00003702_thunk_FUN_0000383c.c",
+    "decompiled": true
+  },
+  {
+    "entry": 14104,
+    "name": "thunk_FUN_0000383c",
+    "size": 4,
+    "file": "function_00003718_thunk_FUN_0000383c.c",
+    "decompiled": true
+  },
+  {
+    "entry": 14112,
+    "name": "caseD_0",
+    "size": 10,
+    "file": "function_00003720_caseD_0.c",
+    "decompiled": true
+  },
+  {
+    "entry": 14118,
+    "name": "thunk_FUN_0000383c",
+    "size": 4,
+    "file": "function_00003726_thunk_FUN_0000383c.c",
+    "decompiled": true
+  },
+  {
+    "entry": 14344,
+    "name": "FUN_00003808",
+    "size": 4,
+    "file": "function_00003808_FUN_00003808.c",
+    "decompiled": true
+  },
+  {
+    "entry": 14356,
+    "name": "FUN_00003814",
+    "size": 10,
+    "file": "function_00003814_FUN_00003814.c",
+    "decompiled": true
+  },
+  {
+    "entry": 14384,
+    "name": "caseD_20",
+    "size": 2,
+    "file": "function_00003830_caseD_20.c",
+    "decompiled": true
+  },
+  {
+    "entry": 14396,
+    "name": "FUN_0000383c",
+    "size": 32,
+    "file": "function_0000383C_FUN_0000383c.c",
+    "decompiled": true
+  },
+  {
+    "entry": 15496,
+    "name": "thunk_FUN_0000383c",
+    "size": 4,
+    "file": "function_00003C88_thunk_FUN_0000383c.c",
+    "decompiled": true
+  },
+  {
+    "entry": 15562,
+    "name": "FUN_00003cca",
+    "size": 38,
+    "file": "function_00003CCA_FUN_00003cca.c",
+    "decompiled": true
+  },
+  {
+    "entry": 16484,
+    "name": "thunk_FUN_00004080",
+    "size": 2,
+    "file": "function_00004064_thunk_FUN_00004080.c",
+    "decompiled": true
+  },
+  {
+    "entry": 16512,
+    "name": "FUN_00004080",
+    "size": 12,
+    "file": "function_00004080_FUN_00004080.c",
+    "decompiled": true
+  },
+  {
+    "entry": 16524,
+    "name": "FUN_0000408c",
+    "size": 50,
+    "file": "function_0000408C_FUN_0000408c.c",
+    "decompiled": true
+  },
+  {
+    "entry": 16570,
+    "name": "FUN_000040ba",
+    "size": 18,
+    "file": "function_000040BA_FUN_000040ba.c",
+    "decompiled": true
+  },
+  {
+    "entry": 16588,
+    "name": "FUN_000040cc",
+    "size": 18,
+    "file": "function_000040CC_FUN_000040cc.c",
+    "decompiled": true
+  },
+  {
+    "entry": 16610,
+    "name": "FUN_000040e2",
+    "size": 259,
+    "file": "function_000040E2_FUN_000040e2.c",
+    "decompiled": true
+  },
+  {
+    "entry": 16936,
+    "name": "FUN_00004228",
+    "size": 18,
+    "file": "function_00004228_FUN_00004228.c",
+    "decompiled": true
+  },
+  {
+    "entry": 16954,
+    "name": "FUN_0000423a",
+    "size": 260,
+    "file": "function_0000423A_FUN_0000423a.c",
+    "decompiled": true
+  },
+  {
+    "entry": 17276,
+    "name": "FUN_0000437c",
+    "size": 56,
+    "file": "function_0000437C_FUN_0000437c.c",
+    "decompiled": true
+  },
+  {
+    "entry": 17332,
+    "name": "FUN_000043b4",
+    "size": 20,
+    "file": "function_000043B4_FUN_000043b4.c",
+    "decompiled": true
+  },
+  {
+    "entry": 17352,
+    "name": "FUN_000043c8",
+    "size": 68,
+    "file": "function_000043C8_FUN_000043c8.c",
+    "decompiled": true
+  },
+  {
+    "entry": 17692,
+    "name": "FUN_0000451c",
+    "size": 16,
+    "file": "function_0000451C_FUN_0000451c.c",
+    "decompiled": true
+  },
+  {
+    "entry": 17712,
+    "name": "FUN_00004530",
+    "size": 83,
+    "file": "function_00004530_FUN_00004530.c",
+    "decompiled": true
+  },
+  {
+    "entry": 17836,
+    "name": "FUN_000045ac",
+    "size": 40,
+    "file": "function_000045AC_FUN_000045ac.c",
+    "decompiled": true
+  },
+  {
+    "entry": 17876,
+    "name": "FUN_000045d4",
+    "size": 20,
+    "file": "function_000045D4_FUN_000045d4.c",
+    "decompiled": true
+  },
+  {
+    "entry": 17922,
+    "name": "FUN_00004602",
+    "size": 26,
+    "file": "function_00004602_FUN_00004602.c",
+    "decompiled": true
+  },
+  {
+    "entry": 17948,
+    "name": "FUN_0000461c",
+    "size": 46,
+    "file": "function_0000461C_FUN_0000461c.c",
+    "decompiled": true
+  },
+  {
+    "entry": 17994,
+    "name": "FUN_0000464a",
+    "size": 4,
+    "file": "function_0000464A_FUN_0000464a.c",
+    "decompiled": true
+  },
+  {
+    "entry": 17998,
+    "name": "FUN_0000464e",
+    "size": 40,
+    "file": "function_0000464E_FUN_0000464e.c",
+    "decompiled": true
+  },
+  {
+    "entry": 18038,
+    "name": "FUN_00004676",
+    "size": 98,
+    "file": "function_00004676_FUN_00004676.c",
+    "decompiled": true
+  },
+  {
+    "entry": 18324,
+    "name": "FUN_00004794",
+    "size": 24,
+    "file": "function_00004794_FUN_00004794.c",
+    "decompiled": true
+  },
+  {
+    "entry": 18380,
+    "name": "FUN_000047cc",
+    "size": 4,
+    "file": "function_000047CC_FUN_000047cc.c",
+    "decompiled": true
+  },
+  {
+    "entry": 18420,
+    "name": "FUN_000047f4",
+    "size": 198,
+    "file": "function_000047F4_FUN_000047f4.c",
+    "decompiled": true
+  },
+  {
+    "entry": 18816,
+    "name": "FUN_00004980",
+    "size": 76,
+    "file": "function_00004980_FUN_00004980.c",
+    "decompiled": true
+  },
+  {
+    "entry": 18850,
+    "name": "FUN_000049a2",
+    "size": 36,
+    "file": "function_000049A2_FUN_000049a2.c",
+    "decompiled": true
+  },
+  {
+    "entry": 18924,
+    "name": "FUN_000049ec",
+    "size": 60,
+    "file": "function_000049EC_FUN_000049ec.c",
+    "decompiled": true
+  },
+  {
+    "entry": 19304,
+    "name": "FUN_00004b68",
+    "size": 46,
+    "file": "function_00004B68_FUN_00004b68.c",
+    "decompiled": true
+  },
+  {
+    "entry": 19682,
+    "name": "thunk_FUN_0000383c",
+    "size": 4,
+    "file": "function_00004CE2_thunk_FUN_0000383c.c",
+    "decompiled": true
+  },
+  {
+    "entry": 19774,
+    "name": "FUN_00004d3e",
+    "size": 14,
+    "file": "function_00004D3E_FUN_00004d3e.c",
+    "decompiled": true
+  },
+  {
+    "entry": 19800,
+    "name": "FUN_00004d58",
+    "size": 14,
+    "file": "function_00004D58_FUN_00004d58.c",
+    "decompiled": true
+  },
+  {
+    "entry": 19814,
+    "name": "FUN_00004d66",
+    "size": 12,
+    "file": "function_00004D66_FUN_00004d66.c",
+    "decompiled": true
+  },
+  {
+    "entry": 20434,
+    "name": "FUN_00004fd2",
+    "size": 10,
+    "file": "function_00004FD2_FUN_00004fd2.c",
+    "decompiled": true
+  },
+  {
+    "entry": 20648,
+    "name": "FUN_000050a8",
+    "size": 6,
+    "file": "function_000050A8_FUN_000050a8.c",
+    "decompiled": true
+  },
+  {
+    "entry": 20688,
+    "name": "FUN_000050d0",
+    "size": 258,
+    "file": "function_000050D0_FUN_000050d0.c",
+    "decompiled": true
+  },
+  {
+    "entry": 21430,
+    "name": "FUN_000053b6",
+    "size": 22,
+    "file": "function_000053B6_FUN_000053b6.c",
+    "decompiled": true
+  },
+  {
+    "entry": 21452,
+    "name": "FUN_000053cc",
+    "size": 206,
+    "file": "function_000053CC_FUN_000053cc.c",
+    "decompiled": true
+  },
+  {
+    "entry": 21526,
+    "name": "FUN_00005416",
+    "size": 12,
+    "file": "function_00005416_FUN_00005416.c",
+    "decompiled": true
+  },
+  {
+    "entry": 21616,
+    "name": "FUN_00005470",
+    "size": 14,
+    "file": "function_00005470_FUN_00005470.c",
+    "decompiled": true
+  },
+  {
+    "entry": 21684,
+    "name": "FUN_000054b4",
+    "size": 38,
+    "file": "function_000054B4_FUN_000054b4.c",
+    "decompiled": true
+  },
+  {
+    "entry": 21722,
+    "name": "FUN_000054da",
+    "size": 28,
+    "file": "function_000054DA_FUN_000054da.c",
+    "decompiled": true
+  },
+  {
+    "entry": 21750,
+    "name": "FUN_000054f6",
+    "size": 24,
+    "file": "function_000054F6_FUN_000054f6.c",
+    "decompiled": true
+  },
+  {
+    "entry": 21774,
+    "name": "FUN_0000550e",
+    "size": 56,
+    "file": "function_0000550E_FUN_0000550e.c",
+    "decompiled": true
+  },
+  {
+    "entry": 21790,
+    "name": "FUN_0000551e",
+    "size": 50,
+    "file": "function_0000551E_FUN_0000551e.c",
+    "decompiled": true
+  },
+  {
+    "entry": 21840,
+    "name": "FUN_00005550",
+    "size": 66,
+    "file": "function_00005550_FUN_00005550.c",
+    "decompiled": true
+  },
+  {
+    "entry": 22002,
+    "name": "FUN_000055f2",
+    "size": 24,
+    "file": "function_000055F2_FUN_000055f2.c",
+    "decompiled": true
+  },
+  {
+    "entry": 22026,
+    "name": "FUN_0000560a",
+    "size": 36,
+    "file": "function_0000560A_FUN_0000560a.c",
+    "decompiled": true
+  },
+  {
+    "entry": 22062,
+    "name": "FUN_0000562e",
+    "size": 40,
+    "file": "function_0000562E_FUN_0000562e.c",
+    "decompiled": true
+  },
+  {
+    "entry": 22248,
+    "name": "FUN_000056e8",
+    "size": 14,
+    "file": "function_000056E8_FUN_000056e8.c",
+    "decompiled": true
+  },
+  {
+    "entry": 22262,
+    "name": "FUN_000056f6",
+    "size": 36,
+    "file": "function_000056F6_FUN_000056f6.c",
+    "decompiled": true
+  },
+  {
+    "entry": 22350,
+    "name": "FUN_0000574e",
+    "size": 6,
+    "file": "function_0000574E_FUN_0000574e.c",
+    "decompiled": true
+  },
+  {
+    "entry": 22356,
+    "name": "FUN_00005754",
+    "size": 622,
+    "file": "function_00005754_FUN_00005754.c",
+    "decompiled": true
+  },
+  {
+    "entry": 22980,
+    "name": "FUN_000059c4",
+    "size": 22,
+    "file": "function_000059C4_FUN_000059c4.c",
+    "decompiled": true
+  },
+  {
+    "entry": 23128,
+    "name": "FUN_00005a58",
+    "size": 6,
+    "file": "function_00005A58_FUN_00005a58.c",
+    "decompiled": true
+  },
+  {
+    "entry": 23134,
+    "name": "FUN_00005a5e",
+    "size": 4,
+    "file": "function_00005A5E_FUN_00005a5e.c",
+    "decompiled": true
+  },
+  {
+    "entry": 23138,
+    "name": "FUN_00005a62",
+    "size": 4,
+    "file": "function_00005A62_FUN_00005a62.c",
+    "decompiled": true
+  },
+  {
+    "entry": 23142,
+    "name": "FUN_00005a66",
+    "size": 8,
+    "file": "function_00005A66_FUN_00005a66.c",
+    "decompiled": true
+  },
+  {
+    "entry": 23150,
+    "name": "FUN_00005a6e",
+    "size": 6,
+    "file": "function_00005A6E_FUN_00005a6e.c",
+    "decompiled": true
+  },
+  {
+    "entry": 23156,
+    "name": "FUN_00005a74",
+    "size": 15,
+    "file": "function_00005A74_FUN_00005a74.c",
+    "decompiled": true
+  },
+  {
+    "entry": 23188,
+    "name": "FUN_00005a94",
+    "size": 10,
+    "file": "function_00005A94_FUN_00005a94.c",
+    "decompiled": true
+  },
+  {
+    "entry": 23202,
+    "name": "FUN_00005aa2",
+    "size": 24,
+    "file": "function_00005AA2_FUN_00005aa2.c",
+    "decompiled": true
+  },
+  {
+    "entry": 23226,
+    "name": "FUN_00005aba",
+    "size": 16,
+    "file": "function_00005ABA_FUN_00005aba.c",
+    "decompiled": true
+  },
+  {
+    "entry": 23278,
+    "name": "FUN_00005aee",
+    "size": 78,
+    "file": "function_00005AEE_FUN_00005aee.c",
+    "decompiled": true
+  },
+  {
+    "entry": 23356,
+    "name": "FUN_00005b3c",
+    "size": 114,
+    "file": "function_00005B3C_FUN_00005b3c.c",
+    "decompiled": true
+  },
+  {
+    "entry": 23486,
+    "name": "FUN_00005bbe",
+    "size": 76,
+    "file": "function_00005BBE_FUN_00005bbe.c",
+    "decompiled": true
+  },
+  {
+    "entry": 23564,
+    "name": "FUN_00005c0c",
+    "size": 46,
+    "file": "function_00005C0C_FUN_00005c0c.c",
+    "decompiled": true
+  },
+  {
+    "entry": 23610,
+    "name": "FUN_00005c3a",
+    "size": 4,
+    "file": "function_00005C3A_FUN_00005c3a.c",
+    "decompiled": true
+  },
+  {
+    "entry": 23614,
+    "name": "FUN_00005c3e",
+    "size": 74,
+    "file": "function_00005C3E_FUN_00005c3e.c",
+    "decompiled": true
+  },
+  {
+    "entry": 24982,
+    "name": "FUN_00006196",
+    "size": 66,
+    "file": "function_00006196_FUN_00006196.c",
+    "decompiled": true
+  },
+  {
+    "entry": 25050,
+    "name": "FUN_000061da",
+    "size": 166,
+    "file": "function_000061DA_FUN_000061da.c",
+    "decompiled": true
+  },
+  {
+    "entry": 25216,
+    "name": "FUN_00006280",
+    "size": 22,
+    "file": "function_00006280_FUN_00006280.c",
+    "decompiled": true
+  },
+  {
+    "entry": 25238,
+    "name": "FUN_00006296",
+    "size": 18,
+    "file": "function_00006296_FUN_00006296.c",
+    "decompiled": true
+  },
+  {
+    "entry": 25256,
+    "name": "FUN_000062a8",
+    "size": 26,
+    "file": "function_000062A8_FUN_000062a8.c",
+    "decompiled": true
+  },
+  {
+    "entry": 25282,
+    "name": "FUN_000062c2",
+    "size": 46,
+    "file": "function_000062C2_FUN_000062c2.c",
+    "decompiled": true
+  },
+  {
+    "entry": 25332,
+    "name": "FUN_000062f4",
+    "size": 70,
+    "file": "function_000062F4_FUN_000062f4.c",
+    "decompiled": true
+  },
+  {
+    "entry": 25402,
+    "name": "FUN_0000633a",
+    "size": 52,
+    "file": "function_0000633A_FUN_0000633a.c",
+    "decompiled": true
+  },
+  {
+    "entry": 25454,
+    "name": "FUN_0000636e",
+    "size": 46,
+    "file": "function_0000636E_FUN_0000636e.c",
+    "decompiled": true
+  },
+  {
+    "entry": 25546,
+    "name": "FUN_000063ca",
+    "size": 110,
+    "file": "function_000063CA_FUN_000063ca.c",
+    "decompiled": true
+  },
+  {
+    "entry": 25616,
+    "name": "FUN_00006410",
+    "size": 36,
+    "file": "function_00006410_FUN_00006410.c",
+    "decompiled": true
+  },
+  {
+    "entry": 25654,
+    "name": "FUN_00006436",
+    "size": 70,
+    "file": "function_00006436_FUN_00006436.c",
+    "decompiled": true
+  },
+  {
+    "entry": 25768,
+    "name": "FUN_000064a8",
+    "size": 74,
+    "file": "function_000064A8_FUN_000064a8.c",
+    "decompiled": true
+  },
+  {
+    "entry": 25842,
+    "name": "FUN_000064f2",
+    "size": 82,
+    "file": "function_000064F2_FUN_000064f2.c",
+    "decompiled": true
+  },
+  {
+    "entry": 25968,
+    "name": "FUN_00006570",
+    "size": 54,
+    "file": "function_00006570_FUN_00006570.c",
+    "decompiled": true
+  },
+  {
+    "entry": 26190,
+    "name": "FUN_0000664e",
+    "size": 26,
+    "file": "function_0000664E_FUN_0000664e.c",
+    "decompiled": true
+  },
+  {
+    "entry": 26286,
+    "name": "thunk_FUN_0000383c",
+    "size": 4,
+    "file": "function_000066AE_thunk_FUN_0000383c.c",
+    "decompiled": true
+  },
+  {
+    "entry": 26430,
+    "name": "FUN_0000673e",
+    "size": 32,
+    "file": "function_0000673E_FUN_0000673e.c",
+    "decompiled": true
+  },
+  {
+    "entry": 26598,
+    "name": "thunk_FUN_0000383c",
+    "size": 4,
+    "file": "function_000067E6_thunk_FUN_0000383c.c",
+    "decompiled": true
+  },
+  {
+    "entry": 26636,
+    "name": "thunk_FUN_0000383c",
+    "size": 4,
+    "file": "function_0000680C_thunk_FUN_0000383c.c",
+    "decompiled": true
+  },
+  {
+    "entry": 26640,
+    "name": "FUN_00006810",
+    "size": 44,
+    "file": "function_00006810_FUN_00006810.c",
+    "decompiled": true
+  },
+  {
+    "entry": 26684,
+    "name": "FUN_0000683c",
+    "size": 62,
+    "file": "function_0000683C_FUN_0000683c.c",
+    "decompiled": true
+  },
+  {
+    "entry": 26872,
+    "name": "FUN_000068f8",
+    "size": 14,
+    "file": "function_000068F8_FUN_000068f8.c",
+    "decompiled": true
+  },
+  {
+    "entry": 27050,
+    "name": "FUN_000069aa",
+    "size": 1298,
+    "file": "function_000069AA_FUN_000069aa.c",
+    "decompiled": true
+  },
+  {
+    "entry": 27060,
+    "name": "FUN_000069b4",
+    "size": 4,
+    "file": "function_000069B4_FUN_000069b4.c",
+    "decompiled": true
+  },
+  {
+    "entry": 27064,
+    "name": "FUN_000069b8",
+    "size": 10,
+    "file": "function_000069B8_FUN_000069b8.c",
+    "decompiled": true
+  },
+  {
+    "entry": 27074,
+    "name": "FUN_000069c2",
+    "size": 12,
+    "file": "function_000069C2_FUN_000069c2.c",
+    "decompiled": true
+  },
+  {
+    "entry": 27088,
+    "name": "FUN_000069d0",
+    "size": 2,
+    "file": "function_000069D0_FUN_000069d0.c",
+    "decompiled": true
+  },
+  {
+    "entry": 27090,
+    "name": "FUN_000069d2",
+    "size": 10,
+    "file": "function_000069D2_FUN_000069d2.c",
+    "decompiled": true
+  },
+  {
+    "entry": 27100,
+    "name": "FUN_000069dc",
+    "size": 4,
+    "file": "function_000069DC_FUN_000069dc.c",
+    "decompiled": true
+  },
+  {
+    "entry": 27104,
+    "name": "FUN_000069e0",
+    "size": 10,
+    "file": "function_000069E0_FUN_000069e0.c",
+    "decompiled": true
+  },
+  {
+    "entry": 27114,
+    "name": "FUN_000069ea",
+    "size": 62,
+    "file": "function_000069EA_FUN_000069ea.c",
+    "decompiled": true
+  },
+  {
+    "entry": 27176,
+    "name": "FUN_00006a28",
+    "size": 160,
+    "file": "function_00006A28_FUN_00006a28.c",
+    "decompiled": true
+  },
+  {
+    "entry": 27216,
+    "name": "FUN_00006a50",
+    "size": 6,
+    "file": "function_00006A50_FUN_00006a50.c",
+    "decompiled": true
+  },
+  {
+    "entry": 27222,
+    "name": "FUN_00006a56",
+    "size": 12,
+    "file": "function_00006A56_FUN_00006a56.c",
+    "decompiled": true
+  },
+  {
+    "entry": 27266,
+    "name": "caseD_20",
+    "size": 4,
+    "file": "function_00006A82_caseD_20.c",
+    "decompiled": true
+  },
+  {
+    "entry": 27272,
+    "name": "thunk_FUN_000056f6",
+    "size": 4,
+    "file": "function_00006A88_thunk_FUN_000056f6.c",
+    "decompiled": true
+  },
+  {
+    "entry": 27276,
+    "name": "FUN_00006a8c",
+    "size": 4,
+    "file": "function_00006A8C_FUN_00006a8c.c",
+    "decompiled": true
+  },
+  {
+    "entry": 27284,
+    "name": "FUN_00006a94",
+    "size": 12,
+    "file": "function_00006A94_FUN_00006a94.c",
+    "decompiled": true
+  },
+  {
+    "entry": 27308,
+    "name": "FUN_00006aac",
+    "size": 4,
+    "file": "function_00006AAC_FUN_00006aac.c",
+    "decompiled": true
+  },
+  {
+    "entry": 27312,
+    "name": "FUN_00006ab0",
+    "size": 16,
+    "file": "function_00006AB0_FUN_00006ab0.c",
+    "decompiled": true
+  },
+  {
+    "entry": 27328,
+    "name": "FUN_00006ac0",
+    "size": 302,
+    "file": "function_00006AC0_FUN_00006ac0.c",
+    "decompiled": true
+  },
+  {
+    "entry": 27614,
+    "name": "FUN_00006bde",
+    "size": 48,
+    "file": "function_00006BDE_FUN_00006bde.c",
+    "decompiled": true
+  },
+  {
+    "entry": 27728,
+    "name": "FUN_00006c50",
+    "size": 36,
+    "file": "function_00006C50_FUN_00006c50.c",
+    "decompiled": true
+  },
+  {
+    "entry": 27764,
+    "name": "FUN_00006c74",
+    "size": 538,
+    "file": "function_00006C74_FUN_00006c74.c",
+    "decompiled": true
+  },
+  {
+    "entry": 27836,
+    "name": "FUN_00006cbc",
+    "size": 56,
+    "file": "function_00006CBC_FUN_00006cbc.c",
+    "decompiled": true
+  },
+  {
+    "entry": 28264,
+    "name": "FUN_00006e68",
+    "size": 96,
+    "file": "function_00006E68_FUN_00006e68.c",
+    "decompiled": true
+  },
+  {
+    "entry": 28356,
+    "name": "FUN_00006ec4",
+    "size": 30,
+    "file": "function_00006EC4_FUN_00006ec4.c",
+    "decompiled": true
+  },
+  {
+    "entry": 28410,
+    "name": "FUN_00006efa",
+    "size": 20,
+    "file": "function_00006EFA_FUN_00006efa.c",
+    "decompiled": true
+  },
+  {
+    "entry": 29996,
+    "name": "FUN_0000752c",
+    "size": 102,
+    "file": "function_0000752C_FUN_0000752c.c",
+    "decompiled": true
+  },
+  {
+    "entry": 31202,
+    "name": "FUN_000079e2",
+    "size": 30,
+    "file": "function_000079E2_FUN_000079e2.c",
+    "decompiled": true
+  },
+  {
+    "entry": 31274,
+    "name": "FUN_00007a2a",
+    "size": 40,
+    "file": "function_00007A2A_FUN_00007a2a.c",
+    "decompiled": true
+  },
+  {
+    "entry": 31314,
+    "name": "FUN_00007a52",
+    "size": 292,
+    "file": "function_00007A52_FUN_00007a52.c",
+    "decompiled": true
+  },
+  {
+    "entry": 31742,
+    "name": "FUN_00007bfe",
+    "size": 64,
+    "file": "function_00007BFE_FUN_00007bfe.c",
+    "decompiled": true
+  },
+  {
+    "entry": 31806,
+    "name": "FUN_00007c3e",
+    "size": 38,
+    "file": "function_00007C3E_FUN_00007c3e.c",
+    "decompiled": true
+  },
+  {
+    "entry": 31844,
+    "name": "FUN_00007c64",
+    "size": 22,
+    "file": "function_00007C64_FUN_00007c64.c",
+    "decompiled": true
+  },
+  {
+    "entry": 31922,
+    "name": "FUN_00007cb2",
+    "size": 30,
+    "file": "function_00007CB2_FUN_00007cb2.c",
+    "decompiled": true
+  },
+  {
+    "entry": 31962,
+    "name": "thunk_FUN_0000383c",
+    "size": 4,
+    "file": "function_00007CDA_thunk_FUN_0000383c.c",
+    "decompiled": true
+  },
+  {
+    "entry": 32088,
+    "name": "FUN_00007d58",
+    "size": 8,
+    "file": "function_00007D58_FUN_00007d58.c",
+    "decompiled": true
+  },
+  {
+    "entry": 32850,
+    "name": "FUN_00008052",
+    "size": 12,
+    "file": "function_00008052_FUN_00008052.c",
+    "decompiled": true
+  },
+  {
+    "entry": 32862,
+    "name": "FUN_0000805e",
+    "size": 6,
+    "file": "function_0000805E_FUN_0000805e.c",
+    "decompiled": true
+  },
+  {
+    "entry": 32868,
+    "name": "FUN_00008064",
+    "size": 92,
+    "file": "function_00008064_FUN_00008064.c",
+    "decompiled": true
+  },
+  {
+    "entry": 32960,
+    "name": "FUN_000080c0",
+    "size": 92,
+    "file": "function_000080C0_FUN_000080c0.c",
+    "decompiled": true
+  },
+  {
+    "entry": 33052,
+    "name": "FUN_0000811c",
+    "size": 122,
+    "file": "function_0000811C_FUN_0000811c.c",
+    "decompiled": true
+  },
+  {
+    "entry": 33354,
+    "name": "FUN_0000824a",
+    "size": 22,
+    "file": "function_0000824A_FUN_0000824a.c",
+    "decompiled": true
+  },
+  {
+    "entry": 34524,
+    "name": "FUN_000086dc",
+    "size": 42,
+    "file": "function_000086DC_FUN_000086dc.c",
+    "decompiled": true
+  },
+  {
+    "entry": 34570,
+    "name": "FUN_0000870a",
+    "size": 236,
+    "file": "function_0000870A_FUN_0000870a.c",
+    "decompiled": true
+  },
+  {
+    "entry": 34786,
+    "name": "FUN_000087e2",
+    "size": 30,
+    "file": "function_000087E2_FUN_000087e2.c",
+    "decompiled": true
+  },
+  {
+    "entry": 34834,
+    "name": "FUN_00008812",
+    "size": 18,
+    "file": "function_00008812_FUN_00008812.c",
+    "decompiled": true
+  },
+  {
+    "entry": 34874,
+    "name": "FUN_0000883a",
+    "size": 48,
+    "file": "function_0000883A_FUN_0000883a.c",
+    "decompiled": true
+  },
+  {
+    "entry": 34972,
+    "name": "FUN_0000889c",
+    "size": 84,
+    "file": "function_0000889C_FUN_0000889c.c",
+    "decompiled": true
+  },
+  {
+    "entry": 35854,
+    "name": "FUN_00008c0e",
+    "size": 24,
+    "file": "function_00008C0E_FUN_00008c0e.c",
+    "decompiled": true
+  },
+  {
+    "entry": 35910,
+    "name": "FUN_00008c46",
+    "size": 268,
+    "file": "function_00008C46_FUN_00008c46.c",
+    "decompiled": true
+  },
+  {
+    "entry": 36202,
+    "name": "FUN_00008d6a",
+    "size": 22,
+    "file": "function_00008D6A_FUN_00008d6a.c",
+    "decompiled": true
+  },
+  {
+    "entry": 36860,
+    "name": "FUN_00008ffc",
+    "size": 16,
+    "file": "function_00008FFC_FUN_00008ffc.c",
+    "decompiled": true
+  },
+  {
+    "entry": 37576,
+    "name": "FUN_000092c8",
+    "size": 8,
+    "file": "function_000092C8_FUN_000092c8.c",
+    "decompiled": true
+  },
+  {
+    "entry": 37584,
+    "name": "FUN_000092d0",
+    "size": 82,
+    "file": "function_000092D0_FUN_000092d0.c",
+    "decompiled": true
+  },
+  {
+    "entry": 37700,
+    "name": "FUN_00009344",
+    "size": 32,
+    "file": "function_00009344_FUN_00009344.c",
+    "decompiled": true
+  },
+  {
+    "entry": 37732,
+    "name": "FUN_00009364",
+    "size": 54,
+    "file": "function_00009364_FUN_00009364.c",
+    "decompiled": true
+  },
+  {
+    "entry": 37786,
+    "name": "FUN_0000939a",
+    "size": 4,
+    "file": "function_0000939A_FUN_0000939a.c",
+    "decompiled": true
+  },
+  {
+    "entry": 37790,
+    "name": "FUN_0000939e",
+    "size": 152,
+    "file": "function_0000939E_FUN_0000939e.c",
+    "decompiled": true
+  },
+  {
+    "entry": 37886,
+    "name": "FUN_000093fe",
+    "size": 52,
+    "file": "function_000093FE_FUN_000093fe.c",
+    "decompiled": true
+  },
+  {
+    "entry": 37938,
+    "name": "FUN_00009432",
+    "size": 50,
+    "file": "function_00009432_FUN_00009432.c",
+    "decompiled": true
+  },
+  {
+    "entry": 38054,
+    "name": "FUN_000094a6",
+    "size": 196,
+    "file": "function_000094A6_FUN_000094a6.c",
+    "decompiled": true
+  },
+  {
+    "entry": 38250,
+    "name": "FUN_0000956a",
+    "size": 74,
+    "file": "function_0000956A_FUN_0000956a.c",
+    "decompiled": true
+  },
+  {
+    "entry": 38324,
+    "name": "FUN_000095b4",
+    "size": 62,
+    "file": "function_000095B4_FUN_000095b4.c",
+    "decompiled": true
+  },
+  {
+    "entry": 38766,
+    "name": "thunk_FUN_00000a26",
+    "size": 6,
+    "file": "function_0000976E_thunk_FUN_00000a26.c",
+    "decompiled": true
+  },
+  {
+    "entry": 39128,
+    "name": "FUN_000098d8",
+    "size": 46,
+    "file": "function_000098D8_FUN_000098d8.c",
+    "decompiled": true
+  },
+  {
+    "entry": 39174,
+    "name": "FUN_00009906",
+    "size": 32,
+    "file": "function_00009906_FUN_00009906.c",
+    "decompiled": true
+  },
+  {
+    "entry": 39350,
+    "name": "FUN_000099b6",
+    "size": 214,
+    "file": "function_000099B6_FUN_000099b6.c",
+    "decompiled": true
+  },
+  {
+    "entry": 39734,
+    "name": "FUN_00009b36",
+    "size": 24,
+    "file": "function_00009B36_FUN_00009b36.c",
+    "decompiled": true
+  },
+  {
+    "entry": 39924,
+    "name": "FUN_00009bf4",
+    "size": 60,
+    "file": "function_00009BF4_FUN_00009bf4.c",
+    "decompiled": true
+  },
+  {
+    "entry": 39984,
+    "name": "FUN_00009c30",
+    "size": 40,
+    "file": "function_00009C30_FUN_00009c30.c",
+    "decompiled": true
+  },
+  {
+    "entry": 40024,
+    "name": "FUN_00009c58",
+    "size": 110,
+    "file": "function_00009C58_FUN_00009c58.c",
+    "decompiled": true
+  },
+  {
+    "entry": 40134,
+    "name": "FUN_00009cc6",
+    "size": 20,
+    "file": "function_00009CC6_FUN_00009cc6.c",
+    "decompiled": true
+  },
+  {
+    "entry": 40170,
+    "name": "FUN_00009cea",
+    "size": 4,
+    "file": "function_00009CEA_FUN_00009cea.c",
+    "decompiled": true
+  },
+  {
+    "entry": 40174,
+    "name": "FUN_00009cee",
+    "size": 126,
+    "file": "function_00009CEE_FUN_00009cee.c",
+    "decompiled": true
+  },
+  {
+    "entry": 40300,
+    "name": "FUN_00009d6c",
+    "size": 40,
+    "file": "function_00009D6C_FUN_00009d6c.c",
+    "decompiled": true
+  },
+  {
+    "entry": 40340,
+    "name": "FUN_00009d94",
+    "size": 74,
+    "file": "function_00009D94_FUN_00009d94.c",
+    "decompiled": true
+  },
+  {
+    "entry": 40420,
+    "name": "FUN_00009de4",
+    "size": 20,
+    "file": "function_00009DE4_FUN_00009de4.c",
+    "decompiled": true
+  },
+  {
+    "entry": 40744,
+    "name": "FUN_00009f28",
+    "size": 8,
+    "file": "function_00009F28_FUN_00009f28.c",
+    "decompiled": true
+  },
+  {
+    "entry": 40752,
+    "name": "FUN_00009f30",
+    "size": 142,
+    "file": "function_00009F30_FUN_00009f30.c",
+    "decompiled": true
+  },
+  {
+    "entry": 41038,
+    "name": "FUN_0000a04e",
+    "size": 28,
+    "file": "function_0000A04E_FUN_0000a04e.c",
+    "decompiled": true
+  },
+  {
+    "entry": 41150,
+    "name": "FUN_0000a0be",
+    "size": 42,
+    "file": "function_0000A0BE_FUN_0000a0be.c",
+    "decompiled": true
+  },
+  {
+    "entry": 42264,
+    "name": "FUN_0000a518",
+    "size": 82,
+    "file": "function_0000A518_FUN_0000a518.c",
+    "decompiled": true
+  },
+  {
+    "entry": 42876,
+    "name": "FUN_0000a77c",
+    "size": 54,
+    "file": "function_0000A77C_FUN_0000a77c.c",
+    "decompiled": true
+  },
+  {
+    "entry": 42926,
+    "name": "FUN_0000a7ae",
+    "size": 32,
+    "file": "function_0000A7AE_FUN_0000a7ae.c",
+    "decompiled": true
+  },
+  {
+    "entry": 42958,
+    "name": "FUN_0000a7ce",
+    "size": 36,
+    "file": "function_0000A7CE_FUN_0000a7ce.c",
+    "decompiled": true
+  },
+  {
+    "entry": 43472,
+    "name": "FUN_0000a9d0",
+    "size": 28,
+    "file": "function_0000A9D0_FUN_0000a9d0.c",
+    "decompiled": true
+  },
+  {
+    "entry": 43512,
+    "name": "FUN_0000a9f8",
+    "size": 72,
+    "file": "function_0000A9F8_FUN_0000a9f8.c",
+    "decompiled": true
+  },
+  {
+    "entry": 43594,
+    "name": "FUN_0000aa4a",
+    "size": 6,
+    "file": "function_0000AA4A_FUN_0000aa4a.c",
+    "decompiled": true
+  },
+  {
+    "entry": 43652,
+    "name": "FUN_0000aa84",
+    "size": 6,
+    "file": "function_0000AA84_FUN_0000aa84.c",
+    "decompiled": true
+  },
+  {
+    "entry": 43710,
+    "name": "FUN_0000aabe",
+    "size": 6,
+    "file": "function_0000AABE_FUN_0000aabe.c",
+    "decompiled": true
+  },
+  {
+    "entry": 43768,
+    "name": "FUN_0000aaf8",
+    "size": 6,
+    "file": "function_0000AAF8_FUN_0000aaf8.c",
+    "decompiled": true
+  },
+  {
+    "entry": 43774,
+    "name": "FUN_0000aafe",
+    "size": 8,
+    "file": "function_0000AAFE_FUN_0000aafe.c",
+    "decompiled": true
+  },
+  {
+    "entry": 44016,
+    "name": "FUN_0000abf0",
+    "size": 46,
+    "file": "function_0000ABF0_FUN_0000abf0.c",
+    "decompiled": true
+  },
+  {
+    "entry": 44938,
+    "name": "FUN_0000af8a",
+    "size": 94,
+    "file": "function_0000AF8A_FUN_0000af8a.c",
+    "decompiled": true
+  },
+  {
+    "entry": 45032,
+    "name": "FUN_0000afe8",
+    "size": 16,
+    "file": "function_0000AFE8_FUN_0000afe8.c",
+    "decompiled": true
+  },
+  {
+    "entry": 45048,
+    "name": "FUN_0000aff8",
+    "size": 52,
+    "file": "function_0000AFF8_FUN_0000aff8.c",
+    "decompiled": true
+  },
+  {
+    "entry": 45100,
+    "name": "FUN_0000b02c",
+    "size": 8,
+    "file": "function_0000B02C_FUN_0000b02c.c",
+    "decompiled": true
+  },
+  {
+    "entry": 45124,
+    "name": "FUN_0000b044",
+    "size": 26,
+    "file": "function_0000B044_FUN_0000b044.c",
+    "decompiled": true
+  },
+  {
+    "entry": 45616,
+    "name": "FUN_0000b230",
+    "size": 8,
+    "file": "function_0000B230_FUN_0000b230.c",
+    "decompiled": true
+  },
+  {
+    "entry": 45778,
+    "name": "FUN_0000b2d2",
+    "size": 6,
+    "file": "function_0000B2D2_FUN_0000b2d2.c",
+    "decompiled": true
+  },
+  {
+    "entry": 45784,
+    "name": "FUN_0000b2d8",
+    "size": 14,
+    "file": "function_0000B2D8_FUN_0000b2d8.c",
+    "decompiled": true
+  },
+  {
+    "entry": 45978,
+    "name": "thunk_FUN_00007a2a",
+    "size": 6,
+    "file": "function_0000B39A_thunk_FUN_00007a2a.c",
+    "decompiled": true
+  },
+  {
+    "entry": 46140,
+    "name": "FUN_0000b43c",
+    "size": 6,
+    "file": "function_0000B43C_FUN_0000b43c.c",
+    "decompiled": true
+  },
+  {
+    "entry": 47412,
+    "name": "FUN_0000b934",
+    "size": 28,
+    "file": "function_0000B934_FUN_0000b934.c",
+    "decompiled": true
+  },
+  {
+    "entry": 47650,
+    "name": "FUN_0000ba22",
+    "size": 14,
+    "file": "function_0000BA22_FUN_0000ba22.c",
+    "decompiled": true
+  },
+  {
+    "entry": 47660,
+    "name": "FUN_0000ba2c",
+    "size": 10,
+    "file": "function_0000BA2C_FUN_0000ba2c.c",
+    "decompiled": true
+  },
+  {
+    "entry": 47690,
+    "name": "FUN_0000ba4a",
+    "size": 158,
+    "file": "function_0000BA4A_FUN_0000ba4a.c",
+    "decompiled": true
+  },
+  {
+    "entry": 47848,
+    "name": "FUN_0000bae8",
+    "size": 10,
+    "file": "function_0000BAE8_FUN_0000bae8.c",
+    "decompiled": true
+  },
+  {
+    "entry": 47858,
+    "name": "FUN_0000baf2",
+    "size": 4,
+    "file": "function_0000BAF2_FUN_0000baf2.c",
+    "decompiled": true
+  },
+  {
+    "entry": 47862,
+    "name": "FUN_0000baf6",
+    "size": 36,
+    "file": "function_0000BAF6_FUN_0000baf6.c",
+    "decompiled": true
+  },
+  {
+    "entry": 47898,
+    "name": "FUN_0000bb1a",
+    "size": 73,
+    "file": "function_0000BB1A_FUN_0000bb1a.c",
+    "decompiled": true
+  },
+  {
+    "entry": 47972,
+    "name": "FUN_0000bb64",
+    "size": 32,
+    "file": "function_0000BB64_FUN_0000bb64.c",
+    "decompiled": true
+  },
+  {
+    "entry": 48206,
+    "name": "FUN_0000bc4e",
+    "size": 14,
+    "file": "function_0000BC4E_FUN_0000bc4e.c",
+    "decompiled": true
+  },
+  {
+    "entry": 48652,
+    "name": "FUN_0000be0c",
+    "size": 14,
+    "file": "function_0000BE0C_FUN_0000be0c.c",
+    "decompiled": true
+  },
+  {
+    "entry": 48666,
+    "name": "FUN_0000be1a",
+    "size": 22,
+    "file": "function_0000BE1A_FUN_0000be1a.c",
+    "decompiled": true
+  },
+  {
+    "entry": 48688,
+    "name": "FUN_0000be30",
+    "size": 54,
+    "file": "function_0000BE30_FUN_0000be30.c",
+    "decompiled": true
+  },
+  {
+    "entry": 48742,
+    "name": "FUN_0000be66",
+    "size": 62,
+    "file": "function_0000BE66_FUN_0000be66.c",
+    "decompiled": true
+  },
+  {
+    "entry": 50656,
+    "name": "FUN_0000c5e0",
+    "size": 166,
+    "file": "function_0000C5E0_FUN_0000c5e0.c",
+    "decompiled": true
+  },
+  {
+    "entry": 51044,
+    "name": "FUN_0000c764",
+    "size": 64,
+    "file": "function_0000C764_FUN_0000c764.c",
+    "decompiled": false
+  },
+  {
+    "entry": 51722,
+    "name": "FUN_0000ca0a",
+    "size": 58,
+    "file": "function_0000CA0A_FUN_0000ca0a.c",
+    "decompiled": true
+  },
+  {
+    "entry": 52738,
+    "name": "FUN_0000ce02",
+    "size": 178,
+    "file": "function_0000CE02_FUN_0000ce02.c",
+    "decompiled": true
+  },
+  {
+    "entry": 52912,
+    "name": "FUN_0000ceb0",
+    "size": 40,
+    "file": "function_0000CEB0_FUN_0000ceb0.c",
+    "decompiled": true
+  },
+  {
+    "entry": 52952,
+    "name": "FUN_0000ced8",
+    "size": 4,
+    "file": "function_0000CED8_FUN_0000ced8.c",
+    "decompiled": true
+  },
+  {
+    "entry": 52956,
+    "name": "FUN_0000cedc",
+    "size": 32,
+    "file": "function_0000CEDC_FUN_0000cedc.c",
+    "decompiled": true
+  },
+  {
+    "entry": 52996,
+    "name": "FUN_0000cf04",
+    "size": 156,
+    "file": "function_0000CF04_FUN_0000cf04.c",
+    "decompiled": true
+  },
+  {
+    "entry": 53152,
+    "name": "FUN_0000cfa0",
+    "size": 58,
+    "file": "function_0000CFA0_FUN_0000cfa0.c",
+    "decompiled": true
+  },
+  {
+    "entry": 53210,
+    "name": "FUN_0000cfda",
+    "size": 36,
+    "file": "function_0000CFDA_FUN_0000cfda.c",
+    "decompiled": true
+  },
+  {
+    "entry": 53354,
+    "name": "FUN_0000d06a",
+    "size": 42,
+    "file": "function_0000D06A_FUN_0000d06a.c",
+    "decompiled": true
+  },
+  {
+    "entry": 53448,
+    "name": "FUN_0000d0c8",
+    "size": 20,
+    "file": "function_0000D0C8_FUN_0000d0c8.c",
+    "decompiled": true
+  },
+  {
+    "entry": 53588,
+    "name": "FUN_0000d154",
+    "size": 54,
+    "file": "function_0000D154_FUN_0000d154.c",
+    "decompiled": true
+  },
+  {
+    "entry": 53642,
+    "name": "FUN_0000d18a",
+    "size": 32,
+    "file": "function_0000D18A_FUN_0000d18a.c",
+    "decompiled": true
+  },
+  {
+    "entry": 53906,
+    "name": "FUN_0000d292",
+    "size": 34,
+    "file": "function_0000D292_FUN_0000d292.c",
+    "decompiled": true
+  },
+  {
+    "entry": 54038,
+    "name": "thunk_FUN_000122a6",
+    "size": 6,
+    "file": "function_0000D316_thunk_FUN_000122a6.c",
+    "decompiled": true
+  },
+  {
+    "entry": 54936,
+    "name": "FUN_0000d698",
+    "size": 10,
+    "file": "function_0000D698_FUN_0000d698.c",
+    "decompiled": true
+  },
+  {
+    "entry": 54946,
+    "name": "FUN_0000d6a2",
+    "size": 36,
+    "file": "function_0000D6A2_FUN_0000d6a2.c",
+    "decompiled": true
+  },
+  {
+    "entry": 55538,
+    "name": "FUN_0000d8f2",
+    "size": 36,
+    "file": "function_0000D8F2_FUN_0000d8f2.c",
+    "decompiled": true
+  },
+  {
+    "entry": 55758,
+    "name": "FUN_0000d9ce",
+    "size": 66,
+    "file": "function_0000D9CE_FUN_0000d9ce.c",
+    "decompiled": true
+  },
+  {
+    "entry": 56852,
+    "name": "FUN_0000de14",
+    "size": 228,
+    "file": "function_0000DE14_FUN_0000de14.c",
+    "decompiled": true
+  },
+  {
+    "entry": 57122,
+    "name": "FUN_0000df22",
+    "size": 36,
+    "file": "function_0000DF22_FUN_0000df22.c",
+    "decompiled": true
+  },
+  {
+    "entry": 57506,
+    "name": "FUN_0000e0a2",
+    "size": 50,
+    "file": "function_0000E0A2_FUN_0000e0a2.c",
+    "decompiled": false
+  },
+  {
+    "entry": 58626,
+    "name": "FUN_0000e502",
+    "size": 52,
+    "file": "function_0000E502_FUN_0000e502.c",
+    "decompiled": true
+  },
+  {
+    "entry": 58772,
+    "name": "FUN_0000e594",
+    "size": 80,
+    "file": "function_0000E594_FUN_0000e594.c",
+    "decompiled": true
+  },
+  {
+    "entry": 58906,
+    "name": "FUN_0000e61a",
+    "size": 16,
+    "file": "function_0000E61A_FUN_0000e61a.c",
+    "decompiled": true
+  },
+  {
+    "entry": 58964,
+    "name": "FUN_0000e654",
+    "size": 10,
+    "file": "function_0000E654_FUN_0000e654.c",
+    "decompiled": true
+  },
+  {
+    "entry": 59218,
+    "name": "FUN_0000e752",
+    "size": 32,
+    "file": "function_0000E752_FUN_0000e752.c",
+    "decompiled": true
+  },
+  {
+    "entry": 59250,
+    "name": "FUN_0000e772",
+    "size": 4,
+    "file": "function_0000E772_FUN_0000e772.c",
+    "decompiled": true
+  },
+  {
+    "entry": 59254,
+    "name": "FUN_0000e776",
+    "size": 32,
+    "file": "function_0000E776_FUN_0000e776.c",
+    "decompiled": true
+  },
+  {
+    "entry": 59286,
+    "name": "FUN_0000e796",
+    "size": 136,
+    "file": "function_0000E796_FUN_0000e796.c",
+    "decompiled": true
+  },
+  {
+    "entry": 59422,
+    "name": "FUN_0000e81e",
+    "size": 22,
+    "file": "function_0000E81E_FUN_0000e81e.c",
+    "decompiled": true
+  },
+  {
+    "entry": 59444,
+    "name": "FUN_0000e834",
+    "size": 10,
+    "file": "function_0000E834_FUN_0000e834.c",
+    "decompiled": true
+  },
+  {
+    "entry": 59498,
+    "name": "FUN_0000e86a",
+    "size": 22,
+    "file": "function_0000E86A_FUN_0000e86a.c",
+    "decompiled": true
+  },
+  {
+    "entry": 59524,
+    "name": "FUN_0000e884",
+    "size": 52,
+    "file": "function_0000E884_FUN_0000e884.c",
+    "decompiled": true
+  },
+  {
+    "entry": 59576,
+    "name": "FUN_0000e8b8",
+    "size": 160,
+    "file": "function_0000E8B8_FUN_0000e8b8.c",
+    "decompiled": true
+  },
+  {
+    "entry": 59736,
+    "name": "FUN_0000e958",
+    "size": 418,
+    "file": "function_0000E958_FUN_0000e958.c",
+    "decompiled": true
+  },
+  {
+    "entry": 60206,
+    "name": "FUN_0000eb2e",
+    "size": 56,
+    "file": "function_0000EB2E_FUN_0000eb2e.c",
+    "decompiled": true
+  },
+  {
+    "entry": 60258,
+    "name": "FUN_0000eb62",
+    "size": 48,
+    "file": "function_0000EB62_FUN_0000eb62.c",
+    "decompiled": true
+  },
+  {
+    "entry": 60338,
+    "name": "FUN_0000ebb2",
+    "size": 24,
+    "file": "function_0000EBB2_FUN_0000ebb2.c",
+    "decompiled": true
+  },
+  {
+    "entry": 60362,
+    "name": "FUN_0000ebca",
+    "size": 40,
+    "file": "function_0000EBCA_FUN_0000ebca.c",
+    "decompiled": true
+  },
+  {
+    "entry": 60536,
+    "name": "FUN_0000ec78",
+    "size": 96,
+    "file": "function_0000EC78_FUN_0000ec78.c",
+    "decompiled": true
+  },
+  {
+    "entry": 61146,
+    "name": "FUN_0000eeda",
+    "size": 90,
+    "file": "function_0000EEDA_FUN_0000eeda.c",
+    "decompiled": true
+  },
+  {
+    "entry": 61470,
+    "name": "FUN_0000f01e",
+    "size": 72,
+    "file": "function_0000F01E_FUN_0000f01e.c",
+    "decompiled": true
+  },
+  {
+    "entry": 61602,
+    "name": "FUN_0000f0a2",
+    "size": 44,
+    "file": "function_0000F0A2_FUN_0000f0a2.c",
+    "decompiled": true
+  },
+  {
+    "entry": 61698,
+    "name": "FUN_0000f102",
+    "size": 224,
+    "file": "function_0000F102_FUN_0000f102.c",
+    "decompiled": true
+  },
+  {
+    "entry": 62414,
+    "name": "FUN_0000f3ce",
+    "size": 198,
+    "file": "function_0000F3CE_FUN_0000f3ce.c",
+    "decompiled": true
+  },
+  {
+    "entry": 62608,
+    "name": "FUN_0000f490",
+    "size": 14,
+    "file": "function_0000F490_FUN_0000f490.c",
+    "decompiled": true
+  },
+  {
+    "entry": 62622,
+    "name": "FUN_0000f49e",
+    "size": 2,
+    "file": "function_0000F49E_FUN_0000f49e.c",
+    "decompiled": true
+  },
+  {
+    "entry": 62628,
+    "name": "FUN_0000f4a4",
+    "size": 26,
+    "file": "function_0000F4A4_FUN_0000f4a4.c",
+    "decompiled": true
+  },
+  {
+    "entry": 62960,
+    "name": "FUN_0000f5f0",
+    "size": 1382,
+    "file": "function_0000F5F0_FUN_0000f5f0.c",
+    "decompiled": false
+  },
+  {
+    "entry": 63162,
+    "name": "FUN_0000f6ba",
+    "size": 24,
+    "file": "function_0000F6BA_FUN_0000f6ba.c",
+    "decompiled": true
+  },
+  {
+    "entry": 63178,
+    "name": "FUN_0000f6ca",
+    "size": 30,
+    "file": "function_0000F6CA_FUN_0000f6ca.c",
+    "decompiled": true
+  },
+  {
+    "entry": 64866,
+    "name": "FUN_0000fd62",
+    "size": 46,
+    "file": "function_0000FD62_FUN_0000fd62.c",
+    "decompiled": true
+  },
+  {
+    "entry": 64912,
+    "name": "FUN_0000fd90",
+    "size": 540,
+    "file": "function_0000FD90_FUN_0000fd90.c",
+    "decompiled": false
+  },
+  {
+    "entry": 65062,
+    "name": "FUN_0000fe26",
+    "size": 68,
+    "file": "function_0000FE26_FUN_0000fe26.c",
+    "decompiled": true
+  },
+  {
+    "entry": 65130,
+    "name": "thunk_FUN_0001197e",
+    "size": 6,
+    "file": "function_0000FE6A_thunk_FUN_0001197e.c",
+    "decompiled": true
+  },
+  {
+    "entry": 65516,
+    "name": "FUN_0000ffec",
+    "size": 82,
+    "file": "function_0000FFEC_FUN_0000ffec.c",
+    "decompiled": true
+  },
+  {
+    "entry": 65598,
+    "name": "FUN_0001003e",
+    "size": 38,
+    "file": "function_0001003E_FUN_0001003e.c",
+    "decompiled": true
+  },
+  {
+    "entry": 65636,
+    "name": "FUN_00010064",
+    "size": 4,
+    "file": "function_00010064_FUN_00010064.c",
+    "decompiled": true
+  },
+  {
+    "entry": 65640,
+    "name": "FUN_00010068",
+    "size": 40,
+    "file": "function_00010068_FUN_00010068.c",
+    "decompiled": true
+  },
+  {
+    "entry": 65842,
+    "name": "FUN_00010132",
+    "size": 180,
+    "file": "function_00010132_FUN_00010132.c",
+    "decompiled": false
+  },
+  {
+    "entry": 66022,
+    "name": "FUN_000101e6",
+    "size": 66,
+    "file": "function_000101E6_FUN_000101e6.c",
+    "decompiled": true
+  },
+  {
+    "entry": 66154,
+    "name": "FUN_0001026a",
+    "size": 132,
+    "file": "function_0001026A_FUN_0001026a.c",
+    "decompiled": false
+  },
+  {
+    "entry": 66294,
+    "name": "FUN_000102f6",
+    "size": 4,
+    "file": "function_000102F6_FUN_000102f6.c",
+    "decompiled": true
+  },
+  {
+    "entry": 66298,
+    "name": "FUN_000102fa",
+    "size": 236,
+    "file": "function_000102FA_FUN_000102fa.c",
+    "decompiled": true
+  },
+  {
+    "entry": 66534,
+    "name": "FUN_000103e6",
+    "size": 8,
+    "file": "function_000103E6_FUN_000103e6.c",
+    "decompiled": true
+  },
+  {
+    "entry": 66542,
+    "name": "FUN_000103ee",
+    "size": 20,
+    "file": "function_000103EE_FUN_000103ee.c",
+    "decompiled": true
+  },
+  {
+    "entry": 66562,
+    "name": "FUN_00010402",
+    "size": 180,
+    "file": "function_00010402_FUN_00010402.c",
+    "decompiled": true
+  },
+  {
+    "entry": 66742,
+    "name": "FUN_000104b6",
+    "size": 114,
+    "file": "function_000104B6_FUN_000104b6.c",
+    "decompiled": true
+  },
+  {
+    "entry": 67032,
+    "name": "FUN_000105d8",
+    "size": 6,
+    "file": "function_000105D8_FUN_000105d8.c",
+    "decompiled": true
+  },
+  {
+    "entry": 67906,
+    "name": "FUN_00010942",
+    "size": 96,
+    "file": "function_00010942_FUN_00010942.c",
+    "decompiled": false
+  },
+  {
+    "entry": 68012,
+    "name": "FUN_000109ac",
+    "size": 30,
+    "file": "function_000109AC_FUN_000109ac.c",
+    "decompiled": true
+  },
+  {
+    "entry": 68042,
+    "name": "FUN_000109ca",
+    "size": 23,
+    "file": "function_000109CA_FUN_000109ca.c",
+    "decompiled": true
+  },
+  {
+    "entry": 68180,
+    "name": "FUN_00010a54",
+    "size": 8,
+    "file": "function_00010A54_FUN_00010a54.c",
+    "decompiled": true
+  },
+  {
+    "entry": 68188,
+    "name": "FUN_00010a5c",
+    "size": 4,
+    "file": "function_00010A5C_FUN_00010a5c.c",
+    "decompiled": true
+  },
+  {
+    "entry": 68192,
+    "name": "FUN_00010a60",
+    "size": 8,
+    "file": "function_00010A60_FUN_00010a60.c",
+    "decompiled": true
+  },
+  {
+    "entry": 68200,
+    "name": "FUN_00010a68",
+    "size": 2,
+    "file": "function_00010A68_FUN_00010a68.c",
+    "decompiled": true
+  },
+  {
+    "entry": 68202,
+    "name": "FUN_00010a6a",
+    "size": 14,
+    "file": "function_00010A6A_FUN_00010a6a.c",
+    "decompiled": true
+  },
+  {
+    "entry": 68216,
+    "name": "FUN_00010a78",
+    "size": 72,
+    "file": "function_00010A78_FUN_00010a78.c",
+    "decompiled": true
+  },
+  {
+    "entry": 68288,
+    "name": "FUN_00010ac0",
+    "size": 28,
+    "file": "function_00010AC0_FUN_00010ac0.c",
+    "decompiled": true
+  },
+  {
+    "entry": 68316,
+    "name": "FUN_00010adc",
+    "size": 32,
+    "file": "function_00010ADC_FUN_00010adc.c",
+    "decompiled": true
+  },
+  {
+    "entry": 68348,
+    "name": "FUN_00010afc",
+    "size": 24,
+    "file": "function_00010AFC_FUN_00010afc.c",
+    "decompiled": true
+  },
+  {
+    "entry": 68372,
+    "name": "FUN_00010b14",
+    "size": 32,
+    "file": "function_00010B14_FUN_00010b14.c",
+    "decompiled": true
+  },
+  {
+    "entry": 68434,
+    "name": "FUN_00010b52",
+    "size": 54,
+    "file": "function_00010B52_FUN_00010b52.c",
+    "decompiled": true
+  },
+  {
+    "entry": 68646,
+    "name": "FUN_00010c26",
+    "size": 2,
+    "file": "function_00010C26_FUN_00010c26.c",
+    "decompiled": true
+  },
+  {
+    "entry": 68648,
+    "name": "FUN_00010c28",
+    "size": 32,
+    "file": "function_00010C28_FUN_00010c28.c",
+    "decompiled": true
+  },
+  {
+    "entry": 68680,
+    "name": "FUN_00010c48",
+    "size": 4,
+    "file": "function_00010C48_FUN_00010c48.c",
+    "decompiled": false
+  },
+  {
+    "entry": 68682,
+    "name": "FUN_00010c4a",
+    "size": 36,
+    "file": "function_00010C4A_FUN_00010c4a.c",
+    "decompiled": false
+  },
+  {
+    "entry": 68718,
+    "name": "FUN_00010c6e",
+    "size": 30,
+    "file": "function_00010C6E_FUN_00010c6e.c",
+    "decompiled": true
+  },
+  {
+    "entry": 68748,
+    "name": "FUN_00010c8c",
+    "size": 12,
+    "file": "function_00010C8C_FUN_00010c8c.c",
+    "decompiled": true
+  },
+  {
+    "entry": 68760,
+    "name": "FUN_00010c98",
+    "size": 174,
+    "file": "function_00010C98_FUN_00010c98.c",
+    "decompiled": false
+  },
+  {
+    "entry": 68966,
+    "name": "FUN_00010d66",
+    "size": 54,
+    "file": "function_00010D66_FUN_00010d66.c",
+    "decompiled": true
+  },
+  {
+    "entry": 69020,
+    "name": "FUN_00010d9c",
+    "size": 32,
+    "file": "function_00010D9C_FUN_00010d9c.c",
+    "decompiled": true
+  },
+  {
+    "entry": 69136,
+    "name": "FUN_00010e10",
+    "size": 114,
+    "file": "function_00010E10_FUN_00010e10.c",
+    "decompiled": true
+  },
+  {
+    "entry": 69250,
+    "name": "FUN_00010e82",
+    "size": 24,
+    "file": "function_00010E82_FUN_00010e82.c",
+    "decompiled": true
+  },
+  {
+    "entry": 69274,
+    "name": "FUN_00010e9a",
+    "size": 348,
+    "file": "function_00010E9A_FUN_00010e9a.c",
+    "decompiled": true
+  },
+  {
+    "entry": 69342,
+    "name": "FUN_00010ede",
+    "size": 8,
+    "file": "function_00010EDE_FUN_00010ede.c",
+    "decompiled": true
+  },
+  {
+    "entry": 69630,
+    "name": "FUN_00010ffe",
+    "size": 448,
+    "file": "function_00010FFE_FUN_00010ffe.c",
+    "decompiled": false
+  },
+  {
+    "entry": 70044,
+    "name": "FUN_0001119c",
+    "size": 4,
+    "file": "function_0001119C_FUN_0001119c.c",
+    "decompiled": true
+  },
+  {
+    "entry": 70048,
+    "name": "FUN_000111a0",
+    "size": 28,
+    "file": "function_000111A0_FUN_000111a0.c",
+    "decompiled": true
+  },
+  {
+    "entry": 70202,
+    "name": "FUN_0001123a",
+    "size": 6,
+    "file": "function_0001123A_FUN_0001123a.c",
+    "decompiled": true
+  },
+  {
+    "entry": 70208,
+    "name": "FUN_00011240",
+    "size": 14,
+    "file": "function_00011240_FUN_00011240.c",
+    "decompiled": true
+  },
+  {
+    "entry": 70696,
+    "name": "FUN_00011428",
+    "size": 32,
+    "file": "function_00011428_FUN_00011428.c",
+    "decompiled": true
+  },
+  {
+    "entry": 70874,
+    "name": "FUN_000114da",
+    "size": 88,
+    "file": "function_000114DA_FUN_000114da.c",
+    "decompiled": true
+  },
+  {
+    "entry": 71040,
+    "name": "FUN_00011580",
+    "size": 1,
+    "file": "function_00011580_FUN_00011580.c",
+    "decompiled": true
+  },
+  {
+    "entry": 71048,
+    "name": "FUN_00011588",
+    "size": 8,
+    "file": "function_00011588_FUN_00011588.c",
+    "decompiled": true
+  },
+  {
+    "entry": 71056,
+    "name": "FUN_00011590",
+    "size": 4,
+    "file": "function_00011590_FUN_00011590.c",
+    "decompiled": true
+  },
+  {
+    "entry": 71060,
+    "name": "FUN_00011594",
+    "size": 10,
+    "file": "function_00011594_FUN_00011594.c",
+    "decompiled": true
+  },
+  {
+    "entry": 71070,
+    "name": "FUN_0001159e",
+    "size": 7,
+    "file": "function_0001159E_FUN_0001159e.c",
+    "decompiled": true
+  },
+  {
+    "entry": 71088,
+    "name": "FUN_000115b0",
+    "size": 1,
+    "file": "function_000115B0_FUN_000115b0.c",
+    "decompiled": true
+  },
+  {
+    "entry": 71120,
+    "name": "FUN_000115d0",
+    "size": 1,
+    "file": "function_000115D0_FUN_000115d0.c",
+    "decompiled": true
+  },
+  {
+    "entry": 71136,
+    "name": "FUN_000115e0",
+    "size": 1,
+    "file": "function_000115E0_FUN_000115e0.c",
+    "decompiled": true
+  },
+  {
+    "entry": 71154,
+    "name": "FUN_000115f2",
+    "size": 4,
+    "file": "function_000115F2_FUN_000115f2.c",
+    "decompiled": true
+  },
+  {
+    "entry": 71182,
+    "name": "FUN_0001160e",
+    "size": 8,
+    "file": "function_0001160E_FUN_0001160e.c",
+    "decompiled": true
+  },
+  {
+    "entry": 71218,
+    "name": "FUN_00011632",
+    "size": 4,
+    "file": "function_00011632_FUN_00011632.c",
+    "decompiled": true
+  },
+  {
+    "entry": 71236,
+    "name": "FUN_00011644",
+    "size": 18,
+    "file": "function_00011644_FUN_00011644.c",
+    "decompiled": true
+  },
+  {
+    "entry": 71268,
+    "name": "FUN_00011664",
+    "size": 4,
+    "file": "function_00011664_FUN_00011664.c",
+    "decompiled": true
+  },
+  {
+    "entry": 71286,
+    "name": "FUN_00011676",
+    "size": 4,
+    "file": "function_00011676_FUN_00011676.c",
+    "decompiled": true
+  },
+  {
+    "entry": 71304,
+    "name": "FUN_00011688",
+    "size": 18,
+    "file": "function_00011688_FUN_00011688.c",
+    "decompiled": true
+  },
+  {
+    "entry": 71322,
+    "name": "FUN_0001169a",
+    "size": 18,
+    "file": "function_0001169A_FUN_0001169a.c",
+    "decompiled": true
+  },
+  {
+    "entry": 71358,
+    "name": "FUN_000116be",
+    "size": 18,
+    "file": "function_000116BE_FUN_000116be.c",
+    "decompiled": true
+  },
+  {
+    "entry": 71376,
+    "name": "FUN_000116d0",
+    "size": 18,
+    "file": "function_000116D0_FUN_000116d0.c",
+    "decompiled": true
+  },
+  {
+    "entry": 71412,
+    "name": "FUN_000116f4",
+    "size": 18,
+    "file": "function_000116F4_FUN_000116f4.c",
+    "decompiled": true
+  },
+  {
+    "entry": 71474,
+    "name": "FUN_00011732",
+    "size": 18,
+    "file": "function_00011732_FUN_00011732.c",
+    "decompiled": true
+  },
+  {
+    "entry": 71492,
+    "name": "FUN_00011744",
+    "size": 18,
+    "file": "function_00011744_FUN_00011744.c",
+    "decompiled": true
+  },
+  {
+    "entry": 71528,
+    "name": "FUN_00011768",
+    "size": 18,
+    "file": "function_00011768_FUN_00011768.c",
+    "decompiled": true
+  },
+  {
+    "entry": 71792,
+    "name": "FUN_00011870",
+    "size": 42,
+    "file": "function_00011870_FUN_00011870.c",
+    "decompiled": true
+  },
+  {
+    "entry": 71836,
+    "name": "FUN_0001189c",
+    "size": 12,
+    "file": "function_0001189C_FUN_0001189c.c",
+    "decompiled": true
+  },
+  {
+    "entry": 71850,
+    "name": "FUN_000118aa",
+    "size": 12,
+    "file": "function_000118AA_FUN_000118aa.c",
+    "decompiled": true
+  },
+  {
+    "entry": 72028,
+    "name": "FUN_0001195c",
+    "size": 18,
+    "file": "function_0001195C_FUN_0001195c.c",
+    "decompiled": true
+  },
+  {
+    "entry": 72062,
+    "name": "FUN_0001197e",
+    "size": 2,
+    "file": "function_0001197E_FUN_0001197e.c",
+    "decompiled": true
+  },
+  {
+    "entry": 72068,
+    "name": "FUN_00011984",
+    "size": 14,
+    "file": "function_00011984_FUN_00011984.c",
+    "decompiled": true
+  },
+  {
+    "entry": 72102,
+    "name": "FUN_000119a6",
+    "size": 14,
+    "file": "function_000119A6_FUN_000119a6.c",
+    "decompiled": true
+  },
+  {
+    "entry": 72360,
+    "name": "FUN_00011aa8",
+    "size": 14,
+    "file": "function_00011AA8_FUN_00011aa8.c",
+    "decompiled": true
+  },
+  {
+    "entry": 72392,
+    "name": "FUN_00011ac8",
+    "size": 18,
+    "file": "function_00011AC8_FUN_00011ac8.c",
+    "decompiled": true
+  },
+  {
+    "entry": 72540,
+    "name": "FUN_00011b5c",
+    "size": 14,
+    "file": "function_00011B5C_FUN_00011b5c.c",
+    "decompiled": true
+  },
+  {
+    "entry": 72554,
+    "name": "FUN_00011b6a",
+    "size": 4,
+    "file": "function_00011B6A_FUN_00011b6a.c",
+    "decompiled": true
+  },
+  {
+    "entry": 72558,
+    "name": "FUN_00011b6e",
+    "size": 14,
+    "file": "function_00011B6E_FUN_00011b6e.c",
+    "decompiled": true
+  },
+  {
+    "entry": 72572,
+    "name": "FUN_00011b7c",
+    "size": 18,
+    "file": "function_00011B7C_FUN_00011b7c.c",
+    "decompiled": true
+  },
+  {
+    "entry": 72590,
+    "name": "FUN_00011b8e",
+    "size": 4,
+    "file": "function_00011B8E_FUN_00011b8e.c",
+    "decompiled": true
+  },
+  {
+    "entry": 72594,
+    "name": "FUN_00011b92",
+    "size": 14,
+    "file": "function_00011B92_FUN_00011b92.c",
+    "decompiled": true
+  },
+  {
+    "entry": 72612,
+    "name": "FUN_00011ba4",
+    "size": 10,
+    "file": "function_00011BA4_FUN_00011ba4.c",
+    "decompiled": true
+  },
+  {
+    "entry": 72630,
+    "name": "FUN_00011bb6",
+    "size": 10,
+    "file": "function_00011BB6_FUN_00011bb6.c",
+    "decompiled": true
+  },
+  {
+    "entry": 72696,
+    "name": "FUN_00011bf8",
+    "size": 2,
+    "file": "function_00011BF8_FUN_00011bf8.c",
+    "decompiled": true
+  },
+  {
+    "entry": 72790,
+    "name": "FUN_00011c56",
+    "size": 16,
+    "file": "function_00011C56_FUN_00011c56.c",
+    "decompiled": true
+  },
+  {
+    "entry": 72808,
+    "name": "FUN_00011c68",
+    "size": 16,
+    "file": "function_00011C68_FUN_00011c68.c",
+    "decompiled": true
+  },
+  {
+    "entry": 72826,
+    "name": "FUN_00011c7a",
+    "size": 4,
+    "file": "function_00011C7A_FUN_00011c7a.c",
+    "decompiled": true
+  },
+  {
+    "entry": 72830,
+    "name": "FUN_00011c7e",
+    "size": 14,
+    "file": "function_00011C7E_FUN_00011c7e.c",
+    "decompiled": true
+  },
+  {
+    "entry": 72844,
+    "name": "FUN_00011c8c",
+    "size": 4,
+    "file": "function_00011C8C_FUN_00011c8c.c",
+    "decompiled": true
+  },
+  {
+    "entry": 72848,
+    "name": "FUN_00011c90",
+    "size": 14,
+    "file": "function_00011C90_FUN_00011c90.c",
+    "decompiled": true
+  },
+  {
+    "entry": 72866,
+    "name": "FUN_00011ca2",
+    "size": 14,
+    "file": "function_00011CA2_FUN_00011ca2.c",
+    "decompiled": true
+  },
+  {
+    "entry": 73270,
+    "name": "FUN_00011e36",
+    "size": 36,
+    "file": "function_00011E36_FUN_00011e36.c",
+    "decompiled": true
+  },
+  {
+    "entry": 73310,
+    "name": "FUN_00011e5e",
+    "size": 14,
+    "file": "function_00011E5E_FUN_00011e5e.c",
+    "decompiled": true
+  },
+  {
+    "entry": 73466,
+    "name": "FUN_00011efa",
+    "size": 14,
+    "file": "function_00011EFA_FUN_00011efa.c",
+    "decompiled": true
+  },
+  {
+    "entry": 73520,
+    "name": "FUN_00011f30",
+    "size": 18,
+    "file": "function_00011F30_FUN_00011f30.c",
+    "decompiled": true
+  },
+  {
+    "entry": 73542,
+    "name": "FUN_00011f46",
+    "size": 14,
+    "file": "function_00011F46_FUN_00011f46.c",
+    "decompiled": true
+  },
+  {
+    "entry": 73560,
+    "name": "FUN_00011f58",
+    "size": 14,
+    "file": "function_00011F58_FUN_00011f58.c",
+    "decompiled": true
+  },
+  {
+    "entry": 73592,
+    "name": "FUN_00011f78",
+    "size": 14,
+    "file": "function_00011F78_FUN_00011f78.c",
+    "decompiled": true
+  },
+  {
+    "entry": 73610,
+    "name": "FUN_00011f8a",
+    "size": 18,
+    "file": "function_00011F8A_FUN_00011f8a.c",
+    "decompiled": true
+  },
+  {
+    "entry": 73682,
+    "name": "FUN_00011fd2",
+    "size": 18,
+    "file": "function_00011FD2_FUN_00011fd2.c",
+    "decompiled": true
+  },
+  {
+    "entry": 73722,
+    "name": "FUN_00011ffa",
+    "size": 14,
+    "file": "function_00011FFA_FUN_00011ffa.c",
+    "decompiled": true
+  },
+  {
+    "entry": 73780,
+    "name": "FUN_00012034",
+    "size": 1,
+    "file": "function_00012034_FUN_00012034.c",
+    "decompiled": true
+  },
+  {
+    "entry": 73816,
+    "name": "FUN_00012058",
+    "size": 18,
+    "file": "function_00012058_FUN_00012058.c",
+    "decompiled": true
+  },
+  {
+    "entry": 73852,
+    "name": "FUN_0001207c",
+    "size": 4,
+    "file": "function_0001207C_FUN_0001207c.c",
+    "decompiled": true
+  },
+  {
+    "entry": 73856,
+    "name": "FUN_00012080",
+    "size": 14,
+    "file": "function_00012080_FUN_00012080.c",
+    "decompiled": true
+  },
+  {
+    "entry": 73888,
+    "name": "FUN_000120a0",
+    "size": 18,
+    "file": "function_000120A0_FUN_000120a0.c",
+    "decompiled": true
+  },
+  {
+    "entry": 73906,
+    "name": "FUN_000120b2",
+    "size": 18,
+    "file": "function_000120B2_FUN_000120b2.c",
+    "decompiled": true
+  },
+  {
+    "entry": 73954,
+    "name": "FUN_000120e2",
+    "size": 1,
+    "file": "function_000120E2_FUN_000120e2.c",
+    "decompiled": true
+  },
+  {
+    "entry": 74062,
+    "name": "FUN_0001214e",
+    "size": 18,
+    "file": "function_0001214E_FUN_0001214e.c",
+    "decompiled": true
+  },
+  {
+    "entry": 74080,
+    "name": "FUN_00012160",
+    "size": 18,
+    "file": "function_00012160_FUN_00012160.c",
+    "decompiled": true
+  },
+  {
+    "entry": 74120,
+    "name": "FUN_00012188",
+    "size": 14,
+    "file": "function_00012188_FUN_00012188.c",
+    "decompiled": true
+  },
+  {
+    "entry": 74148,
+    "name": "FUN_000121a4",
+    "size": 18,
+    "file": "function_000121A4_FUN_000121a4.c",
+    "decompiled": true
+  },
+  {
+    "entry": 74166,
+    "name": "FUN_000121b6",
+    "size": 18,
+    "file": "function_000121B6_FUN_000121b6.c",
+    "decompiled": true
+  },
+  {
+    "entry": 74254,
+    "name": "FUN_0001220e",
+    "size": 16,
+    "file": "function_0001220E_FUN_0001220e.c",
+    "decompiled": true
+  },
+  {
+    "entry": 74286,
+    "name": "FUN_0001222e",
+    "size": 4,
+    "file": "function_0001222E_FUN_0001222e.c",
+    "decompiled": true
+  },
+  {
+    "entry": 74294,
+    "name": "FUN_00012236",
+    "size": 10,
+    "file": "function_00012236_FUN_00012236.c",
+    "decompiled": true
+  },
+  {
+    "entry": 74304,
+    "name": "FUN_00012240",
+    "size": 4,
+    "file": "function_00012240_FUN_00012240.c",
+    "decompiled": true
+  },
+  {
+    "entry": 74344,
+    "name": "FUN_00012268",
+    "size": 10,
+    "file": "function_00012268_FUN_00012268.c",
+    "decompiled": true
+  },
+  {
+    "entry": 74406,
+    "name": "FUN_000122a6",
+    "size": 18,
+    "file": "function_000122A6_FUN_000122a6.c",
+    "decompiled": true
+  },
+  {
+    "entry": 74442,
+    "name": "FUN_000122ca",
+    "size": 18,
+    "file": "function_000122CA_FUN_000122ca.c",
+    "decompiled": true
+  },
+  {
+    "entry": 74698,
+    "name": "FUN_000123ca",
+    "size": 14,
+    "file": "function_000123CA_FUN_000123ca.c",
+    "decompiled": true
+  },
+  {
+    "entry": 74712,
+    "name": "FUN_000123d8",
+    "size": 12,
+    "file": "function_000123D8_FUN_000123d8.c",
+    "decompiled": true
+  },
+  {
+    "entry": 74724,
+    "name": "FUN_000123e4",
+    "size": 12,
+    "file": "function_000123E4_FUN_000123e4.c",
+    "decompiled": true
+  },
+  {
+    "entry": 74736,
+    "name": "FUN_000123f0",
+    "size": 12,
+    "file": "function_000123F0_FUN_000123f0.c",
+    "decompiled": true
+  },
+  {
+    "entry": 74748,
+    "name": "FUN_000123fc",
+    "size": 12,
+    "file": "function_000123FC_FUN_000123fc.c",
+    "decompiled": true
+  },
+  {
+    "entry": 74760,
+    "name": "FUN_00012408",
+    "size": 10,
+    "file": "function_00012408_FUN_00012408.c",
+    "decompiled": true
+  },
+  {
+    "entry": 74778,
+    "name": "FUN_0001241a",
+    "size": 10,
+    "file": "function_0001241A_FUN_0001241a.c",
+    "decompiled": true
+  },
+  {
+    "entry": 74788,
+    "name": "FUN_00012424",
+    "size": 10,
+    "file": "function_00012424_FUN_00012424.c",
+    "decompiled": true
+  },
+  {
+    "entry": 74798,
+    "name": "FUN_0001242e",
+    "size": 8,
+    "file": "function_0001242E_FUN_0001242e.c",
+    "decompiled": true
+  },
+  {
+    "entry": 74806,
+    "name": "FUN_00012436",
+    "size": 8,
+    "file": "function_00012436_FUN_00012436.c",
+    "decompiled": true
+  },
+  {
+    "entry": 74834,
+    "name": "FUN_00012452",
+    "size": 14,
+    "file": "function_00012452_FUN_00012452.c",
+    "decompiled": true
+  },
+  {
+    "entry": 74868,
+    "name": "FUN_00012474",
+    "size": 4,
+    "file": "function_00012474_FUN_00012474.c",
+    "decompiled": true
+  },
+  {
+    "entry": 74886,
+    "name": "FUN_00012486",
+    "size": 2,
+    "file": "function_00012486_FUN_00012486.c",
+    "decompiled": true
+  },
+  {
+    "entry": 74892,
+    "name": "FUN_0001248c",
+    "size": 14,
+    "file": "function_0001248C_FUN_0001248c.c",
+    "decompiled": true
+  },
+  {
+    "entry": 75244,
+    "name": "FUN_000125ec",
+    "size": 4,
+    "file": "function_000125EC_FUN_000125ec.c",
+    "decompiled": true
+  },
+  {
+    "entry": 75270,
+    "name": "FUN_00012606",
+    "size": 10,
+    "file": "function_00012606_FUN_00012606.c",
+    "decompiled": true
+  },
+  {
+    "entry": 75296,
+    "name": "FUN_00012620",
+    "size": 2,
+    "file": "function_00012620_FUN_00012620.c",
+    "decompiled": true
+  },
+  {
+    "entry": 75368,
+    "name": "FUN_00012668",
+    "size": 18,
+    "file": "function_00012668_FUN_00012668.c",
+    "decompiled": true
+  },
+  {
+    "entry": 75440,
+    "name": "FUN_000126b0",
+    "size": 18,
+    "file": "function_000126B0_FUN_000126b0.c",
+    "decompiled": true
+  },
+  {
+    "entry": 75502,
+    "name": "FUN_000126ee",
+    "size": 18,
+    "file": "function_000126EE_FUN_000126ee.c",
+    "decompiled": true
+  },
+  {
+    "entry": 75822,
+    "name": "FUN_0001282e",
+    "size": 18,
+    "file": "function_0001282E_FUN_0001282e.c",
+    "decompiled": true
+  },
+  {
+    "entry": 75848,
+    "name": "FUN_00012848",
+    "size": 10,
+    "file": "function_00012848_FUN_00012848.c",
+    "decompiled": true
+  },
+  {
+    "entry": 75898,
+    "name": "FUN_0001287a",
+    "size": 4,
+    "file": "function_0001287A_FUN_0001287a.c",
+    "decompiled": true
+  },
+  {
+    "entry": 75934,
+    "name": "FUN_0001289e",
+    "size": 18,
+    "file": "function_0001289E_FUN_0001289e.c",
+    "decompiled": true
+  },
+  {
+    "entry": 76102,
+    "name": "FUN_00012946",
+    "size": 10,
+    "file": "function_00012946_FUN_00012946.c",
+    "decompiled": true
+  },
+  {
+    "entry": 76134,
+    "name": "FUN_00012966",
+    "size": 8,
+    "file": "function_00012966_FUN_00012966.c",
+    "decompiled": true
+  },
+  {
+    "entry": 76400,
+    "name": "FUN_00012a70",
+    "size": 14,
+    "file": "function_00012A70_FUN_00012a70.c",
+    "decompiled": true
+  },
+  {
+    "entry": 76474,
+    "name": "FUN_00012aba",
+    "size": 10,
+    "file": "function_00012ABA_FUN_00012aba.c",
+    "decompiled": true
+  },
+  {
+    "entry": 76528,
+    "name": "FUN_00012af0",
+    "size": 18,
+    "file": "function_00012AF0_FUN_00012af0.c",
+    "decompiled": true
+  },
+  {
+    "entry": 76564,
+    "name": "FUN_00012b14",
+    "size": 18,
+    "file": "function_00012B14_FUN_00012b14.c",
+    "decompiled": true
+  },
+  {
+    "entry": 76584,
+    "name": "FUN_00012b28",
+    "size": 1,
+    "file": "function_00012B28_FUN_00012b28.c",
+    "decompiled": true
+  },
+  {
+    "entry": 76602,
+    "name": "FUN_00012b3a",
+    "size": 1,
+    "file": "function_00012B3A_FUN_00012b3a.c",
+    "decompiled": true
+  },
+  {
+    "entry": 76620,
+    "name": "FUN_00012b4c",
+    "size": 1,
+    "file": "function_00012B4C_FUN_00012b4c.c",
+    "decompiled": true
+  },
+  {
+    "entry": 76638,
+    "name": "FUN_00012b5e",
+    "size": 18,
+    "file": "function_00012B5E_FUN_00012b5e.c",
+    "decompiled": true
+  },
+  {
+    "entry": 76656,
+    "name": "FUN_00012b70",
+    "size": 18,
+    "file": "function_00012B70_FUN_00012b70.c",
+    "decompiled": true
+  },
+  {
+    "entry": 76674,
+    "name": "FUN_00012b82",
+    "size": 18,
+    "file": "function_00012B82_FUN_00012b82.c",
+    "decompiled": true
+  },
+  {
+    "entry": 76692,
+    "name": "FUN_00012b94",
+    "size": 18,
+    "file": "function_00012B94_FUN_00012b94.c",
+    "decompiled": true
+  },
+  {
+    "entry": 76804,
+    "name": "FUN_00012c04",
+    "size": 14,
+    "file": "function_00012C04_FUN_00012c04.c",
+    "decompiled": true
+  },
+  {
+    "entry": 76896,
+    "name": "FUN_00012c60",
+    "size": 18,
+    "file": "function_00012C60_FUN_00012c60.c",
+    "decompiled": true
+  },
+  {
+    "entry": 77008,
+    "name": "FUN_00012cd0",
+    "size": 16,
+    "file": "function_00012CD0_FUN_00012cd0.c",
+    "decompiled": true
+  },
+  {
+    "entry": 77294,
+    "name": "FUN_00012dee",
+    "size": 18,
+    "file": "function_00012DEE_FUN_00012dee.c",
+    "decompiled": true
+  },
+  {
+    "entry": 77474,
+    "name": "FUN_00012ea2",
+    "size": 18,
+    "file": "function_00012EA2_FUN_00012ea2.c",
+    "decompiled": true
+  },
+  {
+    "entry": 78230,
+    "name": "FUN_00013196",
+    "size": 28,
+    "file": "function_00013196_FUN_00013196.c",
+    "decompiled": true
+  },
+  {
+    "entry": 80628,
+    "name": "FUN_00013af4",
+    "size": 174,
+    "file": "function_00013AF4_FUN_00013af4.c",
+    "decompiled": true
+  },
+  {
+    "entry": 80802,
+    "name": "FUN_00013ba2",
+    "size": 120,
+    "file": "function_00013BA2_FUN_00013ba2.c",
+    "decompiled": true
+  },
+  {
+    "entry": 82006,
+    "name": "FUN_00014056",
+    "size": 18,
+    "file": "function_00014056_FUN_00014056.c",
+    "decompiled": true
+  },
+  {
+    "entry": 82386,
+    "name": "FUN_000141d2",
+    "size": 10,
+    "file": "function_000141D2_FUN_000141d2.c",
+    "decompiled": true
+  },
+  {
+    "entry": 82396,
+    "name": "FUN_000141dc",
+    "size": 60,
+    "file": "function_000141DC_FUN_000141dc.c",
+    "decompiled": true
+  },
+  {
+    "entry": 82456,
+    "name": "FUN_00014218",
+    "size": 334,
+    "file": "function_00014218_FUN_00014218.c",
+    "decompiled": true
+  },
+  {
+    "entry": 82968,
+    "name": "FUN_00014418",
+    "size": 190,
+    "file": "function_00014418_FUN_00014418.c",
+    "decompiled": true
+  },
+  {
+    "entry": 83158,
+    "name": "FUN_000144d6",
+    "size": 120,
+    "file": "function_000144D6_FUN_000144d6.c",
+    "decompiled": true
+  },
+  {
+    "entry": 83278,
+    "name": "FUN_0001454e",
+    "size": 18,
+    "file": "function_0001454E_FUN_0001454e.c",
+    "decompiled": true
+  },
+  {
+    "entry": 83296,
+    "name": "FUN_00014560",
+    "size": 20,
+    "file": "function_00014560_FUN_00014560.c",
+    "decompiled": true
+  },
+  {
+    "entry": 83316,
+    "name": "FUN_00014574",
+    "size": 2,
+    "file": "function_00014574_FUN_00014574.c",
+    "decompiled": true
+  },
+  {
+    "entry": 83318,
+    "name": "FUN_00014576",
+    "size": 2,
+    "file": "function_00014576_FUN_00014576.c",
+    "decompiled": true
+  },
+  {
+    "entry": 83320,
+    "name": "FUN_00014578",
+    "size": 14,
+    "file": "function_00014578_FUN_00014578.c",
+    "decompiled": true
+  },
+  {
+    "entry": 83334,
+    "name": "FUN_00014586",
+    "size": 32,
+    "file": "function_00014586_FUN_00014586.c",
+    "decompiled": true
+  },
+  {
+    "entry": 83366,
+    "name": "FUN_000145a6",
+    "size": 22,
+    "file": "function_000145A6_FUN_000145a6.c",
+    "decompiled": true
+  },
+  {
+    "entry": 83388,
+    "name": "FUN_000145bc",
+    "size": 46,
+    "file": "function_000145BC_FUN_000145bc.c",
+    "decompiled": true
+  },
+  {
+    "entry": 83450,
+    "name": "FUN_000145fa",
+    "size": 16,
+    "file": "function_000145FA_FUN_000145fa.c",
+    "decompiled": true
+  },
+  {
+    "entry": 83916,
+    "name": "FUN_000147cc",
+    "size": 20,
+    "file": "function_000147CC_FUN_000147cc.c",
+    "decompiled": true
+  },
+  {
+    "entry": 83936,
+    "name": "FUN_000147e0",
+    "size": 14,
+    "file": "function_000147E0_FUN_000147e0.c",
+    "decompiled": true
+  },
+  {
+    "entry": 83950,
+    "name": "FUN_000147ee",
+    "size": 106,
+    "file": "function_000147EE_FUN_000147ee.c",
+    "decompiled": true
+  },
+  {
+    "entry": 84056,
+    "name": "FUN_00014858",
+    "size": 46,
+    "file": "function_00014858_FUN_00014858.c",
+    "decompiled": true
+  },
+  {
+    "entry": 84102,
+    "name": "FUN_00014886",
+    "size": 86,
+    "file": "function_00014886_FUN_00014886.c",
+    "decompiled": true
+  },
+  {
+    "entry": 84190,
+    "name": "FUN_000148de",
+    "size": 22,
+    "file": "function_000148DE_FUN_000148de.c",
+    "decompiled": true
+  },
+  {
+    "entry": 84212,
+    "name": "FUN_000148f4",
+    "size": 18,
+    "file": "function_000148F4_FUN_000148f4.c",
+    "decompiled": true
+  },
+  {
+    "entry": 84290,
+    "name": "FUN_00014942",
+    "size": 1,
+    "file": "function_00014942_FUN_00014942.c",
+    "decompiled": true
+  },
+  {
+    "entry": 84376,
+    "name": "FUN_00014998",
+    "size": 68,
+    "file": "function_00014998_FUN_00014998.c",
+    "decompiled": true
+  },
+  {
+    "entry": 86828,
+    "name": "FUN_0001532c",
+    "size": 40,
+    "file": "function_0001532C_FUN_0001532c.c",
+    "decompiled": true
+  },
+  {
+    "entry": 87026,
+    "name": "FUN_000153f2",
+    "size": 32,
+    "file": "function_000153F2_FUN_000153f2.c",
+    "decompiled": true
+  },
+  {
+    "entry": 87320,
+    "name": "FUN_00015518",
+    "size": 8,
+    "file": "function_00015518_FUN_00015518.c",
+    "decompiled": true
+  },
+  {
+    "entry": 87330,
+    "name": "FUN_00015522",
+    "size": 4,
+    "file": "function_00015522_FUN_00015522.c",
+    "decompiled": true
+  },
+  {
+    "entry": 87370,
+    "name": "FUN_0001554a",
+    "size": 6,
+    "file": "function_0001554A_FUN_0001554a.c",
+    "decompiled": true
+  },
+  {
+    "entry": 87376,
+    "name": "FUN_00015550",
+    "size": 28,
+    "file": "function_00015550_FUN_00015550.c",
+    "decompiled": true
+  },
+  {
+    "entry": 87404,
+    "name": "FUN_0001556c",
+    "size": 22,
+    "file": "function_0001556C_FUN_0001556c.c",
+    "decompiled": true
+  },
+  {
+    "entry": 87426,
+    "name": "FUN_00015582",
+    "size": 40,
+    "file": "function_00015582_FUN_00015582.c",
+    "decompiled": true
+  },
+  {
+    "entry": 87466,
+    "name": "FUN_000155aa",
+    "size": 14,
+    "file": "function_000155AA_FUN_000155aa.c",
+    "decompiled": true
+  },
+  {
+    "entry": 87480,
+    "name": "FUN_000155b8",
+    "size": 16,
+    "file": "function_000155B8_FUN_000155b8.c",
+    "decompiled": true
+  },
+  {
+    "entry": 87662,
+    "name": "FUN_0001566e",
+    "size": 272,
+    "file": "function_0001566E_FUN_0001566e.c",
+    "decompiled": true
+  },
+  {
+    "entry": 87934,
+    "name": "FUN_0001577e",
+    "size": 4,
+    "file": "function_0001577E_FUN_0001577e.c",
+    "decompiled": true
+  },
+  {
+    "entry": 87938,
+    "name": "FUN_00015782",
+    "size": 16,
+    "file": "function_00015782_FUN_00015782.c",
+    "decompiled": true
+  },
+  {
+    "entry": 87954,
+    "name": "FUN_00015792",
+    "size": 36,
+    "file": "function_00015792_FUN_00015792.c",
+    "decompiled": true
+  },
+  {
+    "entry": 87990,
+    "name": "FUN_000157b6",
+    "size": 92,
+    "file": "function_000157B6_FUN_000157b6.c",
+    "decompiled": true
+  },
+  {
+    "entry": 88104,
+    "name": "FUN_00015828",
+    "size": 68,
+    "file": "function_00015828_FUN_00015828.c",
+    "decompiled": true
+  },
+  {
+    "entry": 88176,
+    "name": "FUN_00015870",
+    "size": 40,
+    "file": "function_00015870_FUN_00015870.c",
+    "decompiled": true
+  },
+  {
+    "entry": 88216,
+    "name": "FUN_00015898",
+    "size": 18,
+    "file": "function_00015898_FUN_00015898.c",
+    "decompiled": true
+  },
+  {
+    "entry": 88246,
+    "name": "FUN_000158b6",
+    "size": 24,
+    "file": "function_000158B6_FUN_000158b6.c",
+    "decompiled": true
+  },
+  {
+    "entry": 89216,
+    "name": "FUN_00015c80",
+    "size": 66,
+    "file": "function_00015C80_FUN_00015c80.c",
+    "decompiled": true
+  },
+  {
+    "entry": 89376,
+    "name": "FUN_00015d20",
+    "size": 48,
+    "file": "function_00015D20_FUN_00015d20.c",
+    "decompiled": true
+  },
+  {
+    "entry": 89424,
+    "name": "FUN_00015d50",
+    "size": 16,
+    "file": "function_00015D50_FUN_00015d50.c",
+    "decompiled": true
+  },
+  {
+    "entry": 89440,
+    "name": "FUN_00015d60",
+    "size": 10,
+    "file": "function_00015D60_FUN_00015d60.c",
+    "decompiled": true
+  },
+  {
+    "entry": 89464,
+    "name": "FUN_00015d78",
+    "size": 41,
+    "file": "function_00015D78_FUN_00015d78.c",
+    "decompiled": true
+  },
+  {
+    "entry": 89506,
+    "name": "FUN_00015da2",
+    "size": 30,
+    "file": "function_00015DA2_FUN_00015da2.c",
+    "decompiled": true
+  },
+  {
+    "entry": 89704,
+    "name": "FUN_00015e68",
+    "size": 1,
+    "file": "function_00015E68_FUN_00015e68.c",
+    "decompiled": true
+  },
+  {
+    "entry": 89718,
+    "name": "FUN_00015e76",
+    "size": 16,
+    "file": "function_00015E76_FUN_00015e76.c",
+    "decompiled": true
+  },
+  {
+    "entry": 89758,
+    "name": "FUN_00015e9e",
+    "size": 92,
+    "file": "function_00015E9E_FUN_00015e9e.c",
+    "decompiled": true
+  },
+  {
+    "entry": 100990,
+    "name": "FUN_00018a7e",
+    "size": 48,
+    "file": "function_00018A7E_FUN_00018a7e.c",
+    "decompiled": true
+  },
+  {
+    "entry": 101004,
+    "name": "FUN_00018a8c",
+    "size": 10,
+    "file": "function_00018A8C_FUN_00018a8c.c",
+    "decompiled": true
+  },
+  {
+    "entry": 101606,
+    "name": "FUN_00018ce6",
+    "size": 62,
+    "file": "function_00018CE6_FUN_00018ce6.c",
+    "decompiled": true
+  },
+  {
+    "entry": 101684,
+    "name": "FUN_00018d34",
+    "size": 224,
+    "file": "function_00018D34_FUN_00018d34.c",
+    "decompiled": true
+  },
+  {
+    "entry": 110620,
+    "name": "FUN_0001b01c",
+    "size": 16,
+    "file": "function_0001B01C_FUN_0001b01c.c",
+    "decompiled": true
+  },
+  {
+    "entry": 110740,
+    "name": "FUN_0001b094",
+    "size": 92,
+    "file": "function_0001B094_FUN_0001b094.c",
+    "decompiled": true
+  },
+  {
+    "entry": 113976,
+    "name": "FUN_0001bd38",
+    "size": 16,
+    "file": "function_0001BD38_FUN_0001bd38.c",
+    "decompiled": true
+  },
+  {
+    "entry": 114010,
+    "name": "FUN_0001bd5a",
+    "size": 412,
+    "file": "function_0001BD5A_FUN_0001bd5a.c",
+    "decompiled": true
+  },
+  {
+    "entry": 114480,
+    "name": "FUN_0001bf30",
+    "size": 46,
+    "file": "function_0001BF30_FUN_0001bf30.c",
+    "decompiled": true
+  },
+  {
+    "entry": 114970,
+    "name": "FUN_0001c11a",
+    "size": 104,
+    "file": "function_0001C11A_FUN_0001c11a.c",
+    "decompiled": true
+  },
+  {
+    "entry": 115312,
+    "name": "FUN_0001c270",
+    "size": 100,
+    "file": "function_0001C270_FUN_0001c270.c",
+    "decompiled": true
+  },
+  {
+    "entry": 115412,
+    "name": "FUN_0001c2d4",
+    "size": 56,
+    "file": "function_0001C2D4_FUN_0001c2d4.c",
+    "decompiled": true
+  },
+  {
+    "entry": 115590,
+    "name": "FUN_0001c386",
+    "size": 80,
+    "file": "function_0001C386_FUN_0001c386.c",
+    "decompiled": true
+  },
+  {
+    "entry": 115858,
+    "name": "FUN_0001c492",
+    "size": 66,
+    "file": "function_0001C492_FUN_0001c492.c",
+    "decompiled": true
+  },
+  {
+    "entry": 115924,
+    "name": "FUN_0001c4d4",
+    "size": 12,
+    "file": "function_0001C4D4_FUN_0001c4d4.c",
+    "decompiled": true
+  },
+  {
+    "entry": 115938,
+    "name": "FUN_0001c4e2",
+    "size": 12,
+    "file": "function_0001C4E2_FUN_0001c4e2.c",
+    "decompiled": true
+  },
+  {
+    "entry": 116050,
+    "name": "FUN_0001c552",
+    "size": 86,
+    "file": "function_0001C552_FUN_0001c552.c",
+    "decompiled": true
+  },
+  {
+    "entry": 116544,
+    "name": "FUN_0001c740",
+    "size": 12,
+    "file": "function_0001C740_FUN_0001c740.c",
+    "decompiled": true
+  },
+  {
+    "entry": 116662,
+    "name": "FUN_0001c7b6",
+    "size": 368,
+    "file": "function_0001C7B6_FUN_0001c7b6.c",
+    "decompiled": true
+  },
+  {
+    "entry": 117526,
+    "name": "FUN_0001cb16",
+    "size": 486,
+    "file": "function_0001CB16_FUN_0001cb16.c",
+    "decompiled": true
+  },
+  {
+    "entry": 120262,
+    "name": "FUN_0001d5c6",
+    "size": 36,
+    "file": "function_0001D5C6_FUN_0001d5c6.c",
+    "decompiled": true
+  },
+  {
+    "entry": 120298,
+    "name": "FUN_0001d5ea",
+    "size": 4,
+    "file": "function_0001D5EA_FUN_0001d5ea.c",
+    "decompiled": true
+  },
+  {
+    "entry": 120302,
+    "name": "FUN_0001d5ee",
+    "size": 10,
+    "file": "function_0001D5EE_FUN_0001d5ee.c",
+    "decompiled": true
+  },
+  {
+    "entry": 120316,
+    "name": "FUN_0001d5fc",
+    "size": 196,
+    "file": "function_0001D5FC_FUN_0001d5fc.c",
+    "decompiled": true
+  },
+  {
+    "entry": 120512,
+    "name": "FUN_0001d6c0",
+    "size": 4,
+    "file": "function_0001D6C0_FUN_0001d6c0.c",
+    "decompiled": true
+  },
+  {
+    "entry": 120516,
+    "name": "FUN_0001d6c4",
+    "size": 26,
+    "file": "function_0001D6C4_FUN_0001d6c4.c",
+    "decompiled": true
+  },
+  {
+    "entry": 120542,
+    "name": "FUN_0001d6de",
+    "size": 6,
+    "file": "function_0001D6DE_FUN_0001d6de.c",
+    "decompiled": true
+  },
+  {
+    "entry": 120548,
+    "name": "FUN_0001d6e4",
+    "size": 18,
+    "file": "function_0001D6E4_FUN_0001d6e4.c",
+    "decompiled": true
+  },
+  {
+    "entry": 120734,
+    "name": "FUN_0001d79e",
+    "size": 26,
+    "file": "function_0001D79E_FUN_0001d79e.c",
+    "decompiled": true
+  },
+  {
+    "entry": 121212,
+    "name": "FUN_0001d97c",
+    "size": 834,
+    "file": "function_0001D97C_FUN_0001d97c.c",
+    "decompiled": true
+  }
+]

@@ -1,0 +1,310 @@
+REM GFA BASIC 3.5U native interpreter regression batch.
+REM Loaded as ASCII through the native Editor Merge (F2) command.
+REM This is a 3.5U runtime probe, not normative 3.5 conformance evidence.
+REM IMPORTANT: OPEN file mode is uppercase letter "O" (Output), NOT digit "0".
+
+REM 3.5 addendum p. 13-35: _0.._9 are longword special variables.
+REM They survive CLEAR; verify two endpoints without relying on regular variables.
+_0=123456
+_9=987654
+CLEAR
+DIM dp%(100),detm(2,2),invsrc(2,2),invm(2,2),invcheck(2,2)
+DIM ta(3,2),tb(2,3)
+DIM addleft(2,2),addright(2,2),addresult(2,2),subresult(2,2)
+REM Capture runtime output on the writable DF0 test disk.
+OPEN "O",#1,"DF0:FACT.OUT"
+OPEN "O",#2,"DF0:GFATEST.OUT"
+PRINT #1,"SPECIAL-VARS-AFTER-CLEAR:";_0;_9
+IF _0=123456 AND _9=987654
+  PRINT #2,"GFATEST:special-vars-clear:PASS"
+ELSE
+  PRINT #2,"GFATEST:special-vars-clear:FAIL"
+ENDIF
+
+REM 3.5 addendum pp. 13-34..13-35: save and restore DATA pointers.
+RESTORE
+PRINT #1,"DATA-AVAILABLE-INITIAL:";_DATA
+i%=0
+DO WHILE _DATA
+  dp%(i%)=_DATA
+  INC i%
+  READ a
+LOOP
+DEC i%
+
+sum%=0
+FOR j%=i% DOWNTO 0
+  _DATA=dp%(j%)
+  READ a
+  PRINT #1,"DATA-VALUE:";a
+  sum%=sum%+a
+NEXT j%
+PRINT #1,"DATA-POINTER:";i%;sum%
+IF i%=14 AND sum%=3653
+  PRINT #2,"GFATEST:data-pointer:PASS"
+ELSE
+  PRINT #2,"GFATEST:data-pointer:FAIL"
+ENDIF
+
+REM 3.5 addendum pp. 13-20..13-21: rectangular matrix product.
+REM 2x3 matrix of ones multiplied by a 3x2 matrix gives two rows of 3,5.
+DIM ma(2,2),mb(2,3),mc(3,2)
+MAT SET mb()=1
+mc(1,1)=1
+mc(1,2)=2
+mc(2,1)=-3
+mc(2,2)=4
+mc(3,1)=5
+mc(3,2)=-1
+MAT MUL ma()=mb()*mc()
+PRINT #1,"MAT-MUL:";ma(1,1);ma(1,2);ma(2,1);ma(2,2)
+IF ma(1,1)=3 AND ma(1,2)=5 AND ma(2,1)=3 AND ma(2,2)=5
+  PRINT #2,"GFATEST:matrix-mul:PASS"
+ELSE
+  PRINT #2,"GFATEST:matrix-mul:FAIL"
+ENDIF
+
+REM FACT boundary values.
+x = FACT(0)
+y = FACT(1)
+z = FACT(2)
+PRINT #1,"FACT(0..2):";x;y;z
+IF x=1 AND y=1 AND z=2
+  PRINT #2,"GFATEST:fact-zero:PASS"
+ELSE
+  PRINT #2,"GFATEST:fact-zero:FAIL"
+ENDIF
+
+REM 3.5 addendum p. 13-33: combinatorics example.
+comb_fact = FACT(6)
+comb_variat = VARIAT(6,2)
+comb_combin = COMBIN(6,2)
+PRINT #1,"COMBINATORICS:";comb_fact;comb_variat;comb_combin
+IF comb_fact=720 AND comb_variat=30 AND comb_combin=15
+  PRINT #2,"GFATEST:combinatorics:PASS"
+ELSE
+  PRINT #2,"GFATEST:combinatorics:FAIL"
+ENDIF
+
+REM Integer arithmetic and operator precedence.
+a = 2 + 3 * 4
+b = (2 + 3) * 4
+PRINT #1,"ARITHMETIC:";a;b
+IF a=14 AND b=20
+  PRINT #2,"GFATEST:arithmetic:PASS"
+ELSE
+  PRINT #2,"GFATEST:arithmetic:FAIL"
+ENDIF
+
+REM FOR/NEXT loop.
+sum = 0
+FOR i = 1 TO 4
+  sum = sum + i
+NEXT i
+PRINT #1,"FOR-NEXT:";sum
+IF sum=10
+  PRINT #2,"GFATEST:for-next:PASS"
+ELSE
+  PRINT #2,"GFATEST:for-next:FAIL"
+ENDIF
+
+REM String concatenation and LEFT$.
+s$ = "GFA" + " BASIC"
+t$ = LEFT$(s$,3)
+PRINT #1,"STRINGS:";t$;s$
+IF t$="GFA" AND s$="GFA BASIC"
+  PRINT #2,"GFATEST:strings:PASS"
+ELSE
+  PRINT #2,"GFATEST:strings:FAIL"
+ENDIF
+
+REM 3.5 addendum pp. 13-14..13-15: transpose a 2x3 matrix into 3x2.
+tb(1,1)=1
+tb(1,2)=2
+tb(1,3)=3
+tb(2,1)=4
+tb(2,2)=5
+tb(2,3)=6
+MAT TRANS ta()=tb()
+PRINT #1,"MAT-TRANS:";ta(1,1);ta(1,2);ta(2,1);ta(2,2);ta(3,1);ta(3,2)
+IF ta(1,1)=1 AND ta(1,2)=4 AND ta(2,1)=2 AND ta(2,2)=5 AND ta(3,1)=3 AND ta(3,2)=6
+  PRINT #2,"GFATEST:matrix-transpose:PASS"
+ELSE
+  PRINT #2,"GFATEST:matrix-transpose:FAIL"
+ENDIF
+
+REM 3.5 addendum pp. 13-26..13-27: determinant of a square matrix.
+detm(1,1)=1
+detm(1,2)=2
+detm(2,1)=3
+detm(2,2)=4
+MAT DET detvalue=detm()
+PRINT #1,"MAT-DET:";detvalue
+IF detvalue=-2
+  PRINT #2,"GFATEST:matrix-det:PASS"
+ELSE
+  PRINT #2,"GFATEST:matrix-det:FAIL"
+ENDIF
+
+REM 3.5 addendum p. 13-30: invert a square matrix into a same-type matrix.
+REM The inverse of [[1,2],[3,4]] is [[-2,1],[1.5,-0.5]].
+invsrc(1,1)=1
+invsrc(1,2)=2
+invsrc(2,1)=3
+invsrc(2,2)=4
+MAT INV invm()=invsrc()
+MAT MUL invcheck()=invm()*invsrc()
+PRINT #1,"MAT-INV:";invm(1,1);invm(1,2);invm(2,1);invm(2,2)
+PRINT #1,"MAT-INV-PRODUCT:";invcheck(1,1);invcheck(1,2);invcheck(2,1);invcheck(2,2)
+IF invcheck(1,1)>0.99 AND invcheck(1,1)<1.01 AND invcheck(1,2)>-0.01 AND invcheck(1,2)<0.01 AND invcheck(2,1)>-0.01 AND invcheck(2,1)<0.01 AND invcheck(2,2)>0.99 AND invcheck(2,2)<1.01
+  PRINT #2,"GFATEST:matrix-inv:PASS"
+ELSE
+  PRINT #2,"GFATEST:matrix-inv:FAIL"
+ENDIF
+
+
+REM 3.5 addendum pp. 13-16..13-19: element-wise matrix addition and subtraction.
+addleft(1,1)=1
+addleft(1,2)=2
+addleft(2,1)=3
+addleft(2,2)=4
+addright(1,1)=5
+addright(1,2)=6
+addright(2,1)=7
+addright(2,2)=8
+MAT ADD addresult()=addleft()+addright()
+MAT SUB subresult()=addleft()-addright()
+PRINT #1,"MAT-ADD:";addresult(1,1);addresult(1,2);addresult(2,1);addresult(2,2)
+PRINT #1,"MAT-SUB:";subresult(1,1);subresult(1,2);subresult(2,1);subresult(2,2)
+IF addresult(1,1)=6 AND addresult(1,2)=8 AND addresult(2,1)=10 AND addresult(2,2)=12
+  PRINT #2,"GFATEST:matrix-add:PASS"
+ELSE
+  PRINT #2,"GFATEST:matrix-add:FAIL"
+ENDIF
+IF subresult(1,1)=-4 AND subresult(1,2)=-4 AND subresult(2,1)=-4 AND subresult(2,2)=-4
+  PRINT #2,"GFATEST:matrix-sub:PASS"
+ELSE
+  PRINT #2,"GFATEST:matrix-sub:FAIL"
+ENDIF
+
+REM DQH-Amiga core language: numeric, string, loop and branch primitives.
+REM These deterministic operations occur throughout dqh-amiga/dqh.lst.
+n1=ABS(-7)
+n2=INT(12.9)
+n3=MIN(4,9)
+n4=SGN(-3)
+s1$=UPPER$("devil")
+s2$=LEFT$("HOUSE",3)
+s3$=MID$("QUEER",2,3)
+s4$=STRING$(3,32)
+n5=ASC(CHR$(65))
+n6=CVI(MKI$(1234))
+PRINT #1,"DQH-CORE:";n1;n2;n3;n4;n5;n6;LEN(s1$);LEN(s2$);LEN(s3$);LEN(s4$)
+IF n1=7 AND n2=12 AND n3=4 AND n4=-1 AND n5=65 AND n6=1234 AND s1$="DEVIL" AND s2$="HOU" AND s3$="UEE" AND LEN(s4$)=3
+  PRINT #2,"GFATEST:dqh-core-primitives:PASS"
+ELSE
+  PRINT #2,"GFATEST:dqh-core-primitives:FAIL"
+ENDIF
+
+REM DQH-Amiga control flow: WHILE/WEND, REPEAT/UNTIL and SELECT/CASE.
+n%=0
+WHILE n%<3
+  INC n%
+WEND
+REPEAT
+  INC n%
+UNTIL n%=5
+SELECT n%
+CASE 5
+  n%=15
+DEFAULT
+  n%=-1
+ENDSELECT
+PRINT #1,"DQH-CONTROL-FLOW:";n%
+IF n%=15
+  PRINT #2,"GFATEST:dqh-control-flow:PASS"
+ELSE
+  PRINT #2,"GFATEST:dqh-control-flow:FAIL"
+ENDIF
+
+REM DQH graphics: manual pp. 8-2, 8-10, 8-15..8-16 and 8-18.
+REM Use a private 320x200 screen and fixed palette/coordinates.
+OPENS 1,0,0,320,200,5,0
+OPENW 0
+SETSPEN 1,0
+SETWPEN 1,0
+screenaddr=SCREEN(1)
+windowaddr=WINDOW(0)
+PRINT #1,"DQH-SCREEN-ADDR:";screenaddr
+PRINT #1,"DQH-WINDOW-ADDR:";windowaddr
+IF screenaddr<>0 AND SCREEN(screenaddr)=1 AND windowaddr<>0 AND WINDOW(windowaddr)=0
+  PRINT #2,"GFATEST:dqh-screen-window-lifecycle:PASS"
+ELSE
+  PRINT #2,"GFATEST:dqh-screen-window-lifecycle:FAIL"
+ENDIF
+
+PRINT #1,"DQH-SCREEN-WINDOW-OK"
+SETCOLOR 1,15,0,0
+COLOR 1
+PLOT 10,10
+LINE 20,20,40,20
+BOX 50,50,70,70
+DEFFILL 2,1,1
+PBOX 80,80,100,100
+PCIRCLE 120,100,10
+p1=POINT(10,10)
+p2=POINT(30,20)
+p3=POINT(50,50)
+p4=POINT(90,90)
+p5=POINT(120,100)
+PRINT #1,"DQH-GRAPHICS:";p1;p2;p3;p4;p5
+IF p1=1 AND p2=1 AND p3=1 AND p4=2 AND p5=2
+  PRINT #2,"GFATEST:dqh-graphics-primitives:PASS"
+ELSE
+  PRINT #2,"GFATEST:dqh-graphics-primitives:FAIL"
+ENDIF
+
+CLEARW 0
+pc=POINT(90,90)
+IF pc=0
+  PRINT #2,"GFATEST:dqh-clear-window:PASS"
+ELSE
+  PRINT #2,"GFATEST:dqh-clear-window:FAIL"
+ENDIF
+CLOSEW 0
+CLOSES 1
+
+REM DQH graphics transfer: GFA BASIC 3.0 base manual pp. 8-21..8-22.
+OPENS 1,0,0,320,200,5,0
+OPENW 0
+SETCOLOR 1,15,0,0
+COLOR 1
+DEFFILL 1,1,1
+PBOX 140,140,150,150
+GET 140,140,150,150,section$
+COLOR 0
+PBOX 140,140,150,150
+pclear=POINT(145,145)
+PUT 160,140,section$
+pput=POINT(165,145)
+PRINT #1,"DQH-GET-PUT:";pclear;pput
+IF pclear=0 AND pput=1
+  PRINT #2,"GFATEST:dqh-get-put:PASS"
+ELSE
+  PRINT #2,"GFATEST:dqh-get-put:FAIL"
+ENDIF
+
+REM GFA BASIC 3.0 base manual pp. 8-24 and 9-20.
+DISPLAY OFF
+DISPLAY ON
+FRONTS 1
+PRINT #2,"GFATEST:dqh-display-fronts:PASS"
+CLOSEW 0
+CLOSES 1
+
+CLOSE #2
+CLOSE #1
+END
+
+DATA 1,2,3,4,5,6,7,8,9
+DATA 13,24,328,3242,1,0

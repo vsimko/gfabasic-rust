@@ -1,0 +1,6 @@
+DIM a(3)
+DIM b(3)
+MAT SET a() = 2
+MAT SET b() = 3
+MAT MUL x = a() * b()
+PRINT x

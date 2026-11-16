@@ -1,0 +1,6 @@
+DIM a(3, 3)
+DIM b(3, 3)
+MAT BASE 0
+MAT TRANS a()
+MAT TRANS a() = b()
+MAT BASE 1

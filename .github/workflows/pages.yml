@@ -1,0 +1,121 @@
+name: Deploy GitHub Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "site/**"
+      - "api/**"
+      - "scripts/**"
+      - "validation/**"
+      - "tests/tooling/**"
+      - "docs/**"
+      - "scripts/validate_okf.py"
+      - "scripts/generate_docs_site.py"
+      - "scripts/tests/test_validate_okf.py"
+      - "scripts/tests/test_generate_docs_site.py"
+      - ".github/workflows/docs.yml"
+      - ".github/workflows/pr-preview.yml"
+      - ".github/workflows/pages.yml"
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: write
+
+concurrency:
+  group: pages-production
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+
+      - name: Set up Python
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0
+        with:
+          python-version: '3.12'
+
+      - name: Generate project data
+        run: |
+          python -m pip install --disable-pip-version-check PyYAML==6.0.2 markdown-it-py==3.0.0
+          python scripts/validate_okf.py
+          python scripts/generate_docs_site.py
+          if [ -f scripts/generate_project_data.py ]; then
+            python3 scripts/generate_project_data.py
+          fi
+          python3 scripts/generate_api_catalogue.py
+          GH_TOKEN="${{ github.token }}" python3 scripts/generate_ci_health.py
+          GH_TOKEN="${{ github.token }}" python3 scripts/generate_repository_activity.py
+
+      - name: Validate repository consistency
+        run: |
+          if [ -f scripts/validate_repository.py ]; then
+            python3 scripts/validate_repository.py
+            python3 -m unittest discover -s tests/tooling
+          fi
+
+      - name: Validate static site
+        run: |
+          test -s site/index.html
+          test -s site/styles.css
+          test -s site/script.js
+          test -s site/data/api-catalogue.json
+          test -s site/data/ci-health.json
+          test -s site/data/activity.json
+          grep -q 'id="recent-activity"' site/index.html
+          grep -q 'id="ci-health"' site/index.html
+          test -d site/data/api-catalogue-details
+          python3 scripts/generate_api_catalogue.py --check
+          node --check site/script.js
+          grep -q 'name="description"' site/index.html
+          grep -q 'id="main-nav"' site/index.html
+          grep -q 'id="api-catalogue"' site/index.html
+
+      - name: Publish production site while preserving active previews
+        run: |
+          staging_dir="$(mktemp -d)"
+          deploy_dir="$(mktemp -d)"
+          cleanup() {
+            git worktree remove --force "$deploy_dir" >/dev/null 2>&1 || true
+            rm -rf "$staging_dir" "$deploy_dir"
+          }
+          trap cleanup EXIT
+
+          cp -a site/. "$staging_dir/"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git fetch origin gh-pages
+          git worktree add --detach "$deploy_dir" origin/gh-pages
+
+          for attempt in 1 2 3 4 5; do
+            git -C "$deploy_dir" fetch origin gh-pages
+            git -C "$deploy_dir" reset --hard FETCH_HEAD
+
+            rsync -a --delete --exclude='.git' --exclude='pr-preview/' "$staging_dir/" "$deploy_dir/"
+            git -C "$deploy_dir" add -f -A
+            if git -C "$deploy_dir" diff --cached --quiet; then
+              echo "Production site is already up to date."
+              exit 0
+            fi
+
+            git -C "$deploy_dir" commit -m "Deploy production site from ${GITHUB_SHA}"
+            if git -C "$deploy_dir" push origin HEAD:gh-pages; then
+              exit 0
+            fi
+            echo "gh-pages changed during deployment; retrying push (attempt $attempt/5)."
+            sleep 2
+          done
+
+          echo "Could not publish production site after 5 attempts."
+          exit 1
+
+      - name: Smoke-test deployed production documentation
+        env:
+          DOCS_URL: https://vsimko.github.io/gfabasic-rust/docs/index.html
+        run: python scripts/tests/test_production_docs.py

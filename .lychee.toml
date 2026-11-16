@@ -1,0 +1,4 @@
+# Only validate links that resolve within this repository.
+# External URLs are intentionally not fetched in this job.
+offline = true
+include_fragments = "anchor-only"

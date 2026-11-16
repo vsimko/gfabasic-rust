@@ -1,0 +1,16 @@
+[package]
+name = "gfabasic-bench"
+version = "0.0.0"
+edition = "2024"
+publish = false
+
+# Keep benchmark-only dependencies outside the normal workspace and release SBOM.
+[workspace]
+
+[dependencies]
+criterion = { version = "=0.8.2", default-features = false, features = ["cargo_bench_support"] }
+gfabasic-compiler = { path = "../crates/gfabasic-compiler" }
+
+[[bench]]
+name = "source_loading"
+harness = false

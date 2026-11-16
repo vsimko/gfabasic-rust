@@ -1,0 +1,1602 @@
+schema-version = 1
+
+# Status describes evidence for Amiga GFA BASIC 3.5, not parser or runtime support.
+# Base-manual groups remain unresolved until individually reconciled with 3.5 evidence.
+[[candidates]]
+id = "amiga.base.variables-memory"
+name = "Variables, arrays and memory"
+kind = "topic-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["2-2–2-44"]
+status = "documented-in-3.0-only"
+notes = "Chapter 2 contains multiple declarations; this family row is a tracking boundary, not a claim that every listed feature is absent from 3.5."
+
+[[candidates]]
+id = "amiga.base.operators"
+name = "Operators and precedence"
+kind = "topic-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["3-2–3-16"]
+status = "documented-in-3.0-only"
+notes = "OCR-sensitive operator glyphs and precedence spellings require page-image and 3.5 reconciliation."
+
+[[candidates]]
+id = "amiga.base.numeric-string"
+name = "Numeric and string functions"
+kind = "topic-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-2–4-36"]
+status = "documented-in-3.0-only"
+notes = "The base inventory extracts selected semantics only; the full Chapter 4 family is not individually verified for 3.5."
+
+[[candidates]]
+id = "amiga.base.input-output"
+name = "Input and output"
+kind = "topic-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["5-2–5-22"]
+status = "documented-in-3.0-only"
+notes = "Selected command forms have page-backed notes; complete declaration-by-declaration 3.5 reconciliation remains outstanding."
+
+[[candidates]]
+id = "amiga.base.files"
+name = "Disk handling and file organization"
+kind = "topic-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["6-2–6-21"]
+status = "documented-in-3.0-only"
+notes = "File-channel I/O is partially extracted; other disk and random-access operations need separate 3.5 checks."
+
+[[candidates]]
+id = "amiga.base.program-control"
+name = "Program handling and control flow"
+kind = "topic-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["7-2–7-55"]
+status = "documented-in-3.0-only"
+notes = "Selected conditionals, loops and branching forms are extracted; procedures, events, errors and editor commands remain to be reconciled."
+
+[[candidates]]
+id = "amiga.base.graphics"
+name = "Graphics language commands"
+kind = "topic-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["8-2–8-24"]
+status = "documented-in-3.0-only"
+notes = "Selected drawing and fill operations have page-backed notes; full graphics surface is not individually reconciled."
+
+[[candidates]]
+id = "amiga.base.events-windows"
+name = "Events, menus, screens and windows"
+kind = "topic-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["9-2–9-37"]
+status = "documented-in-3.0-only"
+notes = "FILESELECT and selected screen/window topics are inventoried; event/menu/window behavior needs systematic 3.5 verification."
+
+[[candidates]]
+id = "amiga.base.advanced"
+name = "Advanced programming and hardware features"
+kind = "topic-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["10-2–10-14"]
+status = "documented-in-3.0-only"
+notes = "SPRITE, STICK and STRIG have selected notes; CLI, EXEC, SAY, FD-files and object commands need reconciliation."
+
+[[candidates]]
+id = "amiga.base.os-libraries"
+name = "Amiga OS library calls"
+kind = "topic-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["11-2–11-92"]
+status = "documented-in-3.0-only"
+notes = "Seven library families and many routines are inventoried; exact wrapper contracts, OCR details and 3.5 availability remain unverified."
+
+[[candidates]]
+id = "amiga.base.appendices"
+name = "Appendix tables and command index"
+kind = "reference-material"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["12-2–12-19"]
+status = "documented-in-3.0-only"
+notes = "Reference material is not a declaration candidate by itself; index entries must be checked against their cited chapter pages."
+
+[[candidates]]
+id = "amiga.35.mat-base"
+name = "MAT BASE"
+kind = "declaration"
+source = "AM-INTERPRETER-35"
+source-version = "3.5 addendum"
+printed-pages = ["13-1–13-2"]
+status = "confirmed-in-3.5"
+notes = "Explicitly documented in the version-specific Chapter 13 addendum; applicability is limited to the documented matrix operations."
+
+corroborating-source = "AM-BOOK-DE-1990"
+corroborating-printed-pages = ["454"]
+[[candidates]]
+id = "amiga.35.mat-generation"
+name = "MAT CLR, MAT SET, MAT ONE"
+kind = "declaration-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.5 addendum"
+printed-pages = ["13-2–13-3"]
+status = "confirmed-in-3.5"
+notes = "Generation forms and floating-point field constraints are documented in Chapter 13."
+
+corroborating-source = "AM-BOOK-DE-1990"
+corroborating-printed-pages = ["454–455"]
+[[candidates]]
+id = "amiga.35.mat-io"
+name = "MAT READ, MAT PRINT, MAT INPUT"
+kind = "declaration-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.5 addendum"
+printed-pages = ["13-3–13-6"]
+status = "confirmed-in-3.5"
+notes = "Chapter 13 explicitly documents vector/matrix data I/O forms."
+
+corroborating-source = "AM-BOOK-DE-1990"
+corroborating-printed-pages = ["456–458"]
+[[candidates]]
+id = "amiga.35.mat-copy"
+name = "MAT CPY, MAT XCPY, MAT TRANS"
+kind = "declaration-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.5 addendum"
+printed-pages = ["13-8–13-20"]
+status = "confirmed-in-3.5"
+notes = "Detailed source-checked shape, offset, extent, transpose and vector-orientation rules are recorded in the addendum inventory."
+
+corroborating-source = "AM-BOOK-DE-1990"
+corroborating-printed-pages = ["459–464"]
+[[candidates]]
+id = "amiga.35.mat-arithmetic"
+name = "MAT ADD, MAT SUB, MAT MUL"
+kind = "declaration-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.5 addendum"
+printed-pages = ["13-22–13-30"]
+status = "confirmed-in-3.5"
+notes = "Element-wise, scalar, matrix-product and vector-product forms are documented. The 3.5 addendum explicitly defines MAT MUL array(),scalar as in-place multiplication of every field element by the scalar; this is source-verified syntax, not a runtime-conformance claim."
+
+corroborating-source = "AM-BOOK-DE-1990"
+corroborating-printed-pages = ["465–470"]
+[[candidates]]
+id = "amiga.35.mat-analysis"
+name = "MAT NORM, MAT DET, MAT QDET, MAT RANG, MAT INV"
+kind = "declaration-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.5 addendum"
+printed-pages = ["13-31–13-39"]
+status = "confirmed-in-3.5"
+notes = "The family is documented in Chapter 13. MAT INV destination-first order is established by the detailed definition and worked example on printed p. 13-30; the reversed summary form on p. 13-16 is treated as a source typo. Numerical edge cases remain unverified."
+
+
+corroborating-source = "AM-BOOK-DE-1990"
+corroborating-printed-pages = ["472–475"]
+[[candidates]]
+id = "amiga.35.editor-update"
+name = "Editor row layout, search and listing changes"
+kind = "editor-feature-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.5 editor update"
+printed-pages = ["1-25"]
+status = "confirmed-in-3.5"
+notes = "Explicit editor update; this is editor behavior, not a language/runtime declaration."
+
+[[candidates]]
+id = "amiga.35.combinatorics"
+name = "FACT, VARIAT, COMBIN"
+kind = "function-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.5 addendum"
+printed-pages = ["13-33–13-34 (469-page scan)", "14-1–14-2 (combined update scan)"]
+status = "confirmed-in-3.5"
+notes = "Factorial, permutations and combinations are explicitly enumerated as additional 3.5 functions."
+
+corroborating-source = "AM-BOOK-DE-1990"
+corroborating-printed-pages = ["477–479"]
+[[candidates]]
+id = "amiga.35.openw-negative-screen"
+name = "OPENW negative screen-number variant"
+kind = "syntax-variant"
+source = "AM-INTERPRETER-35"
+source-version = "3.5 addendum"
+printed-pages = ["13-34 (469-page scan)", "14-3 (combined update scan)"]
+status = "confirmed-in-3.5"
+notes = "Explicit variant opens a window on the current top screen."
+
+[[candidates]]
+id = "amiga.35.pcolor"
+name = "PCOLOR"
+kind = "procedure"
+source = "AM-INTERPRETER-35"
+source-version = "3.5 addendum"
+printed-pages = ["13-34 (469-page scan)", "14-4 (combined update scan)"]
+status = "confirmed-in-3.5"
+notes = "Applies foreground and optional background colors to PRINT screen output."
+
+[[candidates]]
+id = "amiga.35.data-pointer"
+name = "_DATA and _DATA="
+kind = "special-variable-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.5 addendum"
+printed-pages = ["13-34–13-35 (469-page scan)", "14-5 (combined update scan)"]
+status = "confirmed-in-3.5"
+notes = "The leading underscore is confirmed by page-image review; query and restore the DATA pointer."
+
+corroborating-source = "AM-BOOK-DE-1990"
+corroborating-printed-pages = ["479–480"]
+[[candidates]]
+id = "amiga.35.special-longwords"
+name = "_0 through _9"
+kind = "special-variable-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.5 addendum"
+printed-pages = ["13-35 (469-page scan)", "14-6 (combined update scan)"]
+status = "confirmed-in-3.5"
+notes = "Ten special longword variables; persistence and clearing behavior are described in the addendum."
+
+[[candidates]]
+id = "amiga.35.guru"
+name = "GURU statement and function"
+kind = "statement-function-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.5 addendum"
+printed-pages = ["13-35–13-36 (469-page scan)", "14-6–14-7 (combined update scan)"]
+status = "confirmed-in-3.5"
+notes = "GURU checking control and GURU-number function are explicitly documented; crash-recovery tests require isolation."
+
+# Declaration-level candidates from page-reviewed Chapters 5–10.
+# These remain 3.0 evidence; no 3.5 availability is inferred.
+[[candidates]]
+id = "amiga.base5.inkey"
+name = "INKEY$"
+kind = "function"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["5-2"]
+status = "documented-in-3.0-only"
+notes = "Reads keyboard input; special keys use a CSI sequence. 3.0 source fact only; 3.5 availability is unresolved."
+
+[[candidates]]
+id = "amiga.base5.input"
+name = "INPUT"
+kind = "statement"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["5-3–5-4"]
+status = "documented-in-3.0-only"
+notes = "Reads numeric/string variables with optional prompt; window behavior and numeric re-entry are described. 3.5 availability is unresolved."
+
+[[candidates]]
+id = "amiga.base5.line-input"
+name = "LINE INPUT"
+kind = "statement"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["5-5"]
+status = "documented-in-3.0-only"
+notes = "Reads string input while allowing commas in the entered text. 3.5 availability is unresolved."
+
+[[candidates]]
+id = "amiga.base5.form-input"
+name = "FORM INPUT / FORM INPUT AS"
+kind = "statement-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["5-6"]
+status = "documented-in-3.0-only"
+notes = "Edits a string field of width 1–255; FORM INPUT AS starts from the current value. 3.5 availability is unresolved."
+
+[[candidates]]
+id = "amiga.base5.print-write"
+name = "PRINT AT / WRITE"
+kind = "statement-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["5-7–5-8"]
+status = "documented-in-3.0-only"
+notes = "PRINT AT and WRITE remain 3.0 base-manual candidates. PRINT and LOCATE are tracked separately because the 3.5 companion examples demonstrate those forms, not these siblings."
+
+[[candidates]]
+id = "amiga.base5.print-using"
+name = "PRINT USING"
+kind = "statement"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["5-9"]
+status = "documented-in-3.0-only"
+notes = "Formatted screen output; exact placeholder grammar remains unreviewed. 3.5 availability is unresolved."
+
+[[candidates]]
+id = "amiga.base6.inp-out"
+name = "INP / OUT"
+kind = "function-statement"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["6-13"]
+status = "documented-in-3.0-only"
+notes = "INP reads one byte from an opened data channel using INP(#n); OUT writes byte values. The addendum examples show ~INP(2), which is not the documented INP(#n) form and is not treated as confirmation. 3.5 availability remains unresolved."
+
+[[candidates]]
+id = "amiga.base6.input-string"
+name = "INPUT$"
+kind = "function"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["6-14"]
+status = "documented-in-3.0-only"
+notes = "Reads a specified character count from keyboard or an optional file channel. 3.5 availability is unresolved."
+
+[[candidates]]
+id = "amiga.base6.file-input"
+name = "INPUT # / LINE INPUT #"
+kind = "statement-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["6-15"]
+status = "documented-in-3.0-only"
+notes = "Reads channel data as values or lines; keep channel forms distinct from screen input. 3.5 availability is unresolved."
+
+[[candidates]]
+id = "amiga.base6.file-output"
+name = "PRINT # / WRITE #"
+kind = "statement-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["6-16"]
+status = "documented-in-3.0-only"
+notes = "Writes expressions through a data channel; PRINT # supports USING but not PRINT AT. 3.5 availability is unresolved."
+
+[[candidates]]
+id = "amiga.base7.if"
+name = "IF / ELSE / ENDIF"
+kind = "statement-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["7-4–7-5"]
+status = "documented-in-3.0-only"
+notes = "Conditional execution; THEN is optional and any nonzero numeric expression is logically true. 3.5 availability is unresolved."
+
+[[candidates]]
+id = "amiga.base7.elseif"
+name = "ELSE IF / ELSEIF"
+kind = "statement-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["7-6–7-7"]
+status = "documented-in-3.0-only"
+notes = "Chained conditional branches; editor spelling varies and needs lexer/editor confirmation. 3.5 availability is unresolved."
+
+[[candidates]]
+id = "amiga.base7.ongosub"
+name = "ON GOSUB"
+kind = "statement"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["7-8"]
+status = "documented-in-3.0-only"
+notes = "Selects a procedure by numeric index; out-of-range selection calls none. 3.5 availability is unresolved."
+
+[[candidates]]
+id = "amiga.base7.select-case"
+name = "SELECT / CASE / DEFAULT / ENDSELECT"
+kind = "statement-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["7-9–7-10"]
+status = "documented-in-3.0-only"
+notes = "Numeric or short-string selector; CASE supports values, ranges and lists. 3.5 availability is unresolved."
+
+[[candidates]]
+id = "amiga.base7.for-next"
+name = "FOR / NEXT"
+kind = "statement-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["7-13–7-14"]
+status = "confirmed-in-3.5"
+notes = "Chapter 18 examples use ascending FOR...TO...NEXT loops (pp. 463–464, 471); the Chapter 19 DATA-pointer example also uses FOR j=i TO 1 STEP -1...NEXT (p. 480). This confirms the shown ascending and negative-step forms, not the DOWNTO spelling or editor ENDFOR replacement."
+
+confirmation-source = "AM-BOOK-DE-1990"
+confirmation-source-version = "3.5 companion book Chapters 18–19 examples"
+confirmation-printed-pages = ["463","464","471","480"]
+confirmation-basis = "direct-example-use"
+[[candidates]]
+id = "amiga.base7.repeat-until"
+name = "REPEAT / UNTIL"
+kind = "statement-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["7-15"]
+status = "documented-in-3.0-only"
+notes = "Post-tested loop; body executes at least once. 3.5 availability is unresolved."
+
+[[candidates]]
+id = "amiga.base7.while-wend"
+name = "WHILE / WEND"
+kind = "statement-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["7-16"]
+status = "confirmed-in-3.5"
+notes = "The Chapter 19 _DATA example uses WHILE _DATA ... WEND (printed p. 480), with the loop ending when the DATA pointer reaches zero. This confirms the demonstrated condition form, not every condition or loop edge case."
+
+confirmation-source = "AM-BOOK-DE-1990"
+confirmation-source-version = "3.5 companion book Chapter 19 example"
+confirmation-printed-pages = ["480"]
+confirmation-basis = "direct-example-use"
+[[candidates]]
+id = "amiga.base7.do-loop"
+name = "DO / LOOP variants"
+kind = "statement-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["7-17–7-19"]
+status = "documented-in-3.0-only"
+notes = "Beginning- and end-tested WHILE/UNTIL forms are described; exact grammar remains page-sensitive. 3.5 availability is unresolved."
+
+[[candidates]]
+id = "amiga.base7.exit-if"
+name = "EXIT IF"
+kind = "statement"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["7-20"]
+status = "documented-in-3.0-only"
+notes = "Exits the active loop when its Boolean condition is satisfied; allowed within IF and SELECT structures per the source. 3.5 availability is unresolved."
+
+[[candidates]]
+id = "amiga.base8.setcolor"
+name = "SETCOLOR"
+kind = "statement-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["8-2"]
+status = "documented-in-3.0-only"
+notes = "SETCOLOR's palette-component form remains a 3.0 base-manual candidate. The 3.5 companion example uses COLOR 3 and COLOR 1; COLOR is tracked separately."
+
+[[candidates]]
+id = "amiga.base8.deffill"
+name = "DEFFILL"
+kind = "statement"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["8-3–8-4"]
+status = "documented-in-3.0-only"
+notes = "Configures fill color/style/pattern for filled graphics operations; pattern-string limits are described. 3.5 availability is unresolved."
+
+[[candidates]]
+id = "amiga.base8.clip"
+name = "CLIP"
+kind = "statement"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["8-9"]
+status = "documented-in-3.0-only"
+notes = "Restricts graphics output to a rectangle; source explicitly excludes GET and PUT. 3.5 availability is unresolved."
+
+[[candidates]]
+id = "amiga.base8.plot-line-draw"
+name = "PLOT / LINE / DRAW forms other than DRAW TO"
+kind = "statement-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["8-10–8-14"]
+status = "documented-in-3.0-only"
+notes = "The 3.5 companion example demonstrates DRAW TO only (printed p. 471); PLOT, LINE and other DRAW forms remain 3.0 base-manual candidates."
+
+[[candidates]]
+id = "amiga.base8.box"
+name = "BOX / PBOX"
+kind = "statement-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["8-15"]
+status = "documented-in-3.0-only"
+notes = "Draws outlined or filled rectangles. 3.5 availability is unresolved."
+
+[[candidates]]
+id = "amiga.base8.circle-ellipse"
+name = "CIRCLE / PCIRCLE / ELLIPSE / PELLIPSE"
+kind = "statement-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["8-16"]
+status = "documented-in-3.0-only"
+notes = "Draws outlined or filled circles and ellipses. 3.5 availability is unresolved."
+
+[[candidates]]
+id = "amiga.base8.poly"
+name = "POLYLINE / POLYFILL"
+kind = "statement-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["8-17"]
+status = "documented-in-3.0-only"
+notes = "Uses coordinate arrays; polygon endpoints are connected automatically. 3.5 availability is unresolved."
+
+[[candidates]]
+id = "amiga.base8.point"
+name = "POINT"
+kind = "function"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["8-18"]
+status = "documented-in-3.0-only"
+notes = "Returns the color value at a screen coordinate. 3.5 availability is unresolved."
+
+[[candidates]]
+id = "amiga.base9.fileselect"
+name = "FILESELECT"
+kind = "function-procedure"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["9-37–9-38"]
+status = "documented-in-3.0-only"
+notes = "Displays a file selector and returns the selected name or an empty string on Cancel. 3.5 availability is unresolved."
+
+[[candidates]]
+id = "amiga.base10.sprite"
+name = "SPRITE"
+kind = "statement-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["10-5–10-6"]
+status = "documented-in-3.0-only"
+notes = "Defines, frees, moves, enables and disables Amiga hardware sprites; source describes eight sprite numbers and shared registers. 3.5 availability is unresolved."
+
+[[candidates]]
+id = "amiga.base10.stick-strig"
+name = "STICK / STRIG"
+kind = "function-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["10-7"]
+status = "documented-in-3.0-only"
+notes = "Queries joystick position and fire-button state; port 0 interaction with mouse/Intuition is noted. 3.5 availability is unresolved."
+
+
+# Error handling and recovery are present in the 3.0 base manual, but the
+# 3.5 addendum only confirms a narrower GURU interaction (printed p. 13-36).
+# Keep these as unresolved until the full grammar is reconciled.
+[[candidates]]
+id = "amiga.base7.on-error"
+name = "ON ERROR / ON ERROR GOSUB"
+kind = "statement-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["7-29"]
+status = "documented-in-3.0-only"
+notes = "The 3.0 manual documents reset-to-default handling and procedure-based error handling. The 3.5 addendum confirms that GURU Meditation may transfer to ONERROR GOSUB, but does not restate the complete syntax or general 3.5 availability."
+
+[[candidates]]
+id = "amiga.base7.resume"
+name = "RESUME / RESUME NEXT / RESUME label"
+kind = "statement-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["7-29"]
+status = "documented-in-3.0-only"
+notes = "The 3.0 manual documents retry, continue-next and continue-at-label behavior, plus a FATAL-error restriction. The 3.5 addendum specifically disallows RESUME NEXT and RESUME LABEL after a GURU-triggered ONERROR GOSUB in compiled 3.5 programs; broader 3.5 behavior remains unverified."
+
+# Granular Chapter 2–4 source-evidence records; related names may remain grouped.
+# Status remains 3.0-only evidence; this is not a 3.5 availability or absence claim.
+
+[[candidates]]
+id = "amiga.base2.asc-chr"
+name = "ASC / CHR$"
+kind = "function-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["2-13"]
+status = "documented-in-3.0-only"
+notes = "ASC returns the first character code (zero for empty input); CHR$ uses the low byte. 3.0 base-manual evidence only."
+
+[[candidates]]
+id = "amiga.base2.bin-oct-hex"
+name = "BIN$ / OCT$"
+kind = "function-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["2-14"]
+status = "documented-in-3.0-only"
+notes = "Integer-to-base-2/base-8 string conversions; optional width parameters are documented. No direct 3.5 addendum example use was found."
+
+[[candidates]]
+id = "amiga.base2.str"
+name = "STR$"
+kind = "function"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["2-15"]
+status = "confirmed-in-3.5"
+notes = "The 3.5 MAT PRINT description specifies number formatting as STR$(x,g,n) (printed p. 13-3). This confirms the three-argument form used for matrix output; other base-manual overloads are not independently restated."
+
+confirmation-source = "AM-INTERPRETER-35"
+confirmation-source-version = "3.5 addendum"
+confirmation-printed-pages = ["13-3"]
+confirmation-basis = "direct-documentation-reference"
+corroborating-source = "AM-BOOK-DE-1990"
+corroborating-printed-pages = ["457"]
+[[candidates]]
+id = "amiga.base2.val"
+name = "VAL / VAL?"
+kind = "function-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["2-16"]
+status = "documented-in-3.0-only"
+notes = "VAL parses a numeric prefix; VAL? reports consumed characters. 3.0 base-manual evidence only."
+
+[[candidates]]
+id = "amiga.base2.cint-cfloat"
+name = "CINT / CFLOAT"
+kind = "compiler-only-function-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["2-17"]
+status = "documented-in-3.0-only"
+notes = "CINT rounds float to integer; CFLOAT converts integer to float. The manual explicitly says these are meaningful only to the compiler, not interpreter built-ins."
+
+[[candidates]]
+id = "amiga.base2.cvx"
+name = "CVI / CVL / CVS (CVF spelling disputed)"
+kind = "conversion-function-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["2-18–2-19"]
+status = "documented-in-3.0-only"
+notes = "Binary-string conversions; prose names CVS while the MKx counterpart list includes MKF$. Preserve the source naming mismatch; do not normalize a CVF alias."
+
+[[candidates]]
+id = "amiga.base2.mkx"
+name = "MKI$ / MKL$ / MKS$ / MKF$ / MKD$"
+kind = "conversion-function-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["2-18–2-19"]
+status = "documented-in-3.0-only"
+notes = "Numeric-to-binary-string conversion family; counterpart mapping inherits the CVx naming inconsistency. 3.0 base-manual evidence only."
+
+[[candidates]]
+id = "amiga.base2.false-true-pi"
+name = "FALSE / TRUE / PI"
+kind = "constant-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["2-25"]
+status = "documented-in-3.0-only"
+notes = "FALSE=0, TRUE=-1, PI is the mathematical constant. 3.0 base-manual evidence only."
+
+[[candidates]]
+id = "amiga.base2.date-time"
+name = "DATE$ / TIME$"
+kind = "system-value-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["2-26"]
+status = "documented-in-3.0-only"
+notes = "Read/write date and read time string forms are described; the source text's DATE$/DATES and TIME$/TIMES naming is retained for further checking."
+
+[[candidates]]
+id = "amiga.base2.timer"
+name = "TIMER"
+kind = "function"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["2-28"]
+status = "documented-in-3.0-only"
+notes = "Timer function heading and page locator in the base manual; exact return/tick contract is not promoted."
+
+[[candidates]]
+id = "amiga.base2.fre"
+name = "FRE"
+kind = "function"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["2-29"]
+status = "documented-in-3.0-only"
+notes = "Memory-availability query documented in the base manual; argument/return variants need exact signature extraction."
+
+[[candidates]]
+id = "amiga.base2.type"
+name = "TYPE"
+kind = "function"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["2-30"]
+status = "documented-in-3.0-only"
+notes = "Variable type query documented in the base manual; 3.5 applicability unverified."
+
+[[candidates]]
+id = "amiga.base2.dump"
+name = "DUMP"
+kind = "function-or-command"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["2-31"]
+status = "documented-in-3.0-only"
+notes = "DUMP heading and page locator are documented; preserve uncertainty about callable form until detailed page transcription."
+
+[[candidates]]
+id = "amiga.base2.varptr-arrptr"
+name = "VARPTR / ARRPTR"
+kind = "function-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["2-33"]
+status = "documented-in-3.0-only"
+notes = "Distinguishes element/string-data address from array-descriptor address. 3.0 base-manual evidence only."
+
+[[candidates]]
+id = "amiga.base2.peek"
+name = "PEEK / DPEEK / LPEEK"
+kind = "function-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["2-36"]
+status = "documented-in-3.0-only"
+notes = "Reads one, two or four bytes respectively from address x. The source warns that even addresses must be used; 3.5 availability remains unverified."
+
+[[candidates]]
+id = "amiga.base2.absolute"
+name = "ABSOLUTE"
+kind = "function-or-statement"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["2-39"]
+status = "documented-in-3.0-only"
+notes = "Address/variable binding feature in the base manual; classification and detailed signature remain source-scoped."
+
+[[candidates]]
+id = "amiga.base2.void"
+name = "VOID"
+kind = "function"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["2-40"]
+status = "documented-in-3.0-only"
+notes = "VOID heading and page locator are documented; exact return semantics remain unverified."
+
+[[candidates]]
+id = "amiga.base2.malloc-mfree"
+name = "MALLOC / MFREE"
+kind = "function-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["2-41–2-42"]
+status = "documented-in-3.0-only"
+notes = "Memory allocation/release forms are documented; allocator/error/ownership semantics are not promoted to 3.5."
+
+[[candidates]]
+id = "amiga.base2.pointer-star"
+name = "* (array descriptor pointer form)"
+kind = "operator-form"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["2-33"]
+status = "documented-in-3.0-only"
+notes = "Indirect array-descriptor form is documented alongside ARRPTR; keep separate from multiplication operator."
+
+[[candidates]]
+id = "amiga.base3.precedence"
+name = "Operator precedence hierarchy"
+kind = "operator-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["3-2"]
+status = "documented-in-3.0-only"
+notes = "Page-image transcription gives 11 precedence levels; comparison rows contain OCR/source spelling ambiguity. No associativity inferred."
+
+[[candidates]]
+id = "amiga.base3.string-plus"
+name = "String concatenation +"
+kind = "operator"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["3-2–3-10"]
+status = "documented-in-3.0-only"
+notes = "Plus is documented for string concatenation as well as numeric addition; 3.0 base-manual evidence only."
+
+[[candidates]]
+id = "amiga.base3.unary-plus-minus"
+name = "Unary + / -"
+kind = "operator-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["3-2, 3-10"]
+status = "documented-in-3.0-only"
+notes = "The 3.0 precedence table lists prefix plus and minus. The 3.5 book shows negative DATA values (p. 471) and mathematical negative operands (p. 470), but no BASIC expression using unary prefix minus; neither prefix operator is promoted by this evidence."
+
+[[candidates]]
+id = "amiga.base3.power"
+name = "^"
+kind = "operator"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["3-2"]
+status = "documented-in-3.0-only"
+notes = "Power operator precedence is documented in the 3.0 base manual only."
+
+[[candidates]]
+id = "amiga.base3.multiply-divide"
+name = "* /"
+kind = "operator-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["3-2"]
+status = "confirmed-in-3.5"
+notes = "The Chapter 18 MAT MUL example uses b()*c() (p. 469), and the normalization example uses 1/SQR(l) (p. 473). This confirms numeric * and / forms in the shown expressions, not precedence or all operand types."
+
+confirmation-source = "AM-BOOK-DE-1990"
+confirmation-source-version = "3.5 companion book Chapter 18 example"
+confirmation-printed-pages = ["469","473"]
+confirmation-basis = "direct-example-use"
+[[candidates]]
+id = "amiga.base3.integer-divide-mod"
+name = "DIV / MOD"
+kind = "operator-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["3-2"]
+status = "documented-in-3.0-only"
+notes = "Whole-number division and modulo precedence documented; no 3.5 confirmation."
+
+[[candidates]]
+id = "amiga.base3.numeric-add-sub"
+name = "Numeric + / -"
+kind = "operator-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["3-2, 3-10"]
+status = "confirmed-in-3.5"
+notes = "The 3.5 Chapter 18 MAT ADD example uses b()+b() (p. 466), and MAT SUB uses b()-c() (p. 467). This confirms numeric binary + and - use in the shown matrix expressions, not precedence or string concatenation."
+
+confirmation-source = "AM-BOOK-DE-1990"
+confirmation-source-version = "3.5 companion book Chapter 18 example"
+confirmation-printed-pages = ["466","467"]
+confirmation-basis = "direct-example-use"
+[[candidates]]
+id = "amiga.base3.comparison-equality"
+name = "= / == / <>"
+kind = "operator-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["3-2, 3-11–3-16"]
+status = "documented-in-3.0-only"
+notes = "= compares and also assigns in variable context; == is approximate numeric equality (8.5 decimal places); <> is inequality."
+
+[[candidates]]
+id = "amiga.base3.relational"
+name = "< / > / <= / >= and =< / =>"
+kind = "operator-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["3-2, 3-13–3-16"]
+status = "documented-in-3.0-only"
+notes = "Text explicitly accepts <= and =<, and >= and =>. Preserve both alternate spellings; string ordering is separately described."
+
+[[candidates]]
+id = "amiga.base3.logical"
+name = "NOT / AND / OR / XOR / IMP / EQV"
+kind = "operator-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["3-2–3-9"]
+status = "documented-in-3.0-only"
+notes = "NOT is unary; remaining operators are binary; logical truth and 32-bit bitwise behavior are described. 3.0 base-manual evidence only."
+
+[[candidates]]
+id = "amiga.base4.integer-arithmetic-functions"
+name = "ADD() / SUB() / MUL() / DIV() / MOD()"
+kind = "function-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-3"]
+status = "documented-in-3.0-only"
+notes = "Integer-expression function forms are distinct from same-named mutating commands on pp. 4-2–4-3; decimal places are ignored."
+
+[[candidates]]
+id = "amiga.base4.trigonometric"
+name = "SIN() / COS() / TAN()"
+kind = "function-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-5"]
+status = "documented-in-3.0-only"
+notes = "Trigonometric functions use radians in the base manual."
+
+[[candidates]]
+id = "amiga.base4.quadrant-trigonometric"
+name = "SINQ() / COSQ()"
+kind = "function-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-6"]
+status = "documented-in-3.0-only"
+notes = "Degree-based interpolated lookup-table functions; interpolation described in 1/16-degree steps."
+
+[[candidates]]
+id = "amiga.base4.deg-rad"
+name = "DEG() / RAD()"
+kind = "function-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-7"]
+status = "documented-in-3.0-only"
+notes = "Degree/radian conversion functions documented in the 3.0 base manual."
+
+[[candidates]]
+id = "amiga.base4.sqr"
+name = "SQR()"
+kind = "function"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-8"]
+status = "confirmed-in-3.5"
+notes = "The 3.5 vector-normalization example uses SQR(l) to calculate vector length and 1/SQR(l) to normalize the vector (printed p. 473). The one-argument form is demonstrated."
+
+confirmation-source = "AM-BOOK-DE-1990"
+confirmation-source-version = "3.5 companion book Chapter 18"
+confirmation-printed-pages = ["473"]
+confirmation-basis = "direct-example-use"
+[[candidates]]
+id = "amiga.base4.exp-log"
+name = "EXP() / LOG() / LOG10()"
+kind = "function-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-9"]
+status = "documented-in-3.0-only"
+notes = "Exponential and logarithm family; retain LOG10 as candidate pending precise page-level confirmation."
+
+[[candidates]]
+id = "amiga.base4.pred-succ"
+name = "PRED()"
+kind = "function-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-11, 4-33"]
+status = "documented-in-3.0-only"
+notes = "The base manual documents numeric and string PRED forms. The 3.5 addendum examples use SUCC, not PRED; PRED remains 3.0-only evidence."
+
+[[candidates]]
+id = "amiga.base4.abs-sgn"
+name = "ABS() / SGN()"
+kind = "function-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-12"]
+status = "documented-in-3.0-only"
+notes = "Absolute value and sign (-1, 0, 1) functions documented."
+
+[[candidates]]
+id = "amiga.base4.int-trunc-fix-frac"
+name = "TRUNC() / FIX() / FRAC()"
+kind = "function-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-13"]
+status = "documented-in-3.0-only"
+notes = "The base manual distinguishes truncation from floor for negative values and describes TRUNC/FRAC. INT is split into its own entry and confirmed by the 3.5 companion book; the remaining functions have no direct 3.5 evidence."
+
+[[candidates]]
+id = "amiga.base4.round"
+name = "ROUND()"
+kind = "function"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-14"]
+status = "documented-in-3.0-only"
+notes = "ROUND(x) and ROUND(x,n) are documented; negative n rounds before decimal point."
+
+[[candidates]]
+id = "amiga.base4.odd-even"
+name = "ODD() / EVEN()"
+kind = "function-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-15"]
+status = "documented-in-3.0-only"
+notes = "Boolean result is -1/0; zero is even."
+
+[[candidates]]
+id = "amiga.base4.min-max"
+name = "MIN() / MAX()"
+kind = "function-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-16"]
+status = "documented-in-3.0-only"
+notes = "Accept a list of numeric or string expressions and return the extremum."
+
+[[candidates]]
+id = "amiga.base4.random"
+name = "RANDOM() / RANDOMIZE"
+kind = "function-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-17–4-18"]
+status = "documented-in-3.0-only"
+notes = "The base manual documents RANDOM and RANDOMIZE. RND is split into its own entry and confirmed by the 3.5 companion book; these remaining forms have no direct 3.5 evidence."
+
+[[candidates]]
+id = "amiga.base4.bit-test"
+name = "BCLR() / BSET() / BCHG() / BTST()"
+kind = "bit-operation-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-19–4-20"]
+status = "documented-in-3.0-only"
+notes = "Zero-based bit indices masked to 0–31; BTST is described with 1/0 result in this section."
+
+[[candidates]]
+id = "amiga.base4.shift"
+name = "SHL() / SHR()"
+kind = "bit-operation-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-21–4-22"]
+status = "documented-in-3.0-only"
+notes = "Width-sensitive byte/word/longword shift forms are documented."
+
+[[candidates]]
+id = "amiga.base4.rotate"
+name = "ROL() / ROR()"
+kind = "bit-operation-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-22"]
+status = "documented-in-3.0-only"
+notes = "Rotate within selected byte/word/longword width; distinct from shifts."
+
+[[candidates]]
+id = "amiga.base4.bitwise-and-or-xor"
+name = "AND() / OR() / XOR()"
+kind = "function-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-23"]
+status = "documented-in-3.0-only"
+notes = "Integer bitwise function forms; distinct from logical operators as expression operators pending exact parser treatment."
+
+[[candidates]]
+id = "amiga.base4.bitwise-imp-eqv"
+name = "IMP() / EQV()"
+kind = "function-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-24"]
+status = "documented-in-3.0-only"
+notes = "Integer bitwise function forms documented separately from logical truth tables."
+
+[[candidates]]
+id = "amiga.base4.swap"
+name = "SWAP()"
+kind = "function"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-25"]
+status = "documented-in-3.0-only"
+notes = "Function swaps upper/lower 16-bit words; explicitly distinct from Chapter 2 SWAP command."
+
+[[candidates]]
+id = "amiga.base4.byte-card-word"
+name = "BYTE() / CARD() / WORD()"
+kind = "function-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-26"]
+status = "documented-in-3.0-only"
+notes = "Byte/word conversion and extension operations documented."
+
+[[candidates]]
+id = "amiga.base4.left-right"
+name = "LEFT$() / RIGHT$()"
+kind = "function-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-27"]
+status = "documented-in-3.0-only"
+notes = "Substring functions; omitted count returns one character."
+
+[[candidates]]
+id = "amiga.base4.mid"
+name = "MID$()"
+kind = "function"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-28"]
+status = "documented-in-3.0-only"
+notes = "Function returns substring; separate MID$ command is on p. 4-29 and is not merged here."
+
+[[candidates]]
+id = "amiga.base4.instr-rinstr"
+name = "INSTR() / RINSTR()"
+kind = "function-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-30–4-31"]
+status = "documented-in-3.0-only"
+notes = "Forward/reverse substring search functions; preserve source-specific index semantics."
+
+[[candidates]]
+id = "amiga.base4.string-space"
+name = "SPACE$()"
+kind = "function-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-32"]
+status = "documented-in-3.0-only"
+notes = "The base manual documents SPACE$ as a string constructor. The 3.5 addendum examples use STRING$ but do not directly use SPACE$."
+
+[[candidates]]
+id = "amiga.base4.len-trim"
+name = "LEN() / TRIM$()"
+kind = "function-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-34"]
+status = "documented-in-3.0-only"
+notes = "String length and trim functions documented."
+
+[[candidates]]
+id = "amiga.base4.upper"
+name = "UPPER$()"
+kind = "function"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-35"]
+status = "documented-in-3.0-only"
+notes = "Uppercase conversion function documented."
+
+[[candidates]]
+id = "amiga.base4.mid-command"
+name = "MID$ command"
+kind = "statement"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-29"]
+status = "documented-in-3.0-only"
+notes = "Mutates an existing string variable; not the MID$ value-returning function."
+
+[[candidates]]
+id = "amiga.base4.lset-rset"
+name = "LSET / RSET"
+kind = "statement-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-36"]
+status = "documented-in-3.0-only"
+notes = "Left/right justified assignment into existing string variable; padding/truncation details remain unspecified."
+
+
+[[candidates]]
+id = "amiga.base2.poke-family"
+name = "POKE / DPOKE / LPOKE"
+kind = "statement-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["2-35"]
+status = "documented-in-3.0-only"
+notes = "Writes one, two or four bytes respectively to address x. The prose prints DPOKE x.y while the syntax block gives DPOKE x,y; LPOKE is shown with a stray semicolon in the syntax block. Even addresses are required for DPOKE and LPOKE. Preserve these source details; 3.5 applicability is unverified."
+
+[[candidates]]
+id = "amiga.base2.typed-memory-access"
+name = "BYTE{} / CARD{} / INT{} / WORD{} / LONG{} / {} / FLOAT{} / SINGLE{} / DOUBLE{} / CHAR{}"
+kind = "function-command-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["2-37–2-38"]
+status = "documented-in-3.0-only"
+notes = "Each typed address form is both a value-reading function (for example y=BYTE{x}) and a writing command (for example BYTE{x}=y). The source associates forms with byte, integer, GFA 3.0 float, IEEE single/double and null-terminated string layouts; {} is described as similar to LONG{}. Alignment warnings and OCR-sensitive spellings are retained as source-only evidence, not 3.5 declarations."
+
+
+[[candidates]]
+id = "amiga.base2.bmove"
+name = "BMOVE"
+kind = "statement"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["2-43"]
+status = "documented-in-3.0-only"
+notes = "Copies cnt bytes from src to dst; overlapping source/destination blocks are supported, and even parameters execute faster than odd ones. 3.5 applicability is unverified."
+
+[[candidates]]
+id = "amiga.base2.reserve"
+name = "RESERVE"
+kind = "statement"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["2-44"]
+status = "documented-in-3.0-only"
+notes = "RESERVE [n] sets the memory size GFA-BASIC should use; the manual says variables are erased when it executes and recommends using it only at program start. 3.5 applicability is unverified."
+
+[[candidates]]
+id = "amiga.base2.swap-command"
+name = "SWAP command"
+kind = "statement"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["2-19–2-20"]
+status = "documented-in-3.0-only"
+notes = "Exchanges same-type variables or array values; the array form exchanges descriptors, and SWAP *c,d() supports indirect array naming. Explicitly distinct from the SWAP() bit-operation function in Chapter 4. 3.5 applicability is unverified."
+
+[[candidates]]
+id = "amiga.base2.hex"
+name = "HEX$"
+kind = "function"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["2-14"]
+status = "confirmed-in-3.5"
+notes = "The base manual documents HEX$(x[,y]). The 3.5 GURU example calls HEX$(GURU) (printed p. 13-36), confirming the one-argument form; the optional width form is not independently used in the addendum."
+confirmation-source = "AM-INTERPRETER-35"
+confirmation-source-version = "3.5 addendum"
+confirmation-printed-pages = ["13-36"]
+confirmation-basis = "direct-example-use"
+
+[[candidates]]
+id = "amiga.base4.rand"
+name = "RAND()"
+kind = "function"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-17–4-18"]
+status = "confirmed-in-3.5"
+notes = "The 3.5 MAT SET example assigns RAND(10) to matrix elements (printed p. 13-2). This confirms the call form used, not all distribution or seeding details."
+confirmation-source = "AM-INTERPRETER-35"
+confirmation-source-version = "3.5 addendum"
+confirmation-printed-pages = ["13-2"]
+confirmation-basis = "direct-example-use"
+
+[[candidates]]
+id = "amiga.base4.succ"
+name = "SUCC()"
+kind = "function"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-11","4-33"]
+status = "confirmed-in-3.5"
+notes = "The 3.5 matrix-copy examples use SUCC(i%) and SUCC(j%) (printed pp. 13-5–13-13). This directly confirms numeric use; the string overload is not independently restated."
+confirmation-source = "AM-INTERPRETER-35"
+confirmation-source-version = "3.5 addendum"
+confirmation-printed-pages = ["13-5"]
+confirmation-basis = "direct-example-use"
+
+[[candidates]]
+id = "amiga.base4.string"
+name = "STRING$()"
+kind = "function"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-32"]
+status = "confirmed-in-3.5"
+notes = "The 3.5 matrix examples use STRING$(n, \"-\") as PRINT separators (printed pp. 13-21–13-30). This confirms the string-argument form; the character-code overload is not independently restated."
+confirmation-source = "AM-INTERPRETER-35"
+confirmation-source-version = "3.5 addendum"
+confirmation-printed-pages = ["13-21"]
+confirmation-basis = "direct-example-use"
+
+
+[[candidates]]
+id = "amiga.base4.rnd"
+name = "RND()"
+kind = "function"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-17"]
+status = "confirmed-in-3.5"
+notes = "The 3.5 companion book's Chapter 18 matrix example uses RND(1) inside INT(RND(1)*5) (printed p. 458). This confirms the one-argument form; RANDOM and RANDOMIZE remain unconfirmed."
+confirmation-source = "AM-BOOK-DE-1990"
+confirmation-source-version = "3.5 companion book Chapter 18"
+confirmation-printed-pages = ["458"]
+confirmation-basis = "direct-example-use"
+
+[[candidates]]
+id = "amiga.base4.int"
+name = "INT()"
+kind = "function"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-13"]
+status = "confirmed-in-3.5"
+notes = "The 3.5 companion book's Chapter 18 matrix example uses INT(RND(1)*5) (printed p. 458), confirming the one-argument integer-conversion form."
+confirmation-source = "AM-BOOK-DE-1990"
+confirmation-source-version = "3.5 companion book Chapter 18"
+confirmation-printed-pages = ["458"]
+confirmation-basis = "direct-example-use"
+
+[[candidates]]
+id = "amiga.base5.print"
+name = "PRINT"
+kind = "statement"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["5-7–5-8"]
+status = "confirmed-in-3.5"
+notes = "The 3.5 companion examples use ordinary screen PRINT statements alongside MAT PRINT (printed pp. 458, 471 and 480). This confirms the shown PRINT statement form, not PRINT AT or WRITE."
+confirmation-source = "AM-BOOK-DE-1990"
+confirmation-source-version = "3.5 companion book Chapters 18–19 examples"
+confirmation-printed-pages = ["458","471","480"]
+confirmation-basis = "direct-example-use"
+
+[[candidates]]
+id = "amiga.base5.locate"
+name = "LOCATE"
+kind = "statement"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["5-7–5-8"]
+status = "confirmed-in-3.5"
+notes = "The vector-animation example positions output with LOCATE 1,12 (printed p. 471). Other cursor-positioning forms are not confirmed by this occurrence."
+confirmation-source = "AM-BOOK-DE-1990"
+confirmation-source-version = "3.5 companion book Chapter 18 example"
+confirmation-printed-pages = ["471"]
+confirmation-basis = "direct-example-use"
+
+[[candidates]]
+id = "amiga.base8.color"
+name = "COLOR"
+kind = "statement"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["8-2"]
+status = "confirmed-in-3.5"
+notes = "The Chapter 18 vector-animation example selects colors with COLOR 3 and COLOR 1 (printed p. 471). This confirms the shown COLOR statement form, not SETCOLOR's palette-component form."
+confirmation-source = "AM-BOOK-DE-1990"
+confirmation-source-version = "3.5 companion book Chapter 18 example"
+confirmation-printed-pages = ["471"]
+confirmation-basis = "direct-example-use"
+
+[[candidates]]
+id = "amiga.base8.draw-to"
+name = "DRAW TO"
+kind = "statement-syntax-variant"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["8-10–8-14"]
+status = "confirmed-in-3.5"
+notes = "The Chapter 18 vector-animation procedure uses DRAW TO with a calculated endpoint (printed p. 471). This confirms the shown path-drawing form only."
+confirmation-source = "AM-BOOK-DE-1990"
+confirmation-source-version = "3.5 companion book Chapter 18 example"
+confirmation-printed-pages = ["471"]
+confirmation-basis = "direct-example-use"
+
+
+[[candidates]]
+id = "amiga.base2.dim"
+name = "DIM"
+kind = "statement"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["2-8"]
+status = "confirmed-in-3.5"
+notes = "The 3.5 companion examples dimension vector and matrix arrays with DIM v(3),m(2,5) (p. 458), dimension point and matrix arrays (p. 471), and dimension the DATA-pointer position array (p. 480). This confirms the shown numeric-dimension forms, not every type suffix or bounds variant."
+confirmation-source = "AM-BOOK-DE-1990"
+confirmation-source-version = "3.5 companion book Chapters 18–19 examples"
+confirmation-printed-pages = ["458","471","480"]
+confirmation-basis = "direct-example-use"
+
+[[candidates]]
+id = "amiga.base2.option-base"
+name = "OPTION BASE"
+kind = "statement"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["2-9"]
+status = "confirmed-in-3.5"
+notes = "The Chapter 18 matrix example sets OPTION BASE 0 (printed p. 458). This confirms the shown base-0 form only; OPTION BASE 1 is not shown."
+confirmation-source = "AM-BOOK-DE-1990"
+confirmation-source-version = "3.5 companion book Chapter 18 example"
+confirmation-printed-pages = ["458"]
+confirmation-basis = "direct-example-use"
+
+[[candidates]]
+id = "amiga.base4.inc"
+name = "INC"
+kind = "statement"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-10"]
+status = "confirmed-in-3.5"
+notes = "The Chapter 19 DATA-pointer example uses INC i (printed p. 480) to advance its index. This confirms the shown scalar increment form, not DEC or all typed/overflow behavior."
+confirmation-source = "AM-BOOK-DE-1990"
+confirmation-source-version = "3.5 companion book Chapter 19 example"
+confirmation-printed-pages = ["480"]
+confirmation-basis = "direct-example-use"
+
+[[candidates]]
+id = "amiga.base4.dec"
+name = "DEC"
+kind = "statement"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["4-10"]
+status = "documented-in-3.0-only"
+notes = "The base manual documents decrement-by-one behavior. The audited 3.5 examples use INC but do not demonstrate DEC; 3.5 applicability remains unestablished."
+
+[[candidates]]
+id = "amiga.base5.data"
+name = "DATA"
+kind = "statement"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["5-14–5-15"]
+status = "confirmed-in-3.5"
+notes = "The Chapter 18 vector example defines numeric DATA items (printed p. 471). This confirms numeric DATA lines in that example, not string values or numeric-prefix grammar."
+confirmation-source = "AM-BOOK-DE-1990"
+confirmation-source-version = "3.5 companion book Chapter 18 example"
+confirmation-printed-pages = ["471"]
+confirmation-basis = "direct-example-use"
+
+[[candidates]]
+id = "amiga.base5.read"
+name = "READ"
+kind = "statement"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["5-14–5-15"]
+status = "confirmed-in-3.5"
+notes = "The Chapter 19 DATA-pointer example uses READ a (printed p. 480) to fetch one item into a scalar variable. Variable lists and string reads are not shown."
+confirmation-source = "AM-BOOK-DE-1990"
+confirmation-source-version = "3.5 companion book Chapter 19 example"
+confirmation-printed-pages = ["480"]
+confirmation-basis = "direct-example-use"
+
+[[candidates]]
+id = "amiga.base5.restore"
+name = "RESTORE"
+kind = "statement"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["5-14–5-15"]
+status = "confirmed-in-3.5"
+notes = "The Chapter 19 DATA-pointer example uses bare RESTORE (printed p. 480) before reading the DATA list from its beginning. The labelled RESTORE form is not shown."
+confirmation-source = "AM-BOOK-DE-1990"
+confirmation-source-version = "3.5 companion book Chapter 19 example"
+confirmation-printed-pages = ["480"]
+confirmation-basis = "direct-example-use"
+
+[[candidates]]
+id = "amiga.base6.open"
+name = "OPEN"
+kind = "statement"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["6-7"]
+status = "confirmed-in-3.5"
+notes = "The Chapter 18 matrix example opens file channels in output and input modes using OPEN \"O\" and OPEN \"I\" (printed p. 458). Append, update and random-access modes are not demonstrated."
+confirmation-source = "AM-BOOK-DE-1990"
+confirmation-source-version = "3.5 companion book Chapter 18 example"
+confirmation-printed-pages = ["458"]
+confirmation-basis = "direct-example-use"
+
+[[candidates]]
+id = "amiga.base6.close"
+name = "CLOSE"
+kind = "statement"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["6-8"]
+status = "confirmed-in-3.5"
+notes = "The Chapter 18 matrix example closes its data channel with CLOSE #1 (printed p. 458). The no-argument close-all form is not demonstrated."
+confirmation-source = "AM-BOOK-DE-1990"
+confirmation-source-version = "3.5 companion book Chapter 18 example"
+confirmation-printed-pages = ["458"]
+confirmation-basis = "direct-example-use"
+
+[[candidates]]
+id = "amiga.base7.pause"
+name = "PAUSE"
+kind = "statement"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["7-36"]
+status = "confirmed-in-3.5"
+notes = "The Chapter 18 vector-animation example uses PAUSE 50 (printed p. 471), confirming the shown numeric-argument form."
+confirmation-source = "AM-BOOK-DE-1990"
+confirmation-source-version = "3.5 companion book Chapter 18 example"
+confirmation-printed-pages = ["471"]
+confirmation-basis = "direct-example-use"
+
+[[candidates]]
+id = "amiga.base7.delay"
+name = "DELAY"
+kind = "statement"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["7-36"]
+status = "documented-in-3.0-only"
+notes = "The base manual documents DELAY as a pause in seconds. The audited 3.5 examples use PAUSE but do not demonstrate DELAY; 3.5 applicability remains unestablished."
+
+[[candidates]]
+id = "amiga.base7.procedure-return"
+name = "PROCEDURE / RETURN"
+kind = "program-structure"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["7-21–7-22"]
+status = "confirmed-in-3.5"
+notes = "The Chapter 18 vector example defines PROCEDURE drawp and terminates it with RETURN (printed p. 471). This confirms the shown parameterless procedure structure and RETURN form; the @ call prefix is recorded separately, while GOSUB and parameter-passing forms are not demonstrated."
+confirmation-source = "AM-BOOK-DE-1990"
+confirmation-source-version = "3.5 companion book Chapter 18 example"
+confirmation-printed-pages = ["471"]
+confirmation-basis = "direct-example-use"
+
+[[candidates]]
+id = "amiga.base7.gosub"
+name = "GOSUB"
+kind = "statement"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["7-21–7-22"]
+status = "documented-in-3.0-only"
+notes = "The base manual documents GOSUB procedure calls. The 3.5 example invokes drawp with the @ procedure-call form, not GOSUB; 3.5 GOSUB applicability remains unestablished."
+
+[[candidates]]
+id = "amiga.base7.end"
+name = "END"
+kind = "statement"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["7-37"]
+status = "confirmed-in-3.5"
+notes = "The Chapter 18 vector-animation example ends its top-level program with END (printed p. 471). Other program-termination alternatives are not demonstrated."
+confirmation-source = "AM-BOOK-DE-1990"
+confirmation-source-version = "3.5 companion book Chapter 18 example"
+confirmation-printed-pages = ["471"]
+confirmation-basis = "direct-example-use"
+
+[[candidates]]
+id = "amiga.base7.edit-stop"
+name = "EDIT / STOP"
+kind = "statement-family"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["7-37"]
+status = "documented-in-3.0-only"
+notes = "The base manual documents EDIT and STOP as alternatives to END. The audited 3.5 examples use END but do not demonstrate EDIT or STOP; 3.5 applicability remains unestablished."
+
+[[candidates]]
+id = "amiga.base7.procedure-call-at"
+name = "@procedure-call"
+kind = "procedure-call-syntax"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["7-21–7-22"]
+status = "confirmed-in-3.5"
+notes = "The Chapter 18 vector example invokes the parameterless drawp procedure using @drawp (printed p. 471). This confirms the @ call-prefix form only, not GOSUB or parameter passing."
+confirmation-source = "AM-BOOK-DE-1990"
+confirmation-source-version = "3.5 companion book Chapter 18 example"
+confirmation-printed-pages = ["471"]
+confirmation-basis = "direct-example-use"
+
+[[candidates]]
+id = "amiga.base8.cls"
+name = "CLS"
+kind = "statement"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+printed-pages = ["8-20"]
+status = "confirmed-in-3.5"
+notes = "The Chapter 13 3.5 addendum example uses CLS before MAT READ (printed p. 13-24). This confirms the ordinary screen-clear form; the optional CLS #n rerouting form from the base manual is not demonstrated."
+confirmation-source = "AM-INTERPRETER-35"
+confirmation-source-version = "3.5 addendum"
+confirmation-printed-pages = ["13-24"]
+confirmation-basis = "direct-example-use"
+

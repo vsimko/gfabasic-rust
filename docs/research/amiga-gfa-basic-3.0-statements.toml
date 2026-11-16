@@ -1,0 +1,437 @@
+schema-version = 1
+inventory-id = "amiga-gfa-basic-3.0-statements"
+target-dialect = "amiga-gfa-basic-interpreter"
+source = "AM-INTERPRETER-35"
+source-version = "3.0 base manual"
+source-pages = ["5-2–5-22", "6-4–6-21", "7-4–7-55", "8-2–8-24", "9-4–9-38", "10-2–10-16", "12-8–12-18"]
+"3.5-status" = "unverified"
+notes = "Declaration-level subset transcribed from the 3.0 base-manual command index and corresponding chapter entries. Each canonical statement is counted once despite syntax variants. This is not a complete command population or evidence of 3.5 retention."
+
+[[statements]]
+name = "INPUT"
+printed-pages = ["5-3–5-4", "6-15"]
+syntax-variants = ["screen input", "INPUT #"]
+aliases = []
+notes = "Screen and channel forms share the INPUT statement name."
+
+[[statements]]
+name = "LINE INPUT"
+printed-pages = ["5-5", "6-15"]
+syntax-variants = ["screen", "LINE INPUT #"]
+aliases = []
+
+[[statements]]
+name = "FORM INPUT"
+printed-pages = ["5-6"]
+syntax-variants = ["FORM INPUT AS"]
+aliases = []
+
+[[statements]]
+name = "PRINT"
+printed-pages = ["5-7–5-9", "6-16"]
+syntax-variants = ["PRINT AT", "PRINT USING", "PRINT #", "PRINT # USING"]
+aliases = []
+
+[[statements]]
+name = "WRITE"
+printed-pages = ["5-8", "6-16"]
+syntax-variants = ["WRITE #"]
+aliases = []
+
+[[statements]]
+name = "DEFNUM"
+printed-pages = ["5-11"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "MODE"
+printed-pages = ["5-11"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "HTAB"
+printed-pages = ["5-13"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "VTAB"
+printed-pages = ["5-13"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "LET"
+printed-pages = ["2-6"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "DIM"
+printed-pages = ["2-7"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "OPTION BASE"
+printed-pages = ["2-8"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "ERASE"
+printed-pages = ["2-9"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "CLEAR"
+printed-pages = ["2-10"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "CLR"
+printed-pages = ["2-10"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "INSERT"
+printed-pages = ["2-11"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "DELETE"
+printed-pages = ["2-12"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "ARRAYFILL"
+printed-pages = ["2-13"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "SWAP"
+printed-pages = ["2-14"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "QSORT"
+printed-pages = ["2-15"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "SSORT"
+printed-pages = ["2-16"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "IF"
+printed-pages = ["7-4–7-7"]
+syntax-variants = ["ELSE", "ELSE IF", "ELSEIF", "ENDIF"]
+aliases = []
+counting = "one-compound-conditional-construct"
+
+[[statements]]
+name = "ON GOSUB"
+printed-pages = ["7-8"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "SELECT"
+printed-pages = ["7-9–7-10"]
+syntax-variants = ["CASE", "DEFAULT", "ENDSELECT"]
+aliases = []
+counting = "one-compound-selection-construct"
+
+[[statements]]
+name = "FOR"
+printed-pages = ["7-13–7-14"]
+syntax-variants = ["NEXT", "DOWNTO"]
+aliases = []
+counting = "one-compound-counted-loop"
+
+[[statements]]
+name = "REPEAT"
+printed-pages = ["7-15"]
+syntax-variants = ["UNTIL"]
+aliases = []
+counting = "one-compound-post-tested-loop"
+
+[[statements]]
+name = "WHILE"
+printed-pages = ["7-16"]
+syntax-variants = ["WEND"]
+aliases = []
+counting = "one-compound-pre-tested-loop"
+
+[[statements]]
+name = "DO"
+printed-pages = ["7-17–7-19"]
+syntax-variants = ["DO WHILE", "DO UNTIL", "LOOP", "LOOP WHILE", "LOOP UNTIL"]
+aliases = []
+counting = "one-compound-do-loop"
+
+[[statements]]
+name = "EXIT IF"
+printed-pages = ["7-20"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "GOSUB"
+printed-pages = ["7-21–7-23"]
+syntax-variants = ["RETURN"]
+aliases = []
+notes = "Procedure/subroutine lifecycle; confirm exact construct boundaries before final population."
+
+[[statements]]
+name = "ON ERROR"
+printed-pages = ["7-29"]
+syntax-variants = ["ON ERROR GOSUB"]
+aliases = []
+
+[[statements]]
+name = "RESUME"
+printed-pages = ["7-29–7-31"]
+syntax-variants = ["RESUME NEXT", "RESUME label"]
+aliases = []
+
+[[statements]]
+name = "GOTO"
+printed-pages = ["7-36"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "PAUSE"
+printed-pages = ["7-37"]
+syntax-variants = ["DELAY"]
+aliases = []
+
+[[statements]]
+name = "END"
+printed-pages = ["7-38"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "STOP"
+printed-pages = ["7-38"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "REM"
+printed-pages = ["7-35"]
+syntax-variants = ["!"]
+aliases = ["!"]
+
+[[statements]]
+name = "DATA"
+printed-pages = ["5-15"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "READ"
+printed-pages = ["5-15"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "RESTORE"
+printed-pages = ["5-15"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "OPEN"
+printed-pages = ["6-7–6-9"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "CLOSE"
+printed-pages = ["6-7–6-9"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "NAME"
+printed-pages = ["6-11"]
+syntax-variants = ["RENAME"]
+aliases = ["RENAME"]
+
+[[statements]]
+name = "KILL"
+printed-pages = ["6-11"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "BLOAD"
+printed-pages = ["6-12"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "BSAVE"
+printed-pages = ["6-12"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "BGET"
+printed-pages = ["6-12"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "BPUT"
+printed-pages = ["6-12"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "OUT"
+printed-pages = ["6-13"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "SEEK"
+printed-pages = ["6-18"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "RELSEEK"
+printed-pages = ["6-18"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "FIELD"
+printed-pages = ["6-20–6-21"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "GET"
+printed-pages = ["6-20–6-21", "8-21"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "PUT"
+printed-pages = ["6-20–6-21", "8-21"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "SETCOLOR"
+printed-pages = ["8-2"]
+syntax-variants = ["COLOR"]
+aliases = ["COLOR"]
+
+[[statements]]
+name = "DEFFILL"
+printed-pages = ["8-3–8-4"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "CLIP"
+printed-pages = ["8-9"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "PLOT"
+printed-pages = ["8-10"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "LINE"
+printed-pages = ["8-11"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "DRAW"
+printed-pages = ["8-12–8-14"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "BOX"
+printed-pages = ["8-15"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "PBOX"
+printed-pages = ["8-15"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "CIRCLE"
+printed-pages = ["8-16"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "PCIRCLE"
+printed-pages = ["8-16"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "ELLIPSE"
+printed-pages = ["8-16"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "PELLIPSE"
+printed-pages = ["8-16"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "POLYLINE"
+printed-pages = ["8-17"]
+syntax-variants = []
+aliases = []
+
+[[statements]]
+name = "POLYFILL"
+printed-pages = ["8-17"]
+syntax-variants = []
+aliases = []
+
+[normalization]
+compound-control-flow = "count-one-compound-construct"
+syntax-variants = "one-canonical-statement"
+synonyms = "one-canonical-name-with-aliases"
+statement-function-shared-name = "deduplicate-by-name"
+functions-and-statements = "reconcile-with-function-inventory-before-population"
+
+[limitations]
+chapter-and-index-subset-only = true
+complete-language-inventory = false
+explicit-3.5-evidence = false
+runtime-observation = "not-recorded"

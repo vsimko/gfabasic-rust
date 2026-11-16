@@ -1,0 +1,17 @@
+id = "amiga-3.5-mat-cpy-submatrix"
+dialect = "GFA BASIC Amiga"
+version = "3.5"
+api_profiles = []
+kind = "semantic"
+status = "verified"
+source_key = "AM-INTERPRETER-30-35-UPDATE-SCAN"
+source_pages = "printed pp. 13-5–13-6"
+evidence_status = "page-image-verified"
+expectation = "MAT CPY copies the requested 2-by-2 region from b into a at the specified row and column offsets; PRINT a(3,3) outputs 42."
+notes = [
+  "Independently authored minimal fixture; it uses different dimensions, values, and a smaller copied region than the manual's illustrative program.",
+  "The Amiga 3.5 addendum documents MAT CPY a(i,j)=b(k,l),h,w as copying h rows with w elements from the source offsets into the destination offsets; the special case without offsets copies a complete same-order matrix.",
+  "The selected source and destination offsets are both (2,2), avoiding ambiguity in the addendum's prose ordering of the source indices.",
+  "Verified against the supplied 3.5 addendum page images; no original interpreter execution has been performed.",
+  "Stored under research because MAT CPY is not part of the formatter's currently accepted statement subset."
+]

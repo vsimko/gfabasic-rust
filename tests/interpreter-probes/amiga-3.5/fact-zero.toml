@@ -1,0 +1,22 @@
+id = "amiga-3.5-fact-zero"
+dialect = "GFA BASIC Amiga"
+version_target = "3.5"
+component = "interpreter"
+input_format = "ASCII .LST via editor Merge (F2)"
+kind = "semantic"
+evidence_status = "page-image-verified"
+manual_source = "AM-INTERPRETER-30-35-UPDATE-SCAN"
+manual_pages = "printed pp. 14-1–14-2"
+expected_output = "1, 1, 2 (formatting/separators to be observed)"
+actual_component_version = ""
+loaded_successfully = false
+execution_result = "not-run"
+observed_output = ""
+observed_errors = ""
+observation_status = "not-run"
+notes = [
+  "Independently authored ASCII-only probe based on the existing page-image-verified corpus fixture.",
+  "Manual-backed expected values: FACT(0)=1, FACT(1)=1, FACT(2)=2.",
+  "No original interpreter execution is claimed; record editor acceptance and runtime output separately.",
+  "Do not use a 3.52 run as evidence for the normative 3.5 target.",
+]

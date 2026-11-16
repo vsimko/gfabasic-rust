@@ -1,0 +1,16 @@
+id = "amiga-3.5-mat-sub"
+dialect = "GFA BASIC Amiga"
+version = "3.5"
+api_profiles = []
+kind = "semantic"
+status = "verified"
+source_key = "AM-INTERPRETER-35"
+source_pages = "printed pp. 13-18–13-19"
+evidence_status = "page-image-verified"
+expectation = "MAT SUB a()=a()-b() writes the element-wise difference of equal-order matrices a and b to a."
+notes = [
+  "Independently authored minimal fixture; not copied from the manual's example.",
+  "Covers the destination-expression form documented for MAT SUB.",
+  "The 3.5 addendum documents equal-order requirements for matrix subtraction.",
+  "Verified against the supplied Amiga GFA BASIC 3.5 addendum page images; no original interpreter execution has been performed.",
+]

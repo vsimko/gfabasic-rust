@@ -1,0 +1,159 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "GFA BASIC API agent review result v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "declaration_id",
+    "reviewed_inputs",
+    "verdict",
+    "confidence",
+    "reviewed_scope",
+    "reasoning",
+    "evidence",
+    "counter_evidence",
+    "limitations",
+    "follow_up",
+    "human_review_required",
+    "reviewer"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "declaration_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "reviewed_inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "registry_sha256",
+        "source_register_sha256",
+        "documentation_sha256"
+      ],
+      "properties": {
+        "registry_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "source_register_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "documentation_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    },
+    "verdict": {
+      "enum": [
+        "supported",
+        "contradicted",
+        "partially-supported",
+        "insufficient-evidence",
+        "ambiguous"
+      ]
+    },
+    "confidence": {
+      "enum": [
+        "low",
+        "medium",
+        "high"
+      ]
+    },
+    "reviewed_scope": {
+      "type": "string",
+      "minLength": 1
+    },
+    "reasoning": {
+      "type": "string",
+      "minLength": 1
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "kind",
+          "reference",
+          "locator",
+          "relevance"
+        ],
+        "properties": {
+          "kind": {
+            "enum": [
+              "primary-source",
+              "counter-source",
+              "runtime-observation",
+              "test"
+            ]
+          },
+          "reference": {
+            "type": "string",
+            "minLength": 1
+          },
+          "locator": {
+            "type": "string",
+            "minLength": 1
+          },
+          "relevance": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "counter_evidence": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "follow_up": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "human_review_required": {
+      "type": "boolean"
+    },
+    "reviewer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "agent",
+        "model",
+        "procedure_version"
+      ],
+      "properties": {
+        "agent": {
+          "type": "string",
+          "minLength": 1
+        },
+        "model": {
+          "type": "string",
+          "minLength": 1
+        },
+        "procedure_version": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  }
+}

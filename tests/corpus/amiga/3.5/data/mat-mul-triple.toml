@@ -1,0 +1,16 @@
+id = "amiga-3.5-mat-mul-triple"
+dialect = "GFA BASIC Amiga"
+version = "3.5"
+api_profiles = []
+kind = "semantic"
+status = "verified"
+source_key = "AM-INTERPRETER-35"
+source_pages = "printed p. 13-23"
+evidence_status = "page-image-verified"
+expectation = "MAT MUL x=a()*b()*c() computes the vector-matrix-vector product a^T*b*c; with a=[2,1], b a 2x3 matrix filled with 2, and c=[1,2,3], x is 36."
+notes = [
+  "Independently authored minimal fixture; no original interpreter execution has been performed.",
+  "The Amiga GFA BASIC 3.5 addendum defines this form for qualified vectors a and c and a matrix b; the result is a scalar.",
+  "Expected value is derived from the documented product: b*c=[12,12], then a dot (b*c)=2*12+1*12=36.",
+  "This form is not currently part of the formatter's accepted matrix subset and is not a formatter CI fixture.",
+]

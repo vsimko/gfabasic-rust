@@ -1,0 +1,6 @@
+DIM a(4,4), b(3,3)
+MAT SET a()=0
+MAT SET b()=7
+b(3,3)=42
+MAT CPY a(2,2)=b(2,2),2,2
+PRINT a(3,3)
