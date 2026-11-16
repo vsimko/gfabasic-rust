@@ -2,7 +2,7 @@
 set -euo pipefail
 cat > "$RUNNER_TEMP/amiga-cli-probe.uae" <<EOF
 use_gui=no
-cpu_type=68020
+cpu_type=68020/68881
 chipset=ocs
 kickstart_rom_file=$KICKSTART_ROM_PATH
 chipmem_size=2
