@@ -107,7 +107,6 @@ printf "SEND_MOUSE\\t0\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 sleep 0.5
 printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-file-double-clicked.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 
-}"
 
 # The selected-row screenshot places the pointer near x=320,y=218.
 # Move to the center of the Merge gadget (about x=323,y=420).
