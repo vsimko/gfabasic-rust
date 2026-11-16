@@ -77,9 +77,9 @@ target_y = int(target["top"]) + int(target["height"]) / 2
 # SEND_MOUSE has different effective scales on the two axes:
 # X is approximately 0.5, while Y is approximately 0.25.
 # Keep the current horizontal position as requested; calibrate only Y
-# to the agreed screenshot coordinate (210 px).
+# to the agreed screenshot coordinate (215 px).
 raw_dx = 0
-raw_dy = round((210 - pointer_y) * 4)
+raw_dy = round((215 - pointer_y) * 4)
 with open(output_path, "w", encoding="ascii") as output:
     output.write(f"{raw_dx} {raw_dy}\n")
 print(
