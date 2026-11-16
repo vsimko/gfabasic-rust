@@ -1,4 +1,4 @@
-name: Propose public PDF source locator index
+name: Propose public PDF source and text index
 
 on:
   workflow_dispatch:
@@ -45,7 +45,7 @@ jobs:
             test "$(head -c 5 "$pdf")" = "%PDF-"
           done
 
-      - name: Build and validate locator-only index
+      - name: Build and validate source index with permitted German book text
         run: |
           set -euo pipefail
           python scripts/build_reference_source_index.py \
@@ -64,7 +64,13 @@ jobs:
               assert len(document["sha256"]) == 64
               assert len(document["page_locators"]) == document["page_count"]
               assert all(set(page) == {"pdf_page", "anchor"} for page in document["page_locators"])
-          print("Validated locator-only index:", [(d["source_id"], d["page_count"]) for d in data["documents"]])
+              if document["source_id"] == "AM-INTERPRETER-35":
+                  assert "page_text" not in document
+              if document["source_id"] == "AM-BOOK-DE":
+                  assert len(document["page_text"]) == document["page_count"]
+                  assert all(set(page) == {"pdf_page", "text"} for page in document["page_text"])
+                  assert document["rights_basis"]
+          print("Validated source index:", [(d["source_id"], d["page_count"]) for d in data["documents"]])
           PY
 
       - name: Propose index through a pull request
@@ -97,5 +103,5 @@ jobs:
               --base main \
               --head "$branch" \
               --title "Refresh public GFA BASIC source locator index" \
-              --body "Updates bibliographic metadata, PDF hashes, page counts, and PDF page locators only. The workflow downloads source PDFs to ephemeral runner storage and does not commit PDFs, OCR, or page text. Review source availability and the generated metadata before merging."
+              --body "Updates bibliographic metadata, PDF hashes, page counts, and page locators. Includes page-by-page extracted text only for the 1989 German book, based on the reported authors' permission and the maintainer's recorded decision. The English interpreter manual remains locator-only. Source PDFs are downloaded to ephemeral runner storage and are not committed."
           fi
