@@ -42,21 +42,22 @@ import csv
 import subprocess
 import sys
 from PIL import Image
-import numpy as np
 
 image_path, output_path = sys.argv[1:]
 image = Image.open(image_path).convert("RGB")
-pixels = np.asarray(image)
-red = (
-    (pixels[:, :, 0] > 150)
-    & (pixels[:, :, 0] > pixels[:, :, 1] * 1.4)
-    & (pixels[:, :, 0] > pixels[:, :, 2] * 1.4)
-)
-ys, xs = np.where(red)
-if not len(xs):
+pixels = image.load()
+red_x = []
+red_y = []
+for y in range(image.height):
+    for x in range(image.width):
+        red, green, blue = pixels[x, y]
+        if red > 150 and red > green * 1.4 and red > blue * 1.4:
+            red_x.append(x)
+            red_y.append(y)
+if not red_x:
     raise SystemExit("Could not locate the red Amiberry mouse pointer")
-pointer_x = (int(xs.min()) + int(xs.max())) / 2
-pointer_y = (int(ys.min()) + int(ys.max())) / 2
+pointer_x = (min(red_x) + max(red_x)) / 2
+pointer_y = (min(red_y) + max(red_y)) / 2
 
 tsv = subprocess.check_output(
     ["tesseract", image_path, "stdout", "--psm", "6", "tsv"],
