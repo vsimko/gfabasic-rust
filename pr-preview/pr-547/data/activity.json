@@ -1,9 +1,17 @@
 {
   "schema_version": 1,
   "status": "fresh",
-  "generated_at": "2026-11-16T12:29:49.752183+00:00",
-  "last_successful_at": "2026-11-16T12:29:49.752183+00:00",
+  "generated_at": "2026-11-16T12:34:18.552702+00:00",
+  "last_successful_at": "2026-11-16T12:34:18.552702+00:00",
   "items": [
+    {
+      "type": "merged_pull_request",
+      "title": "Use year-neutral identifier for German GFA BASIC source",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/550",
+      "number": 550,
+      "timestamp": "2026-11-16T12:29:59Z",
+      "summary": "PR #550 merged"
+    },
     {
       "type": "merged_pull_request",
       "title": "Revert accidental direct-to-main PDF index changes",
@@ -91,14 +99,6 @@
       "number": 526,
       "timestamp": "2026-11-15T12:43:29Z",
       "summary": "PR #526 merged"
-    },
-    {
-      "type": "commit",
-      "title": "[Research] Probe GFA BASIC 3.5U combinatorics functions (#526)",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/0ecb27e2d15e5a94b466b3355f5678746e99a633",
-      "number": null,
-      "timestamp": "2026-11-15T12:43:29Z",
-      "summary": "Commit 0ecb27e"
     }
   ]
 }
