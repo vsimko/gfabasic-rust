@@ -44,6 +44,13 @@ else
   : > artifacts/amiga-cli-probe/fact-output.txt
 fi
 
+if xdftool "$RUNNER_TEMP/gfatest.adf" read GFATEST.OUT artifacts/amiga-cli-probe/gfatest-output.txt; then
+  cat artifacts/amiga-cli-probe/gfatest-output.txt
+else
+  echo "::error::Interpreter did not create GFATEST.OUT"
+  exit 1
+fi
+
 for diagnostic in insert-floppy-ipc.txt list-floppies-ipc.txt stdin-save.LST; do
   if test -f "amiga-volume/$diagnostic"; then
     cp "amiga-volume/$diagnostic" "artifacts/amiga-cli-probe/$diagnostic"
@@ -70,30 +77,28 @@ else
 fi
 echo "EDITOR_MERGE_OCR_CAPTURED=yes (diagnostic only)" | tee artifacts/amiga-cli-probe/result.txt
 
-if ! grep -Fq 'BEFORE-MAT-ONE' artifacts/amiga-cli-probe/fact-output.txt; then
-  echo "::error::Interpreter did not write BEFORE-MAT-ONE; editor launch or file output is not proven."
+# The listing records explicit PASS/FAIL assertions in GFATEST.OUT.
+# FACT.OUT is diagnostic numeric output; it intentionally contains no
+# BEFORE-MAT-ONE / AFTER-MAT-ONE sentinels.
+expected_tests=(
+  data-pointer fact-zero arithmetic for-next strings
+  matrix-det matrix-inv matrix-add matrix-sub matrix-one
+)
+for test_id in "${expected_tests[@]}"; do
+  if ! grep -Fxq "GFATEST:${test_id}:PASS" artifacts/amiga-cli-probe/gfatest-output.txt; then
+    echo "::error::Native regression failed or omitted ${test_id}"
+    exit 1
+  fi
+done
+if grep -Fq ':FAIL' artifacts/amiga-cli-probe/gfatest-output.txt; then
+  echo "::error::Native regression output contains FAIL"
   exit 1
 fi
-echo "MAT_ONE_REACHED=before-operation" | tee -a artifacts/amiga-cli-probe/result.txt
+echo "NATIVE_REGRESSION_ASSERTIONS=PASS (${#expected_tests[@]} tests)" | tee -a artifacts/amiga-cli-probe/result.txt
 
-if ! grep -Fq 'AFTER-MAT-ONE' artifacts/amiga-cli-probe/fact-output.txt; then
-  echo "::error::MAT ONE did not return to the following statement."
+if ! grep -Fq 'MAT-ONE:100010001' artifacts/amiga-cli-probe/fact-output.txt ||
+   ! grep -Fxq 'GFATEST:matrix-one:PASS' artifacts/amiga-cli-probe/gfatest-output.txt; then
+  echo "::error::MAT ONE did not produce the expected 3x3 identity matrix"
   exit 1
 fi
-echo "MAT_ONE_RETURNED=PASS" | tee -a artifacts/amiga-cli-probe/result.txt
-
-python3 - <<'PY'
-from pathlib import Path
-rows = []
-for line in Path("artifacts/amiga-cli-probe/fact-output.txt").read_text().splitlines():
-    fields = line.split()
-    if len(fields) == 3:
-        try:
-            rows.append(tuple(float(value) for value in fields))
-        except ValueError:
-            continue
-expected = [(1, 0, 0), (0, 1, 0), (0, 0, 1)]
-if rows != expected:
-    raise SystemExit(f"MAT ONE output is not the 3x3 identity matrix: {rows!r}")
-PY
 echo "MAT_ONE_IDENTITY_MATRIX=PASS" | tee -a artifacts/amiga-cli-probe/result.txt
