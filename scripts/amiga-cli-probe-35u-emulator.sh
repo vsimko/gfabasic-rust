@@ -34,11 +34,11 @@ printf "SEND_MOUSE\\t0\\t112\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}
 sleep 0.1
 printf "SEND_MOUSE\\t0\\t112\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 sleep 0.5
-# The preceding movement leaves the pointer on the Parent gadget at
-# about x=315,y=162 in the 752x576 screenshot. Move down ~54 px and right
-# ~15 px to the center of the gfatest.LST row (about x=330,y=216).
+# The preceding movement already leaves the pointer at the file-list
+# row height (about y=160). Move only ~15 px right to the center of
+# gfatest.LST (about x=330,y=160); do not move down into the blank rows.
 # Relative SEND_MOUSE deltas are scaled by roughly one half on this setup.
-printf "SEND_MOUSE\\t30\\t100\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+printf "SEND_MOUSE\\t30\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 sleep 0.3
 printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-file-row-target.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 # Amiberry mouse button 1 is left-button down; release between clicks.
