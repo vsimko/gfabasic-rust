@@ -34,8 +34,8 @@ printf "SEND_MOUSE\\t0\\t112\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}
 sleep 0.1
 printf "SEND_MOUSE\\t0\\t112\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 sleep 0.5
-# The file row is at the fixed Amiga screen coordinate Y=215 px.
-# Keep the existing X position: the pointer is already over gfatest.LST.
+# The gfatest.LST row is at screenshot Y=160 px (the pointer starts near
+# Y=212). Keep the existing X position, which is already over the filename.
 # SEND_MOUSE relative Y is scaled by approximately 0.25.
 printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-file-row-before-click.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 python3 - "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-file-row-before-click.png" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/mouse-y-correction.txt" <<'PY'
@@ -53,7 +53,7 @@ for y in range(image.height):
 if not red_y:
     raise SystemExit("Could not locate the red Amiberry mouse pointer")
 pointer_y = min(red_y)
-raw_dy = round((215 - pointer_y) * 4)
+raw_dy = round((160 - pointer_y) * 4)
 with open(sys.argv[2], "w", encoding="ascii") as output:
     output.write(str(raw_dy) + chr(10))
 print(f"Keeping X unchanged; pointer Y={pointer_y}, target Y=215, raw Y correction={raw_dy}")
@@ -64,7 +64,7 @@ if (( mouse_dy != 0 )); then
 fi
 sleep 0.3
 printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-file-row-y215.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-# Double-click gfatest.LST at the existing X position and fixed Y=215 px.
+# Double-click the gfatest.LST row at screenshot Y=160 px.
 printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 sleep 0.10
 printf "SEND_MOUSE\\t0\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
