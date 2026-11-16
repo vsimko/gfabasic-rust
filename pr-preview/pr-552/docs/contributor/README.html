@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Audience: People who want to review, research, or contribute to this repository.">
+  <title>Contributor documentation · GFA BASIC Rust documentation</title>
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body class="docs-site">
+  <header class="docs-header">
+    <a href="../../index.html">GFA BASIC Rust</a>
+    <span aria-hidden="true">/</span>
+    <a href="../index.html">Documentation</a>
+  </header>
+  <div class="docs-layout">
+    <nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home" href="index.html">Section index</a><ul><li><a href="README.html">Contributor documentation</a></li><li><a href="dependency-license-policy.html">Dependency License Policy</a></li><li><a href="development-setup.html">Development setup</a></li></ul></nav>
+    <main class="docs-content">
+      <article>
+        <h1>Contributor documentation</h1>
+        <p class="docs-meta"><span>Contributor Guide</span></p>
+        <h1 id="contributor-documentation">Contributor documentation</h1>
+<p><strong>Audience:</strong> People who want to review, research, or contribute to this repository.</p>
+<p><strong>Status:</strong> The Rust 1.99.1 workspace and fast Rust CI checks are implemented. The compiler library includes source-map/file-loading primitives and a structured diagnostic renderer; the minimal CLI supports help/version only. GFA BASIC frontend, project configuration, compilation, runtime behavior, and platform integration are not implemented.</p>
+<h2 id="before-making-a-change">Before making a change</h2>
+<ol>
+<li>Read the <a href="../index.html">project documentation index</a> and the <a href="../architecture/README.html">architecture overview</a>.</li>
+<li>Check the open <a href="https://github.com/vsimko/gfabasic-rust/issues">GitHub issues</a> and pull requests to avoid duplicate work.</li>
+<li>Follow the <a href="../DOCUMENTATION.html">documentation policy</a> for Markdown, evidence, citations, and copyright.</li>
+<li>For language or API research, consult the <a href="../reference-sources.html">source register</a> and keep Amiga and Atari ST evidence separate.</li>
+<li>For test design, read <a href="../architecture/TESTING.html">compatibility testing and release criteria</a> and the <a href="https://github.com/vsimko/gfabasic-rust/blob/main/tests/corpus/README.md">conformance corpus instructions</a>.</li>
+</ol>
+<h2 id="development-setup">Development setup</h2>
+<p>Follow the <a href="development-setup.html">development setup guide</a> for the pinned Rust toolchain, local build/test commands, documentation checks, and troubleshooting.</p>
+<h2 id="current-development-constraints">Current development constraints</h2>
+<p>The default branch contains a Cargo workspace with compiler, runtime, and Linux platform crates. The compiler crate implements source-map and strict UTF-8 file-loading primitives plus a structured diagnostic model and human renderer. Its minimal CLI supports help/version; <code>build</code> and <code>check</code> do not compile. The lexer, parser, semantic analysis, IR, backend, project configuration, runtime behavior, and Linux platform adapter remain unimplemented. The pinned toolchain is Rust 1.99.1; LLVM and SDL3 are not required for the current workspace and remain deferred. The project source code and original project documentation are licensed under MIT; see the root <a href="https://github.com/vsimko/gfabasic-rust/blob/main/LICENSE">LICENSE</a> file and the <a href="https://github.com/vsimko/gfabasic-rust/blob/main/LICENSE">license section in the README</a>.</p>
+<p>The MIT license does not grant redistribution rights to third-party manuals, ROMs, disk images, sample programs, or other externally sourced materials. Check their individual rights and the documentation policy before adding or redistributing them.</p>
+<h2 id="documentation-and-workspace-checks">Documentation and workspace checks</h2>
+<p>Run the same documentation checks locally from the repository root:</p>
+<pre><code class="language-sh">npx --yes markdownlint-cli2@0.24.0 &quot;**/*.md&quot; &quot;#node_modules&quot;
+lychee --offline --include-fragments anchor-only --root-dir &quot;$PWD&quot; &quot;**/*.md&quot;
+python -m pip install --disable-pip-version-check PyYAML==6.0.2 markdown-it-py==3.0.0
+python scripts/validate_okf.py
+python scripts/generate_docs_site.py
+python -m unittest discover -s scripts/tests -p &quot;test_*.py&quot;
+</code></pre>
+<p>Run the workspace checks from the repository root after installing the pinned toolchain:</p>
+<pre><code class="language-sh">rustup toolchain install 1.99.1 --profile minimal --component rustfmt --component clippy
+rustup default 1.99.1
+cargo fmt --all -- --check
+cargo clippy --workspace --all-targets -- -D warnings
+cargo test --workspace --all-targets
+cargo build --workspace --all-targets
+</code></pre>
+<p>The same Rust checks run in <a href="https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/rust.yml">rust.yml</a>. The documentation workflow in <a href="https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/docs.yml">docs.yml</a> runs Markdown linting, OKF v0.2 bundle validation and website generation, API registry/corpus validation, validator tests, and offline local-link/anchor validation. Separate workflows provide source-loader fuzzing, RustSec audits, source-loading benchmark checks/measurements, and workspace SBOM generation/validation. These checks validate repository tooling and the current source-loading primitives only; they do not validate a GFA BASIC compiler or runtime implementation. Lexer/parser fuzz targets, compiler/runtime conformance, a stable final PR gate, branch protection, and compiler build/package/release workflows remain unimplemented. The release-SBOM upload has not yet been exercised against a real published release.</p>
+<h2 id="human-blockers-and-ai-agent-workflow">Human blockers and AI agent workflow</h2>
+<p>Follow the repository-wide <a href="https://github.com/vsimko/gfabasic-rust/blob/main/AGENTS.md">AI agent and human-blocker policy</a>. Any progress-blocking human decision, approval, permission, credential, or manual action must be recorded as an open issue with the <code>needs-human</code> label. The issue must specify the requested action and affected work. Do not make owner-only decisions on a maintainer's behalf. Continue independent work while a blocker is waiting for human input.</p>
+<h2 id="pull-request-expectations">Pull request expectations</h2>
+<ul>
+<li>Keep changes small and scoped to an issue or a clearly described defect.</li>
+<li>Preserve accepted architecture decisions. Mark proposals as proposals.</li>
+<li>Cite the applicable dialect, platform, version, source edition, and page/section for language/API claims.</li>
+<li>Do not add copyrighted manuals, ROMs, disk images, or unlicensed examples without a separate documented rights basis.</li>
+<li>Distinguish research candidates from verified conformance tests.</li>
+<li>Report checks that were actually run and state when a check is unavailable.</li>
+<li>By submitting a contribution, you agree that the contribution may be distributed as part of this project under the MIT License. You retain copyright in your contribution; no separate copyright assignment is implied.</li>
+</ul>
+<h2 id="future-development-setup">Future development setup</h2>
+<p>The initial development setup is documented above. Add LLVM and SDL3 prerequisites only after their versions and clean-build strategies are selected.</p>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>
