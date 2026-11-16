@@ -95,13 +95,16 @@ if grep -Eiq 'Merge File|MAT[[:space:]]+SET' "$GITHUB_WORKSPACE/artifacts/amiga-
   echo "The Merge requester is still visible or OCR found MAT SET; refusing to run."
   exit 1
 fi
-if ! grep -Eiq 'MAT[[:space:]]+ONE' "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-merge-ocr.txt" ||
-   ! grep -Eiq 'BEFORE.?MAT.?ONE' "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-merge-ocr.txt"; then
-  echo "MERGE_EDITOR_STATE=UNCONFIRMED (expected LST source text not visible)" | tee "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-validation.txt"
-  echo "The expected LST source is not confirmed in the editor; refusing to send Shift+F10."
+# The full regression listing is longer than one editor screen. Validate the
+# visible prologue, not MAT ONE / runtime markers near the end of the file.
+# The screenshot and OCR artifact remain available for diagnosing ambiguity.
+if ! grep -Eiq 'Loaded as ASCII.*native Editor Merge' "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-merge-ocr.txt" ||
+   ! grep -Eiq 'DATA-AVAILABLE-INITIAL' "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-merge-ocr.txt"; then
+  echo "MERGE_EDITOR_STATE=UNCONFIRMED (listing prologue not visible)" | tee "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-validation.txt"
+  echo "The regression listing prologue is not confirmed in the editor; refusing to send Shift+F10."
   exit 1
 fi
-echo "MERGE_EDITOR_STATE=PASS (expected LST source text visible; OCR is supporting evidence)" | tee "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-validation.txt"
+echo "MERGE_EDITOR_STATE=PASS (regression listing prologue visible; OCR is supporting evidence)" | tee "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-validation.txt"
 
 # Run the merged listing with Shift+F10 (Amiga raw keycodes: LShift=0x60,
 # F10=0x59). Press the modifier first and release it last.
