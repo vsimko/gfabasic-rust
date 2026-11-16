@@ -18,10 +18,24 @@ EOF
 export AMIBERRY_LOG="$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/amiberry.log"
 export SDL_AUDIODRIVER=dummy
 env -u SHELLOPTS xvfb-run -a -s "-screen 0 1024x768x24 +extension GLX" bash scripts/amiga-cli-probe-35u-emulator.sh
-xdftool "$RUNNER_TEMP/gfatest.adf" read FACT.OUT artifacts/amiga-cli-probe/fact-output.txt
-xdftool "$RUNNER_TEMP/gfatest.adf" read GFATEST.OUT artifacts/amiga-cli-probe/gfatest-results.txt
-cat artifacts/amiga-cli-probe/fact-output.txt
-cat artifacts/amiga-cli-probe/gfatest-results.txt
+# BEFORE.OUT is closed before MAT ONE so the marker survives a runtime trap.
+if xdftool "$RUNNER_TEMP/gfatest.adf" read BEFORE.OUT artifacts/amiga-cli-probe/before-mat-one.txt; then
+  cat artifacts/amiga-cli-probe/before-mat-one.txt
+else
+  echo "MISSING: BEFORE.OUT" > artifacts/amiga-cli-probe/before-mat-one.missing
+fi
+if xdftool "$RUNNER_TEMP/gfatest.adf" read FACT.OUT artifacts/amiga-cli-probe/fact-output.txt; then
+  cat artifacts/amiga-cli-probe/fact-output.txt
+else
+  echo "MISSING: FACT.OUT" > artifacts/amiga-cli-probe/fact-output.missing
+  : > artifacts/amiga-cli-probe/fact-output.txt
+fi
+if xdftool "$RUNNER_TEMP/gfatest.adf" read GFATEST.OUT artifacts/amiga-cli-probe/gfatest-results.txt; then
+  cat artifacts/amiga-cli-probe/gfatest-results.txt
+else
+  echo "MISSING: GFATEST.OUT" > artifacts/amiga-cli-probe/gfatest-results.missing
+  : > artifacts/amiga-cli-probe/gfatest-results.txt
+fi
 for diagnostic in insert-floppy-ipc.txt list-floppies-ipc.txt stdin-save.LST; do
   if test -f "amiga-volume/$diagnostic"; then
     cp "amiga-volume/$diagnostic" "artifacts/amiga-cli-probe/$diagnostic"
@@ -44,16 +58,20 @@ if tesseract artifacts/amiga-cli-probe/after-merge-ocr-input.png stdout --psm 6 
 else
   echo "AFTER_MERGE_OCR=unavailable (diagnostic only)" | tee artifacts/amiga-cli-probe/after-merge-ocr.txt
 fi
-# OCR is retained as diagnostic evidence only. Its output is unreliable for
-# punctuation and short source tokens; a fresh disk plus interpreter-written
-# STARTUP-MARKER below is the authoritative proof that the listing ran.
+# OCR is retained as diagnostic evidence only; it does not prove execution.
 echo "EDITOR_MERGE_OCR_CAPTURED=yes (diagnostic only)" | tee artifacts/amiga-cli-probe/result.txt
 
-# This control has no MAT commands: it verifies basic listing execution and file output.
-if grep -Fq 'STARTUP-MARKER' artifacts/amiga-cli-probe/fact-output.txt; then
-  echo "STARTUP_CONTROL=marker-written" | tee -a artifacts/amiga-cli-probe/result.txt
+# This marker is flushed before MAT ONE, so it distinguishes launch failure
+# from a trap or failure inside the matrix operation.
+if grep -Fq 'BEFORE-MAT-ONE' artifacts/amiga-cli-probe/before-mat-one.txt; then
+  echo "MAT_ONE_REACHED=before-operation" | tee -a artifacts/amiga-cli-probe/result.txt
 else
-  echo "::error::FACT.OUT does not contain the startup marker."
+  echo "::error::Interpreter did not write BEFORE-MAT-ONE."
+  exit 1
+fi
+
+if ! grep -Fq 'AFTER-MAT-ONE' artifacts/amiga-cli-probe/fact-output.txt; then
+  echo "::error::MAT ONE did not return to the following statement."
   exit 1
 fi
 
