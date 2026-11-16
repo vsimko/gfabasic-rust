@@ -34,12 +34,21 @@ printf "SEND_MOUSE\\t0\\t112\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}
 sleep 0.1
 printf "SEND_MOUSE\\t0\\t112\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 sleep 0.5
-printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-file-row-pointer.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+# The previous calibration left the pointer at roughly x=324,y=264,
+# below the gfatest.LST row. Move it onto the filename (about x=310,y=205)
+# before double-clicking; the row is directly below the "* S" parent entry.
+printf "SEND_MOUSE\\t-20\\t-100\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+sleep 0.3
+printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-file-row-target.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+# Amiberry mouse button 1 is left-button down; release between clicks.
+for click in 1 2; do
 printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-sleep 0.2
+sleep 0.15
 printf "SEND_MOUSE\\t0\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+sleep 0.2
+done
 sleep 0.5
-printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-file-selected.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-file-double-clicked.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 
 # The selected-row screenshot places the pointer near x=320,y=218.
 # Move to the center of the Merge gadget (about x=323,y=420).
