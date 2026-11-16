@@ -76,7 +76,13 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           branch="automation/public-pdf-source-index"
-          git switch --create "$branch" origin/main 2>/dev/null || git switch "$branch"
+          if git ls-remote --exit-code --heads origin "$branch" >/dev/null 2>&1; then
+            git fetch origin "$branch:refs/remotes/origin/$branch"
+            git switch --create "$branch" --track "origin/$branch"
+          else
+            git switch --create "$branch" origin/main
+          fi
+          git reset --hard origin/main
           git add references/source-index.json
           if git diff --cached --quiet; then
             echo "Source index is already current."
