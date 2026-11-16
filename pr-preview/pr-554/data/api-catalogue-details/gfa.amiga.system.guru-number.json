@@ -1,0 +1,62 @@
+{
+  "id": "gfa.amiga.system.guru-number",
+  "name": "GURU",
+  "kind": "function",
+  "namespace": "amiga",
+  "category": "special-and-platform-commands",
+  "availability": [
+    {
+      "dialect": "amiga-gfa-basic-interpreter",
+      "versions": [
+        "3.5"
+      ],
+      "profile": "amiga"
+    }
+  ],
+  "syntax": [
+    {
+      "form": "GURU",
+      "contexts": [
+        "expression"
+      ]
+    }
+  ],
+  "signature": {
+    "type": "GURU number (return type unspecified by source)"
+  },
+  "semantics": {
+    "summary": "Returns the GURU number associated with the current GURU condition; the addendum does not specify its return type.",
+    "side-effects": []
+  },
+  "evidence": {
+    "source-scope": "amiga-3.5-addendum",
+    "status": "book-documented",
+    "sources": [
+      "AM-INTERPRETER-35"
+    ],
+    "printed-pages": [
+      "Chapter 13, printed p. 13-36 (same feature: combined update scan pp. 14-6–14-7)"
+    ],
+    "notes": [
+      "The 3.5 addendum identifies GURU as a function used to inspect the GURU number, distinct from the GURU enable/disable command."
+    ]
+  },
+  "implementation": {
+    "status": "not-implemented"
+  },
+  "support": [
+    {
+      "target": "x86_64-unknown-linux-gnu",
+      "classification": "unknown",
+      "conformance": "not-tested",
+      "tests": [],
+      "pending-reason": "No GURU-number runtime implementation or executable reference-interpreter conformance tests are registered."
+    }
+  ],
+  "docs": {
+    "path": "docs/research/amiga-gfa-basic-35-guru-declaration-audit.md",
+    "anchors": [
+      "2-guru-function"
+    ]
+  }
+}

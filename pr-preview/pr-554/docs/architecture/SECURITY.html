@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The dedicated security audit workflow runs when Cargo manifests/lockfiles or the audit workflow change, weekly against the default branch, and by manual dispatch.">
+  <title>Dependency and supply-chain security · GFA BASIC Rust documentation</title>
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body class="docs-site">
+  <header class="docs-header">
+    <a href="../../index.html">GFA BASIC Rust</a>
+    <span aria-hidden="true">/</span>
+    <a href="../index.html">Documentation</a>
+  </header>
+  <div class="docs-layout">
+    <nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home" href="index.html">Section index</a><ul><li><a href="AI-VERIFICATION.html">AI-assisted API verification</a></li><li><a href="https://github.com/vsimko/gfabasic-rust/blob/main/.agents/skills/api-evidence-verification/SKILL.md">`api-evidence-verification` agent skill</a></li><li><a href="API-PROFILES.html">API profiles</a></li><li><a href="API-REGISTRY.html">API registry and declaration source of truth</a></li><li><a href="BENCHMARKING.html">Performance benchmarks and profiling strategy</a></li><li><a href="CI.html">GitHub Actions workflow architecture</a></li><li><a href="CLI-AND-CONFIG.html">CLI, configuration, and build artifacts</a></li><li><a href="COMPATIBILITY-MATRIX.html">Current compatibility matrix</a></li><li><a href="DIAGNOSTICS.html">Diagnostics and compatibility reporting</a></li><li><a href="DIALECTS.html">Dialects, versions, and compatibility policy</a></li><li><a href="FORMATTER.html">Formatter style and current support</a></li><li><a href="FUZZING.html">Frontend fuzzing and robustness strategy</a></li><li><a href="GOALS.html">Project goals and compatibility objectives</a></li><li><a href="IMPLEMENTATION-DASHBOARD.html">Implementation dashboard</a></li><li><a href="LANGUAGE-TOOLING.html">Language tooling and editor integration</a></li><li><a href="MEMORY.html">Memory model and hardware access</a></li><li><a href="MVP-vertical-slice.html">First compiler vertical slice — proposed boundary</a></li><li><a href="PIPELINE-AND-IR.html">Compiler pipeline and intermediate representation</a></li><li><a href="README.html">README</a></li><li><a href="RELEASES.html">Release, artifact, and reproducible-build policy</a></li><li><a href="RUNTIME.html">Runtime architecture</a></li><li><a href="SECURITY.html">Dependency and supply-chain security</a></li><li><a href="TARGETS.html">Host and target model</a></li><li><a href="TESTING.html">Compatibility testing and release criteria</a></li><li><a href="VALIDATION.html">Repository consistency validation</a></li><li><a href="VERSIONING.html">Versioning and compatibility lifecycle</a></li><li><a href="WEBSITE_PREVIEWS.html">Website previews for pull requests</a></li><li><a href="WORKSPACE.html">Rust workspace and dependency policy</a></li><li><a href="adr/index.html">Architecture decisions</a></li></ul></nav>
+    <main class="docs-content">
+      <article>
+        <h1>Dependency and supply-chain security</h1>
+        <p class="docs-meta"><span>Architecture</span></p>
+        <h1 id="dependency-and-supply-chain-security">Dependency and supply-chain security</h1>
+<ul>
+<li>Status: <strong>RustSec advisory auditing and the approved dependency-license policy are implemented.</strong> Pull-request CI generates and validates the workspace SPDX 2.3 SBOM; the published-release attachment workflow is configured but has not yet been exercised against a real release.</li>
+<li>Tracking: <a href="https://github.com/vsimko/gfabasic-rust/issues/39">issue #39</a>.</li>
+</ul>
+<h2 id="dependency-advisory-policy">Dependency advisory policy</h2>
+<p>The dedicated <a href="https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/security-audit.yml">security audit workflow</a> runs when Cargo manifests/lockfiles or the audit workflow change, weekly against the default branch, and by manual dispatch.</p>
+<ul>
+<li>The workflow installs <code>cargo-audit 0.22.2</code> with <code>--locked</code> and audits the committed <code>Cargo.lock</code> against the current RustSec advisory database.</li>
+<li>Any reported vulnerability advisory fails the job, regardless of CVSS score. This is deliberately stricter than a high-severity-only threshold because no vulnerability-advisory exceptions are currently approved.</li>
+<li>Cargo Audit warnings about unmaintained, unsound, or yanked crates remain visible but are not fatal under the default command. A future maintainer-approved policy may promote selected warning classes to failures.</li>
+<li>The audit uses no write-capable token. Workflow permissions are limited to <code>contents: read</code>; the command's exit status and package/advisory details provide the actionable failure output.</li>
+<li>The audit is an advisory-database check, not a complete security review. It does not replace code review, static analysis, secret scanning, binary analysis, or OS-level dependency checks.</li>
+</ul>
+<p>The first successful audit on 2026-11-04 (<a href="https://github.com/vsimko/gfabasic-rust/actions/runs/41832754189">workflow run 41832754189</a>) loaded the RustSec advisory database and passed against the then-current three local workspace package entries. The current root lockfile also contains the approved <code>unicode-width</code> 0.2.2 dependency; the workflow audits the complete lockfile, and subsequent dependency additions are subject to the same check. This establishes the workflow baseline, not a claim that future dependencies are safe.</p>
+<h2 id="exceptions">Exceptions</h2>
+<p>There is no advisory ignore list. Do not add an exception silently or use broad wildcard ignores.</p>
+<p>If a specific advisory cannot be fixed immediately, open or update an issue containing:</p>
+<ol>
+<li>The full RustSec advisory ID and affected package/version.</li>
+<li>The dependency path and whether the affected code/feature is reachable.</li>
+<li>The reason an upgrade or removal is not currently possible.</li>
+<li>The compensating mitigation and residual risk.</li>
+<li>An owner-approved expiry/review date and removal plan.</li>
+</ol>
+<p>Only add the exact advisory ID to a checked-in <code>audit.toml</code> after the maintainer explicitly approves the exception. Revisit it on every dependency update and at the recorded expiry. Do not treat a passing audit with an ignore entry as proof that the advisory is irrelevant.</p>
+<h2 id="license-policy-and-sbom">License policy and SBOM</h2>
+<p>The default dependency-license allowlist and exception process are approved and documented in <a href="../contributor/dependency-license-policy.html">the dependency-license policy</a>. Copyleft licenses and identifiers outside the allowlist still require explicit maintainer approval. The root workspace has one direct third-party dependency, <code>unicode-width</code> 0.2.2, licensed MIT OR Apache-2.0 and used only for diagnostic terminal-cell measurement; it is within the approved allowlist. Separate fuzz and benchmark workspaces have tooling dependencies, and their lockfiles are included in the audit workflow.</p>
+<p>The approved release SBOM is one workspace-level SPDX 2.3 JSON document covering all three packages (<code>gfabasic-compiler</code>, <code>gfabasic-runtime</code>, and <code>gfabasic-platform-linux</code>). The pinned generator is <code>cargo-sbom</code> 0.10.0, invoked with <code>spdx_json_2_3</code>. The pull-request path generates the document and validates the SPDX version and workspace package coverage. The published-release path is configured to attach the JSON to the corresponding GitHub Release. No real published release has yet exercised that upload, so the final acceptance criterion in <a href="https://github.com/vsimko/gfabasic-rust/issues/39">issue #39</a> remains open and is labelled <code>needs-human</code> pending a release.</p>
+<h2 id="workflow-supply-chain-controls">Workflow supply-chain controls</h2>
+<ul>
+<li>The audit workflow uses a full immutable commit SHA for checkout.</li>
+<li>The workflow grants only read access to repository contents.</li>
+<li>Rust and Cargo Audit versions are pinned.</li>
+<li>Cargo Audit's transitive tool dependencies are installed with the published lockfile via <code>--locked</code>.</li>
+<li>The audit covers the root workspace, separate fuzz workspace, and benchmark workspace lockfiles. It runs on relevant dependency changes, weekly, and by manual dispatch.</li>
+</ul>
+<p>These controls reduce workflow drift but do not establish provenance or signatures for every future dependency. Review action SHAs, tool versions, and workflow permissions when updating CI.</p>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>
