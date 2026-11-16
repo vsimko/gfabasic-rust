@@ -11,7 +11,7 @@ Use this skill when working on regression probes for the original Amiga GFA BASI
 
 1. Read `AGENTS.md` and follow the repository agent workflow.
 2. Read [the probe-writing guide](../../../docs/testing/amiga-gfa-basic-probes.md).
-3. Read [ADR 0015](../../../docs/architecture/adr/0015-multi-version-amiga-gfa-basic-conformance.md).
+3. Read [ADR 0017](../../../docs/architecture/adr/0017-multi-version-amiga-gfa-basic-conformance.md).
 4. Read the applicable version-specific testing guide and inspect the native workflow that will execute the probe.
 5. Identify the exact interpreter version, platform, binary/asset source, and manual edition. Never assume that observations transfer between GFA BASIC 3.0, 3.5, 3.5U, and 3.52.
 
