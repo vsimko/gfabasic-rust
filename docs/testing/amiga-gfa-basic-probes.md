@@ -17,6 +17,22 @@ Use this guide when writing or changing .LST regression programs for the origina
 4. Check how the native harness starts the program, assigns drives, captures output, and detects completion. Read the matching workflow and existing passing .LST probes.
 5. Keep the fixture minimal. Add one behavior at a time and write diagnostic values before asserting them.
 
+## Native editor: merging an LST file
+
+For the current Amiberry 3.5U native Merge + Run harness, the verified sequence is:
+
+1. Open the editor's Merge file requester with the harness's existing menu/key sequence.
+2. Take a screenshot while the requester is open. Verify the intended `.LST` file row and the pointer's horizontal alignment over that row.
+3. Keep the pointer's X coordinate unchanged. Move only Y to **215 px**, which is the `gfatest.LST` row in the current emulator/window layout. The IPC relative Y correction is approximately four raw units per screen pixel.
+4. Capture the pre-click screenshot with the pointer on the row.
+5. Double-click without moving the pointer: left-button down, release, down, release.
+6. Wait for the requester to close and capture the editor. Confirm the merged listing is visible.
+7. Compare the editor contents with the exact staged `.LST` file before running. Check significant tokens literally; e.g. `MAT ONE a()` is not equivalent evidence to `MAT SET a()`. OCR is only supporting evidence—inspect the screenshot if a token is unclear.
+8. Once the merged source is confirmed, start Run with **Shift+F10**. In the current Amiberry IPC harness, press left Shift raw keycode `0x60` (96), press F10 `0x59` (89), release F10, then release Shift. Do not click an estimated Run-gadget coordinate.
+9. Save screenshots before the double-click, after Merge, and after Run as diagnostic artifacts.
+
+The Y=215 coordinate is specific to the current harness layout and must be revalidated if the emulator/window layout changes. A closed requester or visible listing proves that Merge completed, but not that the intended source was merged unchanged. If the editor shows a different token or statement, stop before diagnosing runtime behavior. Compare the prepared disk's source file, the staged fixture, and the editor display; record the discrepancy without assuming whether fixture preparation, tokenization, or display/OCR caused it.
+
 ## DATA pointer probes (3.5U)
 
 The native probe for the 3.5U addendum DATA-pointer example exposed setup details that must be preserved:
@@ -41,12 +57,13 @@ These are observed rules for the exact 3.5U probe and its documented example, no
 ## Required validation loop
 
 1. Run the exact native Merge + Run workflow for the target interpreter version.
-2. If the output file is missing, inspect the emulator log/screenshot and verify file opens, drive assignment, and program completion first.
-3. If output exists, inspect raw FACT.OUT and GFATEST.OUT; do not rely only on the workflow summary.
-4. Compare every diagnostic value and result ID with the documented expectation.
-5. When a probe fails, reduce it to the smallest reproducer and compare it with the manual's example statement by statement.
-6. After a fix, rerun the native workflow and wait for its completed result. A code change is not validated until the target native run is green.
-7. Keep the PR description precise about the tested version, source pages, observed behavior, and remaining limits.
+2. Verify the merged editor contents against the staged .LST before interpreting any Run result.
+3. If the output file is missing, inspect the emulator log/screenshot and verify file opens, drive assignment, and program completion first.
+4. If output exists, inspect raw FACT.OUT and GFATEST.OUT; do not rely only on the workflow summary.
+5. Compare every diagnostic value and result ID with the documented expectation.
+6. When a probe fails, reduce it to the smallest reproducer and compare it with the manual's example statement by statement.
+7. After a fix, rerun the native workflow and wait for its completed result. A code change is not validated until the target native run is green.
+8. Keep the PR description precise about the tested version, source pages, observed behavior, and remaining limits.
 
 ## Evidence and safety boundaries
 
