@@ -29,7 +29,7 @@ for diagnostic in insert-floppy-ipc.txt list-floppies-ipc.txt stdin-save.LST; do
     printf "MISSING: %s\\n" "$diagnostic" > "artifacts/amiga-cli-probe/$diagnostic.missing"
   fi
 done
-for screenshot in editor-before-merge.png merge-dialog.png merge-file-row-pointer.png merge-file-selected.png after-shortcut.png merge-gadget-pointer.png after-merge.png after-run-dialog.png after-run.png; do
+for screenshot in editor-before-merge.png merge-dialog.png merge-file-row-target.png merge-file-double-clicked.png after-shortcut.png merge-gadget-pointer.png after-merge.png after-run-dialog.png after-run.png; do
   test -s "artifacts/amiga-cli-probe/$screenshot"
 done
 python3 - <<'PY'
