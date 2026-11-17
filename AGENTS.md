@@ -55,7 +55,7 @@ A check is not considered passed because it is expected to pass or because a sim
 
 - Use the repository [pull request template](.github/PULL_REQUEST_TEMPLATE.md) for every PR. Complete all applicable sections and remove instructional placeholders before submission.
 - Prefer one focused PR per issue or independently reviewable change. Link related issues and explain any intentional scope split.
-- Batch related file edits into a small number of coherent commits. Avoid one commit per file or repeated tiny corrective commits; run the relevant local validators before opening the PR to reduce avoidable fix-up churn.
+- Batch related edits into coherent commits where the tooling supports multi-file commits. If a connector only creates one-file commits, finish the related edits before opening the PR and use the repository's squash-merge process; avoid repeated tiny corrective commits after review has started. Run relevant local validators before opening the PR when a local runtime is available; otherwise keep the PR draft until CI validates the first head.
 - A PR may be marked ready for review only after the applicable Definition of Done is met. Keep it draft while substantial implementation or validation remains.
 - Agents may prepare branches, commits, PRs, review evidence, and CI fixes within granted permissions. They must not bypass branch protection, required checks, approval rules, or other repository controls.
 - Merge authority remains with the repository's configured rules and authorized maintainers. An agent must not treat its own review or a green CI result as authorization to override human-only decisions.
