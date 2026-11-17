@@ -25,11 +25,6 @@ WORKFLOWS = {
         "scripts/amiga-cli-probe-35.sh",
         "scripts/amiga-cli-probe-3041u.sh",
         "scripts/validate_gfatest_results.py",
-        # Deleted legacy-profile paths remain classified for PR diffs.
-        ".github/workflows/amiga-35u-native-merge-run.yml",
-        "tests/interpreter-probes/amiga-3.5u/**",
-        "scripts/amiga-cli-probe-35u.sh",
-        "scripts/amiga-cli-probe-35u-emulator.sh",
     ),
     ".github/workflows/docs.yml": (
         "**/*.md", ".markdownlint-cli2.jsonc", ".lychee.toml",
@@ -77,21 +72,37 @@ def matches_pattern(path: str, pattern: str) -> bool:
     return pattern.startswith("**/") and fnmatch.fnmatchcase(path, pattern[3:])
 
 
+def workflows_for_path(path: str) -> set[str]:
+    """Return workflows whose active path filters include this path."""
+    return {
+        workflow for workflow, patterns in WORKFLOWS.items()
+        if any(matches_pattern(path, pattern) for pattern in patterns)
+    }
+
+
 def expected_workflows(paths: list[str]) -> set[str]:
     """Return relevant workflows; unknown paths conservatively select all."""
     if not paths:
         return set(WORKFLOWS)
     expected: set[str] = set()
     for path in paths:
-        matched = {
-            workflow for workflow, patterns in WORKFLOWS.items()
-            if any(matches_pattern(path, pattern) for pattern in patterns)
-        }
+        matched = workflows_for_path(path)
         if not matched:
             print(f"Unclassified path {path!r}; selecting every available PR workflow.")
             return set(WORKFLOWS)
         expected.update(matched)
     return expected
+
+
+def expected_workflows_for_files(files: list[dict[str, Any]]) -> set[str]:
+    """Classify changed files without requiring workflows for unclassified deletions."""
+    paths = []
+    for item in files:
+        path = str(item["filename"])
+        if item.get("status") == "removed" and not workflows_for_path(path):
+            continue
+        paths.append(path)
+    return expected_workflows(paths) if paths else set()
 
 
 def workflow_path(run: dict[str, Any]) -> str:
@@ -179,7 +190,7 @@ def main() -> int:
     # base ref so inherited changes do not spuriously require unrelated runs.
     files = api.paginated(compare_ref, "files")
     paths = [item["filename"] for item in files]
-    expected = expected_workflows(paths)
+    expected = expected_workflows_for_files(files)
     print("Changed paths:")
     for path in paths:
         print(f"  - {path}")

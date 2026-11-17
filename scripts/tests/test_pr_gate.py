@@ -3,11 +3,31 @@ from pathlib import Path
 
 import yaml
 
-from scripts.pr_gate import WORKFLOWS, expected_workflows
+from scripts.pr_gate import WORKFLOWS, expected_workflows, expected_workflows_for_files
 
 
 FUZZ_WORKFLOW = ".github/workflows/fuzz.yml"
 NATIVE_352_WORKFLOW = ".github/workflows/amiga-reference-matrix.yml"
+
+class ChangedFileStatusTests(unittest.TestCase):
+    def test_unclassified_deletions_do_not_require_workflow_runs(self):
+        selected = expected_workflows_for_files(
+            [{"filename": "tests/interpreter-probes/retired-profile/regression-suite.LST", "status": "removed"}]
+        )
+        self.assertEqual(selected, set())
+
+    def test_deletions_matching_shared_workflow_paths_still_select_that_workflow(self):
+        selected = expected_workflows_for_files(
+            [{"filename": "docs/testing/retired-profile.md", "status": "removed"}]
+        )
+        self.assertEqual(selected, {".github/workflows/docs.yml"})
+
+    def test_unclassified_additions_remain_conservative(self):
+        selected = expected_workflows_for_files(
+            [{"filename": "new/unclassified-input.bin", "status": "added"}]
+        )
+        self.assertEqual(selected, set(WORKFLOWS))
+
 
 class Native352InterpreterProbePathTests(unittest.TestCase):
     def test_active_reference_profiles_select_matrix_without_35u_or_fuzzing(self):
