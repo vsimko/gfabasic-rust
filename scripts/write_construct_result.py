@@ -12,9 +12,9 @@ from pathlib import Path
 from scripts.validate_gfatest_results import validate_result_bytes
 
 VERSION_PATTERNS = {
-    "3.041U": re.compile(r"GFA[ -]?BASIC[\\s\\S]*3[.]041U", re.IGNORECASE),
-    "3.5": re.compile(r"GFA[ -]?BASIC[\\s\\S]*3[.]5(?![0-9U])", re.IGNORECASE),
-    "3.52": re.compile(r"GFA[ -]?BASIC[\\s\\S]*3[.]52", re.IGNORECASE),
+    "3.041U": re.compile(r"GFA[ -]?BASIC[\s\S]*3[.]041U", re.IGNORECASE),
+    "3.5": re.compile(r"GFA[ -]?BASIC[\s\S]*3[.]5(?![0-9U])", re.IGNORECASE),
+    "3.52": re.compile(r"GFA[ -]?BASIC[\s\S]*3[.]52", re.IGNORECASE),
 }
 
 
@@ -97,7 +97,7 @@ def main() -> int:
     result = build_result(args)
     output = Path(args.output)
     output.parent.mkdir(parents=True, exist_ok=True)
-    output.write_text(json.dumps(result, indent=2, sort_keys=True) + "\\n", encoding="utf-8")
+    output.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     summary = f"GFATEST {args.construct_id}/{args.version}: harness={result['harness_status']}, conformance={result['conformance_status']}"
     print(summary)
     if result["reason"]:
@@ -105,7 +105,7 @@ def main() -> int:
     github_output = os.environ.get("GITHUB_OUTPUT")
     if github_output:
         with open(github_output, "a", encoding="utf-8") as stream:
-            stream.write(f"conformance_status={result['conformance_status']}\\n")
+            stream.write(f"conformance_status={result['conformance_status']}\n")
     return 1 if result["conformance_status"] == "FAIL" else 0
 
 
