@@ -76,6 +76,27 @@ class AgentSecurityValidationTests(unittest.TestCase):
         }
         self.assertEqual([], validate_document(document, "test.yml"))
 
+    def test_ignores_write_job_restricted_to_release_event(self):
+        document = {
+            "on": {"pull_request": {}, "release": {}},
+            "permissions": {"contents": "read"},
+            "jobs": {"publish": {"if": "github.event_name == 'release'", "permissions": {"contents": "write"}}},
+        }
+        self.assertEqual([], validate_document(document, "test.yml"))
+
+    def test_ignores_pr_cleanup_job_for_manual_dispatch(self):
+        document = {
+            "on": {"pull_request": {}, "workflow_dispatch": {}},
+            "permissions": {"contents": "read"},
+            "jobs": {
+                "cleanup": {
+                    "if": "github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository",
+                    "permissions": {"actions": "write"},
+                }
+            },
+        }
+        self.assertEqual([], validate_document(document, "test.yml"))
+
     def test_requires_explicit_workflow_permissions(self):
         document = {"on": {"push": {}}, "jobs": {}}
         self.assertTrue(any("permissions must be explicit" in error for error in validate_document(document, "test.yml")))
