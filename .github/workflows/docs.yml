@@ -75,6 +75,9 @@ jobs:
       - name: Validate corpus metadata
         run: python scripts/validate_corpus.py
 
+      - name: Validate version-scoped language constructs
+        run: python scripts/validate_language_constructs.py validate
+
       - name: Validate OKF v0.2 documentation bundle
         run: python scripts/validate_okf.py
 
