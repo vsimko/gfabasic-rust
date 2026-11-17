@@ -53,6 +53,26 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
 
+      - name: Cache Amiga CI apt packages
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+        with:
+          path: ${{ runner.temp }}/apt-archives
+          key: ${{ runner.os }}-ubuntu-24.04-amiga-apt-amiberry-ocr-v1
+          restore-keys: |
+            ${{ runner.os }}-ubuntu-24.04-amiga-apt-
+
+      - name: Cache Python wheels
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-python-3.12-amiga-amitools-v1
+          restore-keys: |
+            ${{ runner.os }}-python-3.12-amiga-
+
+      - name: Prepare dependency cache directories
+        run: mkdir -p "$RUNNER_TEMP/apt-archives/partial" "$HOME/.cache/pip"
+
+
       - name: Download candidate 3.5 editor disk archive
         env:
           GFA_ASSETS_TOKEN: ${{ secrets.GFA_ASSETS_TOKEN }}
@@ -77,7 +97,7 @@ jobs:
               with archive.open(sys.argv[2]) as source, open(sys.argv[3], "wb") as target:
                   shutil.copyfileobj(source, target)
           PY
-          python3 -m pip install --break-system-packages amitools
+          python3 -m pip install --cache-dir "$HOME/.cache/pip" --break-system-packages amitools
           xdftool "$RUNNER_TEMP/gfa-basic-3.5.adf" info | tee artifacts/amiga-3.5-discovery/adf-info.txt
           xdftool "$RUNNER_TEMP/gfa-basic-3.5.adf" list / all | tee artifacts/amiga-3.5-discovery/adf-files.txt
           xdftool "$RUNNER_TEMP/gfa-basic-3.5.adf" read gfabasic "$RUNNER_TEMP/gfabasic-3.5"
