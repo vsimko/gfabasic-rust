@@ -19,7 +19,7 @@ APPLICABILITY = {"applicable", "not_applicable", "unknown"}
 EXPECTATION = {"documented", "inferred", "unknown"}
 RESULTS = {"PASS", "FAIL", "DIFFERENT", "UNTESTED"}
 IMPLEMENTATION = {"implemented", "partial", "planned", "not_implemented", "unknown"}
-ID_RE = re.compile(r"[a-z0-9]+(?:-[a-z0-9]+)*\\Z")
+ID_RE = re.compile(r"[a-z0-9]+(?:-[a-z0-9]+)*\Z")
 
 
 class UniqueKeyLoader(yaml.SafeLoader):
@@ -47,14 +47,14 @@ def source_register_ids(root: Path) -> set[str]:
     path = root / "docs" / "reference-sources.md"
     ids = set()
     for line in path.read_text(encoding="utf-8").splitlines():
-        match = re.match(r"^\\|\\s*([A-Z][A-Z0-9-]+)\\s*\\|", line)
+        match = re.match(r"^\|\s*([A-Z][A-Z0-9-]+)\s*\|", line)
         if match and match.group(1) != "ID":
             ids.add(match.group(1))
     return ids
 
 
 def safe_probe_path(value: object, construct_dir: Path) -> Path | None:
-    if not isinstance(value, str) or not value.endswith(".LST") or "\\\\" in value:
+    if not isinstance(value, str) or not value.endswith(".LST") or "\\" in value:
         return None
     relative = Path(value)
     if relative.is_absolute() or any(part in {"", ".", ".."} for part in value.split("/")):
