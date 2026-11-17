@@ -1,9 +1,25 @@
 {
   "schema_version": 1,
   "status": "fresh",
-  "generated_at": "2026-11-17T00:27:22.484774+00:00",
-  "last_successful_at": "2026-11-17T00:27:22.484774+00:00",
+  "generated_at": "2026-11-17T06:43:47.887647+00:00",
+  "last_successful_at": "2026-11-17T06:43:47.887647+00:00",
   "items": [
+    {
+      "type": "merged_pull_request",
+      "title": "test(amiga): capture the running GFA-BASIC editor version",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/556",
+      "number": 556,
+      "timestamp": "2026-11-17T06:43:22Z",
+      "summary": "PR #556 merged"
+    },
+    {
+      "type": "commit",
+      "title": "test(amiga): capture the running GFA-BASIC editor version (#556)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/6aabb1bc1f0cd94b60a61ccb74d692a66569788d",
+      "number": null,
+      "timestamp": "2026-11-17T06:43:22Z",
+      "summary": "Commit 6aabb1b"
+    },
     {
       "type": "merged_pull_request",
       "title": "test(amiga): verify MAT ONE with GFA BASIC 3.52D",
@@ -83,22 +99,6 @@
       "number": null,
       "timestamp": "2026-11-16T21:48:11Z",
       "summary": "Commit 035dfe7"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "Document GFA-BASIC editor diagnostics",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/555",
-      "number": 555,
-      "timestamp": "2026-11-16T20:52:25Z",
-      "summary": "PR #555 merged"
-    },
-    {
-      "type": "commit",
-      "title": "Document GFA-BASIC editor diagnostics (#555)",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/e4a4255258fa19cc40ef0e599af13f4bcba79456",
-      "number": null,
-      "timestamp": "2026-11-16T20:52:25Z",
-      "summary": "Commit e4a4255"
     }
   ]
 }
