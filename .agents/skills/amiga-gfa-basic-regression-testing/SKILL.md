@@ -1,6 +1,6 @@
 ---
 name: amiga-gfa-basic-regression-testing
-description: Create, debug, and validate version-specific probes for original Amiga GFA BASIC reference interpreters 3.0, 3.5, and 3.52. Use when editing .LST fixtures, investigating native Amiberry Merge + Run behavior, or comparing language behavior across releases.
+description: Create, debug, and validate version-specific probes for original Amiga GFA BASIC reference interpreters, with 3.52 as the active primary runtime. Use when editing .LST fixtures, investigating native Amiberry Merge + Run behavior, or comparing language behavior across releases.
 ---
 
 # Amiga GFA BASIC regression testing
@@ -13,13 +13,15 @@ Use this skill when working on regression probes for the original Amiga GFA BASI
 2. Read [the probe-writing guide](../../../docs/testing/amiga-gfa-basic-probes.md).
 3. Read [ADR 0017](../../../docs/architecture/adr/0017-multi-version-amiga-gfa-basic-conformance.md).
 4. Read the applicable version-specific testing guide and inspect the native workflow that will execute the probe.
-5. Identify the exact interpreter version, platform, binary/asset source, and manual edition. Never assume that observations transfer between GFA BASIC 3.0, 3.5, and 3.52. Check ADR 0017 and the current probe guide before selecting a runtime profile; do not revive the retired 3.5U profile based on old notes or inventory entries.
+5. Identify the exact interpreter version, platform, binary/asset source, and manual edition. Never assume that observations transfer between versions. Check ADR 0017, current workflow files, and the latest relevant issue/CI run before selecting a runtime profile; do not revive the retired 3.5U profile based on old notes or inventory entries.
 
 ## Version policy
 
 - GFA BASIC 3.52 is the primary reference baseline and default expected behavior for current development.
-- GFA BASIC 3.5 and 3.0 are compatibility comparison versions when their exact interpreter assets and native workflows are available.
-- GFA BASIC 3.5U is a historical/retired test profile, not part of the current matrix. Existing 3.5U records remain historical evidence only.
+- GFA BASIC 3.52 is the active native runtime baseline.
+- GFA BASIC 3.041U is the available 3.0-era native comparison profile; label it exactly `3.041U`, not `3.0`.
+- Amiga GFA BASIC 3.5 remains the normative source-language target under ADR 0009, but there is no active native 3.5 runtime profile in the current workflow set.
+- GFA BASIC 3.5U is retired: do not use its workflow or assets for new runs. Preserve old 3.5U observations as historical evidence only.
 - Run the same applicable probe against all versions when the licensed assets and native harness are available.
 - Keep one result per exact interpreter version. Do not infer one version's behavior from another.
 - Use `PASS`, `FAIL`, `DIFFERENT`, and `UNTESTED` per probe/version. A verified version difference is not automatically a defect. Missing assets or unavailable runs are `UNTESTED`, never PASS.
