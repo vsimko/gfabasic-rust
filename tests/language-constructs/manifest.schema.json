@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/vsimko/gfabasic-rust/blob/main/tests/language-constructs/manifest.schema.json",
+  "title": "GFA-BASIC language construct manifest",
+  "description": "Version-scoped documentary evidence, native expectations/results, and implementation status for one independently testable construct.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "id", "name", "kind", "classification", "evidence", "versions", "implementation"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "id": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
+    "name": {"type": "string", "minLength": 1},
+    "kind": {"enum": ["statement", "function", "operator", "declaration", "special_form"]},
+    "classification": {"enum": ["language_core", "runtime", "graphics", "io", "system_interface"]},
+    "evidence": {
+      "type": "object", "additionalProperties": false,
+      "required": ["status", "sources"],
+      "properties": {
+        "status": {"enum": ["documented", "partially_documented", "unverified", "unknown"]},
+        "sources": {"type": "array", "items": {"$ref": "#/$defs/source"}}
+      }
+    },
+    "versions": {
+      "type": "object", "additionalProperties": false,
+      "required": ["3.041U", "3.5", "3.52"],
+      "properties": {
+        "3.041U": {"$ref": "#/$defs/version"},
+        "3.5": {"$ref": "#/$defs/version"},
+        "3.52": {"$ref": "#/$defs/version"}
+      }
+    },
+    "implementation": {
+      "type": "object", "additionalProperties": false,
+      "required": ["status", "notes"],
+      "properties": {
+        "status": {"enum": ["implemented", "partial", "planned", "not_implemented", "unknown"]},
+        "notes": {"type": "string"}
+      }
+    }
+  },
+  "$defs": {
+    "source": {
+      "type": "object", "additionalProperties": false,
+      "required": ["source_key", "locator", "claim", "version_scope"],
+      "properties": {
+        "source_key": {"type": "string", "pattern": "^[A-Z][A-Z0-9-]+$"},
+        "locator": {"type": "string", "minLength": 1},
+        "claim": {"type": "string", "minLength": 1},
+        "version_scope": {"type": "array", "items": {"enum": ["3.041U", "3.5", "3.52", "unknown"]}, "minItems": 1, "uniqueItems": true}
+      }
+    },
+    "version": {
+      "type": "object", "additionalProperties": false,
+      "required": ["applicability", "probe", "expectation", "observed"],
+      "properties": {
+        "applicability": {"enum": ["applicable", "not_applicable", "unknown"]},
+        "probe": {"type": ["string", "null"], "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.?(/|$)).+\\.LST$"},
+        "expectation": {
+          "type": "object", "additionalProperties": false,
+          "required": ["status", "summary"],
+          "properties": {
+            "status": {"enum": ["documented", "inferred", "unknown"]},
+            "summary": {"type": "string", "minLength": 1}
+          }
+        },
+        "observed": {
+          "type": "object", "additionalProperties": false,
+          "required": ["result", "artifact", "run_id"],
+          "properties": {
+            "result": {"enum": ["PASS", "FAIL", "DIFFERENT", "UNTESTED"]},
+            "artifact": {"type": ["string", "null"]},
+            "run_id": {"type": ["string", "null"]}
+          }
+        }
+      }
+    }
+  }
+}

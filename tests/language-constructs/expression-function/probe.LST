@@ -1,0 +1,3 @@
+REM Construct probe: expression-function
+REM Intentionally minimal structural example; expected behavior is not asserted.
+END

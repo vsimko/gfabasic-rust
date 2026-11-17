@@ -1,0 +1,42 @@
+schema_version: 1
+id: expression-function
+name: Expression function
+kind: function
+classification: language_core
+evidence:
+  status: unknown
+  sources: []
+versions:
+  3.041U:
+    applicability: unknown
+    probe: null
+    expectation:
+      status: unknown
+      summary: No version-scoped expectation recorded.
+    observed:
+      result: UNTESTED
+      artifact: null
+      run_id: null
+  3.5:
+    applicability: unknown
+    probe: null
+    expectation:
+      status: unknown
+      summary: No version-scoped expectation recorded.
+    observed:
+      result: UNTESTED
+      artifact: null
+      run_id: null
+  3.52:
+    applicability: unknown
+    probe: probe.LST
+    expectation:
+      status: unknown
+      summary: Syntax and expected result require version-specific evidence review.
+    observed:
+      result: UNTESTED
+      artifact: null
+      run_id: null
+implementation:
+  status: unknown
+  notes: Native language support and Rust implementation status are not inferred from this example.

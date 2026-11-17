@@ -1,0 +1,3 @@
+REM Construct probe: if-then-else
+REM Intentionally minimal structural example; expected behavior is not asserted.
+END
