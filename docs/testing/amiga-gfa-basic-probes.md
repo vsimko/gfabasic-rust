@@ -44,6 +44,16 @@ For a probe that depends on editor shortcut expansion (for example `M O identity
 
 A successful Merge operation does not establish that a statement was expanded or accepted correctly.
 
+## Probe metadata
+
+The standalone metadata for the Amiga 3.5 FACT smoke probe is stored in
+`tests/interpreter-probes/amiga-3.5/fact-zero.yaml`. It is deliberately
+separate from the conformance-corpus manifest: it records the target component,
+input format, documentary expectation, and observed editor/runtime results.
+Keep expected output separate from observed output, and do not mark a probe as
+loaded or executed unless the corresponding native run produced that evidence.
+The corpus validator does not validate this probe-specific metadata file.
+
 ## Before writing a probe
 
 1. Identify the exact interpreter version and platform under test. Do not transfer observations between 3.041U, 3.5, and 3.52 without evidence.
