@@ -13,7 +13,7 @@ Use this skill when working on regression probes for the original Amiga GFA BASI
 2. Read [the probe-writing guide](../../../docs/testing/amiga-gfa-basic-probes.md).
 3. Read [ADR 0017](../../../docs/architecture/adr/0017-multi-version-amiga-gfa-basic-conformance.md).
 4. Read the applicable version-specific testing guide and inspect the native workflow that will execute the probe.
-5. Identify the exact interpreter version, platform, binary/asset source, and manual edition. Never assume that observations transfer between versions. Check ADR 0017, current workflow files, and the latest relevant issue/CI run before selecting a runtime profile; do not revive the retired 3.5U profile based on old notes or inventory entries.
+5. Identify the exact interpreter version, platform, binary/asset source, and manual edition. Never assume that observations transfer between versions. Check ADR 0017, current workflow files, and the latest relevant issue/CI run before selecting a runtime profile.
 
 ## Version policy
 
@@ -21,7 +21,6 @@ Use this skill when working on regression probes for the original Amiga GFA BASI
 - GFA BASIC 3.52 is the active native runtime baseline.
 - GFA BASIC 3.041U is the available 3.0-era native comparison profile; label it exactly `3.041U`, not `3.0`.
 - Amiga GFA BASIC 3.5 remains the normative source-language target under ADR 0009 and now has an active, deliberately limited native smoke profile (editor identity plus arithmetic, FOR/NEXT, and strings). This is not broad runtime conformance; keep untested behavior `UNTESTED`.
-- GFA BASIC 3.5U is retired: do not use its workflow or assets for new runs. Preserve old 3.5U observations as historical evidence only.
 - Run the same applicable probe against all versions when the licensed assets and native harness are available.
 - Keep one result per exact interpreter version. Do not infer one version's behavior from another.
 - Use `PASS`, `FAIL`, `DIFFERENT`, and `UNTESTED` per probe/version. A verified version difference is not automatically a defect. Missing assets or unavailable runs are `UNTESTED`, never PASS.

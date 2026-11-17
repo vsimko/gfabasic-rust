@@ -3,3 +3,8 @@ arithmetic
 for-next
 strings
 matrix-one
+int
+sqr
+succ
+string-repeat
+hex
