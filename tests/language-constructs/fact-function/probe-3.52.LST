@@ -1,9 +1,10 @@
+REM GFATEST:fact-function
 OPEN "Output",#1,"DF0:GFATEST.OUT"
 x = FACT(0)
 y = FACT(1)
 z = FACT(2)
 IF x=1 AND y=1 AND z=2
-  PRINT #1,"GFATEST:fact-zero:PASS"
+  PRINT #1,"GFATEST:fact-function:PASS"
 ELSE
   PRINT #1,"GFATEST:fact-zero:FAIL"
 ENDIF
