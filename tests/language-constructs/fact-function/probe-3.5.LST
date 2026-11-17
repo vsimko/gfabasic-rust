@@ -6,6 +6,6 @@ z = FACT(2)
 IF x=1 AND y=1 AND z=2
   PRINT #1,"GFATEST:fact-function:PASS"
 ELSE
-  PRINT #1,"GFATEST:fact-zero:FAIL"
+  PRINT #1,"GFATEST:fact-function:FAIL"
 ENDIF
 CLOSE #1
