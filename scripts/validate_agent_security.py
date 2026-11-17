@@ -75,7 +75,9 @@ def validate_document(document: object, path: str) -> list[str]:
             continue
         job_permissions = job.get("permissions", workflow_permissions)
         writes = _has_write_permission(job_permissions)
-        secrets = _contains_secret(job.get("secrets")) or _contains_secret(job.get("env")) or _contains_secret(job.get("with"))
+        if isinstance(job_permissions, str) and job_permissions.lower() == "write-all":
+            errors.append(f"{path}: job {job_id!r} must not use broad write-all permissions")
+        secrets = _contains_secret(job)
         guard = job.get("if")
 
         if has_pull_request and (writes or secrets) and not _same_repository_guard(guard):
