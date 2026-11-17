@@ -137,7 +137,7 @@ jobs:
       native_allowed: ${{ steps.gate.outputs.native_allowed }}
       reason: ${{ steps.gate.outputs.reason }}
     steps:
-      - name: Check owner trust and read-token availability without printing the token
+      - name: Check event trust without reading the private token
         id: gate
         env:
           EVENT_NAME: ${{ github.event_name }}
