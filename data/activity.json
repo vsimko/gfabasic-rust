@@ -1,9 +1,25 @@
 {
   "schema_version": 1,
   "status": "fresh",
-  "generated_at": "2026-11-17T06:43:47.887647+00:00",
-  "last_successful_at": "2026-11-17T06:43:47.887647+00:00",
+  "generated_at": "2026-11-17T06:52:35.952682+00:00",
+  "last_successful_at": "2026-11-17T06:52:35.952682+00:00",
   "items": [
+    {
+      "type": "merged_pull_request",
+      "title": "Drive PDF source indexing from a JSON manifest",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/551",
+      "number": 551,
+      "timestamp": "2026-11-17T06:52:09Z",
+      "summary": "PR #551 merged"
+    },
+    {
+      "type": "commit",
+      "title": "Drive PDF source indexing from a JSON manifest (#551)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/89dde2f7c88d8d07ced2022a8604cb925c57f7a3",
+      "number": null,
+      "timestamp": "2026-11-17T06:52:08Z",
+      "summary": "Commit 89dde2f"
+    },
     {
       "type": "merged_pull_request",
       "title": "test(amiga): capture the running GFA-BASIC editor version",
@@ -83,22 +99,6 @@
       "number": null,
       "timestamp": "2026-11-16T22:50:59Z",
       "summary": "Commit ca25402"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "docs: define multi-version Amiga GFA-BASIC conformance policy",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/558",
-      "number": 558,
-      "timestamp": "2026-11-16T21:48:11Z",
-      "summary": "PR #558 merged"
-    },
-    {
-      "type": "commit",
-      "title": "docs: define multi-version Amiga GFA-BASIC conformance policy (#558)",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/035dfe7a000efbcb86eb98d14f3dc1393249c0b9",
-      "number": null,
-      "timestamp": "2026-11-16T21:48:11Z",
-      "summary": "Commit 035dfe7"
     }
   ]
 }
