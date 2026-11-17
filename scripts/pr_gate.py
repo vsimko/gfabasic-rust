@@ -15,13 +15,6 @@ import urllib.request
 from typing import Any
 
 WORKFLOWS = {
-    ".github/workflows/amiga-35u-native-merge-run.yml": (
-        ".github/workflows/amiga-35u-native-merge-run.yml",
-        "tests/interpreter-probes/amiga-3.5u/**",
-        "scripts/amiga-cli-probe-35u.sh",
-        "scripts/amiga-cli-probe-35u-emulator.sh",
-        "scripts/validate_gfatest_results.py",
-    ),
     ".github/workflows/amiga-reference-matrix.yml": (
         ".github/workflows/amiga-reference-matrix.yml",
         ".github/workflows/amiga-native-merge-run.yml",
