@@ -14,6 +14,7 @@ on:
       - "scripts/**"
       - "site/**"
       - "tests/corpus/**"
+      - "tests/language-constructs/**"
       - "tests/tooling/**"
       - "docs/**"
 
