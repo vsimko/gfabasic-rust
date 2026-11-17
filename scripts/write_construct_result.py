@@ -52,7 +52,7 @@ def build_result(args: argparse.Namespace) -> dict:
         status = "UNTESTED"
     elif failed:
         status = "FAIL"
-    elif different:
+    elif different and harness_ok:
         status = "DIFFERENT"
     elif passed == 1 and harness_ok:
         status = "PASS"
