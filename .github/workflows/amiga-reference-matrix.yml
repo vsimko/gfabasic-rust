@@ -141,10 +141,13 @@ jobs:
           GFA_ASSETS_TOKEN: ${{ secrets.GFA_ASSETS_TOKEN }}
         run: |
           set -euo pipefail
-          mkdir -p artifacts/amiga-3.5-discovery/boot-volume/S
-          cp "$RUNNER_TEMP/gfabasic-3.5" artifacts/amiga-3.5-discovery/boot-volume/gfabasic
-          printf 'gfabasic\n' > artifacts/amiga-3.5-discovery/boot-volume/S/Startup-Sequence
-          xdftool "$RUNNER_TEMP/gfa-basic-3.5-boot.adf" create + format GFA35 ofs + write artifacts/amiga-3.5-discovery/boot-volume/gfabasic + write artifacts/amiga-3.5-discovery/boot-volume/S
+          BOOT_VOLUME="$RUNNER_TEMP/gfa-basic-3.5-boot-volume"
+          mkdir -p "$BOOT_VOLUME/S"
+          cp "$RUNNER_TEMP/gfabasic-3.5" "$BOOT_VOLUME/gfabasic"
+          printf 'gfabasic\n' > "$BOOT_VOLUME/S/Startup-Sequence"
+          xdftool "$RUNNER_TEMP/gfa-basic-3.5-boot.adf" create + format GFA35 ofs + write "$BOOT_VOLUME/gfabasic" + write "$BOOT_VOLUME/S"
+          # Never place the commercial interpreter executable in an artifact tree.
+          rm -rf "$BOOT_VOLUME"
           xdftool "$RUNNER_TEMP/gfa-basic-3.5-boot.adf" boot install boot1x
           xdftool "$RUNNER_TEMP/gfa-basic-3.5-boot.adf" info > artifacts/amiga-3.5-discovery/boot-adf-info.txt
 
@@ -223,7 +226,7 @@ jobs:
           ImageEnhance.Contrast(image).enhance(3).save("artifacts/amiga-3.5-discovery/editor-version-menu-ocr.png")
           PY
           tesseract artifacts/amiga-3.5-discovery/editor-version-menu-ocr.png stdout --psm 6 2>/dev/null | tee artifacts/amiga-3.5-discovery/editor-version-menu-ocr.txt
-          if grep -Eiq 'GFA[ -]?BASIC.*3[.]5' artifacts/amiga-3.5-discovery/editor-version-menu-ocr.txt; then
+          if grep -Eiq 'GFA[ -]?BASIC.*3[.]5(?![0-9U])' artifacts/amiga-3.5-discovery/editor-version-menu-ocr.txt; then
             echo "EDITOR_MENU_OCR=GFA BASIC 3.5" > artifacts/amiga-3.5-discovery/editor-version-result.txt
           else
             echo "EDITOR_MENU_OCR=INCONCLUSIVE; inspect editor-version-menu.png" > artifacts/amiga-3.5-discovery/editor-version-result.txt
@@ -231,6 +234,9 @@ jobs:
           echo "The right-button menu screenshot is the authoritative version evidence; OCR is diagnostic only. The screenshot is retained for visual verification." >> "$GITHUB_STEP_SUMMARY"
 
       - name: Prepare writable 3.5 test disk
+        env:
+          GFA_CONSTRUCT_ID_INPUT: ${{ inputs.construct_id }}
+          GFA_PROBE_PATH_INPUT: ${{ inputs.probe_path }}
         run: |
           set -euo pipefail
           mkdir -p artifacts/amiga-3.5-discovery/native-run
@@ -240,22 +246,58 @@ jobs:
           xdftool "$TEST_ADF" makedir S
           printf 'DF1:gfabasic\n' > "$RUNNER_TEMP/Startup-Sequence"
           xdftool "$TEST_ADF" write "$RUNNER_TEMP/Startup-Sequence" S/Startup-Sequence
-          xdftool "$TEST_ADF" write tests/interpreter-probes/amiga-3.5/regression-suite.LST gfatest.LST
+          if [ -n "$GFA_PROBE_PATH_INPUT" ]; then
+            test -n "$GFA_CONSTRUCT_ID_INPUT"
+            test -f "$GFA_PROBE_PATH_INPUT"
+            xdftool "$TEST_ADF" write "$GFA_PROBE_PATH_INPUT" gfatest.LST
+            printf '%s\n' "$GFA_CONSTRUCT_ID_INPUT" > "$RUNNER_TEMP/expected-ids.txt"
+            echo "GFATEST_EXPECTED_IDS_FILE=$RUNNER_TEMP/expected-ids.txt" >> "$GITHUB_ENV"
+            echo "GFA_CONSTRUCT_ID=$GFA_CONSTRUCT_ID_INPUT" >> "$GITHUB_ENV"
+          else
+            xdftool "$TEST_ADF" write tests/interpreter-probes/amiga-3.5/regression-suite.LST gfatest.LST
+            echo "GFATEST_EXPECTED_IDS_FILE=tests/interpreter-probes/amiga-3.5/expected-ids.txt" >> "$GITHUB_ENV"
+            echo "GFA_CONSTRUCT_ID=" >> "$GITHUB_ENV"
+          fi
           xdftool "$TEST_ADF" boot install boot1x
           xdftool "$TEST_ADF" list / all > artifacts/amiga-3.5-discovery/native-run/test-disk-layout.txt
           xdftool "$TEST_ADF" boot show > artifacts/amiga-3.5-discovery/native-run/test-disk-boot.txt
           grep -F 'bootable: True' artifacts/amiga-3.5-discovery/native-run/test-disk-boot.txt
-          cp tests/interpreter-probes/amiga-3.5/regression-suite.LST artifacts/amiga-3.5-discovery/native-run/gfatest.LST
+          if [ -n "$GFA_PROBE_PATH_INPUT" ]; then cp "$GFA_PROBE_PATH_INPUT" artifacts/amiga-3.5-discovery/native-run/gfatest.LST; else cp tests/interpreter-probes/amiga-3.5/regression-suite.LST artifacts/amiga-3.5-discovery/native-run/gfatest.LST; fi
 
       - name: Merge and run the 3.5 BASIC probe
+        id: native-run
         run: bash scripts/amiga-cli-probe-35.sh
+
+      - name: Write per-construct result record
+        if: always() && inputs.construct_id != ''
+        env:
+          CONSTRUCT_ID: ${{ inputs.construct_id }}
+          VERSION: "3.5"
+          PROBE_PATH: ${{ inputs.probe_path }}
+          HARNESS_OUTCOME: ${{ steps.native-run.outcome }}
+          EXPECTED_IDS_FILE: ${{ env.GFATEST_EXPECTED_IDS_FILE }}
+          RESULT_FILE: artifacts/amiga-3.5-discovery/native-run/gfatest-results.txt
+          IDENTITY_SCREENSHOT: artifacts/amiga-3.5-discovery/editor-version-menu.png
+          IDENTITY_OCR: artifacts/amiga-3.5-discovery/editor-version-menu-ocr.txt
+          OUTPUT_FILE: artifacts/amiga-3.5-discovery/native-run/result.json
+        run: |
+          python3 scripts/write_construct_result.py \
+            --construct-id "$CONSTRUCT_ID" --version "$VERSION" --probe "$PROBE_PATH" \
+            --harness-outcome "${HARNESS_OUTCOME:-failure}" --expected-ids "$EXPECTED_IDS_FILE" \
+            --results "$RESULT_FILE" --identity-screenshot "$IDENTITY_SCREENSHOT" \
+            --identity-ocr "$IDENTITY_OCR" --output "$OUTPUT_FILE"
 
       - name: Upload non-binary discovery evidence
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         with:
-          name: amiga-gfa-basic-3.5-asset-discovery
-          path: artifacts/amiga-3.5-discovery/
+          name: ${{ inputs.construct_id != '' && format('amiga-construct-{0}-3.5', inputs.construct_id) || 'amiga-gfa-basic-3.5-asset-discovery' }}
+          path: |
+            artifacts/amiga-3.5-discovery/
+            !artifacts/amiga-3.5-discovery/boot-volume/gfabasic
+            !artifacts/amiga-3.5-discovery/**/*.adf
+            !artifacts/amiga-3.5-discovery/**/*.rom
+            !artifacts/amiga-3.5-discovery/**/gfabasic
           if-no-files-found: warn
           retention-days: 7
 
