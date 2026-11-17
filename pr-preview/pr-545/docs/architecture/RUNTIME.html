@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="This document defines the approved boundaries and minimum interface properties. It does not define GFA BASIC semantics, source data layouts, or a stable ABI. Partial combinatorics handler functions and their registry …">
+  <title>Runtime architecture · GFA BASIC Rust documentation</title>
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body class="docs-site">
+  <header class="docs-header">
+    <a href="../../index.html">GFA BASIC Rust</a>
+    <span aria-hidden="true">/</span>
+    <a href="../index.html">Documentation</a>
+  </header>
+  <div class="docs-layout">
+    <nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home" href="index.html">Section index</a><ul><li><a href="AI-VERIFICATION.html">AI-assisted API verification</a></li><li><a href="https://github.com/vsimko/gfabasic-rust/blob/main/.agents/skills/api-evidence-verification/SKILL.md">`api-evidence-verification` agent skill</a></li><li><a href="API-PROFILES.html">API profiles</a></li><li><a href="API-REGISTRY.html">API registry and declaration source of truth</a></li><li><a href="BENCHMARKING.html">Performance benchmarks and profiling strategy</a></li><li><a href="CI.html">GitHub Actions workflow architecture</a></li><li><a href="CLI-AND-CONFIG.html">CLI, configuration, and build artifacts</a></li><li><a href="COMPATIBILITY-MATRIX.html">Current compatibility matrix</a></li><li><a href="DIAGNOSTICS.html">Diagnostics and compatibility reporting</a></li><li><a href="DIALECTS.html">Dialects, versions, and compatibility policy</a></li><li><a href="FORMATTER.html">Formatter style and current support</a></li><li><a href="FUZZING.html">Frontend fuzzing and robustness strategy</a></li><li><a href="GOALS.html">Project goals and compatibility objectives</a></li><li><a href="IMPLEMENTATION-DASHBOARD.html">Implementation dashboard</a></li><li><a href="LANGUAGE-TOOLING.html">Language tooling and editor integration</a></li><li><a href="MEMORY.html">Memory model and hardware access</a></li><li><a href="MVP-vertical-slice.html">First compiler vertical slice — proposed boundary</a></li><li><a href="PIPELINE-AND-IR.html">Compiler pipeline and intermediate representation</a></li><li><a href="README.html">README</a></li><li><a href="RELEASES.html">Release, artifact, and reproducible-build policy</a></li><li><a href="RUNTIME.html">Runtime architecture</a></li><li><a href="SECURITY.html">Dependency and supply-chain security</a></li><li><a href="TARGETS.html">Host and target model</a></li><li><a href="TESTING.html">Compatibility testing and release criteria</a></li><li><a href="VALIDATION.html">Repository consistency validation</a></li><li><a href="VERSIONING.html">Versioning and compatibility lifecycle</a></li><li><a href="WEBSITE_PREVIEWS.html">Website previews for pull requests</a></li><li><a href="WORKSPACE.html">Rust workspace and dependency policy</a></li><li><a href="adr/index.html">Architecture decisions</a></li></ul></nav>
+    <main class="docs-content">
+      <article>
+        <h1>Runtime architecture</h1>
+        <p class="docs-meta"><span>Architecture</span></p>
+        <h1 id="runtime-architecture">Runtime architecture</h1>
+<ul>
+<li>Status: Approved architectural baseline (2026-11-04); language-specific contracts and implementation details remain deferred to their respective issues.</li>
+<li>Implementation status: no stable generated-program runtime ABI, general core runtime, or Amiga/Linux platform runtime is implemented. The runtime crate does contain partial typed handlers for FACT, VARIAT, and COMBIN, used by the compiler's literal combinatorics prototype; these are not a complete generated-program runtime.</li>
+</ul>
+<p>This document defines the approved boundaries and minimum interface properties. It does not define GFA BASIC semantics, source data layouts, or a stable ABI. Partial combinatorics handler functions and their registry dispatch do not constitute the generated-program ABI described here. The project maintainer approved the layering, project-owned generated-code/runtime boundary, opaque-handle/resource lifecycle principles, and SDL3-as-Linux-adapter boundary on 2026-11-04.</p>
+<h2 id="layers-and-dependency-direction">Layers and dependency direction</h2>
+<ol>
+<li><strong>GFA BASIC core runtime</strong> — language services that cannot be lowered directly to target instructions, such as strings, arrays, numeric conversions, file operations, and error/status handling.</li>
+<li><strong>API compatibility runtime</strong> — independently selected Amiga and Atari ST profile behavior. A profile must be based on its own source/version evidence.</li>
+<li><strong>Platform-service contract</strong> — project-owned interfaces for display, input, timing, files/devices, and process integration where the source profile requires them.</li>
+<li><strong>Target adapter</strong> — Linux-specific implementation of platform services. SDL3 is a candidate backend for window, input, and presentation services, not a definition of GFA BASIC behavior.</li>
+</ol>
+<p>Dependency direction:</p>
+<pre><code class="language-text">generated program -&gt; project runtime ABI -&gt; core runtime
+                                  |-------&gt; selected API profile
+                                  |-------&gt; platform-service contract
+                                                   ^
+                                                   |
+                                    Linux platform adapter (SDL3)
+</code></pre>
+<p>The runtime must not depend on the compiler or LLVM. The compiler frontend and generic IR must not depend on SDL3. The Linux adapter may depend on the runtime's platform-service contract; the runtime must not depend on the Linux adapter.</p>
+<h2 id="runtime-abi-boundary">Runtime ABI boundary</h2>
+<p>Generated code calls project-owned runtime symbols only. It must not call SDL3, GEM, AmigaOS, or other platform APIs directly.</p>
+<p>Before implementation, each ABI operation must define:</p>
+<ul>
+<li>stable symbol identity and ABI version;</li>
+<li>calling convention and parameter/return representation;</li>
+<li>ownership and lifetime of strings, arrays, buffers, and handles;</li>
+<li>error/status propagation and which failures terminate an operation;</li>
+<li>initialization and shutdown requirements;</li>
+<li>thread-safety and reentrancy requirements where applicable;</li>
+<li>target/profile availability and support classification.</li>
+</ul>
+<p>Do not use a Rust public API as an accidental generated-code ABI. The generated-program interface must be explicit and testable independently from Rust crate internals. The ABI version must be independent of the compiler product version and registry schema.</p>
+<h2 id="data-representation-and-conversion">Data representation and conversion</h2>
+<p>The runtime must preserve the source dialect's documented semantics at the compatibility boundary. It must not assume that a Rust type, host pointer width, SDL surface format, or Linux file API is equivalent to an historical GFA BASIC representation.</p>
+<p>Keep these representations distinct until the relevant dialect research establishes the contract:</p>
+<ul>
+<li>source-language numeric and Boolean values;</li>
+<li>strings and arrays;</li>
+<li>original-platform addresses and memory layouts;</li>
+<li>profile-specific records and graphics buffers;</li>
+<li>target-native buffers and SDL presentation formats.</li>
+</ul>
+<p>Conversions must be explicit operations with defined overflow, truncation, byte order, alignment, ownership, and failure behavior. Unknown representation details remain unresolved; do not infer them from OCR alone.</p>
+<h2 id="resource-lifecycle-and-errors">Resource lifecycle and errors</h2>
+<p>Platform resources (screens, windows, input devices, files, audio devices, and similar objects) require explicit ownership and deterministic release.</p>
+<ul>
+<li>Creation returns either a valid opaque handle or a structured failure.</li>
+<li>A handle is valid only for the documented lifetime and selected profile/target.</li>
+<li>Closing/releasing a resource must define repeated-close and failure behavior.</li>
+<li>Initialization and shutdown must be ordered and safe on partial initialization failure.</li>
+<li>Runtime errors must be propagated through the project-owned ABI; they must not be silently swallowed or converted into success.</li>
+<li>Process termination must release resources owned by the runtime where the host permits it.</li>
+</ul>
+<p>The exact resource semantics for GFA BASIC commands must be derived from the selected manuals and reference observations, not from this generic policy.</p>
+<h2 id="graphics-input-and-headless-testing">Graphics, input, and headless testing</h2>
+<p>Graphics state and original data formats belong to the compatibility runtime. SDL3 is only a Linux presentation/input adapter.</p>
+<p>The design must keep separate:</p>
+<ul>
+<li>logical screen/window dimensions and pixel formats;</li>
+<li>palette and drawing state;</li>
+<li>planar/bitplane or indexed data and host presentation buffers;</li>
+<li>drawing operations and presentation timing;</li>
+<li>input event collection and source-language polling/event semantics.</li>
+</ul>
+<p>A software conversion/emulation layer may be required where an original API does not map directly to SDL3. The adapter must not silently change coordinate systems, palette indices, draw modes, or event ordering.</p>
+<p>Core runtime tests must run without SDL3. Platform adapter tests should support a headless CI mode where practical. Tests that require a display/device must be explicitly marked and isolated; a skipped hardware test is not a passing conformance result.</p>
+<h2 id="capability-reporting">Capability reporting</h2>
+<p>Every registry/runtime operation must be classified per target and API profile as supported, partial, adapter-backed, emulated, unsupported, unsafe-disabled, or unknown. A successful link does not establish semantic compatibility. Unsupported operations must fail explicitly.</p>
+<h2 id="deferred-decisions">Deferred decisions</h2>
+<p>The following require further source evidence or implementation evaluation:</p>
+<ul>
+<li>exact ABI symbols, calling convention, and version compatibility;</li>
+<li>source-specific strings, arrays, numeric formats, and ownership;</li>
+<li>Amiga/Atari screen, window, graphics, and event semantics;</li>
+<li>which operations can be faithfully emulated on Linux;</li>
+<li>SDL3 version/binding and clean-build strategy;</li>
+<li>static/dynamic runtime linking and deployment.</li>
+</ul>
+<p>Tracking: <a href="https://github.com/vsimko/gfabasic-rust/issues/7">runtime architecture #7</a>, <a href="https://github.com/vsimko/gfabasic-rust/issues/8">memory model #8</a>, <a href="https://github.com/vsimko/gfabasic-rust/issues/24">Amiga API #24</a>, <a href="https://github.com/vsimko/gfabasic-rust/issues/25">Atari ST API #25</a>, and <a href="https://github.com/vsimko/gfabasic-rust/issues/52">Linux platform adapter #52</a>.</p>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>

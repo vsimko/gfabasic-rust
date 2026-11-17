@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Use this guide when writing or changing .LST regression programs for the original Amiga GFA BASIC interpreter. A probe must distinguish a language/runtime failure from a test-harness or program-setup failure.">
+  <title>Writing Amiga GFA BASIC reference-interpreter probes · GFA BASIC Rust documentation</title>
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body class="docs-site">
+  <header class="docs-header">
+    <a href="../../index.html">GFA BASIC Rust</a>
+    <span aria-hidden="true">/</span>
+    <a href="../index.html">Documentation</a>
+  </header>
+  <div class="docs-layout">
+    <nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home" href="index.html">Section index</a><ul><li><a href="amiga-reference-interpreter.html">Original Amiga interpreter reference asset</a></li><li><a href="amiga-gfa-basic-probes.html">Writing Amiga GFA BASIC reference-interpreter probes</a></li><li><a href="https://github.com/vsimko/gfabasic-rust/blob/main/.agents/skills/amiga-gfa-basic-regression-testing/SKILL.md">`amiga-gfa-basic-regression-testing`</a></li><li><a href="https://github.com/vsimko/gfabasic-rust/blob/main/.agents/skills/corpus-fixture-authoring/SKILL.md">`corpus-fixture-authoring`</a></li></ul></nav>
+    <main class="docs-content">
+      <article>
+        <h1>Writing Amiga GFA BASIC reference-interpreter probes</h1>
+        <p class="docs-meta"><span>Testing Guide</span></p>
+        <h1 id="writing-amiga-gfa-basic-reference-interpreter-probes">Writing Amiga GFA BASIC reference-interpreter probes</h1>
+<h2 id="purpose">Purpose</h2>
+<p>Use this guide when writing or changing .LST regression programs for the original Amiga GFA BASIC interpreter. A probe must distinguish a language/runtime failure from a test-harness or program-setup failure.</p>
+<h2 id="interpreter-version-strategy">Interpreter version strategy</h2>
+<p>The project uses three reference versions. See <a href="../architecture/adr/0017-multi-version-amiga-gfa-basic-conformance.html">ADR 0017</a> and <a href="https://github.com/vsimko/gfabasic-rust/issues/557">issue #557</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Version</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GFA-BASIC 3.52</td>
+<td>Primary reference baseline and default expected behavior for current development</td>
+</tr>
+<tr>
+<td>GFA-BASIC 3.5 / 3.5U</td>
+<td>Compatibility comparison; identify the exact release used</td>
+</tr>
+<tr>
+<td>GFA-BASIC 3.0</td>
+<td>Historical compatibility comparison</td>
+</tr>
+</tbody>
+</table>
+<p>Run each applicable probe against all versions for which the licensed asset and native harness are available. Keep results separate. Never assume that a result from 3.52 applies to 3.5 or 3.0.</p>
+<p>Use these outcomes per probe/version:</p>
+<ul>
+<li><code>PASS</code>: observed behavior matches the version-specific expectation.</li>
+<li><code>FAIL</code>: observed behavior contradicts the version-specific expectation.</li>
+<li><code>DIFFERENT</code>: a verified cross-version difference is recorded; this is not automatically a defect.</li>
+<li><code>UNTESTED</code>: no adequate run/evidence is available. Missing assets are not failures or passes.</li>
+</ul>
+<p>A maintainer-reported example motivating this policy is <code>M O a()</code>: reported as <code>MAT SET a()</code> in 3.5 and <code>MAT ONE a()</code> in 3.52. Treat it as reported evidence until exact-version screenshots/native runs are preserved.</p>
+<h2 id="verify-native-editor-merge">Verify native editor Merge</h2>
+<p>For a probe that depends on editor shortcut expansion (for example <code>M O identity()</code>), distinguish editor behavior from an explicitly typed runtime command such as <code>MAT ONE identity()</code>.</p>
+<ol>
+<li>Capture the Merge requester and confirm the exact <code>.LST</code> filename selected.</li>
+<li>After Merge, capture the editor and inspect the source statement itself before running.</li>
+<li>Compare the displayed statement with the staged fixture byte-for-byte where possible; OCR is supporting evidence only.</li>
+<li>If the editor shows a changed or unrecognized token, stop before Run and preserve the screenshot and source fixture. Do not attribute a later runtime error to the interpreter until the Merge discrepancy is understood.</li>
+<li>Run with the workflow's verified key sequence only after the source is confirmed. Do not reuse mouse coordinates from a different emulator layout.</li>
+</ol>
+<p>A successful Merge operation does not establish that a statement was expanded or accepted correctly.</p>
+<h2 id="before-writing-a-probe">Before writing a probe</h2>
+<ol>
+<li>Identify the exact interpreter version and platform under test. Do not transfer observations between 3.0, 3.5, 3.5U, and 3.52 without evidence.</li>
+<li>Find the relevant primary-manual example and record its edition and printed page numbers.</li>
+<li>Preserve the documented statement order and control-flow structure unless the test explicitly targets a variation.</li>
+<li>Check how the native harness starts the program, assigns drives, captures output, and detects completion. Read the matching workflow and existing passing .LST probes.</li>
+<li>Keep the fixture minimal. Add one behavior at a time and write diagnostic values before asserting them.</li>
+<li>Where possible, use the same source probe and harness procedure across versions. If syntax or setup must differ, document the reason and keep the test intent equivalent.</li>
+</ol>
+<h2 id="identify-the-running-interpreter-version">Identify the running interpreter version</h2>
+<p>Use the version shown by the running editor, not the disk or archive filename.</p>
+<ol>
+<li>Open the GFA-BASIC editor in Amiberry.</li>
+<li>Press and keep holding the right mouse button to open the editor menu.</li>
+<li>While the right mouse button is still held down, capture the screenshot. Do not release it before or during capture: releasing the button closes the menu, so the screenshot would no longer show the version.</li>
+<li>OCR the screenshot and read the first menu item in the upper-left corner; it displays the running GFA-BASIC interpreter version.</li>
+<li>Record the exact text and preserve the screenshot as evidence. If OCR is uncertain, inspect or crop the upper-left menu area and transcribe it manually.</li>
+</ol>
+<p>Use this procedure whenever the executable version is uncertain or a test result must be tied to an exact interpreter version. Disk labels and archive names are not substitutes for inspecting the running editor.</p>
+<p><strong>Interpretation of the <code>==&gt;</code> editor prefix:</strong> In the manually observed reference editor, an imported <code>.LST</code> statement prefixed with <code>==&gt;</code> is an unsupported or unrecognized command. The editor can retain and display the statement after MERGE, while attempting to execute it can fail later with a runtime <code>syntax error ==&gt; program aborted</code>. Therefore, successful MERGE or a visible source line does not establish that the command is supported. Inspect the prefix before Run and record both the editor screenshot and any runtime error. Treat this as observed behavior for the tested interpreter, not a universal rule for every GFA-BASIC release.</p>
+<h2 id="data-pointer-probes-35u">DATA pointer probes (3.5U)</h2>
+<p>The native probe for the 3.5U addendum DATA-pointer example exposed setup details that must be preserved:</p>
+<ul>
+<li>Put the DATA declarations after the executable program body, following END, for this tested layout.</li>
+<li>Execute RESTORE before the first DATA availability check/read.</li>
+<li>Use _DATA to inspect/save the DATA pointer position. Do not substitute the DATA availability expression for _DATA in the DO WHILE guard.</li>
+<li>Save each pointer before READ, then restore saved positions with _DATA=... before reading again.</li>
+<li>The documented reverse traversal uses FOR ... DOWNTO.</li>
+<li>The addendum example on printed pages 13-34–13-35 documents the reverse values 0, 1, 3242, 328, 24, 13, 9, 8, 7, 6, 5, 4, 3, 2, 1 for the fixture used in the regression test. Keep the fixture and expected values together; do not generalize this result to other versions.</li>
+</ul>
+<p>These are observed rules for the exact 3.5U probe and its documented example, not a claim of complete DATA semantics across all GFA BASIC versions.</p>
+<h2 id="output-and-harness-rules">Output and harness rules</h2>
+<ul>
+<li>Open every output file before writing to its file number. For example, issue OPEN &quot;O&quot;,#1,&quot;DF0:FACT.OUT&quot; and OPEN &quot;O&quot;,#2,&quot;DF0:GFATEST.OUT&quot; before any PRINT #1 or PRINT #2.</li>
+<li>Use the drive/path expected by the native workflow. A missing output file can mean the program never opened or created it; it does not by itself prove a language feature failed.</li>
+<li>Keep diagnostic output (for example, initial pointer state and each value read) separate from machine-readable GFATEST: result records.</li>
+<li>Close files after writing and ensure all normal paths reach the close statements.</li>
+<li>When the host reports Node not found: FACT.OUT, first inspect the emulator screenshot/log and program file-open path before diagnosing interpreter semantics.</li>
+</ul>
+<h2 id="required-validation-loop">Required validation loop</h2>
+<ol>
+<li>Run the exact native Merge + Run workflow for the target interpreter version.</li>
+<li>If available, run the same probe against the other supported reference versions and preserve each result separately.</li>
+<li>If the output file is missing, inspect the emulator log/screenshot and verify file opens, drive assignment, and program completion first.</li>
+<li>If output exists, inspect raw FACT.OUT and GFATEST.OUT; do not rely only on the workflow summary.</li>
+<li>Compare every diagnostic value and result ID with the version-specific documented expectation.</li>
+<li>Record cross-version differences as DIFFERENT with evidence; do not silently normalize them to the 3.52 result.</li>
+<li>When a probe fails, reduce it to the smallest reproducer and compare it with the manual's example statement by statement.</li>
+<li>After a fix, rerun the target native workflow and wait for its completed result. A code change is not validated until the target native run is green.</li>
+<li>Keep the PR description precise about tested versions, source pages, run evidence, and remaining limits.</li>
+</ol>
+<h2 id="evidence-and-safety-boundaries">Evidence and safety boundaries</h2>
+<ul>
+<li>Cite the manual edition/version and printed pages.</li>
+<li>Separate manual-documented behavior from behavior observed in the emulator and from assumptions.</li>
+<li>Do not claim a runtime implementation bug until the test setup and output path have been verified.</li>
+<li>Do not commit commercial interpreter binaries, Kickstart ROMs, Workbench disks, or disk images. Use the private asset workflow and retain only permitted diagnostics.</li>
+</ul>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>
