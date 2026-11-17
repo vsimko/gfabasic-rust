@@ -10,16 +10,24 @@ class PullRequestGateTests(unittest.TestCase):
             {".github/workflows/amiga-35-ab-c-diagnostic.yml"},
         )
 
-    def test_gfa_basic_35_workflow_and_runner_changes_select_diagnostic(self):
-        for path in (
-            ".github/workflows/amiga-35-ab-c-diagnostic.yml",
-            "scripts/amiga-35-ab-c.sh",
-            "scripts/amiga-35-ab-c-emulator.sh",
-        ):
+    def test_gfa_basic_35_workflow_path_selects_diagnostic_and_workflow_lint(self):
+        self.assertEqual(
+            expected_workflows([".github/workflows/amiga-35-ab-c-diagnostic.yml"]),
+            {
+                ".github/workflows/amiga-35-ab-c-diagnostic.yml",
+                ".github/workflows/workflow-lint.yml",
+            },
+        )
+
+    def test_gfa_basic_35_runner_changes_select_diagnostic_and_docs(self):
+        for path in ("scripts/amiga-35-ab-c.sh", "scripts/amiga-35-ab-c-emulator.sh"):
             with self.subTest(path=path):
                 self.assertEqual(
                     expected_workflows([path]),
-                    {".github/workflows/amiga-35-ab-c-diagnostic.yml"},
+                    {
+                        ".github/workflows/amiga-35-ab-c-diagnostic.yml",
+                        ".github/workflows/docs.yml",
+                    },
                 )
 
     def test_documentation_change_selects_documentation_workflow(self):
