@@ -122,9 +122,11 @@ jobs:
           MATRIX="$(jq -c '{include: .include}' "$RUNNER_TEMP/selection.json")"
           SELECTION_JSON="$(jq -c . "$RUNNER_TEMP/selection.json")"
           HAS_JOBS="$(jq -r '.include | length > 0' "$RUNNER_TEMP/selection.json")"
-          echo "matrix=$MATRIX" >> "$GITHUB_OUTPUT"
-          echo "selection_json=$SELECTION_JSON" >> "$GITHUB_OUTPUT"
-          echo "has_jobs=$HAS_JOBS" >> "$GITHUB_OUTPUT"
+          {
+            echo "matrix=$MATRIX"
+            echo "selection_json=$SELECTION_JSON"
+            echo "has_jobs=$HAS_JOBS"
+          } >> "$GITHUB_OUTPUT"
 
   preflight:
     name: Check trusted event and private asset availability
@@ -168,7 +170,6 @@ jobs:
     name: Native ${{ matrix.construct_id }} / ${{ matrix.version }}
     needs: [select, preflight]
     if: needs.select.outputs.has_jobs == 'true' && needs.preflight.outputs.native_allowed == 'true'
-    continue-on-error: true
     strategy:
       fail-fast: false
       max-parallel: 3
