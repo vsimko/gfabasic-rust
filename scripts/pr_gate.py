@@ -16,9 +16,7 @@ from typing import Any
 
 WORKFLOWS = {
     ".github/workflows/amiga-reference-matrix.yml": (
-        "tests/interpreter-probes/amiga-3.52/**",
-        "tests/interpreter-probes/amiga-3.041u/**",
-        "tests/interpreter-probes/amiga-3.5/**",
+        "tests/interpreter-probes/**",
     ),
     ".github/workflows/amiga-construct-matrix.yml": (
         ".github/workflows/amiga-construct-matrix.yml",
