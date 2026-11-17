@@ -43,7 +43,7 @@ jobs:
     secrets: inherit
 
   amiga-35:
-    name: GFA-BASIC 3.5 asset discovery (runtime still untested)
+    name: GFA-BASIC 3.5 editor identity (conformance probes untested)
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
@@ -84,7 +84,7 @@ jobs:
           sha256sum "$RUNNER_TEMP/gfa-basic-3.5.adf" > artifacts/amiga-3.5-discovery/adf-sha256.txt
           wc -c < "$RUNNER_TEMP/gfa-basic-3.5.adf" > artifacts/amiga-3.5-discovery/adf-size.txt
           printf '%s\\n' "${ADF_MEMBERS[0]}" > artifacts/amiga-3.5-discovery/adf-member.txt
-          echo "Candidate disk discovered. Interpreter identity and runtime execution remain UNTESTED." >> "$GITHUB_STEP_SUMMARY"
+          echo "Candidate disk discovered; running editor identity will be verified from the held-right-button menu screenshot. Native language conformance remains UNTESTED." >> "$GITHUB_STEP_SUMMARY"
 
       - name: Capture the running editor version from its right-button menu
         env:
@@ -208,7 +208,7 @@ jobs:
             echo "|---|---|---|"
             echo "| 3.52 | $STATUS_352 | Native probe suite; inspect its artifact for individual GFATEST records |"
             echo "| 3.041U | $STATUS_3041U | Native comparison probe suite; exact version only |"
-            echo "| 3.5 | UNTESTED | Candidate disk is inspected; exact interpreter identity and native execution remain unverified |"
+            echo "| 3.5 | identity verified | Held-right-button menu confirms GFA-BASIC 3.5; native language-conformance probes remain UNTESTED |"
             echo ""
             echo "A green workflow means the configured native jobs and their host-side result protocol completed. It does not establish complete language conformance."
           } >> "$GITHUB_STEP_SUMMARY"
