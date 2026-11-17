@@ -49,17 +49,24 @@
 <td></td>
 </tr>
 <tr>
-<td>Topic</td>
-<td>Scope</td>
-<td>Document</td>
-<td>Tracking</td>
+<td>Multi-version Amiga GFA-BASIC conformance</td>
+<td>3.52 primary baseline with 3.5/3.5U and 3.0 comparison results</td>
+<td><a href="adr/0017-multi-version-amiga-gfa-basic-conformance.html">ADR 0017</a>; <a href="../testing/amiga-gfa-basic-probes.html">probe-writing guide</a></td>
+<td><a href="https://github.com/vsimko/gfabasic-rust/issues/557">#557</a></td>
 </tr>
+</tbody>
+</table>
+<h2 id="project-architecture-and-compatibility">Project architecture and compatibility</h2>
+<table>
+<thead>
 <tr>
-<td>---</td>
-<td>---</td>
-<td>---</td>
-<td>---</td>
+<th>Topic</th>
+<th>Scope</th>
+<th>Document</th>
+<th>Tracking</th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td>Project goals and compatibility</td>
 <td>Purpose, non-goals, compatibility dimensions</td>
@@ -107,12 +114,6 @@
 <td>Lossless, evidence-gated formatter library and canonical style for the implemented subset</td>
 <td><a href="FORMATTER.html">FORMATTER.md</a></td>
 <td><a href="https://github.com/vsimko/gfabasic-rust/issues/208">#208</a></td>
-</tr>
-<tr>
-<td>Language server and editor integration</td>
-<td>Shared compiler frontend, LSP lifecycle, UTF-16 positions, versioned edits, capability gates</td>
-<td><a href="adr/0012-language-server-and-editor-integration.html">ADR 0012</a> (proposed)</td>
-<td><a href="https://github.com/vsimko/gfabasic-rust/issues/209">#209</a></td>
 </tr>
 <tr>
 <td>Diagnostics and compatibility reporting</td>
