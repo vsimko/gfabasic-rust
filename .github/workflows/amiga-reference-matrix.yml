@@ -93,7 +93,7 @@ jobs:
           set -euo pipefail
           mkdir -p artifacts/amiga-3.5-discovery/boot-volume/S
           cp "$RUNNER_TEMP/gfabasic-3.5" artifacts/amiga-3.5-discovery/boot-volume/gfabasic
-          printf 'gfabasic\\n' > artifacts/amiga-3.5-discovery/boot-volume/S/Startup-Sequence
+          printf 'gfabasic\n' > artifacts/amiga-3.5-discovery/boot-volume/S/Startup-Sequence
           xdftool "$RUNNER_TEMP/gfa-basic-3.5-boot.adf" create + format GFA35 ofs + write artifacts/amiga-3.5-discovery/boot-volume/gfabasic + write artifacts/amiga-3.5-discovery/boot-volume/S
           xdftool "$RUNNER_TEMP/gfa-basic-3.5-boot.adf" boot install boot1x
           xdftool "$RUNNER_TEMP/gfa-basic-3.5-boot.adf" info > artifacts/amiga-3.5-discovery/boot-adf-info.txt
@@ -103,18 +103,18 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends amiberry xvfb netcat-openbsd tesseract-ocr python3-pil
 
-          curl --fail --silent --show-error --location \\
-            --header "Authorization: Bearer $GFA_ASSETS_TOKEN" \\
-            --header "Accept: application/vnd.github+json" \\
-            "https://api.github.com/repos/vsimko/gfabasic-private-assets/contents?ref=main" \\
+          curl --fail --silent --show-error --location \
+            --header "Authorization: Bearer $GFA_ASSETS_TOKEN" \
+            --header "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/vsimko/gfabasic-private-assets/contents?ref=main" \
             --output "$RUNNER_TEMP/private-assets-index.json"
           ROM_NAME="$(jq -r '[.[] | select(.type == "file" and .size == 524288 and (.name|test("(?i)kickstart.*v?1[.]3.*34[.]5"))) ] | .[0].name // empty' "$RUNNER_TEMP/private-assets-index.json")"
           test -n "$ROM_NAME" || { echo "No 512 KiB Kickstart 1.3 rev 34.5 ROM found"; exit 1; }
           ROM_PATH_ENCODED="$(jq -rn --arg path "$ROM_NAME" '$path | @uri')"
-          curl --fail --silent --show-error --location \\
-            --header "Authorization: Bearer $GFA_ASSETS_TOKEN" \\
-            --header "Accept: application/vnd.github.raw" \\
-            "https://api.github.com/repos/vsimko/gfabasic-private-assets/contents/$ROM_PATH_ENCODED?ref=main" \\
+          curl --fail --silent --show-error --location \
+            --header "Authorization: Bearer $GFA_ASSETS_TOKEN" \
+            --header "Accept: application/vnd.github.raw" \
+            "https://api.github.com/repos/vsimko/gfabasic-private-assets/contents/$ROM_PATH_ENCODED?ref=main" \
             --output "$RUNNER_TEMP/kick.rom"
           test "$(wc -c < "$RUNNER_TEMP/kick.rom")" -eq 524288
           sha256sum "$RUNNER_TEMP/kick.rom" > artifacts/amiga-3.5-discovery/kickstart-sha256.txt
@@ -153,13 +153,13 @@ jobs:
             sleep 35
             # Amiberry IPC button mask: bit 0 = left, bit 1 = right, bit 2 = middle.
             # Take the screenshot immediately while the right button remains down.
-            printf "SEND_MOUSE\\t0\\t0\\t2\\n" | timeout 5s nc -U -N "$ipc_socket_path"
+            printf "SEND_MOUSE\t0\t0\t2\n" | timeout 5s nc -U -N "$ipc_socket_path"
             sleep 0.1
-            printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-3.5-discovery/editor-version-menu.png" | timeout 5s nc -U -N "$ipc_socket_path"
-            printf "SEND_MOUSE\\t0\\t0\\t0\\n" | timeout 5s nc -U -N "$ipc_socket_path"
+            printf "SCREENSHOT\t%s\n" "$GITHUB_WORKSPACE/artifacts/amiga-3.5-discovery/editor-version-menu.png" | timeout 5s nc -U -N "$ipc_socket_path"
+            printf "SEND_MOUSE\t0\t0\t0\n" | timeout 5s nc -U -N "$ipc_socket_path"
             sleep 0.2
-            printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-3.5-discovery/editor-after-menu.png" | timeout 5s nc -U -N "$ipc_socket_path"
-            printf "QUIT\\n" | timeout 5s nc -U -N "$ipc_socket_path" || true
+            printf "SCREENSHOT\t%s\n" "$GITHUB_WORKSPACE/artifacts/amiga-3.5-discovery/editor-after-menu.png" | timeout 5s nc -U -N "$ipc_socket_path"
+            printf "QUIT\n" | timeout 5s nc -U -N "$ipc_socket_path" || true
             for attempt in $(seq 1 10); do
               if ! kill -0 "$emulator_pid" 2>/dev/null; then break; fi
               sleep 1
