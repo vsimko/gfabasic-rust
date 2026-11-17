@@ -367,28 +367,31 @@ class LanguageConstructSelectionTests(unittest.TestCase):
 
 
 class LanguageConstructCliTests(unittest.TestCase):
-    def test_validate_only_emits_empty_matrix(self):
+    def test_validate_only_emits_empty_per_version_matrices(self):
         output = io.StringIO()
         with contextlib.redirect_stdout(output):
             result = main(["select", "--root", str(ROOT), "--validate-only", "--format", "github"])
         self.assertEqual(result, 0)
-        lines = output.getvalue().splitlines()
-        self.assertEqual(json.loads(lines[0].split("=", 1)[1]), {"include": []})
-        self.assertEqual(lines[1], "selection=none")
-        self.assertEqual(lines[2], "full_manifest_validation=true")
+        values = dict(line.split("=", 1) for line in output.getvalue().splitlines())
+        for name in ("matrix", "matrix_3041u", "matrix_35", "matrix_352"):
+            self.assertEqual(json.loads(values[name]), {"include": []})
+        self.assertEqual(values["selection"], "none")
+        self.assertEqual(values["full_manifest_validation"], "true")
 
-    def test_github_output_is_machine_readable(self):
+    def test_github_output_emits_general_and_per_version_matrices(self):
         output = io.StringIO()
         with contextlib.redirect_stdout(output):
             result = main(["select", "--root", str(ROOT), "--construct", "fact-function", "--version", "3.5", "--format", "github"])
         self.assertEqual(result, 0)
-        lines = output.getvalue().splitlines()
-        matrix = json.loads(lines[0].split("=", 1)[1])
+        values = dict(line.split("=", 1) for line in output.getvalue().splitlines())
+        matrix = json.loads(values["matrix"])
         self.assertEqual(matrix["include"][0]["construct_id"], "fact-function")
         self.assertEqual(matrix["include"][0]["version"], "3.5")
-        self.assertEqual(lines[1], "selection=manual")
-        self.assertEqual(lines[2], "full_manifest_validation=true")
-
+        self.assertEqual(json.loads(values["matrix_35"]), matrix)
+        self.assertEqual(json.loads(values["matrix_352"]), {"include": []})
+        self.assertEqual(json.loads(values["matrix_3041u"]), {"include": []})
+        self.assertEqual(values["selection"], "manual")
+        self.assertEqual(values["full_manifest_validation"], "true")
 
 if __name__ == "__main__":
     unittest.main()
