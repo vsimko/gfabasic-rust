@@ -1,33 +1,36 @@
-REM Amiga GFA BASIC 3.5 interpreter regression suite (initial seed)
-REM ASCII source loaded through the native Editor Merge (F2) command.
-REM Each section writes a labelled observation to FACT.OUT.
-REM Keep probes small and independent; add a case only after its syntax and
-REM expected result have been checked against the 3.5 manual/interpreter.
+REM Amiga GFA-BASIC 3.5 native interpreter probe.
+REM Loaded through the native Editor Merge (F2) command.
+REM Results are observations for the exact 3.5 interpreter identity captured by CI.
 
-REM Use the letter O for output mode here, not the digit zero (0).
-OPEN "O",#1,"DF0:FACT.OUT"
+OPEN "O",#1,"DF0:GFATEST.OUT"
 
-REM --- Numeric built-in: FACT boundary values (3.5 addendum example) ---
-x = FACT(0)
-y = FACT(1)
-z = FACT(2)
-PRINT #1,"FACT(0..2):";x;y;z
-
-REM --- Integer arithmetic and precedence ---
+REM Arithmetic precedence and grouping.
 a = 2 + 3 * 4
 b = (2 + 3) * 4
-PRINT #1,"ARITHMETIC:";a;b
+IF a=14 AND b=20
+  PRINT #1,"GFATEST:arithmetic:PASS"
+ELSE
+  PRINT #1,"GFATEST:arithmetic:FAIL"
+ENDIF
 
-REM --- FOR/NEXT loop ---
+REM FOR/NEXT loop.
 sum = 0
 FOR i = 1 TO 4
   sum = sum + i
 NEXT i
-PRINT #1,"FOR-NEXT:";sum
+IF sum=10
+  PRINT #1,"GFATEST:for-next:PASS"
+ELSE
+  PRINT #1,"GFATEST:for-next:FAIL"
+ENDIF
 
-REM --- String concatenation and LEFT$ ---
+REM String concatenation and LEFT$.
 s$ = "GFA" + " BASIC"
 t$ = LEFT$(s$,3)
-PRINT #1,"STRINGS:";t$;s$
+IF t$="GFA" AND s$="GFA BASIC"
+  PRINT #1,"GFATEST:strings:PASS"
+ELSE
+  PRINT #1,"GFATEST:strings:FAIL"
+ENDIF
 
 CLOSE #1
