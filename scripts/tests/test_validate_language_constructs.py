@@ -367,6 +367,16 @@ class LanguageConstructSelectionTests(unittest.TestCase):
 
 
 class LanguageConstructCliTests(unittest.TestCase):
+    def test_validate_only_emits_empty_matrix(self):
+        output = io.StringIO()
+        with contextlib.redirect_stdout(output):
+            result = main(["select", "--root", str(ROOT), "--validate-only", "--format", "github"])
+        self.assertEqual(result, 0)
+        lines = output.getvalue().splitlines()
+        self.assertEqual(json.loads(lines[0].split("=", 1)[1]), {"include": []})
+        self.assertEqual(lines[1], "selection=none")
+        self.assertEqual(lines[2], "full_manifest_validation=true")
+
     def test_github_output_is_machine_readable(self):
         output = io.StringIO()
         with contextlib.redirect_stdout(output):
