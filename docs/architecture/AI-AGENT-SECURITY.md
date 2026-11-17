@@ -34,9 +34,9 @@ The GitHub integration used during this audit can read and modify repository con
 
 ### Private assets and credentials
 
-Several Amiga workflows use the repository secret named GFA_ASSETS_TOKEN to read files from vsimko/gfabasic-private-assets. The workflow files show that the token is sent to selected shell steps as an environment variable and used for GitHub Contents API requests. The token value, token type, fine-grained permissions, expiry, secret access policy, and private-repository collaborator settings are not visible from repository contents.
+Several Amiga workflows use the repository secret named GFA_ASSETS_TOKEN to read files from vsimko/gfabasic-private-assets. In addition, amiga-reference.yml passes the same secret to scripts/publish_private_amiga_analysis.sh, which pushes generated analysis to the private repository and creates or uploads a GitHub Release there. The current workflow therefore requires write capability for that publishing path; this is not a read-only credential use. The token value, token type, exact repository scope, fine-grained permissions, expiry, secret access policy, and private-repository collaborator settings are not visible from repository contents.
 
-Do not infer that the token is read-only or restricted to the private-assets repository until a maintainer verifies its actual configuration. The workflows must not print it, persist it in generated files, include it in artifacts, or pass it to code that does not need private-asset access.
+Do not infer the token's exact scope or permissions from its name. A maintainer should consider splitting the current mixed-purpose credential into a read-only asset-download secret and a separate write-capable analysis-publishing secret, both scoped only to the private-assets repository. Until that migration is approved and completed, treat GFA_ASSETS_TOKEN as write-capable. The workflows must not print it, persist it in generated files, include it in artifacts, or pass it to code that does not need its specific read or publish capability.
 
 ### GitHub Actions permission inventory
 
