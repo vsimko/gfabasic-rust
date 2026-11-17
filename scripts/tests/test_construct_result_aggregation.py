@@ -84,7 +84,7 @@ class ConstructResultTests(unittest.TestCase):
         directory.mkdir(parents=True, exist_ok=True)
         data = {
             "schema_version": 1, "construct_id": "fact-function", "version": version,
-            "probe": f"probe-{version}.LST", "harness_status": "success",
+            "probe": f"probe-{version}.LST", "expected_ids": ["fact-function"], "harness_status": "success",
             "conformance_status": status, "reason": None,
             "editor_identity": {"expected_version": version, "ocr_matched": True},
         }
