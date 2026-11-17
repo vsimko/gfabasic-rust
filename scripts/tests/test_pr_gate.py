@@ -121,6 +121,21 @@ class FuzzWorkflowPathTests(unittest.TestCase):
 
 
 
+class LanguageConstructManifestPathTests(unittest.TestCase):
+    def test_manifest_and_probe_paths_select_documentation_workflow_only(self):
+        for path in (
+            "tests/language-constructs/README.md",
+            "tests/language-constructs/fact-function/manifest.yaml",
+            "tests/language-constructs/fact-function/probe-3.5.LST",
+            "tests/language-constructs/mat-one-statement/probe-3.52.LST",
+        ):
+            with self.subTest(path=path):
+                self.assertEqual(
+                    expected_workflows([path]),
+                    {".github/workflows/docs.yml"},
+                )
+
+
 class PdfSourceManifestPathTests(unittest.TestCase):
     def test_pdf_source_manifest_selects_documentation_workflow_only(self):
         selected = expected_workflows(["references/pdf-sources.json"])
