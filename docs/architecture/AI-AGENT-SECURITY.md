@@ -24,7 +24,7 @@ This policy reduces risk; it does not eliminate prompt injection, malicious code
 The repository contains:
 
 - AGENTS.md, the repository instruction entry point.
-- Six task-specific Agent Skills under .agents/skills/. They are procedures and documentation, not executable agent runtimes.
+- Seven task-specific Agent Skills under .agents/skills/. They are procedures and documentation, not executable agent runtimes.
 - Twenty GitHub Actions workflow files under .github/workflows/.
 - No checked-in coding-agent launch workflow, agent runtime configuration, MCP server definition, devcontainer, or agent-specific sandbox configuration was found during this audit.
 
