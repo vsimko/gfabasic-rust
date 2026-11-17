@@ -93,7 +93,7 @@ Run from the repository root:
 python scripts/select_language_constructs.py --validate-only
 python scripts/select_language_constructs.py --changed-path tests/language-constructs/fact-function/manifest.yaml
 python scripts/select_language_constructs.py --all-constructs
-python -m unittest tests/tooling/test_language_constructs.py
+python -m unittest discover -s tests/tooling -p "test_language_constructs.py"
 ```
 
 The CLI emits deterministic JSON with `validate_all` and an `include` array of exact `construct`, `version`, and `probe` tuples. Changed files inside one construct select only that construct's applicable versions. A deleted construct selects no native jobs. A schema, validator, or catalogue README change requests full metadata validation but deliberately selects no native jobs. `--all-constructs` is an explicit full-selection mode for manual dispatch; it does not run implicitly.
