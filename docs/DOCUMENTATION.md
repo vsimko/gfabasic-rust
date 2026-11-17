@@ -141,3 +141,14 @@ Research may refer to materials that are lawfully accessible to the researcher. 
 **Documented exception — 1989 German GFA-BASIC Amiga book:** The project maintainer has confirmed that the authors' permission reported by Amiga-News (2026-09-03) is the rights basis for extracting and including the book's per-page text in `references/source-index.json`. This exception applies only to this identified edition and its extracted text. The source PDF itself remains external and is not committed. Preserve page numbers and the provenance note with the extracted text. Do not extend this exception to other books or manuals.
 
 The English GFA BASIC 3.5 interpreter manual remains metadata-and-locator-only unless a separate redistribution basis is recorded. The project MIT license covers only project-owned source code and original documentation; it does not grant rights to third-party reference materials.
+
+
+## PDF source manifest and generated index
+
+- Maintain external PDF sources in [`references/pdf-sources.json`](../references/pdf-sources.json). This is the canonical list of source IDs, URLs, filenames, platform/version metadata, and per-source text-extraction permissions.
+- Do not hard-code PDF URLs or source-specific extraction policy in the workflow. Update the manifest instead.
+- A push to `main` that changes this manifest starts the index workflow. The builder compares each source entry with the previous manifest and downloads/re-extracts only added or changed enabled sources. Removed sources are removed from the generated index; unchanged sources retain their existing extracted data.
+- The generated `references/source-index.json` is proposed through a separate pull request. The workflow does not commit generated output directly to `main`.
+- Keep source PDFs in temporary runner storage only. Do not upload them as artifacts or commit them.
+- A source with `include_text: true` must have a source-specific `rights_basis`. Keep the German 1989 book exception limited to that edition. The English interpreter manual remains locator-only.
+- A disabled source may remain in the manifest while its direct download URL is unavailable or unverified. Set `enabled: true` only after the exact URL has returned a valid PDF in a workflow run. The previously used publisher-hosted German book URL returned HTTP 404 in [workflow run 43871052080](https://github.com/vsimko/gfabasic-rust/actions/runs/43871052080). The replacement Archive.org URL is recorded but remains disabled until a successful download verifies it.
