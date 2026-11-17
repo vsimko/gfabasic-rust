@@ -1,0 +1,263 @@
+{
+  "repository": "vsimko/gfabasic-rust",
+  "generated_at": "2026-11-17T21:21:07.522216Z",
+  "freshness_threshold_hours": 168,
+  "workflows": [
+    {
+      "name": "Documentation checks",
+      "file": "docs.yml",
+      "note": "Markdown, JavaScript, API registry, corpus metadata and local-link validation.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/docs.yml",
+      "state": "queued",
+      "latest": {
+        "id": 44178553336,
+        "name": "Documentation checks",
+        "status": "queued",
+        "event": "pull_request",
+        "branch": "testing/579-property-mutation-pilot",
+        "created_at": "2026-11-17T21:19:13Z",
+        "updated_at": "2026-11-17T21:19:15Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/44178553336",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 44177843830,
+        "name": "Documentation checks",
+        "status": "success",
+        "event": "push",
+        "branch": "main",
+        "created_at": "2026-11-17T21:15:11Z",
+        "updated_at": "2026-11-17T21:15:35Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/44177843830",
+        "age_hours": 0,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Rust checks",
+      "file": "rust.yml",
+      "note": "Formatting, Clippy, workspace tests/build and formatter fixtures.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/rust.yml",
+      "state": "failure",
+      "latest": {
+        "id": 44178553427,
+        "name": "Rust checks",
+        "status": "failure",
+        "event": "pull_request",
+        "branch": "testing/579-property-mutation-pilot",
+        "created_at": "2026-11-17T21:19:14Z",
+        "updated_at": "2026-11-17T21:20:42Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/44178553427",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 44176081654,
+        "name": "Rust checks",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "agents/577-definition-of-done-pr-lifecycle",
+        "created_at": "2026-11-17T21:05:14Z",
+        "updated_at": "2026-11-17T21:06:12Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/44176081654",
+        "age_hours": 0,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Security audit",
+      "file": "security-audit.yml",
+      "note": "RustSec audits for workspace, fuzz and benchmark lockfiles.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/security-audit.yml",
+      "state": "in_progress",
+      "latest": {
+        "id": 44178553422,
+        "name": "Security audit",
+        "status": "in_progress",
+        "event": "pull_request",
+        "branch": "testing/579-property-mutation-pilot",
+        "created_at": "2026-11-17T21:19:14Z",
+        "updated_at": "2026-11-17T21:20:52Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/44178553422",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 44178249038,
+        "name": "Security audit",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "testing/579-property-mutation-pilot",
+        "created_at": "2026-11-17T21:17:30Z",
+        "updated_at": "2026-11-17T21:17:58Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/44178249038",
+        "age_hours": 0,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Source-loader fuzzing",
+      "file": "fuzz.yml",
+      "note": "Fuzzes the source loader only; lexer/parser fuzzing is not configured.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/fuzz.yml",
+      "state": "queued",
+      "latest": {
+        "id": 44178553529,
+        "name": "Fuzzing",
+        "status": "queued",
+        "event": "pull_request",
+        "branch": "testing/579-property-mutation-pilot",
+        "created_at": "2026-11-17T21:19:14Z",
+        "updated_at": "2026-11-17T21:19:15Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/44178553529",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43869239724,
+        "name": "Fuzzing",
+        "status": "success",
+        "event": "schedule",
+        "branch": "main",
+        "created_at": "2026-11-16T12:44:02Z",
+        "updated_at": "2026-11-16T12:55:36Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43869239724",
+        "age_hours": 32,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Benchmarks",
+      "file": "benchmarks.yml",
+      "note": "Source-loading benchmark; pull requests validate compilation without recording measurements.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/benchmarks.yml",
+      "state": "in_progress",
+      "latest": {
+        "id": 44178553385,
+        "name": "Benchmarks",
+        "status": "in_progress",
+        "event": "pull_request",
+        "branch": "testing/579-property-mutation-pilot",
+        "created_at": "2026-11-17T21:19:13Z",
+        "updated_at": "2026-11-17T21:21:00Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/44178553385",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 44176081460,
+        "name": "Benchmarks",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "agents/577-definition-of-done-pr-lifecycle",
+        "created_at": "2026-11-17T21:05:14Z",
+        "updated_at": "2026-11-17T21:06:18Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/44176081460",
+        "age_hours": 0,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Release SBOM",
+      "file": "release-sbom.yml",
+      "note": "Validates PR SBOMs and uploads on published releases; release attachment is unproven until a release runs.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/release-sbom.yml",
+      "state": "pending",
+      "latest": {
+        "id": 44178553394,
+        "name": "Release SBOM",
+        "status": "pending",
+        "event": "pull_request",
+        "branch": "testing/579-property-mutation-pilot",
+        "created_at": "2026-11-17T21:19:14Z",
+        "updated_at": "2026-11-17T21:19:14Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/44178553394",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 44178248922,
+        "name": "Release SBOM",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "testing/579-property-mutation-pilot",
+        "created_at": "2026-11-17T21:17:29Z",
+        "updated_at": "2026-11-17T21:18:23Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/44178248922",
+        "age_hours": 0,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "GitHub Pages",
+      "file": "pages.yml",
+      "note": "Builds and publishes the static production website.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/pages.yml",
+      "state": "success",
+      "latest": {
+        "id": 44177843915,
+        "name": "Deploy GitHub Pages",
+        "status": "success",
+        "event": "push",
+        "branch": "main",
+        "created_at": "2026-11-17T21:15:11Z",
+        "updated_at": "2026-11-17T21:15:52Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/44177843915",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 44177843915,
+        "name": "Deploy GitHub Pages",
+        "status": "success",
+        "event": "push",
+        "branch": "main",
+        "created_at": "2026-11-17T21:15:11Z",
+        "updated_at": "2026-11-17T21:15:52Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/44177843915",
+        "age_hours": 0,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Pull request preview",
+      "file": "pr-preview.yml",
+      "note": "Builds and smoke-tests same-repository pull request previews.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/pr-preview.yml",
+      "state": "in_progress",
+      "latest": {
+        "id": 44178553434,
+        "name": "Pull request website preview",
+        "status": "in_progress",
+        "event": "pull_request",
+        "branch": "testing/579-property-mutation-pilot",
+        "created_at": "2026-11-17T21:19:14Z",
+        "updated_at": "2026-11-17T21:20:49Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/44178553434",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 44177849222,
+        "name": "Pull request website preview",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "agents/577-definition-of-done-pr-lifecycle",
+        "created_at": "2026-11-17T21:15:13Z",
+        "updated_at": "2026-11-17T21:15:37Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/44177849222",
+        "age_hours": 0,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Conformance suite",
+      "file": "conformance.yml",
+      "note": "No dedicated compiler conformance workflow is configured.",
+      "state": "not-configured",
+      "latest": null,
+      "last_success": null
+    }
+  ]
+}

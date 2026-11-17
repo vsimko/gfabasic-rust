@@ -1,0 +1,82 @@
+{
+  "id": "gfa.language.math.combin",
+  "name": "COMBIN",
+  "kind": "function",
+  "namespace": "language-core",
+  "category": "math-and-matrix",
+  "availability": [
+    {
+      "dialect": "amiga-gfa-basic-interpreter",
+      "versions": [
+        "3.5"
+      ]
+    }
+  ],
+  "syntax": [
+    {
+      "form": "COMBIN(integer-expression, integer-expression)",
+      "contexts": [
+        "expression"
+      ],
+      "arguments": [
+        {
+          "name": "n",
+          "type": "integer expression",
+          "required": true
+        },
+        {
+          "name": "k",
+          "type": "integer expression",
+          "required": true
+        }
+      ]
+    }
+  ],
+  "signature": {
+    "returns": "arithmetic expression"
+  },
+  "semantics": {
+    "summary": "Returns the number of k-combinations of n elements without repetition: n!/((n-k)!*k!).",
+    "errors": [],
+    "side-effects": []
+  },
+  "evidence": {
+    "source-scope": "amiga-3.5-addendum",
+    "status": "book-documented",
+    "sources": [
+      "AM-INTERPRETER-35",
+      "AM-BOOK-DE-1990"
+    ],
+    "printed-pages": [
+      "Chapter 13, printed pp. 13-33–13-34 (same feature: combined update scan pp. 14-1–14-2)",
+      "Chapter 19.1, printed p. 479 (explicit 3.5 additions)"
+    ],
+    "notes": [
+      "The 3.5 addendum page images were checked. Both arguments are documented as integer expressions.",
+      "The companion German book explicitly places COMBIN among the 3.5 additions, defines combinations without repetition as n!/((n-k)!*k!), and states that n >= k is required for the function to be defined (printed p. 479). Both inputs are integer values; behavior for negative or fractional inputs and numeric overflow remains unspecified.",
+      "The compiler prototype evaluates only a restricted literal subset. Partial typed runtime helpers are mapped by stable registry handler IDs, but their overflow/error behavior is not yet conformant or verified."
+    ]
+  },
+  "implementation": {
+    "status": "partial",
+    "handler": "gfa.language.math.combin",
+    "notes": [
+      "The runtime exposes a typed exact-arithmetic helper for this operation. The helper is partial: it returns no value outside the u32 input/u128 result domain, while the original interpreter's overflow and error behavior remains unverified. The compiler prototype still restricts source expressions to its documented literal subset."
+    ]
+  },
+  "support": [
+    {
+      "target": "x86_64-unknown-linux-gnu",
+      "classification": "unknown",
+      "conformance": "not-tested",
+      "tests": [],
+      "pending-reason": "No complete implementation or executable reference-interpreter conformance suite is registered."
+    }
+  ],
+  "docs": {
+    "path": "docs/research/amiga-gfa-basic-35-addendum-inventory.md",
+    "anchors": [
+      "4-additional-commands-in-version-35-combined-scan-chapter-14-printed-pp-14-1-14-7"
+    ]
+  }
+}

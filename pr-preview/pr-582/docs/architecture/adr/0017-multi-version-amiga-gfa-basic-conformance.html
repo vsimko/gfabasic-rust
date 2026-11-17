@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The project uses original Amiga GFA-BASIC interpreters as behavioral references. Interpreter releases must not be assumed to behave identically. A concrete manually reported example is the abbreviation M O a(): GFA-BA…">
+  <title>Multi-version Amiga GFA-BASIC conformance baseline · GFA BASIC Rust documentation</title>
+  <link rel="stylesheet" href="../../../styles.css">
+</head>
+<body class="docs-site">
+  <header class="docs-header">
+    <a href="../../../index.html">GFA BASIC Rust</a>
+    <span aria-hidden="true">/</span>
+    <a href="../../index.html">Documentation</a>
+  </header>
+  <div class="docs-layout">
+    <nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home" href="index.html">Section index</a><ul><li><a href="0001-documentation-and-architecture-records.html">ADR 0001: Documentation and architecture decision records</a></li><li><a href="0002-initial-rust-workspace.html">ADR 0002: Initial Rust workspace crate boundaries</a></li><li><a href="0003-target-model.html">ADR 0003: Host and compilation target model</a></li><li><a href="0004-api-profile-model.html">ADR 0004: API profile model</a></li><li><a href="0005-cli-and-project-configuration.html">ADR 0005: CLI and project configuration</a></li><li><a href="0006-api-registry.html">ADR 0006: API declaration registry</a></li><li><a href="0007-compiler-pipeline-and-ir.html">ADR 0007: Compiler pipeline and typed IR boundaries</a></li><li><a href="0008-initial-source-dialect-amiga-gfa-basic-3.0.html">ADR 0008: Initial source dialect — Amiga GFA BASIC interpreter 3.0</a></li><li><a href="0009-initial-source-dialect-amiga-gfa-basic-3.5.html">ADR 0009: Initial source dialect — Amiga GFA BASIC interpreter 3.5</a></li><li><a href="0010-versioning-and-compatibility-lifecycle.html">ADR 0010: Versioning and compatibility lifecycle</a></li><li><a href="0011-amiga-35-linux-sdl3-product-scope.html">ADR 0011: Product scope — Amiga GFA BASIC 3.5 to Linux x86-64 with SDL3</a></li><li><a href="0012-language-server-and-editor-integration.html">ADR 0012: Language server and editor integration</a></li><li><a href="0013-repository-consistency-validation.html">ADR 0013: Repository consistency validation</a></li><li><a href="0014-implementation-dashboard.html">ADR 0014: Repository implementation dashboard</a></li><li><a href="0015-listing-first-compiler-input.html">ADR 0015: Listing-first compiler input</a></li><li><a href="TEMPLATE.html">ADR NNNN: Title</a></li><li><a href="0016-okf-v02-documentation-bundle.html">ADR 0016: OKF v0.2 documentation bundle</a></li><li><a href="0017-multi-version-amiga-gfa-basic-conformance.html">Multi-version Amiga GFA-BASIC conformance baseline</a></li></ul></nav>
+    <main class="docs-content">
+      <article>
+        <h1>Multi-version Amiga GFA-BASIC conformance baseline</h1>
+        <p class="docs-meta"><span>Architecture Decision Record</span></p>
+        <h1 id="adr-0017-multi-version-amiga-gfa-basic-conformance-baseline">ADR 0017: Multi-version Amiga GFA-BASIC conformance baseline</h1>
+<ul>
+<li><strong>Status:</strong> Accepted</li>
+<li><strong>Date:</strong> 2026-11-16</li>
+<li><strong>Tracking:</strong> <a href="https://github.com/vsimko/gfabasic-rust/issues/557">Issue #557</a></li>
+</ul>
+<h2 id="context">Context</h2>
+<p>The project uses original Amiga GFA-BASIC interpreters as behavioral references. Interpreter releases must not be assumed to behave identically. A concrete manually reported example is the abbreviation <code>M O a()</code>: GFA-BASIC 3.5 expands it as <code>MAT SET a()</code>, while GFA-BASIC 3.52 expands it as <code>MAT ONE a()</code>. This observation motivates independent version checks; it does not establish the behavior of every release or related command.</p>
+<p>Using only one interpreter would miss historical differences. Treating all versions as interchangeable would also risk misclassifying a documented or observed version distinction as a defect.</p>
+<h2 id="decision">Decision</h2>
+<p>Adopt a three-version reference strategy:</p>
+<table>
+<thead>
+<tr>
+<th>Interpreter</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GFA-BASIC 3.52</td>
+<td>Active native runtime baseline and default expected behavior</td>
+</tr>
+<tr>
+<td>GFA-BASIC 3.041U</td>
+<td>Available native comparison profile for the 3.0-era dialect; retain the exact version label</td>
+</tr>
+<tr>
+<td>Amiga GFA-BASIC 3.5</td>
+<td>Normative source-language target under ADR 0009; editor identity and initial three-case native smoke suite verified (arithmetic, FOR/NEXT, strings); broader conformance remains incomplete</td>
+</tr>
+</tbody>
+</table>
+<p>Run the same applicable probes against active native profiles when the licensed interpreter asset and native harness are available. The current profiles are 3.52 and 3.041U. Preserve separate results for each exact version; do not relabel 3.041U as exactly 3.0. Amiga 3.5 remains the normative documented source target. The candidate interpreter identity is visually verified: the running editor menu captured with the right mouse button held displays <code>GFA-BASIC 3.5 Block</code>. The matrix's initial native 3.5 Merge + Run smoke suite completed in run <a href="https://github.com/vsimko/gfabasic-rust/actions/runs/44094135503">44094135503</a>. The retained artifact <code>amiga-gfa-basic-3.5-asset-discovery</code> (artifact 14333027972) contains the held-right-button menu screenshot visibly identifying <code>GFA-BASIC 3.5 Block</code>, Merge/Run screenshots, and raw output <code>GFATEST:arithmetic:PASS</code>, <code>GFATEST:for-next:PASS</code>, <code>GFATEST:strings:PASS</code>. Record these three smoke probes as PASS for this exact candidate; this is not complete language conformance.</p>
+<p>A confirmed difference is a compatibility distinction, not automatically a failure. Expected behavior must be scoped to the tested version and supported by the relevant manual or direct interpreter observation.</p>
+<h2 id="result-vocabulary">Result vocabulary</h2>
+<p>Record one result per probe and interpreter version:</p>
+<ul>
+<li><strong>PASS</strong> — observed behavior matches the version-specific expected result.</li>
+<li><strong>FAIL</strong> — observed behavior contradicts the version-specific expected result.</li>
+<li><strong>DIFFERENT</strong> — a verified cross-version behavior difference is present and recorded; this is not itself a failure.</li>
+<li><strong>UNTESTED</strong> — the version could not be tested or evidence is insufficient. Missing assets or unavailable native runs must not be reported as PASS or FAIL.</li>
+</ul>
+<p>Keep manual-documented behavior, directly observed behavior, and assumptions distinct. Identify the running interpreter from the editor menu, not from disk or archive names.</p>
+<h2 id="alternatives-considered">Alternatives considered</h2>
+<ol>
+<li><strong>Use only 3.52.</strong> Simpler and gives a consistent modern baseline, but loses visibility into 3.0 and 3.5 compatibility.</li>
+<li><strong>Treat all versions as equivalent.</strong> Rejected because the observed matrix-command abbreviation difference disproves that assumption.</li>
+<li><strong>Use all versions without a primary baseline.</strong> Rejected because it leaves current development without a clear default reference.</li>
+</ol>
+<h2 id="consequences">Consequences</h2>
+<ul>
+<li>New conformance probes use 3.52 as the default baseline.</li>
+<li>Run applicable probes on 3.041U as the available 3.0-era comparison profile.</li>
+<li>Record the initial 3.5 smoke probes as PASS only for the exact run and artifact inspected above; broader 3.5 language-conformance coverage remains incomplete.</li>
+<li>Reports and fixtures must retain exact version identity and per-version outcomes.</li>
+<li>A missing interpreter asset or unavailable workflow is an explicit coverage gap.</li>
+<li>The unified matrix entry point is <code>.github/workflows/amiga-reference-matrix.yml</code>. It invokes the 3.52 and 3.041U native workflows and captures the 3.5 editor's held-right-button version menu as identity evidence. The initial 3.5 native smoke suite is wired into the matrix; the three configured cases passed in run 44094135503 and the raw artifact was inspected. This is limited smoke coverage, not complete language conformance. The individual workflows remain available for focused manual runs. A successful matrix run validates only the configured probes and result-collection protocol, not complete language conformance.</li>
+<li>The status of private assets and runnable workflows must be checked from the current workflow configuration and latest issue/CI evidence, not inferred from the media inventory alone.</li>
+</ul>
+<h2 id="evidence-and-limitations">Evidence and limitations</h2>
+<p>The <code>M O a()</code> difference is currently a maintainer-reported observation. Confirm it with preserved screenshots or native-run evidence for both exact interpreter versions before treating it as a fully reproducible conformance record. Consult the matching primary manual for version-specific expected semantics.</p>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>
