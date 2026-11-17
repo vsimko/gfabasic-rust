@@ -34,9 +34,9 @@ The maintainer's pragmatic working model is supported in part by the disk conten
 
 Recommended test profiles:
 
-1. **3.52 interpreter** — primary practical runtime profile for the 3.5-era language target; continue the existing workflow and label every result 3.52.
-2. **3.5U interpreter** — retired historical profile; do not schedule new runs or include it in current compatibility-matrix coverage. Retain its fingerprint and prior observations as historical evidence only.
-3. **3.041 interpreter** — 3.0-era comparison profile.
+1. **3.52 interpreter** — active primary native runtime profile; label every result 3.52.
+2. **3.041U interpreter** — active native comparison profile for the 3.0-era dialect; label every result 3.041U, not 3.0.
+3. **3.5U interpreter** — retired historical profile; do not schedule new runs or include it in current compatibility-matrix coverage. Retain its fingerprint and prior observations as historical evidence only. Amiga 3.5 remains the normative documented language target, but native 3.5 execution is currently UNTESTED.
 
 Do not silently relabel a 3.52 observation as a 3.5U observation. Agreement between 3.52 and the 3.5 manuals is supporting compatibility evidence, not proof that every 3.5 and 3.52 behaviour is identical.
 
@@ -55,6 +55,7 @@ After the initial inventory:
 - The 3.5U, 3.041, and 3.52 ADF filesystems have been enumerated. Interpreter/compiler candidates were extracted to the ephemeral workflow workspace and fingerprinted; all identified executables have the AmigaOS loadseg header `00 00 03 f3`.
 - The workflow records byte size, SHA-256, file type, header bytes, and version strings. Extracted binaries are kept under the runner's temporary directory and are not included in the uploaded artifact.
 - The 3.5U candidate was inventoried for historical comparison, but it is not part of the active test matrix. Do not invest in repairing its boot path unless the maintainer explicitly reactivates this profile.
+- The active native workflows currently cover 3.52 and 3.041U; do not infer active 3.5 runtime coverage from the normative 3.5 manual or from legacy 3.5U records.
 - Run the same small probe corpus against 3.5U, 3.52, and 3.041 and retain separate result directories.
 - Obtain and inspect disk 2 of the 3.5U set before making claims about a complete distribution.
 
