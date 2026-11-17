@@ -42,7 +42,7 @@
 </tr>
 <tr>
 <td>Amiga GFA-BASIC 3.5</td>
-<td>Normative source-language target (ADR 0009); editor identity verified from held-right-button menu screenshot; native conformance probes remain untested</td>
+<td>Normative source-language target (ADR 0009); initial native smoke probes (arithmetic, FOR/NEXT, strings) passed; broader conformance remains incomplete</td>
 </tr>
 <tr>
 <td>GFA-BASIC 3.5U</td>
@@ -50,8 +50,8 @@
 </tr>
 </tbody>
 </table>
-<p>The unified entry point is <code>.github/workflows/amiga-reference-matrix.yml</code>. It calls the two active native workflows as reusable workflows and captures the running 3.5 editor's version menu for identity evidence. An initial 3.5 native smoke suite (arithmetic, FOR/NEXT, strings) is now wired into the matrix using a separate writable test disk. Its result remains <code>UNTESTED</code> until a completed run's raw GFATEST records and Merge/Run screenshots are inspected; it never substitutes the retired 3.5U profile. Run this matrix for a combined view. The individual native workflows remain manually dispatchable for focused diagnosis. A green matrix means the configured native jobs and GFATEST collection protocol completed; it is not a claim of complete language conformance.</p>
-<p>Run each applicable probe against active native profiles for which the licensed asset and workflow are available. The current native profiles are 3.52 and 3.041U. Keep results separate; never relabel 3.041U as exactly 3.0 or transfer its results to 3.5. Amiga GFA-BASIC 3.5 remains the normative documented target; its editor identity is verified from the held-right-button menu screenshot, while native 3.5 probe execution is pending verification of the initial smoke workflow and its raw result artifact. The 3.5U profile is retired.</p>
+<p>The unified entry point is <code>.github/workflows/amiga-reference-matrix.yml</code>. It calls the two active native workflows as reusable workflows and captures the running 3.5 editor's version menu for identity evidence. An initial 3.5 native smoke suite (arithmetic, FOR/NEXT, strings) ran using a separate writable test disk in <a href="https://github.com/vsimko/gfabasic-rust/actions/runs/44094135503">workflow run 44094135503</a>. The inspected artifact <code>amiga-gfa-basic-3.5-asset-discovery</code> contains the held-right-button menu screenshot visibly identifying <code>GFA-BASIC 3.5 Block</code>, Merge/Run screenshots, and three raw <code>GFATEST:*:PASS</code> records. These three cases are PASS for that exact candidate and run; this limited smoke set is not complete language conformance and does not substitute the retired 3.5U profile. Run this matrix for a combined view. The individual native workflows remain manually dispatchable for focused diagnosis. A green matrix means the configured native jobs and GFATEST collection protocol completed; it is not a claim of complete language conformance.</p>
+<p>Run each applicable probe against active native profiles for which the licensed asset and workflow are available. The current native profiles are 3.52 and 3.041U. Keep results separate; never relabel 3.041U as exactly 3.0 or transfer its results to 3.5. Amiga GFA-BASIC 3.5 remains the normative documented target; its identity and the three initial native smoke results have been verified from the retained screenshot and raw result artifact. Broader native conformance remains incomplete. The 3.5U profile is retired.</p>
 <p>Use these outcomes per probe/version:</p>
 <ul>
 <li><code>PASS</code>: observed behavior matches the version-specific expectation.</li>
