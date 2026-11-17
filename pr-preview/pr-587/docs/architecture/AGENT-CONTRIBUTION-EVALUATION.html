@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Tracking: issue #578.">
+  <title>AI-agent contribution evaluation pilot · GFA BASIC Rust documentation</title>
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body class="docs-site">
+  <header class="docs-header">
+    <a href="../../index.html">GFA BASIC Rust</a>
+    <span aria-hidden="true">/</span>
+    <a href="../index.html">Documentation</a>
+  </header>
+  <div class="docs-layout">
+    <nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home" href="index.html">Section index</a><ul><li><a href="AI-VERIFICATION.html">AI-assisted API verification</a></li><li><a href="AI-AGENT-SECURITY.html">AI agent security and trust boundaries</a></li><li><a href="AGENT-CONTRIBUTION-EVALUATION.html">AI-agent contribution evaluation pilot</a></li><li><a href="https://github.com/vsimko/gfabasic-rust/blob/main/.agents/skills/api-evidence-verification/SKILL.md">`api-evidence-verification` agent skill</a></li><li><a href="API-PROFILES.html">API profiles</a></li><li><a href="API-REGISTRY.html">API registry and declaration source of truth</a></li><li><a href="BENCHMARKING.html">Performance benchmarks and profiling strategy</a></li><li><a href="CI.html">GitHub Actions workflow architecture</a></li><li><a href="CLI-AND-CONFIG.html">CLI, configuration, and build artifacts</a></li><li><a href="COMPATIBILITY-MATRIX.html">Current compatibility matrix</a></li><li><a href="DIAGNOSTICS.html">Diagnostics and compatibility reporting</a></li><li><a href="DIALECTS.html">Dialects, versions, and compatibility policy</a></li><li><a href="FORMATTER.html">Formatter style and current support</a></li><li><a href="FUZZING.html">Frontend fuzzing and robustness strategy</a></li><li><a href="GOALS.html">Project goals and compatibility objectives</a></li><li><a href="IMPLEMENTATION-DASHBOARD.html">Implementation dashboard</a></li><li><a href="LANGUAGE-TOOLING.html">Language tooling and editor integration</a></li><li><a href="MEMORY.html">Memory model and hardware access</a></li><li><a href="MVP-vertical-slice.html">First compiler vertical slice — proposed boundary</a></li><li><a href="PIPELINE-AND-IR.html">Compiler pipeline and intermediate representation</a></li><li><a href="README.html">README</a></li><li><a href="RELEASES.html">Release, artifact, and reproducible-build policy</a></li><li><a href="RUNTIME.html">Runtime architecture</a></li><li><a href="SECURITY.html">Dependency and supply-chain security</a></li><li><a href="TARGETS.html">Host and target model</a></li><li><a href="TESTING.html">Compatibility testing and release criteria</a></li><li><a href="VALIDATION.html">Repository consistency validation</a></li><li><a href="VERSIONING.html">Versioning and compatibility lifecycle</a></li><li><a href="WEBSITE_PREVIEWS.html">Website previews for pull requests</a></li><li><a href="WORKSPACE.html">Rust workspace and dependency policy</a></li><li><a href="TOML-YAML-MIGRATION.html">TOML inventory and YAML migration policy</a></li><li><a href="adr/index.html">Architecture decisions</a></li></ul></nav>
+    <main class="docs-content">
+      <article>
+        <h1>AI-agent contribution evaluation pilot</h1>
+        <p class="docs-meta"><span>Architecture</span></p>
+        <h1 id="ai-agent-contribution-evaluation-pilot">AI-agent contribution evaluation pilot</h1>
+<p>Tracking: <a href="https://github.com/vsimko/gfabasic-rust/issues/578">issue #578</a>.</p>
+<h2 id="purpose-and-limits">Purpose and limits</h2>
+<p>This is a small retrospective baseline, not a performance ranking or a claim that agent use improves throughput. The sample contains three completed PRs from one short project-work period. Their selection as agent-assisted comes from the contemporaneous project collaboration context; GitHub author/committer metadata identifies the repository owner and cannot independently prove agent authorship.</p>
+<p>Do not compare people or agents, publish leaderboards, use PR count/lines/speed as success measures, or set numeric targets from this sample.</p>
+<h2 id="rubric-and-data-sources">Rubric and data sources</h2>
+<table>
+<thead>
+<tr>
+<th>Signal</th>
+<th>Operational definition</th>
+<th>Source and limitation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>First-head CI</td>
+<td>Conclusion of checks associated with the first submitted PR head; retain failed and skipped jobs separately</td>
+<td>GitHub Actions runs for the recorded head SHA</td>
+</tr>
+<tr>
+<td>Fix-up pushes</td>
+<td>Additional head updates after initial submission and before the first green required gate</td>
+<td>Not reliably exposed by the available PR metadata. Commit count is not a substitute for push count; report as unavailable</td>
+</tr>
+<tr>
+<td>Substantive review findings</td>
+<td>Formal review or inline thread that requests a code, test, or design change</td>
+<td>GitHub review submissions and review threads; empty results do not include informal discussion</td>
+</tr>
+<tr>
+<td>Follow-up defects</td>
+<td>Linked issue or PR reporting a regression or corrective work after merge</td>
+<td>Issue/PR tracker; attribution requires evidence, not temporal proximity</td>
+</tr>
+<tr>
+<td>DoD/evidence quality</td>
+<td>Whether the PR records scope, actual validation, skipped checks, risks, and human blockers</td>
+<td>PR description compared with the repository PR template and AGENTS.md</td>
+</tr>
+<tr>
+<td>Scope drift/duplicate work</td>
+<td>Reviewer judgement that changed files or work duplicate or exceed the stated issue</td>
+<td>PR diff and linked issue; qualitative, not a numeric score</td>
+</tr>
+<tr>
+<td>Human blockers</td>
+<td>Explicit needs-human work remaining at merge</td>
+<td>Linked issues and labels</td>
+</tr>
+</tbody>
+</table>
+<h2 id="sample-selection">Sample selection</h2>
+<p>Inclusion: completed PRs #581, #582, and #584 from the same short collaboration period, where the project-session context establishes AI assistance. Exclusion: unrelated PRs, open PRs, and work for which agent involvement cannot be established from the collaboration context. This is a convenience sample, not a representative sample of the repository's historical contributions.</p>
+<table>
+<thead>
+<tr>
+<th>PR</th>
+<th>Scope</th>
+<th>First submitted head</th>
+<th>Recorded CI observations</th>
+<th>Reviews</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/vsimko/gfabasic-rust/pull/581">#581</a></td>
+<td>Agent DoD and PR lifecycle</td>
+<td><code>2252822701c6be693276d6a8777c13599554cb9b</code></td>
+<td>Rust checks, documentation checks, and stable PR gate passed. The first preview smoke test failed because the deployed preview returned HTTP 404 after deployment; a later preview run succeeded. Benchmark compilation passed; measurement job was skipped for this PR. Runs: <a href="https://github.com/vsimko/gfabasic-rust/actions/runs/44176081545">preview failure</a>, <a href="https://github.com/vsimko/gfabasic-rust/actions/runs/44177849222">later preview</a>, <a href="https://github.com/vsimko/gfabasic-rust/actions/runs/44176081520">gate</a>.</td>
+<td>No formal review submissions or inline threads returned</td>
+</tr>
+<tr>
+<td><a href="https://github.com/vsimko/gfabasic-rust/pull/582">#582</a></td>
+<td>Deterministic source-map property test and Rust-only mutation workflow</td>
+<td><code>4f900d84dbc17fe1d0c2c04ace9bd814f2f829a0</code></td>
+<td>Rust checks, documentation checks, workflow/skill validation, and stable PR gate passed. Mutation testing was intentionally not part of PR CI; the killed-mutant experiment remained unverified at this baseline. Runs: <a href="https://github.com/vsimko/gfabasic-rust/actions/runs/44182379005">Rust</a>, <a href="https://github.com/vsimko/gfabasic-rust/actions/runs/44182379039">docs</a>, <a href="https://github.com/vsimko/gfabasic-rust/actions/runs/44182379146">workflow/skills</a>, <a href="https://github.com/vsimko/gfabasic-rust/actions/runs/44182379156">gate</a>.</td>
+<td>No formal review submissions or inline threads returned</td>
+</tr>
+<tr>
+<td><a href="https://github.com/vsimko/gfabasic-rust/pull/584">#584</a></td>
+<td>AI-agent security policy and workflow hardening</td>
+<td><code>efde37b3e6ee811d09a82d31b1d17f9692e22aa8</code></td>
+<td>All 11 recorded PR workflow runs completed successfully, including Rust, docs, workflow/skill validation, security audit, SBOM, Amiga reference matrix, CLI probe, preview, benchmarks, and stable PR gate. <a href="https://github.com/vsimko/gfabasic-rust/actions/runs/44188927691">Stable gate</a>.</td>
+<td>No formal review submissions or inline threads returned</td>
+</tr>
+</tbody>
+</table>
+<h2 id="baseline-findings">Baseline findings</h2>
+<ul>
+<li><strong>Sample size:</strong> 3 PRs, one contributor account, one short period, and related agent/process work. Generalization is not justified.</li>
+<li><strong>First-head CI:</strong> two sampled PRs have recorded successful initial validation paths. #581 had one preview smoke-test failure caused by an HTTP 404 on the deployed preview URL; a later preview run succeeded. The evidence does not establish a code defect.</li>
+<li><strong>Fix-up pushes:</strong> unavailable. The PRs contain 3, 23, and 34 commits respectively, but these are commit totals, not counts of post-submission pushes or fix-ups.</li>
+<li><strong>Substantive reviews:</strong> no formal reviews or inline review threads were returned for these three PRs. This is not evidence that no informal review occurred.</li>
+<li><strong>Follow-up work:</strong> issue <a href="https://github.com/vsimko/gfabasic-rust/issues/585">#585</a> records stale private-asset paths discovered by workflows after #584 merged. The observed mismatch is in private-asset repository contents versus configured paths; the available evidence does not attribute it to the security changes in #584.</li>
+<li><strong>Human blockers:</strong> #584 explicitly retained #583 (account-level security verification) and #472 (required branch-protection check). These are not agent implementation failures; they are external maintainer actions.</li>
+<li><strong>Mutation evidence:</strong> #582's scheduled mutation workflow had not yet supplied a verified killed-mutant result at the time of this sample. The PR must not be credited with a demonstrated mutation score.</li>
+</ul>
+<h2 id="actionable-improvement">Actionable improvement</h2>
+<p>At merge time, update the PR's validation section from “pending CI” to the exact observed outcomes, including failed-then-recovered checks and intentionally skipped jobs. #582's PR description still says validation is pending despite the successful CI runs, whereas #584 records the final outcomes and limitations. This is a documentation/evidence-quality improvement; it does not require a new workflow or dependency.</p>
+<h2 id="recommendation-on-recurring-measurement">Recommendation on recurring measurement</h2>
+<p>Do not add a dashboard, telemetry, scheduled evaluation workflow, or numeric target. The sample is too small and attribution/fix-up-push data are incomplete. Revisit only after a larger, deliberately selected sample across distinct task types and contributors can be assembled with consistent attribution and review data. For now, apply the PR-description improvement and keep the rubric available for occasional manual use.</p>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>
