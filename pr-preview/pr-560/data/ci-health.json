@@ -1,0 +1,263 @@
+{
+  "repository": "vsimko/gfabasic-rust",
+  "generated_at": "2026-11-17T10:10:40.983331Z",
+  "freshness_threshold_hours": 168,
+  "workflows": [
+    {
+      "name": "Documentation checks",
+      "file": "docs.yml",
+      "note": "Markdown, JavaScript, API registry, corpus metadata and local-link validation.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/docs.yml",
+      "state": "in_progress",
+      "latest": {
+        "id": 44062317421,
+        "name": "Documentation checks",
+        "status": "in_progress",
+        "event": "pull_request",
+        "branch": "investigation/537-clean-35-ab-c",
+        "created_at": "2026-11-17T10:10:18Z",
+        "updated_at": "2026-11-17T10:10:23Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/44062317421",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 44059308878,
+        "name": "Documentation checks",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "investigation/537-35u-ab-c-diagnostic",
+        "created_at": "2026-11-17T09:50:47Z",
+        "updated_at": "2026-11-17T09:51:15Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/44059308878",
+        "age_hours": 0,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Rust checks",
+      "file": "rust.yml",
+      "note": "Formatting, Clippy, workspace tests/build and formatter fixtures.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/rust.yml",
+      "state": "in_progress",
+      "latest": {
+        "id": 44062317442,
+        "name": "Rust checks",
+        "status": "in_progress",
+        "event": "pull_request",
+        "branch": "investigation/537-clean-35-ab-c",
+        "created_at": "2026-11-17T10:10:18Z",
+        "updated_at": "2026-11-17T10:10:22Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/44062317442",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 44062166869,
+        "name": "Rust checks",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "investigation/537-clean-35-ab-c",
+        "created_at": "2026-11-17T10:09:22Z",
+        "updated_at": "2026-11-17T10:09:49Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/44062166869",
+        "age_hours": 0,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Security audit",
+      "file": "security-audit.yml",
+      "note": "RustSec audits for workspace, fuzz and benchmark lockfiles.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/security-audit.yml",
+      "state": "in_progress",
+      "latest": {
+        "id": 44062317418,
+        "name": "Security audit",
+        "status": "in_progress",
+        "event": "pull_request",
+        "branch": "investigation/537-clean-35-ab-c",
+        "created_at": "2026-11-17T10:10:18Z",
+        "updated_at": "2026-11-17T10:10:23Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/44062317418",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 44062166727,
+        "name": "Security audit",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "investigation/537-clean-35-ab-c",
+        "created_at": "2026-11-17T10:09:22Z",
+        "updated_at": "2026-11-17T10:09:59Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/44062166727",
+        "age_hours": 0,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Source-loader fuzzing",
+      "file": "fuzz.yml",
+      "note": "Fuzzes the source loader only; lexer/parser fuzzing is not configured.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/fuzz.yml",
+      "state": "success",
+      "latest": {
+        "id": 43869239724,
+        "name": "Fuzzing",
+        "status": "success",
+        "event": "schedule",
+        "branch": "main",
+        "created_at": "2026-11-16T12:44:02Z",
+        "updated_at": "2026-11-16T12:55:36Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43869239724",
+        "age_hours": 21,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 43869239724,
+        "name": "Fuzzing",
+        "status": "success",
+        "event": "schedule",
+        "branch": "main",
+        "created_at": "2026-11-16T12:44:02Z",
+        "updated_at": "2026-11-16T12:55:36Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43869239724",
+        "age_hours": 21,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Benchmarks",
+      "file": "benchmarks.yml",
+      "note": "Source-loading benchmark; pull requests validate compilation without recording measurements.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/benchmarks.yml",
+      "state": "in_progress",
+      "latest": {
+        "id": 44062317428,
+        "name": "Benchmarks",
+        "status": "in_progress",
+        "event": "pull_request",
+        "branch": "investigation/537-clean-35-ab-c",
+        "created_at": "2026-11-17T10:10:18Z",
+        "updated_at": "2026-11-17T10:10:22Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/44062317428",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 44062166735,
+        "name": "Benchmarks",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "investigation/537-clean-35-ab-c",
+        "created_at": "2026-11-17T10:09:22Z",
+        "updated_at": "2026-11-17T10:09:45Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/44062166735",
+        "age_hours": 0,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Release SBOM",
+      "file": "release-sbom.yml",
+      "note": "Validates PR SBOMs and uploads on published releases; release attachment is unproven until a release runs.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/release-sbom.yml",
+      "state": "success",
+      "latest": {
+        "id": 44062317484,
+        "name": "Release SBOM",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "investigation/537-clean-35-ab-c",
+        "created_at": "2026-11-17T10:10:18Z",
+        "updated_at": "2026-11-17T10:10:34Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/44062317484",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 44062317484,
+        "name": "Release SBOM",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "investigation/537-clean-35-ab-c",
+        "created_at": "2026-11-17T10:10:18Z",
+        "updated_at": "2026-11-17T10:10:34Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/44062317484",
+        "age_hours": 0,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "GitHub Pages",
+      "file": "pages.yml",
+      "note": "Builds and publishes the static production website.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/pages.yml",
+      "state": "success",
+      "latest": {
+        "id": 44040368938,
+        "name": "Deploy GitHub Pages",
+        "status": "success",
+        "event": "push",
+        "branch": "main",
+        "created_at": "2026-11-17T07:39:17Z",
+        "updated_at": "2026-11-17T07:39:58Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/44040368938",
+        "age_hours": 2,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 44040368938,
+        "name": "Deploy GitHub Pages",
+        "status": "success",
+        "event": "push",
+        "branch": "main",
+        "created_at": "2026-11-17T07:39:17Z",
+        "updated_at": "2026-11-17T07:39:58Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/44040368938",
+        "age_hours": 2,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Pull request preview",
+      "file": "pr-preview.yml",
+      "note": "Builds and smoke-tests same-repository pull request previews.",
+      "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/pr-preview.yml",
+      "state": "in_progress",
+      "latest": {
+        "id": 44062317625,
+        "name": "Pull request website preview",
+        "status": "in_progress",
+        "event": "pull_request",
+        "branch": "investigation/537-clean-35-ab-c",
+        "created_at": "2026-11-17T10:10:18Z",
+        "updated_at": "2026-11-17T10:10:23Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/44062317625",
+        "age_hours": 0,
+        "freshness": "fresh"
+      },
+      "last_success": {
+        "id": 44059308893,
+        "name": "Pull request website preview",
+        "status": "success",
+        "event": "pull_request",
+        "branch": "investigation/537-35u-ab-c-diagnostic",
+        "created_at": "2026-11-17T09:50:47Z",
+        "updated_at": "2026-11-17T09:51:26Z",
+        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/44059308893",
+        "age_hours": 0,
+        "freshness": "fresh"
+      }
+    },
+    {
+      "name": "Conformance suite",
+      "file": "conformance.yml",
+      "note": "No dedicated compiler conformance workflow is configured.",
+      "state": "not-configured",
+      "latest": null,
+      "last_success": null
+    }
+  ]
+}
