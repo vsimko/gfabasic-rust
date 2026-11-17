@@ -226,7 +226,7 @@ jobs:
           ImageEnhance.Contrast(image).enhance(3).save("artifacts/amiga-3.5-discovery/editor-version-menu-ocr.png")
           PY
           tesseract artifacts/amiga-3.5-discovery/editor-version-menu-ocr.png stdout --psm 6 2>/dev/null | tee artifacts/amiga-3.5-discovery/editor-version-menu-ocr.txt
-          if grep -Eiq 'GFA[ -]?BASIC.*3[.]5(?![0-9U])' artifacts/amiga-3.5-discovery/editor-version-menu-ocr.txt; then
+          if grep -Eiq 'GFA[ -]?BASIC.*3[.]5([^0-9U]|$)' artifacts/amiga-3.5-discovery/editor-version-menu-ocr.txt; then
             echo "EDITOR_MENU_OCR=GFA BASIC 3.5" > artifacts/amiga-3.5-discovery/editor-version-result.txt
           else
             echo "EDITOR_MENU_OCR=INCONCLUSIVE; inspect editor-version-menu.png" > artifacts/amiga-3.5-discovery/editor-version-result.txt
