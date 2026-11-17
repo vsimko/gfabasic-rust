@@ -4,6 +4,24 @@ from scripts.pr_gate import WORKFLOWS, expected_workflows, workflow_result
 
 
 class PullRequestGateTests(unittest.TestCase):
+    def test_gfa_basic_35_probe_selects_clean_disk_diagnostic_workflow(self):
+        self.assertEqual(
+            expected_workflows(["tests/interpreter-probes/amiga-3.5/ab-c-isolation.LST"]),
+            {".github/workflows/amiga-35-ab-c-diagnostic.yml"},
+        )
+
+    def test_gfa_basic_35_workflow_and_runner_changes_select_diagnostic(self):
+        for path in (
+            ".github/workflows/amiga-35-ab-c-diagnostic.yml",
+            "scripts/amiga-35-ab-c.sh",
+            "scripts/amiga-35-ab-c-emulator.sh",
+        ):
+            with self.subTest(path=path):
+                self.assertEqual(
+                    expected_workflows([path]),
+                    {".github/workflows/amiga-35-ab-c-diagnostic.yml"},
+                )
+
     def test_documentation_change_selects_documentation_workflow(self):
         self.assertEqual(
             expected_workflows(["docs/architecture/CI.md"]),
