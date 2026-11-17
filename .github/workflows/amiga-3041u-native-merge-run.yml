@@ -22,6 +22,26 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
 
+      - name: Cache Amiga CI apt packages
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+        with:
+          path: ${{ runner.temp }}/apt-archives
+          key: ${{ runner.os }}-ubuntu-24.04-amiga-apt-${{ hashFiles('.github/workflows/amiga-reference-matrix.yml', '.github/workflows/amiga-native-merge-run.yml', '.github/workflows/amiga-3041u-native-merge-run.yml') }}
+          restore-keys: |
+            ${{ runner.os }}-ubuntu-24.04-amiga-apt-
+
+      - name: Cache Python wheels
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-python-amiga-pip-v1
+          restore-keys: |
+            ${{ runner.os }}-python-amiga-pip-
+
+      - name: Prepare dependency cache directories
+        run: mkdir -p "$RUNNER_TEMP/apt-archives/partial" "$HOME/.cache/pip"
+
+
       - name: Download and extract private GFA BASIC 3.041U interpreter
         env:
           GFA_ASSETS_TOKEN: ${{ secrets.GFA_ASSETS_TOKEN }}
@@ -29,7 +49,7 @@ jobs:
           set -euo pipefail
           test -n "$GFA_ASSETS_TOKEN"
           mkdir -p amiga-volume/S artifacts/amiga-cli-probe
-          python3 -m pip install --break-system-packages amitools
+          python3 -m pip install --cache-dir "$HOME/.cache/pip" --break-system-packages amitools
           ZIP_NAME='GFA-BASIC v3.041 (1989-08-31)(GFA Systemtechnik).zip'
           ZIP_PATH_ENCODED="$(python3 -c 'import sys,urllib.parse; print(urllib.parse.quote(sys.argv[1], safe=""))' "$ZIP_NAME")"
           curl --fail --silent --show-error --location --retry 3 \
