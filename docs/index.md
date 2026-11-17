@@ -15,6 +15,7 @@ This is the canonical OKF v0.2 documentation bundle for gfabasic-rust. Markdown 
 # Architecture and implementation
 
 - [Architecture](architecture/) - System design, decisions, validation, and implementation status.
+- [AI agent security and trust boundaries](architecture/AI-AGENT-SECURITY.md) - Agent capabilities, untrusted inputs, workflow permissions, secrets, and maintainer controls.
 - [Runtime handler registration](runtime-handler-registration.md) - Canonical API handler mapping and runtime dispatch validation.
 
 # Language and API reference
