@@ -21,7 +21,7 @@ jobs:
     timeout-minutes: 90
     steps:
       - name: Select the 03:00 Europe/Berlin schedule
-        id: local-time
+        id: local_time
         shell: bash
         run: |
           if [[ "$GITHUB_EVENT_NAME" == "workflow_dispatch" || "$(TZ=Europe/Berlin date +%H)" == "03" ]]; then
@@ -32,11 +32,11 @@ jobs:
           fi
 
       - name: Check out repository
-        if: steps.local-time.outputs.run == 'true'
+        if: steps.local_time.outputs.run == 'true'
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
 
       - name: Cache Rust toolchain
-        if: steps.local-time.outputs.run == 'true'
+        if: steps.local_time.outputs.run == 'true'
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
         with:
           path: |
@@ -45,7 +45,7 @@ jobs:
           key: ${{ runner.os }}-rustup-1.99.1-minimal-mutation
 
       - name: Cache Cargo dependencies and build artifacts
-        if: steps.local-time.outputs.run == 'true'
+        if: steps.local_time.outputs.run == 'true'
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
         with:
           path: |
@@ -57,17 +57,17 @@ jobs:
             ${{ runner.os }}-cargo-mutation-1.99.1-
 
       - name: Install pinned Rust toolchain
-        if: steps.local-time.outputs.run == 'true'
+        if: steps.local_time.outputs.run == 'true'
         run: |
           rustup toolchain install 1.99.1 --profile minimal
           rustup default 1.99.1
 
       - name: Install pinned cargo-mutants
-        if: steps.local-time.outputs.run == 'true'
+        if: steps.local_time.outputs.run == 'true'
         run: cargo +1.99.1 install cargo-mutants --version 27.1.0 --locked
 
       - name: Run bounded Rust-only mutation testing
-        if: steps.local-time.outputs.run == 'true'
+        if: steps.local_time.outputs.run == 'true'
         run: >-
           cargo mutants
           --package gfabasic-compiler
@@ -79,7 +79,7 @@ jobs:
           --unviable
 
       - name: Upload mutation results
-        if: always() && steps.local-time.outputs.run == 'true'
+        if: always() && steps.local_time.outputs.run == 'true'
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         with:
           name: rust-mutation-results-${{ github.run_id }}
