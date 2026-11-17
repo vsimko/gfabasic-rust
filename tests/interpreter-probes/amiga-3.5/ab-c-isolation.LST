@@ -1,0 +1,36 @@
+REM GFA-BASIC 3.5 candidate isolated A/B/C runtime diagnostic.
+REM Loaded as ASCII through the native Editor Merge (F2).
+REM A and B are persisted before C starts, matching issue #537 controls.
+REM A: trivial execution and output.
+OPEN "O",#1,"DF0:FACT.OUT"
+PRINT #1,"CASE-A:BEFORE"
+PRINT #1,"CASE-A:HELLO"
+CLOSE #1
+
+REM B: declare and access a square 3x3 array without MAT statements.
+DIM a(3,3)
+a(1,1)=11
+a(1,2)=12
+a(3,3)=33
+OPEN "O",#1,"DF0:DIM.OUT"
+PRINT #1,"CASE-B:DIM-BEFORE"
+PRINT #1,"CASE-B:VALUES:";a(1,1);a(1,2);a(3,3)
+IF a(1,1)=11 AND a(1,2)=12 AND a(3,3)=33
+  PRINT #1,"CASE-B:DIM-PASS"
+ELSE
+  PRINT #1,"CASE-B:DIM-FAIL"
+ENDIF
+CLOSE #1
+
+REM C: execute the documented MAT ONE on the same square 3x3 array.
+MAT ONE a()
+OPEN "O",#1,"DF0:MAT.OUT"
+PRINT #1,"CASE-C:MAT-ONE-RETURNED"
+PRINT #1,"CASE-C:IDENTITY:";a(1,1);a(1,2);a(1,3);a(2,1);a(2,2);a(2,3);a(3,1);a(3,2);a(3,3)
+IF a(1,1)=1 AND a(1,2)=0 AND a(1,3)=0 AND a(2,1)=0 AND a(2,2)=1 AND a(2,3)=0 AND a(3,1)=0 AND a(3,2)=0 AND a(3,3)=1
+  PRINT #1,"CASE-C:MAT-ONE-PASS"
+ELSE
+  PRINT #1,"CASE-C:MAT-ONE-FAIL"
+ENDIF
+CLOSE #1
+END
