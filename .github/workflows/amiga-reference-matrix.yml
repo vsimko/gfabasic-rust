@@ -18,7 +18,9 @@ on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
     paths:
-      - "tests/interpreter-probes/**"
+      - "tests/interpreter-probes/amiga-3.52/**"
+      - "tests/interpreter-probes/amiga-3.041u/**"
+      - "tests/interpreter-probes/amiga-3.5/**"
   workflow_dispatch:
   workflow_call:
     inputs:
