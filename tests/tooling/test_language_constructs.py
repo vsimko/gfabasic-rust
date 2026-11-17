@@ -85,5 +85,39 @@ class LanguageConstructSelectionTests(unittest.TestCase):
         self.assertTrue(any("duplicate key" in error for error in validate_catalogue(self.root)))
 
 
+    def test_renamed_construct_selects_only_new_directory(self):
+        renamed = self.catalogue / "beta"
+        (self.catalogue / "alpha").rename(renamed)
+        result = select_jobs([
+            "tests/language-constructs/alpha/manifest.yaml",
+            "tests/language-constructs/beta/manifest.yaml",
+        ], self.root)
+        self.assertEqual([job["construct"] for job in result["include"]], ["beta"])
+
+    def test_malformed_yaml_fails_validation(self):
+        (self.catalogue / "alpha/manifest.yaml").write_text("construct: [unterminated", encoding="utf-8")
+        self.assertTrue(any("invalid YAML" in error for error in validate_catalogue(self.root)))
+
+    def test_missing_probe_fails_validation(self):
+        (self.catalogue / "alpha/probe-3.5.LST").unlink()
+        self.assertTrue(any("missing or unsafe probe" in error for error in validate_catalogue(self.root)))
+
+    def test_unknown_version_key_fails_schema_validation(self):
+        manifest = self.catalogue / "alpha/manifest.yaml"
+        data = yaml.safe_load(manifest.read_text(encoding="utf-8"))
+        data["versions"]["3.53"] = data["versions"]["3.5"]
+        manifest.write_text(yaml.safe_dump(data, sort_keys=False), encoding="utf-8")
+        self.assertTrue(any("3.53" in error for error in validate_catalogue(self.root)))
+
+    def test_duplicate_construct_ids_fail_validation(self):
+        self.construct("beta", {"3.52": "probe-3.52.LST"})
+        manifest = self.catalogue / "beta/manifest.yaml"
+        data = yaml.safe_load(manifest.read_text(encoding="utf-8"))
+        data["construct"]["id"] = "alpha"
+        manifest.write_text(yaml.safe_dump(data, sort_keys=False), encoding="utf-8")
+        errors = validate_catalogue(self.root)
+        self.assertTrue(any("duplicate construct ID" in error for error in errors))
+
+
 if __name__ == "__main__":
     unittest.main()
