@@ -48,3 +48,9 @@ Run [#44046096736](https://github.com/vsimko/gfabasic-rust/actions/runs/44046096
 - `CASE_C_MAT_ONE=TASK_HELD_CONFIRMED`
 
 The A and B output files contain their expected markers. C produced no `MAT.OUT`; the captured Workbench screenshot OCR reads `Software error - task held / Finish ALL disk activity`. This reproduces the symptom in the exact 3.5U setup after the same-run controls pass. It does not identify the interpreter's internal cause. Keep this probe out of the stable passing suite, and do not infer 3.5U behavior from 3.52 results.
+
+### Source-disk integrity caveat
+
+The 3.5U source archive is explicitly tagged `[b corrupt files]`. The workflow extracts the sole ADF from that archive, reads only `GFABasic` from it, and verifies the extracted executable against a pinned SHA-256. Amiberry then mounts that original ADF as DF1; the A/B/C listing runs from a separately created and formatted writable DF0. Thus the filename is a legitimate confounder, but it does **not** establish that the `GFABasic` executable itself is corrupt: the tag may refer to other files on the disk, and the pinned hash establishes identity rather than known-good integrity.
+
+The task-held result should therefore be treated as a reproduction against this particular potentially damaged 3.5U disk image, not yet as a clean-image interpreter defect. A decisive follow-up is to repeat the same A/B/C probe using a separately sourced, independently verified clean 3.5U disk/executable (or compare the extracted executable against a trusted dump). Until then, disk-image/file corruption remains an unresolved alternative explanation.
