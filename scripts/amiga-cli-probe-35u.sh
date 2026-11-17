@@ -59,7 +59,7 @@ for diagnostic in insert-floppy-ipc.txt list-floppies-ipc.txt stdin-save.LST; do
   fi
 done
 
-for screenshot in editor-before-merge.png merge-dialog.png merge-file-row-before-click.png merge-file-row-y215.png after-merge.png after-run-dialog.png after-run.png; do
+for screenshot in interpreter-version-menu.png editor-before-merge.png merge-dialog.png merge-file-row-before-click.png merge-file-row-y215.png after-merge.png after-run-dialog.png after-run.png; do
   test -s "artifacts/amiga-cli-probe/$screenshot"
 done
 
