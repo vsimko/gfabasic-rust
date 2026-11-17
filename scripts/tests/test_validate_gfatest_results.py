@@ -25,7 +25,7 @@ class ValidateGfaTestResults(unittest.TestCase):
         self.assertEqual((result.passed, result.failed), (1, 1))
 
     def test_different_is_a_valid_non_failure_result(self):
-        result = self.validate(b"GFATEST:fact-zero:DIFFERENT\nGFATEST:matrix-one:PASS\n")
+        result = self.validate(b"GFATEST:hello:DIFFERENT\nGFATEST:fact-zero:PASS\n")
         self.assertTrue(result.valid, result.errors)
         self.assertEqual((result.passed, result.failed, result.different), (1, 0, 1))
 
