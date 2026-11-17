@@ -48,7 +48,7 @@
 </tr>
 <tr>
 <td>Amiga GFA-BASIC 3.5</td>
-<td>Normative source-language target under ADR 0009; no active native runtime profile currently configured</td>
+<td>Normative source-language target under ADR 0009; editor identity verified from the held-right-button menu screenshot; native conformance probes remain untested</td>
 </tr>
 <tr>
 <td>GFA-BASIC 3.5U</td>
@@ -56,7 +56,7 @@
 </tr>
 </tbody>
 </table>
-<p>Run the same applicable probes against active native profiles when the licensed interpreter asset and native harness are available. The current profiles are 3.52 and 3.041U. Preserve separate results for each exact version; do not relabel 3.041U as exactly 3.0. Amiga 3.5 remains the normative documented source target, but native 3.5 coverage is UNTESTED until a verified 3.5 interpreter and active workflow are configured. The previously inventoried 3.5U package/workflow is retired and must not be used for new runs or reported as current 3.5 coverage.</p>
+<p>Run the same applicable probes against active native profiles when the licensed interpreter asset and native harness are available. The current profiles are 3.52 and 3.041U. Preserve separate results for each exact version; do not relabel 3.041U as exactly 3.0. Amiga 3.5 remains the normative documented source target. The candidate interpreter identity is now visually verified: the running editor menu captured with the right mouse button held displays <code>GFA-BASIC 3.5 Block</code>. Native language conformance probes remain UNTESTED; the current matrix captures the editor identity but does not yet execute the 3.5 probe suite. The previously inventoried 3.5U package/workflow is retired and must not be used for new runs or reported as current 3.5 coverage.</p>
 <p>A confirmed difference is a compatibility distinction, not automatically a failure. Expected behavior must be scoped to the tested version and supported by the relevant manual or direct interpreter observation.</p>
 <h2 id="result-vocabulary">Result vocabulary</h2>
 <p>Record one result per probe and interpreter version:</p>
@@ -77,11 +77,11 @@
 <ul>
 <li>New conformance probes use 3.52 as the default baseline.</li>
 <li>Run applicable probes on 3.041U as the available 3.0-era comparison profile.</li>
-<li>Keep 3.5 runtime coverage UNTESTED until a verified non-retired 3.5 runtime profile exists.</li>
+<li>Keep 3.5 language-conformance probe coverage UNTESTED until a native 3.5 probe workflow executes the applicable suite; the editor-menu screenshot verifies interpreter identity only.</li>
 <li>3.5U is excluded from new runs and current matrix reporting unless the maintainer explicitly reactivates it.</li>
 <li>Reports and fixtures must retain exact version identity and per-version outcomes.</li>
 <li>A missing interpreter asset or unavailable workflow is an explicit coverage gap.</li>
-<li>The active native workflows are <code>.github/workflows/amiga-native-merge-run.yml</code> (3.52) and <code>.github/workflows/amiga-3041u-native-merge-run.yml</code> (3.041U). The 3.5U workflow is legacy/retired. Check workflow configuration and latest CI runs before claiming a profile is runnable.</li>
+<li>The unified matrix entry point is <code>.github/workflows/amiga-reference-matrix.yml</code>. It invokes the 3.52 and 3.041U native workflows and captures the 3.5 editor's held-right-button version menu as identity evidence. The 3.5 language probe suite remains <code>UNTESTED</code>. The individual workflows remain available for focused manual runs. A successful matrix run validates only the configured probes and result-collection protocol, not complete language conformance.</li>
 <li>The status of private assets and runnable workflows must be checked from the current workflow configuration and latest issue/CI evidence, not inferred from the media inventory alone.</li>
 </ul>
 <h2 id="evidence-and-limitations">Evidence and limitations</h2>
