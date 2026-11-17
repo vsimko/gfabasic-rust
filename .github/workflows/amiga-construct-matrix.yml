@@ -95,8 +95,7 @@ jobs:
             case "$DISPATCH_MODE" in
               validate-only)
                 python scripts/validate_language_constructs.py validate
-                printf '{"selection":"validate-only","changed_constructs":[],"include":[]}
-' > "$RUNNER_TEMP/selection.json"
+                printf '%s\n' '{"selection":"validate-only","changed_constructs":[],"include":[]}' > "$RUNNER_TEMP/selection.json"
                 ;;
               all)
                 python scripts/validate_language_constructs.py select --all --format json > "$RUNNER_TEMP/selection.json"
@@ -213,8 +212,7 @@ jobs:
           NATIVE_REASON: ${{ needs.preflight.outputs.reason }}
         run: |
           set -euo pipefail
-          printf '%s
-' "$SELECTION_JSON" > "$RUNNER_TEMP/selection.json"
+          printf '%s\n' "$SELECTION_JSON" > "$RUNNER_TEMP/selection.json"
           python scripts/aggregate_language_construct_results.py \
             --selection "$RUNNER_TEMP/selection.json" \
             --artifacts artifacts/native-results \
