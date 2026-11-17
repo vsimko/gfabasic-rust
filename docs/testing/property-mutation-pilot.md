@@ -27,8 +27,12 @@ The selected property target is the stable `SourceFile` line-index interface. Th
 
 This is a bounded deterministic property test, not a language-conformance test. It generates transport/source-map text only and makes no claim about GFA BASIC source encoding or syntax.
 
-## Mutation pilot
+## Mutation testing
 
-A bounded manual mutation pilot will target the Rust `SourceFile::line_column` implementation exercised by the generated property test. The mutant will alter Unicode column counting; the generated supplementary-plane character cases must detect the incorrect column. No Python validator or non-Rust implementation is in the mutation scope. The result will be recorded after the targeted Rust test runs.
+Mutation testing is intentionally excluded from pull-request and push CI because each mutant rebuilds and retests the Rust package. It runs in the dedicated **Rust mutation testing** workflow once per day at 02:00 UTC (approximately 03:00 CET), and can also be started manually with `workflow_dispatch`.
 
-No mutation-testing dependency is added. The pilot is intentionally narrow; it does not establish a repository-wide mutation score.
+The workflow uses the pinned `cargo-mutants` release and restricts mutation generation to `crates/gfabasic-compiler/src/source.rs`, testing only the `gfabasic-compiler` Rust package. Python scripts, generated documentation, and other non-Rust implementations are out of scope. Results are uploaded as a workflow artifact for review.
+
+The initial bounded pilot is the Unicode-column behavior in `SourceFile::line_column`: a byte-counting mutant (`prefix.len()`) must be detected by the generated deterministic test, while the committed implementation counts Unicode scalar values (`prefix.chars().count()`). The earlier one-line probe was applied only temporarily and has been reverted; its CI attempt stopped at rustfmt before tests ran, so it is **not** counted as a killed mutant.
+
+This workflow establishes a narrow, scheduled Rust-only mutation baseline. It does not establish a repository-wide mutation score.
