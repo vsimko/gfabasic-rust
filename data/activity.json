@@ -1,9 +1,25 @@
 {
   "schema_version": 1,
   "status": "fresh",
-  "generated_at": "2026-11-17T13:18:23.706252+00:00",
-  "last_successful_at": "2026-11-17T13:18:23.706252+00:00",
+  "generated_at": "2026-11-17T14:49:06.729857+00:00",
+  "last_successful_at": "2026-11-17T14:49:06.729857+00:00",
   "items": [
+    {
+      "type": "merged_pull_request",
+      "title": "Add native Amiga GFA-BASIC 3.5 smoke probes",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/564",
+      "number": 564,
+      "timestamp": "2026-11-17T14:48:02Z",
+      "summary": "PR #564 merged"
+    },
+    {
+      "type": "commit",
+      "title": "Add native Amiga GFA-BASIC 3.5 smoke probes (#564)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/6bb05d929ac840c3d981130a0ab73fba1318b8d1",
+      "number": null,
+      "timestamp": "2026-11-17T14:48:02Z",
+      "summary": "Commit 6bb05d9"
+    },
     {
       "type": "merged_pull_request",
       "title": "Add systematic Amiga GFA-BASIC reference version matrix",
@@ -83,22 +99,6 @@
       "number": null,
       "timestamp": "2026-11-17T11:29:40Z",
       "summary": "Commit e4e2623"
-    },
-    {
-      "type": "commit",
-      "title": "docs: align Amiga interpreter matrix with current baseline",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/604f55936cde873370afb9199b1eb5674a2c4934",
-      "number": null,
-      "timestamp": "2026-11-17T11:29:35Z",
-      "summary": "Commit 604f559"
-    },
-    {
-      "type": "commit",
-      "title": "docs: align Amiga interpreter matrix with current baseline",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/8b93d064e23aa9843024c3f471bc930450ec5401",
-      "number": null,
-      "timestamp": "2026-11-17T11:29:31Z",
-      "summary": "Commit 8b93d06"
     }
   ]
 }
