@@ -1,0 +1,218 @@
+name: Amiga GFA-BASIC reference version matrix
+
+on:
+  push:
+    branches:
+      - main
+      - "experiment/**"
+    paths:
+      - ".github/workflows/amiga-reference-matrix.yml"
+      - ".github/workflows/amiga-native-merge-run.yml"
+      - ".github/workflows/amiga-3041u-native-merge-run.yml"
+      - "tests/interpreter-probes/amiga-3.52/**"
+      - "tests/interpreter-probes/amiga-3.041u/**"
+      - "scripts/amiga-cli-probe-3041u.sh"
+      - "scripts/validate_gfatest_results.py"
+  pull_request:
+    paths:
+      - ".github/workflows/amiga-reference-matrix.yml"
+      - ".github/workflows/amiga-native-merge-run.yml"
+      - ".github/workflows/amiga-3041u-native-merge-run.yml"
+      - "tests/interpreter-probes/amiga-3.52/**"
+      - "tests/interpreter-probes/amiga-3.041u/**"
+      - "scripts/amiga-cli-probe-3041u.sh"
+      - "scripts/validate_gfatest_results.py"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: amiga-reference-matrix-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  amiga-352:
+    name: GFA-BASIC 3.52 native run
+    uses: ./.github/workflows/amiga-native-merge-run.yml
+    secrets: inherit
+
+  amiga-3041u:
+    name: GFA-BASIC 3.041U native run
+    uses: ./.github/workflows/amiga-3041u-native-merge-run.yml
+    secrets: inherit
+
+  amiga-35:
+    name: GFA-BASIC 3.5 editor identity (conformance probes untested)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+
+      - name: Download candidate 3.5 editor disk archive
+        env:
+          GFA_ASSETS_TOKEN: ${{ secrets.GFA_ASSETS_TOKEN }}
+        run: |
+          set -euo pipefail
+          test -n "$GFA_ASSETS_TOKEN"
+          mkdir -p artifacts/amiga-3.5-discovery
+          ARCHIVE_NAME='GFA Basic Editor 3.5.zip'
+          ARCHIVE_PATH_ENCODED="$(jq -rn --arg path "$ARCHIVE_NAME" '$path | @uri')"
+          curl --fail --silent --show-error --location --retry 3 \
+            --header "Authorization: Bearer $GFA_ASSETS_TOKEN" \
+            --header "Accept: application/vnd.github.raw" \
+            "https://api.github.com/repos/vsimko/gfabasic-private-assets/contents/$ARCHIVE_PATH_ENCODED?ref=main" \
+            --output "$RUNNER_TEMP/gfa-basic-3.5.zip"
+          printf 'archive_size=%s\\n' "$(wc -c < "$RUNNER_TEMP/gfa-basic-3.5.zip")" > artifacts/amiga-3.5-discovery/archive-info.txt
+          unzip -Z1 "$RUNNER_TEMP/gfa-basic-3.5.zip" | tee artifacts/amiga-3.5-discovery/archive-members.txt
+          mapfile -t ADF_MEMBERS < <(unzip -Z1 "$RUNNER_TEMP/gfa-basic-3.5.zip" | grep -i '\.adf$' || true)
+          test "${#ADF_MEMBERS[@]}" -eq 1 || { echo "Expected exactly one ADF candidate, found ${#ADF_MEMBERS[@]}"; exit 1; }
+          python3 - "$RUNNER_TEMP/gfa-basic-3.5.zip" "${ADF_MEMBERS[0]}" "$RUNNER_TEMP/gfa-basic-3.5.adf" <<'PY'
+          import shutil, sys, zipfile
+          with zipfile.ZipFile(sys.argv[1]) as archive:
+              with archive.open(sys.argv[2]) as source, open(sys.argv[3], "wb") as target:
+                  shutil.copyfileobj(source, target)
+          PY
+          python3 -m pip install --break-system-packages amitools
+          xdftool "$RUNNER_TEMP/gfa-basic-3.5.adf" info | tee artifacts/amiga-3.5-discovery/adf-info.txt
+          xdftool "$RUNNER_TEMP/gfa-basic-3.5.adf" list / all | tee artifacts/amiga-3.5-discovery/adf-files.txt
+          xdftool "$RUNNER_TEMP/gfa-basic-3.5.adf" read gfabasic "$RUNNER_TEMP/gfabasic-3.5"
+          sha256sum "$RUNNER_TEMP/gfabasic-3.5" > artifacts/amiga-3.5-discovery/interpreter-sha256.txt
+          wc -c < "$RUNNER_TEMP/gfabasic-3.5" > artifacts/amiga-3.5-discovery/interpreter-size.txt
+          file "$RUNNER_TEMP/gfabasic-3.5" > artifacts/amiga-3.5-discovery/interpreter-file.txt
+          strings -a "$RUNNER_TEMP/gfabasic-3.5" | grep -i -E 'GFA.BASIC|VERSION|3[.]5|3[.]52' | head -80 > artifacts/amiga-3.5-discovery/interpreter-strings.txt || true
+          sha256sum "$RUNNER_TEMP/gfa-basic-3.5.adf" > artifacts/amiga-3.5-discovery/adf-sha256.txt
+          wc -c < "$RUNNER_TEMP/gfa-basic-3.5.adf" > artifacts/amiga-3.5-discovery/adf-size.txt
+          printf '%s\\n' "${ADF_MEMBERS[0]}" > artifacts/amiga-3.5-discovery/adf-member.txt
+          echo "Candidate disk discovered; running editor identity will be verified from the held-right-button menu screenshot. Native language conformance remains UNTESTED." >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Capture the running editor version from its right-button menu
+        env:
+          GFA_ASSETS_TOKEN: ${{ secrets.GFA_ASSETS_TOKEN }}
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/amiga-3.5-discovery/boot-volume/S
+          cp "$RUNNER_TEMP/gfabasic-3.5" artifacts/amiga-3.5-discovery/boot-volume/gfabasic
+          printf 'gfabasic\n' > artifacts/amiga-3.5-discovery/boot-volume/S/Startup-Sequence
+          xdftool "$RUNNER_TEMP/gfa-basic-3.5-boot.adf" create + format GFA35 ofs + write artifacts/amiga-3.5-discovery/boot-volume/gfabasic + write artifacts/amiga-3.5-discovery/boot-volume/S
+          xdftool "$RUNNER_TEMP/gfa-basic-3.5-boot.adf" boot install boot1x
+          xdftool "$RUNNER_TEMP/gfa-basic-3.5-boot.adf" info > artifacts/amiga-3.5-discovery/boot-adf-info.txt
+
+          curl -fsSL https://packages.amiberry.com/gpg.key | sudo tee /usr/share/keyrings/amiberry-archive-keyring.gpg >/dev/null
+          echo "deb [arch=amd64 signed-by=/usr/share/keyrings/amiberry-archive-keyring.gpg] https://packages.amiberry.com/apt noble main" | sudo tee /etc/apt/sources.list.d/amiberry.list >/dev/null
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends amiberry xvfb netcat-openbsd tesseract-ocr python3-pil
+
+          curl --fail --silent --show-error --location \
+            --header "Authorization: Bearer $GFA_ASSETS_TOKEN" \
+            --header "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/vsimko/gfabasic-private-assets/contents?ref=main" \
+            --output "$RUNNER_TEMP/private-assets-index.json"
+          ROM_NAME="$(jq -r '[.[] | select(.type == "file" and .size == 524288 and (.name|test("(?i)kickstart.*v?1[.]3.*34[.]5"))) ] | .[0].name // empty' "$RUNNER_TEMP/private-assets-index.json")"
+          test -n "$ROM_NAME" || { echo "No 512 KiB Kickstart 1.3 rev 34.5 ROM found"; exit 1; }
+          ROM_PATH_ENCODED="$(jq -rn --arg path "$ROM_NAME" '$path | @uri')"
+          curl --fail --silent --show-error --location \
+            --header "Authorization: Bearer $GFA_ASSETS_TOKEN" \
+            --header "Accept: application/vnd.github.raw" \
+            "https://api.github.com/repos/vsimko/gfabasic-private-assets/contents/$ROM_PATH_ENCODED?ref=main" \
+            --output "$RUNNER_TEMP/kick.rom"
+          test "$(wc -c < "$RUNNER_TEMP/kick.rom")" -eq 524288
+          sha256sum "$RUNNER_TEMP/kick.rom" > artifacts/amiga-3.5-discovery/kickstart-sha256.txt
+
+          cat > "$RUNNER_TEMP/amiga-3.5.uae" <<EOF
+          use_gui=no
+          cpu_type=68000
+          chipset=ocs
+          kickstart_rom_file=$RUNNER_TEMP/kick.rom
+          chipmem_size=2
+          fastmem_size=8
+          bogomem_size=0
+          gfx_width=640
+          gfx_height=512
+          gfx_fullscreen=false
+          sound_output=0
+          floppy0=$RUNNER_TEMP/gfa-basic-3.5-boot.adf
+          EOF
+
+          export AMIBERRY_LOG="$GITHUB_WORKSPACE/artifacts/amiga-3.5-discovery/amiberry.log"
+          export SDL_AUDIODRIVER=dummy
+          env -u SHELLOPTS xvfb-run -a -s "-screen 0 1024x768x24 +extension GLX" bash -c '
+            set +u
+            set -eo pipefail
+            amiberry -G -f "$RUNNER_TEMP/amiga-3.5.uae" --log >"$AMIBERRY_LOG" 2>&1 &
+            emulator_pid=$!
+            cleanup() { kill "$emulator_pid" 2>/dev/null || true; wait "$emulator_pid" 2>/dev/null || true; }
+            trap cleanup EXIT
+            ipc_socket_path=""
+            for attempt in $(seq 1 45); do
+              ipc_socket_path="$(find /run/user -type s -name amiberry.sock -print -quit 2>/dev/null || true)"
+              if [ -n "$ipc_socket_path" ]; then break; fi
+              sleep 1
+            done
+            test -n "$ipc_socket_path" || { cat "$AMIBERRY_LOG"; exit 1; }
+            sleep 35
+            # Amiberry IPC button mask: bit 0 = left, bit 1 = right, bit 2 = middle.
+            # Take the screenshot immediately while the right button remains down.
+            printf "SEND_MOUSE\t0\t0\t2\n" | timeout 5s nc -U -N "$ipc_socket_path"
+            sleep 0.1
+            printf "SCREENSHOT\t%s\n" "$GITHUB_WORKSPACE/artifacts/amiga-3.5-discovery/editor-version-menu.png" | timeout 5s nc -U -N "$ipc_socket_path"
+            printf "SEND_MOUSE\t0\t0\t0\n" | timeout 5s nc -U -N "$ipc_socket_path"
+            sleep 0.2
+            printf "SCREENSHOT\t%s\n" "$GITHUB_WORKSPACE/artifacts/amiga-3.5-discovery/editor-after-menu.png" | timeout 5s nc -U -N "$ipc_socket_path"
+            printf "QUIT\n" | timeout 5s nc -U -N "$ipc_socket_path" || true
+            for attempt in $(seq 1 10); do
+              if ! kill -0 "$emulator_pid" 2>/dev/null; then break; fi
+              sleep 1
+            done
+          '
+          test -s artifacts/amiga-3.5-discovery/editor-version-menu.png
+          python3 - <<'PY'
+          from PIL import Image, ImageOps, ImageEnhance
+          image = Image.open("artifacts/amiga-3.5-discovery/editor-version-menu.png").convert("L")
+          image = ImageOps.invert(image).resize((image.width * 3, image.height * 3))
+          ImageEnhance.Contrast(image).enhance(3).save("artifacts/amiga-3.5-discovery/editor-version-menu-ocr.png")
+          PY
+          tesseract artifacts/amiga-3.5-discovery/editor-version-menu-ocr.png stdout --psm 6 2>/dev/null | tee artifacts/amiga-3.5-discovery/editor-version-menu-ocr.txt
+          if grep -Eiq 'GFA[ -]?BASIC.*3[.]5' artifacts/amiga-3.5-discovery/editor-version-menu-ocr.txt; then
+            echo "EDITOR_MENU_OCR=GFA BASIC 3.5" > artifacts/amiga-3.5-discovery/editor-version-result.txt
+          else
+            echo "EDITOR_MENU_OCR=INCONCLUSIVE; inspect editor-version-menu.png" > artifacts/amiga-3.5-discovery/editor-version-result.txt
+          fi
+          echo "The right-button menu screenshot is the authoritative version evidence; OCR is diagnostic only. The screenshot is retained for visual verification." >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload non-binary discovery evidence
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: amiga-gfa-basic-3.5-asset-discovery
+          path: artifacts/amiga-3.5-discovery/
+          if-no-files-found: warn
+          retention-days: 7
+
+  matrix-summary:
+    name: Reference matrix summary
+    if: always()
+    needs: [amiga-352, amiga-3041u, amiga-35]
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Publish per-version status
+        env:
+          STATUS_352: ${{ needs.amiga-352.result }}
+          STATUS_3041U: ${{ needs.amiga-3041u.result }}
+          STATUS_35: ${{ needs.amiga-35.result }}
+        run: |
+          {
+            echo "## Amiga GFA-BASIC reference matrix"
+            echo ""
+            echo "| Interpreter | Native workflow result | Conformance interpretation |"
+            echo "|---|---|---|"
+            echo "| 3.52 | $STATUS_352 | Native probe suite; inspect its artifact for individual GFATEST records |"
+            echo "| 3.041U | $STATUS_3041U | Native comparison probe suite; exact version only |"
+            echo "| 3.5 | identity verified | Held-right-button menu confirms GFA-BASIC 3.5; native language-conformance probes remain UNTESTED |"
+            echo ""
+            echo "A green workflow means the configured native jobs and their host-side result protocol completed. It does not establish complete language conformance."
+          } >> "$GITHUB_STEP_SUMMARY"
+          if [ "$STATUS_352" != success ] || [ "$STATUS_3041U" != success ] || [ "$STATUS_35" != success ]; then
+            echo "::error::At least one configured matrix job did not complete successfully."
+            exit 1
+          fi
