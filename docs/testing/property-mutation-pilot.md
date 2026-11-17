@@ -29,7 +29,7 @@ This is a bounded deterministic property test, not a language-conformance test. 
 
 ## Mutation testing
 
-Mutation testing is intentionally excluded from pull-request and push CI because each mutant rebuilds and retests the Rust package. It runs in the dedicated **Rust mutation testing** workflow once per day at 02:00 UTC (approximately 03:00 CET), and can also be started manually with `workflow_dispatch`.
+Mutation testing is intentionally excluded from pull-request and push CI because each mutant rebuilds and retests the Rust package. It runs in the dedicated **Rust mutation testing** workflow once per day at 03:00 Europe/Berlin. Since GitHub Actions cron uses UTC, the workflow checks both 01:00 and 02:00 UTC and runs the expensive job only at the matching local hour, including CET/CEST changes. It can also be started manually with `workflow_dispatch`.
 
 The workflow uses the pinned `cargo-mutants` release and restricts mutation generation to `crates/gfabasic-compiler/src/source.rs`, testing only the `gfabasic-compiler` Rust package. Python scripts, generated documentation, and other non-Rust implementations are out of scope. Results are uploaded as a workflow artifact for review.
 
