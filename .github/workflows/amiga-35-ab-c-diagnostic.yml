@@ -37,7 +37,7 @@ jobs:
           python3 - "$RUNNER_TEMP/gfa-basic-editor-3.5.zip" <<'PY'
           import hashlib, pathlib, sys
           data = pathlib.Path(sys.argv[1]).read_bytes()
-          actual = hashlib.sha1(b"blob " + str(len(data)).encode() + b"\\0" + data).hexdigest()
+          actual = hashlib.sha1(b"blob " + str(len(data)).encode() + b"\0" + data).hexdigest()
           expected = "d92b15b971186a9d93132dd78e79818e5fc5aea9"
           if actual != expected:
               raise SystemExit(f"Unexpected private ZIP Git blob SHA: {actual}")
