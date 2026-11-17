@@ -29,6 +29,6 @@ This is a bounded deterministic property test, not a language-conformance test. 
 
 ## Mutation pilot
 
-A bounded manual mutation pilot is being run against Unicode column calculation. The deliberate mutant counts UTF-16 code units instead of Unicode scalar values; the existing examples use BMP text and do not distinguish those units, while the generated alphabet includes a supplementary-plane emoji. The result and classification will be recorded here after CI completes.
+A bounded manual mutation pilot targets the critical API registry validator. The deliberate mutant disables duplicate declaration-ID detection; the existing `test_duplicate_ids_fail` case should kill it. The validator is restored after the experiment. The result and classification will be recorded here after CI completes.
 
 No mutation-testing dependency is added. The pilot is intentionally narrow; it does not establish a repository-wide mutation score.
