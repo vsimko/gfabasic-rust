@@ -65,7 +65,7 @@ jobs:
             --output "$RUNNER_TEMP/gfa-basic-3.5.zip"
           printf 'archive_size=%s\\n' "$(wc -c < "$RUNNER_TEMP/gfa-basic-3.5.zip")" > artifacts/amiga-3.5-discovery/archive-info.txt
           unzip -Z1 "$RUNNER_TEMP/gfa-basic-3.5.zip" | tee artifacts/amiga-3.5-discovery/archive-members.txt
-          mapfile -t ADF_MEMBERS < <(unzip -Z1 "$RUNNER_TEMP/gfa-basic-3.5.zip" | grep -i -E '\\.adf$' || true)
+          mapfile -t ADF_MEMBERS < <(unzip -Z1 "$RUNNER_TEMP/gfa-basic-3.5.zip" | grep -i '\.adf$' || true)
           test "${#ADF_MEMBERS[@]}" -eq 1 || { echo "Expected exactly one ADF candidate, found ${#ADF_MEMBERS[@]}"; exit 1; }
           python3 - "$RUNNER_TEMP/gfa-basic-3.5.zip" "${ADF_MEMBERS[0]}" "$RUNNER_TEMP/gfa-basic-3.5.adf" <<'PY'
           import shutil, sys, zipfile
