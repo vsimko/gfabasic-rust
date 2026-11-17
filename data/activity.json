@@ -1,9 +1,25 @@
 {
   "schema_version": 1,
   "status": "fresh",
-  "generated_at": "2026-11-17T11:30:33.453711+00:00",
-  "last_successful_at": "2026-11-17T11:30:33.453711+00:00",
+  "generated_at": "2026-11-17T11:31:07.586241+00:00",
+  "last_successful_at": "2026-11-17T11:31:07.586241+00:00",
   "items": [
+    {
+      "type": "commit",
+      "title": "docs: remove retired 3.5U test plan",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/e65b369da4b17b7c714cc3fb8de319ad2c752af6",
+      "number": null,
+      "timestamp": "2026-11-17T11:31:04Z",
+      "summary": "Commit e65b369"
+    },
+    {
+      "type": "commit",
+      "title": "docs: clarify Amiga conformance ADR status",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/30fd138390d56df93f3e94e87e0d9afda147cb7f",
+      "number": null,
+      "timestamp": "2026-11-17T11:30:45Z",
+      "summary": "Commit 30fd138"
+    },
     {
       "type": "commit",
       "title": "docs: clarify active Amiga runtime profiles",
@@ -83,22 +99,6 @@
       "number": null,
       "timestamp": "2026-11-17T07:39:14Z",
       "summary": "Commit 59fbbbf"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "Drive PDF source indexing from a JSON manifest",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/551",
-      "number": 551,
-      "timestamp": "2026-11-17T06:52:09Z",
-      "summary": "PR #551 merged"
-    },
-    {
-      "type": "commit",
-      "title": "Drive PDF source indexing from a JSON manifest (#551)",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/89dde2f7c88d8d07ced2022a8604cb925c57f7a3",
-      "number": null,
-      "timestamp": "2026-11-17T06:52:08Z",
-      "summary": "Commit 89dde2f"
     }
   ]
 }
