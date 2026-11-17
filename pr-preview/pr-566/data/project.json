@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "source_revision": "cff73edd955e51d9a098a5b431405e0130b9428b",
+  "source_revision": "1e5532b138f6c4fc172ed72e4d7d3e5fa4ce1742",
   "project": {
     "name": "gfabasic-rust",
     "language": "Rust",
