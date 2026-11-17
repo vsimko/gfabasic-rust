@@ -53,9 +53,9 @@
 <td style="text-align:right">9-4</td>
 </tr>
 <tr>
-<td>Menu message data</td>
+<td>Menu message data / function-like accessor</td>
 <td><code>MENU(x)</code>, <code>MENU(0..11)</code></td>
-<td>Exposes event-message fields including selected BASIC-menu array index, IDCMP class, code, qualifier, object address, mouse coordinates, time and window address. Event-specific meanings are documented in the following tables.</td>
+<td>Function-like indexed accessor for fields in the Intuition event-message buffer; it is distinct from the <code>MENU m$()</code> menu-installation statement and the <code>MENU(x,y)</code> / <code>MENU(x,str$)</code> menu-entry mutation commands. Fields include BASIC-menu index, IDCMP class, code, qualifier, object address, mouse coordinates, time and window address.</td>
 <td style="text-align:right">9-5–9-8</td>
 </tr>
 <tr>
