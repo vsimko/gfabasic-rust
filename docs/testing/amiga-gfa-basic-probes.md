@@ -22,7 +22,7 @@ The project uses three reference versions. See [ADR 0017](../architecture/adr/00
 
 The unified entry point is `.github/workflows/amiga-reference-matrix.yml`. It calls the two active native workflows as reusable workflows and captures the running 3.5 editor's version menu for identity evidence. The 3.5 language probe suite remains `UNTESTED`; it never substitutes the retired 3.5U profile. Run this matrix for a combined view. The individual native workflows remain manually dispatchable for focused diagnosis. A green matrix means the configured native jobs and GFATEST collection protocol completed; it is not a claim of complete language conformance.
 
-Run each applicable probe against active native profiles for which the licensed asset and workflow are available. The current native profiles are 3.52 and 3.041U. Keep results separate; never relabel 3.041U as exactly 3.0 or transfer its results to 3.5. Amiga GFA-BASIC 3.5 remains the normative documented target, The running editor has now been identified as `GFA-BASIC 3.5` from a screenshot captured while the right mouse button was held; native 3.5 probe execution remains untested. The 3.5U profile is retired.
+Run each applicable probe against active native profiles for which the licensed asset and workflow are available. The current native profiles are 3.52 and 3.041U. Keep results separate; never relabel 3.041U as exactly 3.0 or transfer its results to 3.5. Amiga GFA-BASIC 3.5 remains the normative documented target; its editor identity is verified from the held-right-button menu screenshot, while native 3.5 probe execution remains untested. The 3.5U profile is retired.
 
 Use these outcomes per probe/version:
 
