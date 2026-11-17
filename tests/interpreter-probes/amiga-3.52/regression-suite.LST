@@ -64,33 +64,33 @@ ENDIF
 REM Function checks: INT, SQR, SUCC, STRING$, and HEX$.
 v = INT(3.7)
 IF v=3
-  PRINT 2,"GFATEST:int:PASS"
+  PRINT #2,"GFATEST:int:PASS"
 ELSE
-  PRINT 2,"GFATEST:int:FAIL"
+  PRINT #2,"GFATEST:int:FAIL"
 ENDIF
 v = SQR(9)
 IF v=3
-  PRINT 2,"GFATEST:sqr:PASS"
+  PRINT #2,"GFATEST:sqr:PASS"
 ELSE
-  PRINT 2,"GFATEST:sqr:FAIL"
+  PRINT #2,"GFATEST:sqr:FAIL"
 ENDIF
 v = SUCC(1)
 IF v=2
-  PRINT 2,"GFATEST:succ:PASS"
+  PRINT #2,"GFATEST:succ:PASS"
 ELSE
-  PRINT 2,"GFATEST:succ:FAIL"
+  PRINT #2,"GFATEST:succ:FAIL"
 ENDIF
 s$ = STRING$(3,"-")
 IF s$="---"
-  PRINT 2,"GFATEST:string-repeat:PASS"
+  PRINT #2,"GFATEST:string-repeat:PASS"
 ELSE
-  PRINT 2,"GFATEST:string-repeat:FAIL"
+  PRINT #2,"GFATEST:string-repeat:FAIL"
 ENDIF
 s$ = HEX$(255)
 IF s$="FF"
-  PRINT 2,"GFATEST:hex:PASS"
+  PRINT #2,"GFATEST:hex:PASS"
 ELSE
-  PRINT 2,"GFATEST:hex:FAIL"
+  PRINT #2,"GFATEST:hex:FAIL"
 ENDIF
 
 CLOSE #2
