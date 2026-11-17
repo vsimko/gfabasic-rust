@@ -1,6 +1,6 @@
 ---
 name: corpus-fixture-authoring
-description: Add or revise independently authored GFA BASIC conformance-corpus fixtures and metadata. Use when editing tests/corpus listings, TOML sidecars, the corpus manifest, evidence status, or fixture-to-API crosswalks.
+description: Add or revise independently authored GFA BASIC conformance-corpus fixtures and metadata. Use when editing tests/corpus listings, YAML sidecars, the corpus manifest, evidence status, or fixture-to-API crosswalks.
 ---
 
 # GFA BASIC corpus fixture authoring
@@ -27,7 +27,7 @@ Use this skill when creating or changing source fixtures in `tests/corpus/`. The
 
 ### 2. Create an independent minimal fixture
 
-- Use the existing layout: `<dialect>/<version>/<area>/<case>.lst` plus a matching `.toml` sidecar.
+- Use the existing layout: `<dialect>/<version>/<area>/<case>.lst` plus a matching `.yaml` sidecar.
 - Choose a stable lowercase kebab-case ID and use it consistently in the manifest and sidecar.
 - Keep the program focused, self-contained, deterministic, and free of machine-specific paths, network access, locale assumptions, and external assets.
 - Author original source. Do not copy historical listings or substantial manual examples.
@@ -51,7 +51,7 @@ Do not use `verified` merely because the fixture parses, formats, or passes meta
 
 ### 4. Register and cross-link
 
-- Add the fixture path (without `.lst` or `.toml`) to `tests/corpus/manifest.toml`.
+- Add the fixture path (without `.lst` or `.yaml`) to `tests/corpus/manifest.yaml`.
 - Update any relevant declaration-to-fixture crosswalk or research index.
 - Add registry `support.tests` links only when the fixture actually substantiates implementation/conformance claims under the registry policy. Research-only fixtures must not be presented as executable conformance tests.
 - Keep source-evidence links and executable test links distinct.
