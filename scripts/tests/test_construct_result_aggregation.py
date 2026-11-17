@@ -99,8 +99,8 @@ class ConstructResultTests(unittest.TestCase):
             "selection": "changed",
             "changed_constructs": ["fact-function"],
             "include": [
-                {"construct_id": "fact-function", "version": "3.5"},
-                {"construct_id": "fact-function", "version": "3.52"},
+                {"construct_id": "fact-function", "version": "3.5", "probe": "probe-3.5.LST"},
+                {"construct_id": "fact-function", "version": "3.52", "probe": "probe-3.52.LST"},
             ],
         }
         result = aggregate(selection, self.root, artifacts, True, "")
@@ -115,7 +115,7 @@ class ConstructResultTests(unittest.TestCase):
         selection = {
             "selection": "changed",
             "changed_constructs": ["fact-function"],
-            "include": [{"construct_id": "fact-function", "version": "3.5"}],
+            "include": [{"construct_id": "fact-function", "version": "3.5", "probe": "probe-3.5.LST"}],
         }
         result = aggregate(selection, self.root, self.root / "missing-artifacts", False, "fork PR cannot receive private assets")
         row = next(row for row in result["rows"] if row["version"] == "3.5")
