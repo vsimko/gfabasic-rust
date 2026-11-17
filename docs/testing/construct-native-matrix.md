@@ -23,7 +23,7 @@ allowed only for a same-repository owner pull request, an owner-triggered main-b
 run, or an owner manual dispatch. Fork PRs and other untrusted events do not receive
 `GFA_ASSETS_TOKEN`; their applicable matrix rows are reported as `UNTESTED`.
 
-The token is used only in the existing private-asset download steps. It is not printed,
+The token is checked for presence in preflight and used only in the existing private-asset download steps. It is not printed,
 written to artifacts, or passed to probe programs. The token's actual repository scope
 still requires maintainer verification in issue #583. The reference and media-inventory
 workflows tracked by #585 remain outside this matrix.
