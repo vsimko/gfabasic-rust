@@ -43,20 +43,80 @@ jobs:
     secrets: inherit
 
   amiga-35:
-    name: Amiga GFA-BASIC 3.5 coverage status
+    name: GFA-BASIC 3.5 asset discovery (runtime still untested)
     runs-on: ubuntu-24.04
-    timeout-minutes: 2
+    timeout-minutes: 10
     steps:
-      - name: Record explicit coverage gap
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+
+      - name: Download candidate 3.5 editor disk archive
+        env:
+          GFA_ASSETS_TOKEN: ${{ secrets.GFA_ASSETS_TOKEN }}
+        run: |
+          set -euo pipefail
+          test -n "$GFA_ASSETS_TOKEN"
+          mkdir -p artifacts/amiga-3.5-discovery
+          ARCHIVE_NAME='GFA Basic Editor 3.5.zip'
+          ARCHIVE_PATH_ENCODED="$(jq -rn --arg path "$ARCHIVE_NAME" '$path | @uri')"
+          curl --fail --silent --show-error --location --retry 3 \
+            --header "Authorization: Bearer $GFA_ASSETS_TOKEN" \
+            --header "Accept: application/vnd.github.raw" \
+            "https://api.github.com/repos/vsimko/gfabasic-private-assets/contents/$ARCHIVE_PATH_ENCODED?ref=main" \
+            --output "$RUNNER_TEMP/gfa-basic-3.5.zip"
+          printf 'archive_size=%s\\n' "$(wc -c < "$RUNNER_TEMP/gfa-basic-3.5.zip")" > artifacts/amiga-3.5-discovery/archive-info.txt
+          unzip -Z1 "$RUNNER_TEMP/gfa-basic-3.5.zip" | tee artifacts/amiga-3.5-discovery/archive-members.txt
+          mapfile -t ADF_MEMBERS < <(unzip -Z1 "$RUNNER_TEMP/gfa-basic-3.5.zip" | grep -i -E '\\.adf
+  matrix-summary:
+    name: Reference matrix summary
+    if: always()
+    needs: [amiga-352, amiga-3041u, amiga-35]
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Publish per-version status
+        env:
+          STATUS_352: ${{ needs.amiga-352.result }}
+          STATUS_3041U: ${{ needs.amiga-3041u.result }}
+          STATUS_35: ${{ needs.amiga-35.result }}
         run: |
           {
-            echo "## Amiga GFA-BASIC 3.5"
+            echo "## Amiga GFA-BASIC reference matrix"
             echo ""
-            echo "**UNTESTED** — no verified native 3.5 interpreter asset and native workflow are configured."
+            echo "| Interpreter | Native workflow result | Conformance interpretation |"
+            echo "|---|---|---|"
+            echo "| 3.52 | $STATUS_352 | Native probe suite; inspect its artifact for individual GFATEST records |"
+            echo "| 3.041U | $STATUS_3041U | Native comparison probe suite; exact version only |"
+            echo "| 3.5 | UNTESTED | Candidate disk is inspected; exact interpreter identity and native execution remain unverified |"
             echo ""
-            echo "The 3.5U profile is retired and is not a substitute for 3.5."
+            echo "A green workflow means the configured native jobs and their host-side result protocol completed. It does not establish complete language conformance."
           } >> "$GITHUB_STEP_SUMMARY"
+          if [ "$STATUS_352" != success ] || [ "$STATUS_3041U" != success ] || [ "$STATUS_35" != success ]; then
+            echo "::error::At least one configured matrix job did not complete successfully."
+            exit 1
+          fi
+ || true)
+          test "${#ADF_MEMBERS[@]}" -eq 1 || { echo "Expected exactly one ADF candidate, found ${#ADF_MEMBERS[@]}"; exit 1; }
+          python3 - "$RUNNER_TEMP/gfa-basic-3.5.zip" "${ADF_MEMBERS[0]}" "$RUNNER_TEMP/gfa-basic-3.5.adf" <<'PY'
+          import shutil, sys, zipfile
+          with zipfile.ZipFile(sys.argv[1]) as archive:
+              with archive.open(sys.argv[2]) as source, open(sys.argv[3], "wb") as target:
+                  shutil.copyfileobj(source, target)
+          PY
+          python3 -m pip install --break-system-packages amitools
+          xdftool "$RUNNER_TEMP/gfa-basic-3.5.adf" info | tee artifacts/amiga-3.5-discovery/adf-info.txt
+          xdftool "$RUNNER_TEMP/gfa-basic-3.5.adf" list / all | tee artifacts/amiga-3.5-discovery/adf-files.txt
+          sha256sum "$RUNNER_TEMP/gfa-basic-3.5.adf" > artifacts/amiga-3.5-discovery/adf-sha256.txt
+          wc -c < "$RUNNER_TEMP/gfa-basic-3.5.adf" > artifacts/amiga-3.5-discovery/adf-size.txt
+          printf '%s\\n' "${ADF_MEMBERS[0]}" > artifacts/amiga-3.5-discovery/adf-member.txt
+          echo "Candidate disk discovered. Interpreter identity and runtime execution remain UNTESTED." >> "$GITHUB_STEP_SUMMARY"
 
+      - name: Upload non-binary discovery evidence
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: amiga-gfa-basic-3.5-asset-discovery
+          path: artifacts/amiga-3.5-discovery/
+          if-no-files-found: warn
+          retention-days: 7
   matrix-summary:
     name: Reference matrix summary
     if: always()
