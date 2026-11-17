@@ -57,7 +57,7 @@ Other workflows use read-only repository permissions for their normal jobs. The 
 ### Fork and pull-request behavior
 
 - Standard pull_request workflows do not receive repository secrets for fork pull requests; GitHub also restricts the fork PR GITHUB_TOKEN. This is a platform behavior, not a substitute for explicit repository guards.
-- Secret-bearing PR workflows now explicitly skip fork PRs. The Amiga reference matrix also guards its reusable workflows before inheriting secrets.
+- Secret-bearing PR workflows now explicitly skip fork PRs and Dependabot PRs. The Amiga reference matrix also guards its reusable workflows before inheriting secrets.
 - Manual dispatch of workflows that use private assets or write permissions is restricted to the default main ref. Reusable Amiga workflows can still be called by the guarded reference-matrix workflow.
 - The repository currently has no pull_request_target or workflow_run workflow trigger. Do not add either for untrusted PR processing without a separate security review.
 - Same-repository PR code is not automatically safe. Contributors who can push branches in this repository are treated as trusted to the extent that the configured repository permissions allow them to run same-repository PR workflows. The collaborator list and write-access policy are not inspectable here.
