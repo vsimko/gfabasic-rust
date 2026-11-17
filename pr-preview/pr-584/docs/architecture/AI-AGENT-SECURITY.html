@@ -96,7 +96,7 @@
 <h3 id="fork-and-pull-request-behavior">Fork and pull-request behavior</h3>
 <ul>
 <li>Standard pull_request workflows do not receive repository secrets for fork pull requests; GitHub also restricts the fork PR GITHUB_TOKEN. This is a platform behavior, not a substitute for explicit repository guards.</li>
-<li>Secret-bearing PR workflows now explicitly skip fork PRs. The Amiga reference matrix also guards its reusable workflows before inheriting secrets.</li>
+<li>Secret-bearing PR workflows now explicitly skip fork PRs and Dependabot PRs. The Amiga reference matrix also guards its reusable workflows before inheriting secrets.</li>
 <li>Manual dispatch of workflows that use private assets or write permissions is restricted to the default main ref. Reusable Amiga workflows can still be called by the guarded reference-matrix workflow.</li>
 <li>The repository currently has no pull_request_target or workflow_run workflow trigger. Do not add either for untrusted PR processing without a separate security review.</li>
 <li>Same-repository PR code is not automatically safe. Contributors who can push branches in this repository are treated as trusted to the extent that the configured repository permissions allow them to run same-repository PR workflows. The collaborator list and write-access policy are not inspectable here.</li>
@@ -176,7 +176,7 @@
 <ol>
 <li>Use explicit least-privilege permissions; grant write access only to the job that requires it.</li>
 <li>Use pull_request, not pull_request_target, for workflows that inspect or execute PR code. Fork PRs must not receive secrets.</li>
-<li>Any secret-bearing PR job must explicitly guard against fork PRs. Any write-enabled PR job must have an explicit same-repository guard.</li>
+<li>Any secret-bearing PR job must explicitly guard against fork and Dependabot PRs. Any write-enabled PR job must have an explicit same-repository guard.</li>
 <li>A manual dispatch of a secret-bearing or write-enabled workflow must be restricted to the default branch unless a documented, separately reviewed exception exists.</li>
 <li>Pass GFA_ASSETS_TOKEN only to the step that needs it. Never place it in command-line arguments, logs, summaries, cache keys, artifacts, generated files, or issue/PR text.</li>
 <li>Use immutable action SHAs and pinned tool versions. Review action changes and permissions as part of #39.</li>
@@ -219,7 +219,7 @@
 <ul>
 <li>Explicit workflow permission declarations.</li>
 <li>No pull_request_target or workflow_run trigger.</li>
-<li>Same-repository guards for secret-bearing or write-enabled PR jobs.</li>
+<li>Same-repository guards for secret-bearing or write-enabled PR jobs, plus Dependabot exclusion for secret-bearing PR jobs.</li>
 <li>Default-branch guards for manually dispatched jobs that use secrets or write permissions.</li>
 </ul>
 <p>These checks cannot verify repository settings, actual secret scopes, collaborator trust, GitHub App installation permissions, or an external agent's sandbox. A passing check is not a substitute for maintainer verification.</p>
