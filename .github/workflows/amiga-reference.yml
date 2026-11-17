@@ -25,8 +25,7 @@ jobs:
         env:
           GFA_ASSETS_TOKEN: ${{ secrets.GFA_ASSETS_TOKEN }}
         run: >-
-          python scripts/check_private_github_assets.py
-          --repo vsimko/gfabasic-private-assets --ref main --path GFABasic
+          python scripts/check_private_github_assets.py --repo vsimko/gfabasic-private-assets --ref main --path GFABasic
 
       - name: Download private interpreter binary
         env:
