@@ -364,13 +364,35 @@ jobs:
             --results artifacts/amiga-cli-probe/gfatest-results.txt
 
 
+      - name: Write per-construct result record
+        if: always() && inputs.construct_id != ''
+        env:
+          CONSTRUCT_ID: ${{ inputs.construct_id }}
+          VERSION: "3.52"
+          PROBE_PATH: ${{ inputs.probe_path }}
+          HARNESS_OUTCOME: ${{ steps.native-run.outcome }}
+          EXPECTED_IDS_FILE: ${{ env.GFATEST_EXPECTED_IDS_FILE }}
+          RESULT_FILE: artifacts/amiga-cli-probe/gfatest-results.txt
+          IDENTITY_SCREENSHOT: artifacts/amiga-cli-probe/editor-version-menu.png
+          IDENTITY_OCR: artifacts/amiga-cli-probe/editor-version-menu-ocr.txt
+          OUTPUT_FILE: artifacts/amiga-cli-probe/result.json
+        run: |
+          python3 scripts/write_construct_result.py \
+            --construct-id "$CONSTRUCT_ID" --version "$VERSION" --probe "$PROBE_PATH" \
+            --harness-outcome "${HARNESS_OUTCOME:-failure}" --expected-ids "$EXPECTED_IDS_FILE" \
+            --results "$RESULT_FILE" --identity-screenshot "$IDENTITY_SCREENSHOT" \
+            --identity-ocr "$IDENTITY_OCR" --output "$OUTPUT_FILE"
+
       - name: Upload diagnostic evidence (never upload commercial binary)
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         with:
-          name: amiga-gfa-basic-3.52-native-merge-run
+          name: ${{ inputs.construct_id != '' && format('amiga-construct-{0}-3.52', inputs.construct_id) || 'amiga-gfa-basic-3.52-native-merge-run' }}
           path: |
             artifacts/amiga-cli-probe/
             !artifacts/amiga-cli-probe/*.adf
+            !artifacts/amiga-cli-probe/*.rom
+            !artifacts/amiga-cli-probe/GFABasic
+            !artifacts/amiga-cli-probe/gfabasic
           if-no-files-found: warn
           retention-days: 7
