@@ -55,7 +55,7 @@ Keep manual-documented behavior, directly observed behavior, and assumptions dis
 - 3.5U is excluded from new runs and current matrix reporting unless the maintainer explicitly reactivates it.
 - Reports and fixtures must retain exact version identity and per-version outcomes.
 - A missing interpreter asset or unavailable workflow is an explicit coverage gap.
-- The active native workflows are `.github/workflows/amiga-native-merge-run.yml` (3.52) and `.github/workflows/amiga-3041u-native-merge-run.yml` (3.041U). The 3.5U workflow is legacy/retired. Check workflow configuration and latest CI runs before claiming a profile is runnable.
+- The unified matrix entry point is `.github/workflows/amiga-reference-matrix.yml`. It invokes the 3.52 and 3.041U native workflows and reports 3.5 as `UNTESTED` until a verified 3.5 runtime is configured. The individual workflows remain available for focused manual runs. A successful matrix run validates only the configured probes and result-collection protocol, not complete language conformance.
 - The status of private assets and runnable workflows must be checked from the current workflow configuration and latest issue/CI evidence, not inferred from the media inventory alone.
 
 ## Evidence and limitations
