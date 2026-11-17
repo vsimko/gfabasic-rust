@@ -27,6 +27,23 @@ on:
       - "scripts/amiga-cli-probe-3041u.sh"
       - "scripts/validate_gfatest_results.py"
   workflow_dispatch:
+  workflow_call:
+    inputs:
+      version:
+        description: "Single version for a construct matrix child run; empty runs the full reference matrix."
+        required: false
+        type: string
+        default: ""
+      construct_id:
+        description: "Construct ID for an isolated probe."
+        required: false
+        type: string
+        default: ""
+      probe_path:
+        description: "Repository-relative .LST probe path."
+        required: false
+        type: string
+        default: ""
 
 permissions:
   contents: read
@@ -37,19 +54,25 @@ concurrency:
 
 jobs:
   amiga-352:
-    if: github.actor != 'dependabot[bot]' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) && (github.event_name != 'workflow_dispatch' || github.ref == 'refs/heads/main')
+    if: (!inputs.version || inputs.version == '3.52') && github.actor != 'dependabot[bot]' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) && (github.event_name != 'workflow_dispatch' || github.ref == 'refs/heads/main')
     name: GFA-BASIC 3.52 native run
     uses: ./.github/workflows/amiga-native-merge-run.yml
+    with:
+      construct_id: ${{ inputs.construct_id }}
+      probe_path: ${{ inputs.probe_path }}
     secrets: inherit
 
   amiga-3041u:
-    if: github.actor != 'dependabot[bot]' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) && (github.event_name != 'workflow_dispatch' || github.ref == 'refs/heads/main')
+    if: (!inputs.version || inputs.version == '3.041U') && github.actor != 'dependabot[bot]' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) && (github.event_name != 'workflow_dispatch' || github.ref == 'refs/heads/main')
     name: GFA-BASIC 3.041U native run
     uses: ./.github/workflows/amiga-3041u-native-merge-run.yml
+    with:
+      construct_id: ${{ inputs.construct_id }}
+      probe_path: ${{ inputs.probe_path }}
     secrets: inherit
 
   amiga-35:
-    if: github.actor != 'dependabot[bot]' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) && (github.event_name != 'workflow_dispatch' || github.ref == 'refs/heads/main')
+    if: (!inputs.version || inputs.version == '3.5') && github.actor != 'dependabot[bot]' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) && (github.event_name != 'workflow_dispatch' || github.ref == 'refs/heads/main')
     name: GFA-BASIC 3.5 native Merge + Run probes
     runs-on: ubuntu-24.04
     timeout-minutes: 25
