@@ -18,6 +18,10 @@ def _same_repository_guard(expression: object) -> bool:
     return "github.event.pull_request.head.repo.full_name==github.repository" in value
 
 
+def _dependabot_guard(expression: object) -> bool:
+    return "github.actor!='dependabot[bot]'" in _normalise(expression)
+
+
 def _main_dispatch_guard(expression: object) -> bool:
     value = _normalise(expression)
     if "github.ref=='refs/heads/main'" not in value and 'github.ref==\"refs/heads/main\"' not in value:
@@ -94,6 +98,11 @@ def validate_document(document: object, path: str) -> list[str]:
             reason = "write permissions" if writes else "secret access"
             errors.append(
                 f"{path}: job {job_id!r} has {reason} on pull_request without a same-repository guard"
+            )
+
+        if has_pull_request and _job_includes_event(guard, "pull_request") and secrets and not _dependabot_guard(guard):
+            errors.append(
+                f"{path}: job {job_id!r} uses secrets on pull_request without excluding Dependabot"
             )
 
         if has_dispatch and _job_includes_event(guard, "workflow_dispatch") and (writes or secrets) and not _main_dispatch_guard(guard):
