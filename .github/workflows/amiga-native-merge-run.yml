@@ -26,7 +26,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: amiga-cli-probe-${{ github.event.pull_request.number || github.ref }}
+  group: amiga-cli-probe-${{ github.event.pull_request.number || github.ref }}-${{ inputs.construct_id || 'baseline' }}
   cancel-in-progress: true
 
 jobs:
