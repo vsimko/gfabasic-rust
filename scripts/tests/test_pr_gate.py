@@ -38,7 +38,7 @@ class Native35uAbcDiagnosticPathTests(unittest.TestCase):
         selected = expected_workflows([
             "tests/interpreter-probes/amiga-3.5u/ab-c-isolation.LST"
         ])
-        self.assertEqual(selected, {".github/workflows/amiga-35u-ab-c-diagnostic.yml"})
+        self.assertEqual(selected, {NATIVE_WORKFLOW, ".github/workflows/amiga-35u-ab-c-diagnostic.yml"})
 
     def test_diagnostic_workflow_paths_match_pr_gate_classification(self):
         root = Path(__file__).resolve().parents[2]
