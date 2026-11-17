@@ -21,7 +21,7 @@
         <p class="docs-meta"><span>Architecture Decision Record</span></p>
         <h1 id="adr-0017-multi-version-amiga-gfa-basic-conformance-baseline">ADR 0017: Multi-version Amiga GFA-BASIC conformance baseline</h1>
 <ul>
-<li><strong>Status:</strong> Proposed</li>
+<li><strong>Status:</strong> Accepted</li>
 <li><strong>Date:</strong> 2026-11-16</li>
 <li><strong>Tracking:</strong> <a href="https://github.com/vsimko/gfabasic-rust/issues/557">Issue #557</a></li>
 </ul>
@@ -43,8 +43,12 @@
 <td>Primary reference baseline for current development and default expected behavior</td>
 </tr>
 <tr>
-<td>GFA-BASIC 3.5 (including 3.5U where explicitly identified)</td>
+<td>GFA-BASIC 3.5</td>
 <td>Compatibility comparison</td>
+</tr>
+<tr>
+<td>GFA-BASIC 3.5U</td>
+<td>Retired historical profile; no new routine test runs; retain old results as historical evidence only</td>
 </tr>
 <tr>
 <td>GFA-BASIC 3.0</td>
@@ -52,7 +56,7 @@
 </tr>
 </tbody>
 </table>
-<p>Run the same applicable probes against all three versions when the licensed interpreter asset and native harness are available. Preserve separate results for each exact version. Never infer a version's behavior from another version.</p>
+<p>Run the same applicable probes against the active matrix versions (3.52, 3.5, and 3.0) when the licensed interpreter asset and native harness are available. Preserve separate results for each exact version. Never infer a version's behavior from another version. The previously inventoried 3.5U package is not an active matrix target; its old probe results remain historical and must not be reported as current 3.5 coverage.</p>
 <p>A confirmed difference is a compatibility distinction, not automatically a failure. Expected behavior must be scoped to the tested version and supported by the relevant manual or direct interpreter observation.</p>
 <h2 id="result-vocabulary">Result vocabulary</h2>
 <p>Record one result per probe and interpreter version:</p>
@@ -73,9 +77,11 @@
 <ul>
 <li>New conformance probes use 3.52 as the default baseline.</li>
 <li>Applicable probes should run on 3.5 and 3.0 as comparison coverage.</li>
+<li>3.5U is excluded from new runs and current matrix reporting unless the maintainer explicitly reactivates it.</li>
 <li>Reports and fixtures must retain exact version identity and per-version outcomes.</li>
 <li>A missing interpreter asset or unavailable workflow is an explicit coverage gap.</li>
-<li>Native workflows, private licensed assets, and result aggregation must be expanded incrementally; this ADR does not claim that all three versions are currently available in CI.</li>
+<li>Native workflows, private licensed assets, and result aggregation must be expanded incrementally; this ADR does not claim that all three active versions are currently available in CI.</li>
+<li>The status of private assets and runnable workflows must be checked from the current workflow configuration and latest issue/CI evidence, not inferred from the media inventory alone.</li>
 </ul>
 <h2 id="evidence-and-limitations">Evidence and limitations</h2>
 <p>The <code>M O a()</code> difference is currently a maintainer-reported observation. Confirm it with preserved screenshots or native-run evidence for both exact interpreter versions before treating it as a fully reproducible conformance record. Consult the matching primary manual for version-specific expected semantics.</p>
