@@ -1,0 +1,1897 @@
+{
+  "documents": [
+    {
+      "filename": "GFA_Basic_3.5_Interpreter.pdf",
+      "page_count": 469,
+      "page_locators": [
+        {
+          "anchor": "pdf-page-0001",
+          "pdf_page": 1
+        },
+        {
+          "anchor": "pdf-page-0002",
+          "pdf_page": 2
+        },
+        {
+          "anchor": "pdf-page-0003",
+          "pdf_page": 3
+        },
+        {
+          "anchor": "pdf-page-0004",
+          "pdf_page": 4
+        },
+        {
+          "anchor": "pdf-page-0005",
+          "pdf_page": 5
+        },
+        {
+          "anchor": "pdf-page-0006",
+          "pdf_page": 6
+        },
+        {
+          "anchor": "pdf-page-0007",
+          "pdf_page": 7
+        },
+        {
+          "anchor": "pdf-page-0008",
+          "pdf_page": 8
+        },
+        {
+          "anchor": "pdf-page-0009",
+          "pdf_page": 9
+        },
+        {
+          "anchor": "pdf-page-0010",
+          "pdf_page": 10
+        },
+        {
+          "anchor": "pdf-page-0011",
+          "pdf_page": 11
+        },
+        {
+          "anchor": "pdf-page-0012",
+          "pdf_page": 12
+        },
+        {
+          "anchor": "pdf-page-0013",
+          "pdf_page": 13
+        },
+        {
+          "anchor": "pdf-page-0014",
+          "pdf_page": 14
+        },
+        {
+          "anchor": "pdf-page-0015",
+          "pdf_page": 15
+        },
+        {
+          "anchor": "pdf-page-0016",
+          "pdf_page": 16
+        },
+        {
+          "anchor": "pdf-page-0017",
+          "pdf_page": 17
+        },
+        {
+          "anchor": "pdf-page-0018",
+          "pdf_page": 18
+        },
+        {
+          "anchor": "pdf-page-0019",
+          "pdf_page": 19
+        },
+        {
+          "anchor": "pdf-page-0020",
+          "pdf_page": 20
+        },
+        {
+          "anchor": "pdf-page-0021",
+          "pdf_page": 21
+        },
+        {
+          "anchor": "pdf-page-0022",
+          "pdf_page": 22
+        },
+        {
+          "anchor": "pdf-page-0023",
+          "pdf_page": 23
+        },
+        {
+          "anchor": "pdf-page-0024",
+          "pdf_page": 24
+        },
+        {
+          "anchor": "pdf-page-0025",
+          "pdf_page": 25
+        },
+        {
+          "anchor": "pdf-page-0026",
+          "pdf_page": 26
+        },
+        {
+          "anchor": "pdf-page-0027",
+          "pdf_page": 27
+        },
+        {
+          "anchor": "pdf-page-0028",
+          "pdf_page": 28
+        },
+        {
+          "anchor": "pdf-page-0029",
+          "pdf_page": 29
+        },
+        {
+          "anchor": "pdf-page-0030",
+          "pdf_page": 30
+        },
+        {
+          "anchor": "pdf-page-0031",
+          "pdf_page": 31
+        },
+        {
+          "anchor": "pdf-page-0032",
+          "pdf_page": 32
+        },
+        {
+          "anchor": "pdf-page-0033",
+          "pdf_page": 33
+        },
+        {
+          "anchor": "pdf-page-0034",
+          "pdf_page": 34
+        },
+        {
+          "anchor": "pdf-page-0035",
+          "pdf_page": 35
+        },
+        {
+          "anchor": "pdf-page-0036",
+          "pdf_page": 36
+        },
+        {
+          "anchor": "pdf-page-0037",
+          "pdf_page": 37
+        },
+        {
+          "anchor": "pdf-page-0038",
+          "pdf_page": 38
+        },
+        {
+          "anchor": "pdf-page-0039",
+          "pdf_page": 39
+        },
+        {
+          "anchor": "pdf-page-0040",
+          "pdf_page": 40
+        },
+        {
+          "anchor": "pdf-page-0041",
+          "pdf_page": 41
+        },
+        {
+          "anchor": "pdf-page-0042",
+          "pdf_page": 42
+        },
+        {
+          "anchor": "pdf-page-0043",
+          "pdf_page": 43
+        },
+        {
+          "anchor": "pdf-page-0044",
+          "pdf_page": 44
+        },
+        {
+          "anchor": "pdf-page-0045",
+          "pdf_page": 45
+        },
+        {
+          "anchor": "pdf-page-0046",
+          "pdf_page": 46
+        },
+        {
+          "anchor": "pdf-page-0047",
+          "pdf_page": 47
+        },
+        {
+          "anchor": "pdf-page-0048",
+          "pdf_page": 48
+        },
+        {
+          "anchor": "pdf-page-0049",
+          "pdf_page": 49
+        },
+        {
+          "anchor": "pdf-page-0050",
+          "pdf_page": 50
+        },
+        {
+          "anchor": "pdf-page-0051",
+          "pdf_page": 51
+        },
+        {
+          "anchor": "pdf-page-0052",
+          "pdf_page": 52
+        },
+        {
+          "anchor": "pdf-page-0053",
+          "pdf_page": 53
+        },
+        {
+          "anchor": "pdf-page-0054",
+          "pdf_page": 54
+        },
+        {
+          "anchor": "pdf-page-0055",
+          "pdf_page": 55
+        },
+        {
+          "anchor": "pdf-page-0056",
+          "pdf_page": 56
+        },
+        {
+          "anchor": "pdf-page-0057",
+          "pdf_page": 57
+        },
+        {
+          "anchor": "pdf-page-0058",
+          "pdf_page": 58
+        },
+        {
+          "anchor": "pdf-page-0059",
+          "pdf_page": 59
+        },
+        {
+          "anchor": "pdf-page-0060",
+          "pdf_page": 60
+        },
+        {
+          "anchor": "pdf-page-0061",
+          "pdf_page": 61
+        },
+        {
+          "anchor": "pdf-page-0062",
+          "pdf_page": 62
+        },
+        {
+          "anchor": "pdf-page-0063",
+          "pdf_page": 63
+        },
+        {
+          "anchor": "pdf-page-0064",
+          "pdf_page": 64
+        },
+        {
+          "anchor": "pdf-page-0065",
+          "pdf_page": 65
+        },
+        {
+          "anchor": "pdf-page-0066",
+          "pdf_page": 66
+        },
+        {
+          "anchor": "pdf-page-0067",
+          "pdf_page": 67
+        },
+        {
+          "anchor": "pdf-page-0068",
+          "pdf_page": 68
+        },
+        {
+          "anchor": "pdf-page-0069",
+          "pdf_page": 69
+        },
+        {
+          "anchor": "pdf-page-0070",
+          "pdf_page": 70
+        },
+        {
+          "anchor": "pdf-page-0071",
+          "pdf_page": 71
+        },
+        {
+          "anchor": "pdf-page-0072",
+          "pdf_page": 72
+        },
+        {
+          "anchor": "pdf-page-0073",
+          "pdf_page": 73
+        },
+        {
+          "anchor": "pdf-page-0074",
+          "pdf_page": 74
+        },
+        {
+          "anchor": "pdf-page-0075",
+          "pdf_page": 75
+        },
+        {
+          "anchor": "pdf-page-0076",
+          "pdf_page": 76
+        },
+        {
+          "anchor": "pdf-page-0077",
+          "pdf_page": 77
+        },
+        {
+          "anchor": "pdf-page-0078",
+          "pdf_page": 78
+        },
+        {
+          "anchor": "pdf-page-0079",
+          "pdf_page": 79
+        },
+        {
+          "anchor": "pdf-page-0080",
+          "pdf_page": 80
+        },
+        {
+          "anchor": "pdf-page-0081",
+          "pdf_page": 81
+        },
+        {
+          "anchor": "pdf-page-0082",
+          "pdf_page": 82
+        },
+        {
+          "anchor": "pdf-page-0083",
+          "pdf_page": 83
+        },
+        {
+          "anchor": "pdf-page-0084",
+          "pdf_page": 84
+        },
+        {
+          "anchor": "pdf-page-0085",
+          "pdf_page": 85
+        },
+        {
+          "anchor": "pdf-page-0086",
+          "pdf_page": 86
+        },
+        {
+          "anchor": "pdf-page-0087",
+          "pdf_page": 87
+        },
+        {
+          "anchor": "pdf-page-0088",
+          "pdf_page": 88
+        },
+        {
+          "anchor": "pdf-page-0089",
+          "pdf_page": 89
+        },
+        {
+          "anchor": "pdf-page-0090",
+          "pdf_page": 90
+        },
+        {
+          "anchor": "pdf-page-0091",
+          "pdf_page": 91
+        },
+        {
+          "anchor": "pdf-page-0092",
+          "pdf_page": 92
+        },
+        {
+          "anchor": "pdf-page-0093",
+          "pdf_page": 93
+        },
+        {
+          "anchor": "pdf-page-0094",
+          "pdf_page": 94
+        },
+        {
+          "anchor": "pdf-page-0095",
+          "pdf_page": 95
+        },
+        {
+          "anchor": "pdf-page-0096",
+          "pdf_page": 96
+        },
+        {
+          "anchor": "pdf-page-0097",
+          "pdf_page": 97
+        },
+        {
+          "anchor": "pdf-page-0098",
+          "pdf_page": 98
+        },
+        {
+          "anchor": "pdf-page-0099",
+          "pdf_page": 99
+        },
+        {
+          "anchor": "pdf-page-0100",
+          "pdf_page": 100
+        },
+        {
+          "anchor": "pdf-page-0101",
+          "pdf_page": 101
+        },
+        {
+          "anchor": "pdf-page-0102",
+          "pdf_page": 102
+        },
+        {
+          "anchor": "pdf-page-0103",
+          "pdf_page": 103
+        },
+        {
+          "anchor": "pdf-page-0104",
+          "pdf_page": 104
+        },
+        {
+          "anchor": "pdf-page-0105",
+          "pdf_page": 105
+        },
+        {
+          "anchor": "pdf-page-0106",
+          "pdf_page": 106
+        },
+        {
+          "anchor": "pdf-page-0107",
+          "pdf_page": 107
+        },
+        {
+          "anchor": "pdf-page-0108",
+          "pdf_page": 108
+        },
+        {
+          "anchor": "pdf-page-0109",
+          "pdf_page": 109
+        },
+        {
+          "anchor": "pdf-page-0110",
+          "pdf_page": 110
+        },
+        {
+          "anchor": "pdf-page-0111",
+          "pdf_page": 111
+        },
+        {
+          "anchor": "pdf-page-0112",
+          "pdf_page": 112
+        },
+        {
+          "anchor": "pdf-page-0113",
+          "pdf_page": 113
+        },
+        {
+          "anchor": "pdf-page-0114",
+          "pdf_page": 114
+        },
+        {
+          "anchor": "pdf-page-0115",
+          "pdf_page": 115
+        },
+        {
+          "anchor": "pdf-page-0116",
+          "pdf_page": 116
+        },
+        {
+          "anchor": "pdf-page-0117",
+          "pdf_page": 117
+        },
+        {
+          "anchor": "pdf-page-0118",
+          "pdf_page": 118
+        },
+        {
+          "anchor": "pdf-page-0119",
+          "pdf_page": 119
+        },
+        {
+          "anchor": "pdf-page-0120",
+          "pdf_page": 120
+        },
+        {
+          "anchor": "pdf-page-0121",
+          "pdf_page": 121
+        },
+        {
+          "anchor": "pdf-page-0122",
+          "pdf_page": 122
+        },
+        {
+          "anchor": "pdf-page-0123",
+          "pdf_page": 123
+        },
+        {
+          "anchor": "pdf-page-0124",
+          "pdf_page": 124
+        },
+        {
+          "anchor": "pdf-page-0125",
+          "pdf_page": 125
+        },
+        {
+          "anchor": "pdf-page-0126",
+          "pdf_page": 126
+        },
+        {
+          "anchor": "pdf-page-0127",
+          "pdf_page": 127
+        },
+        {
+          "anchor": "pdf-page-0128",
+          "pdf_page": 128
+        },
+        {
+          "anchor": "pdf-page-0129",
+          "pdf_page": 129
+        },
+        {
+          "anchor": "pdf-page-0130",
+          "pdf_page": 130
+        },
+        {
+          "anchor": "pdf-page-0131",
+          "pdf_page": 131
+        },
+        {
+          "anchor": "pdf-page-0132",
+          "pdf_page": 132
+        },
+        {
+          "anchor": "pdf-page-0133",
+          "pdf_page": 133
+        },
+        {
+          "anchor": "pdf-page-0134",
+          "pdf_page": 134
+        },
+        {
+          "anchor": "pdf-page-0135",
+          "pdf_page": 135
+        },
+        {
+          "anchor": "pdf-page-0136",
+          "pdf_page": 136
+        },
+        {
+          "anchor": "pdf-page-0137",
+          "pdf_page": 137
+        },
+        {
+          "anchor": "pdf-page-0138",
+          "pdf_page": 138
+        },
+        {
+          "anchor": "pdf-page-0139",
+          "pdf_page": 139
+        },
+        {
+          "anchor": "pdf-page-0140",
+          "pdf_page": 140
+        },
+        {
+          "anchor": "pdf-page-0141",
+          "pdf_page": 141
+        },
+        {
+          "anchor": "pdf-page-0142",
+          "pdf_page": 142
+        },
+        {
+          "anchor": "pdf-page-0143",
+          "pdf_page": 143
+        },
+        {
+          "anchor": "pdf-page-0144",
+          "pdf_page": 144
+        },
+        {
+          "anchor": "pdf-page-0145",
+          "pdf_page": 145
+        },
+        {
+          "anchor": "pdf-page-0146",
+          "pdf_page": 146
+        },
+        {
+          "anchor": "pdf-page-0147",
+          "pdf_page": 147
+        },
+        {
+          "anchor": "pdf-page-0148",
+          "pdf_page": 148
+        },
+        {
+          "anchor": "pdf-page-0149",
+          "pdf_page": 149
+        },
+        {
+          "anchor": "pdf-page-0150",
+          "pdf_page": 150
+        },
+        {
+          "anchor": "pdf-page-0151",
+          "pdf_page": 151
+        },
+        {
+          "anchor": "pdf-page-0152",
+          "pdf_page": 152
+        },
+        {
+          "anchor": "pdf-page-0153",
+          "pdf_page": 153
+        },
+        {
+          "anchor": "pdf-page-0154",
+          "pdf_page": 154
+        },
+        {
+          "anchor": "pdf-page-0155",
+          "pdf_page": 155
+        },
+        {
+          "anchor": "pdf-page-0156",
+          "pdf_page": 156
+        },
+        {
+          "anchor": "pdf-page-0157",
+          "pdf_page": 157
+        },
+        {
+          "anchor": "pdf-page-0158",
+          "pdf_page": 158
+        },
+        {
+          "anchor": "pdf-page-0159",
+          "pdf_page": 159
+        },
+        {
+          "anchor": "pdf-page-0160",
+          "pdf_page": 160
+        },
+        {
+          "anchor": "pdf-page-0161",
+          "pdf_page": 161
+        },
+        {
+          "anchor": "pdf-page-0162",
+          "pdf_page": 162
+        },
+        {
+          "anchor": "pdf-page-0163",
+          "pdf_page": 163
+        },
+        {
+          "anchor": "pdf-page-0164",
+          "pdf_page": 164
+        },
+        {
+          "anchor": "pdf-page-0165",
+          "pdf_page": 165
+        },
+        {
+          "anchor": "pdf-page-0166",
+          "pdf_page": 166
+        },
+        {
+          "anchor": "pdf-page-0167",
+          "pdf_page": 167
+        },
+        {
+          "anchor": "pdf-page-0168",
+          "pdf_page": 168
+        },
+        {
+          "anchor": "pdf-page-0169",
+          "pdf_page": 169
+        },
+        {
+          "anchor": "pdf-page-0170",
+          "pdf_page": 170
+        },
+        {
+          "anchor": "pdf-page-0171",
+          "pdf_page": 171
+        },
+        {
+          "anchor": "pdf-page-0172",
+          "pdf_page": 172
+        },
+        {
+          "anchor": "pdf-page-0173",
+          "pdf_page": 173
+        },
+        {
+          "anchor": "pdf-page-0174",
+          "pdf_page": 174
+        },
+        {
+          "anchor": "pdf-page-0175",
+          "pdf_page": 175
+        },
+        {
+          "anchor": "pdf-page-0176",
+          "pdf_page": 176
+        },
+        {
+          "anchor": "pdf-page-0177",
+          "pdf_page": 177
+        },
+        {
+          "anchor": "pdf-page-0178",
+          "pdf_page": 178
+        },
+        {
+          "anchor": "pdf-page-0179",
+          "pdf_page": 179
+        },
+        {
+          "anchor": "pdf-page-0180",
+          "pdf_page": 180
+        },
+        {
+          "anchor": "pdf-page-0181",
+          "pdf_page": 181
+        },
+        {
+          "anchor": "pdf-page-0182",
+          "pdf_page": 182
+        },
+        {
+          "anchor": "pdf-page-0183",
+          "pdf_page": 183
+        },
+        {
+          "anchor": "pdf-page-0184",
+          "pdf_page": 184
+        },
+        {
+          "anchor": "pdf-page-0185",
+          "pdf_page": 185
+        },
+        {
+          "anchor": "pdf-page-0186",
+          "pdf_page": 186
+        },
+        {
+          "anchor": "pdf-page-0187",
+          "pdf_page": 187
+        },
+        {
+          "anchor": "pdf-page-0188",
+          "pdf_page": 188
+        },
+        {
+          "anchor": "pdf-page-0189",
+          "pdf_page": 189
+        },
+        {
+          "anchor": "pdf-page-0190",
+          "pdf_page": 190
+        },
+        {
+          "anchor": "pdf-page-0191",
+          "pdf_page": 191
+        },
+        {
+          "anchor": "pdf-page-0192",
+          "pdf_page": 192
+        },
+        {
+          "anchor": "pdf-page-0193",
+          "pdf_page": 193
+        },
+        {
+          "anchor": "pdf-page-0194",
+          "pdf_page": 194
+        },
+        {
+          "anchor": "pdf-page-0195",
+          "pdf_page": 195
+        },
+        {
+          "anchor": "pdf-page-0196",
+          "pdf_page": 196
+        },
+        {
+          "anchor": "pdf-page-0197",
+          "pdf_page": 197
+        },
+        {
+          "anchor": "pdf-page-0198",
+          "pdf_page": 198
+        },
+        {
+          "anchor": "pdf-page-0199",
+          "pdf_page": 199
+        },
+        {
+          "anchor": "pdf-page-0200",
+          "pdf_page": 200
+        },
+        {
+          "anchor": "pdf-page-0201",
+          "pdf_page": 201
+        },
+        {
+          "anchor": "pdf-page-0202",
+          "pdf_page": 202
+        },
+        {
+          "anchor": "pdf-page-0203",
+          "pdf_page": 203
+        },
+        {
+          "anchor": "pdf-page-0204",
+          "pdf_page": 204
+        },
+        {
+          "anchor": "pdf-page-0205",
+          "pdf_page": 205
+        },
+        {
+          "anchor": "pdf-page-0206",
+          "pdf_page": 206
+        },
+        {
+          "anchor": "pdf-page-0207",
+          "pdf_page": 207
+        },
+        {
+          "anchor": "pdf-page-0208",
+          "pdf_page": 208
+        },
+        {
+          "anchor": "pdf-page-0209",
+          "pdf_page": 209
+        },
+        {
+          "anchor": "pdf-page-0210",
+          "pdf_page": 210
+        },
+        {
+          "anchor": "pdf-page-0211",
+          "pdf_page": 211
+        },
+        {
+          "anchor": "pdf-page-0212",
+          "pdf_page": 212
+        },
+        {
+          "anchor": "pdf-page-0213",
+          "pdf_page": 213
+        },
+        {
+          "anchor": "pdf-page-0214",
+          "pdf_page": 214
+        },
+        {
+          "anchor": "pdf-page-0215",
+          "pdf_page": 215
+        },
+        {
+          "anchor": "pdf-page-0216",
+          "pdf_page": 216
+        },
+        {
+          "anchor": "pdf-page-0217",
+          "pdf_page": 217
+        },
+        {
+          "anchor": "pdf-page-0218",
+          "pdf_page": 218
+        },
+        {
+          "anchor": "pdf-page-0219",
+          "pdf_page": 219
+        },
+        {
+          "anchor": "pdf-page-0220",
+          "pdf_page": 220
+        },
+        {
+          "anchor": "pdf-page-0221",
+          "pdf_page": 221
+        },
+        {
+          "anchor": "pdf-page-0222",
+          "pdf_page": 222
+        },
+        {
+          "anchor": "pdf-page-0223",
+          "pdf_page": 223
+        },
+        {
+          "anchor": "pdf-page-0224",
+          "pdf_page": 224
+        },
+        {
+          "anchor": "pdf-page-0225",
+          "pdf_page": 225
+        },
+        {
+          "anchor": "pdf-page-0226",
+          "pdf_page": 226
+        },
+        {
+          "anchor": "pdf-page-0227",
+          "pdf_page": 227
+        },
+        {
+          "anchor": "pdf-page-0228",
+          "pdf_page": 228
+        },
+        {
+          "anchor": "pdf-page-0229",
+          "pdf_page": 229
+        },
+        {
+          "anchor": "pdf-page-0230",
+          "pdf_page": 230
+        },
+        {
+          "anchor": "pdf-page-0231",
+          "pdf_page": 231
+        },
+        {
+          "anchor": "pdf-page-0232",
+          "pdf_page": 232
+        },
+        {
+          "anchor": "pdf-page-0233",
+          "pdf_page": 233
+        },
+        {
+          "anchor": "pdf-page-0234",
+          "pdf_page": 234
+        },
+        {
+          "anchor": "pdf-page-0235",
+          "pdf_page": 235
+        },
+        {
+          "anchor": "pdf-page-0236",
+          "pdf_page": 236
+        },
+        {
+          "anchor": "pdf-page-0237",
+          "pdf_page": 237
+        },
+        {
+          "anchor": "pdf-page-0238",
+          "pdf_page": 238
+        },
+        {
+          "anchor": "pdf-page-0239",
+          "pdf_page": 239
+        },
+        {
+          "anchor": "pdf-page-0240",
+          "pdf_page": 240
+        },
+        {
+          "anchor": "pdf-page-0241",
+          "pdf_page": 241
+        },
+        {
+          "anchor": "pdf-page-0242",
+          "pdf_page": 242
+        },
+        {
+          "anchor": "pdf-page-0243",
+          "pdf_page": 243
+        },
+        {
+          "anchor": "pdf-page-0244",
+          "pdf_page": 244
+        },
+        {
+          "anchor": "pdf-page-0245",
+          "pdf_page": 245
+        },
+        {
+          "anchor": "pdf-page-0246",
+          "pdf_page": 246
+        },
+        {
+          "anchor": "pdf-page-0247",
+          "pdf_page": 247
+        },
+        {
+          "anchor": "pdf-page-0248",
+          "pdf_page": 248
+        },
+        {
+          "anchor": "pdf-page-0249",
+          "pdf_page": 249
+        },
+        {
+          "anchor": "pdf-page-0250",
+          "pdf_page": 250
+        },
+        {
+          "anchor": "pdf-page-0251",
+          "pdf_page": 251
+        },
+        {
+          "anchor": "pdf-page-0252",
+          "pdf_page": 252
+        },
+        {
+          "anchor": "pdf-page-0253",
+          "pdf_page": 253
+        },
+        {
+          "anchor": "pdf-page-0254",
+          "pdf_page": 254
+        },
+        {
+          "anchor": "pdf-page-0255",
+          "pdf_page": 255
+        },
+        {
+          "anchor": "pdf-page-0256",
+          "pdf_page": 256
+        },
+        {
+          "anchor": "pdf-page-0257",
+          "pdf_page": 257
+        },
+        {
+          "anchor": "pdf-page-0258",
+          "pdf_page": 258
+        },
+        {
+          "anchor": "pdf-page-0259",
+          "pdf_page": 259
+        },
+        {
+          "anchor": "pdf-page-0260",
+          "pdf_page": 260
+        },
+        {
+          "anchor": "pdf-page-0261",
+          "pdf_page": 261
+        },
+        {
+          "anchor": "pdf-page-0262",
+          "pdf_page": 262
+        },
+        {
+          "anchor": "pdf-page-0263",
+          "pdf_page": 263
+        },
+        {
+          "anchor": "pdf-page-0264",
+          "pdf_page": 264
+        },
+        {
+          "anchor": "pdf-page-0265",
+          "pdf_page": 265
+        },
+        {
+          "anchor": "pdf-page-0266",
+          "pdf_page": 266
+        },
+        {
+          "anchor": "pdf-page-0267",
+          "pdf_page": 267
+        },
+        {
+          "anchor": "pdf-page-0268",
+          "pdf_page": 268
+        },
+        {
+          "anchor": "pdf-page-0269",
+          "pdf_page": 269
+        },
+        {
+          "anchor": "pdf-page-0270",
+          "pdf_page": 270
+        },
+        {
+          "anchor": "pdf-page-0271",
+          "pdf_page": 271
+        },
+        {
+          "anchor": "pdf-page-0272",
+          "pdf_page": 272
+        },
+        {
+          "anchor": "pdf-page-0273",
+          "pdf_page": 273
+        },
+        {
+          "anchor": "pdf-page-0274",
+          "pdf_page": 274
+        },
+        {
+          "anchor": "pdf-page-0275",
+          "pdf_page": 275
+        },
+        {
+          "anchor": "pdf-page-0276",
+          "pdf_page": 276
+        },
+        {
+          "anchor": "pdf-page-0277",
+          "pdf_page": 277
+        },
+        {
+          "anchor": "pdf-page-0278",
+          "pdf_page": 278
+        },
+        {
+          "anchor": "pdf-page-0279",
+          "pdf_page": 279
+        },
+        {
+          "anchor": "pdf-page-0280",
+          "pdf_page": 280
+        },
+        {
+          "anchor": "pdf-page-0281",
+          "pdf_page": 281
+        },
+        {
+          "anchor": "pdf-page-0282",
+          "pdf_page": 282
+        },
+        {
+          "anchor": "pdf-page-0283",
+          "pdf_page": 283
+        },
+        {
+          "anchor": "pdf-page-0284",
+          "pdf_page": 284
+        },
+        {
+          "anchor": "pdf-page-0285",
+          "pdf_page": 285
+        },
+        {
+          "anchor": "pdf-page-0286",
+          "pdf_page": 286
+        },
+        {
+          "anchor": "pdf-page-0287",
+          "pdf_page": 287
+        },
+        {
+          "anchor": "pdf-page-0288",
+          "pdf_page": 288
+        },
+        {
+          "anchor": "pdf-page-0289",
+          "pdf_page": 289
+        },
+        {
+          "anchor": "pdf-page-0290",
+          "pdf_page": 290
+        },
+        {
+          "anchor": "pdf-page-0291",
+          "pdf_page": 291
+        },
+        {
+          "anchor": "pdf-page-0292",
+          "pdf_page": 292
+        },
+        {
+          "anchor": "pdf-page-0293",
+          "pdf_page": 293
+        },
+        {
+          "anchor": "pdf-page-0294",
+          "pdf_page": 294
+        },
+        {
+          "anchor": "pdf-page-0295",
+          "pdf_page": 295
+        },
+        {
+          "anchor": "pdf-page-0296",
+          "pdf_page": 296
+        },
+        {
+          "anchor": "pdf-page-0297",
+          "pdf_page": 297
+        },
+        {
+          "anchor": "pdf-page-0298",
+          "pdf_page": 298
+        },
+        {
+          "anchor": "pdf-page-0299",
+          "pdf_page": 299
+        },
+        {
+          "anchor": "pdf-page-0300",
+          "pdf_page": 300
+        },
+        {
+          "anchor": "pdf-page-0301",
+          "pdf_page": 301
+        },
+        {
+          "anchor": "pdf-page-0302",
+          "pdf_page": 302
+        },
+        {
+          "anchor": "pdf-page-0303",
+          "pdf_page": 303
+        },
+        {
+          "anchor": "pdf-page-0304",
+          "pdf_page": 304
+        },
+        {
+          "anchor": "pdf-page-0305",
+          "pdf_page": 305
+        },
+        {
+          "anchor": "pdf-page-0306",
+          "pdf_page": 306
+        },
+        {
+          "anchor": "pdf-page-0307",
+          "pdf_page": 307
+        },
+        {
+          "anchor": "pdf-page-0308",
+          "pdf_page": 308
+        },
+        {
+          "anchor": "pdf-page-0309",
+          "pdf_page": 309
+        },
+        {
+          "anchor": "pdf-page-0310",
+          "pdf_page": 310
+        },
+        {
+          "anchor": "pdf-page-0311",
+          "pdf_page": 311
+        },
+        {
+          "anchor": "pdf-page-0312",
+          "pdf_page": 312
+        },
+        {
+          "anchor": "pdf-page-0313",
+          "pdf_page": 313
+        },
+        {
+          "anchor": "pdf-page-0314",
+          "pdf_page": 314
+        },
+        {
+          "anchor": "pdf-page-0315",
+          "pdf_page": 315
+        },
+        {
+          "anchor": "pdf-page-0316",
+          "pdf_page": 316
+        },
+        {
+          "anchor": "pdf-page-0317",
+          "pdf_page": 317
+        },
+        {
+          "anchor": "pdf-page-0318",
+          "pdf_page": 318
+        },
+        {
+          "anchor": "pdf-page-0319",
+          "pdf_page": 319
+        },
+        {
+          "anchor": "pdf-page-0320",
+          "pdf_page": 320
+        },
+        {
+          "anchor": "pdf-page-0321",
+          "pdf_page": 321
+        },
+        {
+          "anchor": "pdf-page-0322",
+          "pdf_page": 322
+        },
+        {
+          "anchor": "pdf-page-0323",
+          "pdf_page": 323
+        },
+        {
+          "anchor": "pdf-page-0324",
+          "pdf_page": 324
+        },
+        {
+          "anchor": "pdf-page-0325",
+          "pdf_page": 325
+        },
+        {
+          "anchor": "pdf-page-0326",
+          "pdf_page": 326
+        },
+        {
+          "anchor": "pdf-page-0327",
+          "pdf_page": 327
+        },
+        {
+          "anchor": "pdf-page-0328",
+          "pdf_page": 328
+        },
+        {
+          "anchor": "pdf-page-0329",
+          "pdf_page": 329
+        },
+        {
+          "anchor": "pdf-page-0330",
+          "pdf_page": 330
+        },
+        {
+          "anchor": "pdf-page-0331",
+          "pdf_page": 331
+        },
+        {
+          "anchor": "pdf-page-0332",
+          "pdf_page": 332
+        },
+        {
+          "anchor": "pdf-page-0333",
+          "pdf_page": 333
+        },
+        {
+          "anchor": "pdf-page-0334",
+          "pdf_page": 334
+        },
+        {
+          "anchor": "pdf-page-0335",
+          "pdf_page": 335
+        },
+        {
+          "anchor": "pdf-page-0336",
+          "pdf_page": 336
+        },
+        {
+          "anchor": "pdf-page-0337",
+          "pdf_page": 337
+        },
+        {
+          "anchor": "pdf-page-0338",
+          "pdf_page": 338
+        },
+        {
+          "anchor": "pdf-page-0339",
+          "pdf_page": 339
+        },
+        {
+          "anchor": "pdf-page-0340",
+          "pdf_page": 340
+        },
+        {
+          "anchor": "pdf-page-0341",
+          "pdf_page": 341
+        },
+        {
+          "anchor": "pdf-page-0342",
+          "pdf_page": 342
+        },
+        {
+          "anchor": "pdf-page-0343",
+          "pdf_page": 343
+        },
+        {
+          "anchor": "pdf-page-0344",
+          "pdf_page": 344
+        },
+        {
+          "anchor": "pdf-page-0345",
+          "pdf_page": 345
+        },
+        {
+          "anchor": "pdf-page-0346",
+          "pdf_page": 346
+        },
+        {
+          "anchor": "pdf-page-0347",
+          "pdf_page": 347
+        },
+        {
+          "anchor": "pdf-page-0348",
+          "pdf_page": 348
+        },
+        {
+          "anchor": "pdf-page-0349",
+          "pdf_page": 349
+        },
+        {
+          "anchor": "pdf-page-0350",
+          "pdf_page": 350
+        },
+        {
+          "anchor": "pdf-page-0351",
+          "pdf_page": 351
+        },
+        {
+          "anchor": "pdf-page-0352",
+          "pdf_page": 352
+        },
+        {
+          "anchor": "pdf-page-0353",
+          "pdf_page": 353
+        },
+        {
+          "anchor": "pdf-page-0354",
+          "pdf_page": 354
+        },
+        {
+          "anchor": "pdf-page-0355",
+          "pdf_page": 355
+        },
+        {
+          "anchor": "pdf-page-0356",
+          "pdf_page": 356
+        },
+        {
+          "anchor": "pdf-page-0357",
+          "pdf_page": 357
+        },
+        {
+          "anchor": "pdf-page-0358",
+          "pdf_page": 358
+        },
+        {
+          "anchor": "pdf-page-0359",
+          "pdf_page": 359
+        },
+        {
+          "anchor": "pdf-page-0360",
+          "pdf_page": 360
+        },
+        {
+          "anchor": "pdf-page-0361",
+          "pdf_page": 361
+        },
+        {
+          "anchor": "pdf-page-0362",
+          "pdf_page": 362
+        },
+        {
+          "anchor": "pdf-page-0363",
+          "pdf_page": 363
+        },
+        {
+          "anchor": "pdf-page-0364",
+          "pdf_page": 364
+        },
+        {
+          "anchor": "pdf-page-0365",
+          "pdf_page": 365
+        },
+        {
+          "anchor": "pdf-page-0366",
+          "pdf_page": 366
+        },
+        {
+          "anchor": "pdf-page-0367",
+          "pdf_page": 367
+        },
+        {
+          "anchor": "pdf-page-0368",
+          "pdf_page": 368
+        },
+        {
+          "anchor": "pdf-page-0369",
+          "pdf_page": 369
+        },
+        {
+          "anchor": "pdf-page-0370",
+          "pdf_page": 370
+        },
+        {
+          "anchor": "pdf-page-0371",
+          "pdf_page": 371
+        },
+        {
+          "anchor": "pdf-page-0372",
+          "pdf_page": 372
+        },
+        {
+          "anchor": "pdf-page-0373",
+          "pdf_page": 373
+        },
+        {
+          "anchor": "pdf-page-0374",
+          "pdf_page": 374
+        },
+        {
+          "anchor": "pdf-page-0375",
+          "pdf_page": 375
+        },
+        {
+          "anchor": "pdf-page-0376",
+          "pdf_page": 376
+        },
+        {
+          "anchor": "pdf-page-0377",
+          "pdf_page": 377
+        },
+        {
+          "anchor": "pdf-page-0378",
+          "pdf_page": 378
+        },
+        {
+          "anchor": "pdf-page-0379",
+          "pdf_page": 379
+        },
+        {
+          "anchor": "pdf-page-0380",
+          "pdf_page": 380
+        },
+        {
+          "anchor": "pdf-page-0381",
+          "pdf_page": 381
+        },
+        {
+          "anchor": "pdf-page-0382",
+          "pdf_page": 382
+        },
+        {
+          "anchor": "pdf-page-0383",
+          "pdf_page": 383
+        },
+        {
+          "anchor": "pdf-page-0384",
+          "pdf_page": 384
+        },
+        {
+          "anchor": "pdf-page-0385",
+          "pdf_page": 385
+        },
+        {
+          "anchor": "pdf-page-0386",
+          "pdf_page": 386
+        },
+        {
+          "anchor": "pdf-page-0387",
+          "pdf_page": 387
+        },
+        {
+          "anchor": "pdf-page-0388",
+          "pdf_page": 388
+        },
+        {
+          "anchor": "pdf-page-0389",
+          "pdf_page": 389
+        },
+        {
+          "anchor": "pdf-page-0390",
+          "pdf_page": 390
+        },
+        {
+          "anchor": "pdf-page-0391",
+          "pdf_page": 391
+        },
+        {
+          "anchor": "pdf-page-0392",
+          "pdf_page": 392
+        },
+        {
+          "anchor": "pdf-page-0393",
+          "pdf_page": 393
+        },
+        {
+          "anchor": "pdf-page-0394",
+          "pdf_page": 394
+        },
+        {
+          "anchor": "pdf-page-0395",
+          "pdf_page": 395
+        },
+        {
+          "anchor": "pdf-page-0396",
+          "pdf_page": 396
+        },
+        {
+          "anchor": "pdf-page-0397",
+          "pdf_page": 397
+        },
+        {
+          "anchor": "pdf-page-0398",
+          "pdf_page": 398
+        },
+        {
+          "anchor": "pdf-page-0399",
+          "pdf_page": 399
+        },
+        {
+          "anchor": "pdf-page-0400",
+          "pdf_page": 400
+        },
+        {
+          "anchor": "pdf-page-0401",
+          "pdf_page": 401
+        },
+        {
+          "anchor": "pdf-page-0402",
+          "pdf_page": 402
+        },
+        {
+          "anchor": "pdf-page-0403",
+          "pdf_page": 403
+        },
+        {
+          "anchor": "pdf-page-0404",
+          "pdf_page": 404
+        },
+        {
+          "anchor": "pdf-page-0405",
+          "pdf_page": 405
+        },
+        {
+          "anchor": "pdf-page-0406",
+          "pdf_page": 406
+        },
+        {
+          "anchor": "pdf-page-0407",
+          "pdf_page": 407
+        },
+        {
+          "anchor": "pdf-page-0408",
+          "pdf_page": 408
+        },
+        {
+          "anchor": "pdf-page-0409",
+          "pdf_page": 409
+        },
+        {
+          "anchor": "pdf-page-0410",
+          "pdf_page": 410
+        },
+        {
+          "anchor": "pdf-page-0411",
+          "pdf_page": 411
+        },
+        {
+          "anchor": "pdf-page-0412",
+          "pdf_page": 412
+        },
+        {
+          "anchor": "pdf-page-0413",
+          "pdf_page": 413
+        },
+        {
+          "anchor": "pdf-page-0414",
+          "pdf_page": 414
+        },
+        {
+          "anchor": "pdf-page-0415",
+          "pdf_page": 415
+        },
+        {
+          "anchor": "pdf-page-0416",
+          "pdf_page": 416
+        },
+        {
+          "anchor": "pdf-page-0417",
+          "pdf_page": 417
+        },
+        {
+          "anchor": "pdf-page-0418",
+          "pdf_page": 418
+        },
+        {
+          "anchor": "pdf-page-0419",
+          "pdf_page": 419
+        },
+        {
+          "anchor": "pdf-page-0420",
+          "pdf_page": 420
+        },
+        {
+          "anchor": "pdf-page-0421",
+          "pdf_page": 421
+        },
+        {
+          "anchor": "pdf-page-0422",
+          "pdf_page": 422
+        },
+        {
+          "anchor": "pdf-page-0423",
+          "pdf_page": 423
+        },
+        {
+          "anchor": "pdf-page-0424",
+          "pdf_page": 424
+        },
+        {
+          "anchor": "pdf-page-0425",
+          "pdf_page": 425
+        },
+        {
+          "anchor": "pdf-page-0426",
+          "pdf_page": 426
+        },
+        {
+          "anchor": "pdf-page-0427",
+          "pdf_page": 427
+        },
+        {
+          "anchor": "pdf-page-0428",
+          "pdf_page": 428
+        },
+        {
+          "anchor": "pdf-page-0429",
+          "pdf_page": 429
+        },
+        {
+          "anchor": "pdf-page-0430",
+          "pdf_page": 430
+        },
+        {
+          "anchor": "pdf-page-0431",
+          "pdf_page": 431
+        },
+        {
+          "anchor": "pdf-page-0432",
+          "pdf_page": 432
+        },
+        {
+          "anchor": "pdf-page-0433",
+          "pdf_page": 433
+        },
+        {
+          "anchor": "pdf-page-0434",
+          "pdf_page": 434
+        },
+        {
+          "anchor": "pdf-page-0435",
+          "pdf_page": 435
+        },
+        {
+          "anchor": "pdf-page-0436",
+          "pdf_page": 436
+        },
+        {
+          "anchor": "pdf-page-0437",
+          "pdf_page": 437
+        },
+        {
+          "anchor": "pdf-page-0438",
+          "pdf_page": 438
+        },
+        {
+          "anchor": "pdf-page-0439",
+          "pdf_page": 439
+        },
+        {
+          "anchor": "pdf-page-0440",
+          "pdf_page": 440
+        },
+        {
+          "anchor": "pdf-page-0441",
+          "pdf_page": 441
+        },
+        {
+          "anchor": "pdf-page-0442",
+          "pdf_page": 442
+        },
+        {
+          "anchor": "pdf-page-0443",
+          "pdf_page": 443
+        },
+        {
+          "anchor": "pdf-page-0444",
+          "pdf_page": 444
+        },
+        {
+          "anchor": "pdf-page-0445",
+          "pdf_page": 445
+        },
+        {
+          "anchor": "pdf-page-0446",
+          "pdf_page": 446
+        },
+        {
+          "anchor": "pdf-page-0447",
+          "pdf_page": 447
+        },
+        {
+          "anchor": "pdf-page-0448",
+          "pdf_page": 448
+        },
+        {
+          "anchor": "pdf-page-0449",
+          "pdf_page": 449
+        },
+        {
+          "anchor": "pdf-page-0450",
+          "pdf_page": 450
+        },
+        {
+          "anchor": "pdf-page-0451",
+          "pdf_page": 451
+        },
+        {
+          "anchor": "pdf-page-0452",
+          "pdf_page": 452
+        },
+        {
+          "anchor": "pdf-page-0453",
+          "pdf_page": 453
+        },
+        {
+          "anchor": "pdf-page-0454",
+          "pdf_page": 454
+        },
+        {
+          "anchor": "pdf-page-0455",
+          "pdf_page": 455
+        },
+        {
+          "anchor": "pdf-page-0456",
+          "pdf_page": 456
+        },
+        {
+          "anchor": "pdf-page-0457",
+          "pdf_page": 457
+        },
+        {
+          "anchor": "pdf-page-0458",
+          "pdf_page": 458
+        },
+        {
+          "anchor": "pdf-page-0459",
+          "pdf_page": 459
+        },
+        {
+          "anchor": "pdf-page-0460",
+          "pdf_page": 460
+        },
+        {
+          "anchor": "pdf-page-0461",
+          "pdf_page": 461
+        },
+        {
+          "anchor": "pdf-page-0462",
+          "pdf_page": 462
+        },
+        {
+          "anchor": "pdf-page-0463",
+          "pdf_page": 463
+        },
+        {
+          "anchor": "pdf-page-0464",
+          "pdf_page": 464
+        },
+        {
+          "anchor": "pdf-page-0465",
+          "pdf_page": 465
+        },
+        {
+          "anchor": "pdf-page-0466",
+          "pdf_page": 466
+        },
+        {
+          "anchor": "pdf-page-0467",
+          "pdf_page": 467
+        },
+        {
+          "anchor": "pdf-page-0468",
+          "pdf_page": 468
+        },
+        {
+          "anchor": "pdf-page-0469",
+          "pdf_page": 469
+        }
+      ],
+      "platform": "Amiga",
+      "sha256": "84f5d30ae3d905ebbb3dd18ba00c92e0bb3c5bd0356e4fa32336454977e336f6",
+      "source_id": "AM-INTERPRETER-35",
+      "source_url": "https://ia803204.us.archive.org/16/items/gfa-basic-3.5-interpreter/GFA_Basic_3.5_Interpreter.pdf",
+      "text_extraction": "not-included",
+      "title": "GFA BASIC 3.5 Interpreter",
+      "version": "3.5"
+    }
+  ],
+  "format_version": 3,
+  "generated_by": "scripts/build_reference_source_index.py",
+  "manifest": "references/pdf-sources.json",
+  "purpose": "Bibliographic metadata, page locators, and manifest-authorized per-page extracted text"
+}
