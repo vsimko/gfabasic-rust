@@ -1,19 +1,6 @@
 name: Prepare and analyze Amiga GFA-BASIC reference interpreter
 
 on:
-  # Analyze automatically when the interpreter-analysis pipeline or its scripts change.
-  # This also runs for pushes to the active development branch, so no UI dispatch is needed.
-  push:
-    branches:
-      - main
-      - research/amiga-command-syntax-workflow
-      - research/amiga-string-crossrefs
-    paths:
-      - .github/workflows/amiga-reference.yml
-      - scripts/amiga_binary_strings.py
-      - scripts/build_amiga_analysis_report.py
-      - scripts/publish_private_amiga_analysis.sh
-      - scripts/ghidra/**
   workflow_dispatch:
 
 permissions:
@@ -26,7 +13,7 @@ concurrency:
 
 jobs:
   prepare-and-analyze:
-    if: github.event_name != 'workflow_dispatch' || github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main'
     name: Fetch, verify, and analyze GFA BASIC 3.52
     runs-on: ubuntu-24.04
     timeout-minutes: 60
