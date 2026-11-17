@@ -29,6 +29,6 @@ This is a bounded deterministic property test, not a language-conformance test. 
 
 ## Mutation pilot
 
-A bounded manual mutation pilot targets the critical API registry validator. The deliberate mutant disables duplicate declaration-ID detection; the existing `test_duplicate_ids_fail` case should kill it. The validator is restored after the experiment. The result and classification will be recorded here after CI completes.
+A bounded manual mutation pilot will target the Rust `SourceFile::line_column` implementation exercised by the generated property test. The mutant will alter Unicode column counting; the generated supplementary-plane character cases must detect the incorrect column. No Python validator or non-Rust implementation is in the mutation scope. The result will be recorded after the targeted Rust test runs.
 
 No mutation-testing dependency is added. The pilot is intentionally narrow; it does not establish a repository-wide mutation score.
