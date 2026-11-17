@@ -1,3 +1,8 @@
 arithmetic
 for-next
 strings
+int
+sqr
+succ
+string-repeat
+hex
