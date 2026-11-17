@@ -1,9 +1,41 @@
 {
   "schema_version": 1,
   "status": "fresh",
-  "generated_at": "2026-11-17T07:39:42.971498+00:00",
-  "last_successful_at": "2026-11-17T07:39:42.971498+00:00",
+  "generated_at": "2026-11-17T11:29:58.591297+00:00",
+  "last_successful_at": "2026-11-17T11:29:58.591297+00:00",
   "items": [
+    {
+      "type": "commit",
+      "title": "docs: align Amiga interpreter matrix with current baseline",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/500f6e4acbaf8b679304dc4ac29a84a0b8b766c7",
+      "number": null,
+      "timestamp": "2026-11-17T11:29:45Z",
+      "summary": "Commit 500f6e4"
+    },
+    {
+      "type": "commit",
+      "title": "docs: align Amiga interpreter matrix with current baseline",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/e4e2623ccd0a8cb8546b377fd60695f440b9072a",
+      "number": null,
+      "timestamp": "2026-11-17T11:29:40Z",
+      "summary": "Commit e4e2623"
+    },
+    {
+      "type": "commit",
+      "title": "docs: align Amiga interpreter matrix with current baseline",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/604f55936cde873370afb9199b1eb5674a2c4934",
+      "number": null,
+      "timestamp": "2026-11-17T11:29:35Z",
+      "summary": "Commit 604f559"
+    },
+    {
+      "type": "commit",
+      "title": "docs: align Amiga interpreter matrix with current baseline",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/8b93d064e23aa9843024c3f471bc930450ec5401",
+      "number": null,
+      "timestamp": "2026-11-17T11:29:31Z",
+      "summary": "Commit 8b93d06"
+    },
     {
       "type": "merged_pull_request",
       "title": "build(deps): bump actions/cache from 4.2.0 to 6.1.0",
@@ -67,38 +99,6 @@
       "number": null,
       "timestamp": "2026-11-17T00:27:06Z",
       "summary": "Commit d8e9fa5"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "Use publisher-hosted German GFA BASIC book download",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/554",
-      "number": 554,
-      "timestamp": "2026-11-17T00:20:43Z",
-      "summary": "PR #554 merged"
-    },
-    {
-      "type": "commit",
-      "title": "Use publisher-hosted German GFA BASIC book download (#554)",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/9858f063b0852da3588891028cf94c1c21ceddea",
-      "number": null,
-      "timestamp": "2026-11-17T00:20:43Z",
-      "summary": "Commit 9858f06"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "test(amiga): expand 3.5 regression suite on 3.52",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/535",
-      "number": 535,
-      "timestamp": "2026-11-16T23:32:09Z",
-      "summary": "PR #535 merged"
-    },
-    {
-      "type": "commit",
-      "title": "test(amiga): add native 3.5U MAT ONE probe (#535)",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/de28378eb4eb3448bc504bed423290a1e0eebd5e",
-      "number": null,
-      "timestamp": "2026-11-16T23:32:08Z",
-      "summary": "Commit de28378"
     }
   ]
 }
