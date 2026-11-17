@@ -40,12 +40,25 @@ class AgentSecurityValidationTests(unittest.TestCase):
             "permissions": {"contents": "read"},
             "jobs": {
                 "probe": {
-                    "if": "github.event.pull_request.head.repo.full_name == github.repository",
+                    "if": "github.actor != 'dependabot[bot]' && github.event.pull_request.head.repo.full_name == github.repository",
                     "env": {"TOKEN": "${{ secrets.PRIVATE_TOKEN }}"},
                 }
             },
         }
         self.assertEqual([], validate_document(document, "test.yml"))
+
+    def test_requires_dependabot_exclusion_for_pr_secret(self):
+        document = {
+            "on": {"pull_request": {}},
+            "permissions": {"contents": "read"},
+            "jobs": {
+                "probe": {
+                    "if": "github.event.pull_request.head.repo.full_name == github.repository",
+                    "env": {"TOKEN": "${{ secrets.PRIVATE_TOKEN }}"},
+                }
+            },
+        }
+        self.assertTrue(any("excluding Dependabot" in error for error in validate_document(document, "test.yml")))
 
     def test_requires_same_repository_guard_for_pr_write(self):
         document = {
