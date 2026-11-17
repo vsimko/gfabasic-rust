@@ -3,7 +3,6 @@ REM Loaded through the native Editor Merge (F2) command.
 REM Results are observations for the exact 3.5 interpreter identity captured by CI.
 
 OPEN "O",#1,"DF0:GFATEST.OUT"
-#OUT=1
 
 REM Arithmetic precedence and grouping.
 a = 2 + 3 * 4
@@ -38,33 +37,33 @@ ENDIF
 REM Function checks: INT, SQR, SUCC, STRING$, and HEX$.
 v = INT(3.7)
 IF v=3
-  PRINT 1,"GFATEST:int:PASS"
+  PRINT #1,"GFATEST:int:PASS"
 ELSE
-  PRINT 1,"GFATEST:int:FAIL"
+  PRINT #1,"GFATEST:int:FAIL"
 ENDIF
 v = SQR(9)
 IF v=3
-  PRINT 1,"GFATEST:sqr:PASS"
+  PRINT #1,"GFATEST:sqr:PASS"
 ELSE
-  PRINT 1,"GFATEST:sqr:FAIL"
+  PRINT #1,"GFATEST:sqr:FAIL"
 ENDIF
 v = SUCC(1)
 IF v=2
-  PRINT 1,"GFATEST:succ:PASS"
+  PRINT #1,"GFATEST:succ:PASS"
 ELSE
-  PRINT 1,"GFATEST:succ:FAIL"
+  PRINT #1,"GFATEST:succ:FAIL"
 ENDIF
 s$ = STRING$(3,"-")
 IF s$="---"
-  PRINT 1,"GFATEST:string-repeat:PASS"
+  PRINT #1,"GFATEST:string-repeat:PASS"
 ELSE
-  PRINT 1,"GFATEST:string-repeat:FAIL"
+  PRINT #1,"GFATEST:string-repeat:FAIL"
 ENDIF
 s$ = HEX$(255)
 IF s$="FF"
-  PRINT 1,"GFATEST:hex:PASS"
+  PRINT #1,"GFATEST:hex:PASS"
 ELSE
-  PRINT 1,"GFATEST:hex:FAIL"
+  PRINT #1,"GFATEST:hex:FAIL"
 ENDIF
 
 CLOSE #1
