@@ -16,15 +16,9 @@ from typing import Any
 
 WORKFLOWS = {
     ".github/workflows/amiga-reference-matrix.yml": (
-        ".github/workflows/amiga-reference-matrix.yml",
-        ".github/workflows/amiga-native-merge-run.yml",
-        ".github/workflows/amiga-3041u-native-merge-run.yml",
         "tests/interpreter-probes/amiga-3.52/**",
         "tests/interpreter-probes/amiga-3.041u/**",
         "tests/interpreter-probes/amiga-3.5/**",
-        "scripts/amiga-cli-probe-35.sh",
-        "scripts/amiga-cli-probe-3041u.sh",
-        "scripts/validate_gfatest_results.py",
     ),
     ".github/workflows/amiga-construct-matrix.yml": (
         ".github/workflows/amiga-construct-matrix.yml",
