@@ -73,7 +73,7 @@
 <tr>
 <td>amiga-reference.yml</td>
 <td>contents and pull requests write</td>
-<td>Publish generated 3.52 analysis to the private-assets repository and propose reviewed metadata through a PR. Push branches are explicitly listed; manual dispatch is restricted to main.</td>
+<td>Publish generated 3.52 analysis to the private-assets repository and propose reviewed metadata through a PR. Manual dispatch on main only; no automatic push trigger, so publishing requires an explicit maintainer action.</td>
 </tr>
 <tr>
 <td>release-sbom.yml</td>
@@ -88,7 +88,7 @@
 <tr>
 <td>amiga-media-inventory.yml cleanup job</td>
 <td>actions write</td>
-<td>Delete one known legacy artifact after a successful inventory run on main. The workflow is no longer triggered by PRs.</td>
+<td>Delete one known legacy artifact after a successful inventory run. The workflow is manual-dispatch only on main; it is not triggered by PRs or pushes.</td>
 </tr>
 </tbody>
 </table>

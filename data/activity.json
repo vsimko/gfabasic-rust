@@ -1,9 +1,25 @@
 {
   "schema_version": 1,
   "status": "fresh",
-  "generated_at": "2026-11-17T22:24:15.651760+00:00",
-  "last_successful_at": "2026-11-17T22:24:15.651760+00:00",
+  "generated_at": "2026-11-17T22:27:42.456531+00:00",
+  "last_successful_at": "2026-11-17T22:27:42.456531+00:00",
   "items": [
+    {
+      "type": "merged_pull_request",
+      "title": "[Security] Require explicit dispatch for private Amiga workflows",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/586",
+      "number": 586,
+      "timestamp": "2026-11-17T22:27:16Z",
+      "summary": "PR #586 merged"
+    },
+    {
+      "type": "commit",
+      "title": "[Security] Require explicit dispatch for private Amiga workflows (#586)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/46d2c246944e4e371f0b6cd7f45a855d9fc8d44d",
+      "number": null,
+      "timestamp": "2026-11-17T22:27:16Z",
+      "summary": "Commit 46d2c24"
+    },
     {
       "type": "merged_pull_request",
       "title": "[Security] Define AI-agent trust boundaries and harden workflows (#580)",
@@ -83,22 +99,6 @@
       "number": null,
       "timestamp": "2026-11-17T18:13:14Z",
       "summary": "Commit 50513a4"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "Classify MOUSE statement and MENU event accessor",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/567",
-      "number": 567,
-      "timestamp": "2026-11-17T16:20:09Z",
-      "summary": "PR #567 merged"
-    },
-    {
-      "type": "commit",
-      "title": "Classify MOUSE statement and MENU event accessor (#567)",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/bb882b945258257010c20b10d729c0d29da5b049",
-      "number": null,
-      "timestamp": "2026-11-17T16:20:08Z",
-      "summary": "Commit bb882b9"
     }
   ]
 }
