@@ -59,6 +59,7 @@ Follow the repository-wide [AI agent and human-blocker policy](../../AGENTS.md).
 
 ## Pull request expectations
 
+- Use the [pull request template](../../.github/PULL_REQUEST_TEMPLATE.md) and complete all applicable sections.
 - Keep changes small and scoped to an issue or a clearly described defect.
 - Preserve accepted architecture decisions. Mark proposals as proposals.
 - Cite the applicable dialect, platform, version, source edition, and page/section for language/API claims.
