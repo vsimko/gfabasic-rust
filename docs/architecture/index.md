@@ -28,4 +28,5 @@
 - [VERSIONING](VERSIONING.md) - Documentation concepts in architecture.
 - [WEBSITE PREVIEWS](WEBSITE_PREVIEWS.md) - Documentation concepts in architecture.
 - [WORKSPACE](WORKSPACE.md) - Documentation concepts in architecture.
+- [TOML inventory and YAML migration policy](TOML-YAML-MIGRATION.md) - Repository-wide inventory and migration decisions for issue #574.
 - [ADR](adr/) - Related documentation concepts.
