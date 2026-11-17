@@ -72,6 +72,6 @@ For the corpus and interpreter probe sidecars:
 ## Sequencing
 
 - This document completes the inventory and format decision for issue #574.
-- The corpus and interpreter-probe YAML migration is the implementation work remaining in #574.
+- The corpus manifest, 16 corpus sidecars, and the Amiga 3.5 interpreter-probe sidecar have been migrated to YAML in this PR. Remaining work in #574 is to verify downstream consumers, CI, and documentation references before closing the issue.
 - Construct-scoped YAML manifests and change selection are tracked separately in [#570](https://github.com/vsimko/gfabasic-rust/issues/570) and [#571](https://github.com/vsimko/gfabasic-rust/issues/571); parallel construct/version CI is [#572](https://github.com/vsimko/gfabasic-rust/issues/572).
 - Do not migrate tool-owned formats (Cargo, rustup) or convert research/API data merely to make all extensions uniform.
