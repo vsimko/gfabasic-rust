@@ -21,7 +21,7 @@ A directory name is the stable construct ID. It must match `construct.id` and us
 
 ## Manifest schema version 1
 
-Every `manifest.yaml` is UTF-8 YAML with these required top-level fields:
+Every `manifest.yaml` is UTF-8 YAML with these required top-level fields. Schema version 1 is strict: unknown fields are rejected at every level so a typo cannot silently change selection.
 
 | Field | Meaning |
 |---|---|
@@ -63,10 +63,10 @@ Every exact version key has:
 - `execution.status`: exactly one of the ADR result values `PASS`, `FAIL`, `DIFFERENT`, or `UNTESTED`.
 - `execution.observed`: null for `UNTESTED`; otherwise the concise observed output/behavior.
 - `execution.run_url`: null for `UNTESTED`; otherwise a stable URL to the native run.
-- `execution.probe_source`: optional repository-relative path to the exact source file used by an existing observation. It can differ from the isolated `probe` when a previous shared regression suite already exercised the construct.
+- `execution.probe_source`: null for `UNTESTED`; required for a native result. It is a repository-relative `.LST` path under `tests/` to the exact source file used by an existing observation. It can differ from the isolated `probe` when a previous shared regression suite already exercised the construct.
 - `execution.evidence_refs`: evidence IDs supporting the observation.
 - `implementation.status`: one of `not-targeted`, `not-started`, `syntax-only`, `prototype`, `production`, or `unknown`.
-- `implementation.refs`: repository paths supporting the implementation status.
+- `implementation.refs`: existing repository-relative file paths supporting the implementation status. They are required for `syntax-only`, `prototype`, and `production`, and empty for `not-targeted`, `not-started`, and `unknown`.
 
 The `implementation` field describes the current Rust implementation, not the original interpreter. The `execution` field describes native interpreter evidence, not a Rust unit test. A Rust prototype test must never be recorded as a native interpreter PASS.
 
@@ -75,11 +75,12 @@ The `implementation` field describes the current Rust implementation, not the or
 1. Manifest filename is exactly `manifest.yaml`.
 2. `construct.id` must equal the directory name and match `^[a-z0-9]+(?:-[a-z0-9]+)*$`.
 3. Probe paths are relative to the construct directory, must stay inside it, must exist as regular files, and must use the `.LST` extension.
-4. A version marked `applicable` and selected for execution must map to a probe. Unknown or not-applicable versions must not be assigned a guessed probe. Probe files should be ASCII with LF line endings unless the construct explicitly tests encoding behavior.
+4. A version marked `applicable` must map to a probe and appear in at least one syntax form. Unknown or not-applicable versions must not be assigned a guessed probe; their expectation status must be `unknown` or `not-applicable` respectively. Probe files should be ASCII with LF line endings unless the construct explicitly tests encoding behavior.
 5. `execution.probe_source` is provenance for an already observed run, not the selection path for future per-construct jobs. It must be repository-relative and point to an existing test source.
 6. Every evidence reference must resolve to exactly one evidence ID in the same manifest.
 7. Version identifiers are exact strings. Do not normalize `3.041U`, `3.5`, or `3.52`.
-8. Expected behavior is not evidence. Evidence is not implementation status. A probe path is not proof that it ran.
+8. A native result other than `UNTESTED` requires observed output, a run URL, the source probe path, and evidence references. `UNTESTED` requires all four to be empty/null.
+9. Expected behavior is not evidence. Evidence is not implementation status. A probe path is not proof that it ran.
 
 ## Examples
 
