@@ -110,7 +110,7 @@ class LanguageConstructManifestValidationTests(unittest.TestCase):
 
     def test_backslash_probe_path_fails(self):
         manifest = self.load_manifest()
-        manifest["versions"]["3.5"]["probe"] = r"subdir\\probe.LST"
+        manifest["versions"]["3.5"]["probe"] = r"subdir\probe.LST"
         self.write_manifest(manifest)
         self.assertTrue(any("safe relative POSIX path" in error for error in validate_language_constructs(self.root)))
 
@@ -304,10 +304,10 @@ class LanguageConstructSelectionTests(unittest.TestCase):
     def test_git_name_status_parser_handles_add_modify_delete_and_rename(self):
         output = (
             "A\0tests/language-constructs/new/manifest.yaml\0"
-            "M\0tests/language-constructs/fact-function/manifest.yaml\\0"
-            "D\0tests/language-constructs/old/manifest.yaml\\0"
-            "R100\0tests/language-constructs/old/manifest.yaml\\0"
-            "tests/language-constructs/new/manifest.yaml\\0"
+            "M\0tests/language-constructs/fact-function/manifest.yaml\0"
+            "D\0tests/language-constructs/old/manifest.yaml\0"
+            "R100\0tests/language-constructs/old/manifest.yaml\0"
+            "tests/language-constructs/new/manifest.yaml\0"
         )
         changes = parse_name_status_z(output)
         self.assertEqual([item.status for item in changes], ["A", "M", "D", "R100"])
