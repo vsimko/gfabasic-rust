@@ -68,6 +68,21 @@ class PullRequestGateTests(unittest.TestCase):
             },
         )
 
+    def test_reference_matrix_workflow_change_routes_to_construct_matrix_and_lint(self):
+        self.assertEqual(
+            expected_workflows([".github/workflows/amiga-reference-matrix.yml"]),
+            {
+                ".github/workflows/amiga-construct-matrix.yml",
+                ".github/workflows/workflow-lint.yml",
+            },
+        )
+
+    def test_interpreter_probe_change_keeps_full_suite_baseline(self):
+        self.assertEqual(
+            expected_workflows(["tests/interpreter-probes/amiga-3.52/probe.LST"]),
+            {".github/workflows/amiga-reference-matrix.yml"},
+        )
+
     def test_unknown_path_fails_closed_to_all_workflows(self):
         self.assertEqual(
             expected_workflows(["new/unknown/component.file"]),
