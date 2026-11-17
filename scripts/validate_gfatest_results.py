@@ -27,6 +27,10 @@ class Validation:
         return sum(outcome == "FAIL" for outcome in self.outcomes.values())
 
     @property
+    def different(self) -> int:
+        return sum(outcome == "DIFFERENT" for outcome in self.outcomes.values())
+
+    @property
     def valid(self) -> bool:
         return not self.errors
 
@@ -94,7 +98,7 @@ def main() -> int:
 
     result = validate_result_bytes(expected_ids, raw)
     print(f"GFATEST: {result.passed} PASS, {result.failed} FAIL, "
-          f"{len(result.errors)} protocol error(s)")
+          f"{result.different} DIFFERENT, {len(result.errors)} protocol error(s)")
     for error in result.errors:
         print(f"ERROR: {error}", file=sys.stderr)
 
