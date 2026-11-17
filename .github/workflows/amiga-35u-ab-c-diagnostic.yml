@@ -48,7 +48,7 @@ jobs:
           xdftool "$RUNNER_TEMP/gfa-basic-3.5u.adf" read GFABasic amiga-volume/GFABasic
           echo "c5e9ffdb96b621307069d8f21a3282788386930bbc1ea679dfebe2caef5493ca  amiga-volume/GFABasic" | sha256sum --check
           test "$(wc -c < amiga-volume/GFABasic)" -eq 135956
-          printf '\\x00\\x00\\x03\\xf3' | cmp -n 4 - amiga-volume/GFABasic
+          printf '\x00\x00\x03\xf3' | cmp -n 4 - amiga-volume/GFABasic
           sha256sum "$RUNNER_TEMP/gfa-basic-3.5u.adf" > artifacts/amiga-35u-ab-c/source-adf-sha256.txt
           sha256sum amiga-volume/GFABasic > artifacts/amiga-35u-ab-c/interpreter-sha256.txt
           file amiga-volume/GFABasic | tee artifacts/amiga-35u-ab-c/interpreter-file.txt
