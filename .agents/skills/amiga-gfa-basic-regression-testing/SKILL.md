@@ -20,7 +20,7 @@ Use this skill when working on regression probes for the original Amiga GFA BASI
 - GFA BASIC 3.52 is the primary reference baseline and default expected behavior for current development.
 - GFA BASIC 3.52 is the active native runtime baseline.
 - GFA BASIC 3.041U is the available 3.0-era native comparison profile; label it exactly `3.041U`, not `3.0`.
-- Amiga GFA BASIC 3.5 remains the normative source-language target under ADR 0009, but there is no active native 3.5 runtime profile in the current workflow set.
+- Amiga GFA BASIC 3.5 remains the normative source-language target under ADR 0009 and now has an active, deliberately limited native smoke profile (editor identity plus arithmetic, FOR/NEXT, and strings). This is not broad runtime conformance; keep untested behavior `UNTESTED`.
 - GFA BASIC 3.5U is retired: do not use its workflow or assets for new runs. Preserve old 3.5U observations as historical evidence only.
 - Run the same applicable probe against all versions when the licensed assets and native harness are available.
 - Keep one result per exact interpreter version. Do not infer one version's behavior from another.
