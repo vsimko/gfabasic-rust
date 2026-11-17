@@ -201,9 +201,6 @@ jobs:
               sleep 0.2
             done
             printf "SEND_MOUSE\\t206\\t198\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-            # The calibrated cursor ended below the Merge gadget (y≈420).
-            # Move it up by 56 screen pixels (IPC dy≈-112) before clicking.
-            printf "SEND_MOUSE\\t0\\t-112\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
             sleep 0.5
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-gadget-pointer.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
             printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
