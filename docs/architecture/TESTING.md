@@ -20,6 +20,7 @@ Use the category that best describes the contract under test. Categories may ove
 1. **Unit tests** check one function, module, or invariant in isolation. They should avoid external processes and filesystem access unless those are the subject of the test.
 2. **Golden/snapshot tests** compare stable, user-visible or compiler-produced output, such as diagnostics or normalized intermediate representations. Snapshot changes require review of the semantic diff; do not update snapshots only to make a failing test pass.
 3. **Property-based tests** check general invariants across generated inputs. Record the generator configuration and seed when a failure must be reproduced.
+   The current bounded source-map property pilot records its target, deterministic generator, seed, and mutation experiment in [the generated property and mutation-testing pilot](../testing/property-mutation-pilot.md).
 4. **Fuzz tests** explore malformed and adversarial inputs for crashes, hangs, panics, and violated invariants. Keep fuzzing strategy and resource budgets under [issue #43](https://github.com/vsimko/gfabasic-rust/issues/43); do not make long fuzz campaigns part of every fast pull-request check.
 5. **Integration tests** exercise boundaries between compiler stages, crates, runtime components, or platform adapters.
 6. **Conformance tests** compare behavior with an applicable manual rule or a named trusted reference implementation. Each test must identify the exact dialect/version and API profile, expected behavior, and source page/section or reproducible observation.
