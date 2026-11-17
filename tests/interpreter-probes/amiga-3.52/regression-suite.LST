@@ -93,5 +93,16 @@ ELSE
   PRINT #2,"GFATEST:hex:FAIL"
 ENDIF
 
+REM One-line expression function: exact DEFFN/FN form found in a
+REM historical application listing; this probe checks 3.52 execution only.
+DEFFN gfa562=ASC("A")
+value = FN gfa562
+PRINT #1,"DEFFN-FN:";value
+IF value=65
+  PRINT #2,"GFATEST:deffn-fn:PASS"
+ELSE
+  PRINT #2,"GFATEST:deffn-fn:FAIL"
+ENDIF
+
 CLOSE #2
 CLOSE #1

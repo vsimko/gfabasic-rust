@@ -8,3 +8,4 @@ sqr
 succ
 string-repeat
 hex
+deffn-fn
