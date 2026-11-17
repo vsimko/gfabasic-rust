@@ -117,5 +117,11 @@ class FuzzWorkflowPathTests(unittest.TestCase):
         )
 
 
+
+class PdfSourceManifestPathTests(unittest.TestCase):
+    def test_pdf_source_manifest_selects_documentation_workflow_only(self):
+        selected = expected_workflows(["references/pdf-sources.json"])
+        self.assertEqual(selected, {".github/workflows/docs.yml"})
+
 if __name__ == "__main__":
     unittest.main()
