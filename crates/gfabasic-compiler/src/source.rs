@@ -123,7 +123,7 @@ impl SourceFile {
         let prefix = self.text[line_start..offset]
             .strip_suffix('\r')
             .unwrap_or(&self.text[line_start..offset]);
-        let column = prefix.chars().count() + 1;
+        let column = prefix.len() + 1;
         Some((line_index + 1, column))
     }
 
