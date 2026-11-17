@@ -45,9 +45,9 @@ jobs:
     secrets: inherit
 
   amiga-35:
-    name: GFA-BASIC 3.5 editor identity (conformance probes untested)
+    name: GFA-BASIC 3.5 native Merge + Run probes
     runs-on: ubuntu-24.04
-    timeout-minutes: 10
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
 
@@ -230,9 +230,9 @@ jobs:
             echo "|---|---|---|"
             echo "| 3.52 | $STATUS_352 | Native probe suite; inspect its artifact for individual GFATEST records |"
             echo "| 3.041U | $STATUS_3041U | Native comparison probe suite; exact version only |"
-            echo "| 3.5 | identity verified | Held-right-button menu confirms GFA-BASIC 3.5; native language-conformance probes remain UNTESTED |"
+            echo "| 3.5 | $STATUS_35 | Exact editor identity plus native Merge + Run probes; inspect GFATEST records and screenshots |"
             echo ""
-            echo "A green workflow means the configured native jobs and their host-side result protocol completed. It does not establish complete language conformance."
+            echo "A green workflow means the configured native jobs and their host-side result protocol completed. The 3.5 suite is an initial three-case smoke set, not complete language conformance."
           } >> "$GITHUB_STEP_SUMMARY"
           if [ "$STATUS_352" != success ] || [ "$STATUS_3041U" != success ] || [ "$STATUS_35" != success ]; then
             echo "::error::At least one configured matrix job did not complete successfully."
