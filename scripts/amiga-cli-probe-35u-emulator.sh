@@ -18,6 +18,22 @@ grep -Eq "(^|[^0-9])0([^0-9]|$)" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/fl
 sleep 35
 printf "INSERTFLOPPY\\t%s\\t0\\n" "$RUNNER_TEMP/gfatest.adf" | timeout 5s nc -U -N "${ipc_socket_path:-}" >"$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/insert-floppy-ipc.txt"
 printf "LIST_FLOPPIES\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}" >"$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/list-floppies-ipc.txt"
+# Capture the version menu while the editor is active. SDL button bit 4 is RMB;
+# keep it held until SCREENSHOT has completed because release closes the menu.
+printf "SEND_MOUSE\\t0\\t0\\t4\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+sleep 0.3
+printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/interpreter-version-menu.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+printf "SEND_MOUSE\\t0\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+sleep 0.2
+python3 - "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/interpreter-version-menu.png" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/interpreter-version-menu-upper-left.png" <<'PY'
+from PIL import Image, ImageOps
+import sys
+image = Image.open(sys.argv[1]).convert("L")
+crop = image.crop((0, 0, min(image.width, 420), min(image.height, 220)))
+crop = ImageOps.autocontrast(crop.resize((crop.width * 3, crop.height * 3)))
+crop.save(sys.argv[2])
+PY
+tesseract "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/interpreter-version-menu-upper-left.png" stdout --psm 6 2>/dev/null | tee "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/interpreter-version-menu-ocr.txt"
 printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/editor-before-merge.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 printf "SEND_KEY\\t81\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 sleep 0.2
