@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A language-construct manifest is a version-scoped description of one independently testable GFA BASIC construct. It supports targeted native interpreter selection and keeps documentary expectations separate from obser…">
+  <title>Language-construct manifest contract · GFA BASIC Rust documentation</title>
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body class="docs-site">
+  <header class="docs-header">
+    <a href="../../index.html">GFA BASIC Rust</a>
+    <span aria-hidden="true">/</span>
+    <a href="../index.html">Documentation</a>
+  </header>
+  <div class="docs-layout">
+    <nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home" href="index.html">Section index</a><ul><li><a href="amiga-reference-interpreter.html">Original Amiga interpreter reference asset</a></li><li><a href="amiga-gfa-basic-probes.html">Writing Amiga GFA BASIC reference-interpreter probes</a></li><li><a href="property-mutation-pilot.html">Generated property and mutation-testing pilot</a></li><li><a href="language-construct-manifests.html">Language-construct manifest contract</a></li><li><a href="https://github.com/vsimko/gfabasic-rust/blob/main/.agents/skills/amiga-gfa-basic-regression-testing/SKILL.md">`amiga-gfa-basic-regression-testing`</a></li><li><a href="https://github.com/vsimko/gfabasic-rust/blob/main/.agents/skills/corpus-fixture-authoring/SKILL.md">`corpus-fixture-authoring`</a></li></ul></nav>
+    <main class="docs-content">
+      <article>
+        <h1>Language-construct manifest contract</h1>
+        <p class="docs-meta"><span>Testing Guide</span></p>
+        <h1 id="language-construct-manifest-contract">Language-construct manifest contract</h1>
+<h2 id="purpose-and-boundaries">Purpose and boundaries</h2>
+<p>A language-construct manifest is a version-scoped description of one independently testable GFA BASIC construct. It supports targeted native interpreter selection and keeps documentary expectations separate from observed interpreter behavior.</p>
+<p>This catalogue is distinct from:</p>
+<ul>
+<li><code>tests/corpus/manifest.yaml</code> and its fixture sidecars, which describe the research/conformance corpus;</li>
+<li><code>api/registry/</code> TOML declarations, which remain the canonical API/language registry;</li>
+<li><code>tests/interpreter-probes/</code>, which contains existing native-probe metadata and harness inputs.</li>
+</ul>
+<p>Do not migrate or duplicate those formats here. A manifest is metadata, not proof that a construct is implemented, supported, or conformant.</p>
+<h2 id="layout-and-identity">Layout and identity</h2>
+<p>Use one directory per construct:</p>
+<pre><code class="language-text">tests/language-constructs/
+  schema-v1.json
+  &lt;construct-id&gt;/
+    manifest.yaml
+    probe.LST                 # optional shared probe
+    probe-&lt;version&gt;.LST       # optional version-specific probe
+</code></pre>
+<p>The construct ID and directory name must match. IDs use lowercase ASCII letters and digits separated by single hyphens (for example, <code>mat-one-statement</code>). Do not encode version numbers in an ID unless the construct itself is version-specific. Keep probe files inside their construct directory; manifest paths are basenames, not paths into other directories.</p>
+<h2 id="manifest-schema-v1">Manifest schema v1</h2>
+<p>Every <code>manifest.yaml</code> is a YAML mapping validated against <a href="https://github.com/vsimko/gfabasic-rust/blob/main/tests/language-constructs/schema-v1.json">schema-v1.json</a>. Unknown fields are rejected. The schema requires:</p>
+<ul>
+<li><code>schema_version: 1</code>;</li>
+<li>stable <code>id</code>, human-readable <code>name</code>, construct <code>kind</code>, and broad <code>classification</code>;</li>
+<li>one or more exact syntax <code>form</code> entries with their contexts;</li>
+<li><code>evidence.status</code> and source references with source ID, edition, printed page locator, and locator description;</li>
+<li>an explicit entry for each exact interpreter version: <code>3.041U</code>, <code>3.5</code>, and <code>3.52</code>.</li>
+</ul>
+<p>Each version entry contains three independent fields:</p>
+<ol>
+<li><strong>expectation</strong> — documentary expectation only: <code>supported</code>, <code>unsupported</code>, <code>different</code>, or <code>unknown</code>, with an explanation. This is not an execution result.</li>
+<li><strong>probe</strong> — optional basename of the <code>.LST</code> input intended for that exact version. Use <code>null</code> when no probe is defined. A shared probe may be referenced by more than one version only when the source is genuinely equivalent.</li>
+<li><strong>observed</strong> — actual run outcome: <code>PASS</code>, <code>FAIL</code>, <code>DIFFERENT</code>, or <code>UNTESTED</code>. New/unrun entries must use <code>UNTESTED</code>; include a run ID/artifact only when it exists.</li>
+</ol>
+<p>All three versions must be present. Use <code>unknown</code> and <code>UNTESTED</code> when evidence or execution is unavailable; do not omit a version or infer behavior from an archive label, a sibling version, a compiler release, or a different platform. <code>PASS</code> means the observed behavior matched the version-specific expectation in a named native run, not that a Rust implementation passed a unit test.</p>
+<h2 id="evidence-and-version-rules">Evidence and version rules</h2>
+<ul>
+<li>Keep evidence status independent from per-version expectations and observed results.</li>
+<li>Cite primary references with the source-register ID and printed page/section, not PDF viewer page numbers.</li>
+<li>A 3.0/3.03 source does not establish 3.5 behavior without an explicit 3.5 applicability decision.</li>
+<li>Keep Amiga 3.5, 3.041U, and 3.52 results separate. The 3.52 product label does not by itself identify the interpreter component version.</li>
+<li>Listing occurrences, successful parsing, formatter acceptance, and a passing Rust unit test are not native interpreter observations.</li>
+<li>User-defined symbols, external library routines, and Amiga OS calls must not be classified as built-in language constructs without primary evidence.</li>
+</ul>
+<h2 id="examples-and-validation">Examples and validation</h2>
+<p>The examples in <a href="https://github.com/vsimko/gfabasic-rust/blob/main/tests/language-constructs/README.md">tests/language-constructs/</a> show a function expression and a statement. Their 3.5 expectations are grounded in the cited 3.5 addendum; all runtime outcomes remain <code>UNTESTED</code> until a matching native run is recorded.</p>
+<p>Issue <a href="https://github.com/vsimko/gfabasic-rust/issues/570">#570</a> defines this schema and directory contract. The change-selection validator and GitHub Actions matrix integration are separate work in <a href="https://github.com/vsimko/gfabasic-rust/issues/571">#571</a> and <a href="https://github.com/vsimko/gfabasic-rust/issues/572">#572</a>.</p>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>
