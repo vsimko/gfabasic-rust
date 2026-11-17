@@ -77,6 +77,9 @@ jobs:
       - name: Validate OKF v0.2 documentation bundle
         run: python scripts/validate_okf.py
 
+      - name: Validate AI-agent workflow security boundaries
+        run: python scripts/validate_agent_security.py
+
       - name: Generate documentation website pages
         run: python scripts/generate_docs_site.py
 

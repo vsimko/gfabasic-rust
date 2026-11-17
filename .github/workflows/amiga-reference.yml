@@ -26,6 +26,7 @@ concurrency:
 
 jobs:
   prepare-and-analyze:
+    if: github.event_name != 'workflow_dispatch' || github.ref == 'refs/heads/main'
     name: Fetch, verify, and analyze GFA BASIC 3.52
     runs-on: ubuntu-24.04
     timeout-minutes: 60

@@ -2,9 +2,6 @@ name: Inventory private Amiga GFA BASIC media
 
 on:
   workflow_dispatch:
-  pull_request:
-    paths:
-      - ".github/workflows/amiga-media-inventory.yml"
   push:
     branches:
       - main
@@ -16,6 +13,7 @@ permissions:
 
 jobs:
   inspect-private-media:
+    if: github.ref == 'refs/heads/main'
     permissions:
       contents: read
     runs-on: ubuntu-24.04
@@ -147,7 +145,7 @@ jobs:
 
   cleanup-legacy-artifact:
     name: Remove legacy artifact with extracted executables
-    if: github.event_name == 'pull_request'
+    if: github.ref == 'refs/heads/main'
     needs: inspect-private-media
     runs-on: ubuntu-24.04
     permissions:
