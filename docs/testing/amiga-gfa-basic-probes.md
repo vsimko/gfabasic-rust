@@ -18,11 +18,10 @@ The project uses three reference versions. See [ADR 0017](../architecture/adr/00
 | GFA-BASIC 3.52 | Active native runtime baseline and default expected behavior for current development |
 | GFA-BASIC 3.041U | Available native comparison profile for the 3.0-era dialect; always report the exact `3.041U` version |
 | Amiga GFA-BASIC 3.5 | Normative source-language target (ADR 0009); initial native smoke probes (arithmetic, FOR/NEXT, strings) passed; broader conformance remains incomplete |
-| GFA-BASIC 3.5U | Retired historical profile; do not schedule new runs or treat old results as current matrix coverage |
 
-The unified entry point is `.github/workflows/amiga-reference-matrix.yml`. It calls the two active native workflows as reusable workflows and captures the running 3.5 editor's version menu for identity evidence. An initial 3.5 native smoke suite (arithmetic, FOR/NEXT, strings) ran using a separate writable test disk in [workflow run 44094135503](https://github.com/vsimko/gfabasic-rust/actions/runs/44094135503). The inspected artifact `amiga-gfa-basic-3.5-asset-discovery` contains the held-right-button menu screenshot visibly identifying `GFA-BASIC 3.5 Block`, Merge/Run screenshots, and three raw `GFATEST:*:PASS` records. These three cases are PASS for that exact candidate and run; this limited smoke set is not complete language conformance and does not substitute the retired 3.5U profile. Run this matrix for a combined view. The individual native workflows remain manually dispatchable for focused diagnosis. A green matrix means the configured native jobs and GFATEST collection protocol completed; it is not a claim of complete language conformance.
+The unified entry point is `.github/workflows/amiga-reference-matrix.yml`. It calls the two active native workflows as reusable workflows and captures the running 3.5 editor's version menu for identity evidence. An initial 3.5 native smoke suite (arithmetic, FOR/NEXT, strings) ran using a separate writable test disk in [workflow run 44094135503](https://github.com/vsimko/gfabasic-rust/actions/runs/44094135503). The inspected artifact `amiga-gfa-basic-3.5-asset-discovery` contains the held-right-button menu screenshot visibly identifying `GFA-BASIC 3.5 Block`, Merge/Run screenshots, and three raw `GFATEST:*:PASS` records. These three cases are PASS for that exact candidate and run; this limited smoke set is not complete language conformance. Run this matrix for a combined view. The individual native workflows remain manually dispatchable for focused diagnosis. A green matrix means the configured native jobs and GFATEST collection protocol completed; it is not a claim of complete language conformance.
 
-Run each applicable probe against active native profiles for which the licensed asset and workflow are available. The current native profiles are 3.52 and 3.041U. Keep results separate; never relabel 3.041U as exactly 3.0 or transfer its results to 3.5. Amiga GFA-BASIC 3.5 remains the normative documented target; its identity and the three initial native smoke results have been verified from the retained screenshot and raw result artifact. Broader native conformance remains incomplete. The 3.5U profile is retired.
+Run each applicable probe against active native profiles for which the licensed asset and workflow are available. The current native profiles are 3.52 and 3.041U. Keep results separate; never relabel 3.041U as exactly 3.0 or transfer its results to 3.5. Amiga GFA-BASIC 3.5 remains the normative documented target; its identity and the three initial native smoke results have been verified from the retained screenshot and raw result artifact. Broader native conformance remains incomplete.
 
 Use these outcomes per probe/version:
 
@@ -47,7 +46,7 @@ A successful Merge operation does not establish that a statement was expanded or
 
 ## Before writing a probe
 
-1. Identify the exact interpreter version and platform under test. Do not transfer observations between 3.041U, 3.5, and 3.52 without evidence. Treat old 3.5U observations as historical and outside the current runtime matrix.
+1. Identify the exact interpreter version and platform under test. Do not transfer observations between 3.041U, 3.5, and 3.52 without evidence.
 2. Find the relevant primary-manual example and record its edition and printed page numbers.
 3. Preserve the documented statement order and control-flow structure unless the test explicitly targets a variation.
 4. Check how the native harness starts the program, assigns drives, captures output, and detects completion. Read the matching workflow and existing passing .LST probes.
@@ -67,43 +66,3 @@ Use the version shown by the running editor, not the disk or archive filename.
 Use this procedure whenever the executable version is uncertain or a test result must be tied to an exact interpreter version. Disk labels and archive names are not substitutes for inspecting the running editor.
 
 **Interpretation of the `==>` editor prefix:** In the manually observed reference editor, an imported `.LST` statement prefixed with `==>` is an unsupported or unrecognized command. The editor can retain and display the statement after MERGE, while attempting to execute it can fail later with a runtime `syntax error ==> program aborted`. Therefore, successful MERGE or a visible source line does not establish that the command is supported. Inspect the prefix before Run and record both the editor screenshot and any runtime error. Treat this as observed behavior for the tested interpreter, not a universal rule for every GFA-BASIC release.
-
-## Historical DATA pointer probe (3.5U — retired profile)
-
-The native probe for the 3.5U addendum DATA-pointer example exposed setup details that must be preserved:
-
-- Put the DATA declarations after the executable program body, following END, for this tested layout.
-- Execute RESTORE before the first DATA availability check/read.
-- Use _DATA to inspect/save the DATA pointer position. Do not substitute the DATA availability expression for _DATA in the DO WHILE guard.
-- Save each pointer before READ, then restore saved positions with _DATA=... before reading again.
-- The documented reverse traversal uses FOR ... DOWNTO.
-- The addendum example on printed pages 13-34–13-35 documents the reverse values 0, 1, 3242, 328, 24, 13, 9, 8, 7, 6, 5, 4, 3, 2, 1 for the fixture used in the regression test. Keep the fixture and expected values together; do not generalize this result to other versions.
-
-These are historical observations for the exact 3.5U probe and its documented example. They are not part of the current active runtime matrix and do not establish DATA semantics for 3.041U, 3.5, or 3.52.
-
-## Output and harness rules
-
-- Open every output file before writing to its file number. For example, issue OPEN "O",#1,"DF0:FACT.OUT" and OPEN "O",#2,"DF0:GFATEST.OUT" before any PRINT #1 or PRINT #2.
-- Use the drive/path expected by the native workflow. A missing output file can mean the program never opened or created it; it does not by itself prove a language feature failed.
-- Keep diagnostic output (for example, initial pointer state and each value read) separate from machine-readable GFATEST: result records.
-- Close files after writing and ensure all normal paths reach the close statements.
-- When the host reports Node not found: FACT.OUT, first inspect the emulator screenshot/log and program file-open path before diagnosing interpreter semantics.
-
-## Required validation loop
-
-1. Run the exact native Merge + Run workflow for the target interpreter version.
-2. If available, run the same probe against the other supported reference versions and preserve each result separately.
-3. If the output file is missing, inspect the emulator log/screenshot and verify file opens, drive assignment, and program completion first.
-4. If output exists, inspect raw FACT.OUT and GFATEST.OUT; do not rely only on the workflow summary.
-5. Compare every diagnostic value and result ID with the version-specific documented expectation.
-6. Record cross-version differences as DIFFERENT with evidence; do not silently normalize them to the 3.52 result.
-7. When a probe fails, reduce it to the smallest reproducer and compare it with the manual's example statement by statement.
-8. After a fix, rerun the target native workflow and wait for its completed result. A code change is not validated until the target native run is green.
-9. Keep the PR description precise about tested versions, source pages, run evidence, and remaining limits.
-
-## Evidence and safety boundaries
-
-- Cite the manual edition/version and printed pages.
-- Separate manual-documented behavior from behavior observed in the emulator and from assumptions.
-- Do not claim a runtime implementation bug until the test setup and output path have been verified.
-- Do not commit commercial interpreter binaries, Kickstart ROMs, Workbench disks, or disk images. Use the private asset workflow and retain only permitted diagnostics.
