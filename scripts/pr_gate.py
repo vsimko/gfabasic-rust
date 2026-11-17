@@ -194,7 +194,9 @@ def main() -> int:
     pull = api.get(f"/pulls/{args.pull_request}")
     base_ref = str(pull["base"]["ref"])
     base_sha = str(pull["base"]["sha"])
-    base_tree = api.get(f"/git/trees/{urllib.parse.quote(base_sha, safe='')}?recursive=1")
+    base_commit = api.get(f"/commits/{urllib.parse.quote(base_sha, safe='')}")
+    base_tree_sha = str(base_commit["commit"]["tree"]["sha"])
+    base_tree = api.get(f"/git/trees/{urllib.parse.quote(base_tree_sha, safe='')}?recursive=1")
     if base_tree.get("truncated"):
         print("Base repository tree was truncated; cannot safely determine available workflows.", file=sys.stderr)
         return 2
