@@ -1,0 +1,72 @@
+{
+  "id": "gfa.language.data.set-data-pointer",
+  "name": "_DATA=",
+  "kind": "statement",
+  "namespace": "language-core",
+  "category": "special-variables-and-data-pointers",
+  "availability": [
+    {
+      "dialect": "amiga-gfa-basic-interpreter",
+      "versions": [
+        "3.5"
+      ]
+    }
+  ],
+  "syntax": [
+    {
+      "form": "_DATA= integer-expression",
+      "contexts": [
+        "statement"
+      ],
+      "arguments": [
+        {
+          "name": "position",
+          "type": "integer expression previously obtained from _DATA",
+          "required": true
+        }
+      ]
+    }
+  ],
+  "signature": {
+    "type": "no return value"
+  },
+  "semantics": {
+    "summary": "Sets the DATA pointer to a value previously obtained with _DATA.",
+    "side-effects": [
+      "Changes the current DATA-pointer position."
+    ],
+    "errors": []
+  },
+  "evidence": {
+    "source-scope": "amiga-3.5-addendum",
+    "status": "book-documented",
+    "sources": [
+      "AM-INTERPRETER-35"
+    ],
+    "printed-pages": [
+      "Chapter 13, printed p. 13-34 (same feature: combined update scan p. 14-5)"
+    ],
+    "notes": [
+      "The leading underscore and equals sign in _DATA= were checked against the addendum page image.",
+      "The source describes restoring a pointer value previously obtained from _DATA; it does not specify arbitrary pointer values."
+    ]
+  },
+  "implementation": {
+    "status": "not-implemented"
+  },
+  "support": [
+    {
+      "target": "x86_64-unknown-linux-gnu",
+      "classification": "unknown",
+      "conformance": "not-tested",
+      "tests": [],
+      "pending-reason": "No DATA-pointer implementation or executable reference-interpreter conformance tests are registered."
+    }
+  ],
+  "docs": {
+    "path": "docs/research/amiga-gfa-basic-35-addendum-inventory.md",
+    "anchors": [
+      "4-additional-commands-in-version-35-combined-scan-chapter-14-printed-pp-14-1-14-7"
+    ]
+  }
+}
