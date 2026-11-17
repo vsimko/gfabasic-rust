@@ -113,7 +113,7 @@ def render_markdown(result: dict) -> str:
         "|---|---|---|---|---|---|",
     ]
     for row in result["rows"]:
-        reason = (row.get("reason") or "").replace("|", "\\|").replace("\\n", " ")
+        reason = (row.get("reason") or "").replace("|", "\\|").replace("\n", " ")
         lines.append(
             f"| {row['construct_id']} | {row['version']} | {row['harness_status']} | "
             f"{row['conformance_status']} | {row.get('probe') or '—'} | {reason or '—'} |"
@@ -124,7 +124,7 @@ def render_markdown(result: dict) -> str:
         "Harness execution and language-conformance outcomes are reported separately.",
         "",
     ])
-    return "\\n".join(lines)
+    return "\n".join(lines)
 
 
 def main() -> int:
@@ -141,9 +141,9 @@ def main() -> int:
         result = aggregate(selection, args.root.resolve(), args.artifacts, args.native_allowed == "true",
                            args.unavailable_reason)
     except (OSError, UnicodeDecodeError, json.JSONDecodeError, yaml.YAMLError, KeyError, TypeError, ValueError) as exc:
-        parser.exit(2, f"ERROR: cannot aggregate construct results: {exc}\\n")
+        parser.exit(2, f"ERROR: cannot aggregate construct results: {exc}\n")
     args.output.parent.mkdir(parents=True, exist_ok=True)
-    args.output.write_text(json.dumps(result, indent=2, sort_keys=True) + "\\n", encoding="utf-8")
+    args.output.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     markdown = render_markdown(result)
     print(markdown)
     summary_path = os.environ.get("GITHUB_STEP_SUMMARY")
