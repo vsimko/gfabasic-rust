@@ -1,0 +1,37 @@
+schema_version: 1
+id: fact-function
+name: FACT
+kind: function
+classification: language-core
+syntax:
+  - form: "FACT(expression)"
+    contexts: [expression]
+evidence:
+  status: documented
+  sources:
+    - source_id: AM-INTERPRETER-35
+      edition: "GFA BASIC 3.5 Interpreter manual"
+      printed_pages: ["14-2"]
+      locator: "Chapter 14, FACT function entry"
+versions:
+  "3.041U":
+    expectation:
+      status: unknown
+      notes: "No version-specific evidence is asserted by this example."
+    probe: null
+    observed:
+      result: UNTESTED
+  "3.5":
+    expectation:
+      status: supported
+      notes: "The 3.5 addendum documents FACT; this is a documentary expectation, not an execution result."
+    probe: probe-3.5.LST
+    observed:
+      result: UNTESTED
+  "3.52":
+    expectation:
+      status: unknown
+      notes: "Do not infer interpreter support from compiler or archive version labels."
+    probe: null
+    observed:
+      result: UNTESTED
