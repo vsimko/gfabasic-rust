@@ -140,7 +140,7 @@ def _check_mapping_fields(
         return False
     for field in sorted(required - value.keys()):
         _add_error(errors, root, path, f"{label} is missing required field {field!r}")
-    for field in sorted(value.keys() - allowed):
+    for field in sorted(value.keys() - allowed, key=str):
         _add_error(errors, root, path, f"{label} has unsupported field {field!r}")
     return True
 
@@ -159,7 +159,7 @@ def _has_symlink_component(path: Path, root: Path) -> bool:
 
 
 def _safe_relative_parts(value: object) -> tuple[str, ...] | None:
-    if not isinstance(value, str) or not value or "\\\\" in value:
+    if not isinstance(value, str) or not value or "\\" in value:
         return None
     if value.startswith("/"):
         return None
@@ -323,9 +323,9 @@ def _load_manifest(path: Path, root: Path, errors: list[str]) -> dict | None:
         for field in ("source_id", "location", "claim"):
             if not _is_non_empty_string(item.get(field)):
                 _add_error(errors, root, path, f"{label}.{field} must be a non-empty string")
-        if item.get("kind") not in EVIDENCE_KINDS:
+        if not isinstance(item.get("kind"), str) or item.get("kind") not in EVIDENCE_KINDS:
             _add_error(errors, root, path, f"{label}.kind must be one of {sorted(EVIDENCE_KINDS)}")
-        if item.get("status") not in EVIDENCE_STATUSES:
+        if not isinstance(item.get("status"), str) or item.get("status") not in EVIDENCE_STATUSES:
             _add_error(errors, root, path, f"{label}.status must be one of {sorted(EVIDENCE_STATUSES)}")
         if "url" in item and not _is_non_empty_string(item.get("url")):
             _add_error(errors, root, path, f"{label}.url must be a non-empty string when present")
@@ -364,7 +364,7 @@ def _load_manifest(path: Path, root: Path, errors: list[str]) -> dict | None:
             expectation, EXPECTATION_FIELDS, EXPECTATION_FIELDS, errors, root, path, f"{label}.expectation"
         ):
             expectation_status = expectation.get("status")
-            if expectation_status not in EXPECTATION_STATUSES:
+            if not isinstance(expectation_status, str) or expectation_status not in EXPECTATION_STATUSES:
                 _add_error(
                     errors, root, path,
                     f"{label}.expectation.status must be one of {sorted(EXPECTATION_STATUSES)}",
@@ -378,7 +378,7 @@ def _load_manifest(path: Path, root: Path, errors: list[str]) -> dict | None:
                 root,
                 path,
                 f"{label}.expectation.evidence_refs",
-                required=expectation_status in {"documented", "observed"},
+                required=isinstance(expectation_status, str) and expectation_status in {"documented", "observed"},
             )
             if expectation_status in {"unknown", "not-applicable"} and refs:
                 _add_error(
@@ -416,7 +416,7 @@ def _load_manifest(path: Path, root: Path, errors: list[str]) -> dict | None:
             execution, EXECUTION_FIELDS, EXECUTION_FIELDS, errors, root, path, f"{label}.execution"
         ):
             status = execution.get("status")
-            if status not in EXECUTION_STATUSES:
+            if not isinstance(status, str) or status not in EXECUTION_STATUSES:
                 _add_error(errors, root, path, f"{label}.execution.status must be one of {sorted(EXECUTION_STATUSES)}")
             refs = _validate_reference_list(
                 execution.get("evidence_refs"),
@@ -425,7 +425,7 @@ def _load_manifest(path: Path, root: Path, errors: list[str]) -> dict | None:
                 root,
                 path,
                 f"{label}.execution.evidence_refs",
-                required=status in {"PASS", "FAIL", "DIFFERENT"},
+                required=isinstance(status, str) and status in {"PASS", "FAIL", "DIFFERENT"},
             )
             if status == "UNTESTED":
                 for field in ("observed", "run_url", "probe_source"):
@@ -465,7 +465,7 @@ def _load_manifest(path: Path, root: Path, errors: list[str]) -> dict | None:
             f"{label}.implementation",
         ):
             implementation_status = implementation.get("status")
-            if implementation_status not in IMPLEMENTATION_STATUSES:
+            if not isinstance(implementation_status, str) or implementation_status not in IMPLEMENTATION_STATUSES:
                 _add_error(
                     errors, root, path,
                     f"{label}.implementation.status must be one of {sorted(IMPLEMENTATION_STATUSES)}",
@@ -519,7 +519,7 @@ def _load_manifests(root: Path) -> tuple[dict[str, dict], list[str]]:
     root = root.resolve()
     catalogue = root / CATALOGUE_REL
     errors: list[str] = []
-    manifests: dict[str, dict] = []
+    manifests: dict[str, dict] = {}
     if not catalogue.is_dir():
         return {}, [f"{CATALOGUE_REL}: catalogue directory is missing"]
     if _has_symlink_component(catalogue, root):
@@ -562,7 +562,7 @@ def validate_language_constructs(root: Path = ROOT) -> list[str]:
 
 def parse_name_status_z(output: str) -> list[FileChange]:
     """Parse git diff --name-status -z output, including rename/copy records."""
-    fields = output.split("\\0")
+    fields = output.split("\0")
     changes: list[FileChange] = []
     index = 0
     while index < len(fields):
@@ -686,7 +686,10 @@ def select_jobs(
                 paths.append((change.new_path, status == "D"))
 
             for raw_path, deleted in paths:
-                path = raw_path.replace("\\\\", "/")
+                path = raw_path
+                if _safe_relative_parts(path) is None:
+                    errors.append(f"changed path {path!r} is not a safe relative POSIX path")
+                    continue
                 if path in ROOT_SHARED_PATHS:
                     shared_change = True
                     continue
@@ -770,7 +773,6 @@ def main(argv: list[str] | None = None) -> int:
             for item in errors:
                 print(f"ERROR: {item}", file=sys.stderr)
             return 1
-        _, manifests_errors = _load_manifests(root)
         manifests, _ = _load_manifests(root)
         print(f"Language-construct manifest validation passed ({len(manifests)} constructs).")
         return 0
@@ -783,6 +785,10 @@ def main(argv: list[str] | None = None) -> int:
         parser.error("--version cannot be combined with --all")
     if args.changed_path and (args.base or args.head or args.all or args.construct):
         parser.error("--changed-path cannot be combined with --base/--head, --all, or --construct")
+    if (args.base or args.head) and (args.all or args.construct):
+        parser.error("--base/--head cannot be combined with --all or --construct")
+    if len(args.version) != len(set(args.version)):
+        parser.error("--version values must not contain duplicates")
     if not (args.base or args.all or args.construct or args.changed_path):
         parser.error("select requires --base/--head, --changed-path, --all, or --construct")
 
