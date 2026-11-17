@@ -1,0 +1,84 @@
+manifest_schema_version: 1
+construct:
+  id: "mat-one-statement"
+  kind: "statement"
+  name: "MAT ONE"
+  summary: "Initialize a previously dimensioned square matrix as an identity matrix."
+  syntax_forms:
+    - text: "MAT ONE array()"
+      versions: ["3.5"]
+    - text: "M O array()"
+      versions: ["3.52"]
+evidence:
+  - id: "mat-one-manual-35"
+    source_id: "AM-INTERPRETER-30-35-UPDATE-SCAN"
+    location: "printed p. 13-3"
+    kind: "primary-manual"
+    status: "page-image-verified"
+    claim: "The 3.5 addendum defines MAT ONE as initializing a square identity matrix; MAT PRINT displays the matrix."
+    url: "https://github.com/vsimko/gfabasic-rust/blob/main/tests/corpus/amiga/3.5/matrix/mat-one-identity.yaml"
+  - id: "mat-one-adr-352"
+    source_id: "ADR-0017"
+    location: "Version-specific syntax observations: M O expansion"
+    kind: "repository-adr"
+    status: "repository-record"
+    claim: "The repository ADR records M O array() as the 3.52 shortcut form for MAT ONE; this is not a page-image-verified 3.52 manual claim."
+    url: "https://github.com/vsimko/gfabasic-rust/blob/main/docs/architecture/adr/0017-multi-version-amiga-gfa-basic-conformance.md"
+  - id: "mat-one-native-352"
+    source_id: "ACTIONS-44188927520"
+    location: "GFA-BASIC 3.52 native run / cli-probe job; artifact GFATEST:matrix-one:PASS"
+    kind: "native-observation"
+    status: "direct-observation"
+    claim: "The 3.52 regression suite reported GFATEST:matrix-one:PASS after checking the nine identity-matrix elements."
+    url: "https://github.com/vsimko/gfabasic-rust/actions/runs/44188927520"
+versions:
+  "3.041U":
+    applicability: "unknown"
+    expectation:
+      status: "unknown"
+      summary: "No version-scoped MAT ONE expectation has been established for 3.041U."
+      evidence_refs: []
+    probe: null
+    execution:
+      status: "UNTESTED"
+      observed: null
+      run_url: null
+      probe_source: null
+      evidence_refs: []
+    implementation:
+      status: "not-targeted"
+      refs: []
+  "3.5":
+    applicability: "applicable"
+    expectation:
+      status: "documented"
+      summary: "MAT ONE initializes the previously dimensioned square matrix as an identity matrix. The manual does not establish the element count for DIM identity(3,3) in this probe."
+      evidence_refs: ["mat-one-manual-35"]
+    probe: "probe-3.5.LST"
+    execution:
+      status: "UNTESTED"
+      observed: null
+      run_url: null
+      probe_source: null
+      evidence_refs: []
+    implementation:
+      status: "syntax-only"
+      refs:
+        - "crates/gfabasic-compiler/src/frontend.rs"
+        - "crates/gfabasic-compiler/src/semantic.rs"
+  "3.52":
+    applicability: "applicable"
+    expectation:
+      status: "documented"
+      summary: "The repository ADR records M O array() as the 3.52 shortcut for MAT ONE; this expectation is based on a repository record, not a page-image-verified manual."
+      evidence_refs: ["mat-one-adr-352"]
+    probe: "probe-3.52.LST"
+    execution:
+      status: "PASS"
+      observed: "GFATEST:matrix-one:PASS after checking the nine identity-matrix elements."
+      run_url: "https://github.com/vsimko/gfabasic-rust/actions/runs/44188927520"
+      probe_source: "tests/interpreter-probes/amiga-3.52/regression-suite.LST"
+      evidence_refs: ["mat-one-native-352"]
+    implementation:
+      status: "not-targeted"
+      refs: []

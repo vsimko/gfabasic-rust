@@ -13,6 +13,8 @@ The source corpus is maintained in [tests/corpus/](../../tests/corpus/README.md)
 
 See the [current compatibility matrix](COMPATIBILITY-MATRIX.md) for the explicit statement of which dialects, profiles, and targets are not yet supported.
 
+The version-scoped language-construct catalogue is maintained separately in [tests/language-constructs/](../../tests/language-constructs/README.md). Its manifests map exact interpreter versions to evidence, expectations, probes, native execution results, and Rust implementation status. It does not replace or migrate the existing corpus metadata or API registry.
+
 ## Test categories
 
 Use the category that best describes the contract under test. Categories may overlap; for example, a conformance test can be an end-to-end test.
