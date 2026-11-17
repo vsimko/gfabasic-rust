@@ -22,6 +22,18 @@ class AgentSecurityValidationTests(unittest.TestCase):
         }
         self.assertTrue(any("same-repository guard" in error for error in validate_document(document, "test.yml")))
 
+    def test_detects_secret_in_step_environment(self):
+        document = {
+            "on": {"pull_request": {}},
+            "permissions": {"contents": "read"},
+            "jobs": {
+                "probe": {
+                    "steps": [{"env": {"TOKEN": "${{ secrets.PRIVATE_TOKEN }}"}}],
+                }
+            },
+        }
+        self.assertTrue(any("same-repository guard" in error for error in validate_document(document, "test.yml")))
+
     def test_accepts_same_repository_guard_for_pr_secret(self):
         document = {
             "on": {"pull_request": {}},
