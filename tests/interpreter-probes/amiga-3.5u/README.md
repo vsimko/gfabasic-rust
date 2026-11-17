@@ -21,3 +21,20 @@ Therefore the 3.52 ZIP is intentional and required for the native editor Merge t
 The fixture retains the broad 3.5 regression batch: FACT boundary values, arithmetic and precedence, FOR/NEXT, strings, DATA-pointer handling, matrix determinant/inverse/add/subtract/transpose/multiply/identity, combinatorics, special variables and the prioritized DQH language and graphics subset. The explicit `MAT ONE` test checks all nine elements of a 3x3 identity matrix.
 
 Results are observations for the exact 3.52 ZIP asset and emulator/Kickstart setup recorded in each workflow artifact. They provide compatibility evidence for the 3.5-based test cases, not proof that 3.5 and 3.52 are identical or that the entire language conforms.
+
+## Isolated MAT ONE investigation (issue #537)
+
+[`ab-c-isolation.LST`](ab-c-isolation.LST) is a diagnostic-only A/B/C listing. It is intentionally separate from the stable regression batch and runs with the exact GFA-BASIC 3.5U interpreter asset:
+
+- Private archive: `GFA-BASIC v3.5U (1990)(GFA Systemtechnik)(DE)(Disk 1 of 2)[b corrupt files][WB].zip`
+- Archive SHA-256: `004c20a73d1fe715112b5b2672138e7e7c9ea1e11f6900004e5466dc15382413`
+- Extracted `GFABasic` SHA-256: `c5e9ffdb96b621307069d8f21a3282788386930bbc1ea679dfebe2caef5493ca`
+- Emulator profile: Amiberry, 68000, OCS, Kickstart 1.3 rev 34.5.
+
+The dedicated [A/B/C workflow](../../../.github/workflows/amiga-35u-ab-c-diagnostic.yml) keeps the original commercial disk and ROM private and uploads only diagnostic logs, screenshots, and output files.
+
+- **A** runs a trivial PRINT program and closes its output file.
+- **B** declares and accesses a square 3×3 array without MAT statements, then closes its output file.
+- **C** executes explicit `MAT ONE a()` on that same array and records the identity matrix if it returns.
+
+A and B are written to separate files before C starts, so a C task-held failure cannot erase their completed output. The workflow reports C as `HELD_OR_NO_OUTPUT` if the command does not reach the output-file open; that status is diagnostic evidence, not a claim about the interpreter's internal cause. Do not add this probe to the stable passing suite, and do not infer 3.5U behavior from 3.52 results.
