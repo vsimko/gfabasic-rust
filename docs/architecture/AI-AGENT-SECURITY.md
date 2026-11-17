@@ -111,7 +111,7 @@ An agent's available tools are session-specific. Do not assume that a connector 
 
 1. Use explicit least-privilege permissions; grant write access only to the job that requires it.
 2. Use pull_request, not pull_request_target, for workflows that inspect or execute PR code. Fork PRs must not receive secrets.
-3. Any secret-bearing PR job must explicitly guard against fork PRs. Any write-enabled PR job must have an explicit same-repository guard.
+3. Any secret-bearing PR job must explicitly guard against fork and Dependabot PRs. Any write-enabled PR job must have an explicit same-repository guard.
 4. A manual dispatch of a secret-bearing or write-enabled workflow must be restricted to the default branch unless a documented, separately reviewed exception exists.
 5. Pass GFA_ASSETS_TOKEN only to the step that needs it. Never place it in command-line arguments, logs, summaries, cache keys, artifacts, generated files, or issue/PR text.
 6. Use immutable action SHAs and pinned tool versions. Review action changes and permissions as part of #39.
@@ -159,7 +159,7 @@ python scripts/validate_agent_security.py checks the workflow files for these me
 
 - Explicit workflow permission declarations.
 - No pull_request_target or workflow_run trigger.
-- Same-repository guards for secret-bearing or write-enabled PR jobs.
+- Same-repository guards for secret-bearing or write-enabled PR jobs, plus Dependabot exclusion for secret-bearing PR jobs.
 - Default-branch guards for manually dispatched jobs that use secrets or write permissions.
 
 These checks cannot verify repository settings, actual secret scopes, collaborator trust, GitHub App installation permissions, or an external agent's sandbox. A passing check is not a substitute for maintainer verification.
