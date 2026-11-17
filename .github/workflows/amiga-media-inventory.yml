@@ -33,6 +33,10 @@ jobs:
           3.52-disk2|GFA-BASIC v3.52 (1990)(GFA Systemtechnik)(DE)(Disk 2 of 2).zip
           EOF
 
+          python scripts/check_private_github_assets.py \\
+            --repo vsimko/gfabasic-private-assets --ref main \\
+            --manifest "$RUNNER_TEMP/media.tsv"
+
           while IFS='|' read -r label filename; do
             encoded="$(python3 -c 'import sys,urllib.parse; print(urllib.parse.quote(sys.argv[1], safe=""))' "$filename")"
             curl --fail --silent --show-error --location --retry 3 \
