@@ -129,7 +129,7 @@ jobs:
           } >> "$GITHUB_OUTPUT"
 
   preflight:
-    name: Check trusted event and private asset availability
+    name: Check trusted event for native execution
     needs: select
     runs-on: ubuntu-24.04
     timeout-minutes: 3
@@ -140,7 +140,6 @@ jobs:
       - name: Check owner trust and read-token availability without printing the token
         id: gate
         env:
-          GFA_ASSETS_TOKEN: ${{ secrets.GFA_ASSETS_TOKEN }}
           EVENT_NAME: ${{ github.event_name }}
           HEAD_REPOSITORY: ${{ github.event.pull_request.head.repo.full_name }}
           PR_AUTHOR_ASSOCIATION: ${{ github.event.pull_request.author_association }}
@@ -153,15 +152,15 @@ jobs:
           allowed=false
           reason="private native assets are unavailable for this event"
           if [ "$EVENT_NAME" = "pull_request" ]; then
-            if [ "$HEAD_REPOSITORY" = "$REPOSITORY" ] && [ "$PR_AUTHOR_ASSOCIATION" = "OWNER" ] && [ -n "$GFA_ASSETS_TOKEN" ]; then
+            if [ "$HEAD_REPOSITORY" = "$REPOSITORY" ] && [ "$PR_AUTHOR_ASSOCIATION" = "OWNER" ]; then
               allowed=true
-              reason="trusted owner pull request with private asset read token"
+              reason="trusted owner pull request; native download steps determine asset availability"
             else
               reason="native assets are restricted to same-repository owner pull requests"
             fi
-          elif [ "$REF" = "refs/heads/main" ] && [ "$ACTOR" = "$REPOSITORY_OWNER" ] && [ -n "$GFA_ASSETS_TOKEN" ]; then
+          elif [ "$REF" = "refs/heads/main" ] && [ "$ACTOR" = "$REPOSITORY_OWNER" ]; then
             allowed=true
-            reason="trusted main-branch run with private asset read token"
+            reason="trusted main-branch run; native download steps determine asset availability"
           fi
           echo "native_allowed=$allowed" >> "$GITHUB_OUTPUT"
           echo "reason=$reason" >> "$GITHUB_OUTPUT"
