@@ -50,7 +50,7 @@ The workflow files explicitly declare permissions. The main write-capable surfac
 | amiga-reference.yml | contents and pull requests write | Publish generated 3.52 analysis to the private-assets repository and propose reviewed metadata through a PR. Push branches are explicitly listed; manual dispatch is restricted to main. |
 | release-sbom.yml | contents write on the release job | Attach the generated SBOM to a published GitHub Release. Its PR validation job is read-only. |
 | cleanup-private-adf-artifacts.yml | actions write | Delete a fixed list of legacy artifacts; push trigger is main, and manual dispatch is restricted to main. |
-| amiga-media-inventory.yml cleanup job | actions write | Delete one known legacy artifact. It is restricted to same-repository PRs. |
+| amiga-media-inventory.yml cleanup job | actions write | Delete one known legacy artifact after a successful inventory run on main. The workflow is no longer triggered by PRs. |
 
 Other workflows use read-only repository permissions for their normal jobs. The exact permissions are defined in each workflow and must be re-audited when a workflow changes.
 
