@@ -76,6 +76,11 @@ jobs:
           python3 -m pip install --break-system-packages amitools
           xdftool "$RUNNER_TEMP/gfa-basic-3.5.adf" info | tee artifacts/amiga-3.5-discovery/adf-info.txt
           xdftool "$RUNNER_TEMP/gfa-basic-3.5.adf" list / all | tee artifacts/amiga-3.5-discovery/adf-files.txt
+          xdftool "$RUNNER_TEMP/gfa-basic-3.5.adf" read gfabasic "$RUNNER_TEMP/gfabasic-3.5"
+          sha256sum "$RUNNER_TEMP/gfabasic-3.5" > artifacts/amiga-3.5-discovery/interpreter-sha256.txt
+          wc -c < "$RUNNER_TEMP/gfabasic-3.5" > artifacts/amiga-3.5-discovery/interpreter-size.txt
+          file "$RUNNER_TEMP/gfabasic-3.5" > artifacts/amiga-3.5-discovery/interpreter-file.txt
+          strings -a "$RUNNER_TEMP/gfabasic-3.5" | grep -i -E 'GFA.BASIC|VERSION|3[.]5|3[.]52' | head -80 > artifacts/amiga-3.5-discovery/interpreter-strings.txt || true
           sha256sum "$RUNNER_TEMP/gfa-basic-3.5.adf" > artifacts/amiga-3.5-discovery/adf-sha256.txt
           wc -c < "$RUNNER_TEMP/gfa-basic-3.5.adf" > artifacts/amiga-3.5-discovery/adf-size.txt
           printf '%s\\n' "${ADF_MEMBERS[0]}" > artifacts/amiga-3.5-discovery/adf-member.txt
