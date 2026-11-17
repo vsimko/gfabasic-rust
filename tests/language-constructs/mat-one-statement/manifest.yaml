@@ -1,0 +1,37 @@
+schema_version: 1
+id: mat-one-statement
+name: MAT ONE
+kind: statement
+classification: language-core
+syntax:
+  - form: "MAT ONE array()"
+    contexts: [statement]
+evidence:
+  status: documented
+  sources:
+    - source_id: AM-INTERPRETER-35
+      edition: "GFA BASIC 3.5 Interpreter manual"
+      printed_pages: ["13-1"]
+      locator: "Chapter 13, MAT ONE entry"
+versions:
+  "3.041U":
+    expectation:
+      status: unknown
+      notes: "No version-specific evidence is asserted by this example."
+    probe: null
+    observed:
+      result: UNTESTED
+  "3.5":
+    expectation:
+      status: supported
+      notes: "The 3.5 addendum documents MAT ONE; this is a documentary expectation, not an execution result."
+    probe: probe-3.5.LST
+    observed:
+      result: UNTESTED
+  "3.52":
+    expectation:
+      status: unknown
+      notes: "The package label alone does not establish interpreter component/version behavior."
+    probe: null
+    observed:
+      result: UNTESTED
