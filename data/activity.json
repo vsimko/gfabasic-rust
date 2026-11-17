@@ -1,9 +1,25 @@
 {
   "schema_version": 1,
   "status": "fresh",
-  "generated_at": "2026-11-17T22:27:42.456531+00:00",
-  "last_successful_at": "2026-11-17T22:27:42.456531+00:00",
+  "generated_at": "2026-11-17T22:35:24.591804+00:00",
+  "last_successful_at": "2026-11-17T22:35:24.591804+00:00",
   "items": [
+    {
+      "type": "merged_pull_request",
+      "title": "[Agents] Add evidence-based contribution evaluation pilot (#578)",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/589",
+      "number": 589,
+      "timestamp": "2026-11-17T22:34:26Z",
+      "summary": "PR #589 merged"
+    },
+    {
+      "type": "commit",
+      "title": "[Agents] Add evidence-based contribution evaluation pilot (#578) (#589)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/86c1efcd2adf85c627471e07992885e638c53f11",
+      "number": null,
+      "timestamp": "2026-11-17T22:34:25Z",
+      "summary": "Commit 86c1efc"
+    },
     {
       "type": "merged_pull_request",
       "title": "[Security] Require explicit dispatch for private Amiga workflows",
@@ -83,22 +99,6 @@
       "number": null,
       "timestamp": "2026-11-17T20:42:41Z",
       "summary": "Commit bd38432"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "Probe DEFFN/FN on Amiga GFA-BASIC 3.52",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/568",
-      "number": 568,
-      "timestamp": "2026-11-17T18:13:15Z",
-      "summary": "PR #568 merged"
-    },
-    {
-      "type": "commit",
-      "title": "test: probe DEFFN/FN on Amiga 3.52",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/50513a4b2e9f02da31f8924079a9da82ce4782dc",
-      "number": null,
-      "timestamp": "2026-11-17T18:13:14Z",
-      "summary": "Commit 50513a4"
     }
   ]
 }
