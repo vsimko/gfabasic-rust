@@ -37,6 +37,8 @@ class Native352InterpreterProbePathTests(unittest.TestCase):
         for path in (
             "tests/interpreter-probes/amiga-3.52/expected-ids.txt",
             "tests/interpreter-probes/amiga-3.52/regression-suite.LST",
+            "tests/interpreter-probes/amiga-3.5/expected-ids.txt",
+            "tests/interpreter-probes/amiga-3.5/regression-suite.LST",
         ):
             with self.subTest(path=path):
                 selected = expected_workflows([path])
