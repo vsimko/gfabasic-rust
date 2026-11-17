@@ -41,9 +41,15 @@ elif test -s artifacts/amiga-35u-ab-c/MAT.OUT && grep -Fq 'CASE-C:MAT-ONE-FAIL' 
   echo "CASE_C_MAT_ONE=FAIL (statement returned but matrix was incorrect)" | tee -a artifacts/amiga-35u-ab-c/result.txt
   exit 1
 else
-  echo "CASE_C_MAT_ONE=HELD_OR_NO_OUTPUT" | tee -a artifacts/amiga-35u-ab-c/result.txt
-  # Preserve the run as diagnostic evidence. The task-held requester and
-  # emulator log determine whether the command failed before MAT.OUT opened.
+  tesseract artifacts/amiga-35u-ab-c/after-run.png stdout --psm 6 2>/dev/null > artifacts/amiga-35u-ab-c/after-run-ocr.txt || true
+  if grep -Eiq 'task held|finish ALL disk activity' artifacts/amiga-35u-ab-c/after-run-ocr.txt; then
+    echo "CASE_C_MAT_ONE=TASK_HELD_CONFIRMED" | tee -a artifacts/amiga-35u-ab-c/result.txt
+  elif grep -Eiq 'Illegal instruction|B-Trap|F-line|exception' artifacts/amiga-35u-ab-c/amiberry.log; then
+    echo "CASE_C_MAT_ONE=EMULATOR_EXCEPTION" | tee -a artifacts/amiga-35u-ab-c/result.txt
+  else
+    echo "CASE_C_MAT_ONE=NO_OUTPUT_UNCLASSIFIED" | tee -a artifacts/amiga-35u-ab-c/result.txt
+  fi
+  # A missing MAT.OUT alone is not proof of a task-held requester or cause.
 fi
 
 for screenshot in editor-before-merge.png merge-dialog.png merge-file-row-pointer.png merge-file-selected.png after-shortcut.png merge-gadget-pointer.png after-merge.png after-run-dialog.png after-run.png; do
