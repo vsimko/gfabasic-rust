@@ -50,18 +50,23 @@ def build_result(args: argparse.Namespace) -> dict:
 
     if not identity_ok or errors or not outcomes:
         status = "UNTESTED"
+        harness_status = args.harness_outcome
     elif failed:
+        # A complete, version-identified FAIL record proves the harness ran;
+        # the conformance assertion, not harness execution, failed.
         status = "FAIL"
+        harness_status = "success"
     elif different and harness_ok:
         status = "DIFFERENT"
+        harness_status = "success"
     elif passed == 1 and harness_ok:
         status = "PASS"
+        harness_status = "success"
     else:
         status = "UNTESTED"
-    if not harness_ok and status == "PASS":
-        status = "UNTESTED"
+        harness_status = args.harness_outcome
     reason = "; ".join(errors)
-    if not harness_ok:
+    if harness_status != "success":
         reason = (reason + "; " if reason else "") + f"native harness step concluded {args.harness_outcome}"
     return {
         "schema_version": 1,
@@ -69,7 +74,7 @@ def build_result(args: argparse.Namespace) -> dict:
         "version": args.version,
         "probe": args.probe,
         "expected_ids": expected_ids,
-        "harness_status": "success" if harness_ok else args.harness_outcome,
+        "harness_status": harness_status,
         "conformance_status": status,
         "reason": reason or None,
         "outcomes": outcomes,
