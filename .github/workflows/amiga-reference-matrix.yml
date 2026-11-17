@@ -303,7 +303,7 @@ jobs:
 
   matrix-summary:
     name: Reference matrix summary
-    if: always() && github.actor != 'dependabot[bot]' && (github.event_name != 'pull_request' || (github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.author_association == 'OWNER')) && (github.event_name != 'workflow_dispatch' || (github.ref == 'refs/heads/main' && github.actor == github.repository_owner)) && (github.event_name != 'push' || (github.ref == 'refs/heads/main' && github.actor == github.repository_owner))
+    if: always()
     needs: [amiga-352, amiga-3041u, amiga-35]
     runs-on: ubuntu-24.04
     steps:
@@ -313,7 +313,20 @@ jobs:
           STATUS_3041U: ${{ needs.amiga-3041u.result }}
           STATUS_35: ${{ needs.amiga-35.result }}
           SELECTED_VERSION: ${{ inputs.version }}
+          EVENT_NAME: ${{ github.event_name }}
+          HEAD_REPOSITORY: ${{ github.event.pull_request.head.repo.full_name }}
+          PR_AUTHOR_ASSOCIATION: ${{ github.event.pull_request.author_association }}
+          REPOSITORY: ${{ github.repository }}
+          REF: ${{ github.ref }}
+          ACTOR: ${{ github.actor }}
+          REPOSITORY_OWNER: ${{ github.repository_owner }}
         run: |
+          TRUSTED_EVENT=true
+          if [ "$EVENT_NAME" = "pull_request" ] && { [ "$HEAD_REPOSITORY" != "$REPOSITORY" ] || [ "$PR_AUTHOR_ASSOCIATION" != "OWNER" ]; }; then
+            TRUSTED_EVENT=false
+          elif [ "$EVENT_NAME" != "pull_request" ] && { [ "$REF" != "refs/heads/main" ] || [ "$ACTOR" != "$REPOSITORY_OWNER" ]; }; then
+            TRUSTED_EVENT=false
+          fi
           {
             echo "## Amiga GFA-BASIC reference matrix"
             echo ""
@@ -326,9 +339,17 @@ jobs:
             echo "A green workflow means the selected native harness and its host-side result protocol completed. Per-construct GFATEST outcomes are retained in the construct-result artifact; the 3.5 profile remains a smoke profile, not complete language conformance."
           } >> "$GITHUB_STEP_SUMMARY"
           if [ -z "$SELECTED_VERSION" ]; then
-            if [ "$STATUS_352" != success ] || [ "$STATUS_3041U" != success ] || [ "$STATUS_35" != success ]; then
-              echo "::error::At least one configured baseline matrix job did not complete successfully."
+            if [ "$STATUS_352" = failure ] || [ "$STATUS_3041U" = failure ] || [ "$STATUS_35" = failure ]; then
+              echo "::error::At least one configured baseline matrix job failed."
               exit 1
+            fi
+            if [ "$STATUS_352" != success ] || [ "$STATUS_3041U" != success ] || [ "$STATUS_35" != success ]; then
+              if [ "$TRUSTED_EVENT" = false ]; then
+                echo "Native matrix: UNTESTED (private assets withheld for this event)." >> "$GITHUB_STEP_SUMMARY"
+              else
+                echo "::error::A trusted baseline native matrix job was skipped or did not complete."
+                exit 1
+              fi
             fi
           else
             case "$SELECTED_VERSION" in
@@ -337,8 +358,15 @@ jobs:
               3.5) SELECTED_STATUS="$STATUS_35" ;;
               *) echo "::error::Unsupported selected version: $SELECTED_VERSION"; exit 1 ;;
             esac
-            if [ "$SELECTED_STATUS" != success ]; then
-              echo "::error::Selected native workflow $SELECTED_VERSION did not complete successfully."
+            if [ "$SELECTED_STATUS" = failure ]; then
+              echo "::error::Selected native workflow $SELECTED_VERSION failed."
               exit 1
+            elif [ "$SELECTED_STATUS" != success ]; then
+              if [ "$TRUSTED_EVENT" = false ]; then
+                echo "Native matrix $SELECTED_VERSION: UNTESTED (private assets withheld for this event)." >> "$GITHUB_STEP_SUMMARY"
+              else
+                echo "::error::Selected native workflow $SELECTED_VERSION was skipped or did not complete."
+                exit 1
+              fi
             fi
           fi
