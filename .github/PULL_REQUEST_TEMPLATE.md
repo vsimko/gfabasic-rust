@@ -19,6 +19,12 @@ Closes #
 
 <!-- List exact commands and observed results. Do not report expected results as actual. -->
 
+## Workflow changes (if applicable)
+
+- [ ] Reviewed event triggers and refs, including pull_request/forks, push-to-main, workflow_dispatch, schedule, workflow_call, and release events.
+- [ ] Reviewed effective job permissions, secrets, Dependabot/fork behavior, checkout credentials, artifacts, and automatic post-merge side effects.
+- [ ] Confirmed untrusted PR code cannot access private assets or write-capable tokens.
+
 ## Documentation and generated artifacts
 
 - [ ] Canonical documentation updated where behavior or policy changed.
