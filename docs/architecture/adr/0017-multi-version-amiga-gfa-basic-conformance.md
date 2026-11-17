@@ -5,7 +5,7 @@ title: "Multi-version Amiga GFA-BASIC conformance baseline"
 
 # ADR 0017: Multi-version Amiga GFA-BASIC conformance baseline
 
-- **Status:** Proposed
+- **Status:** Accepted
 - **Date:** 2026-11-16
 - **Tracking:** [Issue #557](https://github.com/vsimko/gfabasic-rust/issues/557)
 
@@ -22,10 +22,11 @@ Adopt a three-version reference strategy:
 | Interpreter | Role |
 |---|---|
 | GFA-BASIC 3.52 | Primary reference baseline for current development and default expected behavior |
-| GFA-BASIC 3.5 (including 3.5U where explicitly identified) | Compatibility comparison |
+| GFA-BASIC 3.5 | Compatibility comparison |
+| GFA-BASIC 3.5U | Retired historical profile; no new routine test runs; retain old results as historical evidence only |
 | GFA-BASIC 3.0 | Historical compatibility comparison |
 
-Run the same applicable probes against all three versions when the licensed interpreter asset and native harness are available. Preserve separate results for each exact version. Never infer a version's behavior from another version.
+Run the same applicable probes against the active matrix versions (3.52, 3.5, and 3.0) when the licensed interpreter asset and native harness are available. Preserve separate results for each exact version. Never infer a version's behavior from another version. The previously inventoried 3.5U package is not an active matrix target; its old probe results remain historical and must not be reported as current 3.5 coverage.
 
 A confirmed difference is a compatibility distinction, not automatically a failure. Expected behavior must be scoped to the tested version and supported by the relevant manual or direct interpreter observation.
 
@@ -50,9 +51,11 @@ Keep manual-documented behavior, directly observed behavior, and assumptions dis
 
 - New conformance probes use 3.52 as the default baseline.
 - Applicable probes should run on 3.5 and 3.0 as comparison coverage.
+- 3.5U is excluded from new runs and current matrix reporting unless the maintainer explicitly reactivates it.
 - Reports and fixtures must retain exact version identity and per-version outcomes.
 - A missing interpreter asset or unavailable workflow is an explicit coverage gap.
-- Native workflows, private licensed assets, and result aggregation must be expanded incrementally; this ADR does not claim that all three versions are currently available in CI.
+- Native workflows, private licensed assets, and result aggregation must be expanded incrementally; this ADR does not claim that all three active versions are currently available in CI.
+- The status of private assets and runnable workflows must be checked from the current workflow configuration and latest issue/CI evidence, not inferred from the media inventory alone.
 
 ## Evidence and limitations
 
