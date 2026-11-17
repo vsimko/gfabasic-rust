@@ -36,11 +36,12 @@ def aggregate(selection: dict, root: Path, artifacts: Path, native_allowed: bool
     changed = selection.get("changed_constructs", [])
     if not isinstance(changed, list) or any(not isinstance(item, str) for item in changed):
         raise ValueError("selection.changed_constructs must be a list of construct IDs")
-    selected = {
-        (item.get("construct_id"), item.get("version"))
+    selected_items = {
+        (item.get("construct_id"), item.get("version")): item
         for item in selection.get("include", [])
         if isinstance(item, dict)
     }
+    selected = set(selected_items)
     artifacts_by_pair = _read_result_artifacts(artifacts)
     rows = []
     for construct_id in sorted(set(changed)):
@@ -75,14 +76,34 @@ def aggregate(selection: dict, root: Path, artifacts: Path, native_allowed: bool
                     "reason": reason,
                 }
             else:
-                row = {
-                    "construct_id": construct_id, "version": version,
-                    "harness_status": artifact.get("harness_status", "unknown"),
-                    "conformance_status": artifact["conformance_status"],
-                    "reason": artifact.get("reason"),
-                    "probe": artifact.get("probe"),
-                    "editor_identity": artifact.get("editor_identity"),
-                }
+                expected_probe = selected_items[pair].get("probe")
+                identity = artifact.get("editor_identity") or {}
+                status = artifact["conformance_status"]
+                integrity_ok = (
+                    artifact.get("probe") == expected_probe
+                    and artifact.get("expected_ids") == [construct_id]
+                    and identity.get("ocr_matched") is True
+                )
+                if status in {"PASS", "DIFFERENT"}:
+                    integrity_ok = integrity_ok and artifact.get("harness_status") == "success"
+                if not integrity_ok and status != "UNTESTED":
+                    row = {
+                        "construct_id": construct_id, "version": version,
+                        "harness_status": artifact.get("harness_status", "unknown"),
+                        "conformance_status": "UNTESTED",
+                        "reason": "native result metadata, harness, or editor identity did not match the selected pair",
+                        "probe": artifact.get("probe"),
+                        "editor_identity": identity,
+                    }
+                else:
+                    row = {
+                        "construct_id": construct_id, "version": version,
+                        "harness_status": artifact.get("harness_status", "unknown"),
+                        "conformance_status": status,
+                        "reason": artifact.get("reason"),
+                        "probe": artifact.get("probe"),
+                        "editor_identity": identity,
+                    }
             rows.append(row)
     rows.sort(key=lambda row: (row["construct_id"], VERSIONS.index(row["version"])))
     if not rows:
