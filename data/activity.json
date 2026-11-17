@@ -1,12 +1,44 @@
 {
   "schema_version": 1,
   "status": "fresh",
-  "generated_at": "2026-11-16T23:32:35.606674+00:00",
-  "last_successful_at": "2026-11-16T23:32:35.606674+00:00",
+  "generated_at": "2026-11-17T00:27:22.484774+00:00",
+  "last_successful_at": "2026-11-17T00:27:22.484774+00:00",
   "items": [
     {
       "type": "merged_pull_request",
-      "title": "test(amiga): add native 3.5U MAT ONE probe",
+      "title": "test(amiga): verify MAT ONE with GFA BASIC 3.52D",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/547",
+      "number": 547,
+      "timestamp": "2026-11-17T00:27:06Z",
+      "summary": "PR #547 merged"
+    },
+    {
+      "type": "commit",
+      "title": "test(amiga): verify MAT ONE with GFA BASIC 3.52D (#547)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/d8e9fa5d2bb510831a71453e302e712476e66093",
+      "number": null,
+      "timestamp": "2026-11-17T00:27:06Z",
+      "summary": "Commit d8e9fa5"
+    },
+    {
+      "type": "merged_pull_request",
+      "title": "Use publisher-hosted German GFA BASIC book download",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/554",
+      "number": 554,
+      "timestamp": "2026-11-17T00:20:43Z",
+      "summary": "PR #554 merged"
+    },
+    {
+      "type": "commit",
+      "title": "Use publisher-hosted German GFA BASIC book download (#554)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/9858f063b0852da3588891028cf94c1c21ceddea",
+      "number": null,
+      "timestamp": "2026-11-17T00:20:43Z",
+      "summary": "Commit 9858f06"
+    },
+    {
+      "type": "merged_pull_request",
+      "title": "test(amiga): expand 3.5 regression suite on 3.52",
       "url": "https://github.com/vsimko/gfabasic-rust/pull/535",
       "number": 535,
       "timestamp": "2026-11-16T23:32:09Z",
@@ -67,38 +99,6 @@
       "number": null,
       "timestamp": "2026-11-16T20:52:25Z",
       "summary": "Commit e4a4255"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "Keep public PDF source index locator-only",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/552",
-      "number": 552,
-      "timestamp": "2026-11-16T14:26:05Z",
-      "summary": "PR #552 merged"
-    },
-    {
-      "type": "commit",
-      "title": "Keep public PDF index locator-only (#552)",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/c5c908d736e0acfb07ee5426ecb7046ce5ae0939",
-      "number": null,
-      "timestamp": "2026-11-16T14:26:05Z",
-      "summary": "Commit c5c908d"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "Add PR-based public PDF source and text index",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/549",
-      "number": 549,
-      "timestamp": "2026-11-16T12:55:21Z",
-      "summary": "PR #549 merged"
-    },
-    {
-      "type": "commit",
-      "title": "Add PR-based public PDF source and text index",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/a6b0ecdcb14e68bad3174f9d114b15063d6aa27d",
-      "number": null,
-      "timestamp": "2026-11-16T12:55:19Z",
-      "summary": "Commit a6b0ecd"
     }
   ]
 }

@@ -55,6 +55,16 @@
 <li><code>UNTESTED</code>: no adequate run/evidence is available. Missing assets are not failures or passes.</li>
 </ul>
 <p>A maintainer-reported example motivating this policy is <code>M O a()</code>: reported as <code>MAT SET a()</code> in 3.5 and <code>MAT ONE a()</code> in 3.52. Treat it as reported evidence until exact-version screenshots/native runs are preserved.</p>
+<h2 id="verify-native-editor-merge">Verify native editor Merge</h2>
+<p>For a probe that depends on editor shortcut expansion (for example <code>M O identity()</code>), distinguish editor behavior from an explicitly typed runtime command such as <code>MAT ONE identity()</code>.</p>
+<ol>
+<li>Capture the Merge requester and confirm the exact <code>.LST</code> filename selected.</li>
+<li>After Merge, capture the editor and inspect the source statement itself before running.</li>
+<li>Compare the displayed statement with the staged fixture byte-for-byte where possible; OCR is supporting evidence only.</li>
+<li>If the editor shows a changed or unrecognized token, stop before Run and preserve the screenshot and source fixture. Do not attribute a later runtime error to the interpreter until the Merge discrepancy is understood.</li>
+<li>Run with the workflow's verified key sequence only after the source is confirmed. Do not reuse mouse coordinates from a different emulator layout.</li>
+</ol>
+<p>A successful Merge operation does not establish that a statement was expanded or accepted correctly.</p>
 <h2 id="before-writing-a-probe">Before writing a probe</h2>
 <ol>
 <li>Identify the exact interpreter version and platform under test. Do not transfer observations between 3.0, 3.5, 3.5U, and 3.52 without evidence.</li>
