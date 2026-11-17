@@ -44,7 +44,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: amiga-reference-matrix-${{ github.event.pull_request.number || github.ref }}
+  group: amiga-reference-matrix-${{ github.event.pull_request.number || github.ref }}-${{ inputs.construct_id || 'baseline' }}-${{ inputs.version || 'all' }}
   cancel-in-progress: true
 
 jobs:
