@@ -1,9 +1,25 @@
 {
   "schema_version": 1,
   "status": "fresh",
-  "generated_at": "2026-11-17T22:35:24.591804+00:00",
-  "last_successful_at": "2026-11-17T22:35:24.591804+00:00",
+  "generated_at": "2026-11-17T22:38:33.296898+00:00",
+  "last_successful_at": "2026-11-17T22:38:33.296898+00:00",
   "items": [
+    {
+      "type": "merged_pull_request",
+      "title": "[Amiga CI] Preflight private asset paths before downloads (#585)",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/588",
+      "number": 588,
+      "timestamp": "2026-11-17T22:38:13Z",
+      "summary": "PR #588 merged"
+    },
+    {
+      "type": "commit",
+      "title": "[Amiga CI] Preflight private asset paths before downloads (#585) (#588)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/ececfe4c1dc8b54a6be852b4fd2f97be00113e69",
+      "number": null,
+      "timestamp": "2026-11-17T22:38:13Z",
+      "summary": "Commit ececfe4"
+    },
     {
       "type": "merged_pull_request",
       "title": "[Agents] Add evidence-based contribution evaluation pilot (#578)",
@@ -83,22 +99,6 @@
       "number": null,
       "timestamp": "2026-11-17T21:15:08Z",
       "summary": "Commit 182510c"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "chore: migrate corpus and probe metadata to YAML",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/575",
-      "number": 575,
-      "timestamp": "2026-11-17T20:42:42Z",
-      "summary": "PR #575 merged"
-    },
-    {
-      "type": "commit",
-      "title": "chore: migrate corpus and probe metadata to YAML (#575)",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/bd384323d919c4632566946980beae79f2201899",
-      "number": null,
-      "timestamp": "2026-11-17T20:42:41Z",
-      "summary": "Commit bd38432"
     }
   ]
 }
