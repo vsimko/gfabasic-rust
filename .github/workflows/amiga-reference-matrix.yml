@@ -11,6 +11,8 @@ on:
       - ".github/workflows/amiga-3041u-native-merge-run.yml"
       - "tests/interpreter-probes/amiga-3.52/**"
       - "tests/interpreter-probes/amiga-3.041u/**"
+      - "tests/interpreter-probes/amiga-3.5/**"
+      - "scripts/amiga-cli-probe-35.sh"
       - "scripts/amiga-cli-probe-3041u.sh"
       - "scripts/validate_gfatest_results.py"
   pull_request:
@@ -20,6 +22,8 @@ on:
       - ".github/workflows/amiga-3041u-native-merge-run.yml"
       - "tests/interpreter-probes/amiga-3.52/**"
       - "tests/interpreter-probes/amiga-3.041u/**"
+      - "tests/interpreter-probes/amiga-3.5/**"
+      - "scripts/amiga-cli-probe-35.sh"
       - "scripts/amiga-cli-probe-3041u.sh"
       - "scripts/validate_gfatest_results.py"
   workflow_dispatch:
@@ -43,11 +47,31 @@ jobs:
     secrets: inherit
 
   amiga-35:
-    name: GFA-BASIC 3.5 editor identity (conformance probes untested)
+    name: GFA-BASIC 3.5 native Merge + Run probes
     runs-on: ubuntu-24.04
-    timeout-minutes: 10
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+
+      - name: Cache Amiga CI apt packages
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+        with:
+          path: ${{ runner.temp }}/apt-archives
+          key: ${{ runner.os }}-ubuntu-24.04-amiga-apt-amiberry-ocr-v1
+          restore-keys: |
+            ${{ runner.os }}-ubuntu-24.04-amiga-apt-
+
+      - name: Cache Python wheels
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-python-3.12-amiga-amitools-v1
+          restore-keys: |
+            ${{ runner.os }}-python-3.12-amiga-
+
+      - name: Prepare dependency cache directories
+        run: mkdir -p "$RUNNER_TEMP/apt-archives/partial" "$HOME/.cache/pip"
+
 
       - name: Download candidate 3.5 editor disk archive
         env:
@@ -73,7 +97,7 @@ jobs:
               with archive.open(sys.argv[2]) as source, open(sys.argv[3], "wb") as target:
                   shutil.copyfileobj(source, target)
           PY
-          python3 -m pip install --break-system-packages amitools
+          python3 -m pip install --cache-dir "$HOME/.cache/pip" --break-system-packages amitools
           xdftool "$RUNNER_TEMP/gfa-basic-3.5.adf" info | tee artifacts/amiga-3.5-discovery/adf-info.txt
           xdftool "$RUNNER_TEMP/gfa-basic-3.5.adf" list / all | tee artifacts/amiga-3.5-discovery/adf-files.txt
           xdftool "$RUNNER_TEMP/gfa-basic-3.5.adf" read gfabasic "$RUNNER_TEMP/gfabasic-3.5"
@@ -180,6 +204,26 @@ jobs:
           fi
           echo "The right-button menu screenshot is the authoritative version evidence; OCR is diagnostic only. The screenshot is retained for visual verification." >> "$GITHUB_STEP_SUMMARY"
 
+      - name: Prepare writable 3.5 test disk
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/amiga-3.5-discovery/native-run
+          TEST_ADF="$RUNNER_TEMP/gfatest.adf"
+          xdftool "$TEST_ADF" create
+          xdftool "$TEST_ADF" format GFATEST ofs
+          xdftool "$TEST_ADF" makedir S
+          printf 'DF1:gfabasic\n' > "$RUNNER_TEMP/Startup-Sequence"
+          xdftool "$TEST_ADF" write "$RUNNER_TEMP/Startup-Sequence" S/Startup-Sequence
+          xdftool "$TEST_ADF" write tests/interpreter-probes/amiga-3.5/regression-suite.LST gfatest.LST
+          xdftool "$TEST_ADF" boot install boot1x
+          xdftool "$TEST_ADF" list / all > artifacts/amiga-3.5-discovery/native-run/test-disk-layout.txt
+          xdftool "$TEST_ADF" boot show > artifacts/amiga-3.5-discovery/native-run/test-disk-boot.txt
+          grep -F 'bootable: True' artifacts/amiga-3.5-discovery/native-run/test-disk-boot.txt
+          cp tests/interpreter-probes/amiga-3.5/regression-suite.LST artifacts/amiga-3.5-discovery/native-run/gfatest.LST
+
+      - name: Merge and run the 3.5 BASIC probe
+        run: bash scripts/amiga-cli-probe-35.sh
+
       - name: Upload non-binary discovery evidence
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
@@ -208,9 +252,9 @@ jobs:
             echo "|---|---|---|"
             echo "| 3.52 | $STATUS_352 | Native probe suite; inspect its artifact for individual GFATEST records |"
             echo "| 3.041U | $STATUS_3041U | Native comparison probe suite; exact version only |"
-            echo "| 3.5 | identity verified | Held-right-button menu confirms GFA-BASIC 3.5; native language-conformance probes remain UNTESTED |"
+            echo "| 3.5 | $STATUS_35 | Exact editor identity plus native Merge + Run probes; inspect GFATEST records and screenshots |"
             echo ""
-            echo "A green workflow means the configured native jobs and their host-side result protocol completed. It does not establish complete language conformance."
+            echo "A green workflow means the configured native jobs and their host-side result protocol completed. The 3.5 suite is an initial three-case smoke set, not complete language conformance."
           } >> "$GITHUB_STEP_SUMMARY"
           if [ "$STATUS_352" != success ] || [ "$STATUS_3041U" != success ] || [ "$STATUS_35" != success ]; then
             echo "::error::At least one configured matrix job did not complete successfully."

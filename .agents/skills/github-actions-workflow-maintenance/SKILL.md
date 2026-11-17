@@ -36,7 +36,29 @@ Use this skill before changing, diagnosing, or reviewing workflows under `.githu
 - Pin tool and dependency versions used in CI; verify downloaded assets with trusted hashes when available.
 - Do not broaden permissions or weaken checks merely to make a failing workflow green.
 
-### 3. Run diagnosis
+### 3. Dependency caching (required)
+
+Every workflow that installs or downloads reusable build/test dependencies MUST use a sensible cache unless the dependency is tiny, ephemeral, supplied by the runner, or caching is demonstrably unsafe. Treat caching as a default design requirement, not an optional later optimization.
+
+Before adding or changing a workflow:
+
+1. Identify every dependency download/install step (OS packages, Python packages, Node packages, Rust crates/toolchains, browser or emulator tooling, SDKs, and build outputs).
+2. Reuse the repository's established cache action/version and patterns where suitable. Pin cache actions to full commit SHAs, just like every other third-party action.
+3. Cache package-manager download stores rather than installed system directories:
+   - Rust: Cargo registry/git plus build output only when the key and restore behavior are appropriate; use an additional cache action only if approved in the repository, otherwise follow the existing actions/cache pattern.
+   - Python: pip's download/wheel cache (normally ~/.cache/pip).
+   - Node: npm/yarn/pnpm package cache, preferably via setup-node's built-in cache when its lockfile support is clear.
+   - APT: archive cache (including its partial directory), not the mutable installed package database; run apt-get update and install normally.
+   - Other ecosystems: cache the official package-manager download/cache directory, not credentials or machine-specific state.
+4. Build keys from the operating system/runner image, relevant runtime or toolchain version, and dependency lockfiles or package manifests. For APT or workflows without lockfiles, include a deliberate cache schema/version and hash the workflow/package list that defines installed packages. Use restore prefixes only for compatible older caches.
+5. Keep cache paths narrow and deterministic. Never cache secrets, tokens, private licensed assets, emulator disk images, generated test results, or mutable machine state.
+6. Do not let a cache become a correctness dependency: installs must still work on a cold cache, cache misses and eviction must be harmless, and package installation/update commands must still validate/install required packages.
+7. Avoid pointless caches (for example, caching a one-off download or a runner-preinstalled tool) and explain the exception in the workflow or review notes. Do not cache an entire home directory or system directory.
+8. For matrix/reusable workflows, ensure cache keys do not cause incompatible jobs to share state; include version/architecture/toolchain dimensions where relevant.
+
+During review, check that cache keys change when dependencies or toolchain versions change, restore prefixes are compatible, and the workflow remains correct with an empty cache. Mention cache coverage and any justified exceptions in the completion report.
+
+### 4. Run diagnosis
 
 For a failing run:
 
@@ -49,7 +71,7 @@ For a failing run:
 
 For native Amiga runs, follow the `amiga-gfa-basic-regression-testing` skill for emulator and fixture diagnosis.
 
-### 4. Validation
+### 5. Validation
 
 - Run `actionlint` against every workflow file, not a hand-picked subset.
 - Run `bash -n` against every repository shell script affected by the change.
