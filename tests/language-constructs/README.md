@@ -7,6 +7,7 @@ This catalogue is deliberately separate from the existing API registry and regre
 ```text
 tests/language-constructs/
   README.md
+  manifest.schema.json
   fact-function/
     manifest.yaml
     probe-3.5.LST
@@ -21,7 +22,9 @@ A directory name is the stable construct ID. It must match `construct.id` and us
 
 ## Manifest schema version 1
 
-Every `manifest.yaml` is UTF-8 YAML with these required top-level fields:
+Every `manifest.yaml` is UTF-8 YAML validated against [manifest.schema.json](manifest.schema.json). The JSON Schema defines the structure; the repository validator adds cross-field, evidence-reference, filesystem-safety, and probe-integrity checks.
+
+Every manifest has these required top-level fields:
 
 | Field | Meaning |
 |---|---|
@@ -59,7 +62,7 @@ Every exact version key has:
 - `expectation.status`: `documented`, `observed`, `unknown`, or `not-applicable`.
 - `expectation.summary`: non-empty statement, including an explicit explanation when unknown.
 - `expectation.evidence_refs`: IDs from the manifest's `evidence` list. Documented/observed expectations require at least one reference; unknown/not-applicable expectations use an empty list.
-- `probe`: null or a path relative to the construct directory. An applicable, testable version maps to its own `.LST` probe; version-specific syntax uses explicitly named files such as `probe-3.52.LST`.
+- `probe`: null or a basename relative to the construct directory. An applicable version must map to its own `.LST` probe.
 - `execution.status`: exactly one of the ADR result values `PASS`, `FAIL`, `DIFFERENT`, or `UNTESTED`.
 - `execution.observed`: null for `UNTESTED`; otherwise the concise observed output/behavior.
 - `execution.run_url`: null for `UNTESTED`; otherwise a stable URL to the native run.
@@ -74,22 +77,25 @@ The `implementation` field describes the current Rust implementation, not the or
 
 1. Manifest filename is exactly `manifest.yaml`.
 2. `construct.id` must equal the directory name and match `^[a-z0-9]+(?:-[a-z0-9]+)*$`.
-3. Probe paths are relative to the construct directory, must stay inside it, must exist as regular files, and must use the `.LST` extension.
-4. A version marked `applicable` and selected for execution must map to a probe. Unknown or not-applicable versions must not be assigned a guessed probe. Probe files should be ASCII with LF line endings unless the construct explicitly tests encoding behavior.
-5. `execution.probe_source` is provenance for an already observed run, not the selection path for future per-construct jobs. It must be repository-relative and point to an existing test source.
+3. Probe paths are basenames relative to the construct directory, must exist as regular files, and must use the `.LST` extension.
+4. A version marked `applicable` must map to a probe. Unknown or not-applicable versions must not be assigned a guessed probe.
+5. `execution.probe_source` and implementation references are repository-relative paths and must point to existing files.
 6. Every evidence reference must resolve to exactly one evidence ID in the same manifest.
 7. Version identifiers are exact strings. Do not normalize `3.041U`, `3.5`, or `3.52`.
 8. Expected behavior is not evidence. Evidence is not implementation status. A probe path is not proof that it ran.
+9. Duplicate YAML keys, symlink traversal, unreferenced probe files, and path traversal are rejected.
 
-## Examples
+## Validator and change selection
 
-- `fact-function` is a function with a 3.5 manual-backed expectation and an observed 3.52 native result. The 3.52 observation came from the existing shared regression suite; the new isolated probe is mapped for future construct-level execution.
-- `mat-one-statement` is a statement with a 3.5 page-image-backed expectation and a 3.52 shortcut form recorded in ADR-0017 and observed in the 3.52 native run. Its Rust implementation is currently syntax-only for 3.5.
+Run from the repository root:
 
-Both examples explicitly leave 3.041U applicability unknown rather than assuming cross-version equivalence.
+```sh
+python scripts/select_language_constructs.py --validate-only
+python scripts/select_language_constructs.py --changed-path tests/language-constructs/fact-function/manifest.yaml
+python scripts/select_language_constructs.py --all-constructs
+python -m unittest tests/tooling/test_language_constructs.py
+```
 
-## Validator contract
+The CLI emits deterministic JSON with `validate_all` and an `include` array of exact `construct`, `version`, and `probe` tuples. Changed files inside one construct select only that construct's applicable versions. A deleted construct selects no native jobs. A schema, validator, or catalogue README change requests full metadata validation but deliberately selects no native jobs. `--all-constructs` is an explicit full-selection mode for manual dispatch; it does not run implicitly.
 
-Issue [#571](https://github.com/vsimko/gfabasic-rust/issues/571) implements validation. The validator should reject duplicate IDs, unsupported schema versions, missing/extra version keys, invalid enums, dangling evidence references, path traversal, missing/non-`.LST` probes, and inconsistent expectation/execution states. It must not modify or migrate the existing corpus YAML or API registry TOML.
-
-The new construct catalogue is metadata for selecting and interpreting tests; it does not add parser, IR, runtime, or API-registry behavior.
+Issue [#571](https://github.com/vsimko/gfabasic-rust/issues/571) implements validation and change selection. Issue [#572](https://github.com/vsimko/gfabasic-rust/issues/572) integrates the selected pairs into native CI. The new construct catalogue is metadata for selecting and interpreting tests; it does not add parser, IR, runtime, or API-registry behavior.
