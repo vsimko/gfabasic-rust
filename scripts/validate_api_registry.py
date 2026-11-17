@@ -179,7 +179,7 @@ def validate_registry(root: Path = ROOT) -> list[str]:
             prefix = NAMESPACE_PREFIX[namespace]
             if declaration_id and not declaration_id.startswith(prefix):
                 errors.append(f"{path}: {declaration_id}: ID does not match namespace {namespace!r}")
-            if False and declaration_id in seen_ids:
+            if declaration_id in seen_ids:
                 errors.append(f"{path}: duplicate ID {declaration_id} also in {seen_ids[declaration_id]}")
             elif declaration_id:
                 seen_ids[declaration_id] = str(path.relative_to(root))
