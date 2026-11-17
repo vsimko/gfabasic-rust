@@ -59,11 +59,10 @@ sleep 0.5
 printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-file-selected.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 
 # The selected-row screenshot places the pointer near x=320,y=218.
-# Move to the center of the Merge gadget (about x=323,y=420).
-# Amiberry bounds each relative mouse event; use repeated small increments.
-# SEND_MOUSE relative Y is scaled by the emulator; eight 50-unit steps
-# move the pointer from the selected row to the Merge gadget center.
-for _ in $(seq 1 8); do
+# The Merge gadget center is at screenshot y~=364, not y=420.
+# SEND_MOUSE relative Y is scaled by the emulator; six 50-unit steps
+# move the pointer to the center of the Merge gadget.
+for _ in $(seq 1 6); do
 printf "SEND_MOUSE\\t0\\t50\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 sleep 0.15
 done
@@ -72,10 +71,23 @@ printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-g
 printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 sleep 0.2
 printf "SEND_MOUSE\\t0\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-sleep 4
+sleep 1
+printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-merge.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+python3 - "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-merge.png" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-merge-ocr-input.png" <<'PY'
+from PIL import Image, ImageOps, ImageEnhance
+import sys
+image = Image.open(sys.argv[1]).convert("L")
+image = ImageOps.invert(image).resize((image.width * 3, image.height * 3))
+ImageEnhance.Contrast(image).enhance(3).save(sys.argv[2])
+PY
+tesseract "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-merge-ocr-input.png" stdout --psm 6 2>/dev/null | tee "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-merge-ocr.txt"
+if grep -Eiq 'Merge File|Cancel|Parent' "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-merge-ocr.txt"; then
+  echo "MERGE_EDITOR_STATE=FAIL (Merge requester remains open)" | tee "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-validation.txt"
+  exit 1
+fi
+echo "MERGE_EDITOR_STATE=PASS (Merge requester closed)" | tee "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-validation.txt"
 printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-shortcut.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 tesseract "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-shortcut.png" stdout 2>/dev/null > "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-shortcut-ocr.txt"
-printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-merge.png" | timeout 5s nc -U -N "${ipc_socket_path:-}" || true
 
 # Click the editor's visible Run gadget rather than relying on the Amiga-key
 # shortcut, which can leave the listing open without starting the program.
