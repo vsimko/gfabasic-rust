@@ -1,9 +1,25 @@
 {
   "schema_version": 1,
   "status": "fresh",
-  "generated_at": "2026-11-17T21:43:44.198653+00:00",
-  "last_successful_at": "2026-11-17T21:43:44.198653+00:00",
+  "generated_at": "2026-11-17T22:24:15.651760+00:00",
+  "last_successful_at": "2026-11-17T22:24:15.651760+00:00",
   "items": [
+    {
+      "type": "merged_pull_request",
+      "title": "[Security] Define AI-agent trust boundaries and harden workflows (#580)",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/584",
+      "number": 584,
+      "timestamp": "2026-11-17T22:23:50Z",
+      "summary": "PR #584 merged"
+    },
+    {
+      "type": "commit",
+      "title": "[Security] Define AI-agent trust boundaries and harden workflows (#580) (#584)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/81b6a50ec9359b3e7215dc5cff02fc0543f2775c",
+      "number": null,
+      "timestamp": "2026-11-17T22:23:50Z",
+      "summary": "Commit 81b6a50"
+    },
     {
       "type": "merged_pull_request",
       "title": "[Testing] Add deterministic source-map property coverage (#579)",
@@ -83,22 +99,6 @@
       "number": null,
       "timestamp": "2026-11-17T16:20:08Z",
       "summary": "Commit bb882b9"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "Add function probes to the Amiga interpreter version matrix",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/565",
-      "number": 565,
-      "timestamp": "2026-11-17T16:06:22Z",
-      "summary": "PR #565 merged"
-    },
-    {
-      "type": "commit",
-      "title": "Add function probes to the Amiga interpreter version matrix (#565)",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/0deb0b1ab9e7e1f553b47d2e2b9b69dfb9fbc9c5",
-      "number": null,
-      "timestamp": "2026-11-17T16:06:21Z",
-      "summary": "Commit 0deb0b1"
     }
   ]
 }
