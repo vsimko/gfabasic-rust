@@ -104,9 +104,13 @@ def validate_catalogue(root: Path = ROOT) -> list[str]:
         if not isinstance(data, dict):
             errors.append(f"{relative}: manifest must be a YAML mapping")
             continue
-        for error in sorted(validator.iter_errors(data), key=lambda item: list(map(str, item.absolute_path))):
-            location = ".".join(str(part) for part in error.absolute_path) or "<root>"
-            errors.append(f"{relative}:{location}: {error.message}")
+        schema_errors = sorted(validator.iter_errors(data), key=lambda item: list(map(str, item.absolute_path)))
+        if schema_errors:
+            for error in schema_errors:
+                location = ".".join(str(part) for part in error.absolute_path) or "<root>"
+                errors.append(f"{relative}:{location}: {error.message}")
+            # Do not inspect malformed values with custom cross-field logic.
+            continue
 
         construct = data.get("construct", {})
         if not isinstance(construct, dict):
