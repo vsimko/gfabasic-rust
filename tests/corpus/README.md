@@ -81,7 +81,7 @@ A fixture may use `verified` only after its syntax and expected behavior are che
 ## Adding fixtures
 
 1. Check the relevant issue and architecture decisions.
-2. Add one focused `.lst` file and its TOML sidecar.
+2. Add one focused `.lst` file and its YAML sidecar.
 3. Add the fixture ID to `manifest.yaml`.
 4. Record the source claim and expected outcome.
 5. Keep the status at `candidate` until evidence review is complete.
