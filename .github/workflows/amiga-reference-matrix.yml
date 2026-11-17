@@ -309,6 +309,7 @@ jobs:
           STATUS_3041U: ${{ needs.amiga-3041u.result }}
           STATUS_35: ${{ needs.amiga-35.result }}
           SELECTED_VERSION: ${{ inputs.version }}
+          CONSTRUCT_ID: ${{ inputs.construct_id }}
           EVENT_NAME: ${{ github.event_name }}
           HEAD_REPOSITORY: ${{ github.event.pull_request.head.repo.full_name }}
           PR_AUTHOR_ASSOCIATION: ${{ github.event.pull_request.author_association }}
@@ -346,6 +347,9 @@ jobs:
             echo ""
             echo "A green workflow means the selected native harness and its host-side result protocol completed. Per-construct GFATEST outcomes are retained in the construct-result artifact; the 3.5 profile remains a smoke profile, not complete language conformance."
           } >> "$GITHUB_STEP_SUMMARY"
+          if [ -n "$CONSTRUCT_ID" ]; then
+            echo "Construct-level conformance status is reported by the parent matrix aggregator from the result.json artifact; job status may be success because harness failures are retained for aggregation." >> "$GITHUB_STEP_SUMMARY"
+          fi
           if [ -z "$SELECTED_VERSION" ]; then
             if [ "$STATUS_352" = failure ] || [ "$STATUS_3041U" = failure ] || [ "$STATUS_35" = failure ]; then
               echo "::error::At least one configured baseline matrix job failed."
