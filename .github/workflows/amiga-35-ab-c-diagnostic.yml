@@ -1,0 +1,125 @@
+name: Amiga GFA-BASIC 3.5 clean-disk A/B/C diagnostic
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/amiga-35-ab-c-diagnostic.yml"
+      - "tests/interpreter-probes/amiga-3.5/ab-c-isolation.LST"
+      - "scripts/amiga-35-ab-c.sh"
+      - "scripts/amiga-35-ab-c-emulator.sh"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  native-ab-c:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+
+      - name: Download and verify the exact private GFA Basic Editor 3.5 disk
+        env:
+          GFA_ASSETS_TOKEN: ${{ secrets.GFA_ASSETS_TOKEN }}
+        run: |
+          set -euo pipefail
+          test -n "$GFA_ASSETS_TOKEN"
+          mkdir -p amiga-volume/S artifacts/amiga-35-ab-c
+          python3 -m pip install --break-system-packages amitools
+          ZIP_NAME='GFA Basic Editor 3.5.zip'
+          ZIP_PATH_ENCODED="$(python3 -c 'import sys,urllib.parse; print(urllib.parse.quote(sys.argv[1], safe=""))' "$ZIP_NAME")"
+          curl --fail --silent --show-error --location --retry 3 \
+            --header "Authorization: Bearer $GFA_ASSETS_TOKEN" \
+            --header "Accept: application/vnd.github.raw" \
+            "https://api.github.com/repos/vsimko/gfabasic-private-assets/contents/$ZIP_PATH_ENCODED?ref=main" \
+            --output "$RUNNER_TEMP/gfa-basic-editor-3.5.zip"
+          python3 - "$RUNNER_TEMP/gfa-basic-editor-3.5.zip" <<'PY'
+          import hashlib, pathlib, sys
+          data = pathlib.Path(sys.argv[1]).read_bytes()
+          actual = hashlib.sha1(b"blob " + str(len(data)).encode() + b"\\0" + data).hexdigest()
+          expected = "d92b15b971186a9d93132dd78e79818e5fc5aea9"
+          if actual != expected:
+              raise SystemExit(f"Unexpected private ZIP Git blob SHA: {actual}")
+          print(f"PRIVATE_ZIP_GIT_BLOB_SHA={actual}")
+          print(f"PRIVATE_ZIP_SIZE={len(data)}")
+          PY
+          mapfile -t ADF_ENTRIES < <(unzip -Z1 "$RUNNER_TEMP/gfa-basic-editor-3.5.zip" | grep -i -E '\.adf$' || true)
+          test "${#ADF_ENTRIES[@]}" -eq 1 || { echo "Expected exactly one ADF in private ZIP"; unzip -Z1 "$RUNNER_TEMP/gfa-basic-editor-3.5.zip"; exit 1; }
+          ADF_ENTRY="${ADF_ENTRIES[0]}"
+          printf '%s\n' "$ADF_ENTRY" | tee artifacts/amiga-35-ab-c/source-adf-entry.txt
+          python3 - "$RUNNER_TEMP/gfa-basic-editor-3.5.zip" "$ADF_ENTRY" "$RUNNER_TEMP/gfa-basic-editor-3.5.adf" <<'PY'
+          import shutil, sys, zipfile
+          with zipfile.ZipFile(sys.argv[1]) as archive:
+              with archive.open(sys.argv[2]) as source, open(sys.argv[3], "wb") as target:
+                  shutil.copyfileobj(source, target)
+          PY
+          xdftool "$RUNNER_TEMP/gfa-basic-editor-3.5.adf" list / all | tee artifacts/amiga-35-ab-c/source-adf-layout.txt
+          xdftool "$RUNNER_TEMP/gfa-basic-editor-3.5.adf" read GFABasic amiga-volume/GFABasic
+          test -s amiga-volume/GFABasic
+          sha256sum amiga-volume/GFABasic > artifacts/amiga-35-ab-c/interpreter-sha256.txt
+          wc -c amiga-volume/GFABasic | tee artifacts/amiga-35-ab-c/interpreter-size.txt
+          file amiga-volume/GFABasic | tee artifacts/amiga-35-ab-c/interpreter-file.txt
+          sha256sum "$RUNNER_TEMP/gfa-basic-editor-3.5.adf" > artifacts/amiga-35-ab-c/source-adf-sha256.txt
+          sha256sum amiga-volume/GFABasic > artifacts/amiga-35-ab-c/interpreter-sha256.txt
+          file amiga-volume/GFABasic | tee artifacts/amiga-35-ab-c/interpreter-file.txt
+
+      - name: Download Kickstart 1.3 rev 34.5
+        env:
+          GFA_ASSETS_TOKEN: ${{ secrets.GFA_ASSETS_TOKEN }}
+        run: |
+          set -euo pipefail
+          mkdir -p private-kickstart artifacts/amiga-35-ab-c
+          ROM_NAME='Kickstart v1.3 rev 34.5 (1987)(Commodore)(A3000)[o].rom'
+          ROM_PATH_ENCODED="$(python3 -c 'import sys,urllib.parse; print(urllib.parse.quote(sys.argv[1], safe=""))' "$ROM_NAME")"
+          curl --fail --silent --show-error --location \
+            --header "Authorization: Bearer $GFA_ASSETS_TOKEN" \
+            --header "Accept: application/vnd.github.raw" \
+            "https://api.github.com/repos/vsimko/gfabasic-private-assets/contents/$ROM_PATH_ENCODED?ref=main" \
+            --output private-kickstart/kick.rom
+          test "$(wc -c < private-kickstart/kick.rom)" -eq 524288
+          sha256sum private-kickstart/kick.rom > artifacts/amiga-35-ab-c/kickstart-sha256.txt
+          printf 'KICKSTART_ROM_PATH=%s/private-kickstart/kick.rom\n' "$GITHUB_WORKSPACE" >> "$GITHUB_ENV"
+
+      - name: Install Amiberry and disk tools
+        run: |
+          sudo install -d -m 0755 /usr/share/keyrings
+          curl -fsSL https://packages.amiberry.com/gpg.key | sudo tee /usr/share/keyrings/amiberry-archive-keyring.gpg >/dev/null
+          echo "deb [arch=amd64 signed-by=/usr/share/keyrings/amiberry-archive-keyring.gpg] https://packages.amiberry.com/apt noble main" | sudo tee /etc/apt/sources.list.d/amiberry.list >/dev/null
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends amiberry xvfb netcat-openbsd tesseract-ocr python3-pip python3-pil
+          python3 -m pip install --break-system-packages amitools
+          amiberry --version | tee artifacts/amiga-35-ab-c/amiberry-version.txt
+
+      - name: Prepare writable test disk and verify listing
+        run: |
+          set -euo pipefail
+          TEST_ADF="$RUNNER_TEMP/gfatest.adf"
+          xdftool "$TEST_ADF" create
+          xdftool "$TEST_ADF" format GFATEST ofs
+          xdftool "$TEST_ADF" makedir S
+          printf 'DF1:GFABasic\n' > "$RUNNER_TEMP/Startup-Sequence"
+          xdftool "$TEST_ADF" write "$RUNNER_TEMP/Startup-Sequence" S/Startup-Sequence
+          xdftool "$TEST_ADF" write tests/interpreter-probes/amiga-3.5/ab-c-isolation.LST gfatest.LST
+          xdftool "$TEST_ADF" boot install boot1x
+          xdftool "$TEST_ADF" boot show | tee artifacts/amiga-35-ab-c/test-adf-boot.txt
+          grep -F 'bootable: True' artifacts/amiga-35-ab-c/test-adf-boot.txt
+          xdftool "$TEST_ADF" list / all | tee artifacts/amiga-35-ab-c/test-adf-layout.txt
+          xdftool "$TEST_ADF" read gfatest.LST artifacts/amiga-35-ab-c/staged-listing.LST
+          cmp tests/interpreter-probes/amiga-3.5/ab-c-isolation.LST artifacts/amiga-35-ab-c/staged-listing.LST
+          sha256sum artifacts/amiga-35-ab-c/staged-listing.LST > artifacts/amiga-35-ab-c/listing-sha256.txt
+          sha256sum "$TEST_ADF" > artifacts/amiga-35-ab-c/test-adf-sha256.txt
+
+      - name: Run isolated A/B/C on the new 3.5 disk candidate (68000, OCS, Kickstart 1.3)
+        run: bash scripts/amiga-35-ab-c.sh
+
+      - name: Upload diagnostic evidence (never upload commercial binary, ROM, or disk images)
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: amiga-gfa-basic-35u-ab-c-diagnostic
+          path: |
+            artifacts/amiga-35-ab-c/
+            !artifacts/amiga-35-ab-c/*.adf
+          if-no-files-found: warn
+          retention-days: 7
