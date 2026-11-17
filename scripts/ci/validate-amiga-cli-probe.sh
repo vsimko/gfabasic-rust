@@ -36,13 +36,14 @@ done
 find artifacts/amiga-cli-probe/ocr -maxdepth 1 -type f -name '*-ocr-input.png' -delete
 find artifacts/amiga-cli-probe/ocr -maxdepth 1 -type f -name '*.txt' -print | sort > artifacts/amiga-cli-probe/ocr/index.txt
 
-# Verify the interpreter executed the full regression listing and wrote
-# its labelled results to the guest disk before checking tokenized Save.
-xdftool artifacts/amiga-cli-probe/factzero.adf read FACT.OUT artifacts/amiga-cli-probe/FACT.OUT
-grep -Fq 'FACT(0..2)' artifacts/amiga-cli-probe/FACT.OUT
-grep -Fq 'ARITHMETIC:' artifacts/amiga-cli-probe/FACT.OUT
-grep -Fq 'FOR-NEXT:' artifacts/amiga-cli-probe/FACT.OUT
-grep -Fq 'STRINGS:' artifacts/amiga-cli-probe/FACT.OUT
+# Verify the interpreter executed the merged regression listing and wrote
+# the fixture's strict GFATEST protocol to the guest disk before Save checks.
+# The active input is regression-suite.LST, which writes GFATEST.OUT (not the
+# historical FACT.OUT format).
+xdftool artifacts/amiga-cli-probe/factzero.adf read GFATEST.OUT artifacts/amiga-cli-probe/GFATEST.OUT
+python3 scripts/validate_gfatest_results.py \
+  --expected-ids tests/interpreter-probes/amiga-3.5/expected-ids.txt \
+  --results artifacts/amiga-cli-probe/GFATEST.OUT
 
 # Verify tokenized Save created a non-empty .GFA on the ADF.
 xdftool artifacts/amiga-cli-probe/factzero.adf list / all > artifacts/amiga-cli-probe/adf-after-save-list.txt
