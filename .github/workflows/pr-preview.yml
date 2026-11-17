@@ -17,7 +17,7 @@ concurrency:
 jobs:
   preview:
     # Do not run write-enabled preview deployment for untrusted fork code.
-    if: github.event.pull_request.head.repo.full_name == github.repository
+    if: github.event.pull_request.head.repo.full_name == github.repository && github.actor != 'dependabot[bot]'
     runs-on: ubuntu-latest
     steps:
       - name: Check out pull request
