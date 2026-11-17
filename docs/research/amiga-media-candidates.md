@@ -35,7 +35,7 @@ The maintainer's pragmatic working model is supported in part by the disk conten
 Recommended test profiles:
 
 1. **3.52 interpreter** — primary practical runtime profile for the 3.5-era language target; continue the existing workflow and label every result 3.52.
-2. **3.5U interpreter** — direct 3.5-era profile; execute the extracted binary and obtain/inspect disk 2 before claiming complete distribution coverage.
+2. **3.5U interpreter** — retired historical profile; do not schedule new runs or include it in current compatibility-matrix coverage. Retain its fingerprint and prior observations as historical evidence only.
 3. **3.041 interpreter** — 3.0-era comparison profile.
 
 Do not silently relabel a 3.52 observation as a 3.5U observation. Agreement between 3.52 and the 3.5 manuals is supporting compatibility evidence, not proof that every 3.5 and 3.52 behaviour is identical.
@@ -54,7 +54,7 @@ After the initial inventory:
 
 - The 3.5U, 3.041, and 3.52 ADF filesystems have been enumerated. Interpreter/compiler candidates were extracted to the ephemeral workflow workspace and fingerprinted; all identified executables have the AmigaOS loadseg header `00 00 03 f3`.
 - The workflow records byte size, SHA-256, file type, header bytes, and version strings. Extracted binaries are kept under the runner's temporary directory and are not included in the uploaded artifact.
-- Boot the 3.5U candidate under the same Amiberry/Kickstart profile as the existing 3.52 baseline where possible. Its invalid boot-block checksum may require copying the extracted interpreter onto a fresh working boot volume.
+- The 3.5U candidate was inventoried for historical comparison, but it is not part of the active test matrix. Do not invest in repairing its boot path unless the maintainer explicitly reactivates this profile.
 - Run the same small probe corpus against 3.5U, 3.52, and 3.041 and retain separate result directories.
 - Obtain and inspect disk 2 of the 3.5U set before making claims about a complete distribution.
 
