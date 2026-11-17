@@ -1,0 +1,66 @@
+{
+  "id": "gfa.language.memory.special-longword-variables",
+  "name": "_0.._9",
+  "kind": "variable",
+  "namespace": "language-core",
+  "category": "special-variables-and-data-pointers",
+  "availability": [
+    {
+      "dialect": "amiga-gfa-basic-interpreter",
+      "versions": [
+        "3.5"
+      ]
+    }
+  ],
+  "syntax": [
+    {
+      "form": "_0 through _9",
+      "contexts": [
+        "expression",
+        "lvalue"
+      ]
+    }
+  ],
+  "signature": {
+    "type": "longword"
+  },
+  "semantics": {
+    "summary": "Provides ten special longword variables, not floating-point variables. They are erased by NEW but not by CLEAR, LOAD, CHAIN, or RUN.",
+    "side-effects": [
+      "Values persist across CLEAR, LOAD, CHAIN, and RUN; NEW clears them."
+    ],
+    "errors": []
+  },
+  "evidence": {
+    "source-scope": "amiga-3.5-addendum",
+    "status": "book-documented",
+    "sources": [
+      "AM-INTERPRETER-35"
+    ],
+    "printed-pages": [
+      "Chapter 13, printed p. 13-35 (same feature: combined update scan p. 14-6)"
+    ],
+    "notes": [
+      "The range _0 through _9, longword storage, and command-specific clearing behavior are documented in the 3.5 addendum.",
+      "The manual gives AllocMem addresses and LibraryBase values as example uses; no host pointer equivalence is implied."
+    ]
+  },
+  "implementation": {
+    "status": "not-implemented"
+  },
+  "support": [
+    {
+      "target": "x86_64-unknown-linux-gnu",
+      "classification": "unknown",
+      "conformance": "not-tested",
+      "tests": [],
+      "pending-reason": "No special-variable storage or lifecycle implementation is registered."
+    }
+  ],
+  "docs": {
+    "path": "docs/research/amiga-gfa-basic-35-addendum-inventory.md",
+    "anchors": [
+      "4-additional-commands-in-version-35-combined-scan-chapter-14-printed-pp-14-1-14-7"
+    ]
+  }
+}

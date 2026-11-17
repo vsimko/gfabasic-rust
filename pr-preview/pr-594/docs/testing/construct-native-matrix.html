@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The amiga-construct-matrix.yml workflow selects changed construct/version pairs from tests/language-constructs//manifest.yaml. Each selected pair is dispatched as a separate matrix job through amiga-reference-matrix.y…">
+  <title>Construct-scoped Amiga GFA-BASIC native matrix · GFA BASIC Rust documentation</title>
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body class="docs-site">
+  <header class="docs-header">
+    <a href="../../index.html">GFA BASIC Rust</a>
+    <span aria-hidden="true">/</span>
+    <a href="../index.html">Documentation</a>
+  </header>
+  <div class="docs-layout">
+    <nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home" href="index.html">Section index</a><ul><li><a href="amiga-reference-interpreter.html">Original Amiga interpreter reference asset</a></li><li><a href="amiga-gfa-basic-probes.html">Writing Amiga GFA BASIC reference-interpreter probes</a></li><li><a href="construct-native-matrix.html">Construct-scoped Amiga GFA-BASIC native matrix</a></li><li><a href="property-mutation-pilot.html">Generated property and mutation-testing pilot</a></li><li><a href="https://github.com/vsimko/gfabasic-rust/blob/main/.agents/skills/amiga-gfa-basic-regression-testing/SKILL.md">`amiga-gfa-basic-regression-testing`</a></li><li><a href="https://github.com/vsimko/gfabasic-rust/blob/main/.agents/skills/corpus-fixture-authoring/SKILL.md">`corpus-fixture-authoring`</a></li></ul></nav>
+    <main class="docs-content">
+      <article>
+        <h1>Construct-scoped Amiga GFA-BASIC native matrix</h1>
+        <p class="docs-meta"><span>Testing Guide</span></p>
+        <h1 id="construct-scoped-amiga-gfa-basic-native-matrix">Construct-scoped Amiga GFA-BASIC native matrix</h1>
+<p>The <code>amiga-construct-matrix.yml</code> workflow selects changed construct/version pairs from
+<code>tests/language-constructs/*/manifest.yaml</code>. Each selected pair is dispatched as a
+separate matrix job through <code>amiga-reference-matrix.yml</code>, which calls the matching
+native harness for 3.041U, 3.5, or 3.52.</p>
+<h2 id="selection">Selection</h2>
+<ul>
+<li>Pull requests compare the PR base and head with the repository selector.</li>
+<li>Pushes to <code>main</code> compare the before and after commits.</li>
+<li>Manual dispatch supports <code>validate-only</code>, <code>all</code>, and one <code>construct</code> (optionally
+restricted to one exact version).</li>
+<li>Shared validator/contract changes validate all manifests but do not schedule native
+interpreter jobs unless a construct directory also changed.</li>
+<li>The existing <code>amiga-reference-matrix.yml</code> workflow remains the whole-suite baseline
+when it is dispatched directly or called without a selected version.</li>
+</ul>
+<h2 id="trust-and-licensed-assets">Trust and licensed assets</h2>
+<p>The selector and manifest validation run without private credentials. Native jobs are
+allowed only for a same-repository owner pull request, an owner-triggered main-branch
+run, or an owner manual dispatch. Fork PRs and other untrusted events do not receive
+<code>GFA_ASSETS_TOKEN</code>; their applicable matrix rows are reported as <code>UNTESTED</code>.</p>
+<p>The token is checked for presence in preflight and used only in the existing private-asset download steps. It is not printed,
+written to artifacts, or passed to probe programs. The token's actual repository scope
+still requires maintainer verification in issue #583. The reference and media-inventory
+workflows tracked by #585 remain outside this matrix.</p>
+<p>Commercial interpreter executables, Kickstart ROMs, and generated ADF disks must never
+be included in uploaded artifacts. Artifacts retain only result records, screenshots,
+OCR text, logs, and non-binary metadata.</p>
+<h2 id="result-semantics">Result semantics</h2>
+<p>Each construct/version result records two independent dimensions:</p>
+<ul>
+<li><strong>Harness:</strong> whether the emulator, editor, merge/run interaction, and identity evidence
+completed successfully.</li>
+<li><strong>Conformance:</strong> one of <code>PASS</code>, <code>FAIL</code>, <code>DIFFERENT</code>, or <code>UNTESTED</code>.</li>
+</ul>
+<p><code>PASS</code> requires a successful harness, a screenshot of the running editor's version
+menu, matching version OCR, and a complete GFATEST result for the construct ID.
+<code>FAIL</code> is a valid interpreter-emitted failure record from an identified version.
+<code>DIFFERENT</code> is an explicit interpreter-emitted, verified version-difference record.
+<code>UNTESTED</code> covers unknown/not-applicable versions, skipped jobs, unavailable workflows
+or licensed assets, incomplete harness runs, missing results, and uncertain editor
+identity. It is never treated as a pass.</p>
+<p>The aggregate summary is <code>PASS</code> only when every reported row is PASS or DIFFERENT;
+any UNTESTED row makes the summary INCOMPLETE, and any FAIL makes it FAIL. Raw GFATEST
+output and editor-identity evidence remain in per-construct/version artifacts.</p>
+<h2 id="local-validation">Local validation</h2>
+<pre><code class="language-sh">python scripts/validate_language_constructs.py validate
+python -m unittest discover -s scripts/tests -p 'test_*.py'
+python scripts/validate_language_constructs.py select --all --format json
+</code></pre>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>

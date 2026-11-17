@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The current workspace includes a source map, strict UTF-8 file-loading primitive, structured diagnostics, and an experimental, narrowly scoped Amiga GFA BASIC 3.5 frontend for the addendum&#x27;s FACT assignment/PRINT exam…">
+  <title>Development setup · GFA BASIC Rust documentation</title>
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body class="docs-site">
+  <header class="docs-header">
+    <a href="../../index.html">GFA BASIC Rust</a>
+    <span aria-hidden="true">/</span>
+    <a href="../index.html">Documentation</a>
+  </header>
+  <div class="docs-layout">
+    <nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home" href="index.html">Section index</a><ul><li><a href="README.html">Contributor documentation</a></li><li><a href="dependency-license-policy.html">Dependency License Policy</a></li><li><a href="development-setup.html">Development setup</a></li></ul></nav>
+    <main class="docs-content">
+      <article>
+        <h1>Development setup</h1>
+        <p class="docs-meta"><span>Contributor Guide</span></p>
+        <h1 id="development-setup">Development setup</h1>
+<h2 id="scope">Scope</h2>
+<p>The current workspace includes a source map, strict UTF-8 file-loading primitive, structured diagnostics, and an experimental, narrowly scoped Amiga GFA BASIC 3.5 frontend for the addendum's FACT assignment/PRINT example. The <code>gfabasic build</code> command uses a temporary C/<code>cc</code> bootstrap to produce a native host executable for that subset only. It is not general GFA BASIC support or original-interpreter conformance. General lexical/grammar coverage, semantic analysis, typed IR, LLVM code generation, project configuration, runtime behavior, and platform integration remain unimplemented. These instructions validate the Rust workspace and prototype tests; they do not establish general language compatibility.</p>
+<p>The initial CI host is Linux x86-64 using the GitHub-hosted Ubuntu runner. Other development hosts may work with Rust, but are not yet part of the project's validated environment matrix.</p>
+<h2 id="required-tools">Required tools</h2>
+<ul>
+<li>Rust 1.99.1, pinned by <code>rust-toolchain.toml</code>.</li>
+<li>The <code>rustfmt</code> and <code>clippy</code> Rust components.</li>
+<li>Git.</li>
+<li>A host C compiler exposed as <code>cc</code> for the experimental <code>gfabasic build</code> command and its native executable test. It is not required for <code>cargo build</code>.</li>
+<li>Node.js 22 and npm/npx for Markdown linting.</li>
+<li>Python 3.12 with <code>jsonschema==4.25.1</code>, <code>PyYAML==6.0.2</code>, and <code>markdown-it-py==3.0.0</code> for API registry validation, OKF v0.2 validation, and static documentation generation.</li>
+<li>lychee v0.24.2 for local Markdown link and anchor checks.</li>
+</ul>
+<p>The compiler crate has one third-party Cargo dependency, <code>unicode-width</code> 0.2.2, for terminal display-cell measurement; its MIT OR Apache-2.0 license is within the approved allowlist. The temporary native bootstrap invokes the host <code>cc</code> compiler but requires no additional project runtime library. LLVM and SDL3 are deliberately deferred and are not required to build the Rust workspace. Do not install arbitrary LLVM or SDL3 versions for this stage.</p>
+<p>The project source code and original documentation are licensed under MIT. See the root <a href="https://github.com/vsimko/gfabasic-rust/blob/main/LICENSE">LICENSE</a> and <a href="https://github.com/vsimko/gfabasic-rust/blob/main/LICENSE">project README</a>. This license does not grant redistribution rights to third-party manuals, ROMs, disk images, or sample programs.</p>
+<h2 id="install-the-toolchain">Install the toolchain</h2>
+<p>Install rustup using the official Rust installation instructions for your operating system. Then run these commands from the repository root:</p>
+<pre><code class="language-sh">rustup toolchain install 1.99.1 --profile minimal --component rustfmt --component clippy
+rustup default 1.99.1
+rustc --version
+cargo --version
+</code></pre>
+<p>The toolchain file also selects Rust 1.99.1 when commands run inside this repository.</p>
+<h2 id="build-and-test">Build and test</h2>
+<p>Run the same checks used by the Rust pull-request workflow:</p>
+<pre><code class="language-sh">cargo fmt --all -- --check
+cargo clippy --workspace --all-targets -- -D warnings
+cargo test --workspace --all-targets
+cargo build --workspace --all-targets
+</code></pre>
+<p>The Rust test suite includes focused tests for the narrow FACT/PRINT frontend and a native compile-and-run smoke test; the latter requires <code>cc</code>. There is no general corpus runner and no original-interpreter test suite. Successful Cargo tests validate only the implemented prototype subset and Rust tooling, not full language compatibility.</p>
+<p>For documentation changes, run the separate checks:</p>
+<pre><code class="language-sh">npx --yes markdownlint-cli2@0.24.0 &quot;**/*.md&quot; &quot;#node_modules&quot;
+lychee --offline --include-fragments anchor-only --root-dir &quot;$PWD&quot; &quot;**/*.md&quot;
+python -m pip install --disable-pip-version-check jsonschema==4.25.1 PyYAML==6.0.2 markdown-it-py==3.0.0
+python scripts/validate_okf.py
+python scripts/generate_docs_site.py
+python scripts/validate_api_registry.py
+python scripts/validate_corpus.py
+python -m unittest discover -s scripts/tests -p &quot;test_*.py&quot;
+</code></pre>
+<p>The documentation workflow also validates the OKF bundle, generates build-only HTML pages from the canonical source, validates the API registry and corpus, and runs its validator tests. Run the same checks locally after installing the pinned Python dependency and lychee version:</p>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<h3 id="the-pinned-toolchain-cannot-be-found">The pinned toolchain cannot be found</h3>
+<p>Run the <code>rustup toolchain install</code> command above. If the version is unavailable on a host mirror, do not silently substitute a different compiler; report the mirror/toolchain problem and keep CI on the repository pin.</p>
+<h3 id="formatting-or-clippy-fails">Formatting or Clippy fails</h3>
+<p>Run the failing command locally with the pinned toolchain. Do not add broad lint suppressions to make the check pass. Fix the source or document a narrowly justified exception.</p>
+<h3 id="cargo-reports-a-lockfile-or-workspace-error">Cargo reports a lockfile or workspace error</h3>
+<p>Check that commands run from the repository root and that all workspace members listed in the root <code>Cargo.toml</code> exist. Do not delete <code>Cargo.lock</code> to hide a dependency-resolution difference.</p>
+<h3 id="the-gfa-basic-build-command-accepts-only-the-prototype-subset">The GFA BASIC build command accepts only the prototype subset</h3>
+<p>The experimental <code>gfabasic build &lt;source.bas&gt; -o &lt;output&gt;</code> command accepts only the demonstrated Amiga 3.5 FACT assignments to <code>x</code>, <code>y</code>, and <code>z</code>, followed by <code>PRINT x,y,z</code>, with FACT arguments limited to 0, 1, and 2. It requires a working host <code>cc</code> compiler. It does not compile general GFA BASIC or establish original-interpreter compatibility. The <code>check</code> command remains unavailable.</p>
+<h3 id="llvm-or-sdl3-is-missing">LLVM or SDL3 is missing</h3>
+<p>These dependencies are not part of the current workspace skeleton. They must be selected and added only in the relevant compiler backend or Linux adapter work, with pinned versions and a reproducible clean-build strategy.</p>
+<h2 id="ci-parity">CI parity</h2>
+<ul>
+<li><a href="https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/rust.yml">Rust checks</a> run formatting, Clippy, tests, and workspace build on Rust 1.99.1. The supported Ubuntu runner provides <code>cc</code>, so the native prototype smoke test must execute rather than silently skip.</li>
+<li><a href="https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/docs.yml">Documentation checks</a> run Markdown linting, API registry/corpus validation, validator tests, and local-link/anchor validation.</li>
+<li><a href="https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/fuzz.yml">Fuzzing</a> runs bounded campaigns against the generic source-loader transport boundary only; it does not fuzz a GFA BASIC lexer or parser.</li>
+<li><a href="https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/security-audit.yml">Security audit</a> checks the root, fuzz, and benchmark Cargo lockfiles against RustSec.</li>
+<li><a href="https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/benchmarks.yml">Benchmarks</a> validate the benchmark harness on pull requests and measure synthetic source loading on main/scheduled/manual runs.</li>
+<li><a href="https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/release-sbom.yml">Release SBOM</a> generates and validates the workspace SPDX 2.3 SBOM on pull requests and is configured to attach it to published GitHub Releases; an actual release upload has not yet been exercised.</li>
+</ul>
+<p>These workflows validate repository tooling, source-loading primitives, and the narrow FACT/PRINT prototype path. They do not establish full GFA BASIC language conformance or general compiler/runtime support.</p>
+<p>When adding a new check, update this guide and the corresponding workflow in the same change.</p>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>
