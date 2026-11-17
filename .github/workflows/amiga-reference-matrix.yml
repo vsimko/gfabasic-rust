@@ -192,7 +192,7 @@ jobs:
           xdftool "$TEST_ADF" create
           xdftool "$TEST_ADF" format GFATEST ofs
           xdftool "$TEST_ADF" makedir S
-          printf 'DF1:gfabasic\\n' > "$RUNNER_TEMP/Startup-Sequence"
+          printf 'DF1:gfabasic\n' > "$RUNNER_TEMP/Startup-Sequence"
           xdftool "$TEST_ADF" write "$RUNNER_TEMP/Startup-Sequence" S/Startup-Sequence
           xdftool "$TEST_ADF" write tests/interpreter-probes/amiga-3.5/regression-suite.LST gfatest.LST
           xdftool "$TEST_ADF" boot install boot1x
