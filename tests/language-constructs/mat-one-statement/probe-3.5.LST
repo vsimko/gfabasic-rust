@@ -1,0 +1,4 @@
+DIM a(2,2)
+MAT ONE a()
+PRINT a(1,1)
+END
