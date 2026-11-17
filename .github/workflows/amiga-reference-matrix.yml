@@ -1,0 +1,86 @@
+name: Amiga GFA-BASIC reference version matrix
+
+on:
+  push:
+    branches:
+      - main
+      - "experiment/**"
+    paths:
+      - ".github/workflows/amiga-reference-matrix.yml"
+      - ".github/workflows/amiga-native-merge-run.yml"
+      - ".github/workflows/amiga-3041u-native-merge-run.yml"
+      - "tests/interpreter-probes/amiga-3.52/**"
+      - "tests/interpreter-probes/amiga-3.041u/**"
+      - "scripts/amiga-cli-probe-3041u.sh"
+      - "scripts/validate_gfatest_results.py"
+  pull_request:
+    paths:
+      - ".github/workflows/amiga-reference-matrix.yml"
+      - ".github/workflows/amiga-native-merge-run.yml"
+      - ".github/workflows/amiga-3041u-native-merge-run.yml"
+      - "tests/interpreter-probes/amiga-3.52/**"
+      - "tests/interpreter-probes/amiga-3.041u/**"
+      - "scripts/amiga-cli-probe-3041u.sh"
+      - "scripts/validate_gfatest_results.py"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: amiga-reference-matrix-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  amiga-352:
+    name: GFA-BASIC 3.52 native run
+    uses: ./.github/workflows/amiga-native-merge-run.yml
+    secrets: inherit
+
+  amiga-3041u:
+    name: GFA-BASIC 3.041U native run
+    uses: ./.github/workflows/amiga-3041u-native-merge-run.yml
+    secrets: inherit
+
+  amiga-35:
+    name: Amiga GFA-BASIC 3.5 coverage status
+    runs-on: ubuntu-24.04
+    timeout-minutes: 2
+    steps:
+      - name: Record explicit coverage gap
+        run: |
+          {
+            echo "## Amiga GFA-BASIC 3.5"
+            echo ""
+            echo "**UNTESTED** — no verified native 3.5 interpreter asset and native workflow are configured."
+            echo ""
+            echo "The 3.5U profile is retired and is not a substitute for 3.5."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  matrix-summary:
+    name: Reference matrix summary
+    if: always()
+    needs: [amiga-352, amiga-3041u, amiga-35]
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Publish per-version status
+        env:
+          STATUS_352: ${{ needs.amiga-352.result }}
+          STATUS_3041U: ${{ needs.amiga-3041u.result }}
+          STATUS_35: ${{ needs.amiga-35.result }}
+        run: |
+          {
+            echo "## Amiga GFA-BASIC reference matrix"
+            echo ""
+            echo "| Interpreter | Native workflow result | Conformance interpretation |"
+            echo "|---|---|---|"
+            echo "| 3.52 | $STATUS_352 | Native probe suite; inspect its artifact for individual GFATEST records |"
+            echo "| 3.041U | $STATUS_3041U | Native comparison probe suite; exact version only |"
+            echo "| 3.5 | UNTESTED | No verified native 3.5 runtime is configured |"
+            echo ""
+            echo "A green workflow means the configured native jobs and their host-side result protocol completed. It does not establish complete language conformance."
+          } >> "$GITHUB_STEP_SUMMARY"
+          if [ "$STATUS_352" != success ] || [ "$STATUS_3041U" != success ] || [ "$STATUS_35" != success ]; then
+            echo "::error::At least one configured matrix job did not complete successfully."
+            exit 1
+          fi
