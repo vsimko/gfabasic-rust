@@ -216,6 +216,9 @@ def validate_corpus(root: Path = ROOT) -> list[str]:
     except (OSError, yaml.YAMLError) as exc:
         return [f"tests/corpus/manifest.yaml: invalid YAML: {exc}"]
 
+    if not isinstance(manifest, dict):
+        return ["tests/corpus/manifest.yaml: manifest must be a YAML mapping"]
+
     if manifest.get("schema_version") != 1:
         errors.append("tests/corpus/manifest.yaml: schema_version must be 1")
     if not is_non_empty_string(manifest.get("corpus_status")):
