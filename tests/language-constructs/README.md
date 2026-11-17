@@ -107,9 +107,10 @@ python scripts/validate_language_constructs.py select --base origin/main --head 
 python scripts/validate_language_constructs.py select --construct fact-function
 python scripts/validate_language_constructs.py select --construct fact-function --version 3.5
 python scripts/validate_language_constructs.py select --all
+python scripts/validate_language_constructs.py select --validate-only
 ```
 
-A changed manifest selects only that construct's applicable versions; a changed probe selects only its mapped version. Deleted/renamed paths and multiple constructs are handled deterministically. Changes to this shared contract or validator perform full manifest validation but return an empty native matrix unless a construct directory also changed. All-native selection requires the explicit `--all` option.
+A changed manifest selects only that construct's applicable versions; a changed probe selects only its mapped version. Deleted/renamed paths and multiple constructs are handled deterministically. Changes to this shared contract or validator perform full manifest validation but return an empty native matrix unless a construct directory also changed. All-native selection requires the explicit `--all` option. A manual workflow dispatch without a construct selection should use `--validate-only`; it validates the full catalogue and deliberately emits no native jobs.
 
 Issue [#571](https://github.com/vsimko/gfabasic-rust/issues/571) implements validation and selection. The validator rejects duplicate IDs, unsupported schema versions, missing/extra version keys, invalid enums, dangling evidence references, path traversal, missing/non-`.LST` probes, and inconsistent expectation/execution states. It does not modify or migrate the existing corpus YAML or API registry TOML.
 
