@@ -37,16 +37,19 @@ concurrency:
 
 jobs:
   amiga-352:
+    if: (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) && (github.event_name != 'workflow_dispatch' || github.ref == 'refs/heads/main')
     name: GFA-BASIC 3.52 native run
     uses: ./.github/workflows/amiga-native-merge-run.yml
     secrets: inherit
 
   amiga-3041u:
+    if: (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) && (github.event_name != 'workflow_dispatch' || github.ref == 'refs/heads/main')
     name: GFA-BASIC 3.041U native run
     uses: ./.github/workflows/amiga-3041u-native-merge-run.yml
     secrets: inherit
 
   amiga-35:
+    if: (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) && (github.event_name != 'workflow_dispatch' || github.ref == 'refs/heads/main')
     name: GFA-BASIC 3.5 native Merge + Run probes
     runs-on: ubuntu-24.04
     timeout-minutes: 25
@@ -235,7 +238,7 @@ jobs:
 
   matrix-summary:
     name: Reference matrix summary
-    if: always()
+    if: always() && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) && (github.event_name != 'workflow_dispatch' || github.ref == 'refs/heads/main')
     needs: [amiga-352, amiga-3041u, amiga-35]
     runs-on: ubuntu-24.04
     steps:
