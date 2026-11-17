@@ -380,7 +380,7 @@ def _load_manifest(path: Path, root: Path, errors: list[str]) -> dict | None:
                 f"{label}.expectation.evidence_refs",
                 required=isinstance(expectation_status, str) and expectation_status in {"documented", "observed"},
             )
-            if expectation_status in {"unknown", "not-applicable"} and refs:
+            if isinstance(expectation_status, str) and expectation_status in {"unknown", "not-applicable"} and refs:
                 _add_error(
                     errors, root, path,
                     f"{label}.expectation.evidence_refs must be empty for {expectation_status!r}",
@@ -433,7 +433,7 @@ def _load_manifest(path: Path, root: Path, errors: list[str]) -> dict | None:
                         _add_error(errors, root, path, f"{label}.execution.{field} must be null when UNTESTED")
                 if refs:
                     _add_error(errors, root, path, f"{label}.execution.evidence_refs must be empty when UNTESTED")
-            elif status in {"PASS", "FAIL", "DIFFERENT"}:
+            elif isinstance(status, str) and status in {"PASS", "FAIL", "DIFFERENT"}:
                 if applies != "applicable":
                     _add_error(errors, root, path, f"{label} cannot have a native result when applicability is {applies!r}")
                 if not _is_non_empty_string(execution.get("observed")):
@@ -476,9 +476,9 @@ def _load_manifest(path: Path, root: Path, errors: list[str]) -> dict | None:
                 refs = []
             if len(refs) != len(set(refs)):
                 _add_error(errors, root, path, f"{label}.implementation.refs must not contain duplicates")
-            if implementation_status in {"syntax-only", "prototype", "production"} and not refs:
+            if isinstance(implementation_status, str) and implementation_status in {"syntax-only", "prototype", "production"} and not refs:
                 _add_error(errors, root, path, f"{label}.implementation.refs must not be empty for {implementation_status!r}")
-            if implementation_status in {"not-targeted", "not-started", "unknown"} and refs:
+            if isinstance(implementation_status, str) and implementation_status in {"not-targeted", "not-started", "unknown"} and refs:
                 _add_error(errors, root, path, f"{label}.implementation.refs must be empty for {implementation_status!r}")
             for ref in refs:
                 _check_file_path(
