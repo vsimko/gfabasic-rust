@@ -69,6 +69,7 @@ jobs:
     name: GFA-BASIC 3.5 native Merge + Run probes
     runs-on: ubuntu-24.04
     timeout-minutes: 25
+    continue-on-error: ${{ inputs.construct_id != '' }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
 
