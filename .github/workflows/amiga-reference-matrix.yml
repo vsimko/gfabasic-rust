@@ -86,6 +86,102 @@ jobs:
           printf '%s\\n' "${ADF_MEMBERS[0]}" > artifacts/amiga-3.5-discovery/adf-member.txt
           echo "Candidate disk discovered. Interpreter identity and runtime execution remain UNTESTED." >> "$GITHUB_STEP_SUMMARY"
 
+      - name: Capture the running editor version from its right-button menu
+        env:
+          GFA_ASSETS_TOKEN: ${{ secrets.GFA_ASSETS_TOKEN }}
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/amiga-3.5-discovery/boot-volume/S
+          cp "$RUNNER_TEMP/gfabasic-3.5" artifacts/amiga-3.5-discovery/boot-volume/gfabasic
+          printf 'gfabasic\\n' > artifacts/amiga-3.5-discovery/boot-volume/S/Startup-Sequence
+          xdftool "$RUNNER_TEMP/gfa-basic-3.5-boot.adf" create + format GFA35 ofs + write artifacts/amiga-3.5-discovery/boot-volume/gfabasic + write artifacts/amiga-3.5-discovery/boot-volume/S
+          xdftool "$RUNNER_TEMP/gfa-basic-3.5-boot.adf" boot install boot1x
+          xdftool "$RUNNER_TEMP/gfa-basic-3.5-boot.adf" info > artifacts/amiga-3.5-discovery/boot-adf-info.txt
+
+          curl -fsSL https://packages.amiberry.com/gpg.key | sudo tee /usr/share/keyrings/amiberry-archive-keyring.gpg >/dev/null
+          echo "deb [arch=amd64 signed-by=/usr/share/keyrings/amiberry-archive-keyring.gpg] https://packages.amiberry.com/apt noble main" | sudo tee /etc/apt/sources.list.d/amiberry.list >/dev/null
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends amiberry xvfb netcat-openbsd tesseract-ocr python3-pil
+
+          curl --fail --silent --show-error --location \\
+            --header "Authorization: Bearer $GFA_ASSETS_TOKEN" \\
+            --header "Accept: application/vnd.github+json" \\
+            "https://api.github.com/repos/vsimko/gfabasic-private-assets/contents?ref=main" \\
+            --output "$RUNNER_TEMP/private-assets-index.json"
+          ROM_NAME="$(jq -r '[.[] | select(.type == "file" and .size == 524288 and (.name|test("(?i)kickstart.*v?1[.]3.*34[.]5"))) ] | .[0].name // empty' "$RUNNER_TEMP/private-assets-index.json")"
+          test -n "$ROM_NAME" || { echo "No 512 KiB Kickstart 1.3 rev 34.5 ROM found"; exit 1; }
+          ROM_PATH_ENCODED="$(jq -rn --arg path "$ROM_NAME" '$path | @uri')"
+          curl --fail --silent --show-error --location \\
+            --header "Authorization: Bearer $GFA_ASSETS_TOKEN" \\
+            --header "Accept: application/vnd.github.raw" \\
+            "https://api.github.com/repos/vsimko/gfabasic-private-assets/contents/$ROM_PATH_ENCODED?ref=main" \\
+            --output "$RUNNER_TEMP/kick.rom"
+          test "$(wc -c < "$RUNNER_TEMP/kick.rom")" -eq 524288
+          sha256sum "$RUNNER_TEMP/kick.rom" > artifacts/amiga-3.5-discovery/kickstart-sha256.txt
+
+          cat > "$RUNNER_TEMP/amiga-3.5.uae" <<EOF
+          use_gui=no
+          cpu_type=68000
+          chipset=ocs
+          kickstart_rom_file=$RUNNER_TEMP/kick.rom
+          chipmem_size=2
+          fastmem_size=8
+          bogomem_size=0
+          gfx_width=640
+          gfx_height=512
+          gfx_fullscreen=false
+          sound_output=0
+          floppy0=$RUNNER_TEMP/gfa-basic-3.5-boot.adf
+          EOF
+
+          export AMIBERRY_LOG="$GITHUB_WORKSPACE/artifacts/amiga-3.5-discovery/amiberry.log"
+          export SDL_AUDIODRIVER=dummy
+          env -u SHELLOPTS xvfb-run -a -s "-screen 0 1024x768x24 +extension GLX" bash -c '
+            set +u
+            set -eo pipefail
+            amiberry -G -f "$RUNNER_TEMP/amiga-3.5.uae" --log >"$AMIBERRY_LOG" 2>&1 &
+            emulator_pid=$!
+            cleanup() { kill "$emulator_pid" 2>/dev/null || true; wait "$emulator_pid" 2>/dev/null || true; }
+            trap cleanup EXIT
+            ipc_socket_path=""
+            for attempt in $(seq 1 45); do
+              ipc_socket_path="$(find /run/user -type s -name amiberry.sock -print -quit 2>/dev/null || true)"
+              if [ -n "$ipc_socket_path" ]; then break; fi
+              sleep 1
+            done
+            test -n "$ipc_socket_path" || { cat "$AMIBERRY_LOG"; exit 1; }
+            sleep 35
+            # Amiberry IPC button mask: bit 0 = left, bit 1 = right, bit 2 = middle.
+            # Take the screenshot immediately while the right button remains down.
+            printf "SEND_MOUSE\\t0\\t0\\t2\\n" | timeout 5s nc -U -N "$ipc_socket_path"
+            sleep 0.1
+            printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-3.5-discovery/editor-version-menu.png" | timeout 5s nc -U -N "$ipc_socket_path"
+            printf "SEND_MOUSE\\t0\\t0\\t0\\n" | timeout 5s nc -U -N "$ipc_socket_path"
+            sleep 0.2
+            printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-3.5-discovery/editor-after-menu.png" | timeout 5s nc -U -N "$ipc_socket_path"
+            printf "QUIT\\n" | timeout 5s nc -U -N "$ipc_socket_path" || true
+            for attempt in $(seq 1 10); do
+              if ! kill -0 "$emulator_pid" 2>/dev/null; then break; fi
+              sleep 1
+            done
+          '
+          test -s artifacts/amiga-3.5-discovery/editor-version-menu.png
+          python3 - <<'PY'
+          from PIL import Image, ImageOps, ImageEnhance
+          image = Image.open("artifacts/amiga-3.5-discovery/editor-version-menu.png").convert("L")
+          image = ImageOps.invert(image).resize((image.width * 3, image.height * 3))
+          ImageEnhance.Contrast(image).enhance(3).save("artifacts/amiga-3.5-discovery/editor-version-menu-ocr.png")
+          PY
+          tesseract artifacts/amiga-3.5-discovery/editor-version-menu-ocr.png stdout --psm 6 2>/dev/null | tee artifacts/amiga-3.5-discovery/editor-version-menu-ocr.txt
+          if grep -Eiq 'GFA[ -]?BASIC.*3[.]5' artifacts/amiga-3.5-discovery/editor-version-menu-ocr.txt; then
+            echo "EDITOR_MENU_VERSION=GFA BASIC 3.5 (OCR; screenshot retained for visual verification)" | tee artifacts/amiga-3.5-discovery/editor-version-result.txt
+            echo "Editor menu screenshot captured with right mouse button held; OCR indicates GFA BASIC 3.5." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "EDITOR_MENU_VERSION=UNCONFIRMED" | tee artifacts/amiga-3.5-discovery/editor-version-result.txt
+            echo "::error::The held-right-button editor menu did not yield a recognizable GFA BASIC 3.5 version string."
+            exit 1
+          fi
+
       - name: Upload non-binary discovery evidence
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
