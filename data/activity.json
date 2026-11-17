@@ -1,9 +1,25 @@
 {
   "schema_version": 1,
   "status": "fresh",
-  "generated_at": "2026-11-17T22:38:33.296898+00:00",
-  "last_successful_at": "2026-11-17T22:38:33.296898+00:00",
+  "generated_at": "2026-11-17T22:46:08.696441+00:00",
+  "last_successful_at": "2026-11-17T22:46:08.696441+00:00",
   "items": [
+    {
+      "type": "merged_pull_request",
+      "title": "[Testing] Define version-scoped language-construct manifests (#570)",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/590",
+      "number": 590,
+      "timestamp": "2026-11-17T22:45:25Z",
+      "summary": "PR #590 merged"
+    },
+    {
+      "type": "commit",
+      "title": "[Testing] Define version-scoped language-construct manifests (#570) (#590)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/018908ae7166640b67ac64965f22d6c482738f95",
+      "number": null,
+      "timestamp": "2026-11-17T22:45:24Z",
+      "summary": "Commit 018908a"
+    },
     {
       "type": "merged_pull_request",
       "title": "[Amiga CI] Preflight private asset paths before downloads (#585)",
@@ -83,22 +99,6 @@
       "number": null,
       "timestamp": "2026-11-17T21:43:14Z",
       "summary": "Commit 077ef32"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "[Agents] Define contribution DoD and PR lifecycle (#577)",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/581",
-      "number": 581,
-      "timestamp": "2026-11-17T21:15:09Z",
-      "summary": "PR #581 merged"
-    },
-    {
-      "type": "commit",
-      "title": "[Agents] Define contribution DoD and PR lifecycle (#577) (#581)",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/182510cf9b998f999fdab1218e75abc2738ec622",
-      "number": null,
-      "timestamp": "2026-11-17T21:15:08Z",
-      "summary": "Commit 182510c"
     }
   ]
 }
