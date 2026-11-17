@@ -21,6 +21,12 @@ jobs:
       - name: Check out analysis scripts
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
 
+      - name: Preflight private interpreter asset path
+        env:
+          GFA_ASSETS_TOKEN: ${{ secrets.GFA_ASSETS_TOKEN }}
+        run: >-
+          python scripts/check_private_github_assets.py --repo vsimko/gfabasic-private-assets --ref main --path GFABasic
+
       - name: Download private interpreter binary
         env:
           GFA_ASSETS_TOKEN: ${{ secrets.GFA_ASSETS_TOKEN }}
