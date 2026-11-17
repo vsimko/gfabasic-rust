@@ -42,7 +42,7 @@
 </tr>
 <tr>
 <td>Amiga GFA-BASIC 3.5</td>
-<td>Normative source-language target (ADR 0009); no active native runtime profile is currently configured</td>
+<td>Normative source-language target (ADR 0009); editor identity verified from held-right-button menu screenshot; native conformance probes remain untested</td>
 </tr>
 <tr>
 <td>GFA-BASIC 3.5U</td>
@@ -50,8 +50,8 @@
 </tr>
 </tbody>
 </table>
-<p>The unified entry point is <code>.github/workflows/amiga-reference-matrix.yml</code>. It calls the two active native workflows as reusable workflows and records the 3.5 profile explicitly as <code>UNTESTED</code>; it never substitutes the retired 3.5U profile. Run this matrix for a combined view. The individual native workflows remain manually dispatchable for focused diagnosis. A green matrix means the configured native jobs and GFATEST collection protocol completed; it is not a claim of complete language conformance.</p>
-<p>Run each applicable probe against active native profiles for which the licensed asset and workflow are available. The current native profiles are 3.52 and 3.041U. Keep results separate; never relabel 3.041U as exactly 3.0 or transfer its results to 3.5. Amiga GFA-BASIC 3.5 remains the normative documented target, but do not claim native 3.5 execution until a verified 3.5 interpreter and active workflow exist. The 3.5U profile is retired.</p>
+<p>The unified entry point is <code>.github/workflows/amiga-reference-matrix.yml</code>. It calls the two active native workflows as reusable workflows and captures the running 3.5 editor's version menu for identity evidence. The 3.5 language probe suite remains <code>UNTESTED</code>; it never substitutes the retired 3.5U profile. Run this matrix for a combined view. The individual native workflows remain manually dispatchable for focused diagnosis. A green matrix means the configured native jobs and GFATEST collection protocol completed; it is not a claim of complete language conformance.</p>
+<p>Run each applicable probe against active native profiles for which the licensed asset and workflow are available. The current native profiles are 3.52 and 3.041U. Keep results separate; never relabel 3.041U as exactly 3.0 or transfer its results to 3.5. Amiga GFA-BASIC 3.5 remains the normative documented target, The running editor has now been identified as <code>GFA-BASIC 3.5</code> from a screenshot captured while the right mouse button was held; native 3.5 probe execution remains untested. The 3.5U profile is retired.</p>
 <p>Use these outcomes per probe/version:</p>
 <ul>
 <li><code>PASS</code>: observed behavior matches the version-specific expectation.</li>
