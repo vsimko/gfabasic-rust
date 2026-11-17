@@ -43,7 +43,10 @@ class Native352InterpreterProbePathTests(unittest.TestCase):
         ):
             with self.subTest(path=path):
                 selected = expected_workflows([path])
-                self.assertEqual(selected, {NATIVE_352_WORKFLOW})
+                expected = {NATIVE_352_WORKFLOW}
+                if path == "scripts/amiga-cli-probe-35.sh":
+                    expected.add(".github/workflows/docs.yml")
+                self.assertEqual(selected, expected)
 
     def test_reference_matrix_paths_match_pr_gate_classification(self):
         root = Path(__file__).resolve().parents[2]
