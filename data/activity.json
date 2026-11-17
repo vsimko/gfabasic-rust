@@ -1,9 +1,33 @@
 {
   "schema_version": 1,
   "status": "fresh",
-  "generated_at": "2026-11-17T14:49:06.729857+00:00",
-  "last_successful_at": "2026-11-17T14:49:06.729857+00:00",
+  "generated_at": "2026-11-17T16:06:51.633277+00:00",
+  "last_successful_at": "2026-11-17T16:06:51.633277+00:00",
   "items": [
+    {
+      "type": "merged_pull_request",
+      "title": "Add function probes to the Amiga interpreter version matrix",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/565",
+      "number": 565,
+      "timestamp": "2026-11-17T16:06:22Z",
+      "summary": "PR #565 merged"
+    },
+    {
+      "type": "commit",
+      "title": "Add function probes to the Amiga interpreter version matrix (#565)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/0deb0b1ab9e7e1f553b47d2e2b9b69dfb9fbc9c5",
+      "number": null,
+      "timestamp": "2026-11-17T16:06:21Z",
+      "summary": "Commit 0deb0b1"
+    },
+    {
+      "type": "merged_pull_request",
+      "title": "Remove obsolete Amiga interpreter profile",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/566",
+      "number": 566,
+      "timestamp": "2026-11-17T16:01:57Z",
+      "summary": "PR #566 merged"
+    },
     {
       "type": "merged_pull_request",
       "title": "Add native Amiga GFA-BASIC 3.5 smoke probes",
@@ -75,30 +99,6 @@
       "number": null,
       "timestamp": "2026-11-17T11:30:23Z",
       "summary": "Commit cb7e8b7"
-    },
-    {
-      "type": "commit",
-      "title": "docs: clarify active Amiga runtime profiles",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/8b1a2b29a3f545afc18f30a230488235f3c9d0d9",
-      "number": null,
-      "timestamp": "2026-11-17T11:30:18Z",
-      "summary": "Commit 8b1a2b2"
-    },
-    {
-      "type": "commit",
-      "title": "docs: align Amiga interpreter matrix with current baseline",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/500f6e4acbaf8b679304dc4ac29a84a0b8b766c7",
-      "number": null,
-      "timestamp": "2026-11-17T11:29:45Z",
-      "summary": "Commit 500f6e4"
-    },
-    {
-      "type": "commit",
-      "title": "docs: align Amiga interpreter matrix with current baseline",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/e4e2623ccd0a8cb8546b377fd60695f440b9072a",
-      "number": null,
-      "timestamp": "2026-11-17T11:29:40Z",
-      "summary": "Commit e4e2623"
     }
   ]
 }
