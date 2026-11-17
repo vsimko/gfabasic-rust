@@ -31,7 +31,8 @@
 <ol>
 <li><strong>Unit tests</strong> check one function, module, or invariant in isolation. They should avoid external processes and filesystem access unless those are the subject of the test.</li>
 <li><strong>Golden/snapshot tests</strong> compare stable, user-visible or compiler-produced output, such as diagnostics or normalized intermediate representations. Snapshot changes require review of the semantic diff; do not update snapshots only to make a failing test pass.</li>
-<li><strong>Property-based tests</strong> check general invariants across generated inputs. Record the generator configuration and seed when a failure must be reproduced.</li>
+<li><strong>Property-based tests</strong> check general invariants across generated inputs. Record the generator configuration and seed when a failure must be reproduced.
+The current bounded source-map property pilot records its target, deterministic generator, seed, and mutation experiment in <a href="../testing/property-mutation-pilot.html">the generated property and mutation-testing pilot</a>.</li>
 <li><strong>Fuzz tests</strong> explore malformed and adversarial inputs for crashes, hangs, panics, and violated invariants. Keep fuzzing strategy and resource budgets under <a href="https://github.com/vsimko/gfabasic-rust/issues/43">issue #43</a>; do not make long fuzz campaigns part of every fast pull-request check.</li>
 <li><strong>Integration tests</strong> exercise boundaries between compiler stages, crates, runtime components, or platform adapters.</li>
 <li><strong>Conformance tests</strong> compare behavior with an applicable manual rule or a named trusted reference implementation. Each test must identify the exact dialect/version and API profile, expected behavior, and source page/section or reproducible observation.</li>

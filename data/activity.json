@@ -1,9 +1,25 @@
 {
   "schema_version": 1,
   "status": "fresh",
-  "generated_at": "2026-11-17T21:15:38.233079+00:00",
-  "last_successful_at": "2026-11-17T21:15:38.233079+00:00",
+  "generated_at": "2026-11-17T21:43:44.198653+00:00",
+  "last_successful_at": "2026-11-17T21:43:44.198653+00:00",
   "items": [
+    {
+      "type": "merged_pull_request",
+      "title": "[Testing] Add deterministic source-map property coverage (#579)",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/582",
+      "number": 582,
+      "timestamp": "2026-11-17T21:43:15Z",
+      "summary": "PR #582 merged"
+    },
+    {
+      "type": "commit",
+      "title": "[Testing] Add deterministic source-map property coverage (#579) (#582)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/077ef322b2adb911e3af26ed33fa6eee123fba62",
+      "number": null,
+      "timestamp": "2026-11-17T21:43:14Z",
+      "summary": "Commit 077ef32"
+    },
     {
       "type": "merged_pull_request",
       "title": "[Agents] Define contribution DoD and PR lifecycle (#577)",
@@ -83,22 +99,6 @@
       "number": null,
       "timestamp": "2026-11-17T16:06:21Z",
       "summary": "Commit 0deb0b1"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "Remove obsolete Amiga interpreter profile",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/566",
-      "number": 566,
-      "timestamp": "2026-11-17T16:01:57Z",
-      "summary": "PR #566 merged"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "Add native Amiga GFA-BASIC 3.5 smoke probes",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/564",
-      "number": 564,
-      "timestamp": "2026-11-17T14:48:02Z",
-      "summary": "PR #564 merged"
     }
   ]
 }
