@@ -19,8 +19,8 @@ concurrency:
 
 jobs:
   cli-probe:
-    # Dependabot PRs cannot access the private interpreter/ROM asset token.
-    if: github.actor != 'dependabot[bot]'
+    # Fork PRs and non-main manual dispatches must not execute code with private-asset access.
+    if: github.actor != 'dependabot[bot]' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) && (github.event_name != 'workflow_dispatch' || github.ref == 'refs/heads/main')
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
