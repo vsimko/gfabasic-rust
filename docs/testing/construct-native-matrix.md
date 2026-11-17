@@ -1,3 +1,8 @@
+---
+type: "Testing Guide"
+title: "Construct-scoped Amiga GFA-BASIC native matrix"
+---
+
 # Construct-scoped Amiga GFA-BASIC native matrix
 
 The `amiga-construct-matrix.yml` workflow selects changed construct/version pairs from
