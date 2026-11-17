@@ -65,35 +65,7 @@ jobs:
             --output "$RUNNER_TEMP/gfa-basic-3.5.zip"
           printf 'archive_size=%s\\n' "$(wc -c < "$RUNNER_TEMP/gfa-basic-3.5.zip")" > artifacts/amiga-3.5-discovery/archive-info.txt
           unzip -Z1 "$RUNNER_TEMP/gfa-basic-3.5.zip" | tee artifacts/amiga-3.5-discovery/archive-members.txt
-          mapfile -t ADF_MEMBERS < <(unzip -Z1 "$RUNNER_TEMP/gfa-basic-3.5.zip" | grep -i -E '\\.adf
-  matrix-summary:
-    name: Reference matrix summary
-    if: always()
-    needs: [amiga-352, amiga-3041u, amiga-35]
-    runs-on: ubuntu-24.04
-    steps:
-      - name: Publish per-version status
-        env:
-          STATUS_352: ${{ needs.amiga-352.result }}
-          STATUS_3041U: ${{ needs.amiga-3041u.result }}
-          STATUS_35: ${{ needs.amiga-35.result }}
-        run: |
-          {
-            echo "## Amiga GFA-BASIC reference matrix"
-            echo ""
-            echo "| Interpreter | Native workflow result | Conformance interpretation |"
-            echo "|---|---|---|"
-            echo "| 3.52 | $STATUS_352 | Native probe suite; inspect its artifact for individual GFATEST records |"
-            echo "| 3.041U | $STATUS_3041U | Native comparison probe suite; exact version only |"
-            echo "| 3.5 | UNTESTED | Candidate disk is inspected; exact interpreter identity and native execution remain unverified |"
-            echo ""
-            echo "A green workflow means the configured native jobs and their host-side result protocol completed. It does not establish complete language conformance."
-          } >> "$GITHUB_STEP_SUMMARY"
-          if [ "$STATUS_352" != success ] || [ "$STATUS_3041U" != success ] || [ "$STATUS_35" != success ]; then
-            echo "::error::At least one configured matrix job did not complete successfully."
-            exit 1
-          fi
- || true)
+          mapfile -t ADF_MEMBERS < <(unzip -Z1 "$RUNNER_TEMP/gfa-basic-3.5.zip" | grep -i -E '\\.adf$' || true)
           test "${#ADF_MEMBERS[@]}" -eq 1 || { echo "Expected exactly one ADF candidate, found ${#ADF_MEMBERS[@]}"; exit 1; }
           python3 - "$RUNNER_TEMP/gfa-basic-3.5.zip" "${ADF_MEMBERS[0]}" "$RUNNER_TEMP/gfa-basic-3.5.adf" <<'PY'
           import shutil, sys, zipfile
@@ -117,6 +89,7 @@ jobs:
           path: artifacts/amiga-3.5-discovery/
           if-no-files-found: warn
           retention-days: 7
+
   matrix-summary:
     name: Reference matrix summary
     if: always()
@@ -136,7 +109,7 @@ jobs:
             echo "|---|---|---|"
             echo "| 3.52 | $STATUS_352 | Native probe suite; inspect its artifact for individual GFATEST records |"
             echo "| 3.041U | $STATUS_3041U | Native comparison probe suite; exact version only |"
-            echo "| 3.5 | UNTESTED | No verified native 3.5 runtime is configured |"
+            echo "| 3.5 | UNTESTED | Candidate disk is inspected; exact interpreter identity and native execution remain unverified |"
             echo ""
             echo "A green workflow means the configured native jobs and their host-side result protocol completed. It does not establish complete language conformance."
           } >> "$GITHUB_STEP_SUMMARY"
