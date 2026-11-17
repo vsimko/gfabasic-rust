@@ -10,6 +10,17 @@ on:
       - "scripts/validate_gfatest_results.py"
   workflow_dispatch:
   workflow_call:
+    inputs:
+      construct_id:
+        description: "Construct ID for an isolated probe; empty runs the full baseline suite."
+        required: false
+        type: string
+        default: ""
+      probe_path:
+        description: "Repository-relative .LST probe path for the selected construct."
+        required: false
+        type: string
+        default: ""
 
 permissions:
   contents: read
@@ -117,8 +128,23 @@ jobs:
           strings -a amiga-volume/GFABasic | grep -i -E 'MERGE|SAVE|LIST|DOSCMD|GFA.BASIC' | head -80 > artifacts/amiga-cli-probe/binary-strings.txt || true
 
       - name: Prepare CLI input and boot volume
+        env:
+          GFA_CONSTRUCT_ID_INPUT: ${{ inputs.construct_id }}
+          GFA_PROBE_PATH_INPUT: ${{ inputs.probe_path }}
         run: |
-          cp tests/interpreter-probes/amiga-3.52/regression-suite.LST amiga-volume/factzero.LST
+          set -euo pipefail
+          if [ -n "$GFA_PROBE_PATH_INPUT" ]; then
+            test -n "$GFA_CONSTRUCT_ID_INPUT"
+            test -f "$GFA_PROBE_PATH_INPUT"
+            cp "$GFA_PROBE_PATH_INPUT" amiga-volume/factzero.LST
+            printf '%s\\n' "$GFA_CONSTRUCT_ID_INPUT" > "$RUNNER_TEMP/expected-ids.txt"
+            echo "GFATEST_EXPECTED_IDS_FILE=$RUNNER_TEMP/expected-ids.txt" >> "$GITHUB_ENV"
+            echo "GFA_CONSTRUCT_ID=$GFA_CONSTRUCT_ID_INPUT" >> "$GITHUB_ENV"
+          else
+            cp tests/interpreter-probes/amiga-3.52/regression-suite.LST amiga-volume/factzero.LST
+            echo "GFATEST_EXPECTED_IDS_FILE=tests/interpreter-probes/amiga-3.52/expected-ids.txt" >> "$GITHUB_ENV"
+            echo "GFA_CONSTRUCT_ID=" >> "$GITHUB_ENV"
+          fi
           # Build a bootable AmigaDOS 1.x OFS floppy. Kickstart 1.3 has no
           # built-in Workbench/CLI disk, so the boot block and Startup-Sequence
           # must live on the same disk as the interpreter and textual listing.
