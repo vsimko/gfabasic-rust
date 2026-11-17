@@ -56,7 +56,7 @@ After the initial inventory:
 - The workflow records byte size, SHA-256, file type, header bytes, and version strings. Extracted binaries are kept under the runner's temporary directory and are not included in the uploaded artifact.
 - The 3.5U candidate was inventoried for historical comparison, but it is not part of the active test matrix. Do not invest in repairing its boot path unless the maintainer explicitly reactivates this profile.
 - The active native workflows currently cover 3.52 and 3.041U; do not infer active 3.5 runtime coverage from the normative 3.5 manual or from legacy 3.5U records.
-- Run the same small probe corpus against 3.5U, 3.52, and 3.041 and retain separate result directories.
+- Run the same applicable probe corpus against the active 3.52 and 3.041U workflows, retaining separate result directories and exact version labels. Keep 3.5 runtime status UNTESTED until a non-retired 3.5 interpreter/workflow is available.
 - Obtain and inspect disk 2 of the 3.5U set before making claims about a complete distribution.
 
 ## Evidence policy
@@ -65,4 +65,4 @@ After the initial inventory:
 - A valid Amiga loadseg header and filesystem location help identify a binary, but do not by themselves prove its product version or whether it is interpreter/compiler/editor.
 - A version banner/About screen plus matching disk provenance provides stronger component identity.
 - Runtime output is observed evidence only for the exact executable hash, emulator, Kickstart, and disk setup recorded in that run.
-- 3.52 results can pragmatically guide implementation, but remain labelled 3.52. 3.5U runs should become the direct 3.5 evidence stream.
+- 3.52 results are the active runtime baseline and remain labelled 3.52. Historical 3.5U results must not be promoted to direct 3.5 evidence.
