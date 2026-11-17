@@ -5,7 +5,6 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 import re
-import sys
 
 import yaml
 
@@ -62,6 +61,8 @@ def validate_document(document: object, path: str) -> list[str]:
     workflow_permissions = document.get("permissions")
     if workflow_permissions is None:
         errors.append(f"{path}: top-level permissions must be explicit")
+    elif isinstance(workflow_permissions, str) and workflow_permissions.lower() == "write-all":
+        errors.append(f"{path}: top-level permissions must not use broad write-all")
 
     jobs = document.get("jobs", {})
     if not isinstance(jobs, dict):
