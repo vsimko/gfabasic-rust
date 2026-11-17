@@ -176,6 +176,7 @@ jobs:
           EOF
 
       - name: Merge textual LST in the GFA BASIC editor
+        id: native-run
         run: |
           set -euo pipefail
           export AMIBERRY_LOG="$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/amiberry.log"
@@ -199,6 +200,11 @@ jobs:
             printf "INSERTFLOPPY\\t%s\\t0\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/factzero.adf" | timeout 5s nc -U -N "${ipc_socket_path:-}" >"$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/insert-floppy-ipc.txt"
             printf "LIST_FLOPPIES\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}" >"$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/list-floppies-ipc.txt"
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/editor-before-merge.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+            # Capture the running editor's version menu with the right mouse button held.
+            printf "SEND_MOUSE\\t0\\t0\\t2\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+            sleep 0.1
+            printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/editor-version-menu.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+            printf "SEND_MOUSE\\t0\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 
             # Amiga raw keycode 0x51 (decimal 81) is F2, the Editor Merge command.
             printf "SEND_KEY\\t81\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
@@ -287,9 +293,11 @@ jobs:
               wait "$emulator_pid" || true
             fi
           '
-          xdftool artifacts/amiga-cli-probe/factzero.adf read FACT.OUT artifacts/amiga-cli-probe/fact-output.txt
+          if [ -z "$GFA_CONSTRUCT_ID" ]; then
+            xdftool artifacts/amiga-cli-probe/factzero.adf read FACT.OUT artifacts/amiga-cli-probe/fact-output.txt
+            cat artifacts/amiga-cli-probe/fact-output.txt
+          fi
           xdftool artifacts/amiga-cli-probe/factzero.adf read GFATEST.OUT artifacts/amiga-cli-probe/gfatest-results.txt
-          cat artifacts/amiga-cli-probe/fact-output.txt
           cat artifacts/amiga-cli-probe/gfatest-results.txt
           for diagnostic in insert-floppy-ipc.txt list-floppies-ipc.txt stdin-save.LST; do
             if test -f "amiga-volume/$diagnostic"; then
@@ -298,7 +306,7 @@ jobs:
               printf "MISSING: %s\\n" "$diagnostic" > "artifacts/amiga-cli-probe/$diagnostic.missing"
             fi
           done
-          for screenshot in editor-before-merge.png merge-dialog.png merge-file-row-pointer.png merge-file-selected.png after-shortcut.png merge-gadget-pointer.png after-merge.png after-run-dialog.png; do
+          for screenshot in editor-before-merge.png editor-version-menu.png merge-dialog.png merge-file-row-pointer.png merge-file-selected.png after-shortcut.png merge-gadget-pointer.png after-merge.png after-run-dialog.png; do
             test -s "artifacts/amiga-cli-probe/$screenshot"
           done
           # Amiga Kickstart screenshots use bright text on a saturated blue background.
