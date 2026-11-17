@@ -1,0 +1,47 @@
+REM GFA-BASIC 3.5U isolated A/B/C runtime diagnostic.
+REM Loaded as ASCII through the native Editor Merge (F2).
+REM DATA-AVAILABLE-INITIAL is retained as an OCR-visible merge sentinel.
+OPEN "O",#1,"DF0:FACT.OUT"
+OPEN "O",#2,"DF0:GFATEST.OUT"
+
+REM A: prove the exact 3.5U interpreter can execute and close a trivial program.
+PRINT #1,"CASE-A:BEFORE"
+PRINT #1,"CASE-A:HELLO"
+PRINT #2,"GFATEST:baseline:PASS"
+CLOSE #2
+CLOSE #1
+
+REM B: test a declared and assigned 3x3 array without MAT statements.
+DIM a(3,3)
+a(1,1)=11
+a(1,2)=12
+a(3,3)=33
+OPEN "O",#1,"DF0:FACT.OUT"
+PRINT #1,"CASE-B:DIM-BEFORE"
+PRINT #1,"CASE-B:VALUES:";a(1,1);a(1,2);a(3,3)
+IF a(1,1)=11 AND a(1,2)=12 AND a(3,3)=33
+  PRINT #1,"CASE-B:DIM-PASS"
+  OPEN "A",#2,"DF0:GFATEST.OUT"
+  PRINT #2,"GFATEST:dim-array:PASS"
+  CLOSE #2
+ELSE
+  PRINT #1,"CASE-B:DIM-FAIL"
+ENDIF
+CLOSE #1
+
+REM C: execute the documented MAT ONE on the same square 3x3 array.
+REM Close all output handles before the command so A/B evidence is durable.
+MAT ONE a()
+OPEN "A",#1,"DF0:FACT.OUT"
+PRINT #1,"CASE-C:MAT-ONE-RETURNED"
+PRINT #1,"CASE-C:IDENTITY:";a(1,1);a(1,2);a(1,3);a(2,1);a(2,2);a(2,3);a(3,1);a(3,2);a(3,3)
+IF a(1,1)=1 AND a(1,2)=0 AND a(1,3)=0 AND a(2,1)=0 AND a(2,2)=1 AND a(2,3)=0 AND a(3,1)=0 AND a(3,2)=0 AND a(3,3)=1
+  PRINT #1,"CASE-C:MAT-ONE-PASS"
+  OPEN "A",#2,"DF0:GFATEST.OUT"
+  PRINT #2,"GFATEST:mat-one:PASS"
+  CLOSE #2
+ELSE
+  PRINT #1,"CASE-C:MAT-ONE-FAIL"
+ENDIF
+CLOSE #1
+END
