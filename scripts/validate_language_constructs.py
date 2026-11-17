@@ -758,6 +758,7 @@ def _build_parser() -> argparse.ArgumentParser:
     selection = select_parser.add_mutually_exclusive_group()
     selection.add_argument("--all", action="store_true", help="explicitly select all applicable construct/version pairs")
     selection.add_argument("--construct", help="explicitly select one construct")
+    selection.add_argument("--validate-only", action="store_true", help="validate all manifests and intentionally select no native jobs")
     select_parser.add_argument("--version", action="append", default=[], help="limit --construct to this exact version (repeatable)")
     select_parser.add_argument("--base", help="base commit/ref for git diff")
     select_parser.add_argument("--head", help="head commit/ref for git diff")
@@ -788,14 +789,14 @@ def main(argv: list[str] | None = None) -> int:
         parser.error("--version requires --construct")
     if args.all and args.version:
         parser.error("--version cannot be combined with --all")
-    if args.changed_path and (args.base or args.head or args.all or args.construct):
-        parser.error("--changed-path cannot be combined with --base/--head, --all, or --construct")
-    if (args.base or args.head) and (args.all or args.construct):
-        parser.error("--base/--head cannot be combined with --all or --construct")
+    if args.changed_path and (args.base or args.head or args.all or args.construct or args.validate_only):
+        parser.error("--changed-path cannot be combined with --base/--head, --all, --construct, or --validate-only")
+    if (args.base or args.head) and (args.all or args.construct or args.validate_only):
+        parser.error("--base/--head cannot be combined with --all, --construct, or --validate-only")
     if len(args.version) != len(set(args.version)):
         parser.error("--version values must not contain duplicates")
-    if not (args.base or args.all or args.construct or args.changed_path):
-        parser.error("select requires --base/--head, --changed-path, --all, or --construct")
+    if not (args.base or args.all or args.construct or args.changed_path or args.validate_only):
+        parser.error("select requires --base/--head, --changed-path, --all, --construct, or --validate-only")
 
     try:
         if args.base:
