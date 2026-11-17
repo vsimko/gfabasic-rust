@@ -1,6 +1,6 @@
 import unittest
 
-from scripts.pr_gate import WORKFLOWS, expected_workflows, workflow_result
+from scripts.pr_gate import WORKFLOWS, expected_workflows, workflow_result, workflows_available_on_base
 
 
 class PullRequestGateTests(unittest.TestCase):
@@ -82,6 +82,16 @@ class PullRequestGateTests(unittest.TestCase):
             expected_workflows(["tests/interpreter-probes/amiga-3.52/probe.LST"]),
             {".github/workflows/amiga-reference-matrix.yml"},
         )
+
+    def test_new_workflow_is_not_required_until_it_exists_on_base(self):
+        expected = {".github/workflows/amiga-construct-matrix.yml", ".github/workflows/docs.yml"}
+        base_paths = {".github/workflows/docs.yml"}
+        self.assertEqual(workflows_available_on_base(expected, base_paths), {".github/workflows/docs.yml"})
+
+    def test_existing_construct_matrix_is_required(self):
+        expected = {".github/workflows/amiga-construct-matrix.yml"}
+        base_paths = {".github/workflows/amiga-construct-matrix.yml"}
+        self.assertEqual(workflows_available_on_base(expected, base_paths), expected)
 
     def test_unknown_path_fails_closed_to_all_workflows(self):
         self.assertEqual(
