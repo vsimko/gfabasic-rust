@@ -18,7 +18,7 @@ import yaml
 ROOT = Path(__file__).resolve().parents[1]
 CATALOGUE_REL = "tests/language-constructs"
 SUPPORTED_VERSIONS = ("3.041U", "3.5", "3.52")
-CONSTRUCT_ID = re.compile(r"[a-z0-9]+(?:-[a-z0-9]+)*\\Z")
+CONSTRUCT_ID = re.compile(r"[a-z0-9]+(?:-[a-z0-9]+)*")
 KINDS = {"statement", "function", "operator", "declaration", "special-form", "command"}
 EVIDENCE_KINDS = {
     "primary-manual",
