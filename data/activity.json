@@ -1,9 +1,25 @@
 {
   "schema_version": 1,
   "status": "fresh",
-  "generated_at": "2026-11-17T22:46:08.696441+00:00",
-  "last_successful_at": "2026-11-17T22:46:08.696441+00:00",
+  "generated_at": "2026-11-17T22:59:33.930438+00:00",
+  "last_successful_at": "2026-11-17T22:59:33.930438+00:00",
   "items": [
+    {
+      "type": "merged_pull_request",
+      "title": "[Testing] Validate and select versioned construct manifests (#571)",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/593",
+      "number": 593,
+      "timestamp": "2026-11-17T22:59:16Z",
+      "summary": "PR #593 merged"
+    },
+    {
+      "type": "commit",
+      "title": "[Testing] Validate and select versioned construct manifests (#571) (#593)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/7eb80cac97ac9f7d16f85c1fb0d69a23bc74bb52",
+      "number": null,
+      "timestamp": "2026-11-17T22:59:16Z",
+      "summary": "Commit 7eb80ca"
+    },
     {
       "type": "merged_pull_request",
       "title": "[Testing] Define version-scoped language-construct manifests (#570)",
@@ -83,22 +99,6 @@
       "number": null,
       "timestamp": "2026-11-17T22:23:50Z",
       "summary": "Commit 81b6a50"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "[Testing] Add deterministic source-map property coverage (#579)",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/582",
-      "number": 582,
-      "timestamp": "2026-11-17T21:43:15Z",
-      "summary": "PR #582 merged"
-    },
-    {
-      "type": "commit",
-      "title": "[Testing] Add deterministic source-map property coverage (#579) (#582)",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/077ef322b2adb911e3af26ed33fa6eee123fba62",
-      "number": null,
-      "timestamp": "2026-11-17T21:43:14Z",
-      "summary": "Commit 077ef32"
     }
   ]
 }
