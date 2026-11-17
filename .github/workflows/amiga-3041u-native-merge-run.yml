@@ -166,8 +166,11 @@ jobs:
           xdftool "$TEST_ADF" boot show > artifacts/amiga-cli-probe/prepared-adf-boot.txt
           grep -F "bootable: True" artifacts/amiga-cli-probe/prepared-adf-boot.txt
           sha256sum "$TEST_ADF" > artifacts/amiga-cli-probe/prepared-adf-sha256.txt
-          cp "$GFA_PROBE_PATH_INPUT" artifacts/amiga-cli-probe/gfatest.LST
-          if [ -z "$GFA_PROBE_PATH_INPUT" ]; then cp "tests/interpreter-probes/amiga-3.041u/regression-suite.LST" artifacts/amiga-cli-probe/gfatest.LST; fi
+          if [ -n "$GFA_PROBE_PATH_INPUT" ]; then
+            cp "$GFA_PROBE_PATH_INPUT" artifacts/amiga-cli-probe/gfatest.LST
+          else
+            cp "tests/interpreter-probes/amiga-3.041u/regression-suite.LST" artifacts/amiga-cli-probe/gfatest.LST
+          fi
           printf '%s\\n' "DF1:gfabasic" > artifacts/amiga-cli-probe/interpreter-installed-path.txt
           cp "$RUNNER_TEMP/Startup-Sequence" artifacts/amiga-cli-probe/Startup-Sequence.txt
           grep -F "gfatest.LST" artifacts/amiga-cli-probe/prepared-adf-layout.txt
