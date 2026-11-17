@@ -41,6 +41,33 @@ class PullRequestGateTests(unittest.TestCase):
             },
         )
 
+    def test_construct_probe_change_selects_docs_and_native_matrix(self):
+        self.assertEqual(
+            expected_workflows(["tests/language-constructs/fact-function/probe-3.5.LST"]),
+            {
+                ".github/workflows/docs.yml",
+                ".github/workflows/amiga-construct-matrix.yml",
+            },
+        )
+
+    def test_construct_validator_change_selects_docs_and_native_matrix(self):
+        self.assertEqual(
+            expected_workflows(["scripts/validate_language_constructs.py"]),
+            {
+                ".github/workflows/docs.yml",
+                ".github/workflows/amiga-construct-matrix.yml",
+            },
+        )
+
+    def test_native_matrix_workflow_change_selects_matrix_and_workflow_lint(self):
+        self.assertEqual(
+            expected_workflows([".github/workflows/amiga-construct-matrix.yml"]),
+            {
+                ".github/workflows/amiga-construct-matrix.yml",
+                ".github/workflows/workflow-lint.yml",
+            },
+        )
+
     def test_unknown_path_fails_closed_to_all_workflows(self):
         self.assertEqual(
             expected_workflows(["new/unknown/component.file"]),
