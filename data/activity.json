@@ -1,9 +1,41 @@
 {
   "schema_version": 1,
   "status": "fresh",
-  "generated_at": "2026-11-17T16:20:34.024879+00:00",
-  "last_successful_at": "2026-11-17T16:20:34.024879+00:00",
+  "generated_at": "2026-11-17T20:43:07.021884+00:00",
+  "last_successful_at": "2026-11-17T20:43:07.021884+00:00",
   "items": [
+    {
+      "type": "merged_pull_request",
+      "title": "chore: migrate corpus and probe metadata to YAML",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/575",
+      "number": 575,
+      "timestamp": "2026-11-17T20:42:42Z",
+      "summary": "PR #575 merged"
+    },
+    {
+      "type": "commit",
+      "title": "chore: migrate corpus and probe metadata to YAML (#575)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/bd384323d919c4632566946980beae79f2201899",
+      "number": null,
+      "timestamp": "2026-11-17T20:42:41Z",
+      "summary": "Commit bd38432"
+    },
+    {
+      "type": "merged_pull_request",
+      "title": "Probe DEFFN/FN on Amiga GFA-BASIC 3.52",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/568",
+      "number": 568,
+      "timestamp": "2026-11-17T18:13:15Z",
+      "summary": "PR #568 merged"
+    },
+    {
+      "type": "commit",
+      "title": "test: probe DEFFN/FN on Amiga 3.52",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/50513a4b2e9f02da31f8924079a9da82ce4782dc",
+      "number": null,
+      "timestamp": "2026-11-17T18:13:14Z",
+      "summary": "Commit 50513a4"
+    },
     {
       "type": "merged_pull_request",
       "title": "Classify MOUSE statement and MENU event accessor",
@@ -67,38 +99,6 @@
       "number": 563,
       "timestamp": "2026-11-17T13:18:06Z",
       "summary": "PR #563 merged"
-    },
-    {
-      "type": "commit",
-      "title": "Add systematic Amiga GFA-BASIC reference version matrix (#563)",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/a0555348d31ab60733aec709989a89d75d75de06",
-      "number": null,
-      "timestamp": "2026-11-17T13:18:05Z",
-      "summary": "Commit a055534"
-    },
-    {
-      "type": "commit",
-      "title": "docs: remove retired 3.5U test plan",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/e65b369da4b17b7c714cc3fb8de319ad2c752af6",
-      "number": null,
-      "timestamp": "2026-11-17T11:31:04Z",
-      "summary": "Commit e65b369"
-    },
-    {
-      "type": "commit",
-      "title": "docs: clarify Amiga conformance ADR status",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/30fd138390d56df93f3e94e87e0d9afda147cb7f",
-      "number": null,
-      "timestamp": "2026-11-17T11:30:45Z",
-      "summary": "Commit 30fd138"
-    },
-    {
-      "type": "commit",
-      "title": "docs: clarify active Amiga runtime profiles",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/0feda4bd460fd4a42c91545f943077d98f7811ed",
-      "number": null,
-      "timestamp": "2026-11-17T11:30:32Z",
-      "summary": "Commit 0feda4b"
     }
   ]
 }
