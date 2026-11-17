@@ -20,6 +20,12 @@ WORKFLOWS = {
         "tests/interpreter-probes/amiga-3.52/**",
         "scripts/validate_gfatest_results.py",
     ),
+    ".github/workflows/amiga-35-ab-c-diagnostic.yml": (
+        ".github/workflows/amiga-35-ab-c-diagnostic.yml",
+        "tests/interpreter-probes/amiga-3.5/**",
+        "scripts/amiga-35-ab-c.sh",
+        "scripts/amiga-35-ab-c-emulator.sh",
+    ),
     ".github/workflows/amiga-35u-native-merge-run.yml": (
         ".github/workflows/amiga-35u-native-merge-run.yml",
         "tests/interpreter-probes/amiga-3.5u/**",
