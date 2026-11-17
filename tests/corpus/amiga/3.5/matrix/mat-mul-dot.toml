@@ -1,0 +1,15 @@
+id = "amiga-3.5-mat-mul-dot"
+dialect = "GFA BASIC Amiga"
+version = "3.5"
+api_profiles = []
+kind = "semantic"
+status = "verified"
+source_key = "AM-INTERPRETER-35"
+source_pages = "printed p. 13-22"
+evidence_status = "page-image-verified"
+expectation = "MAT MUL x=a()*b() computes the scalar (inner) product of equal-length vectors a and b; with three elements filled with 2 and 3, x is 18."
+notes = [
+  "Independently authored minimal fixture; not copied from the manual's example.",
+  "The 3.5 addendum defines the scalar product as the sum of corresponding element products and requires equal vector lengths.",
+  "Verified against the supplied Amiga GFA BASIC 3.5 addendum printed p. 13-22 page image; no original interpreter execution has been performed.",
+]

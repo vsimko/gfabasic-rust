@@ -1,7 +1,7 @@
 id: "amiga-3.0-nested-loop-close-order"
 dialect: "GFA BASIC Amiga"
 version: "3.0"
-api_profiles:
+api_profiles: []
 kind: "semantic"
 status: "candidate"
 source_key: "AM-BOOK-FR-1989"

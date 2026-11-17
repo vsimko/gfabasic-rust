@@ -1,0 +1,15 @@
+id = "amiga-3.5-mat-norm-row"
+dialect = "GFA BASIC Amiga"
+version = "3.5"
+api_profiles = []
+kind = "semantic"
+status = "verified"
+source_key = "AM-INTERPRETER-35"
+source_pages = "printed pp. 13-31–13-33"
+evidence_status = "page-image-verified"
+expectation = "MAT NORM a(),0 normalizes each row so the sum of squares of its elements is 1; MAT PRINT displays the matrix."
+notes = [
+  "Independently authored minimal fixture; not copied from the manual's example.",
+  "MAT NORM mode 0 is row-wise normalization; mode 1 is column-wise normalization.",
+  "Verified against the supplied Amiga GFA BASIC 3.5 addendum page images; no original interpreter execution has been performed.",
+]

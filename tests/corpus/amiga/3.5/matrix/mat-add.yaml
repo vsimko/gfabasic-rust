@@ -1,7 +1,7 @@
 id: "amiga-3.5-mat-add"
 dialect: "GFA BASIC Amiga"
 version: "3.5"
-api_profiles:
+api_profiles: []
 kind: "semantic"
 status: "verified"
 source_key: "AM-INTERPRETER-35"

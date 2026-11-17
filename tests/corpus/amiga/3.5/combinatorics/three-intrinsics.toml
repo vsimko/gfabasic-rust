@@ -1,0 +1,16 @@
+id = "amiga-3.5-combinatorics-intrinsics"
+dialect = "GFA BASIC Amiga"
+version = "3.5"
+api_profiles = []
+kind = "semantic"
+status = "verified"
+source_key = "AM-INTERPRETER-30-35-UPDATE-SCAN"
+source_pages = "printed pp. 14-1–14-2"
+evidence_status = "page-image-verified"
+expectation = "FACT(5), VARIAT(5,2), and COMBIN(5,2) evaluate to 120, 20, and 10 respectively; PRINT outputs those values in order."
+notes = [
+  "Independently authored fixture using the three Chapter 14 mathematical intrinsics.",
+  "Syntax and mathematical definitions are documented in the Amiga GFA BASIC 3.5 addendum, printed pp. 14-1–14-2.",
+  "The fixture's syntax and expected mathematical values are page-image-backed; no original interpreter execution has been performed.",
+  "The current prototype restricts arguments to non-negative integer literals and n <= 20; this is an implementation subset, not a dialect limitation.",
+]
