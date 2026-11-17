@@ -318,13 +318,21 @@ jobs:
           REPOSITORY_OWNER: ${{ github.repository_owner }}
         run: |
           TRUSTED_EVENT=true
-          if [ "$EVENT_NAME" = "pull_request" ] && { [ "$HEAD_REPOSITORY" != "$REPOSITORY" ] || [ "$PR_AUTHOR_ASSOCIATION" != "OWNER" ]; }; then
-            TRUSTED_EVENT=false
-          elif [ "$EVENT_NAME" = "push" ] && { ( [ "$REF" != "refs/heads/main" ] && [[ "$REF" != refs/heads/experiment/* ]] ) || [ "$ACTOR" != "$REPOSITORY_OWNER" ]; }; then
-            TRUSTED_EVENT=false
-          elif [ "$EVENT_NAME" = "workflow_dispatch" ] && { [ "$REF" != "refs/heads/main" ] || [ "$ACTOR" != "$REPOSITORY_OWNER" ]; }; then
-            TRUSTED_EVENT=false
-          elif [ "$EVENT_NAME" != "pull_request" ] && [ "$EVENT_NAME" != "push" ] && [ "$EVENT_NAME" != "workflow_dispatch" ]; then
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            if [ "$HEAD_REPOSITORY" != "$REPOSITORY" ] || [ "$PR_AUTHOR_ASSOCIATION" != "OWNER" ]; then
+              TRUSTED_EVENT=false
+            fi
+          elif [ "$EVENT_NAME" = "push" ]; then
+            case "$REF" in
+              refs/heads/main|refs/heads/experiment/*) ;;
+              *) TRUSTED_EVENT=false ;;
+            esac
+            if [ "$ACTOR" != "$REPOSITORY_OWNER" ]; then TRUSTED_EVENT=false; fi
+          elif [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+            if [ "$REF" != "refs/heads/main" ] || [ "$ACTOR" != "$REPOSITORY_OWNER" ]; then
+              TRUSTED_EVENT=false
+            fi
+          else
             TRUSTED_EVENT=false
           fi
           {
