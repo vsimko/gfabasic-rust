@@ -129,7 +129,7 @@ class ConstructResultTests(unittest.TestCase):
         selection = {
             "selection": "changed",
             "changed_constructs": ["fact-function"],
-            "include": [{"construct_id": "fact-function", "version": "3.5"}],
+            "include": [{"construct_id": "fact-function", "version": "3.5", "probe": "probe-3.5.LST"}],
         }
         result = aggregate(selection, self.root, artifacts, True, "")
         self.assertEqual(result["summary_status"], "FAIL")
