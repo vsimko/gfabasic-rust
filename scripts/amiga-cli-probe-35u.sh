@@ -82,10 +82,14 @@ if ! grep -Fq 'AFTER-MAT-ONE' artifacts/amiga-cli-probe/fact-output.txt; then
 fi
 echo "MAT_ONE_RETURNED=PASS" | tee -a artifacts/amiga-cli-probe/result.txt
 
-for row in '1 0 0' '0 1 0' '0 0 1'; do
-  normalized="$(printf '%s' "$row" | tr ' ' '.*')"
-  if ! grep -Eq "$normalized" artifacts/amiga-cli-probe/fact-output.txt; then
-    echo "::error::MAT ONE output does not show the expected identity matrix row ($row); inspect raw FACT.OUT."
+# GFA-BASIC formats numeric columns with variable-width whitespace.
+# Match complete rows while accepting one or more spaces/tabs between values.
+for pattern in \
+  '(^|[^0-9])1[[:space:]]+0[[:space:]]+0([[:space:]]|$)' \
+  '(^|[^0-9])0[[:space:]]+1[[:space:]]+0([[:space:]]|$)' \
+  '(^|[^0-9])0[[:space:]]+0[[:space:]]+1([[:space:]]|$)'; do
+  if ! grep -Eq "$pattern" artifacts/amiga-cli-probe/fact-output.txt; then
+    echo "::error::MAT ONE output does not show the expected identity matrix row ($pattern); inspect raw FACT.OUT."
     exit 1
   fi
 done
