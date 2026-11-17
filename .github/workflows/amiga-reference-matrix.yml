@@ -312,19 +312,33 @@ jobs:
           STATUS_352: ${{ needs.amiga-352.result }}
           STATUS_3041U: ${{ needs.amiga-3041u.result }}
           STATUS_35: ${{ needs.amiga-35.result }}
+          SELECTED_VERSION: ${{ inputs.version }}
         run: |
           {
             echo "## Amiga GFA-BASIC reference matrix"
             echo ""
-            echo "| Interpreter | Native workflow result | Conformance interpretation |"
+            echo "| Interpreter | Native workflow result | Selection |"
             echo "|---|---|---|"
-            echo "| 3.52 | $STATUS_352 | Native probe suite; inspect its artifact for individual GFATEST records |"
-            echo "| 3.041U | $STATUS_3041U | Native comparison probe suite; exact version only |"
-            echo "| 3.5 | $STATUS_35 | Exact editor identity plus native Merge + Run probes; inspect GFATEST records and screenshots |"
+            if [ -z "$SELECTED_VERSION" ] || [ "$SELECTED_VERSION" = "3.52" ]; then echo "| 3.52 | $STATUS_352 | selected |"; else echo "| 3.52 | $STATUS_352 | not selected |"; fi
+            if [ -z "$SELECTED_VERSION" ] || [ "$SELECTED_VERSION" = "3.041U" ]; then echo "| 3.041U | $STATUS_3041U | selected |"; else echo "| 3.041U | $STATUS_3041U | not selected |"; fi
+            if [ -z "$SELECTED_VERSION" ] || [ "$SELECTED_VERSION" = "3.5" ]; then echo "| 3.5 | $STATUS_35 | selected |"; else echo "| 3.5 | $STATUS_35 | not selected |"; fi
             echo ""
-            echo "A green workflow means the configured native jobs and their host-side result protocol completed. The 3.5 suite is an initial three-case smoke set, not complete language conformance."
+            echo "A green workflow means the selected native harness and its host-side result protocol completed. Per-construct GFATEST outcomes are retained in the construct-result artifact; the 3.5 profile remains a smoke profile, not complete language conformance."
           } >> "$GITHUB_STEP_SUMMARY"
-          if [ "$STATUS_352" != success ] || [ "$STATUS_3041U" != success ] || [ "$STATUS_35" != success ]; then
-            echo "::error::At least one configured matrix job did not complete successfully."
-            exit 1
+          if [ -z "$SELECTED_VERSION" ]; then
+            if [ "$STATUS_352" != success ] || [ "$STATUS_3041U" != success ] || [ "$STATUS_35" != success ]; then
+              echo "::error::At least one configured baseline matrix job did not complete successfully."
+              exit 1
+            fi
+          else
+            case "$SELECTED_VERSION" in
+              3.52) SELECTED_STATUS="$STATUS_352" ;;
+              3.041U) SELECTED_STATUS="$STATUS_3041U" ;;
+              3.5) SELECTED_STATUS="$STATUS_35" ;;
+              *) echo "::error::Unsupported selected version: $SELECTED_VERSION"; exit 1 ;;
+            esac
+            if [ "$SELECTED_STATUS" != success ]; then
+              echo "::error::Selected native workflow $SELECTED_VERSION did not complete successfully."
+              exit 1
+            fi
           fi
