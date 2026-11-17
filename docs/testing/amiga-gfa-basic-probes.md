@@ -20,6 +20,8 @@ The project uses three reference versions. See [ADR 0017](../architecture/adr/00
 | Amiga GFA-BASIC 3.5 | Normative source-language target (ADR 0009); no active native runtime profile is currently configured |
 | GFA-BASIC 3.5U | Retired historical profile; do not schedule new runs or treat old results as current matrix coverage |
 
+The unified entry point is `.github/workflows/amiga-reference-matrix.yml`. It calls the two active native workflows as reusable workflows and records the 3.5 profile explicitly as `UNTESTED`; it never substitutes the retired 3.5U profile. Run this matrix for a combined view. The individual native workflows remain manually dispatchable for focused diagnosis. A green matrix means the configured native jobs and GFATEST collection protocol completed; it is not a claim of complete language conformance.
+
 Run each applicable probe against active native profiles for which the licensed asset and workflow are available. The current native profiles are 3.52 and 3.041U. Keep results separate; never relabel 3.041U as exactly 3.0 or transfer its results to 3.5. Amiga GFA-BASIC 3.5 remains the normative documented target, but do not claim native 3.5 execution until a verified 3.5 interpreter and active workflow exist. The 3.5U profile is retired.
 
 Use these outcomes per probe/version:
