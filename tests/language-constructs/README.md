@@ -88,8 +88,28 @@ The `implementation` field describes the current Rust implementation, not the or
 
 Both examples explicitly leave 3.041U applicability unknown rather than assuming cross-version equivalence.
 
-## Validator contract
+## Validator and selector CLI
 
-Issue [#571](https://github.com/vsimko/gfabasic-rust/issues/571) implements validation. The validator should reject duplicate IDs, unsupported schema versions, missing/extra version keys, invalid enums, dangling evidence references, path traversal, missing/non-`.LST` probes, and inconsistent expectation/execution states. It must not modify or migrate the existing corpus YAML or API registry TOML.
+Run the validator from the repository root:
+
+```sh
+python scripts/validate_language_constructs.py validate
+```
+
+The selector validates every manifest before emitting a deterministic matrix:
+
+```sh
+# Select only versions mapped to changed construct paths.
+python scripts/validate_language_constructs.py select --base origin/main --head HEAD
+
+# Explicit workflow_dispatch-style selection.
+python scripts/validate_language_constructs.py select --construct fact-function
+python scripts/validate_language_constructs.py select --construct fact-function --version 3.5
+python scripts/validate_language_constructs.py select --all
+```
+
+A changed manifest selects only that construct's applicable versions; a changed probe selects only its mapped version. Deleted/renamed paths and multiple constructs are handled deterministically. Changes to this shared contract or validator perform full manifest validation but return an empty native matrix unless a construct directory also changed. All-native selection requires the explicit `--all` option.
+
+Issue [#571](https://github.com/vsimko/gfabasic-rust/issues/571) implements validation and selection. The validator rejects duplicate IDs, unsupported schema versions, missing/extra version keys, invalid enums, dangling evidence references, path traversal, missing/non-`.LST` probes, and inconsistent expectation/execution states. It does not modify or migrate the existing corpus YAML or API registry TOML.
 
 The new construct catalogue is metadata for selecting and interpreting tests; it does not add parser, IR, runtime, or API-registry behavior.
