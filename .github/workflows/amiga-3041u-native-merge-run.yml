@@ -190,12 +190,12 @@ jobs:
           VERSION: "3.041U"
           PROBE_PATH: ${{ inputs.probe_path }}
           HARNESS_OUTCOME: ${{ steps.native-run.outcome }}
-          EXPECTED_IDS_FILE: ${{ env.GFATEST_EXPECTED_IDS_FILE }}
           RESULT_FILE: artifacts/amiga-cli-probe/gfatest-results.txt
           IDENTITY_SCREENSHOT: artifacts/amiga-cli-probe/editor-version-menu.png
           IDENTITY_OCR: artifacts/amiga-cli-probe/editor-version-menu-ocr.txt
           OUTPUT_FILE: artifacts/amiga-cli-probe/result.json
         run: |
+          EXPECTED_IDS_FILE="${GFATEST_EXPECTED_IDS_FILE:-tests/interpreter-probes/amiga-3.041u/expected-ids.txt}"
           python3 scripts/write_construct_result.py \
             --construct-id "$CONSTRUCT_ID" --version "$VERSION" --probe "$PROBE_PATH" \
             --harness-outcome "${HARNESS_OUTCOME:-failure}" --expected-ids "$EXPECTED_IDS_FILE" \
