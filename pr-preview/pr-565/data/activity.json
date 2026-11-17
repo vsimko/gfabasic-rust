@@ -1,9 +1,17 @@
 {
   "schema_version": 1,
   "status": "fresh",
-  "generated_at": "2026-11-17T15:33:27.034888+00:00",
-  "last_successful_at": "2026-11-17T15:33:27.034888+00:00",
+  "generated_at": "2026-11-17T16:02:32.700965+00:00",
+  "last_successful_at": "2026-11-17T16:02:32.700965+00:00",
   "items": [
+    {
+      "type": "merged_pull_request",
+      "title": "Remove obsolete Amiga interpreter profile",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/566",
+      "number": 566,
+      "timestamp": "2026-11-17T16:01:57Z",
+      "summary": "PR #566 merged"
+    },
     {
       "type": "merged_pull_request",
       "title": "Add native Amiga GFA-BASIC 3.5 smoke probes",
@@ -91,14 +99,6 @@
       "number": null,
       "timestamp": "2026-11-17T11:29:45Z",
       "summary": "Commit 500f6e4"
-    },
-    {
-      "type": "commit",
-      "title": "docs: align Amiga interpreter matrix with current baseline",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/e4e2623ccd0a8cb8546b377fd60695f440b9072a",
-      "number": null,
-      "timestamp": "2026-11-17T11:29:40Z",
-      "summary": "Commit e4e2623"
     }
   ]
 }
