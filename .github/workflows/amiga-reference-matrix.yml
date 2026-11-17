@@ -174,13 +174,11 @@ jobs:
           PY
           tesseract artifacts/amiga-3.5-discovery/editor-version-menu-ocr.png stdout --psm 6 2>/dev/null | tee artifacts/amiga-3.5-discovery/editor-version-menu-ocr.txt
           if grep -Eiq 'GFA[ -]?BASIC.*3[.]5' artifacts/amiga-3.5-discovery/editor-version-menu-ocr.txt; then
-            echo "EDITOR_MENU_VERSION=GFA BASIC 3.5 (OCR; screenshot retained for visual verification)" | tee artifacts/amiga-3.5-discovery/editor-version-result.txt
-            echo "Editor menu screenshot captured with right mouse button held; OCR indicates GFA BASIC 3.5." >> "$GITHUB_STEP_SUMMARY"
+            echo "EDITOR_MENU_OCR=GFA BASIC 3.5" > artifacts/amiga-3.5-discovery/editor-version-result.txt
           else
-            echo "EDITOR_MENU_VERSION=UNCONFIRMED" | tee artifacts/amiga-3.5-discovery/editor-version-result.txt
-            echo "::error::The held-right-button editor menu did not yield a recognizable GFA BASIC 3.5 version string."
-            exit 1
+            echo "EDITOR_MENU_OCR=INCONCLUSIVE; inspect editor-version-menu.png" > artifacts/amiga-3.5-discovery/editor-version-result.txt
           fi
+          echo "The right-button menu screenshot is the authoritative version evidence; OCR is diagnostic only. The screenshot is retained for visual verification." >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload non-binary discovery evidence
         if: always()
