@@ -77,7 +77,7 @@ For each PR, the first submitted head is the latest commit whose committer times
 
 ## Actionable improvements
 
-1. **Workflow-change checklist:** the PR template now asks contributors changing workflows to review event triggers, effective permissions, secrets, fork/Dependabot behavior, checkout credentials, artifacts, and post-merge side effects. This is the follow-up change in [PR #587](https://github.com/vsimko/gfabasic-rust/pull/587).
+1. **Workflow-change checklist:** the PR template now asks contributors changing workflows to review event triggers, effective permissions, secrets, fork/Dependabot behavior, checkout credentials, artifacts, and post-merge side effects. This is the follow-up change in [PR #589](https://github.com/vsimko/gfabasic-rust/pull/587).
 2. **Batch related edits:** prepare related file changes together and commit one coherent logical unit (or a small number of reviewable units), rather than creating one commit per file or per small correction.
 3. **Run documentation preflight before opening a PR:** validate OKF direct-index entries, links, and Markdown locally when adding a document. The repository already documents these commands in the contributor guide.
 4. **Audit event side effects before merge:** for workflow changes, inspect not only PR execution but also push-to-main, manual dispatch, reusable workflow calls, release, artifact deletion, and publication behavior.
