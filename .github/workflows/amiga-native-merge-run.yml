@@ -1,8 +1,20 @@
 name: Amiga GFA BASIC 3.52 native Merge and Run
 
 on:
-  workflow_call:
+  push:
+    branches:
+      - "experiment/amiga-cli-stdin-probe"
+    paths:
+      - ".github/workflows/amiga-native-merge-run.yml"
+      - "tests/interpreter-probes/amiga-3.52/**"
+      - "scripts/validate_gfatest_results.py"
+  pull_request:
+    paths:
+      - ".github/workflows/amiga-native-merge-run.yml"
+      - "tests/interpreter-probes/amiga-3.52/**"
+      - "scripts/validate_gfatest_results.py"
   workflow_dispatch:
+  workflow_call:
 
 permissions:
   contents: read
