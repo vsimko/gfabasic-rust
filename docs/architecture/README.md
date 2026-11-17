@@ -11,6 +11,7 @@ title: "README"
 | Repository consistency validation | Deterministic Python/JSON checks for drift between repository sources | [VALIDATION.md](VALIDATION.md); [ADR 0013](adr/0013-repository-consistency-validation.md) | architecture [#248](https://github.com/vsimko/gfabasic-rust/issues/248), validator [#249](https://github.com/vsimko/gfabasic-rust/issues/249), website generator [#250](https://github.com/vsimko/gfabasic-rust/issues/250) |
 | Website previews | Per-PR preview URLs and automatic cleanup after PR closure | [WEBSITE_PREVIEWS.md](WEBSITE_PREVIEWS.md) |
 | AI agent security | Agent execution surfaces, untrusted content, capability tiers, workflow permissions, secrets, audit, and incident response | [AI-AGENT-SECURITY.md](AI-AGENT-SECURITY.md) | [#580](https://github.com/vsimko/gfabasic-rust/issues/580)
+| AI agent evaluation | Retrospective rubric, sample selection, CI/rework evidence, follow-up findings, and process improvements | [AI-AGENT-EVALUATION.md](AI-AGENT-EVALUATION.md) | [#578](https://github.com/vsimko/gfabasic-rust/issues/578) |
 | Multi-version Amiga GFA-BASIC conformance | 3.52 primary baseline with 3.5/3.5U and 3.0 comparison results | [ADR 0017](adr/0017-multi-version-amiga-gfa-basic-conformance.md); [probe-writing guide](../testing/amiga-gfa-basic-probes.md) | [#557](https://github.com/vsimko/gfabasic-rust/issues/557) |
 
 ## Project architecture and compatibility
