@@ -616,7 +616,7 @@ def _applicable_versions(manifest: dict) -> list[str]:
     ]
 
 
-def _matrix_entry(construct_id: str, version: str, manifest: dict, root: Path) -> dict:
+def _matrix_entry(construct_id: str, version: str, manifest: dict) -> dict:
     entry = manifest["versions"][version]
     probe = entry["probe"]
     return {
@@ -722,6 +722,8 @@ def select_jobs(
                 else:
                     selected.setdefault(item_id, set()).update(_applicable_versions(manifest))
 
+        if errors:
+            return None, sorted(errors)
         selection = "targeted" if selected else "none"
 
     include = []
@@ -729,7 +731,7 @@ def select_jobs(
         manifest = manifests[item_id]
         for version in SUPPORTED_VERSIONS:
             if version in selected[item_id]:
-                include.append(_matrix_entry(item_id, version, manifest, root))
+                include.append(_matrix_entry(item_id, version, manifest))
 
     result = {
         "full_manifest_validation": True,
