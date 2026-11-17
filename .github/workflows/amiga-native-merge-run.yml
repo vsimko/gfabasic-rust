@@ -25,6 +25,26 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
 
+      - name: Cache Amiga CI apt packages
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+        with:
+          path: ${{ runner.temp }}/apt-archives
+          key: ${{ runner.os }}-ubuntu-24.04-amiga-apt-${{ hashFiles('.github/workflows/amiga-reference-matrix.yml', '.github/workflows/amiga-native-merge-run.yml', '.github/workflows/amiga-3041u-native-merge-run.yml') }}
+          restore-keys: |
+            ${{ runner.os }}-ubuntu-24.04-amiga-apt-
+
+      - name: Cache Python wheels
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-python-amiga-pip-v1
+          restore-keys: |
+            ${{ runner.os }}-python-amiga-pip-
+
+      - name: Prepare dependency cache directories
+        run: mkdir -p "$RUNNER_TEMP/apt-archives/partial" "$HOME/.cache/pip"
+
+
       - name: Download and extract the original 3.52D disk image
         env:
           GFA_ASSETS_TOKEN: ${{ secrets.GFA_ASSETS_TOKEN }}
@@ -80,8 +100,8 @@ jobs:
           curl -fsSL https://packages.amiberry.com/gpg.key | sudo tee /usr/share/keyrings/amiberry-archive-keyring.gpg >/dev/null
           echo "deb [arch=amd64 signed-by=/usr/share/keyrings/amiberry-archive-keyring.gpg] https://packages.amiberry.com/apt noble main" | sudo tee /etc/apt/sources.list.d/amiberry.list >/dev/null
           sudo apt-get update
-          sudo apt-get install -y --no-install-recommends amiberry xvfb netcat-openbsd tesseract-ocr python3-pip python3-pil unzip
-          python3 -m pip install --break-system-packages amitools
+          sudo apt-get install -y --no-install-recommends -o Dir::Cache::archives="$RUNNER_TEMP/apt-archives/" amiberry xvfb netcat-openbsd tesseract-ocr python3-pip python3-pil unzip
+          python3 -m pip install --cache-dir "$HOME/.cache/pip" --break-system-packages amitools
           command -v xdftool
           amiberry --version | tee artifacts/amiga-cli-probe/amiberry-version.txt
 
