@@ -677,9 +677,12 @@ def select_jobs(
         for change in changes:
             status = change.status[:1]
             paths: list[tuple[str, bool]] = []
-            if status in {"R", "C"}:
+            if status == "R":
                 if change.old_path:
                     paths.append((change.old_path, True))
+                if change.new_path:
+                    paths.append((change.new_path, False))
+            elif status == "C":
                 if change.new_path:
                     paths.append((change.new_path, False))
             elif change.new_path:
