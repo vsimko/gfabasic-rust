@@ -33,7 +33,7 @@ def build_result(args: argparse.Namespace) -> dict:
     if expected_ids != [args.construct_id]:
         errors.append("expected-ID file must contain exactly the construct ID")
     if result_path.is_file():
-        validation = validate_result_bytes(result_path.read_bytes(), set(expected_ids))
+        validation = validate_result_bytes(expected_ids, result_path.read_bytes())
         errors.extend(validation.errors)
         outcomes = dict(validation.outcomes)
         passed, failed, different = validation.passed, validation.failed, validation.different
