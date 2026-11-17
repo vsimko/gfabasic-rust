@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The current native workflows execute version-level regression suites. A change to one language construct can therefore run unrelated probes, and the result is not naturally organized around the construct being investi…">
+  <title>Construct-scoped Amiga GFA-BASIC probes · GFA BASIC Rust documentation</title>
+  <link rel="stylesheet" href="../../../styles.css">
+</head>
+<body class="docs-site">
+  <header class="docs-header">
+    <a href="../../../index.html">GFA BASIC Rust</a>
+    <span aria-hidden="true">/</span>
+    <a href="../../index.html">Documentation</a>
+  </header>
+  <div class="docs-layout">
+    <nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home" href="index.html">Section index</a><ul><li><a href="0001-documentation-and-architecture-records.html">ADR 0001: Documentation and architecture decision records</a></li><li><a href="0002-initial-rust-workspace.html">ADR 0002: Initial Rust workspace crate boundaries</a></li><li><a href="0003-target-model.html">ADR 0003: Host and compilation target model</a></li><li><a href="0004-api-profile-model.html">ADR 0004: API profile model</a></li><li><a href="0005-cli-and-project-configuration.html">ADR 0005: CLI and project configuration</a></li><li><a href="0006-api-registry.html">ADR 0006: API declaration registry</a></li><li><a href="0007-compiler-pipeline-and-ir.html">ADR 0007: Compiler pipeline and typed IR boundaries</a></li><li><a href="0008-initial-source-dialect-amiga-gfa-basic-3.0.html">ADR 0008: Initial source dialect — Amiga GFA BASIC interpreter 3.0</a></li><li><a href="0009-initial-source-dialect-amiga-gfa-basic-3.5.html">ADR 0009: Initial source dialect — Amiga GFA BASIC interpreter 3.5</a></li><li><a href="0010-versioning-and-compatibility-lifecycle.html">ADR 0010: Versioning and compatibility lifecycle</a></li><li><a href="0011-amiga-35-linux-sdl3-product-scope.html">ADR 0011: Product scope — Amiga GFA BASIC 3.5 to Linux x86-64 with SDL3</a></li><li><a href="0012-language-server-and-editor-integration.html">ADR 0012: Language server and editor integration</a></li><li><a href="0013-repository-consistency-validation.html">ADR 0013: Repository consistency validation</a></li><li><a href="0014-implementation-dashboard.html">ADR 0014: Repository implementation dashboard</a></li><li><a href="0015-listing-first-compiler-input.html">ADR 0015: Listing-first compiler input</a></li><li><a href="TEMPLATE.html">ADR NNNN: Title</a></li><li><a href="0016-okf-v02-documentation-bundle.html">ADR 0016: OKF v0.2 documentation bundle</a></li><li><a href="0017-multi-version-amiga-gfa-basic-conformance.html">Multi-version Amiga GFA-BASIC conformance baseline</a></li><li><a href="0018-construct-scoped-amiga-gfa-basic-probes.html">Construct-scoped Amiga GFA-BASIC probes</a></li></ul></nav>
+    <main class="docs-content">
+      <article>
+        <h1>Construct-scoped Amiga GFA-BASIC probes</h1>
+        <p class="docs-meta"><span>Architecture Decision Record</span></p>
+        <h1 id="adr-0018-construct-scoped-amiga-gfa-basic-probes">ADR 0018: Construct-scoped Amiga GFA-BASIC probes</h1>
+<ul>
+<li><strong>Status:</strong> Accepted</li>
+<li><strong>Date:</strong> 2026-11-17</li>
+<li><strong>Tracking:</strong> <a href="https://github.com/vsimko/gfabasic-rust/issues/570">Manifest contract #570</a>, <a href="https://github.com/vsimko/gfabasic-rust/issues/571">change selection #571</a>, <a href="https://github.com/vsimko/gfabasic-rust/issues/572">parallel CI #572</a></li>
+<li><strong>Related:</strong> <a href="0017-multi-version-amiga-gfa-basic-conformance.html">ADR 0017</a></li>
+</ul>
+<h2 id="context">Context</h2>
+<p>The current native workflows execute version-level regression suites. A change to one language construct can therefore run unrelated probes, and the result is not naturally organized around the construct being investigated.</p>
+<p>The project needs a durable catalogue that relates one language construct to its independently authored probe, evidence, expected behavior, and observed result for each exact interpreter version. CI should execute only the changed construct and its applicable interpreter versions. Different versions must execute independently and in parallel.</p>
+<h2 id="decision">Decision</h2>
+<p>Use one directory per language construct under <code>tests/language-constructs/&lt;construct-id&gt;/</code>.</p>
+<p>Each construct directory uses:</p>
+<ul>
+<li><code>manifest.yaml</code> as its machine-readable metadata source;</li>
+<li>one or more independently authored <code>.LST</code> probe files;</li>
+<li>an optional <code>README.md</code> for rationale or unresolved details that do not fit the manifest.</li>
+</ul>
+<p>Use YAML for this new construct catalogue. Do not introduce TOML for construct manifests. This decision does not migrate or replace the existing TOML API registry, corpus manifest, or corpus sidecars.</p>
+<p>The manifest contract must keep these dimensions distinct:</p>
+<ul>
+<li>construct identity and classification;</li>
+<li>documentary/source evidence and its exact platform/version scope;</li>
+<li>expected behavior for each exact reference interpreter;</li>
+<li>probe file or version-specific probe variant;</li>
+<li>observed execution outcome and artifact reference;</li>
+<li>Rust implementation and conformance status.</li>
+</ul>
+<p>The exact interpreter identifiers remain <code>3.041U</code>, <code>3.5</code>, and <code>3.52</code>. Never transfer an expectation or result between versions. Use explicit unknown/unavailable states; do not infer support from a manifest, source sighting, parser acceptance, or successful host-side validation.</p>
+<p>CI change detection maps changed construct directories to only the versions declared by their manifests. Each selected construct/version pair is a separate parallel job. Unchanged constructs are not run. A shared schema or selector change can validate all manifests without automatically scheduling every native interpreter run. Existing whole-suite workflows remain available as baseline and diagnostic paths during migration.</p>
+<p>Native execution results are retained as workflow artifacts and summarized per construct/version. They are not automatically committed into the construct directory. A green host job means only that the configured harness and result protocol completed; it does not establish broader language conformance.</p>
+<h2 id="alternatives-considered">Alternatives considered</h2>
+<ol>
+<li><strong>Keep only version-wide suites.</strong> Rejected as the primary change-triggered workflow because a focused construct change needlessly executes unrelated tests.</li>
+<li><strong>One manifest for all constructs.</strong> Rejected because per-construct directories make probes, evidence, and ownership boundaries easier to inspect and change independently.</li>
+<li><strong>TOML for new manifests.</strong> Rejected for this catalogue; YAML is the selected authoring format. Existing TOML contracts remain unchanged.</li>
+<li><strong>Run every construct on every version for every change.</strong> Rejected because it defeats change-scoped execution and increases cost without adding relevant coverage.</li>
+</ol>
+<h2 id="consequences">Consequences</h2>
+<ul>
+<li>The schema, example manifests, and validator are defined under tracking issue #570.</li>
+<li>Deterministic change detection and construct/version selection are defined under #571.</li>
+<li>Dynamic parallel native execution and result aggregation are defined under #572.</li>
+<li>The regression-testing and workflow-maintenance skills must follow this construct-scoped model.</li>
+<li>The existing <code>tests/interpreter-probes/</code> suites and native workflows remain supported until a separately reviewed migration is complete.</li>
+<li>Exact-version results continue to use <code>PASS</code>, <code>FAIL</code>, <code>DIFFERENT</code>, and <code>UNTESTED</code> as defined by ADR 0017.</li>
+</ul>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>
