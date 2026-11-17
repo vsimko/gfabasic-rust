@@ -33,12 +33,13 @@ class NativeInterpreterProbePathTests(unittest.TestCase):
 
 
 class Native352InterpreterProbePathTests(unittest.TestCase):
-    def test_352_profile_selects_352_workflow_without_35u_or_fuzzing(self):
+    def test_active_reference_profiles_select_matrix_without_35u_or_fuzzing(self):
         for path in (
             "tests/interpreter-probes/amiga-3.52/expected-ids.txt",
             "tests/interpreter-probes/amiga-3.52/regression-suite.LST",
             "tests/interpreter-probes/amiga-3.5/expected-ids.txt",
             "tests/interpreter-probes/amiga-3.5/regression-suite.LST",
+            "scripts/amiga-cli-probe-35.sh",
         ):
             with self.subTest(path=path):
                 selected = expected_workflows([path])
