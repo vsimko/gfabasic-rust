@@ -25,6 +25,11 @@ WORKFLOWS = {
         "scripts/amiga-cli-probe-35.sh",
         "scripts/amiga-cli-probe-3041u.sh",
         "scripts/validate_gfatest_results.py",
+        # Deleted legacy-profile paths remain classified for PR diffs.
+        ".github/workflows/amiga-35u-native-merge-run.yml",
+        "tests/interpreter-probes/amiga-3.5u/**",
+        "scripts/amiga-cli-probe-35u.sh",
+        "scripts/amiga-cli-probe-35u-emulator.sh",
     ),
     ".github/workflows/docs.yml": (
         "**/*.md", ".markdownlint-cli2.jsonc", ".lychee.toml",
