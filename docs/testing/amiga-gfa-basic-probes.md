@@ -16,10 +16,11 @@ The project uses three reference versions. See [ADR 0017](../architecture/adr/00
 | Version | Role |
 |---|---|
 | GFA-BASIC 3.52 | Primary reference baseline and default expected behavior for current development |
-| GFA-BASIC 3.5 / 3.5U | Compatibility comparison; identify the exact release used |
+| GFA-BASIC 3.5 | Compatibility comparison; identify the exact interpreter used |
+| GFA-BASIC 3.5U | Retired historical profile; do not schedule new runs or treat old results as current matrix coverage |
 | GFA-BASIC 3.0 | Historical compatibility comparison |
 
-Run each applicable probe against all versions for which the licensed asset and native harness are available. Keep results separate. Never assume that a result from 3.52 applies to 3.5 or 3.0.
+Run each applicable probe against the active versions for which the licensed asset and native harness are available. Keep results separate. Never assume that a result from 3.52 applies to 3.5 or 3.0. The previously inventoried 3.5U media is not an active test target; consult ADR 0017 before using any legacy 3.5U workflow or fixture.
 
 Use these outcomes per probe/version:
 
@@ -44,7 +45,7 @@ A successful Merge operation does not establish that a statement was expanded or
 
 ## Before writing a probe
 
-1. Identify the exact interpreter version and platform under test. Do not transfer observations between 3.0, 3.5, 3.5U, and 3.52 without evidence.
+1. Identify the exact interpreter version and platform under test. Do not transfer observations between 3.0, 3.5, and 3.52 without evidence. Treat old 3.5U observations as historical and outside the current comparison matrix.
 2. Find the relevant primary-manual example and record its edition and printed page numbers.
 3. Preserve the documented statement order and control-flow structure unless the test explicitly targets a variation.
 4. Check how the native harness starts the program, assigns drives, captures output, and detects completion. Read the matching workflow and existing passing .LST probes.
@@ -65,7 +66,7 @@ Use this procedure whenever the executable version is uncertain or a test result
 
 **Interpretation of the `==>` editor prefix:** In the manually observed reference editor, an imported `.LST` statement prefixed with `==>` is an unsupported or unrecognized command. The editor can retain and display the statement after MERGE, while attempting to execute it can fail later with a runtime `syntax error ==> program aborted`. Therefore, successful MERGE or a visible source line does not establish that the command is supported. Inspect the prefix before Run and record both the editor screenshot and any runtime error. Treat this as observed behavior for the tested interpreter, not a universal rule for every GFA-BASIC release.
 
-## DATA pointer probes (3.5U)
+## Historical DATA pointer probe (3.5U — retired profile)
 
 The native probe for the 3.5U addendum DATA-pointer example exposed setup details that must be preserved:
 
@@ -76,7 +77,7 @@ The native probe for the 3.5U addendum DATA-pointer example exposed setup detail
 - The documented reverse traversal uses FOR ... DOWNTO.
 - The addendum example on printed pages 13-34–13-35 documents the reverse values 0, 1, 3242, 328, 24, 13, 9, 8, 7, 6, 5, 4, 3, 2, 1 for the fixture used in the regression test. Keep the fixture and expected values together; do not generalize this result to other versions.
 
-These are observed rules for the exact 3.5U probe and its documented example, not a claim of complete DATA semantics across all GFA BASIC versions.
+These are historical observations for the exact 3.5U probe and its documented example. They are not part of the current active version matrix and do not establish DATA semantics for 3.5 or 3.52.
 
 ## Output and harness rules
 
