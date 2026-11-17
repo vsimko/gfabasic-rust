@@ -37,4 +37,14 @@ The dedicated [A/B/C workflow](../../../.github/workflows/amiga-35u-ab-c-diagnos
 - **B** declares and accesses a square 3×3 array without MAT statements, then closes its output file.
 - **C** executes explicit `MAT ONE a()` on that same array and records the identity matrix if it returns.
 
-A and B are written to separate files before C starts, so a C task-held failure cannot erase their completed output. The workflow reports C as `HELD_OR_NO_OUTPUT` if the command does not reach the output-file open; that status is diagnostic evidence, not a claim about the interpreter's internal cause. Do not add this probe to the stable passing suite, and do not infer 3.5U behavior from 3.52 results.
+A and B are written to separate files before C starts, so a C task-held failure cannot erase their completed output. The workflow distinguishes a confirmed task-held requester, an emulator exception, an unclassified no-output result, and a successful or incorrect matrix result; a missing `MAT.OUT` alone is not treated as proof of a task-held requester or its cause.
+
+### Latest native result
+
+Run [#44046096736](https://github.com/vsimko/gfabasic-rust/actions/runs/44046096736) completed successfully with:
+
+- `CASE_A_BASELINE=PASS`
+- `CASE_B_DIM_ARRAY=PASS`
+- `CASE_C_MAT_ONE=TASK_HELD_CONFIRMED`
+
+The A and B output files contain their expected markers. C produced no `MAT.OUT`; the captured Workbench screenshot OCR reads `Software error - task held / Finish ALL disk activity`. This reproduces the symptom in the exact 3.5U setup after the same-run controls pass. It does not identify the interpreter's internal cause. Keep this probe out of the stable passing suite, and do not infer 3.5U behavior from 3.52 results.
