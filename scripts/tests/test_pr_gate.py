@@ -16,6 +16,7 @@ class NativeInterpreterProbePathTests(unittest.TestCase):
             "tests/interpreter-probes/amiga-3.5u/README.md",
             "tests/interpreter-probes/amiga-3.5u/expected-ids.txt",
             "tests/interpreter-probes/amiga-3.5u/regression-suite.LST",
+        "tests/interpreter-probes/amiga-3.5u/ab-c-isolation.LST",
         ):
             with self.subTest(path=path):
                 selected = expected_workflows([path])
@@ -30,6 +31,21 @@ class NativeInterpreterProbePathTests(unittest.TestCase):
         self.assertEqual(configured_paths, set(WORKFLOWS[NATIVE_WORKFLOW]))
 
 
+
+
+class Native35uAbcDiagnosticPathTests(unittest.TestCase):
+    def test_isolation_probe_selects_only_its_native_diagnostic_workflow(self):
+        selected = expected_workflows([
+            "tests/interpreter-probes/amiga-3.5u/ab-c-isolation.LST"
+        ])
+        self.assertEqual(selected, {".github/workflows/amiga-35u-ab-c-diagnostic.yml"})
+
+    def test_diagnostic_workflow_paths_match_pr_gate_classification(self):
+        root = Path(__file__).resolve().parents[2]
+        workflow_path = root / ".github" / "workflows" / "amiga-35u-ab-c-diagnostic.yml"
+        workflow = yaml.load(workflow_path.read_text(encoding="utf-8"), Loader=yaml.BaseLoader)
+        configured_paths = set(workflow["on"]["pull_request"]["paths"])
+        self.assertEqual(configured_paths, set(WORKFLOWS[".github/workflows/amiga-35u-ab-c-diagnostic.yml"]))
 
 
 class Native352InterpreterProbePathTests(unittest.TestCase):
