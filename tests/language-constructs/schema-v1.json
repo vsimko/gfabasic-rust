@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "GFA BASIC language construct manifest v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "id", "name", "kind", "classification", "syntax", "evidence", "versions"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "id": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
+    "name": {"type": "string", "minLength": 1},
+    "kind": {"enum": ["statement", "function", "operator", "declaration", "special-form", "compound-form"]},
+    "classification": {"enum": ["language-core", "amiga-api", "editor-command", "external-library-call", "unknown"]},
+    "syntax": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["form", "contexts"],
+        "properties": {
+          "form": {"type": "string", "minLength": 1},
+          "contexts": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {"enum": ["statement", "expression", "declaration", "argument", "editor"]}
+          }
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "sources"],
+      "properties": {
+        "status": {"enum": ["documented", "partially-documented", "disputed", "unknown"]},
+        "sources": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["source_id", "edition", "printed_pages", "locator"],
+            "properties": {
+              "source_id": {"type": "string", "pattern": "^[A-Z][A-Z0-9-]+$"},
+              "edition": {"type": "string", "minLength": 1},
+              "printed_pages": {"type": "array", "items": {"type": "string", "minLength": 1}},
+              "locator": {"type": "string", "minLength": 1}
+            }
+          }
+        },
+        "notes": {"type": "array", "items": {"type": "string", "minLength": 1}}
+      }
+    },
+    "versions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["3.041U", "3.5", "3.52"],
+      "properties": {
+        "3.041U": {"$ref": "#/$defs/version"},
+        "3.5": {"$ref": "#/$defs/version"},
+        "3.52": {"$ref": "#/$defs/version"}
+      }
+    }
+  },
+  "$defs": {
+    "version": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["expectation", "probe", "observed"],
+      "properties": {
+        "expectation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status", "notes"],
+          "properties": {
+            "status": {"enum": ["supported", "unsupported", "different", "unknown"]},
+            "notes": {"type": "string", "minLength": 1}
+          }
+        },
+        "probe": {
+          "type": ["string", "null"],
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*\\.LST$"
+        },
+        "observed": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["result"],
+          "properties": {
+            "result": {"enum": ["PASS", "FAIL", "DIFFERENT", "UNTESTED"]},
+            "run_id": {"type": "string", "minLength": 1},
+            "artifact": {"type": "string", "minLength": 1},
+            "notes": {"type": "array", "items": {"type": "string", "minLength": 1}}
+          }
+        }
+      }
+    }
+  }
+}
