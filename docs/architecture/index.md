@@ -26,6 +26,7 @@
 - [SECURITY](SECURITY.md) - Documentation concepts in architecture.
 - [TARGETS](TARGETS.md) - Documentation concepts in architecture.
 - [TESTING](TESTING.md) - Documentation concepts in architecture.
+- [VERSION-SCOPED LANGUAGE CONSTRUCT CATALOGUE](../../tests/language-constructs/README.md) - YAML manifest contract and examples for version-specific GFA BASIC constructs.
 - [VALIDATION](VALIDATION.md) - Documentation concepts in architecture.
 - [VERSIONING](VERSIONING.md) - Documentation concepts in architecture.
 - [WEBSITE PREVIEWS](WEBSITE_PREVIEWS.md) - Documentation concepts in architecture.
