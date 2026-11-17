@@ -84,7 +84,7 @@ def aggregate(selection: dict, root: Path, artifacts: Path, native_allowed: bool
                     and artifact.get("expected_ids") == [construct_id]
                     and identity.get("ocr_matched") is True
                 )
-                if status in {"PASS", "DIFFERENT"}:
+                if status in {"PASS", "FAIL", "DIFFERENT"}:
                     integrity_ok = integrity_ok and artifact.get("harness_status") == "success"
                 if not integrity_ok and status != "UNTESTED":
                     row = {
