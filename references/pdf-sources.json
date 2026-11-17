@@ -1,0 +1,27 @@
+{
+  "format_version": 1,
+  "sources": [
+    {
+      "source_id": "AM-INTERPRETER-35",
+      "title": "GFA BASIC 3.5 Interpreter",
+      "url": "https://ia803204.us.archive.org/16/items/gfa-basic-3.5-interpreter/GFA_Basic_3.5_Interpreter.pdf",
+      "filename": "GFA_Basic_3.5_Interpreter.pdf",
+      "platform": "Amiga",
+      "version": "3.5",
+      "include_text": false,
+      "enabled": true
+    },
+    {
+      "source_id": "AM-BOOK-DE",
+      "title": "Das große Buch zu GFA BASIC Amiga",
+      "url": "https://archive.org/download/das-grosse-buch-zu-gfa-basic-amiga/Das_grosse_Buch_zu_GFA_BASIC_AMIGA%20%28Data%20Becker%29.pdf",
+      "filename": "Das-Grosse-Buch-zu-GFA-BASIC-Amiga.pdf",
+      "platform": "Amiga",
+      "edition": "1989",
+      "include_text": true,
+      "enabled": false,
+      "rights_basis": "Amiga-News reported on 2026-09-03 that the 1989 title is offered free with the authors' permission; project maintainer confirms this permission basis for text extraction and inclusion.",
+      "pending_reason": "The replacement Archive.org direct PDF URL has not yet been verified by a successful workflow download."
+    }
+  ]
+}
