@@ -27,6 +27,15 @@ def _main_dispatch_guard(expression: object) -> bool:
     return "github.event_name!='workflow_dispatch'" in value or 'github.event_name!=\"workflow_dispatch\"' in value
 
 
+def _job_includes_event(expression: object, event: str) -> bool:
+    value = _normalise(expression)
+    equal_events = re.findall(r"github.event_name==['\\\"]([^'\\\"]+)['\\\"]", value)
+    unequal_events = re.findall(r"github.event_name!=['\\\"]([^'\\\"]+)['\\\"]", value)
+    if equal_events and event not in equal_events:
+        return False
+    return event not in unequal_events
+
+
 def _contains_secret(value: object) -> bool:
     if isinstance(value, str):
         return "secrets." in value.lower() or value.strip().lower() == "inherit"
@@ -81,13 +90,13 @@ def validate_document(document: object, path: str) -> list[str]:
         secrets = _contains_secret(job)
         guard = job.get("if")
 
-        if has_pull_request and (writes or secrets) and not _same_repository_guard(guard):
+        if has_pull_request and _job_includes_event(guard, "pull_request") and (writes or secrets) and not _same_repository_guard(guard):
             reason = "write permissions" if writes else "secret access"
             errors.append(
                 f"{path}: job {job_id!r} has {reason} on pull_request without a same-repository guard"
             )
 
-        if has_dispatch and (writes or secrets) and not _main_dispatch_guard(guard):
+        if has_dispatch and _job_includes_event(guard, "workflow_dispatch") and (writes or secrets) and not _main_dispatch_guard(guard):
             reason = "write permissions" if writes else "secret access"
             errors.append(
                 f"{path}: job {job_id!r} has {reason} on workflow_dispatch without a main-ref guard"
