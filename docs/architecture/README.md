@@ -10,7 +10,8 @@ title: "README"
 | Implementation dashboard | Static maintainer dashboard, source-of-truth boundaries, progress states, evidence metrics, generation and freshness | [IMPLEMENTATION-DASHBOARD.md](IMPLEMENTATION-DASHBOARD.md); [ADR 0014](adr/0014-implementation-dashboard.md) | [#304](https://github.com/vsimko/gfabasic-rust/issues/304)–[#310](https://github.com/vsimko/gfabasic-rust/issues/310) |
 | Repository consistency validation | Deterministic Python/JSON checks for drift between repository sources | [VALIDATION.md](VALIDATION.md); [ADR 0013](adr/0013-repository-consistency-validation.md) | architecture [#248](https://github.com/vsimko/gfabasic-rust/issues/248), validator [#249](https://github.com/vsimko/gfabasic-rust/issues/249), website generator [#250](https://github.com/vsimko/gfabasic-rust/issues/250) |
 | Website previews | Per-PR preview URLs and automatic cleanup after PR closure | [WEBSITE_PREVIEWS.md](WEBSITE_PREVIEWS.md) |
-| AI agent security | Agent execution surfaces, untrusted content, capability tiers, workflow permissions, secrets, audit, and incident response | [AI-AGENT-SECURITY.md](AI-AGENT-SECURITY.md) | [#580](https://github.com/vsimko/gfabasic-rust/issues/580)
+| AI agent security | Agent execution surfaces, untrusted content, capability tiers, workflow permissions, secrets, audit, and incident response | [AI-AGENT-SECURITY.md](AI-AGENT-SECURITY.md) | [#580](https://github.com/vsimko/gfabasic-rust/issues/580) |
+| AI-agent contribution evaluation | Retrospective PR-quality rubric, sample, evidence, limitations, and measurement recommendation | [AGENT-CONTRIBUTION-EVALUATION.md](AGENT-CONTRIBUTION-EVALUATION.md) | [#578](https://github.com/vsimko/gfabasic-rust/issues/578) |
 | Multi-version Amiga GFA-BASIC conformance | 3.52 primary baseline with 3.5/3.5U and 3.0 comparison results | [ADR 0017](adr/0017-multi-version-amiga-gfa-basic-conformance.md); [probe-writing guide](../testing/amiga-gfa-basic-probes.md) | [#557](https://github.com/vsimko/gfabasic-rust/issues/557) |
 
 ## Project architecture and compatibility
@@ -22,7 +23,7 @@ title: "README"
 | Product scope | Sole dialect, API profile, Linux x86-64 target, and SDL3 boundary | [ADR 0011](adr/0011-amiga-35-linux-sdl3-product-scope.md) | [#3](https://github.com/vsimko/gfabasic-rust/issues/3), [#4](https://github.com/vsimko/gfabasic-rust/issues/4) |
 | Target model | Host/target distinction and target capabilities | [TARGETS.md](TARGETS.md); [ADR 0003](adr/0003-target-model.md) | [#4](https://github.com/vsimko/gfabasic-rust/issues/4) |
 | API profiles | Amiga GFA BASIC 3.5 API compatibility only; Atari ST research is archival and unsupported | [API-PROFILES.md](API-PROFILES.md); [ADR 0004](adr/0004-api-profile-model.md); [Amiga API research draft](../reference/amiga-gfa-api.md); [Atari ST API research draft](../reference/atari-gfa-api.md) | [#5](https://github.com/vsimko/gfabasic-rust/issues/5), [#24](https://github.com/vsimko/gfabasic-rust/issues/24), [#25](https://github.com/vsimko/gfabasic-rust/issues/25) |
-| Language tooling and editor integration | [LANGUAGE-TOOLING.md](LANGUAGE-TOOLING.md); [ADR 0012](adr/0012-language-server-and-editor-integration.md) | Shared compiler frontend, LSP server, editor client boundaries, and refactoring safety | [#209](https://github.com/vsimko/gfabasic-rust/issues/209), [#210](https://github.com/vsimko/gfabasic-rust/issues/210), [#211](https://github.com/vsimko/gfabasic-rust/issues/211) |
+| Language tooling and editor integration | Shared compiler frontend, LSP server, editor client boundaries, and refactoring safety | [LANGUAGE-TOOLING.md](LANGUAGE-TOOLING.md); [ADR 0012](adr/0012-language-server-and-editor-integration.md) | [#209](https://github.com/vsimko/gfabasic-rust/issues/209), [#210](https://github.com/vsimko/gfabasic-rust/issues/210), [#211](https://github.com/vsimko/gfabasic-rust/issues/211) |
 | Compiler pipeline and IR | Frontend stages, semantic analysis, typed IR, LLVM boundary | [PIPELINE-AND-IR.md](PIPELINE-AND-IR.md); [ADR 0007](adr/0007-compiler-pipeline-and-ir.md) | [#6](https://github.com/vsimko/gfabasic-rust/issues/6) |
 | Source formatting | Lossless, evidence-gated formatter library and canonical style for the implemented subset | [FORMATTER.md](FORMATTER.md) | [#208](https://github.com/vsimko/gfabasic-rust/issues/208) |
 | Diagnostics and compatibility reporting | Stable diagnostic codes, source locations, support outcomes, migration guidance | [DIAGNOSTICS.md](DIAGNOSTICS.md) | [#26](https://github.com/vsimko/gfabasic-rust/issues/26) |
@@ -74,7 +75,7 @@ Use numbered Architecture Decision Records in [adr/](adr/). Each record states c
 
 - **Dialect**: a defined GFA BASIC language variant associated with a platform and/or release.
 - **Version**: a specific release of a dialect.
-- **Language core**: language syntax and semantics not tied to a platform API.
+- **Language core**: syntax and semantics not tied to a platform API.
 - **API profile**: a selectable set of platform-specific declarations and behavior.
 - **Host**: the machine and environment on which the compiler runs.
 - **Target**: the machine and ABI for which the compiler generates output.
