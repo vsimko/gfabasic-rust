@@ -1,6 +1,6 @@
 ---
 name: corpus-fixture-authoring
-description: Add or revise independently authored GFA BASIC conformance-corpus fixtures and metadata. Use when editing tests/corpus listings, TOML sidecars, the corpus manifest, evidence status, or fixture-to-API crosswalks.
+description: Add or revise independently authored GFA BASIC conformance-corpus fixtures, TOML sidecars, manifest entries, and API crosswalks.
 ---
 
 # GFA BASIC corpus fixture authoring
@@ -27,8 +27,8 @@ Use this skill when creating or changing source fixtures in `tests/corpus/`. The
 
 ### 2. Create an independent minimal fixture
 
-- Use the existing layout: `<dialect>/<version>/<area>/<case>.lst` plus a matching `.toml` sidecar.
-- Choose a stable lowercase kebab-case ID and use it consistently in the manifest and sidecar.
+- Use the existing corpus layout: `<dialect>/<version>/<area>/<case>.lst` plus a matching `.toml` sidecar.
+- Choose a stable lowercase kebab-case ID and use it consistently in the corpus manifest and sidecar.
 - Keep the program focused, self-contained, deterministic, and free of machine-specific paths, network access, locale assumptions, and external assets.
 - Author original source. Do not copy historical listings or substantial manual examples.
 - Include only setup necessary to isolate the behavior; avoid unrelated commands that obscure the tested contract.
@@ -36,7 +36,7 @@ Use this skill when creating or changing source fixtures in `tests/corpus/`. The
 
 ### 3. Write complete metadata
 
-Follow the current sidecar schema and neighboring examples. Record at least:
+Follow the current corpus sidecar schema and neighboring examples. Record at least:
 
 - stable `id`;
 - exact `dialect` and `version`;
@@ -53,7 +53,7 @@ Do not use `verified` merely because the fixture parses, formats, or passes meta
 
 - Add the fixture path (without `.lst` or `.toml`) to `tests/corpus/manifest.toml`.
 - Update any relevant declaration-to-fixture crosswalk or research index.
-- Add registry `support.tests` links only when the fixture actually substantiates implementation/conformance claims under the registry policy. Research-only fixtures must not be presented as executable conformance tests.
+- Add registry `support.tests` links only when the fixture actually substantiates implementation/conformance claims under the registry policy.
 - Keep source-evidence links and executable test links distinct.
 
 ### 5. Validate
@@ -64,9 +64,15 @@ Run from the repository root:
 python scripts/validate_corpus.py
 ```
 
-Then run relevant Rust formatter/parser or targeted tests if the fixture is wired into those tools. Read the test documentation and CI workflow to understand exactly what each check covers.
+The corpus validator checks metadata and paths; it does not compile or execute fixtures. A formatter acceptance check is not interpreter conformance.
 
-The corpus validator checks metadata and paths; it does not compile or execute fixtures. A formatter acceptance check is not interpreter conformance. Report the exact validation performed and do not overstate it.
+## Boundary with construct-scoped native probes
+
+The new native interpreter catalogue is separate from this corpus:
+- native probes live under `tests/language-constructs/<construct-id>/` and use YAML `manifest.yaml` files;
+- the existing corpus remains under `tests/corpus/` with TOML sidecars and `tests/corpus/manifest.toml`;
+- do not migrate corpus files or metadata to YAML as part of the construct-catalogue work;
+- use [ADR 0018](../../../docs/architecture/adr/0018-construct-scoped-amiga-gfa-basic-probes.md) for the native probe architecture.
 
 ## Review checklist
 

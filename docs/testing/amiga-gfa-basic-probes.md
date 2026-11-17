@@ -7,11 +7,11 @@ title: "Writing Amiga GFA BASIC reference-interpreter probes"
 
 ## Purpose
 
-Use this guide when writing or changing .LST regression programs for the original Amiga GFA BASIC interpreter. A probe must distinguish a language/runtime failure from a test-harness or program-setup failure.
+Use this guide when writing or changing `.LST` regression programs for the original Amiga GFA BASIC interpreters. A probe must distinguish a language/runtime failure from a test-harness or program-setup failure. New construct-scoped probes follow [ADR 0018](../architecture/adr/0018-construct-scoped-amiga-gfa-basic-probes.md).
 
 ## Interpreter version strategy
 
-The project uses three reference versions. See [ADR 0017](../architecture/adr/0017-multi-version-amiga-gfa-basic-conformance.md) and [issue #557](https://github.com/vsimko/gfabasic-rust/issues/557).
+The project uses three reference versions. See [ADR 0017](../architecture/adr/0017-multi-version-amiga-gfa-basic-conformance.md) and [ADR 0018](../architecture/adr/0018-construct-scoped-amiga-gfa-basic-probes.md).
 
 | Version | Role |
 |---|---|
@@ -19,18 +19,38 @@ The project uses three reference versions. See [ADR 0017](../architecture/adr/00
 | GFA-BASIC 3.041U | Available native comparison profile for the 3.0-era dialect; always report the exact `3.041U` version |
 | Amiga GFA-BASIC 3.5 | Normative source-language target (ADR 0009); initial native smoke probes (arithmetic, FOR/NEXT, strings) passed; broader conformance remains incomplete |
 
-The unified entry point is `.github/workflows/amiga-reference-matrix.yml`. It calls the two active native workflows as reusable workflows and captures the running 3.5 editor's version menu for identity evidence. An initial 3.5 native smoke suite (arithmetic, FOR/NEXT, strings) ran using a separate writable test disk in [workflow run 44094135503](https://github.com/vsimko/gfabasic-rust/actions/runs/44094135503). The inspected artifact `amiga-gfa-basic-3.5-asset-discovery` contains the held-right-button menu screenshot visibly identifying `GFA-BASIC 3.5 Block`, Merge/Run screenshots, and three raw `GFATEST:*:PASS` records. These three cases are PASS for that exact candidate and run; this limited smoke set is not complete language conformance. Run this matrix for a combined view. The individual native workflows remain manually dispatchable for focused diagnosis. A green matrix means the configured native jobs and GFATEST collection protocol completed; it is not a claim of complete language conformance.
+The existing unified entry point is `.github/workflows/amiga-reference-matrix.yml`. It calls the two active native workflows as reusable workflows and captures the running 3.5 editor's version menu for identity evidence. An initial 3.5 native smoke suite (arithmetic, FOR/NEXT, strings) ran using a separate writable test disk in [workflow run 44094135503](https://github.com/vsimko/gfabasic-rust/actions/runs/44094135503). The inspected artifact `amiga-gfa-basic-3.5-asset-discovery` contains the held-right-button menu screenshot visibly identifying `GFA-BASIC 3.5 Block`, Merge/Run screenshots, and three raw `GFATEST:*:PASS` records. These three cases are PASS for that exact candidate and run; this limited smoke set is not complete language conformance. Run the existing matrix for a combined baseline view.
 
-Run each applicable probe against active native profiles for which the licensed asset and workflow are available. The current native profiles are 3.52 and 3.041U. Keep results separate; never relabel 3.041U as exactly 3.0 or transfer its results to 3.5. Amiga GFA-BASIC 3.5 remains the normative documented target; its identity and the three initial native smoke results have been verified from the retained screenshot and raw result artifact. Broader native conformance remains incomplete.
+## Construct-scoped probe catalogue
 
-Use these outcomes per probe/version:
+New native probes are organized by language construct:
 
-- `PASS`: observed behavior matches the version-specific expectation.
-- `FAIL`: observed behavior contradicts the version-specific expectation.
+```text
+tests/language-constructs/
+  <construct-id>/
+    manifest.yaml
+    probe.LST
+    README.md       # optional
+```
+
+- Use one directory per independently testable construct and a stable lowercase kebab-case directory name.
+- `manifest.yaml` is YAML. It records construct identity, classification, source evidence, applicable exact interpreter versions, per-version expectations, and probe paths. The schema and required fields are tracked by [#570](https://github.com/vsimko/gfabasic-rust/issues/570).
+- Keep documentary evidence, expected behavior, observed run results, and Rust implementation/conformance status separate.
+- A construct can declare different applicability or probe variants by version. Reuse one probe only when its syntax and intent are equivalent.
+- CI selects only changed construct directories and their declared versions. Each construct/version pair runs as an independent parallel job; unrelated constructs are not run. Selection tooling is tracked by [#571](https://github.com/vsimko/gfabasic-rust/issues/571), and native matrix integration by [#572](https://github.com/vsimko/gfabasic-rust/issues/572).
+- Keep native output and screenshots in workflow artifacts. Do not commit generated run output as canonical evidence.
+- Existing `tests/interpreter-probes/` suites remain supported as baseline/diagnostic paths during migration. This catalogue does not replace `tests/corpus/`, its TOML sidecars, or `tests/corpus/manifest.toml`.
+
+## Result vocabulary
+
+Record one result per probe and exact interpreter version:
+
+- `PASS`: observed behavior matches that version's expectation.
+- `FAIL`: observed behavior contradicts that version's expectation.
 - `DIFFERENT`: a verified cross-version difference is recorded; this is not automatically a defect.
 - `UNTESTED`: no adequate run/evidence is available. Missing assets are not failures or passes.
 
-A maintainer-reported example motivating this policy is `M O a()`: reported as `MAT SET a()` in 3.5 and `MAT ONE a()` in 3.52. Treat it as reported evidence until exact-version screenshots/native runs are preserved.
+A green host-side job means the configured harness and result protocol completed. It does not establish language-wide conformance.
 
 ## Verify native editor Merge
 
@@ -49,7 +69,7 @@ A successful Merge operation does not establish that a statement was expanded or
 1. Identify the exact interpreter version and platform under test. Do not transfer observations between 3.041U, 3.5, and 3.52 without evidence.
 2. Find the relevant primary-manual example and record its edition and printed page numbers.
 3. Preserve the documented statement order and control-flow structure unless the test explicitly targets a variation.
-4. Check how the native harness starts the program, assigns drives, captures output, and detects completion. Read the matching workflow and existing passing .LST probes.
+4. Check how the native harness starts the program, assigns drives, captures output, and detects completion. Read the matching workflow and existing passing `.LST` probes.
 5. Keep the fixture minimal. Add one behavior at a time and write diagnostic values before asserting them.
 6. Where possible, use the same source probe and harness procedure across versions. If syntax or setup must differ, document the reason and keep the test intent equivalent.
 

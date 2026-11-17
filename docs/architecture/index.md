@@ -29,3 +29,5 @@
 - [WEBSITE PREVIEWS](WEBSITE_PREVIEWS.md) - Documentation concepts in architecture.
 - [WORKSPACE](WORKSPACE.md) - Documentation concepts in architecture.
 - [ADR](adr/) - Related documentation concepts.
+- [ADR 0017: Multi-version Amiga GFA-BASIC conformance baseline](adr/0017-multi-version-amiga-gfa-basic-conformance.md) - Exact-version native interpreter roles and result vocabulary.
+- [ADR 0018: Construct-scoped Amiga GFA-BASIC probes](adr/0018-construct-scoped-amiga-gfa-basic-probes.md) - YAML construct manifests and changed-construct/version CI matrix.
