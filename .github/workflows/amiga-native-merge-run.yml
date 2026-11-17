@@ -200,7 +200,7 @@ jobs:
             printf "INSERTFLOPPY\\t%s\\t0\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/factzero.adf" | timeout 5s nc -U -N "${ipc_socket_path:-}" >"$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/insert-floppy-ipc.txt"
             printf "LIST_FLOPPIES\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}" >"$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/list-floppies-ipc.txt"
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/editor-before-merge.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-            # Capture the running editor's version menu with the right mouse button held.
+            # Capture the running editor version menu with the right mouse button held.
             printf "SEND_MOUSE\\t0\\t0\\t2\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
             sleep 0.1
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/editor-version-menu.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
