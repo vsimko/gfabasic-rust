@@ -75,7 +75,7 @@ The `implementation` field describes the current Rust implementation, not the or
 1. Manifest filename is exactly `manifest.yaml`.
 2. `construct.id` must equal the directory name and match `^[a-z0-9]+(?:-[a-z0-9]+)*$`.
 3. Probe paths are relative to the construct directory, must stay inside it, must exist as regular files, and must use the `.LST` extension.
-4. A version marked `applicable` and selected for execution must map to a probe. Unknown or not-applicable versions must not be assigned a guessed probe.
+4. A version marked `applicable` and selected for execution must map to a probe. Unknown or not-applicable versions must not be assigned a guessed probe. Probe files should be ASCII with LF line endings unless the construct explicitly tests encoding behavior.
 5. `execution.probe_source` is provenance for an already observed run, not the selection path for future per-construct jobs. It must be repository-relative and point to an existing test source.
 6. Every evidence reference must resolve to exactly one evidence ID in the same manifest.
 7. Version identifiers are exact strings. Do not normalize `3.041U`, `3.5`, or `3.52`.
