@@ -2,6 +2,7 @@
 
 - [AI VERIFICATION](AI-VERIFICATION.md) - AI-assisted review of API declarations against source evidence.
 - [AI AGENT SECURITY](AI-AGENT-SECURITY.md) - AI-agent trust boundaries, permissions, secrets, and incident response.
+- [AI AGENT EVALUATION](AI-AGENT-EVALUATION.md) - Evidence-based retrospective pilot for agent-assisted PR quality and workflow improvements.
 - [`api-evidence-verification` agent skill](../../.agents/skills/api-evidence-verification/SKILL.md) - Task procedure for preparing, performing, and validating evidence reviews.
 - [API PROFILES](API-PROFILES.md) - Documentation concepts in architecture.
 - [API REGISTRY](API-REGISTRY.md) - Documentation concepts in architecture.
