@@ -53,6 +53,25 @@ class LanguageConstructManifestValidationTests(unittest.TestCase):
     def test_repository_manifests_validate(self):
         self.assertEqual(validate_language_constructs(ROOT), [])
 
+    def test_unknown_schema_field_fails(self):
+        manifest = self.load_manifest()
+        manifest["unexpected"] = True
+        self.write_manifest(manifest)
+        self.assertTrue(any("unsupported field 'unexpected'" in error for error in validate_language_constructs(self.root)))
+
+    def test_unsupported_schema_version_fails(self):
+        manifest = self.load_manifest()
+        manifest["manifest_schema_version"] = 2
+        self.write_manifest(manifest)
+        self.assertTrue(any("must be integer 1" in error for error in validate_language_constructs(self.root)))
+
+    def test_unquoted_numeric_version_key_fails(self):
+        path = self.manifest_path()
+        source = path.read_text(encoding="utf-8").replace('  "3.5":', "  3.5:", 1)
+        path.write_text(source, encoding="utf-8")
+        errors = validate_language_constructs(self.root)
+        self.assertTrue(any("unknown version key 3.5" in error for error in errors))
+
     def test_duplicate_yaml_key_fails(self):
         path = self.manifest_path()
         path.write_text(
@@ -208,6 +227,27 @@ class LanguageConstructSelectionTests(unittest.TestCase):
         self.assertTrue(result["shared_metadata_changed"])
         self.assertEqual(result["selection"], "none")
         self.assertEqual(result["include"], [])
+
+    def test_invalid_changed_path_fails_closed(self):
+        result, errors = select_jobs(
+            self.root,
+            [FileChange("M", new_path="../tests/language-constructs/fact-function/manifest.yaml")],
+        )
+        self.assertIsNone(result)
+        self.assertTrue(any("not a safe relative POSIX path" in error for error in errors))
+
+    def test_copy_event_selects_only_the_new_path(self):
+        result = self.select(
+            FileChange(
+                "C100",
+                old_path="tests/language-constructs/mat-one-statement/probe-3.5.LST",
+                new_path="tests/language-constructs/fact-function/probe-3.5.LST",
+            )
+        )
+        self.assertEqual(
+            [(item["construct_id"], item["version"]) for item in result["include"]],
+            [("fact-function", "3.5")],
+        )
 
     def test_validator_change_does_not_schedule_all_native_jobs(self):
         result = self.select(FileChange("M", new_path="scripts/validate_language_constructs.py"))
