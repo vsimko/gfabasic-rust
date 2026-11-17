@@ -8,6 +8,13 @@ source-pages = ["5-2–5-22", "6-4–6-21", "7-4–7-55", "8-2–8-24", "9-4–9
 notes = "Declaration-level subset transcribed from the 3.0 base-manual command index and corresponding chapter entries. Each canonical statement is counted once despite syntax variants. This is not a complete command population or evidence of 3.5 retention."
 
 [[statements]]
+name = "MOUSE"
+printed-pages = ["5-17"]
+syntax-variants = ["MOUSE mx,my,mk"]
+aliases = []
+notes = "Reads the current mouse X/Y coordinates and button status together. The manual separately lists MOUSEX, MOUSEY and MOUSEK as predefined mouse-state variables; they are not additional statements. Coordinates are relative to the current output window; values outside the window may be negative. This is 3.0 base-manual evidence only."
+
+[[statements]]
 name = "INPUT"
 printed-pages = ["5-3–5-4", "6-15"]
 syntax-variants = ["screen input", "INPUT #"]

@@ -32,7 +32,7 @@ name = "MENU"
 printed-pages = ["9-4–9-8", "9-12"]
 syntax-variants = ["MENU m$()", "MENU(x)", "MENU KILL", "MENU(x,y)", "MENU(x,str$)", "MENU KEY x,y"]
 aliases = []
-notes = "Creation, inspection, mutation, keyboard shortcut and kill forms share the MENU name."
+notes = "One canonical MENU family has distinct forms: MENU m$() creates/displays the BASIC pull-down menu; MENU(x) is a function-like accessor for fields 0–11 of the Intuition event-message buffer; MENU(x,y) and MENU(x,str$) mutate menu-entry state/text; MENU KILL removes the pull-down menu; MENU KEY x,y manages shortcuts. Do not classify MENU(x) as an ordinary statement or add a duplicate function identifier. This is 3.0 base-manual evidence only."
 
 [[statements]]
 name = "OPENS"
