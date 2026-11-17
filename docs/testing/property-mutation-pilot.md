@@ -29,6 +29,6 @@ This is a bounded deterministic property test, not a language-conformance test. 
 
 ## Mutation pilot
 
-A bounded manual mutation pilot is being run against the source-map line-start lookup. The deliberate mutant changes the lookup boundary from inclusive to exclusive, an off-by-one defect at the start of a line. The result and classification will be recorded here after the targeted Rust test and CI run complete.
+A bounded manual mutation pilot is being run against Unicode column calculation. The deliberate mutant counts UTF-16 code units instead of Unicode scalar values; the existing examples use BMP text and do not distinguish those units, while the generated alphabet includes a supplementary-plane emoji. The result and classification will be recorded here after CI completes.
 
 No mutation-testing dependency is added. The pilot is intentionally narrow; it does not establish a repository-wide mutation score.
