@@ -822,6 +822,11 @@ def main(argv: list[str] | None = None) -> int:
     if args.format == "github":
         matrix = json.dumps({"include": result["include"]}, separators=(",", ":"), sort_keys=True)
         print(f"matrix={matrix}")
+        version_outputs = {"3.041U": "matrix_3041u", "3.5": "matrix_35", "3.52": "matrix_352"}
+        for version, output_name in version_outputs.items():
+            rows = [item for item in result["include"] if item["version"] == version]
+            version_matrix = json.dumps({"include": rows}, separators=(",", ":"), sort_keys=True)
+            print(f"{output_name}={version_matrix}")
         print(f"selection={result['selection']}")
         print("full_manifest_validation=true")
     else:
