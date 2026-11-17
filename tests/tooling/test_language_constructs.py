@@ -88,6 +88,10 @@ class LanguageConstructSelectionTests(unittest.TestCase):
     def test_renamed_construct_selects_only_new_directory(self):
         renamed = self.catalogue / "beta"
         (self.catalogue / "alpha").rename(renamed)
+        manifest = renamed / "manifest.yaml"
+        data = yaml.safe_load(manifest.read_text(encoding="utf-8"))
+        data["construct"]["id"] = "beta"
+        manifest.write_text(yaml.safe_dump(data, sort_keys=False), encoding="utf-8")
         result = select_jobs([
             "tests/language-constructs/alpha/manifest.yaml",
             "tests/language-constructs/beta/manifest.yaml",
