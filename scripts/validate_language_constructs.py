@@ -340,7 +340,6 @@ def _load_manifest(path: Path, root: Path, errors: list[str]) -> dict | None:
         _add_error(errors, root, path, f"versions contains unknown version key {version!r}")
 
     referenced_probes: set[Path] = set()
-    applicability_by_version: dict[str, str] = {}
     probe_by_version: dict[str, str] = {}
     probe_reason_by_version: dict[str, str | None] = {}
     for version in SUPPORTED_VERSIONS:
@@ -357,7 +356,6 @@ def _load_manifest(path: Path, root: Path, errors: list[str]) -> dict | None:
         if not isinstance(applies, str) or applies not in APPLICABILITY:
             _add_error(errors, root, path, f"{label}.applicability must be one of {sorted(APPLICABILITY)}")
             applies = "unknown"
-        applicability_by_version[version] = applies
 
         expectation = entry.get("expectation")
         if _check_mapping_fields(
