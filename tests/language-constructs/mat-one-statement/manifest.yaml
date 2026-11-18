@@ -5,8 +5,10 @@ construct:
   name: "MAT ONE"
   summary: "Initialize a previously dimensioned square matrix as an identity matrix."
   syntax_forms:
+    - text: "MAT ONE array()"
+      versions: ["3.5"]
     - text: "M O array()"
-      versions: ["3.52"]
+      versions: ["3.041U", "3.5", "3.52"]
 evidence:
   - id: "mat-one-manual-35"
     source_id: "AM-INTERPRETER-30-35-UPDATE-SCAN"
@@ -44,7 +46,7 @@ versions:
     applicability: "not-applicable"
     expectation:
       status: "not-applicable"
-      summary: "MAT ONE is not supported by the tested GFA-BASIC 3.5 interpreter; native execution is restricted to the confirmed 3.52 form."
+      summary: "The 3.5 editor expands the abbreviated M O form incorrectly as MAT SET; the probe still runs to preserve this negative compatibility result."
       evidence_refs: []
     probe: "probe-3.5.LST"
     implementation:
