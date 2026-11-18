@@ -36,7 +36,7 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: "Validate only, run all applicable constructs, or select one construct."
+        description: "Validate only, run all declared constructs, or select one construct."
         type: choice
         options: [validate-only, all, construct]
         default: validate-only
