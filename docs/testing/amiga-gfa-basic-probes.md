@@ -21,7 +21,7 @@ The project uses three reference versions. See [ADR 0017](../architecture/adr/00
 
 The unified entry point is `.github/workflows/amiga-reference-matrix.yml`. It calls the two active native workflows as reusable workflows and captures the running 3.5 editor's version menu for identity evidence. An initial 3.5 native smoke suite (arithmetic, FOR/NEXT, strings) ran using a separate writable test disk in [workflow run 44094135503](https://github.com/vsimko/gfabasic-rust/actions/runs/44094135503). The inspected artifact `amiga-gfa-basic-3.5-asset-discovery` contains the held-right-button menu screenshot visibly identifying `GFA-BASIC 3.5 Block`, Merge/Run screenshots, and three raw `GFATEST:*:PASS` records. These three cases are PASS for that exact candidate and run; this limited smoke set is not complete language conformance. Run this matrix for a combined view. The individual native workflows remain manually dispatchable for focused diagnosis. A green matrix means the configured native jobs and GFATEST collection protocol completed; it is not a claim of complete language conformance.
 
-Run each applicable probe against active native profiles for which the licensed asset and workflow are available. The current native profiles are 3.52 and 3.041U. Keep results separate; never relabel 3.041U as exactly 3.0 or transfer its results to 3.5. Amiga GFA-BASIC 3.5 remains the normative documented target; its identity and the three initial native smoke results have been verified from the retained screenshot and raw result artifact. Broader native conformance remains incomplete.
+For the construct-scoped matrix, a manifest change schedules every exact version declared in that manifest (3.041U, 3.5, and 3.52), not only versions currently believed applicable. This allows the matrix to discover and preserve unsupported syntax, different editor expansion, runtime failure, and unknown behavior. An unavailable licensed asset or harness produces an explicit UNTESTED output for that version. Keep results separate; never relabel 3.041U as exactly 3.0 or transfer its results to 3.5. The 3.52 baseline and 3.5 normative source-language role remain as defined by ADR 0017.
 
 Use these outcomes per probe/version:
 
@@ -61,7 +61,7 @@ The corpus validator does not validate this probe-specific metadata file.
 3. Preserve the documented statement order and control-flow structure unless the test explicitly targets a variation.
 4. Check how the native harness starts the program, assigns drives, captures output, and detects completion. Read the matching workflow and existing passing .LST probes.
 5. Keep the fixture minimal. Add one behavior at a time and write diagnostic values before asserting them.
-6. Where possible, use the same source probe and harness procedure across versions. If syntax or setup must differ, document the reason and keep the test intent equivalent.
+6. Use one shared source probe and the same harness procedure across declared versions wherever possible. If syntax or setup must differ, document the reason and keep the test intent equivalent. Store the observed result separately for each exact version; never put run output back into the construct manifest.
 
 ## Identify the running interpreter version
 

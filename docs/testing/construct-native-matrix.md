@@ -5,10 +5,11 @@ title: "Construct-scoped Amiga GFA-BASIC native matrix"
 
 # Construct-scoped Amiga GFA-BASIC native matrix
 
-The `amiga-construct-matrix.yml` workflow selects changed construct/version pairs from
-`tests/language-constructs/*/manifest.yaml`. Each selected pair is dispatched as a
-separate matrix job through `amiga-reference-matrix.yml`, which calls the matching
-native harness for 3.041U, 3.5, or 3.52.
+The `amiga-construct-matrix.yml` workflow selects construct/version pairs from each
+construct's declarative `manifest.yaml`. Each selected pair is dispatched as a separate
+matrix job through the matching native harness for the exact interpreter version
+(3.041U, 3.5, or 3.52). The manifest is input only; native run records are written to
+`tests/language-constructs/<construct>/results/<version>/`.
 
 ## Selection
 
@@ -16,8 +17,13 @@ native harness for 3.041U, 3.5, or 3.52.
 - Pushes to `main` compare the before and after commits.
 - Manual dispatch supports `validate-only`, `all`, and one `construct` (optionally
   restricted to one exact version).
-- Shared validator/contract changes validate all manifests but do not schedule native
-  interpreter jobs unless a construct directory also changed.
+- A changed construct manifest schedules every exact version declared by that manifest,
+  including versions whose applicability/expectation is unknown or not-applicable.
+  Those fields describe knowledge of behavior, not whether a version is tested.
+- A changed shared probe schedules every version mapped to that probe. A changed
+  version-specific probe schedules only its mapped version.
+- Changes limited to generated result outputs do not schedule native jobs and must not
+  create a self-triggering test loop.
 - The existing `amiga-reference-matrix.yml` workflow remains the whole-suite baseline
   when it is dispatched directly or called without a selected version.
 
@@ -53,9 +59,20 @@ menu, matching version OCR, and a complete GFATEST result for the construct ID.
 or licensed assets, incomplete harness runs, missing results, and uncertain editor
 identity. It is never treated as a pass.
 
+### Durable per-version outputs
+
+Each job writes its own result record under
+`tests/language-constructs/<construct>/results/<version>/`. The record is separate
+from the manifest and captures at least the manifest revision/digest, probe revision
+or digest, exact editor identity evidence, workflow/run URL, harness status,
+conformance status, observed behavior, raw GFATEST output, and references to retained
+diagnostics. Preserve FAIL, DIFFERENT, UNTESTED, and harness-failure observations;
+a negative result is data, not a reason to skip that version. Do not commit commercial
+interpreter binaries, ROMs, disk images, or other licensed payloads.
+
 The aggregate summary is `PASS` only when every reported row is PASS or DIFFERENT;
 any UNTESTED row makes the summary INCOMPLETE, and any FAIL makes it FAIL. Raw GFATEST
-output and editor-identity evidence remain in per-construct/version artifacts.
+output and editor-identity evidence remain in the version output and CI artifacts.
 
 ## Local validation
 
