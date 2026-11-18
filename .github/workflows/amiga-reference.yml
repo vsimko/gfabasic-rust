@@ -46,7 +46,7 @@ jobs:
         run: >-
           python scripts/check_private_github_assets.py --repo vsimko/gfabasic-private-assets --ref main --path "GFA-BASIC v3.52 (1990)(GFA Systemtechnik)(DE)(Disk 1 of 2)[WB].zip"
 
-      - name: Download and extract interpreter from the approved 3.52 Disk 1 archive
+      - name: Download and extract the approved 3.52 disk image
         env:
           GFA_ASSETS_TOKEN: ${{ secrets.GFA_ASSETS_TOKEN }}
         run: |
@@ -75,15 +75,6 @@ jobs:
                   while chunk := source.read(1024 * 1024):
                       target.write(chunk)
           PY
-      
-      - name: Install Java and analysis utilities
-        run: |
-          set -euo pipefail
-          cd analysis-input
-          echo "fd80f6093e8d0163856af5849121e945e37051a2ad2a9053aa1930021783d962  GFABasic" | sha256sum --check
-          test "$(wc -c < GFABasic)" -eq 136548
-          printf '\x00\x00\x03\xf3' | cmp -n 4 - GFABasic
-          file GFABasic || true
 
       - name: Install Java and analysis utilities
         run: |
@@ -99,6 +90,13 @@ jobs:
           xdftool "$RUNNER_TEMP/gfa-basic-3.52-disk1.adf" read GFABasic analysis-input/GFABasic
 
       - name: Verify binary identity and Amiga executable header
+        run: |
+          set -euo pipefail
+          cd analysis-input
+          echo "fd80f6093e8d0163856af5849121e945e37051a2ad2a9053aa1930021783d962  GFABasic" | sha256sum --check
+          test "$(wc -c < GFABasic)" -eq 136548
+          printf '\x00\x00\x03\xf3' | cmp -n 4 - GFABasic
+          file GFABasic || true
 
       - name: Download Ghidra
         run: |
