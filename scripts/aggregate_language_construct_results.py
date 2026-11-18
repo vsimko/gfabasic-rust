@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -51,16 +52,9 @@ def aggregate(selection: dict, root: Path, artifacts: Path, native_allowed: bool
         manifest = yaml.safe_load(manifest_path.read_text(encoding="utf-8"))
         versions = manifest["versions"]
         for version in VERSIONS:
-            applicability = versions[version]["applicability"]
             pair = (construct_id, version)
             artifact = artifacts_by_pair.get(pair)
-            if applicability != "applicable":
-                row = {
-                    "construct_id": construct_id, "version": version,
-                    "harness_status": "not-run", "conformance_status": "UNTESTED",
-                    "reason": f"manifest applicability is {applicability}",
-                }
-            elif pair not in selected:
+            if pair not in selected:
                 row = {
                     "construct_id": construct_id, "version": version,
                     "harness_status": "not-run", "conformance_status": "UNTESTED",
@@ -157,6 +151,8 @@ def main() -> int:
     parser.add_argument("--native-allowed", choices=("true", "false"), default="true")
     parser.add_argument("--unavailable-reason", default="private assets or native workflow are unavailable")
     parser.add_argument("--output", required=True, type=Path)
+    parser.add_argument("--persist-results", action="store_true")
+    parser.add_argument("--run-id")
     args = parser.parse_args()
     try:
         selection = json.loads(args.selection.read_text(encoding="utf-8"))
@@ -164,8 +160,35 @@ def main() -> int:
                            args.unavailable_reason)
     except (OSError, UnicodeDecodeError, json.JSONDecodeError, yaml.YAMLError, KeyError, TypeError, ValueError) as exc:
         parser.exit(2, f"ERROR: cannot aggregate construct results: {exc}\n")
+    if args.persist_results:
+        run_id = args.run_id or os.environ.get("GITHUB_RUN_ID", "local")
+        repository = os.environ.get("GITHUB_REPOSITORY", "")
+        server = os.environ.get("GITHUB_SERVER_URL", "https://github.com")
+        run_url = f"{server}/{repository}/actions/runs/{run_id}" if repository else None
+        for row in result["rows"]:
+            pair = (row["construct_id"], row["version"])
+            if pair not in selected_items:
+                continue
+            construct_dir = args.root.resolve() / "tests/language-constructs" / row["construct_id"]
+            manifest_bytes = (construct_dir / "manifest.yaml").read_bytes()
+            probe_path = row.get("probe") or selected_items[pair].get("probe")
+            probe_bytes = (args.root.resolve() / probe_path).read_bytes() if probe_path else b""
+            record = {
+                "result_schema_version": 1,
+                **row,
+                "run_url": row.get("run_url") or run_url,
+                "manifest_sha256": hashlib.sha256(manifest_bytes).hexdigest(),
+                "probe_sha256": hashlib.sha256(probe_bytes).hexdigest() if probe_bytes else None,
+                "selection": selection.get("selection", "unknown"),
+            }
+            output_dir = construct_dir / "results" / row["version"]
+            output_dir.mkdir(parents=True, exist_ok=True)
+            payload = json.dumps(record, indent=2, sort_keys=True) + "\\n"
+            (output_dir / f"run-{run_id}.json").write_text(payload, encoding="utf-8")
+            (output_dir / "latest.json").write_text(payload, encoding="utf-8")
+
     args.output.parent.mkdir(parents=True, exist_ok=True)
-    args.output.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    args.output.write_text(json.dumps(result, indent=2, sort_keys=True) + "\\n", encoding="utf-8")
     markdown = render_markdown(result)
     print(markdown)
     summary_path = os.environ.get("GITHUB_STEP_SUMMARY")
