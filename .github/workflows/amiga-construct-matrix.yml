@@ -46,7 +46,7 @@ on:
         type: string
         required: false
       version:
-        description: "Optional exact version for mode=construct; all runs every applicable version."
+        description: "Optional exact version for mode=construct; all runs every declared version."
         type: choice
         options: [all, "3.041U", "3.5", "3.52"]
         default: all
