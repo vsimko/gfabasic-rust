@@ -131,13 +131,14 @@ def persist_result_records(result: dict, selection: dict, root: Path, run_id: st
             continue
         construct_dir = root.resolve() / "tests/language-constructs" / row["construct_id"]
         manifest_bytes = (construct_dir / "manifest.yaml").read_bytes()
-        probe_path = row.get("probe") or selected_items[pair].get("probe")
+        probe_path = selected_items[pair].get("probe")
         probe_bytes = (root.resolve() / probe_path).read_bytes() if probe_path else b""
         record = {
             "result_schema_version": 1,
             **row,
             "run_url": row.get("run_url") or run_url,
             "manifest_sha256": hashlib.sha256(manifest_bytes).hexdigest(),
+            "expected_probe": probe_path,
             "probe_sha256": hashlib.sha256(probe_bytes).hexdigest() if probe_bytes else None,
             "selection": selection.get("selection", "unknown"),
             "run_attempt": run_attempt,
