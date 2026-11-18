@@ -53,6 +53,7 @@ versions:
       summary: "A 3.52 native regression run observed FACT(0..2)=1,1,2; this is empirical and is not presented as a separate page-verified 3.52 manual rule."
       evidence_refs: ["fact-native-352"]
     probe: "probe-3.52.LST"
+    probe_reason: "GFA-BASIC 3.52 uses OPEN Output device syntax; older probes use OPEN O."
     implementation:
       status: "not-targeted"
       refs: []
