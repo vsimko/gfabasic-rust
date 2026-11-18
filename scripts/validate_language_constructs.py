@@ -606,7 +606,7 @@ def select_jobs(
         manifest = manifests.get(construct_id)
         if manifest is None:
             return None, [f"unknown construct ID {construct_id!r}"]
-        available = set(_applicable_versions(manifest))
+        available = set(_declared_versions(manifest))
         wanted = set(requested_versions) if requested_versions else available
         invalid = sorted(wanted - available, key=lambda value: SUPPORTED_VERSIONS.index(value) if value in SUPPORTED_VERSIONS else 99)
         if invalid:
@@ -655,7 +655,7 @@ def select_jobs(
                 if relative_in_construct == "results" or relative_in_construct.startswith("results/"):
                     continue
                 if relative_in_construct == "manifest.yaml":
-                    selected.setdefault(item_id, set()).update(_applicable_versions(manifest))
+                    selected.setdefault(item_id, set()).update(_declared_versions(manifest))
                     continue
                 matched_versions = {
                     version
@@ -667,7 +667,7 @@ def select_jobs(
                 if matched_versions:
                     selected.setdefault(item_id, set()).update(matched_versions)
                 else:
-                    selected.setdefault(item_id, set()).update(_applicable_versions(manifest))
+                    selected.setdefault(item_id, set()).update(_declared_versions(manifest))
 
         if errors:
             return None, sorted(errors)
