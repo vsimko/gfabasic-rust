@@ -163,6 +163,7 @@ def main() -> int:
         parser.exit(2, f"ERROR: cannot aggregate construct results: {exc}\n")
     if args.persist_results:
         run_id = args.run_id or os.environ.get("GITHUB_RUN_ID", "local")
+        run_attempt = os.environ.get("GITHUB_RUN_ATTEMPT", "1")
         repository = os.environ.get("GITHUB_REPOSITORY", "")
         server = os.environ.get("GITHUB_SERVER_URL", "https://github.com")
         run_url = f"{server}/{repository}/actions/runs/{run_id}" if repository else None
@@ -181,11 +182,12 @@ def main() -> int:
                 "manifest_sha256": hashlib.sha256(manifest_bytes).hexdigest(),
                 "probe_sha256": hashlib.sha256(probe_bytes).hexdigest() if probe_bytes else None,
                 "selection": selection.get("selection", "unknown"),
+                "run_attempt": run_attempt,
             }
             output_dir = construct_dir / "results" / row["version"]
             output_dir.mkdir(parents=True, exist_ok=True)
             payload = json.dumps(record, indent=2, sort_keys=True) + "\n"
-            (output_dir / f"run-{run_id}.json").write_text(payload, encoding="utf-8")
+            (output_dir / f"run-{run_id}-attempt-{run_attempt}.json").write_text(payload, encoding="utf-8")
             (output_dir / "latest.json").write_text(payload, encoding="utf-8")
 
     args.output.parent.mkdir(parents=True, exist_ok=True)
