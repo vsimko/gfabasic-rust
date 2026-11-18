@@ -9,7 +9,10 @@ import os
 import re
 from pathlib import Path
 
-from validate_gfatest_results import validate_result_bytes
+try:
+    from scripts.validate_gfatest_results import validate_result_bytes
+except ModuleNotFoundError:
+    from validate_gfatest_results import validate_result_bytes
 
 VERSION_PATTERNS = {
     "3.041U": re.compile(r"GFA[ -]?BASIC[\s\S]*3[.]041U", re.IGNORECASE),
