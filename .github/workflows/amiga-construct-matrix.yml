@@ -30,7 +30,9 @@ on:
       - "scripts/aggregate_language_construct_results.py"
       - "scripts/amiga-cli-probe-35.sh"
       - "scripts/amiga-cli-probe-3041u.sh"
-      - "tests/language-constructs/**"
+      - "tests/language-constructs/README.md"
+      - "tests/language-constructs/*/manifest.yaml"
+      - "tests/language-constructs/*/*.LST"
   workflow_dispatch:
     inputs:
       mode:
