@@ -16,8 +16,11 @@ tests/language-constructs/
       3.52/
   mat-one-statement/
     manifest.yaml
-    probe-3.5.LST
-    probe-3.52.LST
+    probe.LST
+    results/
+      3.041U/
+      3.5/
+      3.52/
 ```
 
 A directory name is the stable construct ID. It must match `construct.id` and use lowercase kebab-case. A directory may contain only one semantic construct; use multiple `syntax_forms` only when the forms exercise the same construct. Split constructs with different semantics into separate directories.
