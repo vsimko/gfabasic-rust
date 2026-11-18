@@ -447,8 +447,9 @@ def _load_manifest(path: Path, root: Path, errors: list[str]) -> dict | None:
 
     if len(set(probe_by_version.values())) > 1:
         probe_counts = {probe: list(probe_by_version.values()).count(probe) for probe in set(probe_by_version.values())}
+        max_probe_count = max(probe_counts.values())
         for version, probe in probe_by_version.items():
-            if probe_counts[probe] < len(SUPPORTED_VERSIONS) and not _is_non_empty_string(probe_reason_by_version.get(version)):
+            if (probe_counts[probe] < max_probe_count or max_probe_count == 1) and not _is_non_empty_string(probe_reason_by_version.get(version)):
                 _add_error(errors, root, path, f"versions[{version!r}].probe_reason is required when using a version-specific probe")
 
     construct_dir = path.parent
