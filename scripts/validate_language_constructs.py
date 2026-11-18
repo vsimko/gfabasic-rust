@@ -652,6 +652,8 @@ def select_jobs(
 
                 version_map = manifest["versions"]
                 relative_in_construct = "/".join(parts[3:])
+                if relative_in_construct == "results" or relative_in_construct.startswith("results/"):
+                    continue
                 if relative_in_construct == "manifest.yaml":
                     selected.setdefault(item_id, set()).update(_applicable_versions(manifest))
                     continue
