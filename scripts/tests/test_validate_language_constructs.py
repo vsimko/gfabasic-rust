@@ -61,9 +61,9 @@ class LanguageConstructManifestValidationTests(unittest.TestCase):
 
     def test_unsupported_schema_version_fails(self):
         manifest = self.load_manifest()
-        manifest["manifest_schema_version"] = 2
+        manifest["manifest_schema_version"] = 1
         self.write_manifest(manifest)
-        self.assertTrue(any("must be integer 1" in error for error in validate_language_constructs(self.root)))
+        self.assertTrue(any("must be integer 2" in error for error in validate_language_constructs(self.root)))
 
     def test_unquoted_numeric_version_key_fails(self):
         path = self.manifest_path()
@@ -212,10 +212,10 @@ class LanguageConstructSelectionTests(unittest.TestCase):
         self.assertIsNotNone(result)
         return result
 
-    def test_changed_manifest_selects_only_its_applicable_versions(self):
+    def test_changed_manifest_selects_every_declared_version(self):
         result = self.select(FileChange("M", new_path="tests/language-constructs/fact-function/manifest.yaml"))
         self.assertEqual(result["changed_constructs"], ["fact-function"])
-        self.assertEqual([item["version"] for item in result["include"]], ["3.5", "3.52"])
+        self.assertEqual([item["version"] for item in result["include"]], ["3.041U", "3.5", "3.52"])
 
     def test_changed_probe_selects_only_its_version(self):
         result = self.select(FileChange("M", new_path="tests/language-constructs/fact-function/probe-3.5.LST"))
@@ -265,8 +265,10 @@ class LanguageConstructSelectionTests(unittest.TestCase):
         self.assertEqual(
             [(item["construct_id"], item["version"]) for item in result["include"]],
             [
+                ("fact-function", "3.041U"),
                 ("fact-function", "3.5"),
                 ("fact-function", "3.52"),
+                ("mat-one-statement", "3.041U"),
                 ("mat-one-statement", "3.5"),
                 ("mat-one-statement", "3.52"),
             ],
