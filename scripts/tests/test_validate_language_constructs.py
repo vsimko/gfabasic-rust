@@ -246,7 +246,7 @@ class LanguageConstructSelectionTests(unittest.TestCase):
         )
         self.assertEqual(
             [(item["construct_id"], item["version"]) for item in result["include"]],
-            [("fact-function", "3.5")],
+            [("fact-function", "3.041U"), ("fact-function", "3.5")],
         )
 
     def test_validator_change_does_not_schedule_all_native_jobs(self):
