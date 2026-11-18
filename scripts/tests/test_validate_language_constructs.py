@@ -165,25 +165,12 @@ class LanguageConstructManifestValidationTests(unittest.TestCase):
         self.write_manifest(manifest)
         self.assertTrue(any("references unknown evidence ID" in error for error in validate_language_constructs(self.root)))
 
-    def test_untested_execution_cannot_claim_output(self):
+    def test_manifest_rejects_runtime_execution_field(self):
         manifest = self.load_manifest()
-        manifest["versions"]["3.5"]["execution"]["observed"] = "FACT(0)=1"
-        self.write_manifest(manifest)
-        self.assertTrue(any("must be null when UNTESTED" in error for error in validate_language_constructs(self.root)))
-
-    def test_native_result_requires_source_and_run(self):
-        manifest = self.load_manifest()
-        execution = manifest["versions"]["3.5"]["execution"]
-        execution["status"] = "PASS"
-        execution["observed"] = "PASS"
-        execution["run_url"] = None
-        execution["probe_source"] = None
-        execution["evidence_refs"] = []
+        manifest["versions"]["3.5"]["execution"] = {"status": "PASS"}
         self.write_manifest(manifest)
         errors = validate_language_constructs(self.root)
-        self.assertTrue(any("run_url is required" in error for error in errors))
-        self.assertTrue(any("probe_source is required" in error for error in errors))
-        self.assertTrue(any("must not be empty" in error for error in errors))
+        self.assertTrue(any("execution" in error and "unsupported field" in error for error in errors))
 
     def test_implementation_reference_must_exist(self):
         manifest = self.load_manifest()
