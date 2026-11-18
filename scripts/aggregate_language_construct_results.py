@@ -68,6 +68,7 @@ def aggregate(selection: dict, root: Path, artifacts: Path, native_allowed: bool
                     "construct_id": construct_id, "version": version,
                     "harness_status": "unavailable", "conformance_status": "UNTESTED",
                     "reason": reason,
+                    "probe": selected_items[pair].get("probe"),
                 }
             else:
                 expected_probe = selected_items[pair].get("probe")
@@ -183,12 +184,12 @@ def main() -> int:
             }
             output_dir = construct_dir / "results" / row["version"]
             output_dir.mkdir(parents=True, exist_ok=True)
-            payload = json.dumps(record, indent=2, sort_keys=True) + "\\n"
+            payload = json.dumps(record, indent=2, sort_keys=True) + "\n"
             (output_dir / f"run-{run_id}.json").write_text(payload, encoding="utf-8")
             (output_dir / "latest.json").write_text(payload, encoding="utf-8")
 
     args.output.parent.mkdir(parents=True, exist_ok=True)
-    args.output.write_text(json.dumps(result, indent=2, sort_keys=True) + "\\n", encoding="utf-8")
+    args.output.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     markdown = render_markdown(result)
     print(markdown)
     summary_path = os.environ.get("GITHUB_STEP_SUMMARY")
