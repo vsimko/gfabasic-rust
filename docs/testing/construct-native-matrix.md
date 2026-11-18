@@ -55,16 +55,18 @@ Each construct/version result records two independent dimensions:
 menu, matching version OCR, and a complete GFATEST result for the construct ID.
 `FAIL` is a valid interpreter-emitted failure record from an identified version.
 `DIFFERENT` is an explicit interpreter-emitted, verified version-difference record.
-`UNTESTED` covers unknown/not-applicable versions, skipped jobs, unavailable workflows
-or licensed assets, incomplete harness runs, missing results, and uncertain editor
-identity. It is never treated as a pass.
+`UNTESTED` covers runs that did not produce verified output, including skipped jobs,
+unavailable workflows or licensed assets, incomplete harness runs, missing results,
+and uncertain editor identity—even when the expectation is unknown or not-applicable.
+It is never treated as a pass.
 
 ### Durable per-version outputs
 
-Each job writes its own result record under
-`tests/language-constructs/<construct>/results/<version>/`. The record is separate
-from the manifest and captures at least the manifest revision/digest, probe revision
-or digest, exact editor identity evidence, workflow/run URL, harness status,
+After the matrix jobs finish, the aggregation job writes one result record for each
+selected construct/version under `tests/language-constructs/<construct>/results/<version>/`.
+It stores an immutable `run-<run-id>-attempt-<attempt>.json` record and updates
+`latest.json`. Records are separate from the manifest and capture the manifest and
+probe digests, exact editor identity evidence, workflow/run URL, harness status,
 conformance status, observed behavior, raw GFATEST output, and references to retained
 diagnostics. Preserve FAIL, DIFFERENT, UNTESTED, and harness-failure observations;
 a negative result is data, not a reason to skip that version. Do not commit commercial
