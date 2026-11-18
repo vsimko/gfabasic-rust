@@ -187,8 +187,6 @@ jobs:
 
   summarize:
     name: Aggregate construct/version conformance outcomes
-    permissions:
-      contents: write
     needs: [select, preflight, run-native]
     if: always()
     runs-on: ubuntu-24.04
@@ -228,10 +226,55 @@ jobs:
             --artifacts artifacts/native-results \
             --native-allowed "${NATIVE_ALLOWED:-false}" \
             --unavailable-reason "${NATIVE_REASON:-selection or preflight unavailable}" \
-            --persist-results --run-id "$GITHUB_RUN_ID" \
             --output artifacts/construct-matrix-summary.json
-      - name: Commit durable per-version result records
-        if: always() && needs.preflight.outputs.native_allowed == 'true' && github.actor != 'dependabot[bot]' && (github.event_name != 'pull_request' || (github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.author_association == 'OWNER')) && (github.event_name != 'workflow_dispatch' || (github.ref == 'refs/heads/main' && github.actor == github.repository_owner)) && (github.event_name != 'push' || (github.ref == 'refs/heads/main' && github.actor == github.repository_owner))
+      - name: Upload aggregate summary
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: amiga-construct-matrix-summary-${{ github.run_id }}
+          path: artifacts/construct-matrix-summary.json
+          if-no-files-found: warn
+          retention-days: 14
+
+  persist-results:
+    name: Persist durable per-version result records
+    needs: [select, preflight, run-native]
+    if: always() && needs.preflight.outputs.native_allowed == 'true' && github.actor != 'dependabot[bot]' && (github.event_name != 'pull_request' || (github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.author_association == 'OWNER')) && (github.event_name != 'workflow_dispatch' || (github.ref == 'refs/heads/main' && github.actor == github.repository_owner)) && (github.event_name != 'push' || (github.ref == 'refs/heads/main' && github.actor == github.repository_owner))
+    permissions:
+      contents: write
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0
+        with:
+          python-version: "3.12"
+      - name: Install result aggregator dependency
+        run: python -m pip install PyYAML==6.0.2
+      - name: Download per-construct native artifacts
+        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16
+        continue-on-error: true
+        with:
+          pattern: amiga-construct-*
+          path: artifacts/native-results
+          merge-multiple: false
+      - name: Generate durable result records
+        env:
+          SELECTION_JSON: ${{ needs.select.outputs.selection_json }}
+        run: |
+          set -euo pipefail
+          printf '%s\n' "$SELECTION_JSON" > "$RUNNER_TEMP/selection.json"
+          python scripts/aggregate_language_construct_results.py \
+            --selection "$RUNNER_TEMP/selection.json" \
+            --artifacts artifacts/native-results \
+            --native-allowed true \
+            --unavailable-reason "native result artifact unavailable" \
+            --persist-results --run-id "$GITHUB_RUN_ID" \
+            --output "$RUNNER_TEMP/construct-matrix-summary.json" || test "$?" -eq 1
+      - name: Commit result records
         env:
           TARGET_BRANCH: ${{ github.event.pull_request.head.ref || github.ref_name }}
           EXPECTED_BRANCH_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
@@ -251,11 +294,3 @@ jobs:
           fi
           git commit -m "test: record construct matrix run ${GITHUB_RUN_ID}"
           git push origin "HEAD:${TARGET_BRANCH}"
-      - name: Upload aggregate summary
-        if: always()
-        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
-        with:
-          name: amiga-construct-matrix-summary-${{ github.run_id }}
-          path: artifacts/construct-matrix-summary.json
-          if-no-files-found: warn
-          retention-days: 14
