@@ -1,4 +1,4 @@
-manifest_schema_version: 1
+manifest_schema_version: 2
 construct:
   id: "fact-function"
   kind: "function"
@@ -29,13 +29,7 @@ versions:
       status: "unknown"
       summary: "No version-scoped FACT expectation has been established for 3.041U."
       evidence_refs: []
-    probe: null
-    execution:
-      status: "UNTESTED"
-      observed: null
-      run_url: null
-      probe_source: null
-      evidence_refs: []
+    probe: "probe-3.5.LST"
     implementation:
       status: "not-targeted"
       refs: []
@@ -46,12 +40,6 @@ versions:
       summary: "FACT(0)=1, FACT(1)=1, and FACT(2)=2 according to the 3.5 addendum."
       evidence_refs: ["fact-manual-35"]
     probe: "probe-3.5.LST"
-    execution:
-      status: "UNTESTED"
-      observed: null
-      run_url: null
-      probe_source: null
-      evidence_refs: []
     implementation:
       status: "prototype"
       refs:
@@ -65,12 +53,6 @@ versions:
       summary: "A 3.52 native regression run observed FACT(0..2)=1,1,2; this is empirical and is not presented as a separate page-verified 3.52 manual rule."
       evidence_refs: ["fact-native-352"]
     probe: "probe-3.52.LST"
-    execution:
-      status: "PASS"
-      observed: "FACT(0..2)=1,1,2; GFATEST:fact-zero:PASS."
-      run_url: "https://github.com/vsimko/gfabasic-rust/actions/runs/44188927520"
-      probe_source: "tests/interpreter-probes/amiga-3.52/regression-suite.LST"
-      evidence_refs: ["fact-native-352"]
     implementation:
       status: "not-targeted"
       refs: []
