@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="The amiga-construct-matrix.yml workflow selects changed construct/version pairs from tests/language-constructs//manifest.yaml. Each selected pair is dispatched as a separate matrix job through amiga-reference-matrix.y…">
+  <meta name="description" content="The amiga-construct-matrix.yml workflow selects construct/version pairs from each construct&#x27;s declarative manifest.yaml. Each selected pair is dispatched as a separate matrix job through the matching native harness fo…">
   <title>Construct-scoped Amiga GFA-BASIC native matrix · GFA BASIC Rust documentation</title>
   <link rel="stylesheet" href="../../styles.css">
 </head>
@@ -20,18 +20,24 @@
         <h1>Construct-scoped Amiga GFA-BASIC native matrix</h1>
         <p class="docs-meta"><span>Testing Guide</span></p>
         <h1 id="construct-scoped-amiga-gfa-basic-native-matrix">Construct-scoped Amiga GFA-BASIC native matrix</h1>
-<p>The <code>amiga-construct-matrix.yml</code> workflow selects changed construct/version pairs from
-<code>tests/language-constructs/*/manifest.yaml</code>. Each selected pair is dispatched as a
-separate matrix job through <code>amiga-reference-matrix.yml</code>, which calls the matching
-native harness for 3.041U, 3.5, or 3.52.</p>
+<p>The <code>amiga-construct-matrix.yml</code> workflow selects construct/version pairs from each
+construct's declarative <code>manifest.yaml</code>. Each selected pair is dispatched as a separate
+matrix job through the matching native harness for the exact interpreter version
+(3.041U, 3.5, or 3.52). The manifest is input only; native run records are written to
+<code>tests/language-constructs/&lt;construct&gt;/results/&lt;version&gt;/</code>.</p>
 <h2 id="selection">Selection</h2>
 <ul>
 <li>Pull requests compare the PR base and head with the repository selector.</li>
 <li>Pushes to <code>main</code> compare the before and after commits.</li>
 <li>Manual dispatch supports <code>validate-only</code>, <code>all</code>, and one <code>construct</code> (optionally
 restricted to one exact version).</li>
-<li>Shared validator/contract changes validate all manifests but do not schedule native
-interpreter jobs unless a construct directory also changed.</li>
+<li>A changed construct manifest schedules every exact version declared by that manifest,
+including versions whose applicability/expectation is unknown or not-applicable.
+Those fields describe knowledge of behavior, not whether a version is tested.</li>
+<li>A changed shared probe schedules every version mapped to that probe. A changed
+version-specific probe schedules only its mapped version.</li>
+<li>Changes limited to generated result outputs do not schedule native jobs and must not
+create a self-triggering test loop.</li>
 <li>The existing <code>amiga-reference-matrix.yml</code> workflow remains the whole-suite baseline
 when it is dispatched directly or called without a selected version.</li>
 </ul>
@@ -61,9 +67,18 @@ menu, matching version OCR, and a complete GFATEST result for the construct ID.
 <code>UNTESTED</code> covers unknown/not-applicable versions, skipped jobs, unavailable workflows
 or licensed assets, incomplete harness runs, missing results, and uncertain editor
 identity. It is never treated as a pass.</p>
+<h3 id="durable-per-version-outputs">Durable per-version outputs</h3>
+<p>Each job writes its own result record under
+<code>tests/language-constructs/&lt;construct&gt;/results/&lt;version&gt;/</code>. The record is separate
+from the manifest and captures at least the manifest revision/digest, probe revision
+or digest, exact editor identity evidence, workflow/run URL, harness status,
+conformance status, observed behavior, raw GFATEST output, and references to retained
+diagnostics. Preserve FAIL, DIFFERENT, UNTESTED, and harness-failure observations;
+a negative result is data, not a reason to skip that version. Do not commit commercial
+interpreter binaries, ROMs, disk images, or other licensed payloads.</p>
 <p>The aggregate summary is <code>PASS</code> only when every reported row is PASS or DIFFERENT;
 any UNTESTED row makes the summary INCOMPLETE, and any FAIL makes it FAIL. Raw GFATEST
-output and editor-identity evidence remain in per-construct/version artifacts.</p>
+output and editor-identity evidence remain in the version output and CI artifacts.</p>
 <h2 id="local-validation">Local validation</h2>
 <pre><code class="language-sh">python scripts/validate_language_constructs.py validate
 python -m unittest discover -s scripts/tests -p 'test_*.py'
