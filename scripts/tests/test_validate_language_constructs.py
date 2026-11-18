@@ -206,7 +206,7 @@ class LanguageConstructSelectionTests(unittest.TestCase):
 
     def test_changed_probe_selects_only_its_version(self):
         result = self.select(FileChange("M", new_path="tests/language-constructs/fact-function/probe-3.5.LST"))
-        self.assertEqual([(item["construct_id"], item["version"]) for item in result["include"]], [("fact-function", "3.5")])
+        self.assertEqual([(item["construct_id"], item["version"]) for item in result["include"]], [("fact-function", "3.041U"), ("fact-function", "3.5")])
 
     def test_shared_schema_change_validates_all_but_schedules_no_native_jobs(self):
         result = self.select(FileChange("M", new_path="tests/language-constructs/README.md"))
@@ -310,8 +310,10 @@ class LanguageConstructSelectionTests(unittest.TestCase):
         self.assertEqual(
             [(item["construct_id"], item["version"]) for item in result["include"]],
             [
+                ("fact-function", "3.041U"),
                 ("fact-function", "3.5"),
                 ("fact-function", "3.52"),
+                ("mat-one-statement", "3.041U"),
                 ("mat-one-statement", "3.5"),
                 ("mat-one-statement", "3.52"),
             ],
