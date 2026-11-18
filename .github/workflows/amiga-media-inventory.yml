@@ -66,6 +66,12 @@ jobs:
             sha256sum "media/archives/$label.zip" | cut -d' ' -f1 >> artifacts/amiga-media-inventory/archive-sha256.txt
             mkdir -p "media/extracted/$label"
             unzip -q "media/archives/$label.zip" -d "media/extracted/$label"
+            ADF_COUNT="$(find "media/extracted/$label" -type f -iname '*.adf' | wc -l)"
+            test "$ADF_COUNT" -eq 1 || {
+              echo "Expected exactly one ADF in $filename; found $ADF_COUNT"
+              find "media/extracted/$label" -type f -printf '%P\n'
+              exit 1
+            }
             {
               echo "## $label — $filename"
               echo
