@@ -56,7 +56,7 @@ ROOT_SHARED_PATHS = {
 TOP_LEVEL_FIELDS = {"manifest_schema_version", "construct", "evidence", "versions"}
 CONSTRUCT_FIELDS = {"id", "kind", "name", "summary", "syntax_forms"}
 EVIDENCE_FIELDS = {"id", "source_id", "location", "kind", "status", "claim", "url"}
-VERSION_FIELDS = {"applicability", "expectation", "probe", "implementation"}
+VERSION_FIELDS = {"applicability", "expectation", "probe", "probe_reason", "implementation"}
 EXPECTATION_FIELDS = {"status", "summary", "evidence_refs"}
 IMPLEMENTATION_FIELDS = {"status", "refs"}
 SYNTAX_FORM_FIELDS = {"text", "versions"}
@@ -341,13 +341,15 @@ def _load_manifest(path: Path, root: Path, errors: list[str]) -> dict | None:
 
     referenced_probes: set[Path] = set()
     applicability_by_version: dict[str, str] = {}
+    probe_by_version: dict[str, str] = {}
+    probe_reason_by_version: dict[str, str | None] = {}
     for version in SUPPORTED_VERSIONS:
         if version not in versions:
             continue
         entry = versions[version]
         label = f"versions[{version!r}]"
         if not _check_mapping_fields(
-            entry, VERSION_FIELDS, VERSION_FIELDS, errors, root, path, label
+            entry, VERSION_FIELDS - {"probe_reason"}, VERSION_FIELDS, errors, root, path, label
         ):
             continue
 
@@ -391,6 +393,12 @@ def _load_manifest(path: Path, root: Path, errors: list[str]) -> dict | None:
                 _add_error(errors, root, path, f"{label} applicable version cannot have a not-applicable expectation")
 
         probe = entry.get("probe")
+        probe_reason = entry.get("probe_reason")
+        if probe_reason is not None and not _is_non_empty_string(probe_reason):
+            _add_error(errors, root, path, f"{label}.probe_reason must be a non-empty string when present")
+        probe_reason_by_version[version] = probe_reason
+        if isinstance(probe, str):
+            probe_by_version[version] = probe
         if probe is None:
             _add_error(errors, root, path, f"{label}.probe is required for every declared version")
         else:
@@ -436,6 +444,12 @@ def _load_manifest(path: Path, root: Path, errors: list[str]) -> dict | None:
                     manifest_path=path,
                     label=f"{label}.implementation.refs entry",
                 )
+
+    if len(set(probe_by_version.values())) > 1:
+        probe_counts = {probe: list(probe_by_version.values()).count(probe) for probe in set(probe_by_version.values())}
+        for version, probe in probe_by_version.items():
+            if probe_counts[probe] < len(SUPPORTED_VERSIONS) and not _is_non_empty_string(probe_reason_by_version.get(version)):
+                _add_error(errors, root, path, f"versions[{version!r}].probe_reason is required when using a version-specific probe")
 
     construct_dir = path.parent
     for item in sorted(construct_dir.rglob("*")):
