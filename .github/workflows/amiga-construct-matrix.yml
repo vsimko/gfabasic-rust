@@ -228,6 +228,7 @@ jobs:
             --artifacts artifacts/native-results \
             --native-allowed "${NATIVE_ALLOWED:-false}" \
             --unavailable-reason "${NATIVE_REASON:-selection or preflight unavailable}" \
+            --persist-results --run-id "$GITHUB_RUN_ID" \
             --output artifacts/construct-matrix-summary.json
       - name: Commit durable per-version result records
         if: always() && needs.preflight.outputs.native_allowed == 'true' && github.actor != 'dependabot[bot]' && (github.event_name != 'pull_request' || (github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.author_association == 'OWNER')) && (github.event_name != 'workflow_dispatch' || (github.ref == 'refs/heads/main' && github.actor == github.repository_owner)) && (github.event_name != 'push' || (github.ref == 'refs/heads/main' && github.actor == github.repository_owner))
