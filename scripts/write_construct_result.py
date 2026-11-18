@@ -80,7 +80,10 @@ def build_result(args: argparse.Namespace) -> dict:
         "harness_status": harness_status,
         "conformance_status": status,
         "reason": reason or None,
+        "observed": "; ".join(f"{key}={value}" for key, value in sorted(outcomes.items())) or None,
         "outcomes": outcomes,
+        "gfatest": outcomes,
+        "diagnostic_refs": [str(path) for path in (result_path, screenshot, ocr_path) if path.is_file()],
         "editor_identity": {
             "expected_version": args.version,
             "screenshot": str(screenshot),
