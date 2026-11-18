@@ -120,6 +120,39 @@ def aggregate(selection: dict, root: Path, artifacts: Path, native_allowed: bool
     }
 
 
+def persist_result_records(result: dict, selection: dict, root: Path, run_id: str, run_attempt: str, run_url: str | None = None) -> None:
+    selected_items = {
+        (item.get("construct_id"), item.get("version")): item
+        for item in selection.get("include", []) if isinstance(item, dict)
+    }
+        run_id = args.run_id or os.environ.get("GITHUB_RUN_ID", "local")
+        run_attempt = os.environ.get("GITHUB_RUN_ATTEMPT", "1")
+        repository = os.environ.get("GITHUB_REPOSITORY", "")
+        server = os.environ.get("GITHUB_SERVER_URL", "https://github.com")
+        run_url = f"{server}/{repository}/actions/runs/{run_id}" if repository else None
+        for row in result["rows"]:
+            pair = (row["construct_id"], row["version"])
+            if pair not in selected_items:
+                continue
+            construct_dir = root.resolve() / "tests/language-constructs" / row["construct_id"]
+            manifest_bytes = (construct_dir / "manifest.yaml").read_bytes()
+            probe_path = row.get("probe") or selected_items[pair].get("probe")
+            probe_bytes = (root.resolve() / probe_path).read_bytes() if probe_path else b""
+            record = {
+                "result_schema_version": 1,
+                **row,
+                "run_url": row.get("run_url") or run_url,
+                "manifest_sha256": hashlib.sha256(manifest_bytes).hexdigest(),
+                "probe_sha256": hashlib.sha256(probe_bytes).hexdigest() if probe_bytes else None,
+                "selection": selection.get("selection", "unknown"),
+                "run_attempt": run_attempt,
+            }
+            output_dir = construct_dir / "results" / row["version"]
+            output_dir.mkdir(parents=True, exist_ok=True)
+            payload = json.dumps(record, indent=2, sort_keys=True) + "\n"
+            (output_dir / f"run-{run_id}-attempt-{run_attempt}.json").write_text(payload, encoding="utf-8")
+            (output_dir / "latest.json").write_text(payload, encoding="utf-8")
+
 def render_markdown(result: dict) -> str:
     lines = [
         "## Amiga GFA-BASIC construct matrix",
@@ -167,28 +200,7 @@ def main() -> int:
         repository = os.environ.get("GITHUB_REPOSITORY", "")
         server = os.environ.get("GITHUB_SERVER_URL", "https://github.com")
         run_url = f"{server}/{repository}/actions/runs/{run_id}" if repository else None
-        for row in result["rows"]:
-            pair = (row["construct_id"], row["version"])
-            if pair not in selected_items:
-                continue
-            construct_dir = args.root.resolve() / "tests/language-constructs" / row["construct_id"]
-            manifest_bytes = (construct_dir / "manifest.yaml").read_bytes()
-            probe_path = row.get("probe") or selected_items[pair].get("probe")
-            probe_bytes = (args.root.resolve() / probe_path).read_bytes() if probe_path else b""
-            record = {
-                "result_schema_version": 1,
-                **row,
-                "run_url": row.get("run_url") or run_url,
-                "manifest_sha256": hashlib.sha256(manifest_bytes).hexdigest(),
-                "probe_sha256": hashlib.sha256(probe_bytes).hexdigest() if probe_bytes else None,
-                "selection": selection.get("selection", "unknown"),
-                "run_attempt": run_attempt,
-            }
-            output_dir = construct_dir / "results" / row["version"]
-            output_dir.mkdir(parents=True, exist_ok=True)
-            payload = json.dumps(record, indent=2, sort_keys=True) + "\n"
-            (output_dir / f"run-{run_id}-attempt-{run_attempt}.json").write_text(payload, encoding="utf-8")
-            (output_dir / "latest.json").write_text(payload, encoding="utf-8")
+        persist_result_records(result, selection, args.root.resolve(), run_id, run_attempt, run_url)
 
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8")
