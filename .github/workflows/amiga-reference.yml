@@ -21,13 +21,13 @@ jobs:
       - name: Check out analysis scripts
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
 
-      - name: Preflight private interpreter asset path
+      - name: Preflight private interpreter archive path
         env:
           GFA_ASSETS_TOKEN: ${{ secrets.GFA_ASSETS_TOKEN }}
         run: >-
-          python scripts/check_private_github_assets.py --repo vsimko/gfabasic-private-assets --ref main --path GFABasic
+          python scripts/check_private_github_assets.py --repo vsimko/gfabasic-private-assets --ref main --path "GFA-BASIC v3.52 (1990)(GFA Systemtechnik)(DE)(Disk 1 of 2)[WB].zip"
 
-      - name: Download private interpreter binary
+      - name: Download and extract interpreter from the approved 3.52 Disk 1 archive
         env:
           GFA_ASSETS_TOKEN: ${{ secrets.GFA_ASSETS_TOKEN }}
         run: |
@@ -37,11 +37,27 @@ jobs:
             exit 1
           }
           mkdir -p analysis-input analysis-output
+          ARCHIVE_NAME='GFA-BASIC v3.52 (1990)(GFA Systemtechnik)(DE)(Disk 1 of 2)[WB].zip'
+          ARCHIVE_PATH_ENCODED="$(python3 -c 'import sys,urllib.parse; print(urllib.parse.quote(sys.argv[1], safe=""))' "$ARCHIVE_NAME")"
           curl --fail --silent --show-error --location --retry 3 \
             --header "Authorization: Bearer $GFA_ASSETS_TOKEN" \
             --header "Accept: application/vnd.github.raw" \
-            "https://api.github.com/repos/vsimko/gfabasic-private-assets/contents/GFABasic?ref=main" \
-            --output analysis-input/GFABasic
+            "https://api.github.com/repos/vsimko/gfabasic-private-assets/contents/$ARCHIVE_PATH_ENCODED?ref=main" \
+            --output "$RUNNER_TEMP/gfa-basic-3.52-disk1.zip"
+          python3 - "$RUNNER_TEMP/gfa-basic-3.52-disk1.zip" "$RUNNER_TEMP/gfa-basic-3.52-disk1.adf" <<'PY'
+          import sys
+          import zipfile
+
+          with zipfile.ZipFile(sys.argv[1]) as archive:
+              members = [name for name in archive.namelist() if name.lower().endswith(".adf")]
+              if len(members) != 1:
+                  raise SystemExit(f"Expected exactly one ADF in approved archive; found {len(members)}")
+              with archive.open(members[0]) as source, open(sys.argv[2], "wb") as target:
+                  while chunk := source.read(1024 * 1024):
+                      target.write(chunk)
+          PY
+          python3 -m pip install --break-system-packages amitools
+          xdftool "$RUNNER_TEMP/gfa-basic-3.52-disk1.adf" read GFABasic analysis-input/GFABasic
 
       - name: Verify binary identity and Amiga executable header
         run: |
