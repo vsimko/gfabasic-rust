@@ -24,8 +24,8 @@ jobs:
           test -n "$GFA_ASSETS_TOKEN"
           mkdir -p media/{archives,extracted} artifacts/amiga-media-inventory
           cat > "$RUNNER_TEMP/media.tsv" <<'EOF'
-          3.5U|GFA-BASIC v3.5U (1990)(GFA Systemtechnik)(DE)(Disk 1 of 2)[b corrupt files][WB].zip
-          3.041|GFA-BASIC v3.041 (1989-08-31)(GFA Systemtechnik).zip
+          3.5|GFA Basic Editor 3.5.zip
+          3.041u|GFA-BASIC v3.041 (1989-08-31)(GFA Systemtechnik).zip
           3.52-disk1|GFA-BASIC v3.52 (1990)(GFA Systemtechnik)(DE)(Disk 1 of 2)[WB].zip
           3.52-disk2|GFA-BASIC v3.52 (1990)(GFA Systemtechnik)(DE)(Disk 2 of 2).zip
           EOF
@@ -87,10 +87,13 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p artifacts/amiga-media-inventory/executable-fingerprints
-          ADF_35U="$(find media/extracted/3.5U -type f -iname '*.adf' -print -quit)"
-          ADF_3041="$(find media/extracted/3.041 -type f -iname '*.adf' -print -quit)"
+          ADF_35="$(find media/extracted/3.5 -type f -iname '*.adf' -print -quit)"
+          ADF_3041U="$(find media/extracted/3.041u -type f -iname '*.adf' -print -quit)"
           ADF_352_1="$(find media/extracted/3.52-disk1 -type f -iname '*.adf' -print -quit)"
           ADF_352_2="$(find media/extracted/3.52-disk2 -type f -iname '*.adf' -print -quit)"
+          for image in "$ADF_35" "$ADF_3041U" "$ADF_352_1" "$ADF_352_2"; do
+            test -n "$image" || { echo "Expected one ADF for every configured media label"; exit 1; }
+          done
 
           extract_and_report() {
             local label="$1" image="$2" amiga_path="$3"
@@ -112,18 +115,16 @@ jobs:
             } >> artifacts/amiga-media-inventory/executable-fingerprints/REPORT.txt
           }
 
-          extract_and_report "gfabasic-3.5u" "$ADF_35U" "GFABasic"
-          extract_and_report "gfabasro-3.5u" "$ADF_35U" "GFABasRo"
-          extract_and_report "gfa-bcom-3.5u" "$ADF_35U" "GFA_BCOM"
-          extract_and_report "gfabasic-3.041" "$ADF_3041" "gfabasic"
-          extract_and_report "gfabasro-3.041" "$ADF_3041" "gfabasro"
+          extract_and_report "gfabasic-3.5" "$ADF_35" "gfabasic"
+          extract_and_report "gfabasic-3.041u" "$ADF_3041U" "gfabasic"
+          extract_and_report "gfabasro-3.041u" "$ADF_3041U" "gfabasro"
           extract_and_report "gfabasic-3.52" "$ADF_352_1" "GFABasic"
           extract_and_report "gfabasro-3.52" "$ADF_352_1" "GFABasRo"
           extract_and_report "gfa-bcom-3.52" "$ADF_352_2" "GFA_BCOM"
 
           # Record short identity-bearing documentation excerpts, not full manuals.
-          xdftool "$ADF_35U" type readme.gfa > "$RUNNER_TEMP/readme-3.5u.txt" || true
-          xdftool "$ADF_3041" type README.GFA > "$RUNNER_TEMP/readme-3.041.txt" || true
+          xdftool "$ADF_35" type readme.gfa > "$RUNNER_TEMP/readme-3.5.txt" || true
+          xdftool "$ADF_3041U" type README.GFA > "$RUNNER_TEMP/readme-3.041u.txt" || true
           xdftool "$ADF_352_1" type README3.5.GFA > "$RUNNER_TEMP/readme-3.52-3.5.txt" || true
           for readme in "$RUNNER_TEMP"/readme-*.txt; do
             {
@@ -141,22 +142,3 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 
-  cleanup-legacy-artifact:
-    name: Remove legacy artifact with extracted executables
-    if: github.ref == 'refs/heads/main'
-    needs: inspect-private-media
-    runs-on: ubuntu-24.04
-    permissions:
-      actions: write
-      contents: read
-    steps:
-      - name: Remove earlier artifact containing extracted executable files
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          artifact_api="repos/$GITHUB_REPOSITORY/actions/artifacts/14019035686"
-          if gh api "$artifact_api" >/dev/null 2>&1; then
-            gh api --silent --method DELETE "$artifact_api"
-          else
-            echo "The earlier artifact is already absent."
-          fi
