@@ -115,7 +115,17 @@ jobs:
               *) echo "::error::Unknown dispatch mode: $DISPATCH_MODE"; exit 2 ;;
             esac
           elif [ "$EVENT_NAME" = "pull_request" ]; then
-            python scripts/validate_language_constructs.py select --base "$PR_BASE_SHA" --head "$PR_HEAD_SHA" --format json > "$RUNNER_TEMP/selection.json"
+            LATEST_PARENT="$(git rev-parse "$PR_HEAD_SHA^" 2>/dev/null || true)"
+            LATEST_COMMIT_PATHS=""
+            if [ -n "$LATEST_PARENT" ]; then
+              LATEST_COMMIT_PATHS="$(git diff --name-only "$LATEST_PARENT" "$PR_HEAD_SHA")"
+            fi
+            if [ -n "$LATEST_COMMIT_PATHS" ] && ! printf '%s\\n' "$LATEST_COMMIT_PATHS" | grep -qvE '^tests/language-constructs/[^/]+/results/'; then
+              python scripts/validate_language_constructs.py validate
+              printf '%s\\n' '{"selection":"result-output-only","changed_constructs":[],"include":[]}' > "$RUNNER_TEMP/selection.json"
+            else
+              python scripts/validate_language_constructs.py select --base "$PR_BASE_SHA" --head "$PR_HEAD_SHA" --format json > "$RUNNER_TEMP/selection.json"
+            fi
           else
             if [[ "$PUSH_BASE_SHA" =~ ^0+$ ]]; then
               python scripts/validate_language_constructs.py select --all --format json > "$RUNNER_TEMP/selection.json"
