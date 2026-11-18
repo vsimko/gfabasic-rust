@@ -75,10 +75,8 @@ jobs:
                   while chunk := source.read(1024 * 1024):
                       target.write(chunk)
           PY
-          python3 -m pip install --cache-dir "$HOME/.cache/pip" --break-system-packages amitools
-          xdftool "$RUNNER_TEMP/gfa-basic-3.52-disk1.adf" read GFABasic analysis-input/GFABasic
-
-      - name: Verify binary identity and Amiga executable header
+      
+      - name: Install Java and analysis utilities
         run: |
           set -euo pipefail
           cd analysis-input
@@ -92,7 +90,15 @@ jobs:
           set -euo pipefail
           sudo apt-get update
           sudo apt-get install --yes -o Dir::Cache::archives="$RUNNER_TEMP/apt-archives/" openjdk-21-jdk unzip jq python3 python3-pip
+          python3 -m pip install --cache-dir "$HOME/.cache/pip" --break-system-packages amitools
           java -version
+
+      - name: Extract interpreter from the approved 3.52 ADF
+        run: |
+          set -euo pipefail
+          xdftool "$RUNNER_TEMP/gfa-basic-3.52-disk1.adf" read GFABasic analysis-input/GFABasic
+
+      - name: Verify binary identity and Amiga executable header
 
       - name: Download Ghidra
         run: |
