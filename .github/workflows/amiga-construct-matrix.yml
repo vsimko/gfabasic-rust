@@ -123,6 +123,7 @@ jobs:
               python scripts/validate_language_constructs.py select --base "$PUSH_BASE_SHA" --head "$PUSH_HEAD_SHA" --format json > "$RUNNER_TEMP/selection.json"
             fi
           fi
+          cat "$RUNNER_TEMP/selection.json"
           MATRIX="$(jq -c '{include: .include}' "$RUNNER_TEMP/selection.json")"
           SELECTION_JSON="$(jq -c . "$RUNNER_TEMP/selection.json")"
           HAS_JOBS="$(jq -r '.include | length > 0' "$RUNNER_TEMP/selection.json")"
