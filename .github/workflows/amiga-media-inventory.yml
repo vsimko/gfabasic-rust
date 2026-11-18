@@ -16,6 +16,25 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
 
+      - name: Cache Amiga inventory apt archives
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+        with:
+          path: ${{ runner.temp }}/apt-archives
+          key: ${{ runner.os }}-ubuntu-24.04-amiga-inventory-apt-${{ hashFiles('.github/workflows/amiga-media-inventory.yml') }}
+          restore-keys: |
+            ${{ runner.os }}-ubuntu-24.04-amiga-inventory-apt-
+
+      - name: Cache Python wheels
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-python-amiga-inventory-pip-v1
+          restore-keys: |
+            ${{ runner.os }}-python-amiga-inventory-pip-
+
+      - name: Prepare dependency cache directories
+        run: mkdir -p "$RUNNER_TEMP/apt-archives/partial" "$HOME/.cache/pip"
+
       - name: Download and inventory private ZIP archives
         env:
           GFA_ASSETS_TOKEN: ${{ secrets.GFA_ASSETS_TOKEN }}
@@ -33,8 +52,8 @@ jobs:
           python scripts/check_private_github_assets.py --repo vsimko/gfabasic-private-assets --ref main --manifest "$RUNNER_TEMP/media.tsv"
 
           sudo apt-get update
-          sudo apt-get install -y --no-install-recommends unzip file
-          python3 -m pip install --break-system-packages amitools
+          sudo apt-get install -y --no-install-recommends -o Dir::Cache::archives="$RUNNER_TEMP/apt-archives/" unzip file
+          python3 -m pip install --cache-dir "$HOME/.cache/pip" --break-system-packages amitools
 
           while IFS='|' read -r label filename; do
             encoded="$(python3 -c 'import sys,urllib.parse; print(urllib.parse.quote(sys.argv[1], safe=""))' "$filename")"
