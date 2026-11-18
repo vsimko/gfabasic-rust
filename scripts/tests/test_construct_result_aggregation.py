@@ -93,12 +93,14 @@ class ConstructResultTests(unittest.TestCase):
     def test_aggregate_reports_all_versions_and_separates_harness(self):
         self.make_catalogue()
         artifacts = self.root / "artifacts"
+        self.write_artifact(artifacts, "3.041U", "DIFFERENT")
         self.write_artifact(artifacts, "3.5", "PASS")
         self.write_artifact(artifacts, "3.52", "DIFFERENT")
         selection = {
             "selection": "changed",
             "changed_constructs": ["fact-function"],
             "include": [
+                {"construct_id": "fact-function", "version": "3.041U", "probe": "probe-3.041U.LST"},
                 {"construct_id": "fact-function", "version": "3.5", "probe": "probe-3.5.LST"},
                 {"construct_id": "fact-function", "version": "3.52", "probe": "probe-3.52.LST"},
             ],
@@ -107,8 +109,8 @@ class ConstructResultTests(unittest.TestCase):
         rows = {row["version"]: row for row in result["rows"]}
         self.assertEqual(rows["3.5"]["conformance_status"], "PASS")
         self.assertEqual(rows["3.52"]["conformance_status"], "DIFFERENT")
-        self.assertEqual(rows["3.041U"]["conformance_status"], "UNTESTED")
-        self.assertEqual(result["summary_status"], "INCOMPLETE")
+        self.assertEqual(rows["3.041U"]["conformance_status"], "DIFFERENT")
+        self.assertEqual(result["summary_status"], "PASS")
 
     def test_missing_private_assets_are_untested_not_pass(self):
         self.make_catalogue()
