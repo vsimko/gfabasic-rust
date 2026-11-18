@@ -172,6 +172,19 @@ class LanguageConstructManifestValidationTests(unittest.TestCase):
         errors = validate_language_constructs(self.root)
         self.assertTrue(any("execution" in error and "unsupported field" in error for error in errors))
 
+    def test_version_specific_probe_requires_reason(self):
+        manifest = self.load_manifest()
+        manifest["versions"]["3.52"].pop("probe_reason", None)
+        self.write_manifest(manifest)
+        errors = validate_language_constructs(self.root)
+        self.assertTrue(any("probe_reason is required" in error for error in errors))
+
+    def test_result_output_files_are_allowed(self):
+        result = self.root / "tests/language-constructs/fact-function/results/3.5/latest.json"
+        result.parent.mkdir(parents=True)
+        result.write_text("{}\n", encoding="utf-8")
+        self.assertEqual(validate_language_constructs(self.root), [])
+
     def test_implementation_reference_must_exist(self):
         manifest = self.load_manifest()
         manifest["versions"]["3.5"]["implementation"]["refs"] = ["crates/missing.rs"]
