@@ -38,7 +38,6 @@ EVIDENCE_STATUSES = {
 }
 EXPECTATION_STATUSES = {"documented", "observed", "unknown", "not-applicable"}
 APPLICABILITY = {"applicable", "not-applicable", "unknown"}
-EXECUTION_STATUSES = {"PASS", "FAIL", "DIFFERENT", "UNTESTED"}
 IMPLEMENTATION_STATUSES = {
     "not-targeted",
     "not-started",
@@ -57,9 +56,8 @@ ROOT_SHARED_PATHS = {
 TOP_LEVEL_FIELDS = {"manifest_schema_version", "construct", "evidence", "versions"}
 CONSTRUCT_FIELDS = {"id", "kind", "name", "summary", "syntax_forms"}
 EVIDENCE_FIELDS = {"id", "source_id", "location", "kind", "status", "claim", "url"}
-VERSION_FIELDS = {"applicability", "expectation", "probe", "execution", "implementation"}
+VERSION_FIELDS = {"applicability", "expectation", "probe", "implementation"}
 EXPECTATION_FIELDS = {"status", "summary", "evidence_refs"}
-EXECUTION_FIELDS = {"status", "observed", "run_url", "probe_source", "evidence_refs"}
 IMPLEMENTATION_FIELDS = {"status", "refs"}
 SYNTAX_FORM_FIELDS = {"text", "versions"}
 
@@ -249,8 +247,8 @@ def _load_manifest(path: Path, root: Path, errors: list[str]) -> dict | None:
         manifest, TOP_LEVEL_FIELDS, TOP_LEVEL_FIELDS, errors, root, path, "manifest"
     ):
         return None
-    if type(manifest.get("manifest_schema_version")) is not int or manifest.get("manifest_schema_version") != 1:
-        _add_error(errors, root, path, "manifest_schema_version must be integer 1")
+    if type(manifest.get("manifest_schema_version")) is not int or manifest.get("manifest_schema_version") != 2:
+        _add_error(errors, root, path, "manifest_schema_version must be integer 2")
 
     construct = manifest.get("construct")
     if not _check_mapping_fields(
@@ -393,66 +391,15 @@ def _load_manifest(path: Path, root: Path, errors: list[str]) -> dict | None:
                 _add_error(errors, root, path, f"{label} applicable version cannot have a not-applicable expectation")
 
         probe = entry.get("probe")
-        if applies == "applicable":
-            if probe is None:
-                _add_error(errors, root, path, f"{label}.probe is required for an applicable version")
-            else:
-                probe_path = _check_file_path(
-                    probe,
-                    base=path.parent,
-                    root=root,
-                    errors=errors,
-                    manifest_path=path,
-                    label=f"{label}.probe",
-                    suffix=".LST",
-                )
-                if probe_path is not None:
-                    referenced_probes.add(probe_path)
-        elif probe is not None:
-            _add_error(errors, root, path, f"{label}.probe must be null unless applicability is applicable")
-
-        execution = entry.get("execution")
-        if _check_mapping_fields(
-            execution, EXECUTION_FIELDS, EXECUTION_FIELDS, errors, root, path, f"{label}.execution"
-        ):
-            status = execution.get("status")
-            if not isinstance(status, str) or status not in EXECUTION_STATUSES:
-                _add_error(errors, root, path, f"{label}.execution.status must be one of {sorted(EXECUTION_STATUSES)}")
-            refs = _validate_reference_list(
-                execution.get("evidence_refs"),
-                evidence_ids,
-                errors,
-                root,
-                path,
-                f"{label}.execution.evidence_refs",
-                required=isinstance(status, str) and status in {"PASS", "FAIL", "DIFFERENT"},
+        if probe is None:
+            _add_error(errors, root, path, f"{label}.probe is required for every declared version")
+        else:
+            probe_path = _check_file_path(
+                probe, base=path.parent, root=root, errors=errors,
+                manifest_path=path, label=f"{label}.probe", suffix=".LST",
             )
-            if status == "UNTESTED":
-                for field in ("observed", "run_url", "probe_source"):
-                    if execution.get(field) is not None:
-                        _add_error(errors, root, path, f"{label}.execution.{field} must be null when UNTESTED")
-                if refs:
-                    _add_error(errors, root, path, f"{label}.execution.evidence_refs must be empty when UNTESTED")
-            elif isinstance(status, str) and status in {"PASS", "FAIL", "DIFFERENT"}:
-                if applies != "applicable":
-                    _add_error(errors, root, path, f"{label} cannot have a native result when applicability is {applies!r}")
-                if not _is_non_empty_string(execution.get("observed")):
-                    _add_error(errors, root, path, f"{label}.execution.observed is required for a native result")
-                if not _is_non_empty_string(execution.get("run_url")):
-                    _add_error(errors, root, path, f"{label}.execution.run_url is required for a native result")
-                if _is_non_empty_string(execution.get("probe_source")):
-                    _check_file_path(
-                        execution.get("probe_source"),
-                        base=root,
-                        root=root,
-                        errors=errors,
-                        manifest_path=path,
-                        label=f"{label}.execution.probe_source",
-                        suffix=".LST",
-                        must_be_under_tests=True,
-                    )
-                else:
-                    _add_error(errors, root, path, f"{label}.execution.probe_source is required for a native result")
+            if probe_path is not None:
+                referenced_probes.add(probe_path)
 
         implementation = entry.get("implementation")
         if _check_mapping_fields(
@@ -490,13 +437,6 @@ def _load_manifest(path: Path, root: Path, errors: list[str]) -> dict | None:
                     label=f"{label}.implementation.refs entry",
                 )
 
-    for version in syntax_versions:
-        if applicability_by_version.get(version) != "applicable":
-            _add_error(errors, root, path, f"syntax form declares {version!r} but that version is not applicable")
-    for version, applies in applicability_by_version.items():
-        if applies == "applicable" and version not in syntax_versions:
-            _add_error(errors, root, path, f"applicable version {version!r} is not listed by any syntax form")
-
     construct_dir = path.parent
     for item in sorted(construct_dir.rglob("*")):
         if item.is_symlink():
@@ -509,8 +449,10 @@ def _load_manifest(path: Path, root: Path, errors: list[str]) -> dict | None:
         if item.suffix == ".LST":
             if item not in referenced_probes:
                 _add_error(errors, root, item, "probe file is not referenced by any version")
+        elif "results" in item.relative_to(construct_dir).parts:
+            continue
         else:
-            _add_error(errors, root, item, "unexpected file; only manifest.yaml, README.md, and referenced .LST probes are allowed")
+            _add_error(errors, root, item, "unexpected file; only manifest.yaml, README.md, referenced .LST probes, and results/ outputs are allowed")
 
     return manifest
 
@@ -606,13 +548,13 @@ def git_changes(root: Path, base: str, head: str) -> list[FileChange]:
     return parse_name_status_z(completed.stdout.decode("utf-8", errors="strict"))
 
 
-def _applicable_versions(manifest: dict) -> list[str]:
+def _declared_versions(manifest: dict) -> list[str]:
     versions = manifest.get("versions", {})
     return [
         version
         for version in SUPPORTED_VERSIONS
         if isinstance(versions.get(version), dict)
-        and versions[version].get("applicability") == "applicable"
+        
     ]
 
 
@@ -658,7 +600,7 @@ def select_jobs(
 
     if run_all:
         for item_id, manifest in manifests.items():
-            selected[item_id] = set(_applicable_versions(manifest))
+            selected[item_id] = set(_declared_versions(manifest))
         selection = "all"
     elif construct_id is not None:
         manifest = manifests.get(construct_id)
@@ -718,7 +660,7 @@ def select_jobs(
                     for version in SUPPORTED_VERSIONS
                     if isinstance(version_map.get(version), dict)
                     and version_map[version].get("probe") == relative_in_construct
-                    and version_map[version].get("applicability") == "applicable"
+                    
                 }
                 if matched_versions:
                     selected.setdefault(item_id, set()).update(matched_versions)
