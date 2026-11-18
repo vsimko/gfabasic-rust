@@ -6,7 +6,7 @@ from pathlib import Path
 
 import yaml
 
-from scripts.aggregate_language_construct_results import aggregate
+from scripts.aggregate_language_construct_results import aggregate, persist_result_records
 from scripts.write_construct_result import build_result
 
 
@@ -111,6 +111,21 @@ class ConstructResultTests(unittest.TestCase):
         self.assertEqual(rows["3.52"]["conformance_status"], "DIFFERENT")
         self.assertEqual(rows["3.041U"]["conformance_status"], "DIFFERENT")
         self.assertEqual(result["summary_status"], "PASS")
+
+    def test_persist_writes_immutable_run_and_latest_records(self):
+        directory = self.make_catalogue()
+        probe = directory / "probe-3.5.LST"
+        probe.write_text("PRINT 1\\n", encoding="ascii")
+        selection = {"selection": "manual", "changed_constructs": ["fact-function"], "include": [{"construct_id": "fact-function", "version": "3.5", "probe": "tests/language-constructs/fact-function/probe-3.5.LST"}]}
+        result = aggregate(selection, self.root, self.root / "missing-artifacts", True, "")
+        persist_result_records(result, selection, self.root, "12345", "2", "https://example.invalid/run/12345")
+        output = directory / "results/3.5"
+        self.assertTrue((output / "run-12345-attempt-2.json").is_file())
+        record = json.loads((output / "latest.json").read_text(encoding="utf-8"))
+        self.assertEqual(record["conformance_status"], "UNTESTED")
+        self.assertEqual(record["run_attempt"], "2")
+        self.assertTrue(record["manifest_sha256"])
+        self.assertTrue(record["probe_sha256"])
 
     def test_missing_private_assets_are_untested_not_pass(self):
         self.make_catalogue()
