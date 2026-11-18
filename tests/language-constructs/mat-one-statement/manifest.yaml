@@ -59,6 +59,7 @@ versions:
       summary: "The repository ADR records M O array() as the 3.52 shortcut for MAT ONE; this expectation is based on a repository record, not a page-image-verified manual."
       evidence_refs: ["mat-one-adr-352"]
     probe: "probe-3.52.LST"
+    probe_reason: "GFA-BASIC 3.52 uses OPEN Output device syntax; older probes use OPEN O."
     implementation:
       status: "not-targeted"
       refs: []
