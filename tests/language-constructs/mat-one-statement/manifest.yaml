@@ -5,8 +5,6 @@ construct:
   name: "MAT ONE"
   summary: "Initialize a previously dimensioned square matrix as an identity matrix."
   syntax_forms:
-    - text: "MAT ONE array()"
-      versions: ["3.5"]
     - text: "M O array()"
       versions: ["3.52"]
 evidence:
@@ -15,7 +13,7 @@ evidence:
     location: "printed p. 13-3"
     kind: "primary-manual"
     status: "page-image-verified"
-    claim: "The 3.5 addendum defines MAT ONE as initializing a square identity matrix; MAT PRINT displays the matrix."
+    claim: "The 3.5 addendum describes MAT ONE semantics; the repository's native compatibility result establishes that this construct is not supported by the tested 3.5 interpreter."
     url: "https://github.com/vsimko/gfabasic-rust/blob/main/tests/corpus/amiga/3.5/matrix/mat-one-identity.yaml"
   - id: "mat-one-adr-352"
     source_id: "ADR-0017"
@@ -49,12 +47,12 @@ versions:
       status: "not-targeted"
       refs: []
   "3.5":
-    applicability: "applicable"
+    applicability: "not-applicable"
     expectation:
-      status: "documented"
-      summary: "MAT ONE initializes the previously dimensioned square matrix as an identity matrix. The manual does not establish the element count for DIM identity(3,3) in this probe."
-      evidence_refs: ["mat-one-manual-35"]
-    probe: "probe-3.5.LST"
+      status: "not-applicable"
+      summary: "MAT ONE is not supported by the tested GFA-BASIC 3.5 interpreter; native execution is restricted to the confirmed 3.52 form."
+      evidence_refs: []
+    probe: null
     execution:
       status: "UNTESTED"
       observed: null
@@ -62,10 +60,8 @@ versions:
       probe_source: null
       evidence_refs: []
     implementation:
-      status: "syntax-only"
-      refs:
-        - "crates/gfabasic-compiler/src/frontend.rs"
-        - "crates/gfabasic-compiler/src/semantic.rs"
+      status: "not-targeted"
+      refs: []
   "3.52":
     applicability: "applicable"
     expectation:
