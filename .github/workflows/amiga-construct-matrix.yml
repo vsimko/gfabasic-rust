@@ -196,7 +196,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
-          ref: ${{ github.event.pull_request.head.ref || github.ref_name }}
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
           fetch-depth: 0
       - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0
         with:
@@ -234,10 +234,16 @@ jobs:
         if: always() && needs.preflight.outputs.native_allowed == 'true' && github.actor != 'dependabot[bot]' && (github.event_name != 'pull_request' || (github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.author_association == 'OWNER')) && (github.event_name != 'workflow_dispatch' || (github.ref == 'refs/heads/main' && github.actor == github.repository_owner)) && (github.event_name != 'push' || (github.ref == 'refs/heads/main' && github.actor == github.repository_owner))
         env:
           TARGET_BRANCH: ${{ github.event.pull_request.head.ref || github.ref_name }}
+          EXPECTED_BRANCH_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch origin "$TARGET_BRANCH"
+          if [ "$(git rev-parse FETCH_HEAD)" != "$EXPECTED_BRANCH_HEAD" ]; then
+            echo "Branch advanced during native execution; leaving these results as workflow artifacts rather than committing stale digests."
+            exit 0
+          fi
           find tests/language-constructs -type f -path '*/results/*' -print0 | xargs -0 -r git add --
           if git diff --cached --quiet; then
             echo "No durable construct result records to commit."
