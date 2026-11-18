@@ -33,7 +33,7 @@ jobs:
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
         with:
           path: ~/.cache/pip
-          key: ${{ runner.os }}-python-amiga-analysis-pip-v1
+          key: ${{ runner.os }}-python-amiga-analysis-pip-${{ hashFiles('.github/workflows/amiga-reference.yml') }}
           restore-keys: |
             ${{ runner.os }}-python-amiga-analysis-pip-
 
