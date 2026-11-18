@@ -138,7 +138,7 @@ jobs:
             test -n "$GFA_CONSTRUCT_ID_INPUT"
             test -f "$GFA_PROBE_PATH_INPUT"
             cp "$GFA_PROBE_PATH_INPUT" amiga-volume/factzero.LST
-            printf '%s\\n' "$GFA_CONSTRUCT_ID_INPUT" > "$RUNNER_TEMP/expected-ids.txt"
+            printf '%s\n' "$GFA_CONSTRUCT_ID_INPUT" > "$RUNNER_TEMP/expected-ids.txt"
             echo "GFATEST_EXPECTED_IDS_FILE=$RUNNER_TEMP/expected-ids.txt" >> "$GITHUB_ENV"
             echo "GFA_CONSTRUCT_ID=$GFA_CONSTRUCT_ID_INPUT" >> "$GITHUB_ENV"
           else
