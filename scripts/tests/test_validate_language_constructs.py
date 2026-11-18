@@ -261,6 +261,11 @@ class LanguageConstructSelectionTests(unittest.TestCase):
             ],
         )
 
+    def test_result_output_change_does_not_schedule_native_jobs(self):
+        result = self.select(FileChange("M", new_path="tests/language-constructs/fact-function/results/3.5/latest.json"))
+        self.assertEqual(result["include"], [])
+        self.assertEqual(result["selection"], "none")
+
     def test_deleted_construct_does_not_schedule_native_jobs(self):
         shutil.rmtree(self.root / "tests" / "language-constructs" / "fact-function")
         result = self.select(
