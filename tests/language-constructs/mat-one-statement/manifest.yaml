@@ -46,7 +46,7 @@ versions:
       status: "not-applicable"
       summary: "MAT ONE is not supported by the tested GFA-BASIC 3.5 interpreter; native execution is restricted to the confirmed 3.52 form."
       evidence_refs: []
-    probe: null
+    probe: "probe-3.5.LST"
     implementation:
       status: "not-targeted"
       refs: []
