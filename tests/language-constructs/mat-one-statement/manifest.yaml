@@ -1,4 +1,4 @@
-manifest_schema_version: 1
+manifest_schema_version: 2
 construct:
   id: "mat-one-statement"
   kind: "statement"
@@ -36,13 +36,7 @@ versions:
       status: "unknown"
       summary: "No version-scoped MAT ONE expectation has been established for 3.041U."
       evidence_refs: []
-    probe: null
-    execution:
-      status: "UNTESTED"
-      observed: null
-      run_url: null
-      probe_source: null
-      evidence_refs: []
+    probe: "probe-3.5.LST"
     implementation:
       status: "not-targeted"
       refs: []
@@ -53,12 +47,6 @@ versions:
       summary: "MAT ONE is not supported by the tested GFA-BASIC 3.5 interpreter; native execution is restricted to the confirmed 3.52 form."
       evidence_refs: []
     probe: null
-    execution:
-      status: "UNTESTED"
-      observed: null
-      run_url: null
-      probe_source: null
-      evidence_refs: []
     implementation:
       status: "not-targeted"
       refs: []
@@ -69,12 +57,6 @@ versions:
       summary: "The repository ADR records M O array() as the 3.52 shortcut for MAT ONE; this expectation is based on a repository record, not a page-image-verified manual."
       evidence_refs: ["mat-one-adr-352"]
     probe: "probe-3.52.LST"
-    execution:
-      status: "PASS"
-      observed: "GFATEST:matrix-one:PASS after checking the nine identity-matrix elements."
-      run_url: "https://github.com/vsimko/gfabasic-rust/actions/runs/44188927520"
-      probe_source: "tests/interpreter-probes/amiga-3.52/regression-suite.LST"
-      evidence_refs: ["mat-one-native-352"]
     implementation:
       status: "not-targeted"
       refs: []
