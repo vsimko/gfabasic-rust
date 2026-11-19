@@ -6,7 +6,8 @@
 
 use std::collections::{BTreeMap, BTreeSet};
 
-use crate::frontend::{Program, Statement};
+use crate::frontend::Statement;
+use crate::semantic::{SemanticModel, SymbolId, SymbolTable};
 use crate::source::SourceSpan;
 
 /// Stable identity of a value within one IR module.
@@ -105,18 +106,19 @@ fn binary_intrinsic(declaration_id: &str, left: i64, right: i64) -> Result<Optio
 ///
 /// Intrinsics are evaluated here only for the prototype's documented literal
 /// subset. Their bounds are implementation limits, not dialect limits.
-pub fn lower(program: &Program) -> Result<Module, Vec<IrError>> {
+pub fn lower(model: &SemanticModel) -> Result<Module, Vec<IrError>> {
     let mut module = Module::default();
-    let mut variables = BTreeMap::<String, ValueId>::new();
+    let mut variables = BTreeMap::<SymbolId, ValueId>::new();
     let mut next_value = 0_u32;
     let mut errors = Vec::new();
     let mut saw_print = false;
 
-    for statement in &program.statements {
+    for statement in &model.document.program.statements {
         match statement {
             Statement::AssignInteger { name, value, span } => {
                 lower_assignment(
-                    name,
+                    &model.symbols,
+                    *span,
                     Some(*value),
                     *span,
                     &mut variables,
@@ -138,7 +140,8 @@ pub fn lower(program: &Program) -> Result<Module, Vec<IrError>> {
                     }
                 };
                 lower_assignment(
-                    name,
+                    &model.symbols,
+                    *span,
                     value,
                     *span,
                     &mut variables,
@@ -156,7 +159,8 @@ pub fn lower(program: &Program) -> Result<Module, Vec<IrError>> {
                     }
                 };
                 lower_assignment(
-                    name,
+                    &model.symbols,
+                    *span,
                     value,
                     *span,
                     &mut variables,
@@ -174,7 +178,8 @@ pub fn lower(program: &Program) -> Result<Module, Vec<IrError>> {
                     }
                 };
                 lower_assignment(
-                    name,
+                    &model.symbols,
+                    *span,
                     value,
                     *span,
                     &mut variables,
@@ -206,13 +211,19 @@ pub fn lower(program: &Program) -> Result<Module, Vec<IrError>> {
                 ));
             }
             Statement::PrintVariables { names, span } => {
-                let mut values = Vec::with_capacity(names.len());
-                for name in names {
-                    match variables.get(name) {
+                let references: Vec<_> = model
+                    .symbols
+                    .references
+                    .iter()
+                    .filter(|reference| reference.statement_span == *span)
+                    .collect();
+                let mut values = Vec::with_capacity(references.len());
+                for reference in references {
+                    match variables.get(&reference.symbol) {
                         Some(value) => values.push(*value),
                         None => errors.push(IrError::at(
-                            format!("variable '{name}' is not assigned before PRINT"),
-                            *span,
+                            format!("resolved symbol {:?} has no IR definition", reference.symbol),
+                            reference.span,
                         )),
                     }
                 }
@@ -241,17 +252,29 @@ pub fn lower(program: &Program) -> Result<Module, Vec<IrError>> {
 }
 
 fn lower_assignment(
-    name: &str,
+    symbols: &SymbolTable,
+    statement_span: SourceSpan,
     value: Option<i64>,
     span: SourceSpan,
-    variables: &mut BTreeMap<String, ValueId>,
+    variables: &mut BTreeMap<SymbolId, ValueId>,
     module: &mut Module,
     next_value: &mut u32,
     errors: &mut Vec<IrError>,
 ) {
-    if variables.contains_key(name) {
+    let Some(symbol) = symbols
+        .symbols
+        .iter()
+        .find(|symbol| symbol.statement_span == statement_span)
+    else {
         errors.push(IrError::at(
-            format!("reassignment of '{name}' is outside the current prototype subset"),
+            "assignment has no declaration in the resolved semantic model",
+            span,
+        ));
+        return;
+    };
+    if variables.contains_key(&symbol.id) {
+        errors.push(IrError::at(
+            format!("symbol {:?} has more than one IR definition", symbol.id),
             span,
         ));
         return;
@@ -265,7 +288,7 @@ fn lower_assignment(
     };
     let id = ValueId(*next_value);
     *next_value += 1;
-    variables.insert(name.to_owned(), id);
+    variables.insert(symbol.id, id);
     module.instructions.push(Instruction::ConstI64 {
         result: id,
         value,
