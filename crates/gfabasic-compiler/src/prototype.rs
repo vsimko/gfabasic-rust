@@ -108,7 +108,10 @@ fn semantic_error(sources: &SourceMap, span: SourceSpan, message: impl Into<Stri
     .render(sources)
 }
 
-fn lower_semantic_model(semantic: &SemanticModel<'_>, sources: &SourceMap) -> Result<String, String> {
+fn lower_semantic_model(
+    semantic: &SemanticModel<'_>,
+    sources: &SourceMap,
+) -> Result<String, String> {
     let module = crate::ir::lower(semantic).map_err(|errors| {
         errors
             .iter()
