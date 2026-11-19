@@ -6,7 +6,8 @@
 
 use std::collections::{BTreeMap, BTreeSet};
 
-use crate::frontend::{Program, Statement};
+use crate::frontend::Statement;
+use crate::semantic::{SemanticModel, SymbolId, SymbolTable};
 use crate::source::SourceSpan;
 
 /// Stable identity of a value within one IR module.
@@ -101,87 +102,112 @@ fn binary_intrinsic(declaration_id: &str, left: i64, right: i64) -> Result<Optio
     }
 }
 
-/// Lower the current frontend AST to typed, constant-valued IR.
+/// Mutable state shared by the prototype's straight-line lowering operations.
+struct LoweringState<'a> {
+    symbols: &'a SymbolTable,
+    variables: BTreeMap<SymbolId, ValueId>,
+    module: Module,
+    next_value: u32,
+    errors: Vec<IrError>,
+}
+
+impl<'a> LoweringState<'a> {
+    fn new(symbols: &'a SymbolTable) -> Self {
+        Self {
+            symbols,
+            variables: BTreeMap::new(),
+            module: Module::default(),
+            next_value: 0,
+            errors: Vec::new(),
+        }
+    }
+
+    fn lower_assignment(
+        &mut self,
+        statement_span: SourceSpan,
+        value: Option<i64>,
+        span: SourceSpan,
+    ) {
+        let Some(symbol_id) = self
+            .symbols
+            .symbols
+            .iter()
+            .find(|symbol| symbol.statement_span == statement_span)
+            .map(|symbol| symbol.id)
+        else {
+            self.errors.push(IrError::at(
+                "assignment has no declaration in the resolved semantic model",
+                span,
+            ));
+            return;
+        };
+        if self.variables.contains_key(&symbol_id) {
+            self.errors.push(IrError::at(
+                format!("symbol {:?} has more than one IR definition", symbol_id),
+                span,
+            ));
+            return;
+        }
+        let Some(value) = value else {
+            self.errors.push(IrError::at(
+                "intrinsic arguments are outside the supported prototype range (0 <= k <= n <= 20)",
+                span,
+            ));
+            return;
+        };
+        let id = ValueId(self.next_value);
+        self.next_value += 1;
+        self.variables.insert(symbol_id, id);
+        self.module.instructions.push(Instruction::ConstI64 {
+            result: id,
+            value,
+            span,
+        });
+    }
+}
+
+/// Lower a resolved semantic model to typed, constant-valued IR.
 ///
 /// Intrinsics are evaluated here only for the prototype's documented literal
 /// subset. Their bounds are implementation limits, not dialect limits.
-pub fn lower(program: &Program) -> Result<Module, Vec<IrError>> {
-    let mut module = Module::default();
-    let mut variables = BTreeMap::<String, ValueId>::new();
-    let mut next_value = 0_u32;
-    let mut errors = Vec::new();
+pub fn lower(model: &SemanticModel) -> Result<Module, Vec<IrError>> {
+    let mut state = LoweringState::new(&model.symbols);
     let mut saw_print = false;
 
-    for statement in &program.statements {
+    for statement in &model.document.program.statements {
         match statement {
-            Statement::AssignInteger { name, value, span } => {
-                lower_assignment(
-                    name,
-                    Some(*value),
-                    *span,
-                    &mut variables,
-                    &mut module,
-                    &mut next_value,
-                    &mut errors,
-                );
+            Statement::AssignInteger { value, span, .. } => {
+                state.lower_assignment(*span, Some(*value), *span);
             }
-            Statement::AssignFact {
-                name,
-                argument,
-                span,
-            } => {
+            Statement::AssignFact { argument, span, .. } => {
                 let value = match unary_intrinsic("gfa.language.math.fact", *argument) {
                     Ok(value) => value,
                     Err(message) => {
-                        errors.push(IrError::at(message, *span));
+                        state.errors.push(IrError::at(message, *span));
                         continue;
                     }
                 };
-                lower_assignment(
-                    name,
-                    value,
-                    *span,
-                    &mut variables,
-                    &mut module,
-                    &mut next_value,
-                    &mut errors,
-                );
+                state.lower_assignment(*span, value, *span);
             }
-            Statement::AssignVariat { name, n, k, span } => {
+            Statement::AssignVariat { n, k, span, .. } => {
                 let value = match binary_intrinsic("gfa.language.math.variat", *n, *k) {
                     Ok(value) => value,
                     Err(message) => {
-                        errors.push(IrError::at(message, *span));
+                        state.errors.push(IrError::at(message, *span));
                         continue;
                     }
                 };
-                lower_assignment(
-                    name,
-                    value,
-                    *span,
-                    &mut variables,
-                    &mut module,
-                    &mut next_value,
-                    &mut errors,
-                );
+                state.lower_assignment(*span, value, *span);
             }
-            Statement::AssignCombin { name, n, k, span } => {
+            Statement::AssignCombin { n, k, span, .. } => {
                 let value = match binary_intrinsic("gfa.language.math.combin", *n, *k) {
                     Ok(value) => value,
                     Err(message) => {
-                        errors.push(IrError::at(message, *span));
+                        state.errors.push(IrError::at(message, *span));
                         continue;
                     }
                 };
-                lower_assignment(
-                    name,
-                    value,
-                    *span,
-                    &mut variables,
-                    &mut module,
-                    &mut next_value,
-                    &mut errors,
-                );
+                state.lower_assignment(*span, value, *span);
             }
             Statement::DimMatrix { span, .. }
             | Statement::MatOne { span, .. }
@@ -200,24 +226,33 @@ pub fn lower(program: &Program) -> Result<Module, Vec<IrError>> {
             | Statement::MatCopy { span, .. }
             | Statement::MatRead { span, .. }
             | Statement::MatInput { span, .. } => {
-                errors.push(IrError::at(
+                state.errors.push(IrError::at(
                     "matrix statements are supported by the parser and formatter but not by the executable compiler prototype",
                     *span,
                 ));
             }
             Statement::PrintVariables { names, span } => {
-                let mut values = Vec::with_capacity(names.len());
-                for name in names {
-                    match variables.get(name) {
+                let references: Vec<_> = model
+                    .symbols
+                    .references
+                    .iter()
+                    .filter(|reference| reference.statement_span == *span)
+                    .collect();
+                let mut values = Vec::with_capacity(references.len());
+                for reference in references {
+                    match state.variables.get(&reference.symbol) {
                         Some(value) => values.push(*value),
-                        None => errors.push(IrError::at(
-                            format!("variable '{name}' is not assigned before PRINT"),
-                            *span,
+                        None => state.errors.push(IrError::at(
+                            format!(
+                                "resolved symbol {:?} has no IR definition",
+                                reference.symbol
+                            ),
+                            reference.span,
                         )),
                     }
                 }
                 if values.len() == names.len() {
-                    module.instructions.push(Instruction::Print {
+                    state.module.instructions.push(Instruction::Print {
                         values,
                         span: *span,
                     });
@@ -228,49 +263,16 @@ pub fn lower(program: &Program) -> Result<Module, Vec<IrError>> {
     }
 
     if !saw_print {
-        errors.push(IrError::global(
+        state.errors.push(IrError::global(
             "prototype requires at least one valid PRINT statement",
         ));
     }
-    if errors.is_empty() {
-        verify(&module)?;
-        Ok(module)
+    if state.errors.is_empty() {
+        verify(&state.module)?;
+        Ok(state.module)
     } else {
-        Err(errors)
+        Err(state.errors)
     }
-}
-
-fn lower_assignment(
-    name: &str,
-    value: Option<i64>,
-    span: SourceSpan,
-    variables: &mut BTreeMap<String, ValueId>,
-    module: &mut Module,
-    next_value: &mut u32,
-    errors: &mut Vec<IrError>,
-) {
-    if variables.contains_key(name) {
-        errors.push(IrError::at(
-            format!("reassignment of '{name}' is outside the current prototype subset"),
-            span,
-        ));
-        return;
-    }
-    let Some(value) = value else {
-        errors.push(IrError::at(
-            "intrinsic arguments are outside the supported prototype range (0 <= k <= n <= 20)",
-            span,
-        ));
-        return;
-    };
-    let id = ValueId(*next_value);
-    *next_value += 1;
-    variables.insert(name.to_owned(), id);
-    module.instructions.push(Instruction::ConstI64 {
-        result: id,
-        value,
-        span,
-    });
 }
 
 /// Verify unique definitions and reject uses that precede their definitions.
@@ -320,16 +322,25 @@ pub fn value_type(module: &Module, id: ValueId) -> Option<ValueType> {
 #[cfg(test)]
 mod tests {
     use super::{Instruction, ValueId, ValueType, lower, value_type, verify};
-    use crate::frontend::parse;
+    use crate::frontend::parse_document;
+    use crate::semantic::analyze_prototype;
     use crate::source::SourceMap;
+
+    fn semantic_model(
+        source_id: crate::source::SourceId,
+        source: &str,
+    ) -> crate::semantic::SemanticModel {
+        let document = parse_document(source_id, source).expect("supported syntax parses");
+        analyze_prototype(document).expect("prototype semantic analysis succeeds")
+    }
 
     #[test]
     fn lowers_all_three_intrinsics_to_typed_constants_and_print() {
-        let source = "x=FACT(5)\ny=VARIAT(5,2)\nz=COMBIN(5,2)\nPRINT x,y,z\n";
+        let source = "x=FACT(5)\ny=VARIAT(5,2)\nz=COMBIN(5,2)\nPRINT z,x,y\n";
         let mut sources = SourceMap::new();
         let id = sources.add_source("combinatorics.bas", source);
-        let ast = parse(id, source).unwrap();
-        let ir = lower(&ast).unwrap();
+        let model = semantic_model(id, source);
+        let ir = lower(&model).unwrap();
 
         assert_eq!(ir.instructions.len(), 4);
         assert!(matches!(
@@ -359,7 +370,7 @@ mod tests {
         assert!(matches!(
             &ir.instructions[3],
             Instruction::Print { values, .. }
-                if values == &[ValueId(0), ValueId(1), ValueId(2)]
+                if values == &[ValueId(2), ValueId(0), ValueId(1)]
         ));
         assert_eq!(value_type(&ir, ValueId(0)), Some(ValueType::I64));
         verify(&ir).unwrap();
@@ -370,8 +381,8 @@ mod tests {
         let source = "x=42\nLET y=7\nPRINT x,y\n";
         let mut sources = SourceMap::new();
         let source_id = sources.add_source("integer-assignments.bas", source);
-        let program = crate::frontend::parse(source_id, source).expect("syntax is supported");
-        let module = lower(&program).expect("integer assignments lower to constants");
+        let model = semantic_model(source_id, source);
+        let module = lower(&model).expect("integer assignments lower to constants");
 
         assert!(matches!(
             module.instructions[0],
@@ -392,13 +403,12 @@ mod tests {
         let source = include_str!("../../../tests/corpus/amiga/3.5/matrix/mat-one-identity.lst");
         let mut sources = SourceMap::new();
         let id = sources.add_source("matrix.bas", source);
-        let ast = parse(id, source).unwrap();
-
-        let errors = lower(&ast).expect_err("matrix execution is not implemented");
+        let document = parse_document(id, source).unwrap();
+        let errors = analyze_prototype(document).expect_err("matrix semantics are not implemented");
         assert!(
             errors
                 .iter()
-                .any(|error| error.message.contains("matrix statements")),
+                .any(|error| error.message.contains("matrix semantic analysis")),
             "expected an explicit matrix support diagnostic: {errors:?}"
         );
     }
@@ -408,8 +418,8 @@ mod tests {
         let source = "x=FACT(0)\ny=VARIAT(20,0)\nz=COMBIN(20,10)\nPRINT x,y,z\n";
         let mut sources = SourceMap::new();
         let id = sources.add_source("boundary.bas", source);
-        let ast = parse(id, source).unwrap();
-        let ir = lower(&ast).unwrap();
+        let model = semantic_model(id, source);
+        let ir = lower(&model).unwrap();
 
         assert!(matches!(
             ir.instructions[0],
@@ -430,8 +440,8 @@ mod tests {
         for source in ["PRINT x\n", "x=FACT(1)\nx=FACT(2)\nPRINT x\n"] {
             let mut sources = SourceMap::new();
             let id = sources.add_source("invalid.bas", source);
-            let ast = parse(id, source).unwrap();
-            assert!(lower(&ast).is_err(), "accepted: {source}");
+            let document = parse_document(id, source).unwrap();
+            assert!(analyze_prototype(document).is_err(), "accepted: {source}");
         }
     }
 

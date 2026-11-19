@@ -12,8 +12,9 @@ use std::process::Command;
 use std::sync::atomic::{AtomicUsize, Ordering};
 
 use crate::diagnostics::{Diagnostic, DiagnosticCategory, DiagnosticSeverity};
-use crate::frontend::parse;
+use crate::frontend::parse_document;
 use crate::ir::{Instruction, Module, ValueId};
+use crate::semantic::analyze_prototype;
 use crate::source::{SourceMap, SourceSpan};
 
 static NEXT_TEMP: AtomicUsize = AtomicUsize::new(0);
@@ -38,14 +39,14 @@ pub fn compile_file(input: &Path, output: &Path) -> Result<(), String> {
         .text()
         .to_owned();
 
-    let program = parse(source_id, &source).map_err(|diagnostics| {
+    let document = parse_document(source_id, &source).map_err(|diagnostics| {
         diagnostics
             .iter()
             .map(|diagnostic| diagnostic.render(&sources))
             .collect::<Vec<_>>()
             .join("\n")
     })?;
-    let c_source = lower_program(&program, &sources)?;
+    let c_source = lower_program(document, &sources)?;
 
     let sequence = NEXT_TEMP.fetch_add(1, Ordering::Relaxed);
     let temp_path = std::env::temp_dir().join(format!(
@@ -92,10 +93,26 @@ fn semantic_error(sources: &SourceMap, span: SourceSpan, message: impl Into<Stri
 }
 
 fn lower_program(
-    program: &crate::frontend::Program,
+    document: crate::frontend::ParsedDocument,
     sources: &SourceMap,
 ) -> Result<String, String> {
-    let module = crate::ir::lower(program).map_err(|errors| {
+    let model = analyze_prototype(document).map_err(|errors| {
+        errors
+            .iter()
+            .map(|error| {
+                Diagnostic::new(
+                    &error.code,
+                    DiagnosticSeverity::Error,
+                    DiagnosticCategory::Unsupported,
+                    error.message.clone(),
+                )
+                .with_primary_span(error.span)
+                .render(sources)
+            })
+            .collect::<Vec<_>>()
+            .join("\n")
+    })?;
+    let module = crate::ir::lower(&model).map_err(|errors| {
         errors
             .iter()
             .map(|error| match error.span {
@@ -155,7 +172,7 @@ fn emit_c(module: &Module) -> Result<String, String> {
 #[cfg(test)]
 mod tests {
     use super::{compile_file, lower_program};
-    use crate::frontend::parse;
+    use crate::frontend::parse_document;
     use crate::source::SourceMap;
     use std::fs;
     use std::path::Path;
@@ -167,11 +184,11 @@ mod tests {
         include_str!("../../../tests/corpus/amiga/3.5/combinatorics/fact-zero.lst");
 
     #[test]
-    fn lowers_the_frontend_ast_for_the_verified_fact_fixture() {
+    fn lowers_the_resolved_semantic_model_for_the_verified_fact_fixture() {
         let mut sources = SourceMap::new();
         let source_id = sources.add_source("fact-zero.bas", FACT_FIXTURE);
-        let program = parse(source_id, FACT_FIXTURE).unwrap();
-        let generated = lower_program(&program, &sources).unwrap();
+        let document = parse_document(source_id, FACT_FIXTURE).unwrap();
+        let generated = lower_program(document, &sources).unwrap();
 
         assert!(generated.contains("long long v0 = 1;"));
         assert!(generated.contains("long long v1 = 1;"));
@@ -190,9 +207,9 @@ mod tests {
         ] {
             let mut sources = SourceMap::new();
             let source_id = sources.add_source("unsupported.bas", source);
-            let program = parse(source_id, source).unwrap();
+            let document = parse_document(source_id, source).unwrap();
             assert!(
-                lower_program(&program, &sources).is_err(),
+                lower_program(document, &sources).is_err(),
                 "accepted: {source}"
             );
         }
@@ -203,8 +220,8 @@ mod tests {
         let source_text = "x=FACT(5)\ny=VARIAT(5,2)\nz=COMBIN(5,2)\nPRINT x,y,z\n";
         let mut sources = SourceMap::new();
         let source_id = sources.add_source("combinatorics.bas", source_text);
-        let program = parse(source_id, source_text).unwrap();
-        let generated = lower_program(&program, &sources).unwrap();
+        let document = parse_document(source_id, source_text).unwrap();
+        let generated = lower_program(document, &sources).unwrap();
 
         assert!(generated.contains("long long v0 = 120;"));
         assert!(generated.contains("long long v1 = 20;"));
