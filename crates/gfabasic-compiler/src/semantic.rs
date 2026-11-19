@@ -5,6 +5,7 @@
 //! general Amiga GFA BASIC declaration, scope, or type rules.
 
 use std::collections::BTreeMap;
+use std::ops::Deref;
 
 use crate::frontend::{ParsedDocument, Statement, TokenKind};
 
@@ -23,6 +24,8 @@ pub struct Symbol {
     pub name: String,
     /// Source span of the declaration identifier.
     pub declaration: crate::source::SourceSpan,
+    /// Source span of the complete assignment statement.
+    pub assignment: crate::source::SourceSpan,
 }
 
 /// A reference resolved to one declaration.
@@ -57,6 +60,29 @@ impl SymbolTable {
     }
 }
 
+/// Resolved semantic input for the current prototype pipeline.
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct SemanticModel<'a> {
+    pub program: &'a crate::frontend::Program,
+    pub symbol_table: SymbolTable,
+}
+
+impl Deref for SemanticModel<'_> {
+    type Target = SymbolTable;
+    fn deref(&self) -> &Self::Target { &self.symbol_table }
+}
+
+impl SemanticModel<'_> {
+    pub fn symbol_for_assignment(&self, span: crate::source::SourceSpan) -> Option<&Symbol> {
+        self.symbol_table.symbols.iter().find(|symbol| symbol.assignment == span)
+    }
+    pub fn references_in(&self, span: crate::source::SourceSpan) -> impl Iterator<Item = &ResolvedReference> {
+        self.symbol_table.references.iter().filter(move |reference| {
+            reference.span.source == span.source && reference.span.start >= span.start && reference.span.end <= span.end
+        })
+    }
+}
+
 /// A source-located error in the current prototype's symbol rules.
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct SemanticError {
@@ -76,7 +102,7 @@ pub struct SemanticError {
 /// not claims about the full Amiga GFA BASIC 3.5 declaration or scope rules.
 pub fn resolve_prototype_symbols(
     document: &ParsedDocument,
-) -> Result<SymbolTable, Vec<SemanticError>> {
+) -> Result<SemanticModel<'_>, Vec<SemanticError>> {
     let mut by_name = BTreeMap::<String, SymbolId>::new();
     let mut table = SymbolTable::default();
     let mut errors = Vec::new();
@@ -124,6 +150,7 @@ pub fn resolve_prototype_symbols(
                     id,
                     name: name.clone(),
                     declaration,
+                    assignment: *span,
                 });
             }
             Statement::DimMatrix { span, .. }
@@ -189,7 +216,7 @@ pub fn resolve_prototype_symbols(
     }
 
     if errors.is_empty() {
-        Ok(table)
+        Ok(SemanticModel { program: &document.program, symbol_table: table })
     } else {
         Err(errors)
     }
