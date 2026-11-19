@@ -12,7 +12,8 @@ use std::process::Command;
 use std::sync::atomic::{AtomicUsize, Ordering};
 
 use crate::diagnostics::{Diagnostic, DiagnosticCategory, DiagnosticSeverity};
-use crate::frontend::parse;
+use crate::frontend::parse_document;
+use crate::semantic::{SemanticModel, resolve_prototype_symbols};
 use crate::ir::{Instruction, Module, ValueId};
 use crate::source::{SourceMap, SourceSpan};
 
@@ -38,14 +39,15 @@ pub fn compile_file(input: &Path, output: &Path) -> Result<(), String> {
         .text()
         .to_owned();
 
-    let program = parse(source_id, &source).map_err(|diagnostics| {
-        diagnostics
-            .iter()
-            .map(|diagnostic| diagnostic.render(&sources))
-            .collect::<Vec<_>>()
-            .join("\n")
+    let document = parse_document(source_id, &source).map_err(|diagnostics| {
+        diagnostics.iter().map(|diagnostic| diagnostic.render(&sources)).collect::<Vec<_>>().join("\n")
     })?;
-    let c_source = lower_program(&program, &sources)?;
+    let semantic = resolve_prototype_symbols(&document).map_err(|errors| {
+        errors.iter().map(|error| Diagnostic::new(
+            error.code.clone(), DiagnosticSeverity::Error, DiagnosticCategory::Unsupported, error.message.clone(),
+        ).with_primary_span(error.span).render(&sources)).collect::<Vec<_>>().join("\n")
+    })?;
+    let c_source = lower_program(&semantic, &sources)?;
 
     let sequence = NEXT_TEMP.fetch_add(1, Ordering::Relaxed);
     let temp_path = std::env::temp_dir().join(format!(
@@ -92,10 +94,10 @@ fn semantic_error(sources: &SourceMap, span: SourceSpan, message: impl Into<Stri
 }
 
 fn lower_program(
-    program: &crate::frontend::Program,
+    semantic: &SemanticModel<'_>,
     sources: &SourceMap,
 ) -> Result<String, String> {
-    let module = crate::ir::lower(program).map_err(|errors| {
+    let module = crate::ir::lower(semantic).map_err(|errors| {
         errors
             .iter()
             .map(|error| match error.span {
@@ -155,7 +157,8 @@ fn emit_c(module: &Module) -> Result<String, String> {
 #[cfg(test)]
 mod tests {
     use super::{compile_file, lower_program};
-    use crate::frontend::parse;
+    use crate::frontend::parse_document;
+    use crate::semantic::resolve_prototype_symbols;
     use crate::source::SourceMap;
     use std::fs;
     use std::path::Path;
@@ -170,8 +173,9 @@ mod tests {
     fn lowers_the_frontend_ast_for_the_verified_fact_fixture() {
         let mut sources = SourceMap::new();
         let source_id = sources.add_source("fact-zero.bas", FACT_FIXTURE);
-        let program = parse(source_id, FACT_FIXTURE).unwrap();
-        let generated = lower_program(&program, &sources).unwrap();
+        let document = parse_document(source_id, FACT_FIXTURE).unwrap();
+        let semantic = resolve_prototype_symbols(&document).unwrap();
+        let generated = lower_program(&semantic, &sources).unwrap();
 
         assert!(generated.contains("long long v0 = 1;"));
         assert!(generated.contains("long long v1 = 1;"));
@@ -190,9 +194,12 @@ mod tests {
         ] {
             let mut sources = SourceMap::new();
             let source_id = sources.add_source("unsupported.bas", source);
-            let program = parse(source_id, source).unwrap();
+            let document = parse_document(source_id, source).unwrap();
+            let result = resolve_prototype_symbols(&document)
+                .map_err(|errors| errors.iter().map(|error| error.message.clone()).collect::<Vec<_>>().join("\n"))
+                .and_then(|semantic| lower_program(&semantic, &sources));
             assert!(
-                lower_program(&program, &sources).is_err(),
+                result.is_err(),
                 "accepted: {source}"
             );
         }
@@ -203,8 +210,9 @@ mod tests {
         let source_text = "x=FACT(5)\ny=VARIAT(5,2)\nz=COMBIN(5,2)\nPRINT x,y,z\n";
         let mut sources = SourceMap::new();
         let source_id = sources.add_source("combinatorics.bas", source_text);
-        let program = parse(source_id, source_text).unwrap();
-        let generated = lower_program(&program, &sources).unwrap();
+        let document = parse_document(source_id, source_text).unwrap();
+        let semantic = resolve_prototype_symbols(&document).unwrap();
+        let generated = lower_program(&semantic, &sources).unwrap();
 
         assert!(generated.contains("long long v0 = 120;"));
         assert!(generated.contains("long long v1 = 20;"));
