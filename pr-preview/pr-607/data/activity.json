@@ -1,9 +1,73 @@
 {
   "schema_version": 1,
   "status": "fresh",
-  "generated_at": "2026-11-19T00:50:12.280801+00:00",
-  "last_successful_at": "2026-11-19T00:50:12.280801+00:00",
+  "generated_at": "2026-11-19T22:04:45.237565+00:00",
+  "last_successful_at": "2026-11-19T22:04:45.237565+00:00",
   "items": [
+    {
+      "type": "merged_pull_request",
+      "title": "docs: define Ghidra API analysis boundary for agents",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/612",
+      "number": 612,
+      "timestamp": "2026-11-19T08:13:58Z",
+      "summary": "PR #612 merged"
+    },
+    {
+      "type": "commit",
+      "title": "docs: define Ghidra API analysis boundary for agents (#612)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/e5813bf5c8dfdf4dde5c34e39e369eb9ae52ed09",
+      "number": null,
+      "timestamp": "2026-11-19T08:13:57Z",
+      "summary": "Commit e5813bf"
+    },
+    {
+      "type": "merged_pull_request",
+      "title": "[Compiler] Lower typed IR from resolved semantic model",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/601",
+      "number": 601,
+      "timestamp": "2026-11-19T07:15:49Z",
+      "summary": "PR #601 merged"
+    },
+    {
+      "type": "commit",
+      "title": "[Compiler] Lower typed IR from resolved semantic model (#601)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/ced5ad437b24f2007ee39f4b09d52aef0bad6503",
+      "number": null,
+      "timestamp": "2026-11-19T07:15:49Z",
+      "summary": "Commit ced5ad4"
+    },
+    {
+      "type": "merged_pull_request",
+      "title": "[CI] Make mutation schedule guard resilient to delayed runners",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/609",
+      "number": 609,
+      "timestamp": "2026-11-19T07:10:00Z",
+      "summary": "PR #609 merged"
+    },
+    {
+      "type": "commit",
+      "title": "[CI] Make mutation schedule guard resilient to delayed runners (#609)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/f020422dcd59c55880496d8c887203d9036c88ae",
+      "number": null,
+      "timestamp": "2026-11-19T07:10:00Z",
+      "summary": "Commit f020422"
+    },
+    {
+      "type": "merged_pull_request",
+      "title": "[CI] Suppress ShellCheck false positive for Pages cleanup trap",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/606",
+      "number": 606,
+      "timestamp": "2026-11-19T07:05:57Z",
+      "summary": "PR #606 merged"
+    },
+    {
+      "type": "commit",
+      "title": "ci: suppress ShellCheck false positive for EXIT cleanup trap (#606)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/e59111416cbfb220a7d6fec578919cb6c4cbafc6",
+      "number": null,
+      "timestamp": "2026-11-19T07:05:56Z",
+      "summary": "Commit e591114"
+    },
     {
       "type": "merged_pull_request",
       "title": "[Testing] Validate and select versioned construct manifests (#571)",
@@ -35,70 +99,6 @@
       "number": null,
       "timestamp": "2026-11-17T22:45:24Z",
       "summary": "Commit 018908a"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "[Amiga CI] Preflight private asset paths before downloads (#585)",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/588",
-      "number": 588,
-      "timestamp": "2026-11-17T22:38:13Z",
-      "summary": "PR #588 merged"
-    },
-    {
-      "type": "commit",
-      "title": "[Amiga CI] Preflight private asset paths before downloads (#585) (#588)",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/ececfe4c1dc8b54a6be852b4fd2f97be00113e69",
-      "number": null,
-      "timestamp": "2026-11-17T22:38:13Z",
-      "summary": "Commit ececfe4"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "[Agents] Add evidence-based contribution evaluation pilot (#578)",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/589",
-      "number": 589,
-      "timestamp": "2026-11-17T22:34:26Z",
-      "summary": "PR #589 merged"
-    },
-    {
-      "type": "commit",
-      "title": "[Agents] Add evidence-based contribution evaluation pilot (#578) (#589)",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/86c1efcd2adf85c627471e07992885e638c53f11",
-      "number": null,
-      "timestamp": "2026-11-17T22:34:25Z",
-      "summary": "Commit 86c1efc"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "[Security] Require explicit dispatch for private Amiga workflows",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/586",
-      "number": 586,
-      "timestamp": "2026-11-17T22:27:16Z",
-      "summary": "PR #586 merged"
-    },
-    {
-      "type": "commit",
-      "title": "[Security] Require explicit dispatch for private Amiga workflows (#586)",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/46d2c246944e4e371f0b6cd7f45a855d9fc8d44d",
-      "number": null,
-      "timestamp": "2026-11-17T22:27:16Z",
-      "summary": "Commit 46d2c24"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "[Security] Define AI-agent trust boundaries and harden workflows (#580)",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/584",
-      "number": 584,
-      "timestamp": "2026-11-17T22:23:50Z",
-      "summary": "PR #584 merged"
-    },
-    {
-      "type": "commit",
-      "title": "[Security] Define AI-agent trust boundaries and harden workflows (#580) (#584)",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/81b6a50ec9359b3e7215dc5cff02fc0543f2775c",
-      "number": null,
-      "timestamp": "2026-11-17T22:23:50Z",
-      "summary": "Commit 81b6a50"
     }
   ]
 }
