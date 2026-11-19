@@ -62,8 +62,8 @@ env -u SHELLOPTS xvfb-run -a -s "-screen 0 1024x768x24 +extension GLX" bash -c '
   sleep 0.2
   printf "SEND_MOUSE\\t230\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
   sleep 0.2
-  # The row is below the pointer's initial menu position; compensate for
-  # the vertical offset of this release's requester.
+  # The row is below the initial menu position; compensate for
+  # the vertical offset of this release requester.
   printf "SEND_MOUSE\\t0\\t140\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
   sleep 0.5
   printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-file-row-pointer.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
