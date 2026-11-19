@@ -1,6 +1,6 @@
 import unittest
 
-from scripts.pr_gate import WORKFLOWS, expected_workflows, workflow_result
+from scripts.pr_gate import WORKFLOWS, expected_workflows, workflow_result, workflows_available_on_base
 
 
 class PullRequestGateTests(unittest.TestCase):
@@ -40,6 +40,58 @@ class PullRequestGateTests(unittest.TestCase):
                 ".github/workflows/release-sbom.yml",
             },
         )
+
+    def test_construct_probe_change_selects_docs_and_native_matrix(self):
+        self.assertEqual(
+            expected_workflows(["tests/language-constructs/fact-function/probe-3.5.LST"]),
+            {
+                ".github/workflows/docs.yml",
+                ".github/workflows/amiga-construct-matrix.yml",
+            },
+        )
+
+    def test_construct_validator_change_selects_docs_and_native_matrix(self):
+        self.assertEqual(
+            expected_workflows(["scripts/validate_language_constructs.py"]),
+            {
+                ".github/workflows/docs.yml",
+                ".github/workflows/amiga-construct-matrix.yml",
+            },
+        )
+
+    def test_native_matrix_workflow_change_selects_matrix_and_workflow_lint(self):
+        self.assertEqual(
+            expected_workflows([".github/workflows/amiga-construct-matrix.yml"]),
+            {
+                ".github/workflows/amiga-construct-matrix.yml",
+                ".github/workflows/workflow-lint.yml",
+            },
+        )
+
+    def test_reference_matrix_workflow_change_routes_to_construct_matrix_and_lint(self):
+        self.assertEqual(
+            expected_workflows([".github/workflows/amiga-reference-matrix.yml"]),
+            {
+                ".github/workflows/amiga-construct-matrix.yml",
+                ".github/workflows/workflow-lint.yml",
+            },
+        )
+
+    def test_interpreter_probe_change_keeps_full_suite_baseline(self):
+        self.assertEqual(
+            expected_workflows(["tests/interpreter-probes/amiga-3.52/probe.LST"]),
+            {".github/workflows/amiga-reference-matrix.yml"},
+        )
+
+    def test_new_workflow_is_not_required_until_it_exists_on_base(self):
+        expected = {".github/workflows/amiga-construct-matrix.yml", ".github/workflows/docs.yml"}
+        base_paths = {".github/workflows/docs.yml"}
+        self.assertEqual(workflows_available_on_base(expected, base_paths), {".github/workflows/docs.yml"})
+
+    def test_existing_construct_matrix_is_required(self):
+        expected = {".github/workflows/amiga-construct-matrix.yml"}
+        base_paths = {".github/workflows/amiga-construct-matrix.yml"}
+        self.assertEqual(workflows_available_on_base(expected, base_paths), expected)
 
     def test_unknown_path_fails_closed_to_all_workflows(self):
         self.assertEqual(

@@ -16,43 +16,62 @@ on:
       - "scripts/amiga-cli-probe-3041u.sh"
       - "scripts/validate_gfatest_results.py"
   pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
     paths:
-      - ".github/workflows/amiga-reference-matrix.yml"
-      - ".github/workflows/amiga-native-merge-run.yml"
-      - ".github/workflows/amiga-3041u-native-merge-run.yml"
       - "tests/interpreter-probes/amiga-3.52/**"
       - "tests/interpreter-probes/amiga-3.041u/**"
       - "tests/interpreter-probes/amiga-3.5/**"
-      - "scripts/amiga-cli-probe-35.sh"
-      - "scripts/amiga-cli-probe-3041u.sh"
-      - "scripts/validate_gfatest_results.py"
   workflow_dispatch:
+  workflow_call:
+    inputs:
+      version:
+        description: "Single version for a construct matrix child run; empty runs the full reference matrix."
+        required: false
+        type: string
+        default: ""
+      construct_id:
+        description: "Construct ID for an isolated probe."
+        required: false
+        type: string
+        default: ""
+      probe_path:
+        description: "Repository-relative .LST probe path."
+        required: false
+        type: string
+        default: ""
 
 permissions:
   contents: read
 
 concurrency:
-  group: amiga-reference-matrix-${{ github.event.pull_request.number || github.ref }}
+  group: amiga-reference-matrix-${{ github.event.pull_request.number || github.ref }}-${{ inputs.construct_id || 'baseline' }}-${{ inputs.version || 'all' }}
   cancel-in-progress: true
 
 jobs:
   amiga-352:
-    if: github.actor != 'dependabot[bot]' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) && (github.event_name != 'workflow_dispatch' || github.ref == 'refs/heads/main')
+    if: (!inputs.version || inputs.version == '3.52') && github.actor != 'dependabot[bot]' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) && (github.event_name != 'workflow_dispatch' || (github.ref == 'refs/heads/main' && github.actor == github.repository_owner)) && (github.event_name != 'push' || ((github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/experiment/')) && github.actor == github.repository_owner)) && (github.event_name != 'pull_request' || github.event.pull_request.author_association == 'OWNER')
     name: GFA-BASIC 3.52 native run
     uses: ./.github/workflows/amiga-native-merge-run.yml
+    with:
+      construct_id: ${{ inputs.construct_id }}
+      probe_path: ${{ inputs.probe_path }}
     secrets: inherit
 
   amiga-3041u:
-    if: github.actor != 'dependabot[bot]' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) && (github.event_name != 'workflow_dispatch' || github.ref == 'refs/heads/main')
+    if: (!inputs.version || inputs.version == '3.041U') && github.actor != 'dependabot[bot]' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) && (github.event_name != 'workflow_dispatch' || (github.ref == 'refs/heads/main' && github.actor == github.repository_owner)) && (github.event_name != 'push' || (github.ref == 'refs/heads/main' && github.actor == github.repository_owner)) && (github.event_name != 'pull_request' || github.event.pull_request.author_association == 'OWNER')
     name: GFA-BASIC 3.041U native run
     uses: ./.github/workflows/amiga-3041u-native-merge-run.yml
+    with:
+      construct_id: ${{ inputs.construct_id }}
+      probe_path: ${{ inputs.probe_path }}
     secrets: inherit
 
   amiga-35:
-    if: github.actor != 'dependabot[bot]' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) && (github.event_name != 'workflow_dispatch' || github.ref == 'refs/heads/main')
+    if: (!inputs.version || inputs.version == '3.5') && github.actor != 'dependabot[bot]' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) && (github.event_name != 'workflow_dispatch' || (github.ref == 'refs/heads/main' && github.actor == github.repository_owner)) && (github.event_name != 'push' || (github.ref == 'refs/heads/main' && github.actor == github.repository_owner)) && (github.event_name != 'pull_request' || github.event.pull_request.author_association == 'OWNER')
     name: GFA-BASIC 3.5 native Merge + Run probes
     runs-on: ubuntu-24.04
     timeout-minutes: 25
+    continue-on-error: ${{ inputs.construct_id != '' }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
 
@@ -113,23 +132,13 @@ jobs:
           printf '%s\\n' "${ADF_MEMBERS[0]}" > artifacts/amiga-3.5-discovery/adf-member.txt
           echo "Candidate disk discovered; running editor identity will be verified from the held-right-button menu screenshot. Native language conformance remains UNTESTED." >> "$GITHUB_STEP_SUMMARY"
 
-      - name: Capture the running editor version from its right-button menu
+      - name: Download original Amiga Kickstart ROM
         env:
           GFA_ASSETS_TOKEN: ${{ secrets.GFA_ASSETS_TOKEN }}
         run: |
           set -euo pipefail
-          mkdir -p artifacts/amiga-3.5-discovery/boot-volume/S
-          cp "$RUNNER_TEMP/gfabasic-3.5" artifacts/amiga-3.5-discovery/boot-volume/gfabasic
-          printf 'gfabasic\n' > artifacts/amiga-3.5-discovery/boot-volume/S/Startup-Sequence
-          xdftool "$RUNNER_TEMP/gfa-basic-3.5-boot.adf" create + format GFA35 ofs + write artifacts/amiga-3.5-discovery/boot-volume/gfabasic + write artifacts/amiga-3.5-discovery/boot-volume/S
-          xdftool "$RUNNER_TEMP/gfa-basic-3.5-boot.adf" boot install boot1x
-          xdftool "$RUNNER_TEMP/gfa-basic-3.5-boot.adf" info > artifacts/amiga-3.5-discovery/boot-adf-info.txt
-
-          curl -fsSL https://packages.amiberry.com/gpg.key | sudo tee /usr/share/keyrings/amiberry-archive-keyring.gpg >/dev/null
-          echo "deb [arch=amd64 signed-by=/usr/share/keyrings/amiberry-archive-keyring.gpg] https://packages.amiberry.com/apt noble main" | sudo tee /etc/apt/sources.list.d/amiberry.list >/dev/null
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends amiberry xvfb netcat-openbsd tesseract-ocr python3-pil
-
+          test -n "$GFA_ASSETS_TOKEN"
+          mkdir -p artifacts/amiga-3.5-discovery
           curl --fail --silent --show-error --location \
             --header "Authorization: Bearer $GFA_ASSETS_TOKEN" \
             --header "Accept: application/vnd.github+json" \
@@ -145,6 +154,23 @@ jobs:
             --output "$RUNNER_TEMP/kick.rom"
           test "$(wc -c < "$RUNNER_TEMP/kick.rom")" -eq 524288
           sha256sum "$RUNNER_TEMP/kick.rom" > artifacts/amiga-3.5-discovery/kickstart-sha256.txt
+      - name: Capture the running editor version from its right-button menu
+        run: |
+          set -euo pipefail
+          BOOT_VOLUME="$RUNNER_TEMP/gfa-basic-3.5-boot-volume"
+          mkdir -p "$BOOT_VOLUME/S"
+          cp "$RUNNER_TEMP/gfabasic-3.5" "$BOOT_VOLUME/gfabasic"
+          printf 'gfabasic\n' > "$BOOT_VOLUME/S/Startup-Sequence"
+          xdftool "$RUNNER_TEMP/gfa-basic-3.5-boot.adf" create + format GFA35 ofs + write "$BOOT_VOLUME/gfabasic" + write "$BOOT_VOLUME/S"
+          # Never place the commercial interpreter executable in an artifact tree.
+          rm -rf "$BOOT_VOLUME"
+          xdftool "$RUNNER_TEMP/gfa-basic-3.5-boot.adf" boot install boot1x
+          xdftool "$RUNNER_TEMP/gfa-basic-3.5-boot.adf" info > artifacts/amiga-3.5-discovery/boot-adf-info.txt
+
+          curl -fsSL https://packages.amiberry.com/gpg.key | sudo tee /usr/share/keyrings/amiberry-archive-keyring.gpg >/dev/null
+          echo "deb [arch=amd64 signed-by=/usr/share/keyrings/amiberry-archive-keyring.gpg] https://packages.amiberry.com/apt noble main" | sudo tee /etc/apt/sources.list.d/amiberry.list >/dev/null
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends -o Dir::Cache::archives="$RUNNER_TEMP/apt-archives/" amiberry xvfb netcat-openbsd tesseract-ocr python3-pil
 
           cat > "$RUNNER_TEMP/amiga-3.5.uae" <<EOF
           use_gui=no
@@ -181,6 +207,12 @@ jobs:
             # Amiberry IPC button mask: bit 0 = left, bit 1 = right, bit 2 = middle.
             # Take the screenshot immediately while the right button remains down.
             printf "SEND_MOUSE\t0\t0\t2\n" | timeout 5s nc -U -N "$ipc_socket_path"
+            # Move the held pointer away from the version text so it cannot
+            # obscure the first characters during the identity screenshot.
+            for _ in 1 2 3 4; do
+              printf "SEND_MOUSE\t240\t176\t2\n" | timeout 5s nc -U -N "$ipc_socket_path"
+              sleep 0.1
+            done
             sleep 0.1
             printf "SCREENSHOT\t%s\n" "$GITHUB_WORKSPACE/artifacts/amiga-3.5-discovery/editor-version-menu.png" | timeout 5s nc -U -N "$ipc_socket_path"
             printf "SEND_MOUSE\t0\t0\t0\n" | timeout 5s nc -U -N "$ipc_socket_path"
@@ -200,7 +232,7 @@ jobs:
           ImageEnhance.Contrast(image).enhance(3).save("artifacts/amiga-3.5-discovery/editor-version-menu-ocr.png")
           PY
           tesseract artifacts/amiga-3.5-discovery/editor-version-menu-ocr.png stdout --psm 6 2>/dev/null | tee artifacts/amiga-3.5-discovery/editor-version-menu-ocr.txt
-          if grep -Eiq 'GFA[ -]?BASIC.*3[.]5' artifacts/amiga-3.5-discovery/editor-version-menu-ocr.txt; then
+          if grep -Eiq 'GFA[ -]?BASIC.*3[.]5([^0-9U]|$)' artifacts/amiga-3.5-discovery/editor-version-menu-ocr.txt; then
             echo "EDITOR_MENU_OCR=GFA BASIC 3.5" > artifacts/amiga-3.5-discovery/editor-version-result.txt
           else
             echo "EDITOR_MENU_OCR=INCONCLUSIVE; inspect editor-version-menu.png" > artifacts/amiga-3.5-discovery/editor-version-result.txt
@@ -208,6 +240,9 @@ jobs:
           echo "The right-button menu screenshot is the authoritative version evidence; OCR is diagnostic only. The screenshot is retained for visual verification." >> "$GITHUB_STEP_SUMMARY"
 
       - name: Prepare writable 3.5 test disk
+        env:
+          GFA_CONSTRUCT_ID_INPUT: ${{ inputs.construct_id }}
+          GFA_PROBE_PATH_INPUT: ${{ inputs.probe_path }}
         run: |
           set -euo pipefail
           mkdir -p artifacts/amiga-3.5-discovery/native-run
@@ -217,28 +252,64 @@ jobs:
           xdftool "$TEST_ADF" makedir S
           printf 'DF1:gfabasic\n' > "$RUNNER_TEMP/Startup-Sequence"
           xdftool "$TEST_ADF" write "$RUNNER_TEMP/Startup-Sequence" S/Startup-Sequence
-          xdftool "$TEST_ADF" write tests/interpreter-probes/amiga-3.5/regression-suite.LST gfatest.LST
+          if [ -n "$GFA_PROBE_PATH_INPUT" ]; then
+            test -n "$GFA_CONSTRUCT_ID_INPUT"
+            test -f "$GFA_PROBE_PATH_INPUT"
+            xdftool "$TEST_ADF" write "$GFA_PROBE_PATH_INPUT" gfatest.LST
+            printf '%s\n' "$GFA_CONSTRUCT_ID_INPUT" > "$RUNNER_TEMP/expected-ids.txt"
+            echo "GFATEST_EXPECTED_IDS_FILE=$RUNNER_TEMP/expected-ids.txt" >> "$GITHUB_ENV"
+            echo "GFA_CONSTRUCT_ID=$GFA_CONSTRUCT_ID_INPUT" >> "$GITHUB_ENV"
+          else
+            xdftool "$TEST_ADF" write tests/interpreter-probes/amiga-3.5/regression-suite.LST gfatest.LST
+            echo "GFATEST_EXPECTED_IDS_FILE=tests/interpreter-probes/amiga-3.5/expected-ids.txt" >> "$GITHUB_ENV"
+            echo "GFA_CONSTRUCT_ID=" >> "$GITHUB_ENV"
+          fi
           xdftool "$TEST_ADF" boot install boot1x
           xdftool "$TEST_ADF" list / all > artifacts/amiga-3.5-discovery/native-run/test-disk-layout.txt
           xdftool "$TEST_ADF" boot show > artifacts/amiga-3.5-discovery/native-run/test-disk-boot.txt
           grep -F 'bootable: True' artifacts/amiga-3.5-discovery/native-run/test-disk-boot.txt
-          cp tests/interpreter-probes/amiga-3.5/regression-suite.LST artifacts/amiga-3.5-discovery/native-run/gfatest.LST
+          if [ -n "$GFA_PROBE_PATH_INPUT" ]; then cp "$GFA_PROBE_PATH_INPUT" artifacts/amiga-3.5-discovery/native-run/gfatest.LST; else cp tests/interpreter-probes/amiga-3.5/regression-suite.LST artifacts/amiga-3.5-discovery/native-run/gfatest.LST; fi
 
       - name: Merge and run the 3.5 BASIC probe
+        id: native-run
         run: bash scripts/amiga-cli-probe-35.sh
+
+      - name: Write per-construct result record
+        if: always() && inputs.construct_id != ''
+        env:
+          CONSTRUCT_ID: ${{ inputs.construct_id }}
+          VERSION: "3.5"
+          PROBE_PATH: ${{ inputs.probe_path }}
+          HARNESS_OUTCOME: ${{ steps.native-run.outcome }}
+          RESULT_FILE: artifacts/amiga-3.5-discovery/native-run/gfatest-results.txt
+          IDENTITY_SCREENSHOT: artifacts/amiga-3.5-discovery/editor-version-menu.png
+          IDENTITY_OCR: artifacts/amiga-3.5-discovery/editor-version-menu-ocr.txt
+          OUTPUT_FILE: artifacts/amiga-3.5-discovery/native-run/result.json
+        run: |
+          EXPECTED_IDS_FILE="${GFATEST_EXPECTED_IDS_FILE:-tests/interpreter-probes/amiga-3.5/expected-ids.txt}"
+          python3 scripts/write_construct_result.py \
+            --construct-id "$CONSTRUCT_ID" --version "$VERSION" --probe "$PROBE_PATH" \
+            --harness-outcome "${HARNESS_OUTCOME:-failure}" --expected-ids "$EXPECTED_IDS_FILE" \
+            --results "$RESULT_FILE" --identity-screenshot "$IDENTITY_SCREENSHOT" \
+            --identity-ocr "$IDENTITY_OCR" --output "$OUTPUT_FILE"
 
       - name: Upload non-binary discovery evidence
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         with:
-          name: amiga-gfa-basic-3.5-asset-discovery
-          path: artifacts/amiga-3.5-discovery/
+          name: ${{ inputs.construct_id != '' && format('amiga-construct-{0}-3.5', inputs.construct_id) || 'amiga-gfa-basic-3.5-asset-discovery' }}
+          path: |
+            artifacts/amiga-3.5-discovery/
+            !artifacts/amiga-3.5-discovery/boot-volume/gfabasic
+            !artifacts/amiga-3.5-discovery/**/*.adf
+            !artifacts/amiga-3.5-discovery/**/*.rom
+            !artifacts/amiga-3.5-discovery/**/gfabasic
           if-no-files-found: warn
           retention-days: 7
 
   matrix-summary:
     name: Reference matrix summary
-    if: always() && github.actor != 'dependabot[bot]' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) && (github.event_name != 'workflow_dispatch' || github.ref == 'refs/heads/main')
+    if: always()
     needs: [amiga-352, amiga-3041u, amiga-35]
     runs-on: ubuntu-24.04
     steps:
@@ -247,19 +318,77 @@ jobs:
           STATUS_352: ${{ needs.amiga-352.result }}
           STATUS_3041U: ${{ needs.amiga-3041u.result }}
           STATUS_35: ${{ needs.amiga-35.result }}
+          SELECTED_VERSION: ${{ inputs.version }}
+          CONSTRUCT_ID: ${{ inputs.construct_id }}
+          EVENT_NAME: ${{ github.event_name }}
+          HEAD_REPOSITORY: ${{ github.event.pull_request.head.repo.full_name }}
+          PR_AUTHOR_ASSOCIATION: ${{ github.event.pull_request.author_association }}
+          REPOSITORY: ${{ github.repository }}
+          REF: ${{ github.ref }}
+          ACTOR: ${{ github.actor }}
+          REPOSITORY_OWNER: ${{ github.repository_owner }}
         run: |
+          TRUSTED_EVENT=true
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            if [ "$HEAD_REPOSITORY" != "$REPOSITORY" ] || [ "$PR_AUTHOR_ASSOCIATION" != "OWNER" ]; then
+              TRUSTED_EVENT=false
+            fi
+          elif [ "$EVENT_NAME" = "push" ]; then
+            case "$REF" in
+              refs/heads/main|refs/heads/experiment/*) ;;
+              *) TRUSTED_EVENT=false ;;
+            esac
+            if [ "$ACTOR" != "$REPOSITORY_OWNER" ]; then TRUSTED_EVENT=false; fi
+          elif [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+            if [ "$REF" != "refs/heads/main" ] || [ "$ACTOR" != "$REPOSITORY_OWNER" ]; then
+              TRUSTED_EVENT=false
+            fi
+          else
+            TRUSTED_EVENT=false
+          fi
           {
             echo "## Amiga GFA-BASIC reference matrix"
             echo ""
-            echo "| Interpreter | Native workflow result | Conformance interpretation |"
+            echo "| Interpreter | Native workflow result | Selection |"
             echo "|---|---|---|"
-            echo "| 3.52 | $STATUS_352 | Native probe suite; inspect its artifact for individual GFATEST records |"
-            echo "| 3.041U | $STATUS_3041U | Native comparison probe suite; exact version only |"
-            echo "| 3.5 | $STATUS_35 | Exact editor identity plus native Merge + Run probes; inspect GFATEST records and screenshots |"
+            if [ -z "$SELECTED_VERSION" ] || [ "$SELECTED_VERSION" = "3.52" ]; then echo "| 3.52 | $STATUS_352 | selected |"; else echo "| 3.52 | $STATUS_352 | not selected |"; fi
+            if [ -z "$SELECTED_VERSION" ] || [ "$SELECTED_VERSION" = "3.041U" ]; then echo "| 3.041U | $STATUS_3041U | selected |"; else echo "| 3.041U | $STATUS_3041U | not selected |"; fi
+            if [ -z "$SELECTED_VERSION" ] || [ "$SELECTED_VERSION" = "3.5" ]; then echo "| 3.5 | $STATUS_35 | selected |"; else echo "| 3.5 | $STATUS_35 | not selected |"; fi
             echo ""
-            echo "A green workflow means the configured native jobs and their host-side result protocol completed. The 3.5 suite is an initial three-case smoke set, not complete language conformance."
+            echo "A green workflow means the selected native harness and its host-side result protocol completed. Per-construct GFATEST outcomes are retained in the construct-result artifact; the 3.5 profile remains a smoke profile, not complete language conformance."
           } >> "$GITHUB_STEP_SUMMARY"
-          if [ "$STATUS_352" != success ] || [ "$STATUS_3041U" != success ] || [ "$STATUS_35" != success ]; then
-            echo "::error::At least one configured matrix job did not complete successfully."
-            exit 1
+          if [ -n "$CONSTRUCT_ID" ]; then
+            echo "Construct-level conformance status is reported by the parent matrix aggregator from the result.json artifact; job status may be success because harness failures are retained for aggregation." >> "$GITHUB_STEP_SUMMARY"
+          fi
+          if [ -z "$SELECTED_VERSION" ]; then
+            if [ "$STATUS_352" = failure ] || [ "$STATUS_3041U" = failure ] || [ "$STATUS_35" = failure ]; then
+              echo "::error::At least one configured baseline matrix job failed."
+              exit 1
+            fi
+            if [ "$STATUS_352" != success ] || [ "$STATUS_3041U" != success ] || [ "$STATUS_35" != success ]; then
+              if [ "$TRUSTED_EVENT" = false ]; then
+                echo "Native matrix: UNTESTED (private assets withheld for this event)." >> "$GITHUB_STEP_SUMMARY"
+              else
+                echo "::error::A trusted baseline native matrix job was skipped or did not complete."
+                exit 1
+              fi
+            fi
+          else
+            case "$SELECTED_VERSION" in
+              3.52) SELECTED_STATUS="$STATUS_352" ;;
+              3.041U) SELECTED_STATUS="$STATUS_3041U" ;;
+              3.5) SELECTED_STATUS="$STATUS_35" ;;
+              *) echo "::error::Unsupported selected version: $SELECTED_VERSION"; exit 1 ;;
+            esac
+            if [ "$SELECTED_STATUS" = failure ]; then
+              echo "::error::Selected native workflow $SELECTED_VERSION failed."
+              exit 1
+            elif [ "$SELECTED_STATUS" != success ]; then
+              if [ "$TRUSTED_EVENT" = false ]; then
+                echo "Native matrix $SELECTED_VERSION: UNTESTED (private assets withheld for this event)." >> "$GITHUB_STEP_SUMMARY"
+              else
+                echo "::error::Selected native workflow $SELECTED_VERSION was skipped or did not complete."
+                exit 1
+              fi
+            fi
           fi

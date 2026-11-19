@@ -36,26 +36,33 @@ env -u SHELLOPTS xvfb-run -a -s "-screen 0 1024x768x24 +extension GLX" bash -c '
   printf "INSERTFLOPPY\\t%s\\t0\\n" "$RUNNER_TEMP/gfatest.adf" | timeout 5s nc -U -N "${ipc_socket_path:-}" >"$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/insert-floppy-ipc.txt"
   printf "LIST_FLOPPIES\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}" >"$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/list-floppies-ipc.txt"
   printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/editor-before-merge.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+  # Identify the running editor from its own menu; capture while the right
+  # mouse button is still held, not from the archive/disk label.
+  printf "SEND_MOUSE\\t0\\t0\\t2\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+  sleep 0.1
+  printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/editor-version-menu.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+  printf "SEND_MOUSE\\t0\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 
-  # F2 opens the native ASCII Merge requester (GFA BASIC editor shortcut).
-  printf "SEND_KEY\\t81\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+  # GFA BASIC 3.041 exposes Merge as a menu-bar command rather than
+  # the F2 shortcut used by later releases. Click the visible "Merge" item.
+  printf "SEND_MOUSE\\t380\\t70\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
   sleep 0.2
-  printf "SEND_KEY\\t81\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+  printf "SEND_MOUSE\\t230\\t16\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+  sleep 0.3
+  printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+  sleep 0.2
+  printf "SEND_MOUSE\\t0\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
   sleep 3
   printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-dialog.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 
-  # DF0 is already selected. Move the pointer from the top-left corner
-  # to the visible gfatest.LST row (about x=340,y=211 in the screenshot).
-  # Amiberry applies a bounded relative delta per IPC event, so split motion.
-  for _ in $(seq 1 4); do
-    printf "SEND_MOUSE\\t240\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-    sleep 0.1
-  done
-  printf "SEND_MOUSE\\t0\\t176\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-  sleep 0.1
-  printf "SEND_MOUSE\\t0\\t112\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-  sleep 0.1
-  printf "SEND_MOUSE\\t0\\t112\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+  # The requester opens below the menu. Move onto the visible gfatest.LST row.
+  printf "SEND_MOUSE\\t380\\t150\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+  sleep 0.2
+  printf "SEND_MOUSE\\t380\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+  sleep 0.2
+  printf "SEND_MOUSE\\t230\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+  sleep 0.2
+  printf "SEND_MOUSE\\t0\\t174\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
   sleep 0.5
   printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-file-row-pointer.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
   printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
@@ -64,14 +71,12 @@ env -u SHELLOPTS xvfb-run -a -s "-screen 0 1024x768x24 +extension GLX" bash -c '
   sleep 0.5
   printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-file-selected.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 
-  # The LST row is selected. Move down to the Merge gadget and click it.
+  # Move from the selected row to the Merge gadget center.
   for _ in $(seq 1 3); do
     printf "SEND_MOUSE\\t0\\t112\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
     sleep 0.1
   done
-  printf "SEND_MOUSE\\t0\\t48\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-  sleep 0.1
-  printf "SEND_MOUSE\\t0\\t48\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+  printf "SEND_MOUSE\\t0\\t70\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
   sleep 0.5
   printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-gadget-pointer.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
   printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
@@ -121,6 +126,13 @@ env -u SHELLOPTS xvfb-run -a -s "-screen 0 1024x768x24 +extension GLX" bash -c '
     wait "$emulator_pid" || true
   fi
 '
+tesseract artifacts/amiga-cli-probe/editor-version-menu.png stdout --psm 11 2>/dev/null | tee artifacts/amiga-cli-probe/editor-version-menu-ocr.txt
+if grep -Eiq 'GFA[ -]?BASIC.*3[.]041U' artifacts/amiga-cli-probe/editor-version-menu-ocr.txt; then
+  echo "EDITOR_MENU_OCR=GFA BASIC 3.041U" > artifacts/amiga-cli-probe/editor-version-result.txt
+else
+  echo "EDITOR_MENU_OCR=INCONCLUSIVE; inspect editor-version-menu.png" > artifacts/amiga-cli-probe/editor-version-result.txt
+fi
+
 xdftool "$RUNNER_TEMP/gfatest.adf" read GFATEST.OUT artifacts/amiga-cli-probe/gfatest-results.txt
 cat artifacts/amiga-cli-probe/gfatest-results.txt
 for diagnostic in insert-floppy-ipc.txt list-floppies-ipc.txt stdin-save.LST; do
@@ -130,7 +142,7 @@ for diagnostic in insert-floppy-ipc.txt list-floppies-ipc.txt stdin-save.LST; do
     printf "MISSING: %s\\n" "$diagnostic" > "artifacts/amiga-cli-probe/$diagnostic.missing"
   fi
 done
-for screenshot in editor-before-merge.png merge-dialog.png merge-file-row-pointer.png merge-file-selected.png after-shortcut.png merge-gadget-pointer.png after-merge.png after-run-dialog.png after-run.png; do
+for screenshot in editor-before-merge.png editor-version-menu.png merge-dialog.png merge-file-row-pointer.png merge-file-selected.png after-shortcut.png merge-gadget-pointer.png after-merge.png after-run-dialog.png after-run.png; do
   test -s "artifacts/amiga-cli-probe/$screenshot"
 done
 # Amiga Kickstart screenshots use bright text on a saturated blue background.
@@ -154,6 +166,7 @@ fi
 # Validate one interpreter-emitted terminal record for every requested
 # fixture. The BASIC program performs each assertion before writing
 # PASS/FAIL; the host only validates collection completeness.
+EXPECTED_IDS_FILE="${GFATEST_EXPECTED_IDS_FILE:-tests/interpreter-probes/amiga-3.041u/expected-ids.txt}"
 python3 scripts/validate_gfatest_results.py \
-  --expected-ids tests/interpreter-probes/amiga-3.041u/expected-ids.txt \
+  --expected-ids "$EXPECTED_IDS_FILE" \
   --results artifacts/amiga-cli-probe/gfatest-results.txt

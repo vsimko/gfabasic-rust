@@ -154,6 +154,7 @@ fi
 # Validate one interpreter-emitted terminal record for every requested
 # fixture. The BASIC program performs each assertion before writing
 # PASS/FAIL; the host only validates collection completeness.
+EXPECTED_IDS_FILE="${GFATEST_EXPECTED_IDS_FILE:-tests/interpreter-probes/amiga-3.5/expected-ids.txt}"
 python3 scripts/validate_gfatest_results.py \
-  --expected-ids tests/interpreter-probes/amiga-3.5/expected-ids.txt \
+  --expected-ids "$EXPECTED_IDS_FILE" \
   --results artifacts/amiga-3.5-discovery/native-run/gfatest-results.txt

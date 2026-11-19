@@ -1,0 +1,306 @@
+name: Amiga GFA-BASIC changed construct matrix
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    paths:
+      - ".github/workflows/amiga-construct-matrix.yml"
+      - ".github/workflows/amiga-reference-matrix.yml"
+      - ".github/workflows/amiga-native-merge-run.yml"
+      - ".github/workflows/amiga-3041u-native-merge-run.yml"
+      - "scripts/validate_language_constructs.py"
+      - "scripts/validate_gfatest_results.py"
+      - "scripts/write_construct_result.py"
+      - "scripts/aggregate_language_construct_results.py"
+      - "scripts/amiga-cli-probe-35.sh"
+      - "scripts/amiga-cli-probe-3041u.sh"
+      - "tests/language-constructs/README.md"
+      - "tests/language-constructs/*/manifest.yaml"
+      - "tests/language-constructs/*/*.LST"
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/amiga-construct-matrix.yml"
+      - ".github/workflows/amiga-reference-matrix.yml"
+      - ".github/workflows/amiga-native-merge-run.yml"
+      - ".github/workflows/amiga-3041u-native-merge-run.yml"
+      - "scripts/validate_language_constructs.py"
+      - "scripts/validate_gfatest_results.py"
+      - "scripts/write_construct_result.py"
+      - "scripts/aggregate_language_construct_results.py"
+      - "scripts/amiga-cli-probe-35.sh"
+      - "scripts/amiga-cli-probe-3041u.sh"
+      - "tests/language-constructs/README.md"
+      - "tests/language-constructs/*/manifest.yaml"
+      - "tests/language-constructs/*/*.LST"
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "Validate only, run all declared constructs, or select one construct."
+        type: choice
+        options: [validate-only, all, construct]
+        default: validate-only
+        required: true
+      construct_id:
+        description: "Construct ID for mode=construct."
+        type: string
+        required: false
+      version:
+        description: "Optional exact version for mode=construct; all runs every declared version."
+        type: choice
+        options: [all, "3.041U", "3.5", "3.52"]
+        default: all
+        required: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: amiga-construct-matrix-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  select:
+    name: Validate manifests and select construct/version pairs
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    outputs:
+      matrix: ${{ steps.selection.outputs.matrix }}
+      selection_json: ${{ steps.selection.outputs.selection_json }}
+      has_jobs: ${{ steps.selection.outputs.has_jobs }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0
+        with:
+          python-version: "3.12"
+      - name: Cache selector Python wheels
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-python-3.12-amiga-selector-pyyaml-6.0.2
+      - name: Install selector dependency
+        run: python -m pip install --cache-dir "$HOME/.cache/pip" PyYAML==6.0.2
+      - name: Validate and select
+        id: selection
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          PUSH_BASE_SHA: ${{ github.event.before }}
+          PUSH_HEAD_SHA: ${{ github.sha }}
+          DISPATCH_MODE: ${{ inputs.mode }}
+          DISPATCH_CONSTRUCT_ID: ${{ inputs.construct_id }}
+          DISPATCH_VERSION: ${{ inputs.version }}
+        run: |
+          set -euo pipefail
+          if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+            case "$DISPATCH_MODE" in
+              validate-only)
+                python scripts/validate_language_constructs.py validate
+                printf '%s\n' '{"selection":"validate-only","changed_constructs":[],"include":[]}' > "$RUNNER_TEMP/selection.json"
+                ;;
+              all)
+                python scripts/validate_language_constructs.py select --all --format json > "$RUNNER_TEMP/selection.json"
+                ;;
+              construct)
+                test -n "$DISPATCH_CONSTRUCT_ID" || { echo "::error::construct_id is required for mode=construct"; exit 2; }
+                if [ "$DISPATCH_VERSION" = "all" ] || [ -z "$DISPATCH_VERSION" ]; then
+                  python scripts/validate_language_constructs.py select --construct "$DISPATCH_CONSTRUCT_ID" --format json > "$RUNNER_TEMP/selection.json"
+                else
+                  python scripts/validate_language_constructs.py select --construct "$DISPATCH_CONSTRUCT_ID" --version "$DISPATCH_VERSION" --format json > "$RUNNER_TEMP/selection.json"
+                fi
+                ;;
+              *) echo "::error::Unknown dispatch mode: $DISPATCH_MODE"; exit 2 ;;
+            esac
+          elif [ "$EVENT_NAME" = "pull_request" ]; then
+            LATEST_PARENT="$(git rev-parse "$PR_HEAD_SHA^" 2>/dev/null || true)"
+            LATEST_COMMIT_PATHS=""
+            if [ -n "$LATEST_PARENT" ]; then
+              LATEST_COMMIT_PATHS="$(git diff --name-only "$LATEST_PARENT" "$PR_HEAD_SHA")"
+            fi
+            if [ -n "$LATEST_COMMIT_PATHS" ] && ! printf '%s\\n' "$LATEST_COMMIT_PATHS" | grep -qvE '^tests/language-constructs/[^/]+/results/'; then
+              python scripts/validate_language_constructs.py validate
+              printf '%s\\n' '{"selection":"result-output-only","changed_constructs":[],"include":[]}' > "$RUNNER_TEMP/selection.json"
+            else
+              python scripts/validate_language_constructs.py select --base "$PR_BASE_SHA" --head "$PR_HEAD_SHA" --format json > "$RUNNER_TEMP/selection.json"
+            fi
+          else
+            if [[ "$PUSH_BASE_SHA" =~ ^0+$ ]]; then
+              python scripts/validate_language_constructs.py select --all --format json > "$RUNNER_TEMP/selection.json"
+            else
+              python scripts/validate_language_constructs.py select --base "$PUSH_BASE_SHA" --head "$PUSH_HEAD_SHA" --format json > "$RUNNER_TEMP/selection.json"
+            fi
+          fi
+          cat "$RUNNER_TEMP/selection.json"
+          MATRIX="$(jq -c '{include: .include}' "$RUNNER_TEMP/selection.json")"
+          SELECTION_JSON="$(jq -c . "$RUNNER_TEMP/selection.json")"
+          HAS_JOBS="$(jq -r '.include | length > 0' "$RUNNER_TEMP/selection.json")"
+          {
+            echo "matrix=$MATRIX"
+            echo "selection_json=$SELECTION_JSON"
+            echo "has_jobs=$HAS_JOBS"
+          } >> "$GITHUB_OUTPUT"
+
+  preflight:
+    name: Check trusted event for native execution
+    needs: select
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    outputs:
+      native_allowed: ${{ steps.gate.outputs.native_allowed }}
+      reason: ${{ steps.gate.outputs.reason }}
+    steps:
+      - name: Check event trust without reading the private token
+        id: gate
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          HEAD_REPOSITORY: ${{ github.event.pull_request.head.repo.full_name }}
+          PR_AUTHOR_ASSOCIATION: ${{ github.event.pull_request.author_association }}
+          REPOSITORY: ${{ github.repository }}
+          REF: ${{ github.ref }}
+          ACTOR: ${{ github.actor }}
+          REPOSITORY_OWNER: ${{ github.repository_owner }}
+        run: |
+          set -euo pipefail
+          allowed=false
+          reason="private native assets are unavailable for this event"
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            if [ "$HEAD_REPOSITORY" = "$REPOSITORY" ] && [ "$PR_AUTHOR_ASSOCIATION" = "OWNER" ]; then
+              allowed=true
+              reason="trusted owner pull request; native download steps determine asset availability"
+            else
+              reason="native assets are restricted to same-repository owner pull requests"
+            fi
+          elif [ "$REF" = "refs/heads/main" ] && [ "$ACTOR" = "$REPOSITORY_OWNER" ]; then
+            allowed=true
+            reason="trusted main-branch run; native download steps determine asset availability"
+          fi
+          echo "native_allowed=$allowed" >> "$GITHUB_OUTPUT"
+          echo "reason=$reason" >> "$GITHUB_OUTPUT"
+
+  run-native:
+    name: Native ${{ matrix.construct_id }} / ${{ matrix.version }}
+    needs: [select, preflight]
+    if: needs.select.outputs.has_jobs == 'true' && needs.preflight.outputs.native_allowed == 'true' && github.actor != 'dependabot[bot]' && (github.event_name != 'pull_request' || (github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.author_association == 'OWNER')) && (github.event_name != 'workflow_dispatch' || (github.ref == 'refs/heads/main' && github.actor == github.repository_owner)) && (github.event_name != 'push' || (github.ref == 'refs/heads/main' && github.actor == github.repository_owner))
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix: ${{ fromJson(needs.select.outputs.matrix) }}
+    uses: ./.github/workflows/amiga-reference-matrix.yml
+    with:
+      version: ${{ matrix.version }}
+      construct_id: ${{ matrix.construct_id }}
+      probe_path: ${{ matrix.probe }}
+    secrets: inherit
+
+  summarize:
+    name: Aggregate construct/version conformance outcomes
+    needs: [select, preflight, run-native]
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0
+        with:
+          python-version: "3.12"
+      - name: Cache aggregator Python wheels
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-python-3.12-amiga-aggregator-pyyaml-6.0.2
+      - name: Install aggregator dependency
+        run: python -m pip install --cache-dir "$HOME/.cache/pip" PyYAML==6.0.2
+      - name: Download per-construct native artifacts
+        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16
+        continue-on-error: true
+        with:
+          pattern: amiga-construct-*
+          path: artifacts/native-results
+          merge-multiple: false
+      - name: Aggregate and report
+        env:
+          SELECTION_JSON: ${{ needs.select.outputs.selection_json }}
+          NATIVE_ALLOWED: ${{ needs.preflight.outputs.native_allowed }}
+          NATIVE_REASON: ${{ needs.preflight.outputs.reason }}
+        run: |
+          set -euo pipefail
+          printf '%s\n' "$SELECTION_JSON" > "$RUNNER_TEMP/selection.json"
+          python scripts/aggregate_language_construct_results.py \
+            --selection "$RUNNER_TEMP/selection.json" \
+            --artifacts artifacts/native-results \
+            --native-allowed "${NATIVE_ALLOWED:-false}" \
+            --unavailable-reason "${NATIVE_REASON:-selection or preflight unavailable}" \
+            --output artifacts/construct-matrix-summary.json
+      - name: Upload aggregate summary
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: amiga-construct-matrix-summary-${{ github.run_id }}
+          path: artifacts/construct-matrix-summary.json
+          if-no-files-found: warn
+          retention-days: 14
+
+  persist-results:
+    name: Persist durable per-version result records
+    needs: [select, preflight, run-native]
+    if: always() && needs.preflight.outputs.native_allowed == 'true' && github.actor != 'dependabot[bot]' && (github.event_name != 'pull_request' || (github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.author_association == 'OWNER')) && (github.event_name != 'workflow_dispatch' || (github.ref == 'refs/heads/main' && github.actor == github.repository_owner)) && (github.event_name != 'push' || (github.ref == 'refs/heads/main' && github.actor == github.repository_owner))
+    permissions:
+      contents: write
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0
+        with:
+          python-version: "3.12"
+      - name: Install result aggregator dependency
+        run: python -m pip install PyYAML==6.0.2
+      - name: Download per-construct native artifacts
+        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16
+        continue-on-error: true
+        with:
+          pattern: amiga-construct-*
+          path: artifacts/native-results
+          merge-multiple: false
+      - name: Generate durable result records
+        env:
+          SELECTION_JSON: ${{ needs.select.outputs.selection_json }}
+        run: |
+          set -euo pipefail
+          printf '%s\n' "$SELECTION_JSON" > "$RUNNER_TEMP/selection.json"
+          python scripts/aggregate_language_construct_results.py \
+            --selection "$RUNNER_TEMP/selection.json" \
+            --artifacts artifacts/native-results \
+            --native-allowed true \
+            --unavailable-reason "native result artifact unavailable" \
+            --persist-results --run-id "$GITHUB_RUN_ID" \
+            --output "$RUNNER_TEMP/construct-matrix-summary.json" || test "$?" -eq 1
+      - name: Commit result records
+        env:
+          TARGET_BRANCH: ${{ github.event.pull_request.head.ref || github.ref_name }}
+          EXPECTED_BRANCH_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch origin "$TARGET_BRANCH"
+          if [ "$(git rev-parse FETCH_HEAD)" != "$EXPECTED_BRANCH_HEAD" ]; then
+            echo "Branch advanced during native execution; leaving these results as workflow artifacts rather than committing stale digests."
+            exit 0
+          fi
+          find tests/language-constructs -type f -path '*/results/*' -print0 | xargs -0 -r git add --
+          if git diff --cached --quiet; then
+            echo "No durable construct result records to commit."
+            exit 0
+          fi
+          git commit -m "test: record construct matrix run ${GITHUB_RUN_ID}"
+          git push origin "HEAD:${TARGET_BRANCH}"

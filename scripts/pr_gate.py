@@ -16,15 +16,22 @@ from typing import Any
 
 WORKFLOWS = {
     ".github/workflows/amiga-reference-matrix.yml": (
-        ".github/workflows/amiga-reference-matrix.yml",
-        ".github/workflows/amiga-native-merge-run.yml",
-        ".github/workflows/amiga-3041u-native-merge-run.yml",
         "tests/interpreter-probes/amiga-3.52/**",
         "tests/interpreter-probes/amiga-3.041u/**",
         "tests/interpreter-probes/amiga-3.5/**",
+    ),
+    ".github/workflows/amiga-construct-matrix.yml": (
+        ".github/workflows/amiga-construct-matrix.yml",
+        ".github/workflows/amiga-reference-matrix.yml",
+        ".github/workflows/amiga-native-merge-run.yml",
+        ".github/workflows/amiga-3041u-native-merge-run.yml",
+        "scripts/validate_language_constructs.py",
+        "scripts/validate_gfatest_results.py",
+        "scripts/write_construct_result.py",
+        "scripts/aggregate_language_construct_results.py",
         "scripts/amiga-cli-probe-35.sh",
         "scripts/amiga-cli-probe-3041u.sh",
-        "scripts/validate_gfatest_results.py",
+        "tests/language-constructs/**",
     ),
     ".github/workflows/docs.yml": (
         "**/*.md", ".markdownlint-cli2.jsonc", ".lychee.toml",
@@ -92,6 +99,11 @@ def expected_workflows(paths: list[str]) -> set[str]:
             return set(WORKFLOWS)
         expected.update(matched)
     return expected
+
+
+def workflows_available_on_base(expected: set[str], base_paths: set[str]) -> set[str]:
+    """Do not wait for a newly added workflow that GitHub cannot run on this PR yet."""
+    return {workflow for workflow in expected if workflow in base_paths}
 
 
 def expected_workflows_for_files(files: list[dict[str, Any]]) -> set[str]:
@@ -181,6 +193,14 @@ def main() -> int:
     )
     pull = api.get(f"/pulls/{args.pull_request}")
     base_ref = str(pull["base"]["ref"])
+    base_sha = str(pull["base"]["sha"])
+    base_commit = api.get(f"/commits/{urllib.parse.quote(base_sha, safe='')}")
+    base_tree_sha = str(base_commit["commit"]["tree"]["sha"])
+    base_tree = api.get(f"/git/trees/{urllib.parse.quote(base_tree_sha, safe='')}?recursive=1")
+    if base_tree.get("truncated"):
+        print("Base repository tree was truncated; cannot safely determine available workflows.", file=sys.stderr)
+        return 2
+    base_paths = {str(item.get("path", "")) for item in base_tree.get("tree", [])}
     compare_ref = (
         f"/compare/{urllib.parse.quote(base_ref, safe='')}..."
         f"{urllib.parse.quote(args.head_sha, safe='')}"
@@ -191,6 +211,12 @@ def main() -> int:
     files = api.paginated(compare_ref, "files")
     paths = [item["filename"] for item in files]
     expected = expected_workflows_for_files(files)
+    unavailable = sorted(expected - base_paths)
+    if unavailable:
+        print("New workflow(s) not present on the base branch; GitHub cannot run them for this PR yet:")
+        for workflow in unavailable:
+            print(f"  - {workflow}")
+    expected = workflows_available_on_base(expected, base_paths)
     print("Changed paths:")
     for path in paths:
         print(f"  - {path}")
