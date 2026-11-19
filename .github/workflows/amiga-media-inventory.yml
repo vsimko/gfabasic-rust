@@ -57,11 +57,22 @@ jobs:
 
           while IFS='|' read -r label filename; do
             encoded="$(python3 -c 'import sys,urllib.parse; print(urllib.parse.quote(sys.argv[1], safe=""))' "$filename")"
-            curl --fail --silent --show-error --location --retry 3 \
-              --header "Authorization: Bearer $GFA_ASSETS_TOKEN" \
-              --header "Accept: application/vnd.github.raw" \
-              "https://api.github.com/repos/vsimko/gfabasic-private-assets/contents/$encoded?ref=main" \
-              --output "media/archives/$label.zip"
+            python3 - "$filename" "media/archives/$label.zip" <<'PY'
+            import os
+            import shutil
+            import sys
+            from urllib.parse import quote
+            from urllib.request import Request, urlopen
+
+            filename, destination = sys.argv[1:]
+            url = f"https://api.github.com/repos/vsimko/gfabasic-private-assets/contents/{quote(filename, safe='')}?ref=main"
+            request = Request(url, headers={
+                "Authorization": f"Bearer {os.environ['GFA_ASSETS_TOKEN']}",
+                "Accept": "application/vnd.github.raw",
+            })
+            with urlopen(request, timeout=60) as response, open(destination, "wb") as output:
+                shutil.copyfileobj(response, output)
+            PY
             printf '%s\t%s\t' "$label" "$filename" >> artifacts/amiga-media-inventory/archive-sha256.txt
             sha256sum "media/archives/$label.zip" | cut -d' ' -f1 >> artifacts/amiga-media-inventory/archive-sha256.txt
             mkdir -p "media/extracted/$label"
@@ -92,14 +103,13 @@ jobs:
           set -euo pipefail
           {
             while IFS= read -r -d '' image; do
-              echo "===== $image ====="
-              xdftool "$image" info || true
-              echo "--- root listing ---"
-              xdftool "$image" list / all || true
-              echo "--- boot block ---"
-              xdftool "$image" boot show || true
-              echo "--- likely version strings ---"
-              strings -a "$image" | grep -i -E 'GFA|BASIC|VERSION|3[.]0|3[.]5|3[.]52|INTERPRETER|COMPILER' | head -100 || true
+              echo "===== ADF metadata ====="
+              printf 'Path: %s\\n' "$image"
+              stat -c 'Size: %s bytes' "$image"
+              sha256sum "$image"
+              file "$image"
+              echo "--- filesystem entry names ---"
+              xdftool "$image" list / all
               echo
             done < <(find media/extracted -type f -iname '*.adf' -print0 | sort -z)
           } > artifacts/amiga-media-inventory/adf-filesystems.txt
@@ -134,8 +144,6 @@ jobs:
               file "$output/$label"
               printf 'Header bytes: '
               od -An -tx1 -N4 "$output/$label"
-              echo "Version/component strings:"
-              strings -a "$output/$label" | grep -i -E 'GFA|BASIC|VERSION|3[.]0|3[.]5|3[.]52|INTERPRETER|COMPILER' | head -60 || true
               echo
             } >> artifacts/amiga-media-inventory/executable-fingerprints/REPORT.txt
           }
@@ -147,17 +155,7 @@ jobs:
           extract_and_report "gfabasro-3.52" "$ADF_352_1" "GFABasRo"
           extract_and_report "gfa-bcom-3.52" "$ADF_352_2" "GFA_BCOM"
 
-          # Record short identity-bearing documentation excerpts, not full manuals.
-          xdftool "$ADF_35" type readme.gfa > "$RUNNER_TEMP/readme-3.5.txt" || true
-          xdftool "$ADF_3041" type README.GFA > "$RUNNER_TEMP/readme-3.041.txt" || true
-          xdftool "$ADF_352_1" type README3.5.GFA > "$RUNNER_TEMP/readme-3.52-3.5.txt" || true
-          for readme in "$RUNNER_TEMP"/readme-*.txt; do
-            {
-              echo "===== $(basename "$readme") ====="
-              grep -i -E -C 1 'version|3[.]0|3[.]01|3[.]041|3[.]5|3[.]52|interpreter|compiler' "$readme" | head -100 || true
-              echo
-            } >> artifacts/amiga-media-inventory/executable-fingerprints/README-excerpts.txt
-          done
+          # Binary and documentation contents stay out of the public inventory artifact.
 
       - name: Publish metadata-only inventory artifact
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
