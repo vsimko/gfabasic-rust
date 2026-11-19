@@ -2,6 +2,12 @@ name: Prepare and analyze Amiga GFA-BASIC reference interpreter
 
 on:
   workflow_dispatch:
+    inputs:
+      publish_private_analysis:
+        description: "Explicitly approve replacing generated analysis on the private repository main branch and creating/updating a private GitHub Release."
+        required: false
+        default: false
+        type: boolean
 
 permissions:
   contents: write
@@ -58,11 +64,22 @@ jobs:
           mkdir -p analysis-input analysis-output
           ARCHIVE_NAME='GFA-BASIC v3.52 (1990)(GFA Systemtechnik)(DE)(Disk 1 of 2)[WB].zip'
           ARCHIVE_PATH_ENCODED="$(python3 -c 'import sys,urllib.parse; print(urllib.parse.quote(sys.argv[1], safe=""))' "$ARCHIVE_NAME")"
-          curl --fail --silent --show-error --location --retry 3 \
-            --header "Authorization: Bearer $GFA_ASSETS_TOKEN" \
-            --header "Accept: application/vnd.github.raw" \
-            "https://api.github.com/repos/vsimko/gfabasic-private-assets/contents/$ARCHIVE_PATH_ENCODED?ref=main" \
-            --output "$RUNNER_TEMP/gfa-basic-3.52-disk1.zip"
+          python3 - "$ARCHIVE_NAME" "$RUNNER_TEMP/gfa-basic-3.52-disk1.zip" <<'PY'
+          import os
+          import shutil
+          import sys
+          from urllib.parse import quote
+          from urllib.request import Request, urlopen
+
+          filename, destination = sys.argv[1:]
+          url = f"https://api.github.com/repos/vsimko/gfabasic-private-assets/contents/{quote(filename, safe='')}?ref=main"
+          request = Request(url, headers={
+              "Authorization": f"Bearer {os.environ['GFA_ASSETS_TOKEN']}",
+              "Accept": "application/vnd.github.raw",
+          })
+          with urlopen(request, timeout=60) as response, open(destination, "wb") as output:
+              shutil.copyfileobj(response, output)
+          PY
           python3 - "$RUNNER_TEMP/gfa-basic-3.52-disk1.zip" "$RUNNER_TEMP/gfa-basic-3.52-disk1.adf" <<'PY'
           import sys
           import zipfile
@@ -176,7 +193,8 @@ jobs:
           )
           PY
 
-      - name: Publish complete analysis to private assets repository
+      - name: Publish complete analysis to private assets repository (explicit opt-in)
+        if: inputs.publish_private_analysis
         env:
           GFA_ASSETS_TOKEN: ${{ secrets.GFA_ASSETS_TOKEN }}
         run: bash scripts/publish_private_amiga_analysis.sh
@@ -229,10 +247,22 @@ jobs:
             echo "Updated existing analysis PR: $EXISTING_PR"
           fi
 
-      - name: Upload reverse-engineering results
+      - name: Stage explicitly approved public analysis files
+        run: |
+          set -euo pipefail
+          mkdir -p public-analysis-artifact
+          for name in REPORT.md strings.json functions.json memory_blocks.json analysis_stats.json instructions.jsonl references.jsonl string_xrefs.jsonl unclaimed_instructions.jsonl; do
+            test -s "analysis-output/$name" || {
+              echo "::error::Missing public analysis file: $name"
+              exit 1
+            }
+            cp "analysis-output/$name" public-analysis-artifact/
+          done
+
+      - name: Upload reviewed public analysis files only
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         with:
           name: amiga-gfa-basic-analysis
-          path: analysis-output/
+          path: public-analysis-artifact/
           if-no-files-found: error
           retention-days: 30
