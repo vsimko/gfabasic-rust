@@ -290,13 +290,9 @@ jobs:
             xdftool artifacts/amiga-cli-probe/factzero.adf read FACT.OUT artifacts/amiga-cli-probe/fact-output.txt
             cat artifacts/amiga-cli-probe/fact-output.txt
           fi
-          python3 - <<'PY'
-          from PIL import Image, ImageOps, ImageEnhance
-          image = Image.open("artifacts/amiga-cli-probe/editor-version-menu.png").convert("L")
-          image = ImageOps.invert(image).resize((image.width * 3, image.height * 3))
-          ImageEnhance.Contrast(image).enhance(3).save("artifacts/amiga-cli-probe/editor-version-menu-ocr.png")
-          PY
-          tesseract artifacts/amiga-cli-probe/editor-version-menu-ocr.png stdout --psm 11 2>/dev/null | tee artifacts/amiga-cli-probe/editor-version-menu-ocr.txt
+          # Preserve the original menu colors: inversion/upscaling made
+          # Tesseract confuse the 5 in "3.52" with a 9 or 3.
+          tesseract artifacts/amiga-cli-probe/editor-version-menu.png stdout --psm 11 2>/dev/null | tee artifacts/amiga-cli-probe/editor-version-menu-ocr.txt
           if ! grep -Eiq '3[.,]52' artifacts/amiga-cli-probe/editor-version-menu-ocr.txt; then
             echo "EDITOR_MENU_OCR=INCONCLUSIVE; inspect editor-version-menu.png" | tee artifacts/amiga-cli-probe/editor-version-result.txt
             echo "::error::Could not identify GFA BASIC 3.52 from the running editor menu."
