@@ -115,7 +115,7 @@ pub fn lower(model: &SemanticModel) -> Result<Module, Vec<IrError>> {
 
     for statement in &model.document.program.statements {
         match statement {
-            Statement::AssignInteger { name, value, span } => {
+            Statement::AssignInteger { value, span, .. } => {
                 lower_assignment(
                     &model.symbols,
                     *span,
@@ -128,9 +128,9 @@ pub fn lower(model: &SemanticModel) -> Result<Module, Vec<IrError>> {
                 );
             }
             Statement::AssignFact {
-                name,
                 argument,
                 span,
+                ..
             } => {
                 let value = match unary_intrinsic("gfa.language.math.fact", *argument) {
                     Ok(value) => value,
@@ -150,7 +150,7 @@ pub fn lower(model: &SemanticModel) -> Result<Module, Vec<IrError>> {
                     &mut errors,
                 );
             }
-            Statement::AssignVariat { name, n, k, span } => {
+            Statement::AssignVariat { n, k, span, .. } => {
                 let value = match binary_intrinsic("gfa.language.math.variat", *n, *k) {
                     Ok(value) => value,
                     Err(message) => {
@@ -169,7 +169,7 @@ pub fn lower(model: &SemanticModel) -> Result<Module, Vec<IrError>> {
                     &mut errors,
                 );
             }
-            Statement::AssignCombin { name, n, k, span } => {
+            Statement::AssignCombin { n, k, span, .. } => {
                 let value = match binary_intrinsic("gfa.language.math.combin", *n, *k) {
                     Ok(value) => value,
                     Err(message) => {
@@ -343,16 +343,22 @@ pub fn value_type(module: &Module, id: ValueId) -> Option<ValueType> {
 #[cfg(test)]
 mod tests {
     use super::{Instruction, ValueId, ValueType, lower, value_type, verify};
-    use crate::frontend::parse;
+    use crate::frontend::parse_document;
+    use crate::semantic::analyze_prototype;
     use crate::source::SourceMap;
+
+    fn semantic_model(source_id: crate::source::SourceId, source: &str) -> crate::semantic::SemanticModel {
+        let document = parse_document(source_id, source).expect("supported syntax parses");
+        analyze_prototype(document).expect("prototype semantic analysis succeeds")
+    }
 
     #[test]
     fn lowers_all_three_intrinsics_to_typed_constants_and_print() {
         let source = "x=FACT(5)\ny=VARIAT(5,2)\nz=COMBIN(5,2)\nPRINT x,y,z\n";
         let mut sources = SourceMap::new();
         let id = sources.add_source("combinatorics.bas", source);
-        let ast = parse(id, source).unwrap();
-        let ir = lower(&ast).unwrap();
+        let model = semantic_model(id, source);
+        let ir = lower(&model).unwrap();
 
         assert_eq!(ir.instructions.len(), 4);
         assert!(matches!(
@@ -393,8 +399,8 @@ mod tests {
         let source = "x=42\nLET y=7\nPRINT x,y\n";
         let mut sources = SourceMap::new();
         let source_id = sources.add_source("integer-assignments.bas", source);
-        let program = crate::frontend::parse(source_id, source).expect("syntax is supported");
-        let module = lower(&program).expect("integer assignments lower to constants");
+        let model = semantic_model(source_id, source);
+        let module = lower(&model).expect("integer assignments lower to constants");
 
         assert!(matches!(
             module.instructions[0],
@@ -415,13 +421,12 @@ mod tests {
         let source = include_str!("../../../tests/corpus/amiga/3.5/matrix/mat-one-identity.lst");
         let mut sources = SourceMap::new();
         let id = sources.add_source("matrix.bas", source);
-        let ast = parse(id, source).unwrap();
-
-        let errors = lower(&ast).expect_err("matrix execution is not implemented");
+        let document = parse_document(id, source).unwrap();
+        let errors = analyze_prototype(document).expect_err("matrix semantics are not implemented");
         assert!(
             errors
                 .iter()
-                .any(|error| error.message.contains("matrix statements")),
+                .any(|error| error.message.contains("matrix semantic analysis")),
             "expected an explicit matrix support diagnostic: {errors:?}"
         );
     }
@@ -431,8 +436,8 @@ mod tests {
         let source = "x=FACT(0)\ny=VARIAT(20,0)\nz=COMBIN(20,10)\nPRINT x,y,z\n";
         let mut sources = SourceMap::new();
         let id = sources.add_source("boundary.bas", source);
-        let ast = parse(id, source).unwrap();
-        let ir = lower(&ast).unwrap();
+        let model = semantic_model(id, source);
+        let ir = lower(&model).unwrap();
 
         assert!(matches!(
             ir.instructions[0],
@@ -453,8 +458,8 @@ mod tests {
         for source in ["PRINT x\n", "x=FACT(1)\nx=FACT(2)\nPRINT x\n"] {
             let mut sources = SourceMap::new();
             let id = sources.add_source("invalid.bas", source);
-            let ast = parse(id, source).unwrap();
-            assert!(lower(&ast).is_err(), "accepted: {source}");
+            let document = parse_document(id, source).unwrap();
+            assert!(analyze_prototype(document).is_err(), "accepted: {source}");
         }
     }
 
