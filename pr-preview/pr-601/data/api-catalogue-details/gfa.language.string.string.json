@@ -1,0 +1,75 @@
+{
+  "id": "gfa.language.string.string",
+  "name": "STRING$",
+  "kind": "function",
+  "namespace": "language-core",
+  "category": "inherited-functions-3-5-evidence",
+  "availability": [
+    {
+      "dialect": "amiga-gfa-basic-interpreter",
+      "versions": [
+        "3.5"
+      ]
+    }
+  ],
+  "syntax": [
+    {
+      "form": "STRING$(integer-expression, string-expression)",
+      "contexts": [
+        "expression"
+      ],
+      "arguments": [
+        {
+          "name": "count",
+          "type": "integer expression",
+          "required": true
+        },
+        {
+          "name": "value",
+          "type": "string expression",
+          "required": true
+        }
+      ]
+    }
+  ],
+  "signature": {
+    "returns": "string"
+  },
+  "semantics": {
+    "summary": "Creates a string by repeating the supplied string value count times; the 3.5 matrix example uses STRING$(n, \"-\") for separator lines.",
+    "side-effects": [],
+    "errors": []
+  },
+  "evidence": {
+    "source-scope": "amiga-3.5-addendum",
+    "status": "book-documented",
+    "sources": [
+      "AM-INTERPRETER-35"
+    ],
+    "printed-pages": [
+      "Chapter 13, printed p. 13-21",
+      "Base-manual function definition, printed p. 4-32 (3.0-origin overload details only)"
+    ],
+    "notes": [
+      "The 3.5 example directly demonstrates the string-expression second argument. The numeric character-code overload and the documented count boundary are not independently demonstrated in 3.5 material."
+    ]
+  },
+  "implementation": {
+    "status": "not-implemented"
+  },
+  "support": [
+    {
+      "target": "x86_64-unknown-linux-gnu",
+      "classification": "unknown",
+      "conformance": "not-tested",
+      "tests": [],
+      "pending-reason": "No registered runtime implementation or executable 3.5 reference-interpreter conformance test."
+    }
+  ],
+  "docs": {
+    "path": "docs/research/amiga-gfa-basic-35-base-function-use-audit.md",
+    "anchors": [
+      "directly-evidenced-inherited-functions"
+    ]
+  }
+}

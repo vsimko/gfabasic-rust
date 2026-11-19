@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The property-test inventory for issue #579 found:">
+  <title>Generated property and mutation-testing pilot · GFA BASIC Rust documentation</title>
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body class="docs-site">
+  <header class="docs-header">
+    <a href="../../index.html">GFA BASIC Rust</a>
+    <span aria-hidden="true">/</span>
+    <a href="../index.html">Documentation</a>
+  </header>
+  <div class="docs-layout">
+    <nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home" href="index.html">Section index</a><ul><li><a href="amiga-reference-interpreter.html">Original Amiga interpreter reference asset</a></li><li><a href="amiga-gfa-basic-probes.html">Writing Amiga GFA BASIC reference-interpreter probes</a></li><li><a href="property-mutation-pilot.html">Generated property and mutation-testing pilot</a></li><li><a href="https://github.com/vsimko/gfabasic-rust/blob/main/.agents/skills/amiga-gfa-basic-regression-testing/SKILL.md">`amiga-gfa-basic-regression-testing`</a></li><li><a href="https://github.com/vsimko/gfabasic-rust/blob/main/.agents/skills/corpus-fixture-authoring/SKILL.md">`corpus-fixture-authoring`</a></li></ul></nav>
+    <main class="docs-content">
+      <article>
+        <h1>Generated property and mutation-testing pilot</h1>
+        <p class="docs-meta"><span>Testing Guide</span></p>
+        <h1 id="generated-property-and-mutation-testing-pilot">Generated property and mutation-testing pilot</h1>
+<h2 id="inventory-and-target-selection">Inventory and target selection</h2>
+<p>The property-test inventory for issue <a href="https://github.com/vsimko/gfabasic-rust/issues/579">#579</a> found:</p>
+<ul>
+<li><code>crates/gfabasic-compiler/src/source.rs</code> has focused unit tests for source IDs, UTF-8 spans, CRLF/LF/CR line endings, empty input, and UTF-8 loading. The generated property test lives in <code>crates/gfabasic-compiler/tests/source_properties.rs</code> so it exercises the public source-map API as an integration test.</li>
+<li><code>fuzz/fuzz_targets/source_loader.rs</code> already exercises arbitrary byte input, strict UTF-8 rejection, source-map immutability on decode failure, and selected offsets (start, end, midpoint). The AFL++ campaign and its budgets remain governed by <a href="../architecture/FUZZING.html">FUZZING.md</a>.</li>
+<li><code>scripts/tests/test_validate_api_registry.py</code> already has broad table-driven validation cases for schema errors, evidence scope, path traversal/symlinks, duplicate IDs/names, profile mismatches, and support claims.</li>
+<li><code>scripts/tests/test_generate_api_catalogue.py</code> already covers deterministic output, empty/partial registries, a 1,000-entry synthetic registry, detail resolution, and stale output detection.</li>
+</ul>
+<p>The selected property target is the stable <code>SourceFile</code> line-index interface. The integration test checks every byte offset for each generated text, rather than only the three offsets sampled by the existing fuzz target. It also cross-checks every reported line and line text against a separate test oracle.</p>
+<h2 id="generator-contract">Generator contract</h2>
+<ul>
+<li>Target: <code>SourceMap::add_source</code> and <code>SourceFile::{line_count,line_text,line_column}</code>.</li>
+<li>Seed: <code>0x5EED_35A1_2026</code> (fixed xorshift64 state; no external property-testing dependency).</li>
+<li>Bounds: 128 generated strings, at most 48 Unicode scalar values each.</li>
+<li>Alphabet: ASCII letters, two- and four-byte Unicode characters, CR, and LF.</li>
+<li>Properties: CR, LF, and CRLF line splitting; final empty lines; one-based line/column coordinates; Unicode-scalar columns; invalid UTF-8 byte offsets return no coordinate.</li>
+<li>Reproduction: run <code>cargo test -p gfabasic-compiler generated_source_text_has_consistent_lines_and_columns</code>. Failure messages include the seed, generated case, text, and byte offset.</li>
+</ul>
+<p>This is a bounded deterministic property test, not a language-conformance test. It generates transport/source-map text only and makes no claim about GFA BASIC source encoding or syntax.</p>
+<h2 id="mutation-testing">Mutation testing</h2>
+<p>Mutation testing is intentionally excluded from pull-request and push CI because each mutant rebuilds and retests the Rust package. It runs in the dedicated <strong>Rust mutation testing</strong> workflow once per day at 03:00 Europe/Berlin. Since GitHub Actions cron uses UTC, the workflow checks both 01:00 and 02:00 UTC and runs the expensive job only at the matching local hour, including CET/CEST changes. It can also be started manually with <code>workflow_dispatch</code>.</p>
+<p>The workflow uses the pinned <code>cargo-mutants</code> release and restricts mutation generation to the Rust implementation file <code>crates/gfabasic-compiler/src/source.rs</code>, testing only the <code>gfabasic-compiler</code> Rust package. The generated integration test remains part of that package's test suite. Python scripts, generated documentation, and other non-Rust implementations are out of scope. Results are uploaded as a workflow artifact for review.</p>
+<p>The initial bounded pilot is the Unicode-column behavior in <code>SourceFile::line_column</code>: a byte-counting mutant (<code>prefix.len()</code>) must be detected by the generated deterministic test, while the committed implementation counts Unicode scalar values (<code>prefix.chars().count()</code>). The earlier one-line probe was applied only temporarily and has been reverted; its CI attempt stopped at rustfmt before tests ran, so it is <strong>not</strong> counted as a killed mutant.</p>
+<p>This workflow establishes a narrow, scheduled Rust-only mutation baseline. It does not establish a repository-wide mutation score.</p>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>
