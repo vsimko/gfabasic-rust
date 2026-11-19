@@ -1,0 +1,107 @@
+name: Rust mutation testing
+
+on:
+  # GitHub Actions schedules use UTC. The guard below selects 03:00 Europe/Berlin
+  # across CET/CEST changes; only one of these two hourly triggers runs mutants.
+  schedule:
+    - cron: "0 1,2 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rust-mutation-main
+  cancel-in-progress: false
+
+jobs:
+  mutants:
+    name: Rust source-map mutation tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - name: Select the 03:00 Europe/Berlin schedule
+        id: local_time
+        if: always()
+        env:
+          SCHEDULE: ${{ github.event.schedule }}
+        shell: bash
+        run: |
+          if [[ "$GITHUB_EVENT_NAME" == "workflow_dispatch" ]]; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          case "$(TZ=Europe/Berlin date +%z)" in
+            +0100) expected_schedule='0 2 * * *' ;;
+            +0200) expected_schedule='0 1 * * *' ;;
+            *)
+              echo "Unsupported Europe/Berlin UTC offset; refusing to run mutation tests."
+              echo "run=false" >> "$GITHUB_OUTPUT"
+              exit 0
+              ;;
+          esac
+
+          if [[ "$SCHEDULE" == "$expected_schedule" ]]; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+            echo "Selected $SCHEDULE for the current Europe/Berlin UTC offset."
+          else
+            echo "run=false" >> "$GITHUB_OUTPUT"
+            echo "Skipping $SCHEDULE; expected $expected_schedule for the current Europe/Berlin UTC offset."
+          fi
+
+      - name: Check out repository
+        if: steps.local_time.outputs.run == 'true'
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+
+      - name: Cache Rust toolchain
+        if: steps.local_time.outputs.run == 'true'
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+        with:
+          path: |
+            ~/.rustup/toolchains/1.99.1-x86_64-unknown-linux-gnu
+            ~/.rustup/update-hashes
+          key: ${{ runner.os }}-rustup-1.99.1-minimal-mutation
+
+      - name: Cache Cargo dependencies and build artifacts
+        if: steps.local_time.outputs.run == 'true'
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-mutation-1.99.1-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-mutation-1.99.1-
+
+      - name: Install pinned Rust toolchain
+        if: steps.local_time.outputs.run == 'true'
+        run: |
+          rustup toolchain install 1.99.1 --profile minimal
+          rustup default 1.99.1
+
+      - name: Install pinned cargo-mutants
+        if: steps.local_time.outputs.run == 'true'
+        run: cargo +1.99.1 install cargo-mutants --version 27.1.0 --locked
+
+      - name: Run bounded Rust-only mutation testing
+        if: steps.local_time.outputs.run == 'true'
+        run: >-
+          cargo mutants
+          --package gfabasic-compiler
+          --file crates/gfabasic-compiler/src/source.rs
+          --jobs 2
+          --timeout 120
+          --output mutants.out
+          --caught
+          --unviable
+
+      - name: Upload mutation results
+        if: always() && steps.local_time.outputs.run == 'true'
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: rust-mutation-results-${{ github.run_id }}
+          path: mutants.out/
+          if-no-files-found: warn
+          retention-days: 14

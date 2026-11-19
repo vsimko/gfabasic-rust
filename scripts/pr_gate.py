@@ -29,7 +29,7 @@ WORKFLOWS = {
     ".github/workflows/docs.yml": (
         "**/*.md", ".markdownlint-cli2.jsonc", ".lychee.toml",
         ".github/workflows/docs.yml", "api/**", "scripts/**", "site/**",
-        "tests/corpus/**", "tests/tooling/**", "docs/**", "references/pdf-sources.json",
+        "tests/corpus/**", "tests/language-constructs/**", "tests/tooling/**", "docs/**", "references/pdf-sources.json",
         "scripts/validate_okf.py", "scripts/generate_docs_site.py",
         "scripts/tests/test_validate_okf.py", "scripts/tests/test_generate_docs_site.py",
     ),

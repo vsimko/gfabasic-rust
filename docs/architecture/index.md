@@ -1,6 +1,8 @@
 # Architecture and engineering
 
 - [AI VERIFICATION](AI-VERIFICATION.md) - AI-assisted review of API declarations against source evidence.
+- [AI AGENT SECURITY](AI-AGENT-SECURITY.md) - AI-agent trust boundaries, permissions, secrets, and incident response.
+- [AI AGENT EVALUATION](AI-AGENT-EVALUATION.md) - Evidence-based retrospective pilot for agent-assisted PR quality and workflow improvements.
 - [`api-evidence-verification` agent skill](../../.agents/skills/api-evidence-verification/SKILL.md) - Task procedure for preparing, performing, and validating evidence reviews.
 - [API PROFILES](API-PROFILES.md) - Documentation concepts in architecture.
 - [API REGISTRY](API-REGISTRY.md) - Documentation concepts in architecture.
@@ -24,8 +26,10 @@
 - [SECURITY](SECURITY.md) - Documentation concepts in architecture.
 - [TARGETS](TARGETS.md) - Documentation concepts in architecture.
 - [TESTING](TESTING.md) - Documentation concepts in architecture.
+- [VERSION-SCOPED LANGUAGE CONSTRUCT CATALOGUE](../../tests/language-constructs/README.md) - YAML manifest contract and examples for version-specific GFA BASIC constructs.
 - [VALIDATION](VALIDATION.md) - Documentation concepts in architecture.
 - [VERSIONING](VERSIONING.md) - Documentation concepts in architecture.
 - [WEBSITE PREVIEWS](WEBSITE_PREVIEWS.md) - Documentation concepts in architecture.
 - [WORKSPACE](WORKSPACE.md) - Documentation concepts in architecture.
+- [TOML inventory and YAML migration policy](TOML-YAML-MIGRATION.md) - Repository-wide inventory and migration decisions for issue #574.
 - [ADR](adr/) - Related documentation concepts.

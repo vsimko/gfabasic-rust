@@ -1,0 +1,76 @@
+manifest_schema_version: 1
+construct:
+  id: "fact-function"
+  kind: "function"
+  name: "FACT"
+  summary: "Factorial function for non-negative integer inputs."
+  syntax_forms:
+    - text: "FACT(n)"
+      versions: ["3.5", "3.52"]
+evidence:
+  - id: "fact-manual-35"
+    source_id: "AM-INTERPRETER-30-35-UPDATE-SCAN"
+    location: "printed pp. 14-1–14-2"
+    kind: "primary-manual"
+    status: "page-image-verified"
+    claim: "The 3.5 addendum documents FACT(n); the boundary examples give FACT(0)=1, FACT(1)=1, and FACT(2)=2."
+    url: "https://github.com/vsimko/gfabasic-rust/blob/main/tests/corpus/amiga/3.5/combinatorics/fact-zero.yaml"
+  - id: "fact-native-352"
+    source_id: "ACTIONS-44188927520"
+    location: "GFA-BASIC 3.52 native run / cli-probe job; artifact GFATEST:fact-zero:PASS"
+    kind: "native-observation"
+    status: "direct-observation"
+    claim: "The 3.52 regression suite reported FACT(0..2)=1,1,2 and GFATEST:fact-zero:PASS."
+    url: "https://github.com/vsimko/gfabasic-rust/actions/runs/44188927520"
+versions:
+  "3.041U":
+    applicability: "unknown"
+    expectation:
+      status: "unknown"
+      summary: "No version-scoped FACT expectation has been established for 3.041U."
+      evidence_refs: []
+    probe: null
+    execution:
+      status: "UNTESTED"
+      observed: null
+      run_url: null
+      probe_source: null
+      evidence_refs: []
+    implementation:
+      status: "not-targeted"
+      refs: []
+  "3.5":
+    applicability: "applicable"
+    expectation:
+      status: "documented"
+      summary: "FACT(0)=1, FACT(1)=1, and FACT(2)=2 according to the 3.5 addendum."
+      evidence_refs: ["fact-manual-35"]
+    probe: "probe-3.5.LST"
+    execution:
+      status: "UNTESTED"
+      observed: null
+      run_url: null
+      probe_source: null
+      evidence_refs: []
+    implementation:
+      status: "prototype"
+      refs:
+        - "crates/gfabasic-compiler/src/frontend.rs"
+        - "crates/gfabasic-compiler/src/ir.rs"
+        - "crates/gfabasic-compiler/src/prototype.rs"
+  "3.52":
+    applicability: "applicable"
+    expectation:
+      status: "observed"
+      summary: "A 3.52 native regression run observed FACT(0..2)=1,1,2; this is empirical and is not presented as a separate page-verified 3.52 manual rule."
+      evidence_refs: ["fact-native-352"]
+    probe: "probe-3.52.LST"
+    execution:
+      status: "PASS"
+      observed: "FACT(0..2)=1,1,2; GFATEST:fact-zero:PASS."
+      run_url: "https://github.com/vsimko/gfabasic-rust/actions/runs/44188927520"
+      probe_source: "tests/interpreter-probes/amiga-3.52/regression-suite.LST"
+      evidence_refs: ["fact-native-352"]
+    implementation:
+      status: "not-targeted"
+      refs: []

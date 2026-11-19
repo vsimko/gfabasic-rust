@@ -15,6 +15,8 @@ This is the canonical OKF v0.2 documentation bundle for gfabasic-rust. Markdown 
 # Architecture and implementation
 
 - [Architecture](architecture/) - System design, decisions, validation, and implementation status.
+- [AI agent security and trust boundaries](architecture/AI-AGENT-SECURITY.md) - Agent capabilities, untrusted inputs, workflow permissions, secrets, and maintainer controls.
+- [AI agent contribution evaluation](architecture/AI-AGENT-EVALUATION.md) - A small retrospective baseline and evidence-based improvements for agent-assisted PRs.
 - [Runtime handler registration](runtime-handler-registration.md) - Canonical API handler mapping and runtime dispatch validation.
 
 # Language and API reference
@@ -40,5 +42,6 @@ This is the canonical OKF v0.2 documentation bundle for gfabasic-rust. Markdown 
 - [User guides](user/) - User-facing guidance.
 - [Testing guides](testing/) - Reference interpreter and testing material.
 - [Amiga GFA BASIC probe-writing guide](testing/amiga-gfa-basic-probes.md) - Rules for version-specific native interpreter probes.
+- [Version-scoped language-construct catalogue](../tests/language-constructs/README.md) - Exact-version manifests, evidence, expectations, probes, and implementation status.
 - [Agent Skills](../.agents/skills/README.md) - Task-specific procedures for AI coding agents.
 - [Templates](templates/) - Reusable documentation structures.

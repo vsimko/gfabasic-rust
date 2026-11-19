@@ -16,9 +16,9 @@ The verified combinatorics and matrix fixtures accepted by the formatter are can
 
 ## Layout
 
-- `manifest.toml`: corpus version and fixture index.
+- `manifest.yaml`: corpus version and fixture index.
 - `<dialect>/<version>/<area>/<case>.lst`: standalone BASIC source.
-- `<dialect>/<version>/<area>/<case>.toml`: metadata and expected behavior.
+- `<dialect>/<version>/<area>/<case>.yaml`: metadata and expected behavior.
 
 Use lowercase, stable fixture IDs. Each source file must be original and self-contained. Do not require external assets, host paths, locale settings, or network access.
 
@@ -46,7 +46,7 @@ This crosswalk records which declaration a fixture investigates; it does not imp
 
 ## Metadata contract
 
-Each sidecar TOML file must define:
+Each sidecar YAML file must define:
 
 - `id`: stable unique identifier.
 - `dialect` and `version`: exact source dialect and release.
@@ -56,7 +56,7 @@ Each sidecar TOML file must define:
 - `source_key`, `source_pages`, and `evidence_status`: source identity, printed page/section, and evidence quality.
 - `expectation`: expected parse/compile/runtime outcome. State `expected_stdout`, `expected_stderr`, and `expected_exit` when applicable.
 
-The manifest stores fixture paths relative to the corpus root, without the `.lst` or `.toml` suffix. The corresponding source and metadata files use the same path stem. Fixture files and every directory component below the corpus root must be regular, non-symlink paths; symlinks are rejected to prevent external targets and alternate fixture identities.
+The manifest stores fixture paths relative to the corpus root, without the `.lst` or `.yaml` suffix. The corresponding source and metadata files use the same path stem. Fixture files and every directory component below the corpus root must be regular, non-symlink paths; symlinks are rejected to prevent external targets and alternate fixture identities.
 - `notes`: unresolved syntax, OCR, edition, or runtime questions.
 
 Validate the manifest, companion paths, stable IDs, evidence-source keys, and required metadata without compiling or executing any fixture:
@@ -81,8 +81,8 @@ A fixture may use `verified` only after its syntax and expected behavior are che
 ## Adding fixtures
 
 1. Check the relevant issue and architecture decisions.
-2. Add one focused `.lst` file and its TOML sidecar.
-3. Add the fixture ID to `manifest.toml`.
+2. Add one focused `.lst` file and its YAML sidecar.
+3. Add the fixture ID to `manifest.yaml`.
 4. Record the source claim and expected outcome.
 5. Keep the status at `candidate` until evidence review is complete.
 6. When a runner exists, record the runner version and actual result separately from the expected result.

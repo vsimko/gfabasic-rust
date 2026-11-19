@@ -2,20 +2,13 @@ name: Inventory private Amiga GFA BASIC media
 
 on:
   workflow_dispatch:
-  pull_request:
-    paths:
-      - ".github/workflows/amiga-media-inventory.yml"
-  push:
-    branches:
-      - main
-    paths:
-      - ".github/workflows/amiga-media-inventory.yml"
 
 permissions:
   contents: read
 
 jobs:
   inspect-private-media:
+    if: github.ref == 'refs/heads/main'
     permissions:
       contents: read
     runs-on: ubuntu-24.04
@@ -29,9 +22,6 @@ jobs:
         run: |
           set -euo pipefail
           test -n "$GFA_ASSETS_TOKEN"
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends unzip file
-          python3 -m pip install --break-system-packages amitools
           mkdir -p media/{archives,extracted} artifacts/amiga-media-inventory
           cat > "$RUNNER_TEMP/media.tsv" <<'EOF'
           3.5U|GFA-BASIC v3.5U (1990)(GFA Systemtechnik)(DE)(Disk 1 of 2)[b corrupt files][WB].zip
@@ -39,6 +29,12 @@ jobs:
           3.52-disk1|GFA-BASIC v3.52 (1990)(GFA Systemtechnik)(DE)(Disk 1 of 2)[WB].zip
           3.52-disk2|GFA-BASIC v3.52 (1990)(GFA Systemtechnik)(DE)(Disk 2 of 2).zip
           EOF
+
+          python scripts/check_private_github_assets.py --repo vsimko/gfabasic-private-assets --ref main --manifest "$RUNNER_TEMP/media.tsv"
+
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends unzip file
+          python3 -m pip install --break-system-packages amitools
 
           while IFS='|' read -r label filename; do
             encoded="$(python3 -c 'import sys,urllib.parse; print(urllib.parse.quote(sys.argv[1], safe=""))' "$filename")"
@@ -147,7 +143,7 @@ jobs:
 
   cleanup-legacy-artifact:
     name: Remove legacy artifact with extracted executables
-    if: github.event_name == 'pull_request'
+    if: github.ref == 'refs/heads/main'
     needs: inspect-private-media
     runs-on: ubuntu-24.04
     permissions:

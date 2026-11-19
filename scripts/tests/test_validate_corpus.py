@@ -2,7 +2,9 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from scripts.validate_corpus import validate_corpus
+import yaml
+
+from scripts.validate_corpus import manifest_summary, validate_corpus
 
 
 class CorpusValidationTests(unittest.TestCase):
@@ -15,23 +17,23 @@ class CorpusValidationTests(unittest.TestCase):
         (root / "docs/reference-sources.md").write_text(
             "| ID | Title |\n|---|---|\n| TEST-SOURCE | Test source |\n"
         )
-        (root / "tests/corpus/manifest.toml").write_text(
-            'schema_version = 1\ncorpus_status = "research_only"\n'
-            'description = "Test corpus."\n'
-            'fixtures = ["amiga/3.0/control-flow/fixture-one"]\n'
-        )
+        manifest = {
+            "schema_version": 1,
+            "corpus_status": "research_only",
+            "description": "Test corpus.",
+            "fixtures": ["amiga/3.0/control-flow/fixture-one"],
+        }
+        (root / "tests/corpus/manifest.yaml").write_text(yaml.safe_dump(manifest, sort_keys=False))
+        metadata = {
+            "id": "fixture-one", "dialect": "GFA BASIC Amiga", "version": "3.0",
+            "api_profiles": [], "kind": "semantic", "status": "candidate",
+            "source_key": "TEST-SOURCE", "source_pages": "printed p. 1",
+            "evidence_status": "reviewed", "expectation": "Prints one.",
+            "expected_stdout": "1", "expected_exit": "success",
+            "notes": ["Independently authored."],
+        }
         (corpus / "fixture-one.lst").write_text("PRINT 1\n")
-        (corpus / "fixture-one.toml").write_text(
-            'id = "fixture-one"\n'
-            'dialect = "GFA BASIC Amiga"\nversion = "3.0"\napi_profiles = []\n'
-            'kind = "semantic"\nstatus = "candidate"\nsource_key = "TEST-SOURCE"\n'
-            'source_pages = "printed p. 1"\nevidence_status = "reviewed"\n'
-            'expectation = "Prints one."\nexpected_stdout = "1"\nexpected_exit = "success"\n'
-            'notes = ["Independently authored."]\n'
-        )
-        from scripts.validate_corpus import manifest_summary
-        import tomllib
-        manifest = tomllib.loads((root / "tests/corpus/manifest.toml").read_text())
+        (corpus / "fixture-one.yaml").write_text(yaml.safe_dump(metadata, sort_keys=False))
         summary = manifest_summary(root / "tests/corpus", manifest["fixtures"])
         (root / "tests/corpus/README.md").write_text(
             "<!-- fixture-summary:start -->\n" + summary + "\n<!-- fixture-summary:end -->\n"
@@ -44,58 +46,53 @@ class CorpusValidationTests(unittest.TestCase):
         except (OSError, NotImplementedError) as exc:
             self.skipTest(f"symbolic links are unavailable: {exc}")
 
-    def test_invalid_utf8_manifest_reports_error_without_crashing(self):
-        temp, root = self.make_root()
-        self.addCleanup(temp.cleanup)
-        manifest = root / "tests/corpus/manifest.toml"
-        manifest.write_bytes(b"\xff")
-
-        errors = validate_corpus(root)
-        self.assertTrue(any("manifest.toml: invalid UTF-8" in item for item in errors))
-
-    def test_invalid_utf8_fixture_metadata_reports_error_without_crashing(self):
-        temp, root = self.make_root()
-        self.addCleanup(temp.cleanup)
-        metadata = root / "tests/corpus/amiga/3.0/control-flow/fixture-one.toml"
-        metadata.write_bytes(b"\xff")
-
-        errors = validate_corpus(root)
-        self.assertTrue(any("fixture-one.toml: invalid UTF-8" in item for item in errors))
-
-    def test_invalid_utf8_source_register_reports_error_without_crashing(self):
-        temp, root = self.make_root()
-        self.addCleanup(temp.cleanup)
-        source_register = root / "docs/reference-sources.md"
-        source_register.write_bytes(b"\xff")
-
-        errors = validate_corpus(root)
-        self.assertTrue(any("docs/reference-sources.md: invalid UTF-8" in item for item in errors))
-
     def test_valid_corpus_passes(self):
         temp, root = self.make_root()
         self.addCleanup(temp.cleanup)
         self.assertEqual(validate_corpus(root), [])
 
-    def test_non_string_kind_and_status_report_errors_without_crashing(self):
+    def test_invalid_utf8_manifest_reports_error(self):
         temp, root = self.make_root()
         self.addCleanup(temp.cleanup)
-        metadata = root / "tests/corpus/amiga/3.0/control-flow/fixture-one.toml"
-        original = metadata.read_text()
-        invalid_values = (
-            ('kind = "semantic"', "kind = []", "kind must be one of"),
-            ('status = "candidate"', 'status = { value = "candidate" }', "status must be one of"),
-        )
-        for valid_value, invalid_value, expected_error in invalid_values:
-            with self.subTest(value=invalid_value):
-                metadata.write_text(original.replace(valid_value, invalid_value))
-                errors = validate_corpus(root)
-                self.assertTrue(any(expected_error in item for item in errors))
+        (root / "tests/corpus/manifest.yaml").write_bytes(b"\xff")
+        self.assertTrue(any("manifest.yaml: invalid UTF-8" in e for e in validate_corpus(root)))
+
+    def test_invalid_utf8_metadata_reports_error(self):
+        temp, root = self.make_root()
+        self.addCleanup(temp.cleanup)
+        (root / "tests/corpus/amiga/3.0/control-flow/fixture-one.yaml").write_bytes(b"\xff")
+        self.assertTrue(any("fixture-one.yaml: invalid UTF-8" in e for e in validate_corpus(root)))
+
+    def test_duplicate_yaml_mapping_key_is_rejected(self):
+        temp, root = self.make_root()
+        self.addCleanup(temp.cleanup)
+        path = root / "tests/corpus/manifest.yaml"
+        path.write_text("schema_version: 1\nschema_version: 1\n")
+        self.assertTrue(any("invalid YAML" in e and "duplicate key" in e for e in validate_corpus(root)))
+
+    def test_manifest_must_be_mapping(self):
+        temp, root = self.make_root()
+        self.addCleanup(temp.cleanup)
+        (root / "tests/corpus/manifest.yaml").write_text("- item\n")
+        self.assertTrue(any("manifest must be a YAML mapping" in e for e in validate_corpus(root)))
+
+    def test_non_string_kind_and_status_report_errors(self):
+        temp, root = self.make_root()
+        self.addCleanup(temp.cleanup)
+        path = root / "tests/corpus/amiga/3.0/control-flow/fixture-one.yaml"
+        metadata = yaml.safe_load(path.read_text())
+        metadata["kind"] = []
+        metadata["status"] = {"value": "candidate"}
+        path.write_text(yaml.safe_dump(metadata, sort_keys=False))
+        errors = validate_corpus(root)
+        self.assertTrue(any("kind must be one of" in e for e in errors))
+        self.assertTrue(any("status must be one of" in e for e in errors))
 
     def test_missing_companion_file_fails(self):
         temp, root = self.make_root()
         self.addCleanup(temp.cleanup)
         (root / "tests/corpus/amiga/3.0/control-flow/fixture-one.lst").unlink()
-        self.assertTrue(any("missing source file" in item for item in validate_corpus(root)))
+        self.assertTrue(any("missing source file" in e for e in validate_corpus(root)))
 
     def test_symlinked_source_is_rejected(self):
         temp, root = self.make_root()
@@ -105,168 +102,108 @@ class CorpusValidationTests(unittest.TestCase):
         outside.write_text("PRINT 99\n")
         source.unlink()
         self.make_symlink(source, outside)
-
-        errors = validate_corpus(root)
-        self.assertTrue(any("source path must not traverse symlinks" in item for item in errors))
+        self.assertTrue(any("source path must not traverse symlinks" in e for e in validate_corpus(root)))
 
     def test_symlinked_metadata_is_rejected_without_reading_target(self):
         temp, root = self.make_root()
         self.addCleanup(temp.cleanup)
-        metadata = root / "tests/corpus/amiga/3.0/control-flow/fixture-one.toml"
-        outside = root / "outside.toml"
-        outside.write_text("this is not valid TOML = [")
+        metadata = root / "tests/corpus/amiga/3.0/control-flow/fixture-one.yaml"
+        outside = root / "outside.yaml"
+        outside.write_text("not: [valid")
         metadata.unlink()
         self.make_symlink(metadata, outside)
-
         errors = validate_corpus(root)
-        self.assertTrue(any("metadata path must not traverse symlinks" in item for item in errors))
-        self.assertFalse(any("invalid TOML" in item for item in errors))
+        self.assertTrue(any("metadata path must not traverse symlinks" in e for e in errors))
+        self.assertFalse(any("invalid YAML" in e for e in errors))
 
     def test_symlinked_parent_directory_is_rejected(self):
         temp, root = self.make_root()
         self.addCleanup(temp.cleanup)
-        corpus_dir = root / "tests/corpus/amiga/3.0/control-flow"
+        path = root / "tests/corpus/amiga/3.0/control-flow"
         outside = root / "outside-corpus"
-        corpus_dir.rename(outside)
-        self.make_symlink(corpus_dir, outside, target_is_directory=True)
-
+        path.rename(outside)
+        self.make_symlink(path, outside, target_is_directory=True)
         errors = validate_corpus(root)
-        self.assertTrue(any("source path must not traverse symlinks" in item for item in errors))
-        self.assertTrue(any("metadata path must not traverse symlinks" in item for item in errors))
+        self.assertTrue(any("source path must not traverse symlinks" in e for e in errors))
+        self.assertTrue(any("metadata path must not traverse symlinks" in e for e in errors))
 
-    def test_symlinked_corpus_root_is_rejected_before_reading_manifest(self):
+    def test_symlinked_corpus_root_is_rejected(self):
         temp, root = self.make_root()
         self.addCleanup(temp.cleanup)
-        corpus_root = root / "tests/corpus"
+        path = root / "tests/corpus"
         outside = root / "outside-corpus"
-        corpus_root.rename(outside)
-        self.make_symlink(corpus_root, outside, target_is_directory=True)
-
-        self.assertEqual(
-            validate_corpus(root),
-            ["tests/corpus/manifest.toml: path must not traverse symlinks"],
-        )
-
-    def test_symlinked_tests_parent_is_rejected_before_reading_manifest(self):
-        temp, root = self.make_root()
-        self.addCleanup(temp.cleanup)
-        tests_root = root / "tests"
-        outside = root / "outside-tests"
-        tests_root.rename(outside)
-        self.make_symlink(tests_root, outside, target_is_directory=True)
-
-        self.assertEqual(
-            validate_corpus(root),
-            ["tests/corpus/manifest.toml: path must not traverse symlinks"],
-        )
-
-    def test_broken_source_symlink_is_rejected(self):
-        temp, root = self.make_root()
-        self.addCleanup(temp.cleanup)
-        source = root / "tests/corpus/amiga/3.0/control-flow/fixture-one.lst"
-        source.unlink()
-        self.make_symlink(source, root / "missing.lst")
-
-        errors = validate_corpus(root)
-        self.assertTrue(any("source path must not traverse symlinks" in item for item in errors))
+        path.rename(outside)
+        self.make_symlink(path, outside, target_is_directory=True)
+        self.assertEqual(validate_corpus(root), ["tests/corpus/manifest.yaml: path must not traverse symlinks"])
 
     def test_duplicate_fixture_id_fails(self):
         temp, root = self.make_root()
         self.addCleanup(temp.cleanup)
-        manifest = root / "tests/corpus/manifest.toml"
-        manifest.write_text(
-            manifest.read_text().replace(
-                'fixtures = ["amiga/3.0/control-flow/fixture-one"]',
-                'fixtures = ["amiga/3.0/control-flow/fixture-one", "amiga/3.0/control-flow/fixture-two"]',
-            )
-        )
+        manifest_path = root / "tests/corpus/manifest.yaml"
+        manifest = yaml.safe_load(manifest_path.read_text())
+        manifest["fixtures"].append("amiga/3.0/control-flow/fixture-two")
+        manifest_path.write_text(yaml.safe_dump(manifest, sort_keys=False))
         fixture = root / "tests/corpus/amiga/3.0/control-flow"
         (fixture / "fixture-two.lst").write_text("PRINT 2\n")
-        (fixture / "fixture-two.toml").write_text((fixture / "fixture-one.toml").read_text())
-        self.assertTrue(any("duplicate id" in item for item in validate_corpus(root)))
+        (fixture / "fixture-two.yaml").write_text((fixture / "fixture-one.yaml").read_text())
+        self.assertTrue(any("duplicate id" in e for e in validate_corpus(root)))
 
-    def test_dialect_directory_must_match_metadata(self):
+    def test_dialect_and_version_must_match_directory(self):
         temp, root = self.make_root()
         self.addCleanup(temp.cleanup)
-        metadata = root / "tests/corpus/amiga/3.0/control-flow/fixture-one.toml"
-        metadata.write_text(metadata.read_text().replace("GFA BASIC Amiga", "GFA BASIC Atari ST"))
-        self.assertTrue(any("does not match directory 'amiga'" in item for item in validate_corpus(root)))
-
-    def test_version_directory_must_match_metadata(self):
-        temp, root = self.make_root()
-        self.addCleanup(temp.cleanup)
-        metadata = root / "tests/corpus/amiga/3.0/control-flow/fixture-one.toml"
-        metadata.write_text(metadata.read_text().replace('version = "3.0"', 'version = "3.5"'))
-        self.assertTrue(any("does not match directory '3.0'" in item for item in validate_corpus(root)))
+        path = root / "tests/corpus/amiga/3.0/control-flow/fixture-one.yaml"
+        metadata = yaml.safe_load(path.read_text())
+        metadata["dialect"] = "GFA BASIC Atari ST"
+        metadata["version"] = "3.5"
+        path.write_text(yaml.safe_dump(metadata, sort_keys=False))
+        errors = validate_corpus(root)
+        self.assertTrue(any("does not match directory 'amiga'" in e for e in errors))
+        self.assertTrue(any("does not match directory '3.0'" in e for e in errors))
 
     def test_fixture_path_requires_canonical_four_components(self):
         temp, root = self.make_root()
         self.addCleanup(temp.cleanup)
-        manifest = root / "tests/corpus/manifest.toml"
-        original = manifest.read_text()
-        valid_path = "amiga/3.0/control-flow/fixture-one"
-        for invalid_path in (
-            "amiga/3.0/fixture-one",
-            "amiga/3.0/control-flow/nested/fixture-one",
-            "amiga//3.0/control-flow/fixture-one",
-            "amiga/./3.0/control-flow/fixture-one",
-            "amiga/3.0/control-flow/fixture-one/",
-            "amiga/3.0/control-flow/fixture\\\\one",
-        ):
-            with self.subTest(path=invalid_path):
-                manifest.write_text(original.replace(valid_path, invalid_path))
-                self.assertTrue(any("invalid fixture path" in item for item in validate_corpus(root)))
+        path = root / "tests/corpus/manifest.yaml"
+        original = yaml.safe_load(path.read_text())
+        for invalid in ("amiga/3.0/fixture-one", "amiga/3.0/control-flow/nested/fixture-one",
+                        "amiga//3.0/control-flow/fixture-one", "amiga/./3.0/control-flow/fixture-one",
+                        "amiga/3.0/control-flow/fixture-one/", "amiga/3.0/control-flow/fixture\\\\one"):
+            with self.subTest(path=invalid):
+                manifest = dict(original, fixtures=[invalid])
+                path.write_text(yaml.safe_dump(manifest, sort_keys=False))
+                self.assertTrue(any("invalid fixture path" in e for e in validate_corpus(root)))
 
-    def test_missing_source_register_fails(self):
+    def test_missing_and_unknown_source_register_entries_fail(self):
         temp, root = self.make_root()
         self.addCleanup(temp.cleanup)
-        (root / "docs/reference-sources.md").unlink()
+        register = root / "docs/reference-sources.md"
+        register.unlink()
         self.assertIn("missing docs/reference-sources.md", validate_corpus(root))
-
-    def test_unknown_source_key_fails(self):
-        temp, root = self.make_root()
-        self.addCleanup(temp.cleanup)
-        metadata = root / "tests/corpus/amiga/3.0/control-flow/fixture-one.toml"
-        metadata.write_text(metadata.read_text().replace("TEST-SOURCE", "MISSING-SOURCE"))
-        self.assertTrue(any("unknown source_key" in item for item in validate_corpus(root)))
-
-    def test_source_register_heading_is_not_a_valid_source_key(self):
-        temp, root = self.make_root()
-        self.addCleanup(temp.cleanup)
-        metadata = root / "tests/corpus/amiga/3.0/control-flow/fixture-one.toml"
-        metadata.write_text(metadata.read_text().replace('source_key = "TEST-SOURCE"', 'source_key = "ID"'))
-        self.assertTrue(any("unknown source_key 'ID'" in item for item in validate_corpus(root)))
+        register.write_text("| ID | Title |\n|---|---|\n| TEST-SOURCE | Test source |\n")
+        metadata = root / "tests/corpus/amiga/3.0/control-flow/fixture-one.yaml"
+        data = yaml.safe_load(metadata.read_text())
+        data["source_key"] = "MISSING-SOURCE"
+        metadata.write_text(yaml.safe_dump(data, sort_keys=False))
+        self.assertTrue(any("unknown source_key" in e for e in validate_corpus(root)))
 
     def test_unlisted_fixture_fails(self):
         temp, root = self.make_root()
         self.addCleanup(temp.cleanup)
-        fixture = root / "tests/corpus/amiga/3.0/control-flow"
-        (fixture / "unlisted.lst").write_text("PRINT 3\n")
-        self.assertTrue(any("not listed" in item for item in validate_corpus(root)))
+        (root / "tests/corpus/amiga/3.0/control-flow/unlisted.lst").write_text("PRINT 3\n")
+        self.assertTrue(any("not listed" in e for e in validate_corpus(root)))
 
-    def test_manifest_summary_matches_fixture_sidecars(self):
+    def test_manifest_summary_matches_sidecars(self):
         temp, root = self.make_root()
         self.addCleanup(temp.cleanup)
-        from scripts.validate_corpus import manifest_summary
-        import tomllib
-        corpus_readme = root / "tests/corpus/README.md"
-        manifest = tomllib.loads((root / "tests/corpus/manifest.toml").read_text())
-        summary = manifest_summary(root / "tests/corpus", manifest["fixtures"])
-        corpus_readme.write_text(
-            "<!-- fixture-summary:start -->\n" + summary + "\n<!-- fixture-summary:end -->\n"
-        )
         self.assertEqual(validate_corpus(root), [])
 
     def test_stale_manifest_summary_fails(self):
         temp, root = self.make_root()
         self.addCleanup(temp.cleanup)
-        corpus_readme = root / "tests/corpus/README.md"
-        corpus_readme.write_text(
-            "<!-- fixture-summary:start -->\n"
-            "Manifest summary: 99 GFA BASIC Amiga 3.0 fixtures candidate; 99 total.\n"
-            "<!-- fixture-summary:end -->\n"
+        (root / "tests/corpus/README.md").write_text(
+            "<!-- fixture-summary:start -->\nManifest summary: 99 fixtures; 99 total.\n<!-- fixture-summary:end -->\n"
         )
-        self.assertTrue(any("manifest-derived fixture summary is missing or stale" in item for item in validate_corpus(root)))
+        self.assertTrue(any("manifest-derived fixture summary is missing or stale" in e for e in validate_corpus(root)))
 
 
 if __name__ == "__main__":

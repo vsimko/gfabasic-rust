@@ -5,7 +5,7 @@ from __future__ import annotations
 
 import re
 import sys
-import tomllib
+import yaml
 from pathlib import Path
 
 if __package__:
@@ -13,6 +13,40 @@ if __package__:
 else:
     from corpus_paths import has_symlink_component
 
+
+
+
+class UniqueKeySafeLoader(yaml.SafeLoader):
+    """Safe YAML loader that rejects duplicate mapping keys."""
+
+
+def _construct_unique_mapping(loader, node, deep=False):
+    mapping = {}
+    for key_node, value_node in node.value:
+        key = loader.construct_object(key_node, deep=deep)
+        try:
+            duplicate = key in mapping
+        except TypeError as exc:
+            raise yaml.constructor.ConstructorError(
+                "while constructing a mapping", node.start_mark,
+                "found an unhashable mapping key", key_node.start_mark,
+            ) from exc
+        if duplicate:
+            raise yaml.constructor.ConstructorError(
+                "while constructing a mapping", node.start_mark,
+                f"found duplicate key {key!r}", key_node.start_mark,
+            )
+        mapping[key] = loader.construct_object(value_node, deep=deep)
+    return mapping
+
+
+UniqueKeySafeLoader.add_constructor(
+    yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG, _construct_unique_mapping
+)
+
+
+def load_yaml(text):
+    return yaml.load(text, Loader=UniqueKeySafeLoader)
 
 ROOT = Path(__file__).resolve().parents[1]
 CORPUS_ROOT = ROOT / "tests" / "corpus"
@@ -83,16 +117,16 @@ def validate_fixture(
     corpus_root: Path,
 ) -> str | None:
     try:
-        metadata = tomllib.loads(metadata_path.read_text(encoding="utf-8"))
+        metadata = load_yaml(metadata_path.read_text(encoding="utf-8"))
     except UnicodeDecodeError as exc:
         error(errors, metadata_path, f"invalid UTF-8: {exc}", corpus_root)
         return None
-    except (OSError, tomllib.TOMLDecodeError) as exc:
-        error(errors, metadata_path, f"invalid TOML: {exc}", corpus_root)
+    except (OSError, yaml.YAMLError) as exc:
+        error(errors, metadata_path, f"invalid YAML: {exc}", corpus_root)
         return None
 
     if not isinstance(metadata, dict):
-        error(errors, metadata_path, "metadata must be a TOML table", corpus_root)
+        error(errors, metadata_path, "metadata must be a YAML mapping", corpus_root)
         return None
 
     for field in sorted(REQUIRED_FIELDS - metadata.keys()):
@@ -168,30 +202,33 @@ def validate_fixture(
 def validate_corpus(root: Path = ROOT) -> list[str]:
     """Return deterministic metadata errors; never compile or execute BASIC input."""
     corpus_root = root / "tests" / "corpus"
-    manifest_path = corpus_root / "manifest.toml"
+    manifest_path = corpus_root / "manifest.yaml"
     errors: list[str] = []
     if has_symlink_component(manifest_path, corpus_root):
-        return ["tests/corpus/manifest.toml: path must not traverse symlinks"]
+        return ["tests/corpus/manifest.yaml: path must not traverse symlinks"]
     if not manifest_path.is_file():
-        return ["missing tests/corpus/manifest.toml"]
+        return ["missing tests/corpus/manifest.yaml"]
 
     try:
-        manifest = tomllib.loads(manifest_path.read_text(encoding="utf-8"))
+        manifest = load_yaml(manifest_path.read_text(encoding="utf-8"))
     except UnicodeDecodeError as exc:
-        return [f"tests/corpus/manifest.toml: invalid UTF-8: {exc}"]
-    except (OSError, tomllib.TOMLDecodeError) as exc:
-        return [f"tests/corpus/manifest.toml: invalid TOML: {exc}"]
+        return [f"tests/corpus/manifest.yaml: invalid UTF-8: {exc}"]
+    except (OSError, yaml.YAMLError) as exc:
+        return [f"tests/corpus/manifest.yaml: invalid YAML: {exc}"]
+
+    if not isinstance(manifest, dict):
+        return ["tests/corpus/manifest.yaml: manifest must be a YAML mapping"]
 
     if manifest.get("schema_version") != 1:
-        errors.append("tests/corpus/manifest.toml: schema_version must be 1")
+        errors.append("tests/corpus/manifest.yaml: schema_version must be 1")
     if not is_non_empty_string(manifest.get("corpus_status")):
-        errors.append("tests/corpus/manifest.toml: corpus_status must be a non-empty string")
+        errors.append("tests/corpus/manifest.yaml: corpus_status must be a non-empty string")
     if not is_non_empty_string(manifest.get("description")):
-        errors.append("tests/corpus/manifest.toml: description must be a non-empty string")
+        errors.append("tests/corpus/manifest.yaml: description must be a non-empty string")
 
     fixtures = manifest.get("fixtures")
     if not isinstance(fixtures, list):
-        return errors + ["tests/corpus/manifest.toml: fixtures must be an array"]
+        return errors + ["tests/corpus/manifest.yaml: fixtures must be an array"]
 
     seen_stems: set[str] = set()
     seen_ids: dict[str, str] = {}
@@ -210,28 +247,28 @@ def validate_corpus(root: Path = ROOT) -> list[str]:
     for fixture in fixtures:
         fixture_relative = fixture_path(fixture)
         if fixture_relative is None:
-            errors.append(f"tests/corpus/manifest.toml: invalid fixture path {fixture!r}")
+            errors.append(f"tests/corpus/manifest.yaml: invalid fixture path {fixture!r}")
             continue
         stem = fixture_relative.as_posix()
         if stem in seen_stems:
-            errors.append(f"tests/corpus/manifest.toml: duplicate fixture path {stem!r}")
+            errors.append(f"tests/corpus/manifest.yaml: duplicate fixture path {stem!r}")
             continue
         seen_stems.add(stem)
 
         source_path = corpus_root / fixture_relative.with_suffix(".lst")
-        metadata_path = corpus_root / fixture_relative.with_suffix(".toml")
+        metadata_path = corpus_root / fixture_relative.with_suffix(".yaml")
         if has_symlink_component(source_path, corpus_root):
             errors.append(
-                f"tests/corpus/manifest.toml: {stem}: source path must not traverse symlinks"
+                f"tests/corpus/manifest.yaml: {stem}: source path must not traverse symlinks"
             )
         elif not source_path.is_file():
-            errors.append(f"tests/corpus/manifest.toml: {stem}: missing source file")
+            errors.append(f"tests/corpus/manifest.yaml: {stem}: missing source file")
         if has_symlink_component(metadata_path, corpus_root):
             error(errors, metadata_path, "metadata path must not traverse symlinks", corpus_root)
             referenced_metadata.add(metadata_path)
             continue
         if not metadata_path.is_file():
-            errors.append(f"tests/corpus/manifest.toml: {stem}: missing metadata file")
+            errors.append(f"tests/corpus/manifest.yaml: {stem}: missing metadata file")
             continue
         referenced_metadata.add(metadata_path)
         fixture_id = validate_fixture(metadata_path, stem, register_ids, errors, corpus_root)
@@ -246,16 +283,16 @@ def validate_corpus(root: Path = ROOT) -> list[str]:
             else:
                 seen_ids[fixture_id] = metadata_path.relative_to(corpus_root).as_posix()
 
-    for metadata_path in sorted(corpus_root.rglob("*.toml")):
+    for metadata_path in sorted(corpus_root.rglob("*.yaml")):
         if metadata_path == manifest_path:
             continue
         if metadata_path not in referenced_metadata:
-            error(errors, metadata_path, "metadata file is not listed in manifest.toml", corpus_root)
+            error(errors, metadata_path, "metadata file is not listed in manifest.yaml", corpus_root)
 
     for source_path in sorted(corpus_root.rglob("*.lst")):
-        metadata_path = source_path.with_suffix(".toml")
+        metadata_path = source_path.with_suffix(".yaml")
         if metadata_path not in referenced_metadata:
-            error(errors, source_path, "source file is not listed in manifest.toml", corpus_root)
+            error(errors, source_path, "source file is not listed in manifest.yaml", corpus_root)
     readme_path = corpus_root / "README.md"
     try:
         readme = readme_path.read_text(encoding="utf-8")
@@ -278,12 +315,12 @@ def manifest_summary(corpus_root: Path, fixtures: list[object]) -> str:
         relative = fixture_path(fixture)
         if relative is None:
             continue
-        metadata_path = corpus_root / relative.with_suffix(".toml")
+        metadata_path = corpus_root / relative.with_suffix(".yaml")
         if has_symlink_component(metadata_path, corpus_root) or not metadata_path.is_file():
             continue
         try:
-            metadata = tomllib.loads(metadata_path.read_text(encoding="utf-8"))
-        except (OSError, UnicodeDecodeError, tomllib.TOMLDecodeError):
+            metadata = load_yaml(metadata_path.read_text(encoding="utf-8"))
+        except (OSError, UnicodeDecodeError, yaml.YAMLError):
             continue
         dialect, version, status = (metadata.get(field) for field in ("dialect", "version", "status"))
         if not all(is_non_empty_string(value) for value in (dialect, version, status)):
