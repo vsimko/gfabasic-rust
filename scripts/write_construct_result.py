@@ -17,7 +17,7 @@ except ModuleNotFoundError:
 VERSION_PATTERNS = {
     "3.041U": re.compile(r"GFA[ -]?BASIC[\s\S]*3[.]041U", re.IGNORECASE),
     "3.5": re.compile(r"GFA[ -]?BASIC[\s\S]*3[.]5(?![0-9U])", re.IGNORECASE),
-    "3.52": re.compile(r"GFA[ -]?BASIC[\s\S]*3[.]52", re.IGNORECASE),
+    "3.52": re.compile(r"(?:GFA[ -]?)?BASIC[\s\S]*3[.,]52", re.IGNORECASE),
 }
 
 
