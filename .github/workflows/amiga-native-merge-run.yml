@@ -296,8 +296,8 @@ jobs:
           image = ImageOps.invert(image).resize((image.width * 3, image.height * 3))
           ImageEnhance.Contrast(image).enhance(3).save("artifacts/amiga-cli-probe/editor-version-menu-ocr.png")
           PY
-          tesseract artifacts/amiga-cli-probe/editor-version-menu-ocr.png stdout --psm 6 2>/dev/null | tee artifacts/amiga-cli-probe/editor-version-menu-ocr.txt
-          if ! grep -Eiq 'GFA[ -]?BASIC.*3[.]52' artifacts/amiga-cli-probe/editor-version-menu-ocr.txt; then
+          tesseract artifacts/amiga-cli-probe/editor-version-menu-ocr.png stdout --psm 11 2>/dev/null | tee artifacts/amiga-cli-probe/editor-version-menu-ocr.txt
+          if ! grep -Eiq '3[.,]52' artifacts/amiga-cli-probe/editor-version-menu-ocr.txt; then
             echo "EDITOR_MENU_OCR=INCONCLUSIVE; inspect editor-version-menu.png" | tee artifacts/amiga-cli-probe/editor-version-result.txt
             echo "::error::Could not identify GFA BASIC 3.52 from the running editor menu."
             exit 1
