@@ -150,7 +150,7 @@ jobs:
           curl -fsSL https://packages.amiberry.com/gpg.key | sudo tee /usr/share/keyrings/amiberry-archive-keyring.gpg >/dev/null
           echo "deb [arch=amd64 signed-by=/usr/share/keyrings/amiberry-archive-keyring.gpg] https://packages.amiberry.com/apt noble main" | sudo tee /etc/apt/sources.list.d/amiberry.list >/dev/null
           sudo apt-get update
-          sudo apt-get install -y --no-install-recommends amiberry xvfb netcat-openbsd tesseract-ocr python3-pil
+          sudo apt-get install -y --no-install-recommends -o Dir::Cache::archives="$RUNNER_TEMP/apt-archives/" amiberry xvfb netcat-openbsd tesseract-ocr python3-pil
 
           curl --fail --silent --show-error --location \
             --header "Authorization: Bearer $GFA_ASSETS_TOKEN" \
