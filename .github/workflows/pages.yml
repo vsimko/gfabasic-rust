@@ -80,11 +80,7 @@ jobs:
         run: |
           staging_dir="$(mktemp -d)"
           deploy_dir="$(mktemp -d)"
-          cleanup() {
-            git worktree remove --force "$deploy_dir" >/dev/null 2>&1 || true
-            rm -rf "$staging_dir" "$deploy_dir"
-          }
-          trap cleanup EXIT
+          trap 'git worktree remove --force "$deploy_dir" >/dev/null 2>&1 || true; rm -rf "$staging_dir" "$deploy_dir"' EXIT
 
           cp -a site/. "$staging_dir/"
           git config user.name "github-actions[bot]"
