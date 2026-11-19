@@ -347,7 +347,10 @@ mod tests {
     use crate::semantic::analyze_prototype;
     use crate::source::SourceMap;
 
-    fn semantic_model(source_id: crate::source::SourceId, source: &str) -> crate::semantic::SemanticModel {
+    fn semantic_model(
+        source_id: crate::source::SourceId,
+        source: &str,
+    ) -> crate::semantic::SemanticModel {
         let document = parse_document(source_id, source).expect("supported syntax parses");
         analyze_prototype(document).expect("prototype semantic analysis succeeds")
     }
