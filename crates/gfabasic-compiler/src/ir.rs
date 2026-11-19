@@ -133,6 +133,7 @@ pub fn lower(semantic: &SemanticModel<'_>) -> Result<Module, Vec<IrError>> {
             Statement::AssignFact {
                 argument,
                 span,
+                ..
             } => {
                 let value = match unary_intrinsic("gfa.language.math.fact", *argument) {
                     Ok(value) => value,
