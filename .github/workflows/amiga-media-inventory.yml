@@ -103,7 +103,7 @@ jobs:
           {
             while IFS= read -r -d '' image; do
               echo "===== ADF metadata ====="
-              printf 'Path: %s\\n' "$image"
+              echo "Path: $image"
               stat -c 'Size: %s bytes' "$image"
               sha256sum "$image"
               file "$image"
