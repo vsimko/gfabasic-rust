@@ -127,6 +127,21 @@ env -u SHELLOPTS xvfb-run -a -s "-screen 0 1024x768x24 +extension GLX" bash -c '
     wait "$emulator_pid" || true
   fi
 '
+python3 - <<'PY'
+from PIL import Image, ImageOps, ImageEnhance
+image = Image.open("artifacts/amiga-cli-probe/editor-version-menu.png").convert("L")
+image = ImageOps.invert(image).resize((image.width * 3, image.height * 3))
+ImageEnhance.Contrast(image).enhance(3).save("artifacts/amiga-cli-probe/editor-version-menu-ocr.png")
+PY
+tesseract artifacts/amiga-cli-probe/editor-version-menu-ocr.png stdout --psm 6 2>/dev/null | tee artifacts/amiga-cli-probe/editor-version-menu-ocr.txt
+if grep -Eiq 'GFA[ -]?BASIC.*3[.]041U' artifacts/amiga-cli-probe/editor-version-menu-ocr.txt; then
+  echo "EDITOR_MENU_OCR=GFA BASIC 3.041U" > artifacts/amiga-cli-probe/editor-version-result.txt
+else
+  echo "EDITOR_MENU_OCR=INCONCLUSIVE; inspect editor-version-menu.png" > artifacts/amiga-cli-probe/editor-version-result.txt
+  echo "::error::Could not identify GFA BASIC 3.041U from the running editor menu."
+  exit 1
+fi
+
 xdftool "$RUNNER_TEMP/gfatest.adf" read GFATEST.OUT artifacts/amiga-cli-probe/gfatest-results.txt
 cat artifacts/amiga-cli-probe/gfatest-results.txt
 for diagnostic in insert-floppy-ipc.txt list-floppies-ipc.txt stdin-save.LST; do
@@ -160,21 +175,6 @@ fi
 # Validate one interpreter-emitted terminal record for every requested
 # fixture. The BASIC program performs each assertion before writing
 # PASS/FAIL; the host only validates collection completeness.
-python3 - <<'PY'
-from PIL import Image, ImageOps, ImageEnhance
-image = Image.open("artifacts/amiga-cli-probe/editor-version-menu.png").convert("L")
-image = ImageOps.invert(image).resize((image.width * 3, image.height * 3))
-ImageEnhance.Contrast(image).enhance(3).save("artifacts/amiga-cli-probe/editor-version-menu-ocr.png")
-PY
-tesseract artifacts/amiga-cli-probe/editor-version-menu-ocr.png stdout --psm 6 2>/dev/null | tee artifacts/amiga-cli-probe/editor-version-menu-ocr.txt
-if grep -Eiq 'GFA[ -]?BASIC.*3[.]041U' artifacts/amiga-cli-probe/editor-version-menu-ocr.txt; then
-  echo "EDITOR_MENU_OCR=GFA BASIC 3.041U" > artifacts/amiga-cli-probe/editor-version-result.txt
-else
-  echo "EDITOR_MENU_OCR=INCONCLUSIVE; inspect editor-version-menu.png" > artifacts/amiga-cli-probe/editor-version-result.txt
-  echo "::error::Could not identify GFA BASIC 3.041U from the running editor menu."
-  exit 1
-fi
-
 EXPECTED_IDS_FILE="${GFATEST_EXPECTED_IDS_FILE:-tests/interpreter-probes/amiga-3.041u/expected-ids.txt}"
 python3 scripts/validate_gfatest_results.py \
   --expected-ids "$EXPECTED_IDS_FILE" \
