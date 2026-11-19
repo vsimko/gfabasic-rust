@@ -5,13 +5,13 @@ title: "Amiga GFA BASIC API reference — initial research inventory"
 
 # Amiga GFA BASIC API reference — initial research inventory
 
-- **Status:** Research draft; not an accepted API profile or implementation contract.
+- **Status:** Historical 3.0 research inventory with a source-verified 3.5 platform-profile crosswalk; the canonical structured declarations remain in `api/registry/amiga/`.
 - **Source scope:** Historical Amiga GFA BASIC interpreter 3.0 evidence from the French 1989 edition identified as `AM-BOOK-FR-1989`.
-- **Target warning:** The selected project dialect is Amiga interpreter 3.5. This 3.0 API inventory is not the 3.5 API contract; confirm each declaration against 3.5 sources before implementation.
+- **Target warning:** The historical 3.0 inventory is not the 3.5 API contract. Section 7 identifies the four platform declarations explicitly confirmed by the 3.5 addendum and keeps inherited candidates unpromoted.
 - **Tracking:** [issue #24](https://github.com/vsimko/gfabasic-rust/issues/24).
 - **Related material:** [Amiga GFA BASIC 3.0 language and API research notes](amiga-gfa-basic-3.0.md), [source register](../reference-sources.md), [API profile architecture](../architecture/API-PROFILES.md), and [proposed API registry model](../architecture/API-REGISTRY.md).
 
-This page begins a separate Amiga-specific reference. It does not claim complete API coverage, exact 3.52 compatibility, Linux runtime support, or conformance. It records only the limited command and platform behavior extracted so far from the identified Amiga 3.0 book. OCR-derived signatures and semantics remain subject to page-image review; entries below must not be treated as implementation-ready declarations.
+This page preserves the limited command and platform behavior extracted from the historical Amiga 3.0 book and adds a separately version-scoped 3.5 crosswalk in §7. It does not claim complete API coverage, exact 3.52 compatibility, Linux runtime support, or runtime conformance. OCR-derived signatures and semantics in the historical inventory remain subject to page-image review; consult §7 and the canonical TOML registry before treating any entry as a 3.5 declaration.
 
 ## 1. Source and version boundaries
 
