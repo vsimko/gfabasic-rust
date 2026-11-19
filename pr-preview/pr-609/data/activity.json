@@ -1,9 +1,25 @@
 {
   "schema_version": 1,
   "status": "fresh",
-  "generated_at": "2026-11-19T00:49:44.237696+00:00",
-  "last_successful_at": "2026-11-19T00:49:44.237696+00:00",
+  "generated_at": "2026-11-19T07:06:59.220939+00:00",
+  "last_successful_at": "2026-11-19T07:06:59.220939+00:00",
   "items": [
+    {
+      "type": "merged_pull_request",
+      "title": "[CI] Suppress ShellCheck false positive for Pages cleanup trap",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/606",
+      "number": 606,
+      "timestamp": "2026-11-19T07:05:57Z",
+      "summary": "PR #606 merged"
+    },
+    {
+      "type": "commit",
+      "title": "ci: suppress ShellCheck false positive for EXIT cleanup trap (#606)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/e59111416cbfb220a7d6fec578919cb6c4cbafc6",
+      "number": null,
+      "timestamp": "2026-11-19T07:05:56Z",
+      "summary": "Commit e591114"
+    },
     {
       "type": "merged_pull_request",
       "title": "[Testing] Validate and select versioned construct manifests (#571)",
@@ -83,22 +99,6 @@
       "number": null,
       "timestamp": "2026-11-17T22:27:16Z",
       "summary": "Commit 46d2c24"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "[Security] Define AI-agent trust boundaries and harden workflows (#580)",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/584",
-      "number": 584,
-      "timestamp": "2026-11-17T22:23:50Z",
-      "summary": "PR #584 merged"
-    },
-    {
-      "type": "commit",
-      "title": "[Security] Define AI-agent trust boundaries and harden workflows (#580) (#584)",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/81b6a50ec9359b3e7215dc5cff02fc0543f2775c",
-      "number": null,
-      "timestamp": "2026-11-17T22:23:50Z",
-      "summary": "Commit 81b6a50"
     }
   ]
 }
