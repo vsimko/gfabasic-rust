@@ -6,7 +6,8 @@
 
 use std::collections::{BTreeMap, BTreeSet};
 
-use crate::frontend::{Program, Statement};
+use crate::frontend::Statement;
+use crate::semantic::{SemanticModel, SymbolId};
 use crate::source::SourceSpan;
 
 /// Stable identity of a value within one IR module.
@@ -105,18 +106,22 @@ fn binary_intrinsic(declaration_id: &str, left: i64, right: i64) -> Result<Optio
 ///
 /// Intrinsics are evaluated here only for the prototype's documented literal
 /// subset. Their bounds are implementation limits, not dialect limits.
-pub fn lower(program: &Program) -> Result<Module, Vec<IrError>> {
+pub fn lower(semantic: &SemanticModel<'_>) -> Result<Module, Vec<IrError>> {
     let mut module = Module::default();
-    let mut variables = BTreeMap::<String, ValueId>::new();
+    let mut variables = BTreeMap::<SymbolId, ValueId>::new();
     let mut next_value = 0_u32;
     let mut errors = Vec::new();
     let mut saw_print = false;
 
-    for statement in &program.statements {
+    for statement in &semantic.program.statements {
         match statement {
             Statement::AssignInteger { name, value, span } => {
+                let Some(symbol) = semantic.symbol_for_assignment(*span) else {
+                    errors.push(IrError::at("assignment has no resolved semantic symbol", *span));
+                    continue;
+                };
                 lower_assignment(
-                    name,
+                    symbol.id,
                     Some(*value),
                     *span,
                     &mut variables,
@@ -137,8 +142,12 @@ pub fn lower(program: &Program) -> Result<Module, Vec<IrError>> {
                         continue;
                     }
                 };
+                let Some(symbol) = semantic.symbol_for_assignment(*span) else {
+                    errors.push(IrError::at("assignment has no resolved semantic symbol", *span));
+                    continue;
+                };
                 lower_assignment(
-                    name,
+                    symbol.id,
                     value,
                     *span,
                     &mut variables,
@@ -155,8 +164,12 @@ pub fn lower(program: &Program) -> Result<Module, Vec<IrError>> {
                         continue;
                     }
                 };
+                let Some(symbol) = semantic.symbol_for_assignment(*span) else {
+                    errors.push(IrError::at("assignment has no resolved semantic symbol", *span));
+                    continue;
+                };
                 lower_assignment(
-                    name,
+                    symbol.id,
                     value,
                     *span,
                     &mut variables,
@@ -173,8 +186,12 @@ pub fn lower(program: &Program) -> Result<Module, Vec<IrError>> {
                         continue;
                     }
                 };
+                let Some(symbol) = semantic.symbol_for_assignment(*span) else {
+                    errors.push(IrError::at("assignment has no resolved semantic symbol", *span));
+                    continue;
+                };
                 lower_assignment(
-                    name,
+                    symbol.id,
                     value,
                     *span,
                     &mut variables,
@@ -206,14 +223,16 @@ pub fn lower(program: &Program) -> Result<Module, Vec<IrError>> {
                 ));
             }
             Statement::PrintVariables { names, span } => {
+                let references: Vec<_> = semantic.references_in(*span).collect();
                 let mut values = Vec::with_capacity(names.len());
-                for name in names {
-                    match variables.get(name) {
+                if references.len() != names.len() {
+                    errors.push(IrError::at("PRINT references do not match the resolved semantic model", *span));
+                    continue;
+                }
+                for reference in references {
+                    match variables.get(&reference.symbol) {
                         Some(value) => values.push(*value),
-                        None => errors.push(IrError::at(
-                            format!("variable '{name}' is not assigned before PRINT"),
-                            *span,
-                        )),
+                        None => errors.push(IrError::at(format!("resolved symbol {:?} has no lowered value", reference.symbol), reference.span)),
                     }
                 }
                 if values.len() == names.len() {
@@ -241,15 +260,15 @@ pub fn lower(program: &Program) -> Result<Module, Vec<IrError>> {
 }
 
 fn lower_assignment(
-    name: &str,
+    symbol: SymbolId,
     value: Option<i64>,
     span: SourceSpan,
-    variables: &mut BTreeMap<String, ValueId>,
+    variables: &mut BTreeMap<SymbolId, ValueId>,
     module: &mut Module,
     next_value: &mut u32,
     errors: &mut Vec<IrError>,
 ) {
-    if variables.contains_key(name) {
+    if variables.contains_key(&symbol) {
         errors.push(IrError::at(
             format!("reassignment of '{name}' is outside the current prototype subset"),
             span,
@@ -265,7 +284,7 @@ fn lower_assignment(
     };
     let id = ValueId(*next_value);
     *next_value += 1;
-    variables.insert(name.to_owned(), id);
+    variables.insert(symbol, id);
     module.instructions.push(Instruction::ConstI64 {
         result: id,
         value,
