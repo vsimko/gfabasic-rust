@@ -50,7 +50,9 @@ pub struct SymbolTable {
 /// A parsed document paired with its resolved, document-local symbol graph.
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct SemanticModel {
+    /// Exact parsed document whose source spans are used by the symbol graph.
     pub document: ParsedDocument,
+    /// Resolved declarations and source references for the prototype subset.
     pub symbols: SymbolTable,
 }
 
