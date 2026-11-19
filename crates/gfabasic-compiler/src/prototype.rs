@@ -13,8 +13,8 @@ use std::sync::atomic::{AtomicUsize, Ordering};
 
 use crate::diagnostics::{Diagnostic, DiagnosticCategory, DiagnosticSeverity};
 use crate::frontend::parse_document;
-use crate::semantic::analyze_prototype;
 use crate::ir::{Instruction, Module, ValueId};
+use crate::semantic::analyze_prototype;
 use crate::source::{SourceMap, SourceSpan};
 
 static NEXT_TEMP: AtomicUsize = AtomicUsize::new(0);
