@@ -191,7 +191,30 @@ The following Amiga-specific families are documented in the German 1990 book's g
 
 These are explicit unresolved version-applicability candidates, not 3.5 declarations. Do not add registry records for them until a 3.5 source passage or a controlled, version-identified interpreter observation establishes applicability. Where the evidence eventually establishes Amiga hardware/OS semantics without a safe Linux equivalent, record the original semantics and classify Linux support independently (including `unsupported` or `unsafe-disabled` where justified).
 
-### 7.4 Coverage and remaining gaps
+### 7.4 Platform-area coverage audit
+
+The following audit closes the investigation loop for the areas named in issue #286. The candidate page ranges below are from `AM-BOOK-DE-1990`, whose general interpreter reference is explicitly 3.0/V3.03; they are discovery evidence, **not** 3.5 availability evidence. The normative 3.5 addendum (`AM-INTERPRETER-35`, printed pp. 13-32–13-36) adds only the platform constructs listed in §7.1. Absence from that short addendum is not proof that a historical API was removed; it leaves applicability unresolved.
+
+| Investigation area | Historical candidate surface and source locator | 3.5 disposition | Amiga dependency / Linux boundary |
+|---|---|---|---|
+| File, disk and device I/O | `OPEN`, channel I/O, directory/file operations; `AM-BOOK-DE-1990`, pp. 75–119 | Candidate only; no declaration promoted | AmigaDOS device handlers, filesystem semantics and channel behavior are not host-file aliases. Linux support is unclassified until 3.5 applicability and semantics are established. |
+| AmigaDOS library | DOS library routines for handles, locks, directories, file metadata and process execution; pp. 120–131 | Candidate only; no declaration promoted | Direct OS calls and AmigaDOS data structures; no implicit POSIX mapping. |
+| Port I/O | `INP`, `OUT`; p. 119 | Candidate only; no declaration promoted | Hardware/port access is platform-specific. Do not emulate with arbitrary host I/O or mark safe on Linux. |
+| Sound and speech | `SOUND`, `WAVE`, `SAY`, speech translation; pp. 139–143 | Candidate only; no declaration promoted | Amiga audio/speech facilities and device availability are unresolved; no SDL/audio equivalence is inferred. |
+| Graphics primitives and drawing state | `PLOT`, `LINE`, `DRAW`, `BOX`, `CIRCLE`, `GRAPHMODE` and related drawing operations; pp. 225–256 | Candidate only; `PCOLOR` is the sole separately confirmed 3.5 addition in this area | Original RastPort, pen, drawing-mode and active-target semantics need declaration-level evidence; generic host drawing is not proof of compatibility. |
+| Bitmaps, sprites and Blitter objects | `GET`, `PUT`, `SPRITE`, `VSYNC`, `OBJECT.*`, collision operations; pp. 257–278 | Candidate only; no declaration promoted | Bitplanes, hardware sprites, Blitter objects and display timing are Amiga-specific. Linux support may require explicit unsupported/unsafe-disabled classification if later confirmed. |
+| Memory and pointers | `PEEK/POKE`, typed access, `MALLOC/MFREE`, `VARPTR`, `ABSOLUTE`, `INLINE`; pp. 305–316 | Candidate only; no declaration promoted | Address width, ownership, lifetime and executable-memory behavior are unresolved. Never expose raw Amiga addresses as portable host pointers. |
+| Exec tasks, signals, ports, lists, libraries and devices | Direct Exec routine families; pp. 317–329 | Candidate only; no declaration promoted | Amiga Exec ABI, structures, scheduling and resource lifecycle require original headers/runtime evidence; no POSIX-thread or handle substitution is assumed. |
+| Program control, errors, multitasking and debugging | `RUN/STOP`, error handling, time, multitasking and diagnostic operations; pp. 331–361 | Candidate only except the separately confirmed `GURU` command/function in §7.1 | GURU semantics are recorded independently; other control and task APIs remain unverified for 3.5. |
+| Requesters and input devices | `ALERT`, `FILESELECT`, mouse, joystick, `STICK/STRIG`; pp. 363–374 | Candidate only; no declaration promoted | Intuition requester and input-device dependencies; no desktop-dialog or generic gamepad equivalence is inferred. |
+| Windows and screens | `OPENW/CLOSEW`, window management, `OPENS/CLOSES`, screen modes; pp. 375–388 | Candidate only except the negative-screen-number `OPENW` variant in §7.1 | Window/screen lifecycle, IDCMP messages, flags, bitmaps and screen modes remain unverified as a complete 3.5 contract. |
+| Menus and event dispatch | `MENU` family, `MENU()`, `ON MENU`, event handlers and `SLEEP`; pp. 389–404 | Candidate only; no declaration promoted | Intuition event payloads, message masks and handler lifecycle are Amiga-specific and lack 3.5 confirmation. |
+| Compiler and editor facilities | Compiler/linker chapter pp. 405–450; separate editor material pp. 477–482 in the German book; explicit 3.5 editor update at `AM-INTERPRETER-35`, p. 1-25 | Explicitly outside the interpreter platform API profile | Compiler tools and editor UI are not runtime Amiga platform declarations. The editor update remains documented separately. |
+| Matrix, combinatorics and DATA additions | Matrix/vector operations, `FACT`, `VARIAT`, `COMBIN`, `_DATA`, `_DATA=`, `_0`…`_9`; explicit 3.5 addendum pp. 13-1–13-36 | Confirmed 3.5 language-core scope; excluded from `api/registry/amiga/` | These are language-core constructs, not Amiga OS/platform APIs. Their registry entries and implementation state remain in the language-core profile. |
+
+The candidate lists are intentionally family-level. They are not complete signatures and must not be copied into the Amiga 3.5 registry as declarations. Where a row is only a 3.0/V3.03 candidate, Linux support is **not applicable as a registry classification yet**: first establish the 3.5 contract, then classify its host mapping independently. For hardware/OS-dependent behavior, a later declaration must preserve the Amiga semantics and use `unsupported` or `unsafe-disabled` when no safe equivalent exists; it must never silently substitute a host operation.
+
+### 7.5 Coverage and remaining gaps
 
 - **Verified 3.5 Amiga-profile declarations:** four, all linked above.
 - **Verified 3.5 language-core material:** stored separately under `language-core/`; not counted as Amiga APIs.
