@@ -11,7 +11,7 @@ askpass="$work_dir/git-askpass"
 cat > "$askpass" <<'EOF'
 #!/usr/bin/env bash
 case "$1" in
-  *sername*) printf '%s\\n' 'x-access-token' ;;
+  *sername*) printf '%s\n' 'x-access-token' ;;
   *assword*) printf '%s\\n' "$GFA_ASSETS_TOKEN" ;;
   *) exit 1 ;;
 esac
