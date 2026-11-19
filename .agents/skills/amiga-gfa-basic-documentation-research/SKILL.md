@@ -72,6 +72,16 @@ python scripts/validate_okf.py
 
 Run only validators relevant to the files changed; consult their documented commands and current workflow.
 
+### Ghidra-derived API facts
+
+When a task uses Ghidra analysis of the RUN-Only interpreter, follow the repository-wide **Ghidra analysis and implementation-agent boundary** in `AGENTS.md`.
+
+- Research agents may inspect disassembly/decompiler output only to establish externally exposed API facts and observable behavior.
+- Record only neutral API facts in research notes or the API registry; include the exact input binary hash, interpreter/version scope, address/symbol locator, and evidence status.
+- Do not place pseudocode, assembly excerpts, internal algorithms, reconstructed control flow, or implementation-specific data structures in API notes or implementation hand-offs.
+- Implementation agents must not inspect or use Ghidra output. Give them only independently authored API declarations, manual evidence, and black-box/runtime observations.
+- If the public API cannot be established without relying on internal implementation details, mark the question unresolved and seek a black-box probe or human review.
+
 ## Boundaries
 
 - Never commit or redistribute source PDFs, scans, ROMs, disk images, or copied historical sample programs.
