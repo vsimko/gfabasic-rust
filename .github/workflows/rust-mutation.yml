@@ -22,13 +22,32 @@ jobs:
     steps:
       - name: Select the 03:00 Europe/Berlin schedule
         id: local_time
+        if: always()
+        env:
+          SCHEDULE: ${{ github.event.schedule }}
         shell: bash
         run: |
-          if [[ "$GITHUB_EVENT_NAME" == "workflow_dispatch" || "$(TZ=Europe/Berlin date +%H)" == "03" ]]; then
+          if [[ "$GITHUB_EVENT_NAME" == "workflow_dispatch" ]]; then
             echo "run=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          case "$(TZ=Europe/Berlin date +%z)" in
+            +0100) expected_schedule='0 2 * * *' ;;
+            +0200) expected_schedule='0 1 * * *' ;;
+            *)
+              echo "Unsupported Europe/Berlin UTC offset; refusing to run mutation tests."
+              echo "run=false" >> "$GITHUB_OUTPUT"
+              exit 0
+              ;;
+          esac
+
+          if [[ "$SCHEDULE" == "$expected_schedule" ]]; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+            echo "Selected $SCHEDULE for the current Europe/Berlin UTC offset."
           else
             echo "run=false" >> "$GITHUB_OUTPUT"
-            echo "Skipping the UTC schedule that does not correspond to 03:00 Europe/Berlin."
+            echo "Skipping $SCHEDULE; expected $expected_schedule for the current Europe/Berlin UTC offset."
           fi
 
       - name: Check out repository
