@@ -15,7 +15,7 @@ evidence:
     location: "printed p. 13-3"
     kind: "primary-manual"
     status: "page-image-verified"
-    claim: "The 3.5 addendum describes MAT ONE semantics; the repository's native compatibility result establishes that this construct is not supported by the tested 3.5 interpreter."
+    claim: "The 3.5 addendum documents MAT ONE and its M O abbreviation; the construct probe uses the full spelling because the tested editor expands M O as MAT SET."
     url: "https://github.com/vsimko/gfabasic-rust/blob/main/tests/corpus/amiga/3.5/matrix/mat-one-identity.yaml"
   - id: "mat-one-adr-352"
     source_id: "ADR-0017"
@@ -43,11 +43,11 @@ versions:
       status: "not-targeted"
       refs: []
   "3.5":
-    applicability: "not-applicable"
+    applicability: "applicable"
     expectation:
-      status: "not-applicable"
-      summary: "The 3.5 editor expands the abbreviated M O form incorrectly as MAT SET; the probe still runs to preserve this negative compatibility result."
-      evidence_refs: []
+      status: "documented"
+      summary: "MAT ONE is documented for 3.5. The editor expands the M O abbreviation as MAT SET in the observed session, so this probe uses the documented full spelling."
+      evidence_refs: ["mat-one-manual-35"]
     probe: "probe-3.5.LST"
     implementation:
       status: "not-targeted"
