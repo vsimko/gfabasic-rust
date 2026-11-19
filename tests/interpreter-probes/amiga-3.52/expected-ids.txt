@@ -9,3 +9,4 @@ succ
 string-repeat
 hex
 deffn-fn
+upper-dollar
