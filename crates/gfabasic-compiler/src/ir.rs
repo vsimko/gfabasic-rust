@@ -102,87 +102,112 @@ fn binary_intrinsic(declaration_id: &str, left: i64, right: i64) -> Result<Optio
     }
 }
 
+/// Mutable state shared by the prototype's straight-line lowering operations.
+struct LoweringState<'a> {
+    symbols: &'a SymbolTable,
+    variables: BTreeMap<SymbolId, ValueId>,
+    module: Module,
+    next_value: u32,
+    errors: Vec<IrError>,
+}
+
+impl<'a> LoweringState<'a> {
+    fn new(symbols: &'a SymbolTable) -> Self {
+        Self {
+            symbols,
+            variables: BTreeMap::new(),
+            module: Module::default(),
+            next_value: 0,
+            errors: Vec::new(),
+        }
+    }
+
+    fn lower_assignment(
+        &mut self,
+        statement_span: SourceSpan,
+        value: Option<i64>,
+        span: SourceSpan,
+    ) {
+        let Some(symbol_id) = self
+            .symbols
+            .symbols
+            .iter()
+            .find(|symbol| symbol.statement_span == statement_span)
+            .map(|symbol| symbol.id)
+        else {
+            self.errors.push(IrError::at(
+                "assignment has no declaration in the resolved semantic model",
+                span,
+            ));
+            return;
+        };
+        if self.variables.contains_key(&symbol_id) {
+            self.errors.push(IrError::at(
+                format!("symbol {:?} has more than one IR definition", symbol_id),
+                span,
+            ));
+            return;
+        }
+        let Some(value) = value else {
+            self.errors.push(IrError::at(
+                "intrinsic arguments are outside the supported prototype range (0 <= k <= n <= 20)",
+                span,
+            ));
+            return;
+        };
+        let id = ValueId(self.next_value);
+        self.next_value += 1;
+        self.variables.insert(symbol_id, id);
+        self.module.instructions.push(Instruction::ConstI64 {
+            result: id,
+            value,
+            span,
+        });
+    }
+}
+
 /// Lower a resolved semantic model to typed, constant-valued IR.
 ///
 /// Intrinsics are evaluated here only for the prototype's documented literal
 /// subset. Their bounds are implementation limits, not dialect limits.
 pub fn lower(model: &SemanticModel) -> Result<Module, Vec<IrError>> {
-    let mut module = Module::default();
-    let mut variables = BTreeMap::<SymbolId, ValueId>::new();
-    let mut next_value = 0_u32;
-    let mut errors = Vec::new();
+    let mut state = LoweringState::new(&model.symbols);
     let mut saw_print = false;
 
     for statement in &model.document.program.statements {
         match statement {
             Statement::AssignInteger { value, span, .. } => {
-                lower_assignment(
-                    &model.symbols,
-                    *span,
-                    Some(*value),
-                    *span,
-                    &mut variables,
-                    &mut module,
-                    &mut next_value,
-                    &mut errors,
-                );
+                state.lower_assignment(*span, Some(*value), *span);
             }
             Statement::AssignFact { argument, span, .. } => {
                 let value = match unary_intrinsic("gfa.language.math.fact", *argument) {
                     Ok(value) => value,
                     Err(message) => {
-                        errors.push(IrError::at(message, *span));
+                        state.errors.push(IrError::at(message, *span));
                         continue;
                     }
                 };
-                lower_assignment(
-                    &model.symbols,
-                    *span,
-                    value,
-                    *span,
-                    &mut variables,
-                    &mut module,
-                    &mut next_value,
-                    &mut errors,
-                );
+                state.lower_assignment(*span, value, *span);
             }
             Statement::AssignVariat { n, k, span, .. } => {
                 let value = match binary_intrinsic("gfa.language.math.variat", *n, *k) {
                     Ok(value) => value,
                     Err(message) => {
-                        errors.push(IrError::at(message, *span));
+                        state.errors.push(IrError::at(message, *span));
                         continue;
                     }
                 };
-                lower_assignment(
-                    &model.symbols,
-                    *span,
-                    value,
-                    *span,
-                    &mut variables,
-                    &mut module,
-                    &mut next_value,
-                    &mut errors,
-                );
+                state.lower_assignment(*span, value, *span);
             }
             Statement::AssignCombin { n, k, span, .. } => {
                 let value = match binary_intrinsic("gfa.language.math.combin", *n, *k) {
                     Ok(value) => value,
                     Err(message) => {
-                        errors.push(IrError::at(message, *span));
+                        state.errors.push(IrError::at(message, *span));
                         continue;
                     }
                 };
-                lower_assignment(
-                    &model.symbols,
-                    *span,
-                    value,
-                    *span,
-                    &mut variables,
-                    &mut module,
-                    &mut next_value,
-                    &mut errors,
-                );
+                state.lower_assignment(*span, value, *span);
             }
             Statement::DimMatrix { span, .. }
             | Statement::MatOne { span, .. }
@@ -201,7 +226,7 @@ pub fn lower(model: &SemanticModel) -> Result<Module, Vec<IrError>> {
             | Statement::MatCopy { span, .. }
             | Statement::MatRead { span, .. }
             | Statement::MatInput { span, .. } => {
-                errors.push(IrError::at(
+                state.errors.push(IrError::at(
                     "matrix statements are supported by the parser and formatter but not by the executable compiler prototype",
                     *span,
                 ));
@@ -215,9 +240,9 @@ pub fn lower(model: &SemanticModel) -> Result<Module, Vec<IrError>> {
                     .collect();
                 let mut values = Vec::with_capacity(references.len());
                 for reference in references {
-                    match variables.get(&reference.symbol) {
+                    match state.variables.get(&reference.symbol) {
                         Some(value) => values.push(*value),
-                        None => errors.push(IrError::at(
+                        None => state.errors.push(IrError::at(
                             format!(
                                 "resolved symbol {:?} has no IR definition",
                                 reference.symbol
@@ -227,7 +252,7 @@ pub fn lower(model: &SemanticModel) -> Result<Module, Vec<IrError>> {
                     }
                 }
                 if values.len() == names.len() {
-                    module.instructions.push(Instruction::Print {
+                    state.module.instructions.push(Instruction::Print {
                         values,
                         span: *span,
                     });
@@ -238,61 +263,16 @@ pub fn lower(model: &SemanticModel) -> Result<Module, Vec<IrError>> {
     }
 
     if !saw_print {
-        errors.push(IrError::global(
+        state.errors.push(IrError::global(
             "prototype requires at least one valid PRINT statement",
         ));
     }
-    if errors.is_empty() {
-        verify(&module)?;
-        Ok(module)
+    if state.errors.is_empty() {
+        verify(&state.module)?;
+        Ok(state.module)
     } else {
-        Err(errors)
+        Err(state.errors)
     }
-}
-
-fn lower_assignment(
-    symbols: &SymbolTable,
-    statement_span: SourceSpan,
-    value: Option<i64>,
-    span: SourceSpan,
-    variables: &mut BTreeMap<SymbolId, ValueId>,
-    module: &mut Module,
-    next_value: &mut u32,
-    errors: &mut Vec<IrError>,
-) {
-    let Some(symbol) = symbols
-        .symbols
-        .iter()
-        .find(|symbol| symbol.statement_span == statement_span)
-    else {
-        errors.push(IrError::at(
-            "assignment has no declaration in the resolved semantic model",
-            span,
-        ));
-        return;
-    };
-    if variables.contains_key(&symbol.id) {
-        errors.push(IrError::at(
-            format!("symbol {:?} has more than one IR definition", symbol.id),
-            span,
-        ));
-        return;
-    }
-    let Some(value) = value else {
-        errors.push(IrError::at(
-            "intrinsic arguments are outside the supported prototype range (0 <= k <= n <= 20)",
-            span,
-        ));
-        return;
-    };
-    let id = ValueId(*next_value);
-    *next_value += 1;
-    variables.insert(symbol.id, id);
-    module.instructions.push(Instruction::ConstI64 {
-        result: id,
-        value,
-        span,
-    });
 }
 
 /// Verify unique definitions and reject uses that precede their definitions.
