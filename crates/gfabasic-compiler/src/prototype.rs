@@ -62,7 +62,7 @@ pub fn compile_file(input: &Path, output: &Path) -> Result<(), String> {
             .collect::<Vec<_>>()
             .join("\n")
     })?;
-    let c_source = lower_program(&semantic, &sources)?;
+    let c_source = lower_semantic_model(&semantic, &sources)?;
 
     let sequence = NEXT_TEMP.fetch_add(1, Ordering::Relaxed);
     let temp_path = std::env::temp_dir().join(format!(
@@ -108,7 +108,7 @@ fn semantic_error(sources: &SourceMap, span: SourceSpan, message: impl Into<Stri
     .render(sources)
 }
 
-fn lower_program(semantic: &SemanticModel<'_>, sources: &SourceMap) -> Result<String, String> {
+fn lower_semantic_model(semantic: &SemanticModel<'_>, sources: &SourceMap) -> Result<String, String> {
     let module = crate::ir::lower(semantic).map_err(|errors| {
         errors
             .iter()
@@ -168,7 +168,7 @@ fn emit_c(module: &Module) -> Result<String, String> {
 
 #[cfg(test)]
 mod tests {
-    use super::{compile_file, lower_program};
+    use super::{compile_file, lower_semantic_model};
     use crate::frontend::parse_document;
     use crate::semantic::resolve_prototype_symbols;
     use crate::source::SourceMap;
@@ -182,12 +182,12 @@ mod tests {
         include_str!("../../../tests/corpus/amiga/3.5/combinatorics/fact-zero.lst");
 
     #[test]
-    fn lowers_the_frontend_ast_for_the_verified_fact_fixture() {
+    fn lowers_the_resolved_semantic_model_for_the_verified_fact_fixture() {
         let mut sources = SourceMap::new();
         let source_id = sources.add_source("fact-zero.bas", FACT_FIXTURE);
         let document = parse_document(source_id, FACT_FIXTURE).unwrap();
         let semantic = resolve_prototype_symbols(&document).unwrap();
-        let generated = lower_program(&semantic, &sources).unwrap();
+        let generated = lower_semantic_model(&semantic, &sources).unwrap();
 
         assert!(generated.contains("long long v0 = 1;"));
         assert!(generated.contains("long long v1 = 1;"));
@@ -215,7 +215,7 @@ mod tests {
                         .collect::<Vec<_>>()
                         .join("\n")
                 })
-                .and_then(|semantic| lower_program(&semantic, &sources));
+                .and_then(|semantic| lower_semantic_model(&semantic, &sources));
             assert!(result.is_err(), "accepted: {source}");
         }
     }
@@ -227,7 +227,7 @@ mod tests {
         let source_id = sources.add_source("combinatorics.bas", source_text);
         let document = parse_document(source_id, source_text).unwrap();
         let semantic = resolve_prototype_symbols(&document).unwrap();
-        let generated = lower_program(&semantic, &sources).unwrap();
+        let generated = lower_semantic_model(&semantic, &sources).unwrap();
 
         assert!(generated.contains("long long v0 = 120;"));
         assert!(generated.contains("long long v1 = 20;"));
