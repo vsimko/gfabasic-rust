@@ -203,6 +203,12 @@ jobs:
             # Amiberry IPC button mask: bit 0 = left, bit 1 = right, bit 2 = middle.
             # Take the screenshot immediately while the right button remains down.
             printf "SEND_MOUSE\t0\t0\t2\n" | timeout 5s nc -U -N "$ipc_socket_path"
+            # Move the held pointer away from the version text so it cannot
+            # obscure the first characters during the identity screenshot.
+            for _ in 1 2 3 4; do
+              printf "SEND_MOUSE\t240\t176\t2\n" | timeout 5s nc -U -N "$ipc_socket_path"
+              sleep 0.1
+            done
             sleep 0.1
             printf "SCREENSHOT\t%s\n" "$GITHUB_WORKSPACE/artifacts/amiga-3.5-discovery/editor-version-menu.png" | timeout 5s nc -U -N "$ipc_socket_path"
             printf "SEND_MOUSE\t0\t0\t0\n" | timeout 5s nc -U -N "$ipc_socket_path"
