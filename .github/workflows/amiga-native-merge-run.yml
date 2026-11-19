@@ -298,6 +298,20 @@ jobs:
             xdftool artifacts/amiga-cli-probe/factzero.adf read FACT.OUT artifacts/amiga-cli-probe/fact-output.txt
             cat artifacts/amiga-cli-probe/fact-output.txt
           fi
+          python3 - <<'PY'
+          from PIL import Image, ImageOps, ImageEnhance
+          image = Image.open("artifacts/amiga-cli-probe/editor-version-menu.png").convert("L")
+          image = ImageOps.invert(image).resize((image.width * 3, image.height * 3))
+          ImageEnhance.Contrast(image).enhance(3).save("artifacts/amiga-cli-probe/editor-version-menu-ocr.png")
+          PY
+          tesseract artifacts/amiga-cli-probe/editor-version-menu-ocr.png stdout --psm 6 2>/dev/null | tee artifacts/amiga-cli-probe/editor-version-menu-ocr.txt
+          if ! grep -Eiq 'GFA[ -]?BASIC.*3[.]52' artifacts/amiga-cli-probe/editor-version-menu-ocr.txt; then
+            echo "EDITOR_MENU_OCR=INCONCLUSIVE; inspect editor-version-menu.png" | tee artifacts/amiga-cli-probe/editor-version-result.txt
+            echo "::error::Could not identify GFA BASIC 3.52 from the running editor menu."
+            exit 1
+          fi
+          echo "EDITOR_MENU_OCR=GFA BASIC 3.52" | tee artifacts/amiga-cli-probe/editor-version-result.txt
+
           xdftool artifacts/amiga-cli-probe/factzero.adf read GFATEST.OUT artifacts/amiga-cli-probe/gfatest-results.txt
           cat artifacts/amiga-cli-probe/gfatest-results.txt
           for diagnostic in insert-floppy-ipc.txt list-floppies-ipc.txt stdin-save.LST; do
@@ -320,20 +334,6 @@ jobs:
           image.save("artifacts/amiga-cli-probe/after-merge-ocr-input.png")
           PY
           tesseract artifacts/amiga-cli-probe/after-merge-ocr-input.png stdout --psm 6 2>/dev/null | tee artifacts/amiga-cli-probe/after-merge-ocr.txt
-          python3 - <<'PY'
-          from PIL import Image, ImageOps, ImageEnhance
-          image = Image.open("artifacts/amiga-cli-probe/editor-version-menu.png").convert("L")
-          image = ImageOps.invert(image).resize((image.width * 3, image.height * 3))
-          ImageEnhance.Contrast(image).enhance(3).save("artifacts/amiga-cli-probe/editor-version-menu-ocr.png")
-          PY
-          tesseract artifacts/amiga-cli-probe/editor-version-menu-ocr.png stdout --psm 6 2>/dev/null | tee artifacts/amiga-cli-probe/editor-version-menu-ocr.txt
-          if ! grep -Eiq 'GFA[ -]?BASIC.*3[.]52' artifacts/amiga-cli-probe/editor-version-menu-ocr.txt; then
-            echo "EDITOR_MENU_OCR=INCONCLUSIVE; inspect editor-version-menu.png" | tee artifacts/amiga-cli-probe/editor-version-result.txt
-            echo "::error::Could not identify GFA BASIC 3.52 from the running editor menu."
-            exit 1
-          fi
-          echo "EDITOR_MENU_OCR=GFA BASIC 3.52" | tee artifacts/amiga-cli-probe/editor-version-result.txt
-
           if [ -n "$GFA_CONSTRUCT_ID" ]; then
             if grep -Fqi "$GFA_CONSTRUCT_ID" artifacts/amiga-cli-probe/after-merge-ocr.txt; then
               echo "EDITOR_MERGE_LST_CONTENT_VISIBLE=yes" | tee artifacts/amiga-cli-probe/result.txt
