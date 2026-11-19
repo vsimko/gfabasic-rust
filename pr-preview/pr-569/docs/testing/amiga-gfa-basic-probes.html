@@ -14,7 +14,7 @@
     <a href="../index.html">Documentation</a>
   </header>
   <div class="docs-layout">
-    <nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home" href="index.html">Section index</a><ul><li><a href="amiga-reference-interpreter.html">Original Amiga interpreter reference asset</a></li><li><a href="amiga-gfa-basic-probes.html">Writing Amiga GFA BASIC reference-interpreter probes</a></li><li><a href="https://github.com/vsimko/gfabasic-rust/blob/main/.agents/skills/amiga-gfa-basic-regression-testing/SKILL.md">`amiga-gfa-basic-regression-testing`</a></li><li><a href="https://github.com/vsimko/gfabasic-rust/blob/main/.agents/skills/corpus-fixture-authoring/SKILL.md">`corpus-fixture-authoring`</a></li></ul></nav>
+    <nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home" href="index.html">Section index</a><ul><li><a href="amiga-reference-interpreter.html">Original Amiga interpreter reference asset</a></li><li><a href="amiga-gfa-basic-probes.html">Writing Amiga GFA BASIC reference-interpreter probes</a></li><li><a href="property-mutation-pilot.html">Generated property and mutation-testing pilot</a></li><li><a href="https://github.com/vsimko/gfabasic-rust/blob/main/.agents/skills/amiga-gfa-basic-regression-testing/SKILL.md">`amiga-gfa-basic-regression-testing`</a></li><li><a href="https://github.com/vsimko/gfabasic-rust/blob/main/.agents/skills/corpus-fixture-authoring/SKILL.md">`corpus-fixture-authoring`</a></li></ul></nav>
     <main class="docs-content">
       <article>
         <h1>Writing Amiga GFA BASIC reference-interpreter probes</h1>
@@ -66,6 +66,14 @@
 <li>Run with the workflow's verified key sequence only after the source is confirmed. Do not reuse mouse coordinates from a different emulator layout.</li>
 </ol>
 <p>A successful Merge operation does not establish that a statement was expanded or accepted correctly.</p>
+<h2 id="probe-metadata">Probe metadata</h2>
+<p>The standalone metadata for the Amiga 3.5 FACT smoke probe is stored in
+<code>tests/interpreter-probes/amiga-3.5/fact-zero.yaml</code>. It is deliberately
+separate from the conformance-corpus manifest: it records the target component,
+input format, documentary expectation, and observed editor/runtime results.
+Keep expected output separate from observed output, and do not mark a probe as
+loaded or executed unless the corresponding native run produced that evidence.
+The corpus validator does not validate this probe-specific metadata file.</p>
 <h2 id="before-writing-a-probe">Before writing a probe</h2>
 <ol>
 <li>Identify the exact interpreter version and platform under test. Do not transfer observations between 3.041U, 3.5, and 3.52 without evidence.</li>

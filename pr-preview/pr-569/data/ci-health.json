@@ -1,6 +1,6 @@
 {
   "repository": "vsimko/gfabasic-rust",
-  "generated_at": "2026-11-17T18:15:02.533237Z",
+  "generated_at": "2026-11-19T07:14:43.114884Z",
   "freshness_threshold_hours": 168,
   "workflows": [
     {
@@ -8,248 +8,80 @@
       "file": "docs.yml",
       "note": "Markdown, JavaScript, API registry, corpus metadata and local-link validation.",
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/docs.yml",
-      "state": "in_progress",
-      "latest": {
-        "id": 44145730495,
-        "name": "Documentation checks",
-        "status": "in_progress",
-        "event": "pull_request",
-        "branch": "research/issue-562-upper-dollar-352-probe",
-        "created_at": "2026-11-17T18:14:44Z",
-        "updated_at": "2026-11-17T18:14:48Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/44145730495",
-        "age_hours": 0,
-        "freshness": "fresh"
-      },
-      "last_success": {
-        "id": 44139701048,
-        "name": "Documentation checks",
-        "status": "success",
-        "event": "pull_request",
-        "branch": "research/issue-562-deffn-352-probe",
-        "created_at": "2026-11-17T17:41:14Z",
-        "updated_at": "2026-11-17T17:41:45Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/44139701048",
-        "age_hours": 0,
-        "freshness": "fresh"
-      }
+      "state": "unknown",
+      "error": "GH_TOKEN is unavailable; workflow status was not queried.",
+      "latest": null,
+      "last_success": null
     },
     {
       "name": "Rust checks",
       "file": "rust.yml",
       "note": "Formatting, Clippy, workspace tests/build and formatter fixtures.",
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/rust.yml",
-      "state": "in_progress",
-      "latest": {
-        "id": 44145730503,
-        "name": "Rust checks",
-        "status": "in_progress",
-        "event": "pull_request",
-        "branch": "research/issue-562-upper-dollar-352-probe",
-        "created_at": "2026-11-17T18:14:44Z",
-        "updated_at": "2026-11-17T18:14:48Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/44145730503",
-        "age_hours": 0,
-        "freshness": "fresh"
-      },
-      "last_success": {
-        "id": 44139700935,
-        "name": "Rust checks",
-        "status": "success",
-        "event": "pull_request",
-        "branch": "research/issue-562-deffn-352-probe",
-        "created_at": "2026-11-17T17:41:14Z",
-        "updated_at": "2026-11-17T17:41:48Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/44139700935",
-        "age_hours": 0,
-        "freshness": "fresh"
-      }
+      "state": "unknown",
+      "error": "GH_TOKEN is unavailable; workflow status was not queried.",
+      "latest": null,
+      "last_success": null
     },
     {
       "name": "Security audit",
       "file": "security-audit.yml",
       "note": "RustSec audits for workspace, fuzz and benchmark lockfiles.",
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/security-audit.yml",
-      "state": "in_progress",
-      "latest": {
-        "id": 44145730473,
-        "name": "Security audit",
-        "status": "in_progress",
-        "event": "pull_request",
-        "branch": "research/issue-562-upper-dollar-352-probe",
-        "created_at": "2026-11-17T18:14:44Z",
-        "updated_at": "2026-11-17T18:14:48Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/44145730473",
-        "age_hours": 0,
-        "freshness": "fresh"
-      },
-      "last_success": {
-        "id": 44139701090,
-        "name": "Security audit",
-        "status": "success",
-        "event": "pull_request",
-        "branch": "research/issue-562-deffn-352-probe",
-        "created_at": "2026-11-17T17:41:14Z",
-        "updated_at": "2026-11-17T17:41:39Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/44139701090",
-        "age_hours": 0,
-        "freshness": "fresh"
-      }
+      "state": "unknown",
+      "error": "GH_TOKEN is unavailable; workflow status was not queried.",
+      "latest": null,
+      "last_success": null
     },
     {
       "name": "Source-loader fuzzing",
       "file": "fuzz.yml",
       "note": "Fuzzes the source loader only; lexer/parser fuzzing is not configured.",
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/fuzz.yml",
-      "state": "success",
-      "latest": {
-        "id": 43869239724,
-        "name": "Fuzzing",
-        "status": "success",
-        "event": "schedule",
-        "branch": "main",
-        "created_at": "2026-11-16T12:44:02Z",
-        "updated_at": "2026-11-16T12:55:36Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43869239724",
-        "age_hours": 29,
-        "freshness": "fresh"
-      },
-      "last_success": {
-        "id": 43869239724,
-        "name": "Fuzzing",
-        "status": "success",
-        "event": "schedule",
-        "branch": "main",
-        "created_at": "2026-11-16T12:44:02Z",
-        "updated_at": "2026-11-16T12:55:36Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/43869239724",
-        "age_hours": 29,
-        "freshness": "fresh"
-      }
+      "state": "unknown",
+      "error": "GH_TOKEN is unavailable; workflow status was not queried.",
+      "latest": null,
+      "last_success": null
     },
     {
       "name": "Benchmarks",
       "file": "benchmarks.yml",
       "note": "Source-loading benchmark; pull requests validate compilation without recording measurements.",
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/benchmarks.yml",
-      "state": "in_progress",
-      "latest": {
-        "id": 44145730477,
-        "name": "Benchmarks",
-        "status": "in_progress",
-        "event": "pull_request",
-        "branch": "research/issue-562-upper-dollar-352-probe",
-        "created_at": "2026-11-17T18:14:44Z",
-        "updated_at": "2026-11-17T18:14:48Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/44145730477",
-        "age_hours": 0,
-        "freshness": "fresh"
-      },
-      "last_success": {
-        "id": 44139701037,
-        "name": "Benchmarks",
-        "status": "success",
-        "event": "pull_request",
-        "branch": "research/issue-562-deffn-352-probe",
-        "created_at": "2026-11-17T17:41:14Z",
-        "updated_at": "2026-11-17T17:41:37Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/44139701037",
-        "age_hours": 0,
-        "freshness": "fresh"
-      }
+      "state": "unknown",
+      "error": "GH_TOKEN is unavailable; workflow status was not queried.",
+      "latest": null,
+      "last_success": null
     },
     {
       "name": "Release SBOM",
       "file": "release-sbom.yml",
       "note": "Validates PR SBOMs and uploads on published releases; release attachment is unproven until a release runs.",
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/release-sbom.yml",
-      "state": "in_progress",
-      "latest": {
-        "id": 44145730481,
-        "name": "Release SBOM",
-        "status": "in_progress",
-        "event": "pull_request",
-        "branch": "research/issue-562-upper-dollar-352-probe",
-        "created_at": "2026-11-17T18:14:44Z",
-        "updated_at": "2026-11-17T18:14:48Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/44145730481",
-        "age_hours": 0,
-        "freshness": "fresh"
-      },
-      "last_success": {
-        "id": 44139700911,
-        "name": "Release SBOM",
-        "status": "success",
-        "event": "pull_request",
-        "branch": "research/issue-562-deffn-352-probe",
-        "created_at": "2026-11-17T17:41:14Z",
-        "updated_at": "2026-11-17T17:42:08Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/44139700911",
-        "age_hours": 0,
-        "freshness": "fresh"
-      }
+      "state": "unknown",
+      "error": "GH_TOKEN is unavailable; workflow status was not queried.",
+      "latest": null,
+      "last_success": null
     },
     {
       "name": "GitHub Pages",
       "file": "pages.yml",
       "note": "Builds and publishes the static production website.",
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/pages.yml",
-      "state": "success",
-      "latest": {
-        "id": 44124580731,
-        "name": "Deploy GitHub Pages",
-        "status": "success",
-        "event": "push",
-        "branch": "main",
-        "created_at": "2026-11-17T16:20:12Z",
-        "updated_at": "2026-11-17T16:20:47Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/44124580731",
-        "age_hours": 1,
-        "freshness": "fresh"
-      },
-      "last_success": {
-        "id": 44124580731,
-        "name": "Deploy GitHub Pages",
-        "status": "success",
-        "event": "push",
-        "branch": "main",
-        "created_at": "2026-11-17T16:20:12Z",
-        "updated_at": "2026-11-17T16:20:47Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/44124580731",
-        "age_hours": 1,
-        "freshness": "fresh"
-      }
+      "state": "unknown",
+      "error": "GH_TOKEN is unavailable; workflow status was not queried.",
+      "latest": null,
+      "last_success": null
     },
     {
       "name": "Pull request preview",
       "file": "pr-preview.yml",
       "note": "Builds and smoke-tests same-repository pull request previews.",
       "workflow_url": "https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/pr-preview.yml",
-      "state": "in_progress",
-      "latest": {
-        "id": 44145730606,
-        "name": "Pull request website preview",
-        "status": "in_progress",
-        "event": "pull_request",
-        "branch": "research/issue-562-upper-dollar-352-probe",
-        "created_at": "2026-11-17T18:14:44Z",
-        "updated_at": "2026-11-17T18:14:48Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/44145730606",
-        "age_hours": 0,
-        "freshness": "fresh"
-      },
-      "last_success": {
-        "id": 44145471392,
-        "name": "Pull request website preview",
-        "status": "success",
-        "event": "pull_request",
-        "branch": "research/issue-562-deffn-352-probe",
-        "created_at": "2026-11-17T18:13:19Z",
-        "updated_at": "2026-11-17T18:13:39Z",
-        "url": "https://github.com/vsimko/gfabasic-rust/actions/runs/44145471392",
-        "age_hours": 0,
-        "freshness": "fresh"
-      }
+      "state": "unknown",
+      "error": "GH_TOKEN is unavailable; workflow status was not queried.",
+      "latest": null,
+      "last_success": null
     },
     {
       "name": "Conformance suite",
