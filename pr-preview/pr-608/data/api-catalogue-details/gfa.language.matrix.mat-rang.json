@@ -1,0 +1,94 @@
+{
+  "id": "gfa.language.matrix.mat-rang",
+  "name": "MAT RANG",
+  "kind": "statement",
+  "namespace": "language-core",
+  "category": "matrix-operations",
+  "availability": [
+    {
+      "dialect": "amiga-gfa-basic-interpreter",
+      "versions": [
+        "3.5"
+      ]
+    }
+  ],
+  "syntax": [
+    {
+      "form": "MAT RANG scalar-result=array([row,column])[,size]",
+      "contexts": [
+        "statement"
+      ],
+      "arguments": [
+        {
+          "name": "scalar-result",
+          "type": "numeric scalar lvalue",
+          "required": true,
+          "passing": "var"
+        },
+        {
+          "name": "array",
+          "type": "square floating-point matrix",
+          "required": true,
+          "passing": "array"
+        },
+        {
+          "name": "row",
+          "type": "optional integer-expression row offset",
+          "required": false
+        },
+        {
+          "name": "column",
+          "type": "optional integer-expression column offset",
+          "required": false
+        },
+        {
+          "name": "size",
+          "type": "optional integer-expression square-submatrix size",
+          "required": false
+        }
+      ]
+    }
+  ],
+  "signature": {
+    "type": "integer rank assigned to scalar-result"
+  },
+  "semantics": {
+    "summary": "Calculates the rank of a square matrix or selected square submatrix; the optional size selects an n-by-n submatrix starting at the row and column offsets.",
+    "side-effects": [
+      "Assigns the matrix rank to scalar-result."
+    ],
+    "errors": []
+  },
+  "evidence": {
+    "source-scope": "amiga-3.5-addendum",
+    "status": "book-documented",
+    "sources": [
+      "AM-INTERPRETER-35",
+      "AM-INTERPRETER-30-35-UPDATE-SCAN"
+    ],
+    "printed-pages": [
+      "Supplied 469-page manual, Chapter 13, printed p. 13-29; combined update scan, printed pp. 13-38–13-39"
+    ],
+    "notes": [
+      "The square-matrix and submatrix selection rules were checked against the addendum page images."
+    ]
+  },
+  "implementation": {
+    "status": "not-implemented"
+  },
+  "support": [
+    {
+      "target": "x86_64-unknown-linux-gnu",
+      "classification": "unknown",
+      "conformance": "not-tested",
+      "tests": [],
+      "pending-reason": "No matrix-rank implementation or executable reference-interpreter conformance tests are registered."
+    }
+  ],
+  "docs": {
+    "path": "docs/research/amiga-gfa-basic-35-addendum-inventory.md",
+    "anchors": [
+      "3-linear-operations-on-numeric-fields"
+    ]
+  }
+}

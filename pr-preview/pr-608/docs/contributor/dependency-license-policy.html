@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="This policy applies to third-party dependencies used by the Rust workspace and its supporting development, test, fuzzing, and release tooling.">
+  <title>Dependency License Policy · GFA BASIC Rust documentation</title>
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body class="docs-site">
+  <header class="docs-header">
+    <a href="../../index.html">GFA BASIC Rust</a>
+    <span aria-hidden="true">/</span>
+    <a href="../index.html">Documentation</a>
+  </header>
+  <div class="docs-layout">
+    <nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home" href="index.html">Section index</a><ul><li><a href="README.html">Contributor documentation</a></li><li><a href="dependency-license-policy.html">Dependency License Policy</a></li><li><a href="development-setup.html">Development setup</a></li></ul></nav>
+    <main class="docs-content">
+      <article>
+        <h1>Dependency License Policy</h1>
+        <p class="docs-meta"><span>Contributor Guide</span></p>
+        <h1 id="dependency-license-policy">Dependency License Policy</h1>
+<p>This policy applies to third-party dependencies used by the Rust workspace and its
+supporting development, test, fuzzing, and release tooling.</p>
+<h2 id="default-allowlist">Default allowlist</h2>
+<p>The following SPDX license identifiers are approved for new dependencies by default:</p>
+<ul>
+<li><code>MIT</code></li>
+<li><code>Apache-2.0</code></li>
+<li><code>BSD-2-Clause</code></li>
+<li><code>BSD-3-Clause</code></li>
+<li><code>ISC</code></li>
+<li><code>Zlib</code></li>
+<li><code>Unicode-3.0</code></li>
+</ul>
+<p>A dependency is eligible for automatic policy acceptance only when its applicable
+license expression is fully covered by this allowlist. For dual-licensed
+dependencies, the project may select an allowed licensing option where the
+upstream license expression permits that choice. Do not assume that an
+unrecognized identifier, custom license, or additional license exception is
+approved.</p>
+<h2 id="individual-approval">Individual approval</h2>
+<p>Copyleft licenses and all licenses not listed in the default allowlist require
+explicit maintainer approval before a dependency is added or enabled.</p>
+<p>A proposed exception must be raised for review with:</p>
+<ul>
+<li>the dependency and version;</li>
+<li>the exact SPDX license expression and relevant license texts;</li>
+<li>why the dependency is needed and whether alternatives exist;</li>
+<li>the intended use (runtime, build, test, fuzz, or release tooling);</li>
+<li>any redistribution or notice obligations.</li>
+</ul>
+<p>The repository maintainer must explicitly approve or reject the proposal.
+Record the decision and its scope in the relevant GitHub issue or pull request.
+Approval for one dependency/version/use does not automatically approve other
+versions, dependencies, or uses. Until approval is recorded, treat the
+dependency as not approved.</p>
+<h2 id="ongoing-review">Ongoing review</h2>
+<p>For every new or materially changed dependency, review its license together
+with maintenance status, security advisories, platform support, native build
+requirements, and reproducibility. Re-check license metadata when updating
+dependencies; do not rely solely on package-name allowlists.</p>
+<p>Project-owned source and documentation remain MIT-licensed. This policy does
+not grant rights to third-party manuals, ROMs, disk images, or historical
+sample programs; those materials remain excluded from redistribution by
+default.</p>
+<h2 id="sbom">SBOM</h2>
+<p>A Software Bill of Materials (SBOM) is required for every project release.
+The generation process must be reproducible and tested, and the SBOM must
+describe the dependencies actually included in the corresponding release
+artifacts.</p>
+<p><strong>SPDX 2.3 is the approved SBOM specification version.</strong> Generate release
+SBOMs using SPDX 2.3 JSON output.</p>
+<p><strong><code>cargo-sbom</code> 0.10.0 is the approved and pinned generation tool version.</strong>
+Release automation must install exactly version <code>0.10.0</code> and invoke its
+<code>spdx_json_2_3</code> output format. Validate the generated document and verify that
+its component/dependency inventory matches the release build inputs. Tool
+upgrades require an explicit version change, review of upstream changes, and
+successful SBOM validation before merge. Publish each release's SBOM as a
+JSON asset attached to the corresponding GitHub Release. The GitHub Release
+asset is the canonical publication and retention location.</p>
+<p>The SBOM scope is the complete Cargo workspace: <code>gfabasic-compiler</code>,
+<code>gfabasic-runtime</code>, and <code>gfabasic-platform-linux</code>, including their workspace
+relationships and dependencies. Generate one workspace-level SBOM per release.</p>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>

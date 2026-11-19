@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="This note reconciles the statement and expression candidates in issue #562 against the existing Amiga inventories and the anonymous 1995 application-listing witness discussed there. The listing is a discovery witness.…">
+  <title>Application-used Amiga GFA BASIC construct reconciliation · GFA BASIC Rust documentation</title>
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body class="docs-site">
+  <header class="docs-header">
+    <a href="../../index.html">GFA BASIC Rust</a>
+    <span aria-hidden="true">/</span>
+    <a href="../index.html">Documentation</a>
+  </header>
+  <div class="docs-layout">
+    <nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home" href="index.html">Section index</a><ul><li><a href="https://github.com/vsimko/gfabasic-rust/blob/main/.agents/skills/amiga-gfa-basic-documentation-research/SKILL.md">`amiga-gfa-basic-documentation-research`</a></li><li><a href="amiga-gfa-basic-documentation-audit.html">Amiga GFA BASIC documentation coverage audit</a></li><li><a href="amiga-gfa-basic-command-catalogue.html">Amiga GFA BASIC command catalogue</a></li><li><a href="amiga-gfa-basic-application-construct-reconciliation.html">Application-used Amiga GFA BASIC construct reconciliation</a></li><li><a href="amiga-gfa-basic-german-book-command-api-extraction.html">German Amiga GFA-BASIC book: command and OS API extraction</a></li><li><a href="amiga-book-command-index-ocr-transcription.html">Appendix D — OCR transcription of the command index</a></li><li><a href="gfa-basic-command-index-ocr.html">GFA-BASIC command index — first-pass extraction</a></li><li><a href="amiga-gfa-basic-source-topic-index.html">Amiga GFA BASIC source and topic index</a></li><li><a href="amiga-book-515-page-extraction-audit.html">Amiga GFA-BASIC book — 515-page extraction audit</a></li><li><a href="amiga-book-chapters05-17-heading-harvest.html">Amiga book — command-heading harvest, chapters 5–17</a></li><li><a href="amiga-gfa-basic-functions.toml">Function inventory (117 unique names)</a></li><li><a href="amiga-gfa-basic-function-inventory.html">Amiga GFA BASIC 3.5 built-in function inventory</a></li><li><a href="amiga-base-manual-io-graphics-events-advanced.html">Amiga GFA BASIC base-manual I/O, graphics, event, and advanced-programming extraction</a></li><li><a href="amiga-base-manual-io-graphics-events-advanced-details.html">Amiga GFA BASIC base-manual I/O, graphics, event, and advanced-programming details</a></li><li><a href="amiga-base-manual-numeric-string-functions.html">Amiga GFA BASIC base-manual numeric and string function extraction</a></li><li><a href="amiga-gfa-basic-35-addendum-inventory.html">Amiga GFA-BASIC 3.5 interpreter addendum — extracted feature inventory</a></li><li><a href="amiga-gfa-basic-candidates.toml">3.5 candidate manifest</a></li><li><a href="amiga-gfa-basic-candidate-report.html">Amiga GFA BASIC 3.5 candidate verification report</a></li><li><a href="amiga-gfa-basic-language-population-policy.html">Amiga GFA BASIC language population policy</a></li><li><a href="amiga-gfa-basic-3.03-ocr-index.html">German Amiga GFA BASIC book: OCR index and edition notes</a></li><li><a href="amiga-runtime-ocr-audit.html">Amiga runtime workflow OCR audit</a></li><li><a href="README.html">Research materials</a></li><li><a href="amiga-gfa-test-output.html">Amiga GFA BASIC test output</a></li><li><a href="amiga-emulator-lab.html">Amiga emulator experiment lab</a></li><li><a href="amiga-media-candidates.html">Amiga GFA BASIC media candidates</a></li><li><a href="amiga-gfa-basic-35-lst-probes.html">Amiga GFA BASIC 3.5 interpreter probes from text listings</a></li><li><a href="amiga-gfa-basic-352-runtime-baseline.html">Amiga GFA BASIC 3.52 runtime baseline</a></li><li><a href="amiga-gfa-basic-binary-analysis.html">Amiga GFA-BASIC binary analysis</a></li><li><a href="amiga-base-manual-variable-array-conversion-functions.html">Amiga GFA BASIC base-manual variable, array, and conversion functions</a></li><li><a href="amiga-gfa-basic-chapter-7-program-handling-evidence.html">Amiga GFA BASIC Chapter 7 — program handling evidence</a></li><li><a href="amiga-gfa-basic-chapter-8-graphics-evidence.html">Amiga GFA BASIC Chapter 8 — graphics compatibility evidence</a></li><li><a href="amiga-gfa-basic-chapter-9-event-window-evidence.html">Amiga GFA BASIC Chapter 9 — event, menu, screen and window evidence</a></li><li><a href="amiga-gfa-basic-chapter-10-advanced-programming-evidence.html">Amiga GFA BASIC Chapter 10 — advanced programming evidence</a></li><li><a href="amiga-gfa-basic-chapter-11-system-routines-evidence.html">Amiga GFA BASIC Chapter 11 — system-routine evidence</a></li><li><a href="amiga-gfa-basic-chapter-12-appendices-index-evidence.html">Amiga GFA BASIC Chapter 12 — appendix and index evidence</a></li><li><a href="https://github.com/vsimko/gfabasic-rust/blob/main/scripts/validate_amiga_chapter_inventories.py">Chapter inventory validator</a></li><li><a href="amiga-gfa-basic-3.0-command-index.html">Amiga GFA BASIC 3.0 command index — grouped cross-check</a></li><li><a href="amiga-gfa-basic-3.0-statement-command-candidates.html">Amiga GFA BASIC 3.0 statement and command candidate catalogue</a></li><li><a href="amiga-gfa-basic-3.0-base-inventory.html">Amiga GFA BASIC 3.0 base-manual inventory</a></li><li><a href="amiga-gfa-basic-3.0-expressions-builtins-control-flow.html">Amiga GFA BASIC 3.0 expression, intrinsic and control-flow evidence</a></li><li><a href="amiga-gfa-basic-3.0-control-file-data-io.html">Amiga GFA BASIC 3.0 control, file and data I/O evidence</a></li><li><a href="amiga-gfa-basic-3.0-graphics-evidence.html">GFA BASIC 3.0 Amiga — graphics evidence</a></li><li><a href="amiga-gfa-basic-3.0-events-windows-evidence.html">GFA BASIC 3.0 Amiga — event, menu, screen and window evidence</a></li><li><a href="amiga-gfa-basic-3.0-system-routines-evidence.html">GFA BASIC 3.0 Amiga — operating-system routine evidence</a></li><li><a href="amiga-gfa-basic-3.0-advanced-programming-evidence.html">GFA BASIC 3.0 Amiga — advanced programming evidence</a></li><li><a href="amiga-gfa-basic-3.0-appendix-index-evidence.html">GFA BASIC 3.0 Amiga — appendix and command-index evidence</a></li><li><a href="amiga-gfa-basic-3.0-german-source-notes.html">German Amiga GFA BASIC 3.0 source — initial verification notes</a></li><li><a href="amiga-gfa-basic-3.0-procedure-error-details.html">GFA BASIC 3.0 Amiga — procedures, functions and error-flow evidence</a></li><li><a href="amiga-gfa-basic-3.0-screen-window-details.html">GFA BASIC 3.0 Amiga — screen and window command details</a></li><li><a href="amiga-gfa-basic-3.0-output-device-details.html">GFA BASIC 3.0 Amiga — output, cursor, mouse and sound evidence</a></li><li><a href="amiga-gfa-basic-3.0-menu-event-details.html">GFA BASIC 3.0 Amiga — menu and event details</a></li><li><a href="amiga-gfa-basic-3.0-bob-object-details.html">GFA BASIC 3.0 Amiga — BOB and OBJECT API evidence</a></li><li><a href="amiga-gfa-basic-3.0-source-format-editor-evidence.html">Amiga GFA BASIC 3.0 — source composition and editor evidence</a></li><li><a href="amiga-gfa-basic-35-primary-reference.html">Amiga GFA-BASIC 3.5 primary reference and target decision</a></li><li><a href="amiga-gfa-basic-35-german-book-crosscheck.html">Amiga GFA-BASIC 3.5 — independent German-book cross-check</a></li><li><a href="amiga-book-gfa35-chapter18-19-extraction.html">GFA-BASIC 3.5 additions documented in the Amiga book</a></li><li><a href="amiga-gfa-basic-35-editor-feature-audit.html">Amiga GFA BASIC 3.5 — editor feature audit</a></li><li><a href="amiga-gfa-basic-35-lexer-evidence.html">Amiga GFA BASIC 3.5 lexer evidence inventory</a></li><li><a href="amiga-gfa-basic-35-matrix-arithmetic-analysis-audit.html">Amiga GFA BASIC 3.5 — matrix arithmetic and analysis audit</a></li><li><a href="amiga-gfa-basic-35-matrix-io-copy-audit.html">Amiga GFA BASIC 3.5 — matrix I/O and copy declaration audit</a></li><li><a href="amiga-gfa-basic-35-five-declaration-audit.html">Amiga GFA BASIC 3.5 — five declaration-level audit blocks</a></li><li><a href="amiga-gfa-basic-35-five-more-declaration-audit.html">Amiga GFA BASIC 3.5 — five more declaration-level audit blocks</a></li><li><a href="amiga-gfa-basic-35-guru-declaration-audit.html">Amiga GFA BASIC 3.5 — GURU declaration audit</a></li><li><a href="atari-gfa-book-diskette.html">Atari GFA BASIC book diskette — source-corpus research notes</a></li><li><a href="atari-gfa-book-systematic-review.html">Systematic review of *Das große GFA-BASIC-Buch* (Atari ST)</a></li><li><a href="aminet-catalogue.html">Aminet GFA BASIC package survey</a></li><li><a href="gfalist-build-and-fixture-validation.html">gfalist build and fixture validation</a></li><li><a href="gfalist-format-vs-rust-frontend.html">gfalist format notes vs. the Rust frontend</a></li><li><a href="amiga-gfa-basic-35-base-function-use-audit.html">Amiga GFA BASIC 3.5 — inherited function evidence from both manuals</a></li><li><a href="amiga-gfa-basic-35-statement-operator-audit.html">Amiga GFA BASIC 3.5 — inherited statement and operator evidence</a></li><li><a href="amiga-gfa-basic-35-example-used-statements-audit.html">Amiga GFA BASIC 3.5 — inherited statements used in examples</a></li><li><a href="amiga-gfa-basic-35-base-statement-use-audit.html">Amiga GFA BASIC 3.5 — inherited statement evidence from the interpreter addendum</a></li></ul></nav>
+    <main class="docs-content">
+      <article>
+        <h1>Application-used Amiga GFA BASIC construct reconciliation</h1>
+        <p class="docs-meta"><span>Research Note</span></p>
+        <h1 id="application-used-amiga-gfa-basic-construct-reconciliation">Application-used Amiga GFA BASIC construct reconciliation</h1>
+<h2 id="scope-and-evidence-rules">Scope and evidence rules</h2>
+<p>This note reconciles the statement and expression candidates in issue <a href="https://github.com/vsimko/gfabasic-rust/issues/562">#562</a> against the existing Amiga inventories and the anonymous 1995 application-listing witness discussed there. The listing is a discovery witness. Its date and coding style suggest a likely GFA-BASIC 3.52 environment, but no exact interpreter build is identified. It is not a runtime test and does not establish 3.5 or 3.52 compatibility.</p>
+<p>The supplied <em>GFA BASIC 3.5 Interpreter</em> manual combines a 3.0 base text with a distinct 3.5 addendum. The 1990 German book identifies its main reference as V3.03; its explicitly 3.5-labelled later chapters are a separate evidence scope. Keep those source scopes separate. The inventories cited below are research evidence, not proof of Rust frontend or runtime support.</p>
+<p>Fixture status is also separate. The historical application listing is not copied into the repository or corpus. The legacy corpus manifest is marked <code>research_only</code>. PR <a href="https://github.com/vsimko/gfabasic-rust/pull/568">#568</a> added an independently authored, exact-form <code>DEFFN</code>/<code>FN</code> probe and recorded native GFA-BASIC 3.52D output. PR <a href="https://github.com/vsimko/gfabasic-rust/pull/569">#569</a> proposes a separate <code>UPPER$</code> probe; its native artifact must be inspected before recording a probe result. No other candidate below is upgraded to native-tested by its occurrence in the application.</p>
+<h2 id="statement-and-declaration-forms">Statement and declaration forms</h2>
+<table>
+<thead>
+<tr>
+<th>Observed/discovery form</th>
+<th>Classification and canonical location</th>
+<th>Evidence status and exact scope</th>
+<th>Focused fixture / next action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CLEAR</code></td>
+<td>Statement; <code>amiga-gfa-basic-3.0-statements.toml</code></td>
+<td>3.0 base-manual entry; also seen in the application.</td>
+<td>No focused fixture identified; no duplicate declaration.</td>
+</tr>
+<tr>
+<td><code>DIM</code>, <code>ERASE</code></td>
+<td>Statements; same statement inventory.</td>
+<td>3.0 base-manual entries; <code>DIM</code> also has a narrow 3.5 candidate witness. Application use is discovery evidence only.</td>
+<td>No focused fixture identified for these exact application forms; retain existing records.</td>
+</tr>
+<tr>
+<td><code>DEFINT</code></td>
+<td>Member of the <code>DEFxxx</code> variable-type declaration family; same statement inventory.</td>
+<td>3.0 base-manual p. 2-5. Not a separate declaration mechanism.</td>
+<td>No focused fixture identified; do not add a standalone duplicate row.</td>
+</tr>
+<tr>
+<td><code>DEFFN name=expression</code>, <code>FN name</code></td>
+<td>One-line expression-function definition and call; Chapter 7 program-handling evidence and German book §15.3. Distinct from <code>FUNCTION…ENDFUNC</code>.</td>
+<td>German book V3.03-era evidence; the exact one-line form is independently native-tested on GFA-BASIC 3.52D by merged PR #568. This does not establish 3.5 or 3.041U.</td>
+<td>Focused native 3.52D probe exists in PR #568; no additional fixture needed for the same form.</td>
+</tr>
+<tr>
+<td><code>FUNCTION name(...)</code> / <code>ENDFUNC</code></td>
+<td>Multi-line user function definition in the application; keep distinct from <code>DEFFN</code>/<code>FN</code>.</td>
+<td>Application-use witness only in this reconciliation; exact interpreter release is unverified.</td>
+<td>No focused fixture identified; source-backed exact grammar and version probe would be needed for a runtime claim.</td>
+</tr>
+<tr>
+<td><code>LIBRARY</code>, <code>DECLARE FUNCTION … LIBRARY</code></td>
+<td>Candidate language declaration versus Amiga OS library management. Chapter 11 inventories OS library calls; <code>OpenLibrary</code>/<code>CloseLibrary</code> are OS APIs, not BASIC declaration syntax.</td>
+<td>No language-level declaration form established by the inspected 3.5 manual or 1990 German book. <code>+Lib</code> compiler options and OS library calls are not equivalent evidence.</td>
+<td>Unverified; do not add a language declaration or fixture without an exact primary-source form or named-interpreter observation.</td>
+</tr>
+<tr>
+<td><code>LINE</code>, <code>GET</code>, <code>PUT</code></td>
+<td>Graphics statements; existing statement/graphics inventories and Chapter 8 evidence.</td>
+<td>Existing 3.0 base-manual records. Do not generalize the 3.5 <code>DRAW TO</code> example to other drawing forms.</td>
+<td>No focused fixture identified for these forms; reconcile argument variants individually before proposing probes.</td>
+</tr>
+<tr>
+<td><code>LOCATE</code>, <code>COLOR</code></td>
+<td>Statements; existing inventories and narrow 3.5 candidate evidence.</td>
+<td>Specific forms have 3.5 documentary witnesses; this does not establish every optional or sibling form.</td>
+<td>No additional fixture justified by the listing alone; preserve exact witnessed forms in the candidate manifest.</td>
+</tr>
+<tr>
+<td><code>SETCOLOR</code></td>
+<td>Graphics/color statement; existing candidate <code>amiga.base8.setcolor</code>.</td>
+<td>3.0 base-manual p. 8-2; the application uses the same spelling for RGB components. Keep distinct from <code>COLOR</code> and the unverified <code>PALETTE</code> spelling.</td>
+<td>No focused fixture identified; retain existing record.</td>
+</tr>
+<tr>
+<td><code>PALETTE</code></td>
+<td>Candidate statement spelling; no canonical <code>PALETTE</code> declaration established.</td>
+<td>Unverified. The inspected source documents <code>SETCOLOR</code>, not a <code>PALETTE</code> statement.</td>
+<td>Leave unresolved; do not alias it to <code>SETCOLOR</code>.</td>
+</tr>
+<tr>
+<td><code>IF</code> / <code>ELSEIF</code> / <code>ELSE</code> / <code>ENDIF</code></td>
+<td>One compound conditional construct; statement inventory records <code>ELSE</code>, <code>ELSE IF</code>, <code>ELSEIF</code>, and <code>ENDIF</code> as variants.</td>
+<td>3.0 base-manual Chapter 7; application use does not broaden 3.5 scope. Preserve compound syntax rather than splitting it into unrelated commands.</td>
+<td>No focused fixture identified for every spelling/placement; probe exact variants separately if runtime behavior is needed.</td>
+</tr>
+<tr>
+<td><code>FOR</code> / <code>NEXT</code> / <code>STEP</code>; <code>WHILE</code> / <code>WEND</code></td>
+<td>Compound loop constructs; existing statement inventory and candidate manifest.</td>
+<td>3.0 base-manual entries; narrow 3.5 examples cover only the forms recorded in the candidate manifest.</td>
+<td>Existing general 3.52 baseline covers a FOR/NEXT case, not every variant; do not infer all forms from that test.</td>
+</tr>
+<tr>
+<td><code>GOSUB</code> / <code>RETURN</code>, <code>GOTO</code></td>
+<td>Control-flow statements; existing Chapter 7 and statement research.</td>
+<td>Documented in the 3.0/3.03 sources. <code>GOSUB</code> and its variants are not thereby confirmed for 3.5.</td>
+<td>No focused fixture identified for the exact application forms.</td>
+</tr>
+<tr>
+<td><code>ON MENU GOSUB</code></td>
+<td>Compound event-handler statement in the existing event/window inventory.</td>
+<td>3.0 base-manual event/menu evidence; not a new independent <code>GOSUB</code> declaration.</td>
+<td>No focused fixture identified; keep as a compound event form.</td>
+</tr>
+<tr>
+<td><code>ON ERROR GOSUB</code>, <code>ON BREAK GOSUB</code></td>
+<td>Compound error/break event-handler forms; Chapter 7 evidence and candidate records.</td>
+<td>3.0 base-manual evidence. The 3.5 addendum's narrower GURU interaction does not confirm general handler syntax for every context.</td>
+<td>No focused fixture identified; retain version-specific uncertainty.</td>
+</tr>
+<tr>
+<td><code>STOP</code></td>
+<td>Control-flow statement; existing statement research.</td>
+<td>3.0/3.03 source evidence; the audited 3.5 examples do not confirm it.</td>
+<td>No focused fixture identified; 3.5 applicability remains unverified.</td>
+</tr>
+<tr>
+<td><code>SUB</code>, <code>PROCEDURE</code>, <code>ENDSUB</code>, <code>ENDPROC</code>, <code>LOCAL</code></td>
+<td>Procedure declaration, alias, terminators and local-variable declaration. German book §7 and application listing; Chapter 7 evidence note.</td>
+<td><code>SUB</code> is an alias for <code>PROCEDURE</code>; documented terminators include <code>ENDSUB</code>/<code>ENDPROC</code>. Do not infer a spaced <code>END SUB</code> form.</td>
+<td>No focused fixture identified for each alias/terminator.</td>
+</tr>
+<tr>
+<td><code>SHARED</code></td>
+<td>Candidate variable-scope declaration; not established in the inspected source passages.</td>
+<td>Unverified; do not import syntax from another BASIC dialect. The application uses <code>LOCAL</code>, which is a separate construct.</td>
+<td>Leave unresolved pending an exact primary-source witness or named interpreter observation.</td>
+</tr>
+<tr>
+<td><code>MENU m$()</code>, <code>MENU(x)</code>, <code>MENU(x,y)</code>, <code>MENU(x,str$)</code>, <code>MENU KILL</code>, <code>MENU KEY x,y</code></td>
+<td>Multiple forms in one canonical <code>MENU</code> family; <code>amiga-gfa-basic-3.0-event-window-statements.toml</code>. <code>MENU(x)</code> is a function-like event-buffer accessor, not an ordinary statement.</td>
+<td>3.0 base-manual pp. 9-3–9-8 and event example p. 9-13; companion book pp. 394–396. Do not add a duplicate function identifier.</td>
+<td>No focused fixture identified for the event-buffer semantics.</td>
+</tr>
+<tr>
+<td><code>SLEEP</code>, <code>SOUND</code></td>
+<td>Event/wait and sound statements; existing event/window inventory.</td>
+<td>3.0 base-manual entries; no general 3.5 confirmation from the listing.</td>
+<td>No focused fixture identified; retain existing records.</td>
+</tr>
+<tr>
+<td><code>INPUT</code>, <code>INPUT #</code></td>
+<td>Screen/channel input statement forms; statement inventory.</td>
+<td>3.0 base-manual evidence. Keep channel forms within the <code>INPUT</code> statement family.</td>
+<td>No focused fixture identified for all channel variants.</td>
+</tr>
+<tr>
+<td><code>INPUT$</code></td>
+<td>Built-in function, not an input statement; function inventory entry.</td>
+<td>3.0 base-manual function evidence.</td>
+<td>No focused fixture identified; no new declaration.</td>
+</tr>
+<tr>
+<td><code>PRINT #</code></td>
+<td>File/channel output form of the <code>PRINT</code> statement; statement inventory.</td>
+<td>3.0 base-manual evidence. The issue's prior 3.5 audits do not confirm every file-output variant.</td>
+<td>No focused fixture identified for this exact channel form.</td>
+</tr>
+<tr>
+<td><code>WRITE #</code></td>
+<td>Channel form of the <code>WRITE</code> statement; statement inventory.</td>
+<td>3.0 base-manual evidence; the exact form remains unconfirmed by the audited 3.5 examples.</td>
+<td>No focused fixture identified; keep separate from <code>PRINT #</code>.</td>
+</tr>
+<tr>
+<td><code>LOF</code></td>
+<td>Built-in function; function inventory, not a statement.</td>
+<td>3.0 base-manual function evidence.</td>
+<td>No focused fixture identified; no new declaration.</td>
+</tr>
+<tr>
+<td><code>DATA</code>, <code>READ</code></td>
+<td>Data declaration and read statements; statement inventory and candidate manifest.</td>
+<td>3.0 base-manual evidence plus narrow 3.5 candidate witnesses for the recorded forms.</td>
+<td>No additional fixture justified without a distinct syntax/behavior target.</td>
+</tr>
+<tr>
+<td><code>CALL address(...)</code></td>
+<td>Assembly-routine call form, German book §15.5; separate from BASIC library declarations and Amiga OS calls.</td>
+<td>German V3.03-era evidence.</td>
+<td>No focused fixture identified; preserve the external ABI boundary.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="expression-forms-variables-and-spelling-corrections">Expression forms, variables, and spelling corrections</h2>
+<table>
+<thead>
+<tr>
+<th>Discovery spelling/form</th>
+<th>Classification and canonical location</th>
+<th>Evidence status and exact scope</th>
+<th>Focused fixture / next action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ABS</code>, <code>ASC</code>, <code>INT</code>, <code>CHR$</code>, <code>CVI</code>, <code>MKI$</code>, <code>LEN</code>, <code>LEFT$</code>, <code>MID$</code>, <code>RIGHT$</code>, <code>STRING$</code></td>
+<td>Existing built-in function entries in <code>amiga-gfa-basic-functions.toml</code>. <code>MID$</code> also has a distinct command form; do not merge command and function semantics.</td>
+<td>Primarily 3.0 base-manual evidence. <code>INT</code> and selected other forms have separate 3.5 documentary witnesses as recorded in the inventory.</td>
+<td>No focused fixture identified for every overload. Do not add duplicate function entries.</td>
+</tr>
+<tr>
+<td><code>INKEY$</code></td>
+<td>Built-in keyboard-input function; function inventory.</td>
+<td>3.0 base-manual evidence; application use is corroborating source-use evidence only.</td>
+<td>No focused fixture identified.</td>
+</tr>
+<tr>
+<td><code>WINDOW(nr)</code>, <code>WINDOW(adr)</code></td>
+<td>Function-like window number/address accessor in the function inventory; distinct from the <code>WINDOW</code> statement family.</td>
+<td>3.0 base-manual p. 9-35.</td>
+<td>No focused fixture identified for both directions.</td>
+</tr>
+<tr>
+<td><code>MENU(index)</code></td>
+<td>Function-like event-message buffer accessor within the existing <code>MENU</code> family, not a separate identifier.</td>
+<td>3.0 base-manual pp. 9-3–9-4; companion book pp. 394–396.</td>
+<td>No focused fixture identified; preserve the shared-name classification.</td>
+</tr>
+<tr>
+<td><code>MOUSE(...)</code></td>
+<td>Not a documented function. The canonical <code>MOUSE</code> construct is the statement <code>MOUSE mx,my,mk</code>; <code>MOUSEX</code>, <code>MOUSEY</code>, and <code>MOUSEK</code> are predefined state variables.</td>
+<td>3.0 base-manual; statement inventory records <code>MOUSE</code> at p. 5-17.</td>
+<td>Do not add a function. No focused fixture identified for the statement/state variables.</td>
+</tr>
+<tr>
+<td><code>MOUSEK</code></td>
+<td>Predefined mouse-button state variable, not a function or statement.</td>
+<td>3.0 base-manual predefined-variable evidence; also used in the anonymous application.</td>
+<td>No focused fixture identified.</td>
+</tr>
+<tr>
+<td><code>PEEKL</code></td>
+<td>Non-canonical discovery spelling. The four-byte read function is <code>LPEEK(x)</code>, already present in the function inventory.</td>
+<td>3.0 base-manual p. 2-36. The source does not establish <code>PEEKL</code> as an alias.</td>
+<td>No new entry or fixture; keep <code>PEEKL</code> unverified rather than declaring it unsupported.</td>
+</tr>
+<tr>
+<td><code>UCASE$</code></td>
+<td>Non-canonical discovery spelling. The documented and application-used function is <code>UPPER$(a$)</code>, already present in the function inventory.</td>
+<td>3.0 base-manual pp. 4-34–4-35. This does not prove that <code>UCASE$</code> is unsupported.</td>
+<td>PR #569 contains an isolated 3.52D probe proposal; record native outcome only after its raw artifact is inspected.</td>
+</tr>
+<tr>
+<td><code>SADD</code></td>
+<td>User-defined application helper (<code>FUNCTION sadd(a$)</code>) that appends a NUL and returns <code>VARPTR(a$)</code>; not a built-in function.</td>
+<td>Application-source classification only. Its use to prepare strings for Amiga OS calls is not evidence of a language built-in.</td>
+<td>Remove from the built-in-function gap list; no built-in fixture.</td>
+</tr>
+<tr>
+<td><code>VARPTR</code></td>
+<td>Existing built-in pointer function; function inventory. In this listing it is used by the user-defined <code>sadd</code> helper.</td>
+<td>3.0 base-manual function evidence; application use does not establish additional pointer-lifetime semantics.</td>
+<td>No focused fixture identified for the application interop pattern.</td>
+</tr>
+<tr>
+<td><code>BYTE{...}</code>, <code>WORD{...}</code>, <code>LONG{...}</code></td>
+<td>Typed memory-access/conversion forms represented by the existing <code>BYTE</code>, <code>WORD</code>, and <code>LONG</code> function entries.</td>
+<td>3.0 base-manual function inventory; the application listing is a use witness, not a 3.5/3.52 test.</td>
+<td>No focused fixture identified for each memory form.</td>
+</tr>
+<tr>
+<td><code>MOUSE</code>, <code>MENU</code>, <code>WINDOW</code>, <code>SCREEN</code></td>
+<td>Shared names whose statement/function-like contexts must remain distinct and be deduplicated by canonical name where the inventories specify.</td>
+<td>Existing statement/event and function inventories; no new identifiers justified by repeated contexts.</td>
+<td>No duplicate declarations.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="external-and-user-declared-boundary">External and user-declared boundary</h2>
+<p>The application's <code>~Execute</code>, <code>~OpenLibrary</code>, <code>~CloseLibrary</code>, <code>~SetFont</code>, and <code>~Delay</code> forms are Amiga OS routine calls using the GFA BASIC OS-call convention. They are not built-in BASIC statements or <code>DECLARE FUNCTION … LIBRARY</code> declarations. The <code>sadd</code> helper is application-defined and prepares a string pointer for those calls. Keep the language construct, user-defined helper, and OS/library API namespaces separate.</p>
+<h2 id="summary-of-remaining-work">Summary of remaining work</h2>
+<ul>
+<li><strong>No new built-in declaration is justified</strong> for <code>SADD</code>, <code>PEEKL</code>, <code>UCASE$</code>, or <code>MOUSE(...)</code>; these are respectively a user-defined helper, a non-canonical spelling for <code>LPEEK</code>, a non-canonical spelling for <code>UPPER$</code>, and a misclassification of the <code>MOUSE</code> statement/state variables.</li>
+<li><strong>Existing canonical families need no duplicates:</strong> <code>MENU</code>, <code>WINDOW</code>, <code>SCREEN</code>, <code>DEFxxx</code>, control-flow constructs, I/O statements, and the listed functions are already represented in the cited inventories.</li>
+<li><strong>Still unverified as language forms:</strong> <code>DECLARE FUNCTION … LIBRARY</code>, <code>SHARED</code>, <code>WINDOW OUTPUT</code>, and <code>PALETTE</code> as a statement. Their absence from inspected passages is not proof of interpreter rejection.</li>
+<li><strong>Version evidence remains narrow:</strong> 3.0/3.03 documentation and likely-version application use do not establish 3.5 or 3.52 support. Only named interpreter runs with inspected artifacts can establish native results.</li>
+<li><strong>Fixture selection:</strong> the application source is not a corpus fixture. Add only independently authored probes with exact syntax, a source-backed expected result, and a named target version. The existing corpus remains <code>research_only</code>; do not describe its metadata validator as a conformance runner.</li>
+</ul>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>
