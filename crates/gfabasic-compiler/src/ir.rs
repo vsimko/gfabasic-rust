@@ -357,7 +357,7 @@ mod tests {
 
     #[test]
     fn lowers_all_three_intrinsics_to_typed_constants_and_print() {
-        let source = "x=FACT(5)\ny=VARIAT(5,2)\nz=COMBIN(5,2)\nPRINT x,y,z\n";
+        let source = "x=FACT(5)\ny=VARIAT(5,2)\nz=COMBIN(5,2)\nPRINT z,x,y\n";
         let mut sources = SourceMap::new();
         let id = sources.add_source("combinatorics.bas", source);
         let model = semantic_model(id, source);
@@ -391,7 +391,7 @@ mod tests {
         assert!(matches!(
             &ir.instructions[3],
             Instruction::Print { values, .. }
-                if values == &[ValueId(0), ValueId(1), ValueId(2)]
+                if values == &[ValueId(2), ValueId(0), ValueId(1)]
         ));
         assert_eq!(value_type(&ir, ValueId(0)), Some(ValueType::I64));
         verify(&ir).unwrap();
