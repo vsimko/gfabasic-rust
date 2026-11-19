@@ -342,19 +342,17 @@ mod tests {
     use crate::semantic::resolve_prototype_symbols;
     use crate::source::SourceMap;
 
-    fn resolve(source: &str) -> crate::semantic::SemanticModel<'_> {
+    fn parse(source: &str) -> crate::frontend::ParsedDocument {
         let mut sources = SourceMap::new();
         let id = sources.add_source("ir-test.bas", source);
-        // The model borrows its parsed document; keep both in the caller for
-        // production use. Tests use a leaked test-only document for brevity.
-        let document = Box::leak(Box::new(parse_document(id, source).unwrap()));
-        resolve_prototype_symbols(document).expect("test source has valid semantics")
+        parse_document(id, source).expect("test source parses")
     }
 
     #[test]
     fn lowers_intrinsics_through_resolved_symbol_ids() {
         let source = "x=FACT(5)\ny=VARIAT(5,2)\nz=COMBIN(5,2)\nPRINT z,x,y\n";
-        let semantic = resolve(source);
+        let document = parse(source);
+        let semantic = resolve_prototype_symbols(&document).unwrap();
         let ir = lower(&semantic).unwrap();
         assert_eq!(ir.instructions.len(), 4);
         assert!(matches!(ir.instructions[0], Instruction::ConstI64 { result: ValueId(0), value: 120, .. }));
@@ -367,7 +365,8 @@ mod tests {
 
     #[test]
     fn lowers_integer_literal_assignments() {
-        let semantic = resolve("x=42\nLET y=7\nPRINT x,y\n");
+        let document = parse("x=42\nLET y=7\nPRINT x,y\n");
+        let semantic = resolve_prototype_symbols(&document).unwrap();
         let module = lower(&semantic).unwrap();
         assert!(matches!(module.instructions[0], Instruction::ConstI64 { value: 42, .. }));
         assert!(matches!(module.instructions[1], Instruction::ConstI64 { value: 7, .. }));
@@ -376,7 +375,8 @@ mod tests {
 
     #[test]
     fn handles_boundary_intrinsic_values() {
-        let semantic = resolve("x=FACT(0)\ny=VARIAT(20,0)\nz=COMBIN(20,10)\nPRINT x,y,z\n");
+        let document = parse("x=FACT(0)\ny=VARIAT(20,0)\nz=COMBIN(20,10)\nPRINT x,y,z\n");
+        let semantic = resolve_prototype_symbols(&document).unwrap();
         let ir = lower(&semantic).unwrap();
         assert!(matches!(ir.instructions[0], Instruction::ConstI64 { value: 1, .. }));
         assert!(matches!(ir.instructions[1], Instruction::ConstI64 { value: 1, .. }));
