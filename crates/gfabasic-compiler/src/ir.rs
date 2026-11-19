@@ -102,7 +102,7 @@ fn binary_intrinsic(declaration_id: &str, left: i64, right: i64) -> Result<Optio
     }
 }
 
-/// Lower the current frontend AST to typed, constant-valued IR.
+/// Lower a resolved semantic model to typed, constant-valued IR.
 ///
 /// Intrinsics are evaluated here only for the prototype's documented literal
 /// subset. Their bounds are implementation limits, not dialect limits.
