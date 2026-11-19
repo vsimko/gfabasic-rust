@@ -69,17 +69,30 @@ pub struct SemanticModel<'a> {
 
 impl Deref for SemanticModel<'_> {
     type Target = SymbolTable;
-    fn deref(&self) -> &Self::Target { &self.symbol_table }
+    fn deref(&self) -> &Self::Target {
+        &self.symbol_table
+    }
 }
 
 impl SemanticModel<'_> {
     pub fn symbol_for_assignment(&self, span: crate::source::SourceSpan) -> Option<&Symbol> {
-        self.symbol_table.symbols.iter().find(|symbol| symbol.assignment == span)
+        self.symbol_table
+            .symbols
+            .iter()
+            .find(|symbol| symbol.assignment == span)
     }
-    pub fn references_in(&self, span: crate::source::SourceSpan) -> impl Iterator<Item = &ResolvedReference> {
-        self.symbol_table.references.iter().filter(move |reference| {
-            reference.span.source == span.source && reference.span.start >= span.start && reference.span.end <= span.end
-        })
+    pub fn references_in(
+        &self,
+        span: crate::source::SourceSpan,
+    ) -> impl Iterator<Item = &ResolvedReference> {
+        self.symbol_table
+            .references
+            .iter()
+            .filter(move |reference| {
+                reference.span.source == span.source
+                    && reference.span.start >= span.start
+                    && reference.span.end <= span.end
+            })
     }
 }
 
@@ -216,7 +229,10 @@ pub fn resolve_prototype_symbols(
     }
 
     if errors.is_empty() {
-        Ok(SemanticModel { program: &document.program, symbol_table: table })
+        Ok(SemanticModel {
+            program: &document.program,
+            symbol_table: table,
+        })
     } else {
         Err(errors)
     }
