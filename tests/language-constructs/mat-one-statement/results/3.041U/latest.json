@@ -9,13 +9,13 @@
   },
   "expected_probe": "tests/language-constructs/mat-one-statement/probe-3.5.LST",
   "harness_status": "failure",
-  "manifest_sha256": "7fca06c03f73523e5dac799420d3b030869fa3480f5836a799770d6e1f73b6cb",
+  "manifest_sha256": "0e8e7ad2683265e319c42cbaa689180e9016db6832f3a775db01777325003f51",
   "probe": "tests/language-constructs/mat-one-statement/probe-3.5.LST",
-  "probe_sha256": "fa204e97bf8cbf154e87137f7acd853506805a1d9190ca073439d8d9d712455b",
-  "reason": "expected-ID file must contain exactly the construct ID; GFATEST result file is missing; running-editor version-menu OCR did not identify the requested version; native harness step concluded failure",
+  "probe_sha256": "d068d45014a7f3acd5bb7a294bc9aebac7259aeee07ba65b4530101cdcc414ae",
+  "reason": "GFATEST result file is missing; running-editor version-menu OCR did not identify the requested version; native harness step concluded failure",
   "result_schema_version": 1,
   "run_attempt": "1",
-  "run_url": "https://github.com/vsimko/gfabasic-rust/actions/runs/44267575483",
+  "run_url": "https://github.com/vsimko/gfabasic-rust/actions/runs/44428660790",
   "selection": "targeted",
   "version": "3.041U"
 }

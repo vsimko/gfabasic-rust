@@ -12,10 +12,10 @@
   "manifest_sha256": "313d65db8fd49d045f36204d16d89666aa8f0368a0fe1687e5b9be5c4ec937f2",
   "probe": "tests/language-constructs/fact-function/probe-3.5.LST",
   "probe_sha256": "c85a1e8c27f9c9f421c26a4fcd34864304478eb4fe21e70a57d7e9cd773838c4",
-  "reason": "expected-ID file must contain exactly the construct ID; invalid expected fixture ID: 'fact-function\\\\n'; result file is empty or missing; running-editor version-menu OCR did not identify the requested version; native harness step concluded failure",
+  "reason": "GFATEST result file is missing; running-editor version-menu OCR did not identify the requested version; native harness step concluded failure",
   "result_schema_version": 1,
   "run_attempt": "1",
-  "run_url": "https://github.com/vsimko/gfabasic-rust/actions/runs/44267575483",
+  "run_url": "https://github.com/vsimko/gfabasic-rust/actions/runs/44428660790",
   "selection": "targeted",
   "version": "3.041U"
 }
