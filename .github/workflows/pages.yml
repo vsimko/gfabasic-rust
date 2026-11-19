@@ -80,7 +80,8 @@ jobs:
         run: |
           staging_dir="$(mktemp -d)"
           deploy_dir="$(mktemp -d)"
-          # shellcheck disable=SC2329 # Invoked by the EXIT trap below.
+          # ShellCheck SC2329: cleanup is invoked indirectly by the EXIT trap below.
+          # shellcheck disable=SC2329
           cleanup() {
             git worktree remove --force "$deploy_dir" >/dev/null 2>&1 || true
             rm -rf "$staging_dir" "$deploy_dir"
