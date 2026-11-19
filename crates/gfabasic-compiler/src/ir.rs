@@ -117,7 +117,10 @@ pub fn lower(semantic: &SemanticModel<'_>) -> Result<Module, Vec<IrError>> {
         match statement {
             Statement::AssignInteger { value, span, .. } => {
                 let Some(symbol) = semantic.symbol_for_assignment(*span) else {
-                    errors.push(IrError::at("assignment has no resolved semantic symbol", *span));
+                    errors.push(IrError::at(
+                        "assignment has no resolved semantic symbol",
+                        *span,
+                    ));
                     continue;
                 };
                 lower_assignment(
@@ -130,11 +133,7 @@ pub fn lower(semantic: &SemanticModel<'_>) -> Result<Module, Vec<IrError>> {
                     &mut errors,
                 );
             }
-            Statement::AssignFact {
-                argument,
-                span,
-                ..
-            } => {
+            Statement::AssignFact { argument, span, .. } => {
                 let value = match unary_intrinsic("gfa.language.math.fact", *argument) {
                     Ok(value) => value,
                     Err(message) => {
@@ -143,7 +142,10 @@ pub fn lower(semantic: &SemanticModel<'_>) -> Result<Module, Vec<IrError>> {
                     }
                 };
                 let Some(symbol) = semantic.symbol_for_assignment(*span) else {
-                    errors.push(IrError::at("assignment has no resolved semantic symbol", *span));
+                    errors.push(IrError::at(
+                        "assignment has no resolved semantic symbol",
+                        *span,
+                    ));
                     continue;
                 };
                 lower_assignment(
@@ -165,7 +167,10 @@ pub fn lower(semantic: &SemanticModel<'_>) -> Result<Module, Vec<IrError>> {
                     }
                 };
                 let Some(symbol) = semantic.symbol_for_assignment(*span) else {
-                    errors.push(IrError::at("assignment has no resolved semantic symbol", *span));
+                    errors.push(IrError::at(
+                        "assignment has no resolved semantic symbol",
+                        *span,
+                    ));
                     continue;
                 };
                 lower_assignment(
@@ -187,7 +192,10 @@ pub fn lower(semantic: &SemanticModel<'_>) -> Result<Module, Vec<IrError>> {
                     }
                 };
                 let Some(symbol) = semantic.symbol_for_assignment(*span) else {
-                    errors.push(IrError::at("assignment has no resolved semantic symbol", *span));
+                    errors.push(IrError::at(
+                        "assignment has no resolved semantic symbol",
+                        *span,
+                    ));
                     continue;
                 };
                 lower_assignment(
@@ -226,13 +234,22 @@ pub fn lower(semantic: &SemanticModel<'_>) -> Result<Module, Vec<IrError>> {
                 let references: Vec<_> = semantic.references_in(*span).collect();
                 let mut values = Vec::with_capacity(names.len());
                 if references.len() != names.len() {
-                    errors.push(IrError::at("PRINT references do not match the resolved semantic model", *span));
+                    errors.push(IrError::at(
+                        "PRINT references do not match the resolved semantic model",
+                        *span,
+                    ));
                     continue;
                 }
                 for reference in references {
                     match variables.get(&reference.symbol) {
                         Some(value) => values.push(*value),
-                        None => errors.push(IrError::at(format!("resolved symbol {:?} has no lowered value", reference.symbol), reference.span)),
+                        None => errors.push(IrError::at(
+                            format!(
+                                "resolved symbol {:?} has no lowered value",
+                                reference.symbol
+                            ),
+                            reference.span,
+                        )),
                     }
                 }
                 if values.len() == names.len() {
@@ -270,7 +287,10 @@ fn lower_assignment(
 ) {
     if variables.contains_key(&symbol) {
         errors.push(IrError::at(
-            format!("reassignment of resolved symbol {:?} is outside the current prototype subset", symbol),
+            format!(
+                "reassignment of resolved symbol {:?} is outside the current prototype subset",
+                symbol
+            ),
             span,
         ));
         return;
@@ -356,10 +376,33 @@ mod tests {
         let semantic = resolve_prototype_symbols(&document).unwrap();
         let ir = lower(&semantic).unwrap();
         assert_eq!(ir.instructions.len(), 4);
-        assert!(matches!(ir.instructions[0], Instruction::ConstI64 { result: ValueId(0), value: 120, .. }));
-        assert!(matches!(ir.instructions[1], Instruction::ConstI64 { result: ValueId(1), value: 20, .. }));
-        assert!(matches!(ir.instructions[2], Instruction::ConstI64 { result: ValueId(2), value: 10, .. }));
-        assert!(matches!(&ir.instructions[3], Instruction::Print { values, .. } if values == &[ValueId(2), ValueId(0), ValueId(1)]));
+        assert!(matches!(
+            ir.instructions[0],
+            Instruction::ConstI64 {
+                result: ValueId(0),
+                value: 120,
+                ..
+            }
+        ));
+        assert!(matches!(
+            ir.instructions[1],
+            Instruction::ConstI64 {
+                result: ValueId(1),
+                value: 20,
+                ..
+            }
+        ));
+        assert!(matches!(
+            ir.instructions[2],
+            Instruction::ConstI64 {
+                result: ValueId(2),
+                value: 10,
+                ..
+            }
+        ));
+        assert!(
+            matches!(&ir.instructions[3], Instruction::Print { values, .. } if values == &[ValueId(2), ValueId(0), ValueId(1)])
+        );
         assert_eq!(value_type(&ir, ValueId(0)), Some(ValueType::I64));
         verify(&ir).unwrap();
     }
@@ -369,9 +412,17 @@ mod tests {
         let document = parse("x=42\nLET y=7\nPRINT x,y\n");
         let semantic = resolve_prototype_symbols(&document).unwrap();
         let module = lower(&semantic).unwrap();
-        assert!(matches!(module.instructions[0], Instruction::ConstI64 { value: 42, .. }));
-        assert!(matches!(module.instructions[1], Instruction::ConstI64 { value: 7, .. }));
-        assert!(matches!(&module.instructions[2], Instruction::Print { values, .. } if values.len() == 2));
+        assert!(matches!(
+            module.instructions[0],
+            Instruction::ConstI64 { value: 42, .. }
+        ));
+        assert!(matches!(
+            module.instructions[1],
+            Instruction::ConstI64 { value: 7, .. }
+        ));
+        assert!(
+            matches!(&module.instructions[2], Instruction::Print { values, .. } if values.len() == 2)
+        );
     }
 
     #[test]
@@ -379,9 +430,18 @@ mod tests {
         let document = parse("x=FACT(0)\ny=VARIAT(20,0)\nz=COMBIN(20,10)\nPRINT x,y,z\n");
         let semantic = resolve_prototype_symbols(&document).unwrap();
         let ir = lower(&semantic).unwrap();
-        assert!(matches!(ir.instructions[0], Instruction::ConstI64 { value: 1, .. }));
-        assert!(matches!(ir.instructions[1], Instruction::ConstI64 { value: 1, .. }));
-        assert!(matches!(ir.instructions[2], Instruction::ConstI64 { value: 184756, .. }));
+        assert!(matches!(
+            ir.instructions[0],
+            Instruction::ConstI64 { value: 1, .. }
+        ));
+        assert!(matches!(
+            ir.instructions[1],
+            Instruction::ConstI64 { value: 1, .. }
+        ));
+        assert!(matches!(
+            ir.instructions[2],
+            Instruction::ConstI64 { value: 184756, .. }
+        ));
     }
 
     #[test]
@@ -390,7 +450,10 @@ mod tests {
             let mut sources = SourceMap::new();
             let id = sources.add_source("invalid.bas", source);
             let document = parse_document(id, source).unwrap();
-            assert!(resolve_prototype_symbols(&document).is_err(), "accepted: {source}");
+            assert!(
+                resolve_prototype_symbols(&document).is_err(),
+                "accepted: {source}"
+            );
         }
     }
 
@@ -400,7 +463,8 @@ mod tests {
         let mut sources = SourceMap::new();
         let id = sources.add_source("matrix.bas", source);
         let document = parse_document(id, source).unwrap();
-        let errors = resolve_prototype_symbols(&document).expect_err("matrix semantics are not implemented");
+        let errors =
+            resolve_prototype_symbols(&document).expect_err("matrix semantics are not implemented");
         assert!(errors.iter().any(|error| error.code == "GFA-SEM-0003"));
     }
 
@@ -409,12 +473,27 @@ mod tests {
         let mut sources = SourceMap::new();
         let id = sources.add_source("ir-invalid.bas", "PRINT x\n");
         let span = crate::source::SourceSpan::new(id, 0, 7);
-        let undefined = super::Module { instructions: vec![Instruction::Print { values: vec![ValueId(9)], span }] };
+        let undefined = super::Module {
+            instructions: vec![Instruction::Print {
+                values: vec![ValueId(9)],
+                span,
+            }],
+        };
         assert!(verify(&undefined).is_err());
-        let duplicate = super::Module { instructions: vec![
-            Instruction::ConstI64 { result: ValueId(1), value: 1, span },
-            Instruction::ConstI64 { result: ValueId(1), value: 2, span },
-        ]};
+        let duplicate = super::Module {
+            instructions: vec![
+                Instruction::ConstI64 {
+                    result: ValueId(1),
+                    value: 1,
+                    span,
+                },
+                Instruction::ConstI64 {
+                    result: ValueId(1),
+                    value: 2,
+                    span,
+                },
+            ],
+        };
         assert!(verify(&duplicate).is_err());
     }
 }
