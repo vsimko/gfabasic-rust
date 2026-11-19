@@ -181,7 +181,7 @@ class LanguageConstructManifestValidationTests(unittest.TestCase):
 
     def test_result_output_files_are_allowed(self):
         result = self.root / "tests/language-constructs/fact-function/results/3.5/latest.json"
-        result.parent.mkdir(parents=True)
+        result.parent.mkdir(parents=True, exist_ok=True)
         result.write_text("{}\n", encoding="utf-8")
         self.assertEqual(validate_language_constructs(self.root), [])
 
