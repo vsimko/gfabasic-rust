@@ -12,7 +12,21 @@ This note reconciles the statement and expression candidates in issue [#562](htt
 
 The supplied *GFA BASIC 3.5 Interpreter* manual combines a 3.0 base text with a distinct 3.5 addendum. The 1990 German book identifies its main reference as V3.03; its explicitly 3.5-labelled later chapters are a separate evidence scope. Keep those source scopes separate. The inventories cited below are research evidence, not proof of Rust frontend or runtime support.
 
-Fixture status is also separate. The historical application listing is not copied into the repository or corpus. The legacy corpus manifest is marked `research_only`. PR [#568](https://github.com/vsimko/gfabasic-rust/pull/568) added an independently authored, exact-form `DEFFN`/`FN` probe and recorded native GFA-BASIC 3.52D output. PR [#569](https://github.com/vsimko/gfabasic-rust/pull/569) proposes a separate `UPPER$` probe; its native artifact must be inspected before recording a probe result. No other candidate below is upgraded to native-tested by its occurrence in the application.
+Fixture status is also separate. The historical application listing is not copied into the repository or corpus. The legacy corpus manifest is marked `research_only`. PR [#568](https://github.com/vsimko/gfabasic-rust/pull/568) added an independently authored, exact-form `DEFFN`/`FN` probe and recorded native GFA-BASIC 3.52D output. PR [#569](https://github.com/vsimko/gfabasic-rust/pull/569) adds a separate `UPPER---
+type: "Research Note"
+title: "Application-used Amiga GFA BASIC construct reconciliation"
+tags: [amiga, gfa-basic, application-source, version-evidence]
+---
+
+# Application-used Amiga GFA BASIC construct reconciliation
+
+## Scope and evidence rules
+
+This note reconciles the statement and expression candidates in issue [#562](https://github.com/vsimko/gfabasic-rust/issues/562) against the existing Amiga inventories and the anonymous 1995 application-listing witness discussed there. The listing is a discovery witness. Its date and coding style suggest a likely GFA-BASIC 3.52 environment, but no exact interpreter build is identified. It is not a runtime test and does not establish 3.5 or 3.52 compatibility.
+
+The supplied *GFA BASIC 3.5 Interpreter* manual combines a 3.0 base text with a distinct 3.5 addendum. The 1990 German book identifies its main reference as V3.03; its explicitly 3.5-labelled later chapters are a separate evidence scope. Keep those source scopes separate. The inventories cited below are research evidence, not proof of Rust frontend or runtime support.
+
+Fixture status is also separate. The historical application listing is not copied into the repository or corpus. The legacy corpus manifest is marked `research_only`. PR [#568](https://github.com/vsimko/gfabasic-rust/pull/568) added an independently authored, exact-form `DEFFN`/`FN` probe and recorded native GFA-BASIC 3.52D output.  probe. Its raw GFA-BASIC 3.52D artifact was inspected: `fact-output.txt` records `UPPER$:GFA-BASIC 3.52`, `gfatest-results.txt` records `GFATEST:upper-dollar:PASS`, and the captured binary strings identify `GFA-BASIC Version 3.52 D`. This is native evidence for 3.52D only; matrix job success does not establish the exact probe result on 3.5 or 3.041U. No other candidate below is upgraded to native-tested by its occurrence in the application.
 
 ## Statement and declaration forms
 
