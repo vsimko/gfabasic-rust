@@ -63,7 +63,6 @@ jobs:
           }
           mkdir -p analysis-input analysis-output
           ARCHIVE_NAME='GFA-BASIC v3.52 (1990)(GFA Systemtechnik)(DE)(Disk 1 of 2)[WB].zip'
-          ARCHIVE_PATH_ENCODED="$(python3 -c 'import sys,urllib.parse; print(urllib.parse.quote(sys.argv[1], safe=""))' "$ARCHIVE_NAME")"
           python3 - "$ARCHIVE_NAME" "$RUNNER_TEMP/gfa-basic-3.52-disk1.zip" <<'PY'
           import os
           import shutil
