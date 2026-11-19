@@ -155,7 +155,7 @@ jobs:
             test -f "$GFA_PROBE_PATH_INPUT"
             xdftool "$TEST_ADF" write "$GFA_PROBE_PATH_INPUT" gfatest.LST
             printf '%s\n' "$GFA_CONSTRUCT_ID_INPUT" > "$RUNNER_TEMP/expected-ids.txt"
-            test "$(cat \"$RUNNER_TEMP/expected-ids.txt\")" = "$GFA_CONSTRUCT_ID_INPUT"
+            test "$(cat "$RUNNER_TEMP/expected-ids.txt")" = "$GFA_CONSTRUCT_ID_INPUT"
             test "$(wc -l < \"$RUNNER_TEMP/expected-ids.txt\")" -eq 1
             echo "GFATEST_EXPECTED_IDS_FILE=$RUNNER_TEMP/expected-ids.txt" >> "$GITHUB_ENV"
             echo "GFA_CONSTRUCT_ID=$GFA_CONSTRUCT_ID_INPUT" >> "$GITHUB_ENV"
