@@ -57,21 +57,21 @@ jobs:
 
           while IFS='|' read -r label filename; do
             python3 - "$filename" "media/archives/$label.zip" <<'PY'
-            import os
-            import shutil
-            import sys
-            from urllib.parse import quote
-            from urllib.request import Request, urlopen
+          import os
+          import shutil
+          import sys
+          from urllib.parse import quote
+          from urllib.request import Request, urlopen
 
-            filename, destination = sys.argv[1:]
-            url = f"https://api.github.com/repos/vsimko/gfabasic-private-assets/contents/{quote(filename, safe='')}?ref=main"
-            request = Request(url, headers={
-                "Authorization": f"Bearer {os.environ['GFA_ASSETS_TOKEN']}",
-                "Accept": "application/vnd.github.raw",
-            })
-            with urlopen(request, timeout=60) as response, open(destination, "wb") as output:
-                shutil.copyfileobj(response, output)
-            PY
+          filename, destination = sys.argv[1:]
+          url = f"https://api.github.com/repos/vsimko/gfabasic-private-assets/contents/{quote(filename, safe='')}?ref=main"
+          request = Request(url, headers={
+              "Authorization": f"Bearer {os.environ['GFA_ASSETS_TOKEN']}",
+              "Accept": "application/vnd.github.raw",
+          })
+          with urlopen(request, timeout=60) as response, open(destination, "wb") as output:
+              shutil.copyfileobj(response, output)
+          PY
             printf '%s\t%s\t' "$label" "$filename" >> artifacts/amiga-media-inventory/archive-sha256.txt
             sha256sum "media/archives/$label.zip" | cut -d' ' -f1 >> artifacts/amiga-media-inventory/archive-sha256.txt
             mkdir -p "media/extracted/$label"
