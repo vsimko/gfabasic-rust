@@ -56,7 +56,6 @@ jobs:
           python3 -m pip install --cache-dir "$HOME/.cache/pip" --break-system-packages amitools
 
           while IFS='|' read -r label filename; do
-            encoded="$(python3 -c 'import sys,urllib.parse; print(urllib.parse.quote(sys.argv[1], safe=""))' "$filename")"
             python3 - "$filename" "media/archives/$label.zip" <<'PY'
             import os
             import shutil
