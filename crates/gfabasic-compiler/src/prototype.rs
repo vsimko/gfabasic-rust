@@ -13,7 +13,7 @@ use std::sync::atomic::{AtomicUsize, Ordering};
 
 use crate::diagnostics::{Diagnostic, DiagnosticCategory, DiagnosticSeverity};
 use crate::frontend::parse_document;
-use crate::semantic::{SemanticModel, analyze_prototype};
+use crate::semantic::analyze_prototype;
 use crate::ir::{Instruction, Module, ValueId};
 use crate::source::{SourceMap, SourceSpan};
 
@@ -110,7 +110,7 @@ fn lower_program(
                 .render(sources)
             })
             .collect::<Vec<_>>()
-            .join("\\n")
+            .join("\n")
     })?;
     let module = crate::ir::lower(&model).map_err(|errors| {
         errors
