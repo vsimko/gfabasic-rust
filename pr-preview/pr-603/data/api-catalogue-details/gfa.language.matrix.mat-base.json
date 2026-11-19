@@ -1,0 +1,71 @@
+{
+  "id": "gfa.language.matrix.mat-base",
+  "name": "MAT BASE",
+  "kind": "statement",
+  "namespace": "language-core",
+  "category": "math-and-matrix",
+  "availability": [
+    {
+      "dialect": "amiga-gfa-basic-interpreter",
+      "versions": [
+        "3.5"
+      ]
+    }
+  ],
+  "syntax": [
+    {
+      "form": "MAT BASE 0 | MAT BASE 1",
+      "contexts": [
+        "statement"
+      ],
+      "arguments": [
+        {
+          "name": "base",
+          "type": "integer literal 0 or 1",
+          "required": true
+        }
+      ]
+    }
+  ],
+  "signature": {
+    "type": "no return value"
+  },
+  "semantics": {
+    "summary": "Sets the row/column index offset used by the documented matrix operations; the default is 1.",
+    "side-effects": [
+      "Changes the matrix-operation index base for MAT READ, MAT PRINT, MAT CPY, MAT XCPY, MAT ADD, MAT SUB, and MAT MUL."
+    ],
+    "errors": []
+  },
+  "evidence": {
+    "source-scope": "amiga-3.5-addendum",
+    "status": "book-documented",
+    "sources": [
+      "AM-INTERPRETER-35"
+    ],
+    "printed-pages": [
+      "Chapter 13, printed pp. 13-1–13-2"
+    ],
+    "notes": [
+      "The page-image-reviewed addendum says MAT BASE 1 is the default and documents explicit settings 0 and 1."
+    ]
+  },
+  "implementation": {
+    "status": "not-implemented"
+  },
+  "support": [
+    {
+      "target": "x86_64-unknown-linux-gnu",
+      "classification": "unknown",
+      "conformance": "not-tested",
+      "tests": [],
+      "pending-reason": "No matrix-operation runtime or executable reference-interpreter conformance tests are registered."
+    }
+  ],
+  "docs": {
+    "path": "docs/research/amiga-gfa-basic-35-addendum-inventory.md",
+    "anchors": [
+      "3-linear-operations-on-numeric-fields"
+    ]
+  }
+}
