@@ -12,7 +12,7 @@ cat > "$askpass" <<'EOF'
 #!/usr/bin/env bash
 case "$1" in
   *sername*) printf '%s\n' 'x-access-token' ;;
-  *assword*) printf '%s\\n' "$GFA_ASSETS_TOKEN" ;;
+  *assword*) printf '%s\n' "$GFA_ASSETS_TOKEN" ;;
   *) exit 1 ;;
 esac
 EOF
