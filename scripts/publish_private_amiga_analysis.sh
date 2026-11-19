@@ -7,8 +7,20 @@ repo_url="https://github.com/vsimko/gfabasic-private-assets.git"
 work_dir="$(mktemp -d)"
 trap 'rm -rf "$work_dir"' EXIT
 
-auth="$(printf 'x-access-token:%s' "$GFA_ASSETS_TOKEN" | base64 -w0)"
-git -c "http.extraheader=AUTHORIZATION: basic $auth" clone --depth 1 "$repo_url" "$work_dir/repo"
+askpass="$work_dir/git-askpass"
+cat > "$askpass" <<'EOF'
+#!/usr/bin/env bash
+case "$1" in
+  *sername*) printf '%s\\n' 'x-access-token' ;;
+  *assword*) printf '%s\\n' "$GFA_ASSETS_TOKEN" ;;
+  *) exit 1 ;;
+esac
+EOF
+chmod 700 "$askpass"
+export GIT_ASKPASS="$askpass"
+export GIT_TERMINAL_PROMPT=0
+
+git clone --depth 1 "$repo_url" "$work_dir/repo"
 cd "$work_dir/repo"
 
 target="analysis/amiga-3.52/generated"
@@ -46,7 +58,7 @@ else
   git config user.name "github-actions[bot]"
   git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
   git commit -m "Update generated GFA BASIC 3.52 reverse-engineering data"
-  git -c "http.extraheader=AUTHORIZATION: basic $auth" push origin HEAD:main
+  git push origin HEAD:main
 fi
 
 # Keep an immutable, downloadable snapshot alongside the editable Git sources.
