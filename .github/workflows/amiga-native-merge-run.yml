@@ -214,19 +214,15 @@ jobs:
             sleep 3
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-dialog.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 
-            # SEND_MOUSE uses relative dx/dy and the observed cursor scaling is
-            # about +61 screen px for dx=380 and +35 px for dy=70.
-            # Run #117 ended at (260,145), short of the factzero.LST row center
-            # (335,238). Two bounded (230,93) steps should cover the remaining
-            # (+75,+93); verify the pointer screenshot before clicking.
-            for _ in 1 2 3; do
-              printf "SEND_MOUSE\\t380\\t70\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+            # Move from the requester origin to the factzero.LST row center.
+            # Keep the vertical delta bounded; the previous path landed below the row.
+            for _ in 1 2 3 4; do
+              printf "SEND_MOUSE\\t380\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
               sleep 0.2
             done
-            for _ in 1 2; do
-              printf "SEND_MOUSE\\t230\\t93\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-              sleep 0.2
-            done
+            printf "SEND_MOUSE\\t230\\t176\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+            sleep 0.2
+            printf "SEND_MOUSE\\t0\\t112\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
             sleep 0.5
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-file-row-pointer.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
             printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}" || true
@@ -246,15 +242,11 @@ jobs:
             sleep 1
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-shortcut.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
             tesseract "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-shortcut.png" stdout 2>/dev/null > "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/after-shortcut-ocr.txt"
-            # Restore the exact calibrated Merge-gadget movement from the
-            # green PR #343 workflow. The pointer is at the left edge of the
-            # requester after selecting factzero.LST; these relative moves
-            # place it on the Merge gadget center (~323,420).
-            for _ in 1 2; do
-              printf "SEND_MOUSE\\t-177\\t183\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+            # Move from the selected row to the Merge gadget center (~323,363).
+            for _ in 1 2 3; do
+              printf "SEND_MOUSE\\t0\\t112\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
               sleep 0.2
             done
-            printf "SEND_MOUSE\\t206\\t198\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
             sleep 0.5
             printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-gadget-pointer.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
             printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
