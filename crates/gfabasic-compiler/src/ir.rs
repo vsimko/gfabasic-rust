@@ -270,7 +270,7 @@ fn lower_assignment(
 ) {
     if variables.contains_key(&symbol) {
         errors.push(IrError::at(
-            format!("reassignment of '{name}' is outside the current prototype subset"),
+            format!("reassignment of resolved symbol {:?} is outside the current prototype subset", symbol),
             span,
         ));
         return;
@@ -339,149 +339,82 @@ pub fn value_type(module: &Module, id: ValueId) -> Option<ValueType> {
 #[cfg(test)]
 mod tests {
     use super::{Instruction, ValueId, ValueType, lower, value_type, verify};
-    use crate::frontend::parse;
+    use crate::frontend::parse_document;
+    use crate::semantic::resolve_prototype_symbols;
     use crate::source::SourceMap;
 
-    #[test]
-    fn lowers_all_three_intrinsics_to_typed_constants_and_print() {
-        let source = "x=FACT(5)\ny=VARIAT(5,2)\nz=COMBIN(5,2)\nPRINT x,y,z\n";
+    fn resolve(source: &str) -> crate::semantic::SemanticModel<'_> {
         let mut sources = SourceMap::new();
-        let id = sources.add_source("combinatorics.bas", source);
-        let ast = parse(id, source).unwrap();
-        let ir = lower(&ast).unwrap();
+        let id = sources.add_source("ir-test.bas", source);
+        // The model borrows its parsed document; keep both in the caller for
+        // production use. Tests use a leaked test-only document for brevity.
+        let document = Box::leak(Box::new(parse_document(id, source).unwrap()));
+        resolve_prototype_symbols(document).expect("test source has valid semantics")
+    }
 
+    #[test]
+    fn lowers_intrinsics_through_resolved_symbol_ids() {
+        let source = "x=FACT(5)\ny=VARIAT(5,2)\nz=COMBIN(5,2)\nPRINT z,x,y\n";
+        let semantic = resolve(source);
+        let ir = lower(&semantic).unwrap();
         assert_eq!(ir.instructions.len(), 4);
-        assert!(matches!(
-            ir.instructions[0],
-            Instruction::ConstI64 {
-                result: ValueId(0),
-                value: 120,
-                ..
-            }
-        ));
-        assert!(matches!(
-            ir.instructions[1],
-            Instruction::ConstI64 {
-                result: ValueId(1),
-                value: 20,
-                ..
-            }
-        ));
-        assert!(matches!(
-            ir.instructions[2],
-            Instruction::ConstI64 {
-                result: ValueId(2),
-                value: 10,
-                ..
-            }
-        ));
-        assert!(matches!(
-            &ir.instructions[3],
-            Instruction::Print { values, .. }
-                if values == &[ValueId(0), ValueId(1), ValueId(2)]
-        ));
+        assert!(matches!(ir.instructions[0], Instruction::ConstI64 { result: ValueId(0), value: 120, .. }));
+        assert!(matches!(ir.instructions[1], Instruction::ConstI64 { result: ValueId(1), value: 20, .. }));
+        assert!(matches!(ir.instructions[2], Instruction::ConstI64 { result: ValueId(2), value: 10, .. }));
+        assert!(matches!(&ir.instructions[3], Instruction::Print { values, .. } if values == &[ValueId(2), ValueId(0), ValueId(1)]));
         assert_eq!(value_type(&ir, ValueId(0)), Some(ValueType::I64));
         verify(&ir).unwrap();
     }
 
     #[test]
-    fn lowers_integer_literal_assignments_to_constant_values() {
-        let source = "x=42\nLET y=7\nPRINT x,y\n";
-        let mut sources = SourceMap::new();
-        let source_id = sources.add_source("integer-assignments.bas", source);
-        let program = crate::frontend::parse(source_id, source).expect("syntax is supported");
-        let module = lower(&program).expect("integer assignments lower to constants");
-
-        assert!(matches!(
-            module.instructions[0],
-            Instruction::ConstI64 { value: 42, .. }
-        ));
-        assert!(matches!(
-            module.instructions[1],
-            Instruction::ConstI64 { value: 7, .. }
-        ));
-        assert!(matches!(
-            &module.instructions[2],
-            Instruction::Print { values, .. } if values.len() == 2
-        ));
+    fn lowers_integer_literal_assignments() {
+        let semantic = resolve("x=42\nLET y=7\nPRINT x,y\n");
+        let module = lower(&semantic).unwrap();
+        assert!(matches!(module.instructions[0], Instruction::ConstI64 { value: 42, .. }));
+        assert!(matches!(module.instructions[1], Instruction::ConstI64 { value: 7, .. }));
+        assert!(matches!(&module.instructions[2], Instruction::Print { values, .. } if values.len() == 2));
     }
 
     #[test]
-    fn rejects_matrix_statements_from_the_executable_build_subset() {
-        let source = include_str!("../../../tests/corpus/amiga/3.5/matrix/mat-one-identity.lst");
-        let mut sources = SourceMap::new();
-        let id = sources.add_source("matrix.bas", source);
-        let ast = parse(id, source).unwrap();
-
-        let errors = lower(&ast).expect_err("matrix execution is not implemented");
-        assert!(
-            errors
-                .iter()
-                .any(|error| error.message.contains("matrix statements")),
-            "expected an explicit matrix support diagnostic: {errors:?}"
-        );
+    fn handles_boundary_intrinsic_values() {
+        let semantic = resolve("x=FACT(0)\ny=VARIAT(20,0)\nz=COMBIN(20,10)\nPRINT x,y,z\n");
+        let ir = lower(&semantic).unwrap();
+        assert!(matches!(ir.instructions[0], Instruction::ConstI64 { value: 1, .. }));
+        assert!(matches!(ir.instructions[1], Instruction::ConstI64 { value: 1, .. }));
+        assert!(matches!(ir.instructions[2], Instruction::ConstI64 { value: 184756, .. }));
     }
 
     #[test]
-    fn handles_zero_and_boundary_combinatorics_values() {
-        let source = "x=FACT(0)\ny=VARIAT(20,0)\nz=COMBIN(20,10)\nPRINT x,y,z\n";
-        let mut sources = SourceMap::new();
-        let id = sources.add_source("boundary.bas", source);
-        let ast = parse(id, source).unwrap();
-        let ir = lower(&ast).unwrap();
-
-        assert!(matches!(
-            ir.instructions[0],
-            Instruction::ConstI64 { value: 1, .. }
-        ));
-        assert!(matches!(
-            ir.instructions[1],
-            Instruction::ConstI64 { value: 1, .. }
-        ));
-        assert!(matches!(
-            ir.instructions[2],
-            Instruction::ConstI64 { value: 184756, .. }
-        ));
-    }
-
-    #[test]
-    fn rejects_undefined_variables_and_reassignment() {
+    fn semantic_resolution_rejects_undefined_names_and_reassignment() {
         for source in ["PRINT x\n", "x=FACT(1)\nx=FACT(2)\nPRINT x\n"] {
             let mut sources = SourceMap::new();
             let id = sources.add_source("invalid.bas", source);
-            let ast = parse(id, source).unwrap();
-            assert!(lower(&ast).is_err(), "accepted: {source}");
+            let document = parse_document(id, source).unwrap();
+            assert!(resolve_prototype_symbols(&document).is_err(), "accepted: {source}");
         }
     }
 
     #[test]
-    fn verifier_rejects_use_before_definition_and_duplicate_ids() {
-        let source = "PRINT x\n";
+    fn semantic_resolution_rejects_matrix_subset_before_ir_lowering() {
+        let source = include_str!("../../../tests/corpus/amiga/3.5/matrix/mat-one-identity.lst");
         let mut sources = SourceMap::new();
-        let id = sources.add_source("ir-invalid.bas", source);
-        let span = crate::source::SourceSpan::new(id, 0, source.len());
-        let undefined = super::Module {
-            instructions: vec![Instruction::Print {
-                values: vec![ValueId(9)],
-                span,
-            }],
-        };
-        assert!(verify(&undefined).is_err());
+        let id = sources.add_source("matrix.bas", source);
+        let document = parse_document(id, source).unwrap();
+        let errors = resolve_prototype_symbols(&document).expect_err("matrix semantics are not implemented");
+        assert!(errors.iter().any(|error| error.code == "GFA-SEM-0003"));
+    }
 
-        let duplicate = super::Module {
-            instructions: vec![
-                Instruction::ConstI64 {
-                    result: ValueId(1),
-                    value: 1,
-                    span,
-                },
-                Instruction::ConstI64 {
-                    result: ValueId(1),
-                    value: 2,
-                    span,
-                },
-            ],
-        };
+    #[test]
+    fn verifier_rejects_use_before_definition_and_duplicate_ids() {
+        let mut sources = SourceMap::new();
+        let id = sources.add_source("ir-invalid.bas", "PRINT x\n");
+        let span = crate::source::SourceSpan::new(id, 0, 7);
+        let undefined = super::Module { instructions: vec![Instruction::Print { values: vec![ValueId(9)], span }] };
+        assert!(verify(&undefined).is_err());
+        let duplicate = super::Module { instructions: vec![
+            Instruction::ConstI64 { result: ValueId(1), value: 1, span },
+            Instruction::ConstI64 { result: ValueId(1), value: 2, span },
+        ]};
         assert!(verify(&duplicate).is_err());
     }
 }
