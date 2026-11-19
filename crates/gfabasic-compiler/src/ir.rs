@@ -115,7 +115,7 @@ pub fn lower(semantic: &SemanticModel<'_>) -> Result<Module, Vec<IrError>> {
 
     for statement in &semantic.program.statements {
         match statement {
-            Statement::AssignInteger { name, value, span } => {
+            Statement::AssignInteger { value, span, .. } => {
                 let Some(symbol) = semantic.symbol_for_assignment(*span) else {
                     errors.push(IrError::at("assignment has no resolved semantic symbol", *span));
                     continue;
@@ -131,7 +131,6 @@ pub fn lower(semantic: &SemanticModel<'_>) -> Result<Module, Vec<IrError>> {
                 );
             }
             Statement::AssignFact {
-                name,
                 argument,
                 span,
             } => {
@@ -156,7 +155,7 @@ pub fn lower(semantic: &SemanticModel<'_>) -> Result<Module, Vec<IrError>> {
                     &mut errors,
                 );
             }
-            Statement::AssignVariat { name, n, k, span } => {
+            Statement::AssignVariat { n, k, span, .. } => {
                 let value = match binary_intrinsic("gfa.language.math.variat", *n, *k) {
                     Ok(value) => value,
                     Err(message) => {
@@ -178,7 +177,7 @@ pub fn lower(semantic: &SemanticModel<'_>) -> Result<Module, Vec<IrError>> {
                     &mut errors,
                 );
             }
-            Statement::AssignCombin { name, n, k, span } => {
+            Statement::AssignCombin { n, k, span, .. } => {
                 let value = match binary_intrinsic("gfa.language.math.combin", *n, *k) {
                     Ok(value) => value,
                     Err(message) => {
