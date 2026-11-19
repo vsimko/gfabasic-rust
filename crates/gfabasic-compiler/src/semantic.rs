@@ -23,6 +23,8 @@ pub struct Symbol {
     pub name: String,
     /// Source span of the declaration identifier.
     pub declaration: crate::source::SourceSpan,
+    /// Complete assignment statement that introduces this symbol.
+    pub statement_span: crate::source::SourceSpan,
 }
 
 /// A reference resolved to one declaration.
@@ -32,6 +34,8 @@ pub struct ResolvedReference {
     pub symbol: SymbolId,
     /// Source span of the reference identifier.
     pub span: crate::source::SourceSpan,
+    /// PRINT statement containing this reference.
+    pub statement_span: crate::source::SourceSpan,
 }
 
 /// Symbol declarations and resolved references for one parsed document.
@@ -41,6 +45,19 @@ pub struct SymbolTable {
     pub symbols: Vec<Symbol>,
     /// References in source order.
     pub references: Vec<ResolvedReference>,
+}
+
+/// A parsed document paired with its resolved, document-local symbol graph.
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct SemanticModel {
+    pub document: ParsedDocument,
+    pub symbols: SymbolTable,
+}
+
+/// Resolve the current supported subset and retain its source document.
+pub fn analyze_prototype(document: ParsedDocument) -> Result<SemanticModel, Vec<SemanticError>> {
+    let symbols = resolve_prototype_symbols(&document)?;
+    Ok(SemanticModel { document, symbols })
 }
 
 impl SymbolTable {
@@ -124,6 +141,7 @@ pub fn resolve_prototype_symbols(
                     id,
                     name: name.clone(),
                     declaration,
+                    statement_span: *span,
                 });
             }
             Statement::DimMatrix { span, .. }
@@ -176,6 +194,7 @@ pub fn resolve_prototype_symbols(
                         Some(id) => table.references.push(ResolvedReference {
                             symbol: *id,
                             span: token.span,
+                            statement_span: *span,
                         }),
                         None => errors.push(SemanticError {
                             code: "GFA-SEM-0002".to_owned(),
