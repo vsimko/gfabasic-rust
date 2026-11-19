@@ -137,7 +137,23 @@ jobs:
           GFA_ASSETS_TOKEN: ${{ secrets.GFA_ASSETS_TOKEN }}
         run: |
           set -euo pipefail
+          test -n "$GFA_ASSETS_TOKEN"
           mkdir -p artifacts/amiga-3.5-discovery
+          curl --fail --silent --show-error --location \
+            --header "Authorization: Bearer $GFA_ASSETS_TOKEN" \
+            --header "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/vsimko/gfabasic-private-assets/contents?ref=main" \
+            --output "$RUNNER_TEMP/private-assets-index.json"
+          ROM_NAME="$(jq -r '[.[] | select(.type == "file" and .size == 524288 and (.name|test("(?i)kickstart.*v?1[.]3.*34[.]5"))) ] | .[0].name // empty' "$RUNNER_TEMP/private-assets-index.json")"
+          test -n "$ROM_NAME" || { echo "No 512 KiB Kickstart 1.3 rev 34.5 ROM found"; exit 1; }
+          ROM_PATH_ENCODED="$(jq -rn --arg path "$ROM_NAME" '$path | @uri')"
+          curl --fail --silent --show-error --location \
+            --header "Authorization: Bearer $GFA_ASSETS_TOKEN" \
+            --header "Accept: application/vnd.github.raw" \
+            "https://api.github.com/repos/vsimko/gfabasic-private-assets/contents/$ROM_PATH_ENCODED?ref=main" \
+            --output "$RUNNER_TEMP/kick.rom"
+          test "$(wc -c < "$RUNNER_TEMP/kick.rom")" -eq 524288
+          sha256sum "$RUNNER_TEMP/kick.rom" > artifacts/amiga-3.5-discovery/kickstart-sha256.txt
       - name: Capture the running editor version from its right-button menu
         run: |
           set -euo pipefail
@@ -155,22 +171,6 @@ jobs:
           echo "deb [arch=amd64 signed-by=/usr/share/keyrings/amiberry-archive-keyring.gpg] https://packages.amiberry.com/apt noble main" | sudo tee /etc/apt/sources.list.d/amiberry.list >/dev/null
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends -o Dir::Cache::archives="$RUNNER_TEMP/apt-archives/" amiberry xvfb netcat-openbsd tesseract-ocr python3-pil
-
-          curl --fail --silent --show-error --location \
-            --header "Authorization: Bearer $GFA_ASSETS_TOKEN" \
-            --header "Accept: application/vnd.github+json" \
-            "https://api.github.com/repos/vsimko/gfabasic-private-assets/contents?ref=main" \
-            --output "$RUNNER_TEMP/private-assets-index.json"
-          ROM_NAME="$(jq -r '[.[] | select(.type == "file" and .size == 524288 and (.name|test("(?i)kickstart.*v?1[.]3.*34[.]5"))) ] | .[0].name // empty' "$RUNNER_TEMP/private-assets-index.json")"
-          test -n "$ROM_NAME" || { echo "No 512 KiB Kickstart 1.3 rev 34.5 ROM found"; exit 1; }
-          ROM_PATH_ENCODED="$(jq -rn --arg path "$ROM_NAME" '$path | @uri')"
-          curl --fail --silent --show-error --location \
-            --header "Authorization: Bearer $GFA_ASSETS_TOKEN" \
-            --header "Accept: application/vnd.github.raw" \
-            "https://api.github.com/repos/vsimko/gfabasic-private-assets/contents/$ROM_PATH_ENCODED?ref=main" \
-            --output "$RUNNER_TEMP/kick.rom"
-          test "$(wc -c < "$RUNNER_TEMP/kick.rom")" -eq 524288
-          sha256sum "$RUNNER_TEMP/kick.rom" > artifacts/amiga-3.5-discovery/kickstart-sha256.txt
 
           cat > "$RUNNER_TEMP/amiga-3.5.uae" <<EOF
           use_gui=no
