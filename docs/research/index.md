@@ -11,6 +11,7 @@
 ## Amiga GFA BASIC command and API research
 
 - [Command catalogue — start here](amiga-gfa-basic-command-catalogue.md) - Explains the existing alphabetical index, detailed extraction, function inventory, 3.5 evidence manifest, and how their counts differ.
+- [Application-used construct reconciliation](amiga-gfa-basic-application-construct-reconciliation.md) - Issue #562 classification of application-observed statements, expressions, declarations, variables, and OS/user-defined boundaries.
 - [German book command and Amiga OS API extraction](amiga-gfa-basic-german-book-command-api-extraction.md) - Main detailed chapter-based extraction through Chapter 19 and Appendices B–D, with 3.5 addendum reconciliation.
 - [Appendix D command index OCR transcription](amiga-book-command-index-ocr-transcription.md) - Page-oriented transcription of the book's alphabetical index, printed pp. 493–497.
 - [First-pass command index OCR](gfa-basic-command-index-ocr.md) - Richer first-pass transcription of Appendix D with compound forms and OCR caveats.

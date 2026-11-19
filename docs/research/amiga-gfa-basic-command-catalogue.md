@@ -11,6 +11,7 @@ This page is the entry point for discovering the command, function, statement, p
 ## Start here
 
 - **Find a name in the book's alphabetical index:** use the [Appendix D OCR transcription](amiga-book-command-index-ocr-transcription.md) or the [first-pass command index](gfa-basic-command-index-ocr.md).
+- **Reconcile application-used forms:** use the [application construct reconciliation](amiga-gfa-basic-application-construct-reconciliation.md) for issue #562 classifications, exact spellings, evidence scope, and fixture gaps.
 - **Understand the source pages and chapter coverage:** use the [515-page extraction audit](amiga-book-515-page-extraction-audit.md), [chapter heading harvest](amiga-book-chapters05-17-heading-harvest.md), and [source/topic index](amiga-gfa-basic-source-topic-index.md).
 - **Read the detailed extraction:** use the [German book command and Amiga OS API extraction](amiga-gfa-basic-german-book-command-api-extraction.md).
 - **Check built-in function names in structured form:** use the [function inventory](amiga-gfa-basic-functions.toml) and its [human-readable notes](amiga-gfa-basic-function-inventory.md).
