@@ -1,9 +1,41 @@
 {
   "schema_version": 1,
   "status": "fresh",
-  "generated_at": "2026-11-19T07:06:19.191419+00:00",
-  "last_successful_at": "2026-11-19T07:06:19.191419+00:00",
+  "generated_at": "2026-11-19T07:16:09.057852+00:00",
+  "last_successful_at": "2026-11-19T07:16:09.057852+00:00",
   "items": [
+    {
+      "type": "merged_pull_request",
+      "title": "[Compiler] Lower typed IR from resolved semantic model",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/601",
+      "number": 601,
+      "timestamp": "2026-11-19T07:15:49Z",
+      "summary": "PR #601 merged"
+    },
+    {
+      "type": "commit",
+      "title": "[Compiler] Lower typed IR from resolved semantic model (#601)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/ced5ad437b24f2007ee39f4b09d52aef0bad6503",
+      "number": null,
+      "timestamp": "2026-11-19T07:15:49Z",
+      "summary": "Commit ced5ad4"
+    },
+    {
+      "type": "merged_pull_request",
+      "title": "[CI] Make mutation schedule guard resilient to delayed runners",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/609",
+      "number": 609,
+      "timestamp": "2026-11-19T07:10:00Z",
+      "summary": "PR #609 merged"
+    },
+    {
+      "type": "commit",
+      "title": "[CI] Make mutation schedule guard resilient to delayed runners (#609)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/f020422dcd59c55880496d8c887203d9036c88ae",
+      "number": null,
+      "timestamp": "2026-11-19T07:10:00Z",
+      "summary": "Commit f020422"
+    },
     {
       "type": "merged_pull_request",
       "title": "[CI] Suppress ShellCheck false positive for Pages cleanup trap",
@@ -67,38 +99,6 @@
       "number": null,
       "timestamp": "2026-11-17T22:38:13Z",
       "summary": "Commit ececfe4"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "[Agents] Add evidence-based contribution evaluation pilot (#578)",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/589",
-      "number": 589,
-      "timestamp": "2026-11-17T22:34:26Z",
-      "summary": "PR #589 merged"
-    },
-    {
-      "type": "commit",
-      "title": "[Agents] Add evidence-based contribution evaluation pilot (#578) (#589)",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/86c1efcd2adf85c627471e07992885e638c53f11",
-      "number": null,
-      "timestamp": "2026-11-17T22:34:25Z",
-      "summary": "Commit 86c1efc"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "[Security] Require explicit dispatch for private Amiga workflows",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/586",
-      "number": 586,
-      "timestamp": "2026-11-17T22:27:16Z",
-      "summary": "PR #586 merged"
-    },
-    {
-      "type": "commit",
-      "title": "[Security] Require explicit dispatch for private Amiga workflows (#586)",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/46d2c246944e4e371f0b6cd7f45a855d9fc8d44d",
-      "number": null,
-      "timestamp": "2026-11-17T22:27:16Z",
-      "summary": "Commit 46d2c24"
     }
   ]
 }
