@@ -132,9 +132,13 @@ jobs:
           printf '%s\\n' "${ADF_MEMBERS[0]}" > artifacts/amiga-3.5-discovery/adf-member.txt
           echo "Candidate disk discovered; running editor identity will be verified from the held-right-button menu screenshot. Native language conformance remains UNTESTED." >> "$GITHUB_STEP_SUMMARY"
 
-      - name: Capture the running editor version from its right-button menu
+      - name: Download original Amiga Kickstart ROM
         env:
           GFA_ASSETS_TOKEN: ${{ secrets.GFA_ASSETS_TOKEN }}
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/amiga-3.5-discovery
+      - name: Capture the running editor version from its right-button menu
         run: |
           set -euo pipefail
           BOOT_VOLUME="$RUNNER_TEMP/gfa-basic-3.5-boot-volume"

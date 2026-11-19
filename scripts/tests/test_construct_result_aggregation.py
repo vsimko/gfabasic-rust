@@ -86,6 +86,10 @@ class ConstructResultTests(unittest.TestCase):
             "schema_version": 1, "construct_id": "fact-function", "version": version,
             "probe": f"probe-{version}.LST", "expected_ids": ["fact-function"], "harness_status": "success",
             "conformance_status": status, "reason": None,
+            "observed": "fact-function returned the expected value",
+            "outcomes": {"fact-function": status},
+            "gfatest": {"fact-function": status},
+            "diagnostic_refs": ["artifacts/native/GFATEST.OUT"],
             "editor_identity": {"expected_version": version, "ocr_matched": True},
         }
         (directory / "result.json").write_text(json.dumps(data), encoding="utf-8")
@@ -110,6 +114,10 @@ class ConstructResultTests(unittest.TestCase):
         self.assertEqual(rows["3.5"]["conformance_status"], "PASS")
         self.assertEqual(rows["3.52"]["conformance_status"], "DIFFERENT")
         self.assertEqual(rows["3.041U"]["conformance_status"], "DIFFERENT")
+        self.assertEqual(rows["3.5"]["observed"], "fact-function returned the expected value")
+        self.assertEqual(rows["3.5"]["outcomes"], {"fact-function": "PASS"})
+        self.assertEqual(rows["3.5"]["gfatest"], {"fact-function": "PASS"})
+        self.assertEqual(rows["3.5"]["diagnostic_refs"], ["artifacts/native/GFATEST.OUT"])
         self.assertEqual(result["summary_status"], "PASS")
 
     def test_persist_writes_immutable_run_and_latest_records(self):
@@ -117,7 +125,9 @@ class ConstructResultTests(unittest.TestCase):
         probe = directory / "probe-3.5.LST"
         probe.write_text("PRINT 1\\n", encoding="ascii")
         selection = {"selection": "manual", "changed_constructs": ["fact-function"], "include": [{"construct_id": "fact-function", "version": "3.5", "probe": "tests/language-constructs/fact-function/probe-3.5.LST"}]}
-        result = aggregate(selection, self.root, self.root / "missing-artifacts", True, "")
+        artifacts = self.root / "artifacts"
+        self.write_artifact(artifacts, "3.5", "PASS")
+        result = aggregate(selection, self.root, artifacts, True, "")
         persist_result_records(result, selection, self.root, "12345", "2", "https://example.invalid/run/12345")
         output = directory / "results/3.5"
         self.assertTrue((output / "run-12345-attempt-2.json").is_file())
@@ -126,6 +136,10 @@ class ConstructResultTests(unittest.TestCase):
         self.assertEqual(record["run_attempt"], "2")
         self.assertTrue(record["manifest_sha256"])
         self.assertTrue(record["probe_sha256"])
+        self.assertEqual(record["observed"], "fact-function returned the expected value")
+        self.assertEqual(record["outcomes"], {"fact-function": "PASS"})
+        self.assertEqual(record["gfatest"], {"fact-function": "PASS"})
+        self.assertEqual(record["diagnostic_refs"], ["artifacts/native/GFATEST.OUT"])
 
     def test_missing_private_assets_are_untested_not_pass(self):
         self.make_catalogue()

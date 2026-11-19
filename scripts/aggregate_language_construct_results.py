@@ -100,6 +100,12 @@ def aggregate(selection: dict, root: Path, artifacts: Path, native_allowed: bool
                         "probe": artifact.get("probe"),
                         "editor_identity": identity,
                     }
+            if artifact is not None:
+                # Keep native observations and diagnostic references in both the
+                # aggregate summary and the durable per-version records.
+                for field in ("observed", "outcomes", "gfatest", "diagnostic_refs"):
+                    if field in artifact:
+                        row[field] = artifact[field]
             rows.append(row)
     rows.sort(key=lambda row: (row["construct_id"], VERSIONS.index(row["version"])))
     if not rows:
