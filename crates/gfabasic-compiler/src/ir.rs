@@ -127,11 +127,7 @@ pub fn lower(model: &SemanticModel) -> Result<Module, Vec<IrError>> {
                     &mut errors,
                 );
             }
-            Statement::AssignFact {
-                argument,
-                span,
-                ..
-            } => {
+            Statement::AssignFact { argument, span, .. } => {
                 let value = match unary_intrinsic("gfa.language.math.fact", *argument) {
                     Ok(value) => value,
                     Err(message) => {
@@ -222,7 +218,10 @@ pub fn lower(model: &SemanticModel) -> Result<Module, Vec<IrError>> {
                     match variables.get(&reference.symbol) {
                         Some(value) => values.push(*value),
                         None => errors.push(IrError::at(
-                            format!("resolved symbol {:?} has no IR definition", reference.symbol),
+                            format!(
+                                "resolved symbol {:?} has no IR definition",
+                                reference.symbol
+                            ),
                             reference.span,
                         )),
                     }
