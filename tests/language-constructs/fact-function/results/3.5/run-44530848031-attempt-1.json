@@ -1,0 +1,33 @@
+{
+  "conformance_status": "PASS",
+  "construct_id": "fact-function",
+  "diagnostic_refs": [
+    "artifacts/amiga-3.5-discovery/native-run/gfatest-results.txt",
+    "artifacts/amiga-3.5-discovery/editor-version-menu.png",
+    "artifacts/amiga-3.5-discovery/editor-version-menu-ocr.txt"
+  ],
+  "editor_identity": {
+    "expected_version": "3.5",
+    "ocr_file": "artifacts/amiga-3.5-discovery/editor-version-menu-ocr.txt",
+    "ocr_matched": true,
+    "screenshot": "artifacts/amiga-3.5-discovery/editor-version-menu.png"
+  },
+  "expected_probe": "tests/language-constructs/fact-function/probe-3.5.LST",
+  "gfatest": {
+    "fact-function": "PASS"
+  },
+  "harness_status": "success",
+  "manifest_sha256": "313d65db8fd49d045f36204d16d89666aa8f0368a0fe1687e5b9be5c4ec937f2",
+  "observed": "fact-function=PASS",
+  "outcomes": {
+    "fact-function": "PASS"
+  },
+  "probe": "tests/language-constructs/fact-function/probe-3.5.LST",
+  "probe_sha256": "c85a1e8c27f9c9f421c26a4fcd34864304478eb4fe21e70a57d7e9cd773838c4",
+  "reason": null,
+  "result_schema_version": 1,
+  "run_attempt": "1",
+  "run_url": "https://github.com/vsimko/gfabasic-rust/actions/runs/44530848031",
+  "selection": "targeted",
+  "version": "3.5"
+}
