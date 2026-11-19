@@ -46,7 +46,7 @@ pub fn compile_file(input: &Path, output: &Path) -> Result<(), String> {
             .collect::<Vec<_>>()
             .join("\n")
     })?;
-    let c_source = lower_program(&document, &sources)?;
+    let c_source = lower_program(document, &sources)?;
 
     let sequence = NEXT_TEMP.fetch_add(1, Ordering::Relaxed);
     let temp_path = std::env::temp_dir().join(format!(
@@ -93,10 +93,10 @@ fn semantic_error(sources: &SourceMap, span: SourceSpan, message: impl Into<Stri
 }
 
 fn lower_program(
-    document: &crate::frontend::ParsedDocument,
+    document: crate::frontend::ParsedDocument,
     sources: &SourceMap,
 ) -> Result<String, String> {
-    let model = analyze_prototype(document.clone()).map_err(|errors| {
+    let model = analyze_prototype(document).map_err(|errors| {
         errors
             .iter()
             .map(|error| {
@@ -184,11 +184,11 @@ mod tests {
         include_str!("../../../tests/corpus/amiga/3.5/combinatorics/fact-zero.lst");
 
     #[test]
-    fn lowers_the_frontend_ast_for_the_verified_fact_fixture() {
+    fn lowers_the_resolved_semantic_model_for_the_verified_fact_fixture() {
         let mut sources = SourceMap::new();
         let source_id = sources.add_source("fact-zero.bas", FACT_FIXTURE);
         let document = parse_document(source_id, FACT_FIXTURE).unwrap();
-        let generated = lower_program(&document, &sources).unwrap();
+        let generated = lower_program(document, &sources).unwrap();
 
         assert!(generated.contains("long long v0 = 1;"));
         assert!(generated.contains("long long v1 = 1;"));
@@ -209,7 +209,7 @@ mod tests {
             let source_id = sources.add_source("unsupported.bas", source);
             let document = parse_document(source_id, source).unwrap();
             assert!(
-                lower_program(&document, &sources).is_err(),
+                lower_program(document, &sources).is_err(),
                 "accepted: {source}"
             );
         }
@@ -221,7 +221,7 @@ mod tests {
         let mut sources = SourceMap::new();
         let source_id = sources.add_source("combinatorics.bas", source_text);
         let document = parse_document(source_id, source_text).unwrap();
-        let generated = lower_program(&document, &sources).unwrap();
+        let generated = lower_program(document, &sources).unwrap();
 
         assert!(generated.contains("long long v0 = 120;"));
         assert!(generated.contains("long long v1 = 20;"));
