@@ -13,8 +13,8 @@ use std::sync::atomic::{AtomicUsize, Ordering};
 
 use crate::diagnostics::{Diagnostic, DiagnosticCategory, DiagnosticSeverity};
 use crate::frontend::parse_document;
-use crate::semantic::{SemanticModel, resolve_prototype_symbols};
 use crate::ir::{Instruction, Module, ValueId};
+use crate::semantic::{SemanticModel, resolve_prototype_symbols};
 use crate::source::{SourceMap, SourceSpan};
 
 static NEXT_TEMP: AtomicUsize = AtomicUsize::new(0);
@@ -40,12 +40,27 @@ pub fn compile_file(input: &Path, output: &Path) -> Result<(), String> {
         .to_owned();
 
     let document = parse_document(source_id, &source).map_err(|diagnostics| {
-        diagnostics.iter().map(|diagnostic| diagnostic.render(&sources)).collect::<Vec<_>>().join("\n")
+        diagnostics
+            .iter()
+            .map(|diagnostic| diagnostic.render(&sources))
+            .collect::<Vec<_>>()
+            .join("\n")
     })?;
     let semantic = resolve_prototype_symbols(&document).map_err(|errors| {
-        errors.iter().map(|error| Diagnostic::new(
-            error.code.clone(), DiagnosticSeverity::Error, DiagnosticCategory::Unsupported, error.message.clone(),
-        ).with_primary_span(error.span).render(&sources)).collect::<Vec<_>>().join("\n")
+        errors
+            .iter()
+            .map(|error| {
+                Diagnostic::new(
+                    error.code.clone(),
+                    DiagnosticSeverity::Error,
+                    DiagnosticCategory::Unsupported,
+                    error.message.clone(),
+                )
+                .with_primary_span(error.span)
+                .render(&sources)
+            })
+            .collect::<Vec<_>>()
+            .join("\n")
     })?;
     let c_source = lower_program(&semantic, &sources)?;
 
@@ -93,10 +108,7 @@ fn semantic_error(sources: &SourceMap, span: SourceSpan, message: impl Into<Stri
     .render(sources)
 }
 
-fn lower_program(
-    semantic: &SemanticModel<'_>,
-    sources: &SourceMap,
-) -> Result<String, String> {
+fn lower_program(semantic: &SemanticModel<'_>, sources: &SourceMap) -> Result<String, String> {
     let module = crate::ir::lower(semantic).map_err(|errors| {
         errors
             .iter()
@@ -196,12 +208,15 @@ mod tests {
             let source_id = sources.add_source("unsupported.bas", source);
             let document = parse_document(source_id, source).unwrap();
             let result = resolve_prototype_symbols(&document)
-                .map_err(|errors| errors.iter().map(|error| error.message.clone()).collect::<Vec<_>>().join("\n"))
+                .map_err(|errors| {
+                    errors
+                        .iter()
+                        .map(|error| error.message.clone())
+                        .collect::<Vec<_>>()
+                        .join("\n")
+                })
                 .and_then(|semantic| lower_program(&semantic, &sources));
-            assert!(
-                result.is_err(),
-                "accepted: {source}"
-            );
+            assert!(result.is_err(), "accepted: {source}");
         }
     }
 
