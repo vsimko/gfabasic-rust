@@ -15,7 +15,7 @@ class AmigaReferencePublicationBoundaryTests(unittest.TestCase):
         cls.workflow = yaml.load(WORKFLOW.read_text(encoding="utf-8"), Loader=yaml.BaseLoader)
 
     def test_public_publication_requires_independent_default_false_opt_in(self):
-        inputs = cls_inputs = self.workflow["on"]["workflow_dispatch"]["inputs"]
+        inputs = self.workflow["on"]["workflow_dispatch"]["inputs"]
         self.assertEqual("false", inputs["publish_public_analysis"]["default"])
         self.assertEqual("boolean", inputs["publish_public_analysis"]["type"])
         self.assertEqual("false", inputs["publish_private_analysis"]["default"])
