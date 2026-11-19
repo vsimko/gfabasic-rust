@@ -9,7 +9,7 @@ Canonical declarations use TOML in the `language-core/`, `amiga/`, and `atari-st
 - `language-core/matrix-operations.toml`: matrix/vector DATA and file I/O, copy/transpose, arithmetic, determinant, rank, and inverse operations.
 - `language-core/special-variables-and-data-pointers.toml`: `_DATA`, `_DATA=`, and `_0`…`_9`.
 - `language-core/inherited-functions-3-5-evidence.toml`: eight inherited function call forms directly used or explicitly referenced in 3.5-labelled material (`RAND`, `STR$`, `SUCC`, `STRING$`, `HEX$`, `RND`, `INT`, `SQR`).
-- `amiga/special-and-platform-commands.toml`: `PCOLOR`, the negative-screen-number `OPENW` variant, and the `GURU` command/function forms.
+- `amiga/special-and-platform-commands.toml`: `PCOLOR`, the negative-screen-number `OPENW` variant, and the `GURU` command/function forms. The [Amiga API reference crosswalk](../docs/reference/amiga-gfa-api.md#7-amiga-gfa-basic-35-platform-profile-crosswalk) links each declaration ID to its source locator and records inherited 3.0/V3.03 platform candidates without promoting them to 3.5.
 
 The language-core catalogue currently contains 32 declarations, and the Amiga platform profile contains four declarations. All are limited to features explicitly identified in supplied 3.5-specific interpreter material. Neither catalogue claims completeness. The addendum's Chapter 13/14 page references and known source limitations are documented in [the extracted feature inventory](../../docs/research/amiga-gfa-basic-35-addendum-inventory.md).
 
