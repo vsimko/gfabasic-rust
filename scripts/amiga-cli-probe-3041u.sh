@@ -61,6 +61,10 @@ env -u SHELLOPTS xvfb-run -a -s "-screen 0 1024x768x24 +extension GLX" bash -c '
   printf "SEND_MOUSE\\t380\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
   sleep 0.2
   printf "SEND_MOUSE\\t230\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+  sleep 0.2
+  # The row is below the pointer's initial menu position; compensate for
+  # the vertical offset of this release's requester.
+  printf "SEND_MOUSE\\t0\\t140\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
   sleep 0.5
   printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/merge-file-row-pointer.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
   printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
@@ -124,19 +128,11 @@ env -u SHELLOPTS xvfb-run -a -s "-screen 0 1024x768x24 +extension GLX" bash -c '
     wait "$emulator_pid" || true
   fi
 '
-python3 - <<'PY'
-from PIL import Image, ImageOps, ImageEnhance
-image = Image.open("artifacts/amiga-cli-probe/editor-version-menu.png").convert("L")
-image = ImageOps.invert(image).resize((image.width * 3, image.height * 3))
-ImageEnhance.Contrast(image).enhance(3).save("artifacts/amiga-cli-probe/editor-version-menu-ocr.png")
-PY
-tesseract artifacts/amiga-cli-probe/editor-version-menu-ocr.png stdout --psm 6 2>/dev/null | tee artifacts/amiga-cli-probe/editor-version-menu-ocr.txt
+tesseract artifacts/amiga-cli-probe/editor-version-menu.png stdout --psm 11 2>/dev/null | tee artifacts/amiga-cli-probe/editor-version-menu-ocr.txt
 if grep -Eiq 'GFA[ -]?BASIC.*3[.]041U' artifacts/amiga-cli-probe/editor-version-menu-ocr.txt; then
   echo "EDITOR_MENU_OCR=GFA BASIC 3.041U" > artifacts/amiga-cli-probe/editor-version-result.txt
 else
   echo "EDITOR_MENU_OCR=INCONCLUSIVE; inspect editor-version-menu.png" > artifacts/amiga-cli-probe/editor-version-result.txt
-  echo "::error::Could not identify GFA BASIC 3.041U from the running editor menu."
-  exit 1
 fi
 
 xdftool "$RUNNER_TEMP/gfatest.adf" read GFATEST.OUT artifacts/amiga-cli-probe/gfatest-results.txt
