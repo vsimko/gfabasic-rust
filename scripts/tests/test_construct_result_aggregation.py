@@ -43,6 +43,11 @@ class ConstructResultTests(unittest.TestCase):
         self.assertEqual(result["harness_status"], "success")
         self.assertTrue(result["editor_identity"]["ocr_matched"])
 
+    def test_3_52_identity_ocr_accepts_comma_and_missing_prefix(self):
+        result = self.writer(ocr="BASIC 3,52")
+        self.assertEqual(result["conformance_status"], "PASS")
+        self.assertTrue(result["editor_identity"]["ocr_matched"])
+
     def test_fail_is_a_conformance_failure(self):
         self.assertEqual(self.writer(status="FAIL")["conformance_status"], "FAIL")
 
