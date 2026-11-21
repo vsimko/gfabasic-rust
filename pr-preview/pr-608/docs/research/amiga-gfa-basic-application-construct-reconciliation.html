@@ -60,10 +60,10 @@
 <td>Focused native 3.52D probe exists in PR #568; no additional fixture needed for the same form.</td>
 </tr>
 <tr>
-<td><code>FUNCTION name(...)</code> / <code>ENDFUNC</code></td>
-<td>Multi-line user function definition in the application; keep distinct from <code>DEFFN</code>/<code>FN</code>.</td>
-<td>Application-use witness only in this reconciliation; exact interpreter release is unverified.</td>
-<td>No focused fixture identified; source-backed exact grammar and version probe would be needed for a runtime claim.</td>
+<td><code>FUNCTION name[(parameters)] … RETURN Back … ENDFUNC</code></td>
+<td>Multi-line user-defined function declaration and terminator; distinct from one-line <code>DEFFN</code>/<code>FN</code>. German book §6.5, printed p. 176.</td>
+<td>Documented by the German Amiga book's V3.03-era reference. The anonymous application listing is additional use evidence, but does not identify its exact interpreter build or establish runtime conformance. This is not 3.5-specific evidence.</td>
+<td>No focused fixture identified; do not infer 3.5/3.52 support or add a duplicate declaration.</td>
 </tr>
 <tr>
 <td><code>LIBRARY</code>, <code>DECLARE FUNCTION … LIBRARY</code></td>
@@ -132,10 +132,10 @@
 <td>No focused fixture identified; 3.5 applicability remains unverified.</td>
 </tr>
 <tr>
-<td><code>SUB</code>, <code>PROCEDURE</code>, <code>ENDSUB</code>, <code>ENDPROC</code>, <code>LOCAL</code></td>
-<td>Procedure declaration, alias, terminators and local-variable declaration. German book §6.5, pp. 180 and 184–185, and application listing; Chapter 7 evidence note.</td>
-<td><code>SUB</code> is an alias for <code>PROCEDURE</code>; documented terminators include <code>ENDSUB</code>/<code>ENDPROC</code>. Do not infer a spaced <code>END SUB</code> form.</td>
-<td>No focused fixture identified for each alias/terminator.</td>
+<td><code>SUB … ENDSUB</code>, <code>PROCEDURE … RETURN</code>, <code>PROCEDURE … ENDPROC</code>, <code>LOCAL</code></td>
+<td>Alternative procedure forms and their respective terminators, plus the separate local-variable declaration. German book §6.5, printed pp. 183–184 (procedure forms) and p. 180 (<code>LOCAL</code>).</td>
+<td>The book presents <code>PROCEDURE … RETURN</code>, alternatively <code>SUB … ENDSUB</code>, and separately <code>PROCEDURE … ENDPROC</code>. These are V3.03-era documentary forms; the application listing provides additional use evidence only. Do not describe <code>SUB</code> as an alias for <code>PROCEDURE</code>, or infer a spaced <code>END SUB</code> form.</td>
+<td>No focused fixture identified for each exact form/terminator; no duplicate declarations.</td>
 </tr>
 <tr>
 <td><code>SHARED</code></td>
@@ -286,11 +286,43 @@
 </table>
 <h2 id="external-and-user-declared-boundary">External and user-declared boundary</h2>
 <p>The application's <code>~Execute</code>, <code>~OpenLibrary</code>, <code>~CloseLibrary</code>, <code>~SetFont</code>, and <code>~Delay</code> forms are Amiga OS routine calls using the GFA BASIC OS-call convention. They are not built-in BASIC statements or <code>DECLARE FUNCTION … LIBRARY</code> declarations. The <code>sadd</code> helper is application-defined and prepares a string pointer for those calls. Keep the language construct, user-defined helper, and OS/library API namespaces separate.</p>
+<p>Issue #562 also names four suffixed forms for boundary inspection. The application listing is only a discovery witness; the exact declarations/definitions and full call contexts needed to classify these forms are not established by the available evidence. In particular, do not infer a built-in declaration, return type, or calling convention from the trailing <code>&amp;</code> alone.</p>
+<table>
+<thead>
+<tr>
+<th>Observed form</th>
+<th>Classification supported by current evidence</th>
+<th>Evidence status and next action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>xOpen&amp;</code></td>
+<td>Unresolved external/user-declared symbol candidate; not present as a built-in in the cited language inventories.</td>
+<td>Application-listing witness only. The declaration, definition, and target API are not established. Inspect its full declaration/definition and call context before assigning a language or OS/API classification.</td>
+</tr>
+<tr>
+<td><code>xread&amp;</code></td>
+<td>Unresolved external/user-declared symbol candidate; not present as a built-in in the cited language inventories.</td>
+<td>Application-listing witness only. The declaration, definition, and target API are not established. Inspect its full declaration/definition and call context before assigning a language or OS/API classification.</td>
+</tr>
+<tr>
+<td><code>AllocMem&amp;</code></td>
+<td>The base name matches the Amiga Exec library routine <code>AllocMem(size, attributes)</code> documented in the German book's Exec extraction (§11.4; printed pp. 315–317). The observed suffixed form itself is not proven to be a direct OS call or a BASIC declaration.</td>
+<td>OS API-name match plus application-listing witness; exact wrapper/declaration/call boundary remains unresolved. Inspect the full source context and do not add <code>AllocMem&amp;</code> as a BASIC built-in.</td>
+</tr>
+<tr>
+<td><code>setdrmd&amp;</code></td>
+<td>The base name matches the graphics-library routine <code>SetDrMd(rastport, mode)</code> documented in the German book's system-routines appendix (§4.1; printed pp. 11-46–11-49). The observed suffixed form itself is not proven to be a direct OS call or a BASIC declaration.</td>
+<td>OS API-name match plus application-listing witness; exact wrapper/declaration/call boundary remains unresolved. Inspect the full source context and do not add <code>setdrmd&amp;</code> as a BASIC built-in.</td>
+</tr>
+</tbody>
+</table>
 <h2 id="summary-of-remaining-work">Summary of remaining work</h2>
 <ul>
 <li><strong>No new built-in declaration is justified</strong> for <code>SADD</code>, <code>PEEKL</code>, <code>UCASE$</code>, or <code>MOUSE(...)</code>; these are respectively a user-defined helper, a non-canonical spelling for <code>LPEEK</code>, a non-canonical spelling for <code>UPPER$</code>, and a misclassification of the <code>MOUSE</code> statement/state variables.</li>
 <li><strong>Existing canonical families need no duplicates:</strong> <code>MENU</code>, <code>WINDOW</code>, <code>SCREEN</code>, <code>DEFxxx</code>, control-flow constructs, I/O statements, and the listed functions are already represented in the cited inventories.</li>
-<li><strong>Still unverified as language forms:</strong> <code>DECLARE FUNCTION … LIBRARY</code>, <code>SHARED</code>, <code>WINDOW OUTPUT</code>, and <code>PALETTE</code> as a statement. Their absence from inspected passages is not proof of interpreter rejection.</li>
+<li><strong>Still unverified as language forms or external boundaries:</strong> <code>DECLARE FUNCTION … LIBRARY</code>, <code>SHARED</code>, <code>WINDOW OUTPUT</code>, and <code>PALETTE</code> as a statement; the exact declaration/call classifications of <code>xOpen&amp;</code>, <code>xread&amp;</code>, <code>AllocMem&amp;</code>, and <code>setdrmd&amp;</code> also remain unresolved. Their absence from inspected passages is not proof of interpreter rejection.</li>
 <li><strong>Version evidence remains narrow:</strong> 3.0/3.03 documentation and likely-version application use do not establish 3.5 or 3.52 support. Only named interpreter runs with inspected artifacts can establish native results.</li>
 <li><strong>Fixture selection:</strong> the application source is not a corpus fixture. Add only independently authored probes with exact syntax, a source-backed expected result, and a named target version. The existing corpus remains <code>research_only</code>; do not describe its metadata validator as a conformance runner.</li>
 </ul>

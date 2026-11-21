@@ -496,11 +496,19 @@ RETURN
 <li>Procedure names may contain letters, digits, underscore and period; unlike variable names, the first character may be a digit.</li>
 <li>A procedure may declare a list of local receiving variables. The book says these receive values passed through GOSUB; parameter types must match the corresponding argument types.</li>
 <li>Procedures may call other procedures and may recursively call themselves.</li>
-<li>ENDPROC and ENDSUB are documented as alternatives to RETURN; the interpreter normalizes them to RETURN.</li>
+<li>The book presents separate procedure forms on printed pp. 183–184: <code>PROCEDURE Name […] … RETURN</code>, alternatively <code>SUB Name […] … ENDSUB</code>, and <code>PROCEDURE Name […] … ENDPROC</code>. Preserve these as the forms and terminators shown by the source; do not summarize <code>SUB</code> as an alias for <code>PROCEDURE</code>.</li>
 <li>The book documents a VAR marker in PROCEDURE/FUNCTION parameter lists for direct variable passing, as an alternative to indirect pointer variables. The OCR examples show the shape PROCEDURE Name([ordinary parameters] VAR variable[, ...]) and similarly for FUNCTION; exact punctuation and mixed-parameter grammar need page-image verification.</li>
 <li>The chapter cross-references LOCAL, VAR, GOSUB and FUNCTION. Do not infer their complete grammar from the cross-reference alone.</li>
 </ul>
-<h3 id="74-computed-procedure-dispatch-and-break-handling">7.4 Computed procedure dispatch and Break handling</h3>
+<h3 id="74-multi-line-functions">7.4 Multi-line functions</h3>
+<p>The book documents the multi-line user-defined function form on printed p. 176:</p>
+<pre><code class="language-basic">FUNCTION Name [(Var1, Var2%, ...)]
+  ... statements ...
+  RETURN Back
+ENDFUNC
+</code></pre>
+<p><code>FUNCTION</code> begins a multi-line function definition; its optional local parameter list is distinct from the one-line <code>DEFFN</code>/<code>FN</code> form. <code>RETURN Back</code> supplies the function result and returns to the caller. <code>ENDFUNC</code> closes the function structure; it is not the function-result return operation. This is V3.03-era documentary evidence from the book, not a 3.5-specific witness or a runtime test.</p>
+<h3 id="75-computed-procedure-dispatch-and-break-handling">7.5 Computed procedure dispatch and Break handling</h3>
 <p>The book also describes computed procedure dispatch:</p>
 <pre><code class="language-basic">ON Wert GOSUB Proc1 [, Proc2, Proc3, ...]
 </code></pre>
@@ -512,7 +520,7 @@ RETURN
 <li>ON BREAK CONT: disables normal break termination until a later ON BREAK/ON BREAK GOSUB, according to the chapter's description.</li>
 </ul>
 <p>The exact semantics and state transitions should be checked against the interpreter manual before implementation.</p>
-<h3 id="75-evidence-boundary">7.5 Evidence boundary</h3>
+<h3 id="76-evidence-boundary">7.6 Evidence boundary</h3>
 <p>This chapter provides strong evidence for the existence and broad syntax of the constructs above in the book's Amiga interpreter reference. It does not establish every whitespace, abbreviation, nesting, error-recovery or expression-precedence rule. Those details should be taken from the primary 3.5 interpreter manual or verified with the interpreter, not guessed from OCR.</p>
 <h2 id="8-program-control-and-error-handling-chapter-12">8. Program control and error handling: Chapter 12</h2>
 <p>Extracted from printed pp. 331–361.</p>
