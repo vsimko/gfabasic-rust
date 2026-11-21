@@ -132,10 +132,10 @@
 <td>No focused fixture identified; 3.5 applicability remains unverified.</td>
 </tr>
 <tr>
-<td><code>SUB … ENDSUB</code>, <code>PROCEDURE … RETURN</code>, <code>PROCEDURE … ENDPROC</code>, <code>LOCAL</code></td>
-<td>Alternative procedure forms and their respective terminators, plus the separate local-variable declaration. German book §6.5, printed pp. 183–184 (procedure forms) and p. 180 (<code>LOCAL</code>).</td>
-<td>The book presents <code>PROCEDURE … RETURN</code>, alternatively <code>SUB … ENDSUB</code>, and separately <code>PROCEDURE … ENDPROC</code>. These are V3.03-era documentary forms; the application listing provides additional use evidence only. Do not describe <code>SUB</code> as an alias for <code>PROCEDURE</code>, or infer a spaced <code>END SUB</code> form.</td>
-<td>No focused fixture identified for each exact form/terminator; no duplicate declarations.</td>
+<td><code>PROCEDURE … RETURN</code>; source alternatives <code>SUB … ENDSUB</code> and <code>PROCEDURE … ENDPROC</code>; <code>LOCAL</code></td>
+<td>Procedure declaration/call family and its terminators, plus the separate local-variable declaration. German book §6.5, printed pp. 183–185 (procedure syntax and explicit alias rule) and p. 180 (<code>LOCAL</code>).</td>
+<td>The V3.03-era book explicitly states on printed p. 185 that <code>SUB</code> may replace <code>PROCEDURE</code>, and <code>ENDPROC</code> or <code>ENDSUB</code> may replace <code>RETURN</code>; the interpreter normalizes these spellings to <code>PROCEDURE</code> / <code>RETURN</code>. The application listing is additional use evidence only and does not establish its exact interpreter build. Do not infer a spaced <code>END SUB</code> form.</td>
+<td>No focused fixture identified for these exact source spellings; no duplicate declarations.</td>
 </tr>
 <tr>
 <td><code>SHARED</code></td>

@@ -109,9 +109,9 @@
 </tr>
 <tr>
 <td>Procedures</td>
-<td><code>GOSUB proc[(args)]</code>; <code>PROCEDURE proc[(vars)]</code> … <code>RETURN</code>; alternatively <code>SUB proc[(vars)]</code> … <code>ENDSUB</code>; separately <code>PROCEDURE proc[(vars)]</code> … <code>ENDPROC</code></td>
-<td>The book presents three distinct source forms with their respective terminators. Parameters can be values or variable references using VAR. GOSUB disambiguates names that collide with BASIC commands.</td>
-<td style="text-align:right">7-21–7-22</td>
+<td><code>GOSUB proc[(args)]</code>; <code>PROCEDURE proc[(vars)]</code> … <code>RETURN</code>; source alternatives <code>SUB proc[(vars)]</code> … <code>ENDSUB</code> and <code>PROCEDURE proc[(vars)]</code> … <code>ENDPROC</code></td>
+<td>The German book explicitly states (printed p. 185) that <code>SUB</code> may replace <code>PROCEDURE</code> and <code>ENDPROC</code> or <code>ENDSUB</code> may replace <code>RETURN</code>; the interpreter normalizes these aliases to <code>PROCEDURE</code> / <code>RETURN</code>. They are syntax alternatives, not distinct procedure semantics. Parameters can be values or variable references using VAR. GOSUB disambiguates names that collide with BASIC commands.</td>
+<td style="text-align:right">7-21–7-22; German book §6.5, pp. 183–185</td>
 </tr>
 <tr>
 <td>LOCAL</td>
