@@ -16,6 +16,20 @@ Before performing a matching task, read and follow its skill. Skills provide tas
 
 If more than one task type applies, use all relevant skills. Do not treat a skill as a replacement for reading the linked source-of-truth documentation.
 
+## Ghidra analysis and implementation-agent boundary
+
+Ghidra projects, disassembly, and decompiler output are **analysis-only reference material**. Their permitted project purpose is to identify and verify the externally exposed GFA-BASIC API of the distributable RUN-Only interpreter, especially where manuals are incomplete or ambiguous.
+
+- **Analysis/research agents** may inspect Ghidra output only to extract API facts: command/function names, accepted parameter count and types, optionality, return information, calling requirements, errors, and externally observable behavior. Record conclusions as concise, independently worded facts in the canonical API registry or research notes, with binary hash, interpreter/version scope, address or symbol locator, and confidence/evidence status.
+- **Implementation agents must not open, read, search, quote, copy, paraphrase, or use Ghidra decompiler/disassembly output as inspiration or implementation guidance.** This includes pseudocode, assembly listings, reconstructed control flow, internal routines, and implementation-specific data structures.
+- Implementation agents may use only the independently authored API declarations/research summaries, applicable manuals, and reproducible black-box/reference-interpreter tests. These sources may state what an API accepts and does, but must not relay the original implementation's internal algorithm or code structure.
+- Analysis agents must not pass pseudocode, assembly excerpts, reconstructed algorithms, or internal implementation details into implementation tasks, prompts, review packages, or API documentation. Translate relevant findings into neutral API facts instead.
+- If an API fact cannot be established without exposing implementation details, keep it as an unresolved research question and request a black-box probe or human review; do not give implementation agents the decompiler output.
+- Do not use decompiler output to modify, adapt, recompile, or produce a derivative version of the original GFA binary. The new Rust compiler, formatter, editor, and related tools must be implemented independently.
+- Keep Ghidra artifacts separate from implementation inputs where practical (for example, a dedicated analysis directory and restricted task packages). Their presence in the public repository does not waive this agent-use boundary.
+
+This is a project workflow and provenance rule. It does not make a legal determination about the copyright status of every decompiler artifact.
+
 ## Human actions are tracked as issues
 
 Any action that requires a human decision, approval, credential, permission, external account access, physical action, or other manual intervention **and blocks project progress** MUST be represented by an open GitHub issue.
