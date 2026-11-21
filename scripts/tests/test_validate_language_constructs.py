@@ -61,9 +61,9 @@ class LanguageConstructManifestValidationTests(unittest.TestCase):
 
     def test_unsupported_schema_version_fails(self):
         manifest = self.load_manifest()
-        manifest["manifest_schema_version"] = 2
+        manifest["manifest_schema_version"] = 1
         self.write_manifest(manifest)
-        self.assertTrue(any("must be integer 1" in error for error in validate_language_constructs(self.root)))
+        self.assertTrue(any("must be integer 2" in error for error in validate_language_constructs(self.root)))
 
     def test_unquoted_numeric_version_key_fails(self):
         path = self.manifest_path()
@@ -165,25 +165,25 @@ class LanguageConstructManifestValidationTests(unittest.TestCase):
         self.write_manifest(manifest)
         self.assertTrue(any("references unknown evidence ID" in error for error in validate_language_constructs(self.root)))
 
-    def test_untested_execution_cannot_claim_output(self):
+    def test_manifest_rejects_runtime_execution_field(self):
         manifest = self.load_manifest()
-        manifest["versions"]["3.5"]["execution"]["observed"] = "FACT(0)=1"
-        self.write_manifest(manifest)
-        self.assertTrue(any("must be null when UNTESTED" in error for error in validate_language_constructs(self.root)))
-
-    def test_native_result_requires_source_and_run(self):
-        manifest = self.load_manifest()
-        execution = manifest["versions"]["3.5"]["execution"]
-        execution["status"] = "PASS"
-        execution["observed"] = "PASS"
-        execution["run_url"] = None
-        execution["probe_source"] = None
-        execution["evidence_refs"] = []
+        manifest["versions"]["3.5"]["execution"] = {"status": "PASS"}
         self.write_manifest(manifest)
         errors = validate_language_constructs(self.root)
-        self.assertTrue(any("run_url is required" in error for error in errors))
-        self.assertTrue(any("probe_source is required" in error for error in errors))
-        self.assertTrue(any("must not be empty" in error for error in errors))
+        self.assertTrue(any("execution" in error and "unsupported field" in error for error in errors))
+
+    def test_version_specific_probe_requires_reason(self):
+        manifest = self.load_manifest()
+        manifest["versions"]["3.52"].pop("probe_reason", None)
+        self.write_manifest(manifest)
+        errors = validate_language_constructs(self.root)
+        self.assertTrue(any("probe_reason is required" in error for error in errors))
+
+    def test_result_output_files_are_allowed(self):
+        result = self.root / "tests/language-constructs/fact-function/results/3.5/latest.json"
+        result.parent.mkdir(parents=True, exist_ok=True)
+        result.write_text("{}\n", encoding="utf-8")
+        self.assertEqual(validate_language_constructs(self.root), [])
 
     def test_implementation_reference_must_exist(self):
         manifest = self.load_manifest()
@@ -212,14 +212,14 @@ class LanguageConstructSelectionTests(unittest.TestCase):
         self.assertIsNotNone(result)
         return result
 
-    def test_changed_manifest_selects_only_its_applicable_versions(self):
+    def test_changed_manifest_selects_every_declared_version(self):
         result = self.select(FileChange("M", new_path="tests/language-constructs/fact-function/manifest.yaml"))
         self.assertEqual(result["changed_constructs"], ["fact-function"])
-        self.assertEqual([item["version"] for item in result["include"]], ["3.5", "3.52"])
+        self.assertEqual([item["version"] for item in result["include"]], ["3.041U", "3.5", "3.52"])
 
     def test_changed_probe_selects_only_its_version(self):
         result = self.select(FileChange("M", new_path="tests/language-constructs/fact-function/probe-3.5.LST"))
-        self.assertEqual([(item["construct_id"], item["version"]) for item in result["include"]], [("fact-function", "3.5")])
+        self.assertEqual([(item["construct_id"], item["version"]) for item in result["include"]], [("fact-function", "3.041U"), ("fact-function", "3.5")])
 
     def test_shared_schema_change_validates_all_but_schedules_no_native_jobs(self):
         result = self.select(FileChange("M", new_path="tests/language-constructs/README.md"))
@@ -246,7 +246,7 @@ class LanguageConstructSelectionTests(unittest.TestCase):
         )
         self.assertEqual(
             [(item["construct_id"], item["version"]) for item in result["include"]],
-            [("fact-function", "3.5")],
+            [("fact-function", "3.041U"), ("fact-function", "3.5")],
         )
 
     def test_validator_change_does_not_schedule_all_native_jobs(self):
@@ -265,12 +265,19 @@ class LanguageConstructSelectionTests(unittest.TestCase):
         self.assertEqual(
             [(item["construct_id"], item["version"]) for item in result["include"]],
             [
+                ("fact-function", "3.041U"),
                 ("fact-function", "3.5"),
                 ("fact-function", "3.52"),
+                ("mat-one-statement", "3.041U"),
                 ("mat-one-statement", "3.5"),
                 ("mat-one-statement", "3.52"),
             ],
         )
+
+    def test_result_output_change_does_not_schedule_native_jobs(self):
+        result = self.select(FileChange("M", new_path="tests/language-constructs/fact-function/results/3.5/latest.json"))
+        self.assertEqual(result["include"], [])
+        self.assertEqual(result["selection"], "none")
 
     def test_deleted_construct_does_not_schedule_native_jobs(self):
         shutil.rmtree(self.root / "tests" / "language-constructs" / "fact-function")
@@ -321,8 +328,10 @@ class LanguageConstructSelectionTests(unittest.TestCase):
         self.assertEqual(
             [(item["construct_id"], item["version"]) for item in result["include"]],
             [
+                ("fact-function", "3.041U"),
                 ("fact-function", "3.5"),
                 ("fact-function", "3.52"),
+                ("mat-one-statement", "3.041U"),
                 ("mat-one-statement", "3.5"),
                 ("mat-one-statement", "3.52"),
             ],

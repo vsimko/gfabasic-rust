@@ -10,7 +10,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 FIXTURE_ID = re.compile(r"[A-Za-z0-9][A-Za-z0-9._-]*\Z")
-RECORD = re.compile(r"GFATEST:([A-Za-z0-9][A-Za-z0-9._-]*):(PASS|FAIL)\Z")
+RECORD = re.compile(r"GFATEST:([A-Za-z0-9][A-Za-z0-9._-]*):(PASS|FAIL|DIFFERENT)\Z")
 
 
 @dataclass(frozen=True)
@@ -25,6 +25,10 @@ class Validation:
     @property
     def failed(self) -> int:
         return sum(outcome == "FAIL" for outcome in self.outcomes.values())
+
+    @property
+    def different(self) -> int:
+        return sum(outcome == "DIFFERENT" for outcome in self.outcomes.values())
 
     @property
     def valid(self) -> bool:
@@ -94,7 +98,7 @@ def main() -> int:
 
     result = validate_result_bytes(expected_ids, raw)
     print(f"GFATEST: {result.passed} PASS, {result.failed} FAIL, "
-          f"{len(result.errors)} protocol error(s)")
+          f"{result.different} DIFFERENT, {len(result.errors)} protocol error(s)")
     for error in result.errors:
         print(f"ERROR: {error}", file=sys.stderr)
 

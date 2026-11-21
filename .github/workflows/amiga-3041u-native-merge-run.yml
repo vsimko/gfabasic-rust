@@ -11,15 +11,27 @@ on:
       - "scripts/validate_gfatest_results.py"
   workflow_dispatch:
   workflow_call:
+    inputs:
+      construct_id:
+        description: "Construct ID for an isolated probe; empty runs the full baseline suite."
+        required: false
+        type: string
+        default: ""
+      probe_path:
+        description: "Repository-relative .LST probe path for the selected construct."
+        required: false
+        type: string
+        default: ""
 
 permissions:
   contents: read
 
 jobs:
   cli-probe:
-    if: github.event_name != 'workflow_dispatch' || github.ref == 'refs/heads/main'
+    if: github.actor != 'dependabot[bot]' && (github.event_name != 'pull_request' || (github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.author_association == 'OWNER')) && (github.event_name != 'workflow_dispatch' || (github.ref == 'refs/heads/main' && github.actor == github.repository_owner)) && (github.event_name != 'push' || (github.ref == 'refs/heads/main' && github.actor == github.repository_owner))
     runs-on: ubuntu-24.04
     timeout-minutes: 25
+    continue-on-error: ${{ inputs.construct_id != '' }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
 
@@ -111,12 +123,15 @@ jobs:
           curl -fsSL https://packages.amiberry.com/gpg.key | sudo tee /usr/share/keyrings/amiberry-archive-keyring.gpg >/dev/null
           echo "deb [arch=amd64 signed-by=/usr/share/keyrings/amiberry-archive-keyring.gpg] https://packages.amiberry.com/apt noble main" | sudo tee /etc/apt/sources.list.d/amiberry.list >/dev/null
           sudo apt-get update
-          sudo apt-get install -y --no-install-recommends amiberry xvfb netcat-openbsd tesseract-ocr python3-pip python3-pil
+          sudo apt-get install -y --no-install-recommends -o Dir::Cache::archives="$RUNNER_TEMP/apt-archives/" amiberry xvfb netcat-openbsd tesseract-ocr python3-pip python3-pil
           python3 -m pip install --break-system-packages amitools
           command -v xdftool
           amiberry --version | tee artifacts/amiga-cli-probe/amiberry-version.txt
 
       - name: Prepare DF0 test disk and preserve the original GFA BASIC disk in DF1
+        env:
+          GFA_CONSTRUCT_ID_INPUT: ${{ inputs.construct_id }}
+          GFA_PROBE_PATH_INPUT: ${{ inputs.probe_path }}
         run: |
           set -euo pipefail
           SOURCE_ADF="$RUNNER_TEMP/gfa-basic-3.041u.adf"
@@ -135,13 +150,30 @@ jobs:
           DF1:gfabasic
           EOF
           xdftool "$TEST_ADF" write "$RUNNER_TEMP/Startup-Sequence" S/Startup-Sequence
-          xdftool "$TEST_ADF" write "tests/interpreter-probes/amiga-3.041u/regression-suite.LST" gfatest.LST
+          if [ -n "$GFA_PROBE_PATH_INPUT" ]; then
+            test -n "$GFA_CONSTRUCT_ID_INPUT"
+            test -f "$GFA_PROBE_PATH_INPUT"
+            xdftool "$TEST_ADF" write "$GFA_PROBE_PATH_INPUT" gfatest.LST
+            printf '%s\n' "$GFA_CONSTRUCT_ID_INPUT" > "$RUNNER_TEMP/expected-ids.txt"
+            test "$(cat "$RUNNER_TEMP/expected-ids.txt")" = "$GFA_CONSTRUCT_ID_INPUT"
+            test "$(wc -l < "$RUNNER_TEMP/expected-ids.txt")" -eq 1
+            echo "GFATEST_EXPECTED_IDS_FILE=$RUNNER_TEMP/expected-ids.txt" >> "$GITHUB_ENV"
+            echo "GFA_CONSTRUCT_ID=$GFA_CONSTRUCT_ID_INPUT" >> "$GITHUB_ENV"
+          else
+            xdftool "$TEST_ADF" write "tests/interpreter-probes/amiga-3.041u/regression-suite.LST" gfatest.LST
+            echo "GFATEST_EXPECTED_IDS_FILE=tests/interpreter-probes/amiga-3.041u/expected-ids.txt" >> "$GITHUB_ENV"
+            echo "GFA_CONSTRUCT_ID=" >> "$GITHUB_ENV"
+          fi
           xdftool "$TEST_ADF" boot install boot1x
           xdftool "$TEST_ADF" list / all > artifacts/amiga-cli-probe/prepared-adf-layout.txt
           xdftool "$TEST_ADF" boot show > artifacts/amiga-cli-probe/prepared-adf-boot.txt
           grep -F "bootable: True" artifacts/amiga-cli-probe/prepared-adf-boot.txt
           sha256sum "$TEST_ADF" > artifacts/amiga-cli-probe/prepared-adf-sha256.txt
-          cp "tests/interpreter-probes/amiga-3.041u/regression-suite.LST" artifacts/amiga-cli-probe/gfatest.LST
+          if [ -n "$GFA_PROBE_PATH_INPUT" ]; then
+            cp "$GFA_PROBE_PATH_INPUT" artifacts/amiga-cli-probe/gfatest.LST
+          else
+            cp "tests/interpreter-probes/amiga-3.041u/regression-suite.LST" artifacts/amiga-cli-probe/gfatest.LST
+          fi
           printf '%s\\n' "DF1:gfabasic" > artifacts/amiga-cli-probe/interpreter-installed-path.txt
           cp "$RUNNER_TEMP/Startup-Sequence" artifacts/amiga-cli-probe/Startup-Sequence.txt
           grep -F "gfatest.LST" artifacts/amiga-cli-probe/prepared-adf-layout.txt
@@ -150,16 +182,39 @@ jobs:
           test "$(wc -c < "$SOURCE_ADF")" -eq "$(wc -c < "$RUNNER_TEMP/gfa-basic-3.041u.adf")"
 
       - name: Merge textual LST in the GFA BASIC editor
+        id: native-run
         run: bash scripts/amiga-cli-probe-3041u.sh
 
+
+      - name: Write per-construct result record
+        if: always() && inputs.construct_id != ''
+        env:
+          CONSTRUCT_ID: ${{ inputs.construct_id }}
+          VERSION: "3.041U"
+          PROBE_PATH: ${{ inputs.probe_path }}
+          HARNESS_OUTCOME: ${{ steps.native-run.outcome }}
+          RESULT_FILE: artifacts/amiga-cli-probe/gfatest-results.txt
+          IDENTITY_SCREENSHOT: artifacts/amiga-cli-probe/editor-version-menu.png
+          IDENTITY_OCR: artifacts/amiga-cli-probe/editor-version-menu-ocr.txt
+          OUTPUT_FILE: artifacts/amiga-cli-probe/result.json
+        run: |
+          EXPECTED_IDS_FILE="${GFATEST_EXPECTED_IDS_FILE:-tests/interpreter-probes/amiga-3.041u/expected-ids.txt}"
+          python3 scripts/write_construct_result.py \
+            --construct-id "$CONSTRUCT_ID" --version "$VERSION" --probe "$PROBE_PATH" \
+            --harness-outcome "${HARNESS_OUTCOME:-failure}" --expected-ids "$EXPECTED_IDS_FILE" \
+            --results "$RESULT_FILE" --identity-screenshot "$IDENTITY_SCREENSHOT" \
+            --identity-ocr "$IDENTITY_OCR" --output "$OUTPUT_FILE"
 
       - name: Upload diagnostic evidence (never upload commercial binary)
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         with:
-          name: amiga-gfa-basic-3.041u-native-merge-run
+          name: ${{ inputs.construct_id != '' && format('amiga-construct-{0}-3.041U', inputs.construct_id) || 'amiga-gfa-basic-3.041u-native-merge-run' }}
           path: |
             artifacts/amiga-cli-probe/
             !artifacts/amiga-cli-probe/*.adf
+            !artifacts/amiga-cli-probe/*.rom
+            !artifacts/amiga-cli-probe/gfabasic
+            !artifacts/amiga-cli-probe/GFABasic
           if-no-files-found: warn
           retention-days: 7

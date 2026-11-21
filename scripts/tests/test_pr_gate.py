@@ -30,20 +30,24 @@ class ChangedFileStatusTests(unittest.TestCase):
 
 
 class Native352InterpreterProbePathTests(unittest.TestCase):
-    def test_active_reference_profiles_select_matrix_without_35u_or_fuzzing(self):
+    def test_legacy_interpreter_probes_select_whole_suite_baseline(self):
         for path in (
             "tests/interpreter-probes/amiga-3.52/expected-ids.txt",
             "tests/interpreter-probes/amiga-3.52/regression-suite.LST",
             "tests/interpreter-probes/amiga-3.5/expected-ids.txt",
             "tests/interpreter-probes/amiga-3.5/regression-suite.LST",
-            "scripts/amiga-cli-probe-35.sh",
         ):
             with self.subTest(path=path):
-                selected = expected_workflows([path])
-                expected = {NATIVE_352_WORKFLOW}
-                if path == "scripts/amiga-cli-probe-35.sh":
-                    expected.add(".github/workflows/docs.yml")
-                self.assertEqual(selected, expected)
+                self.assertEqual(expected_workflows([path]), {NATIVE_352_WORKFLOW})
+
+    def test_native_harness_script_selects_construct_matrix_and_docs(self):
+        self.assertEqual(
+            expected_workflows(["scripts/amiga-cli-probe-35.sh"]),
+            {
+                ".github/workflows/amiga-construct-matrix.yml",
+                ".github/workflows/docs.yml",
+            },
+        )
 
     def test_reference_matrix_paths_match_pr_gate_classification(self):
         root = Path(__file__).resolve().parents[2]
@@ -122,7 +126,7 @@ class FuzzWorkflowPathTests(unittest.TestCase):
 
 
 class LanguageConstructManifestPathTests(unittest.TestCase):
-    def test_manifest_and_probe_paths_select_documentation_workflow_only(self):
+    def test_manifest_and_probe_paths_select_docs_and_construct_matrix(self):
         for path in (
             "tests/language-constructs/README.md",
             "tests/language-constructs/fact-function/manifest.yaml",
@@ -132,7 +136,7 @@ class LanguageConstructManifestPathTests(unittest.TestCase):
             with self.subTest(path=path):
                 self.assertEqual(
                     expected_workflows([path]),
-                    {".github/workflows/docs.yml"},
+                    {".github/workflows/docs.yml", ".github/workflows/amiga-construct-matrix.yml"},
                 )
 
 

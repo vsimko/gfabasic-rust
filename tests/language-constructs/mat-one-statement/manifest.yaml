@@ -1,4 +1,4 @@
-manifest_schema_version: 1
+manifest_schema_version: 2
 construct:
   id: "mat-one-statement"
   kind: "statement"
@@ -8,14 +8,14 @@ construct:
     - text: "MAT ONE array()"
       versions: ["3.5"]
     - text: "M O array()"
-      versions: ["3.52"]
+      versions: ["3.041U", "3.5", "3.52"]
 evidence:
   - id: "mat-one-manual-35"
     source_id: "AM-INTERPRETER-30-35-UPDATE-SCAN"
     location: "printed p. 13-3"
     kind: "primary-manual"
     status: "page-image-verified"
-    claim: "The 3.5 addendum defines MAT ONE as initializing a square identity matrix; MAT PRINT displays the matrix."
+    claim: "The 3.5 addendum documents MAT ONE and its M O abbreviation; the construct probe uses the full spelling because the tested editor expands M O as MAT SET."
     url: "https://github.com/vsimko/gfabasic-rust/blob/main/tests/corpus/amiga/3.5/matrix/mat-one-identity.yaml"
   - id: "mat-one-adr-352"
     source_id: "ADR-0017"
@@ -38,13 +38,7 @@ versions:
       status: "unknown"
       summary: "No version-scoped MAT ONE expectation has been established for 3.041U."
       evidence_refs: []
-    probe: null
-    execution:
-      status: "UNTESTED"
-      observed: null
-      run_url: null
-      probe_source: null
-      evidence_refs: []
+    probe: "probe-3.5.LST"
     implementation:
       status: "not-targeted"
       refs: []
@@ -52,20 +46,12 @@ versions:
     applicability: "applicable"
     expectation:
       status: "documented"
-      summary: "MAT ONE initializes the previously dimensioned square matrix as an identity matrix. The manual does not establish the element count for DIM identity(3,3) in this probe."
+      summary: "MAT ONE is documented for 3.5. The editor expands the M O abbreviation as MAT SET in the observed session, so this probe uses the documented full spelling."
       evidence_refs: ["mat-one-manual-35"]
     probe: "probe-3.5.LST"
-    execution:
-      status: "UNTESTED"
-      observed: null
-      run_url: null
-      probe_source: null
-      evidence_refs: []
     implementation:
-      status: "syntax-only"
-      refs:
-        - "crates/gfabasic-compiler/src/frontend.rs"
-        - "crates/gfabasic-compiler/src/semantic.rs"
+      status: "not-targeted"
+      refs: []
   "3.52":
     applicability: "applicable"
     expectation:
@@ -73,12 +59,7 @@ versions:
       summary: "The repository ADR records M O array() as the 3.52 shortcut for MAT ONE; this expectation is based on a repository record, not a page-image-verified manual."
       evidence_refs: ["mat-one-adr-352"]
     probe: "probe-3.52.LST"
-    execution:
-      status: "PASS"
-      observed: "GFATEST:matrix-one:PASS after checking the nine identity-matrix elements."
-      run_url: "https://github.com/vsimko/gfabasic-rust/actions/runs/44188927520"
-      probe_source: "tests/interpreter-probes/amiga-3.52/regression-suite.LST"
-      evidence_refs: ["mat-one-native-352"]
+    probe_reason: "GFA-BASIC 3.52 uses OPEN Output device syntax; older probes use OPEN O."
     implementation:
       status: "not-targeted"
       refs: []
