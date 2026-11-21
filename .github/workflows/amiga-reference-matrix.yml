@@ -233,8 +233,10 @@ jobs:
         if: always()
         run: |
           python3 - <<'PY'
+          import io
           import pathlib
           import stat
+          from PIL import Image
 
           root = pathlib.Path("artifacts/amiga-3.5-discovery")
           if not root.is_dir():
@@ -258,8 +260,13 @@ jobs:
                   violations.append(f"executable file: {relative}")
                   continue
               if path.suffix.lower() == ".png":
-                  if not data.startswith(png_signature):
-                      violations.append(f"invalid PNG evidence: {relative}")
+                  try:
+                      if not data.startswith(png_signature):
+                          raise ValueError("missing PNG signature")
+                      with Image.open(io.BytesIO(data)) as image:
+                          image.verify()
+                  except Exception as error:
+                      violations.append(f"invalid PNG evidence: {relative} ({error})")
                   continue
               if bytes([0]) in data:
                   violations.append(f"binary content: {relative}")
