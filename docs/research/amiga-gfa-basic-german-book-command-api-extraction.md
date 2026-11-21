@@ -200,7 +200,7 @@ RETURN
 - Procedure names may contain letters, digits, underscore and period; unlike variable names, the first character may be a digit.
 - A procedure may declare a list of local receiving variables. The book says these receive values passed through GOSUB; parameter types must match the corresponding argument types.
 - Procedures may call other procedures and may recursively call themselves.
-- The book presents separate procedure forms on printed pp. 183–184: `PROCEDURE Name […] … RETURN`, alternatively `SUB Name […] … ENDSUB`, and `PROCEDURE Name […] … ENDPROC`. Preserve these as the forms and terminators shown by the source; do not summarize `SUB` as an alias for `PROCEDURE`.
+- The book presents the source spellings on printed pp. 183–184: `PROCEDURE Name […] … RETURN`, alternatively `SUB Name […] … ENDSUB`, and `PROCEDURE Name […] … ENDPROC`. The explanatory paragraph on printed p. 185 explicitly says that `SUB` may be used instead of `PROCEDURE`, and `ENDPROC` or `ENDSUB` instead of `RETURN`; the interpreter converts these spellings to `PROCEDURE` / `RETURN`. They are therefore syntax aliases normalized by the interpreter, not distinct procedure semantics. Do not infer a spaced `END SUB` form.
 - The book documents a VAR marker in PROCEDURE/FUNCTION parameter lists for direct variable passing, as an alternative to indirect pointer variables. The OCR examples show the shape PROCEDURE Name([ordinary parameters] VAR variable[, ...]) and similarly for FUNCTION; exact punctuation and mixed-parameter grammar need page-image verification.
 - The chapter cross-references LOCAL, VAR, GOSUB and FUNCTION. Do not infer their complete grammar from the cross-reference alone.
 
