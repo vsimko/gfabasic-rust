@@ -153,6 +153,7 @@ jobs:
           set -euo pipefail
           ROM_NAME="$(jq -r '[.[] | select(.type == "file" and .size == 524288 and (.name|test("(?i)kickstart.*v?1[.]3.*34[.]5"))) ] | .[0].name // empty' "$RUNNER_TEMP/private-assets-index.json")"
           test -n "$ROM_NAME" || { echo "No 512 KiB Kickstart 1.3 rev 34.5 ROM found"; exit 1; }
+          ROM_PATH_ENCODED="$(jq -rn --arg path "$ROM_NAME" '$path | @uri')"
           echo "path=$ROM_PATH_ENCODED" >> "$GITHUB_OUTPUT"
 
       - name: Download original Amiga Kickstart ROM
@@ -162,7 +163,6 @@ jobs:
         run: |
           set -euo pipefail
           test -n "$GFA_ASSETS_TOKEN"
-          ROM_PATH_ENCODED="$(jq -rn --arg path "$ROM_NAME" '$path | @uri')"
           curl --fail --silent --show-error --location \
             --header "Authorization: Bearer $GFA_ASSETS_TOKEN" \
             --header "Accept: application/vnd.github.raw" \
