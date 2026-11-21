@@ -1,0 +1,28 @@
+{
+  "conformance_status": "UNTESTED",
+  "construct_id": "mat-one-statement",
+  "diagnostic_refs": [
+    "artifacts/amiga-cli-probe/editor-version-menu.png",
+    "artifacts/amiga-cli-probe/editor-version-menu-ocr.txt"
+  ],
+  "editor_identity": {
+    "expected_version": "3.041U",
+    "ocr_file": "artifacts/amiga-cli-probe/editor-version-menu-ocr.txt",
+    "ocr_matched": false,
+    "screenshot": "artifacts/amiga-cli-probe/editor-version-menu.png"
+  },
+  "expected_probe": "tests/language-constructs/mat-one-statement/probe-3.5.LST",
+  "gfatest": {},
+  "harness_status": "failure",
+  "manifest_sha256": "0e8e7ad2683265e319c42cbaa689180e9016db6832f3a775db01777325003f51",
+  "observed": null,
+  "outcomes": {},
+  "probe": "tests/language-constructs/mat-one-statement/probe-3.5.LST",
+  "probe_sha256": "d068d45014a7f3acd5bb7a294bc9aebac7259aeee07ba65b4530101cdcc414ae",
+  "reason": "GFATEST result file is missing; running-editor version-menu OCR did not identify the requested version; native harness step concluded failure",
+  "result_schema_version": 1,
+  "run_attempt": "1",
+  "run_url": "https://github.com/vsimko/gfabasic-rust/actions/runs/44956249303",
+  "selection": "targeted",
+  "version": "3.041U"
+}

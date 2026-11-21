@@ -1,25 +1,28 @@
 {
   "conformance_status": "UNTESTED",
   "construct_id": "fact-function",
-  "diagnostic_refs": [],
+  "diagnostic_refs": [
+    "artifacts/amiga-cli-probe/editor-version-menu.png",
+    "artifacts/amiga-cli-probe/editor-version-menu-ocr.txt"
+  ],
   "editor_identity": {
     "expected_version": "3.52",
     "ocr_file": "artifacts/amiga-cli-probe/editor-version-menu-ocr.txt",
-    "ocr_matched": false,
+    "ocr_matched": true,
     "screenshot": "artifacts/amiga-cli-probe/editor-version-menu.png"
   },
   "expected_probe": "tests/language-constructs/fact-function/probe-3.52.LST",
   "gfatest": {},
-  "harness_status": "cancelled",
+  "harness_status": "failure",
   "manifest_sha256": "313d65db8fd49d045f36204d16d89666aa8f0368a0fe1687e5b9be5c4ec937f2",
   "observed": null,
   "outcomes": {},
   "probe": "tests/language-constructs/fact-function/probe-3.52.LST",
   "probe_sha256": "b852dee5ca53ec5a2c28eb13210931e211c18bb56822399a3f30f49174d7086d",
-  "reason": "GFATEST result file is missing; running-editor version-menu screenshot is missing; native harness step concluded cancelled",
+  "reason": "GFATEST result file is missing; native harness step concluded failure",
   "result_schema_version": 1,
   "run_attempt": "1",
-  "run_url": "https://github.com/vsimko/gfabasic-rust/actions/runs/44530848031",
+  "run_url": "https://github.com/vsimko/gfabasic-rust/actions/runs/44956249303",
   "selection": "targeted",
   "version": "3.52"
 }
