@@ -1,0 +1,15 @@
+id: "amiga-3.5-data-pointer-save-restore"
+dialect: "GFA BASIC Amiga"
+version: "3.5"
+api_profiles: []
+kind: "semantic"
+status: "verified"
+source_key: "AM-INTERPRETER-30-35-UPDATE-SCAN"
+source_pages: "printed p. 13-34"
+evidence_status: "page-image-verified"
+expectation: "The fixture saves the current DATA pointer with _DATA, consumes the first two DATA values, restores the saved position with _DATA=, and reads the first value again. The three PRINT operations therefore display 10, 20, and 10 in order."
+notes:
+  - "Independently authored minimal fixture; it does not copy the manual's illustrative program."
+  - "Printed p. 13-34 defines _DATA as the DATA-pointer position, returns zero when the next READ would cause an out-of-data condition, and defines _DATA= as restoring a previously obtained _DATA value."
+  - "The same page's worked example saves _DATA before READ and later restores it with _DATA= before reading again; this fixture isolates that save/restore behavior with three values."
+  - "Verified against the supplied GFA BASIC 3.5 Interpreter page image; no original interpreter execution has been performed."
