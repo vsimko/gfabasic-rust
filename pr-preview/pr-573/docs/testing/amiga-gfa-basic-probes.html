@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Use this guide when writing or changing .LST regression programs for the original Amiga GFA BASIC interpreter. A probe must distinguish a language/runtime failure from a test-harness or program-setup failure. New cons…">
+  <meta name="description" content="Use this guide when writing or changing .LST regression programs for the original Amiga GFA BASIC interpreter. A probe must distinguish a language/runtime failure from a test-harness or program-setup failure.">
   <title>Writing Amiga GFA BASIC reference-interpreter probes · GFA BASIC Rust documentation</title>
   <link rel="stylesheet" href="../../styles.css">
 </head>
@@ -21,9 +21,9 @@
         <p class="docs-meta"><span>Testing Guide</span></p>
         <h1 id="writing-amiga-gfa-basic-reference-interpreter-probes">Writing Amiga GFA BASIC reference-interpreter probes</h1>
 <h2 id="purpose">Purpose</h2>
-<p>Use this guide when writing or changing .LST regression programs for the original Amiga GFA BASIC interpreter. A probe must distinguish a language/runtime failure from a test-harness or program-setup failure. New construct-scoped probes follow <a href="../architecture/adr/0018-construct-scoped-amiga-gfa-basic-probes.html">ADR 0018</a>.</p>
+<p>Use this guide when writing or changing .LST regression programs for the original Amiga GFA BASIC interpreter. A probe must distinguish a language/runtime failure from a test-harness or program-setup failure.</p>
 <h2 id="interpreter-version-strategy">Interpreter version strategy</h2>
-<p>The project uses three reference versions. See <a href="../architecture/adr/0017-multi-version-amiga-gfa-basic-conformance.html">ADR 0017</a> and <a href="../architecture/adr/0018-construct-scoped-amiga-gfa-basic-probes.html">ADR 0018</a>.</p>
+<p>The project uses three reference versions. See <a href="../architecture/adr/0017-multi-version-amiga-gfa-basic-conformance.html">ADR 0017</a> and <a href="https://github.com/vsimko/gfabasic-rust/issues/557">issue #557</a>.</p>
 <table>
 <thead>
 <tr>
@@ -56,23 +56,6 @@
 <li><code>UNTESTED</code>: no adequate run/evidence is available. Missing assets are not failures or passes.</li>
 </ul>
 <p>A maintainer-reported example motivating this policy is <code>M O a()</code>: reported as <code>MAT SET a()</code> in 3.5 and <code>MAT ONE a()</code> in 3.52. Treat it as reported evidence until exact-version screenshots/native runs are preserved.</p>
-<h2 id="construct-scoped-probe-catalogue">Construct-scoped probe catalogue</h2>
-<p>New native probes are organized by language construct:</p>
-<pre><code class="language-text">tests/language-constructs/
-  &lt;construct-id&gt;/
-    manifest.yaml
-    probe.LST
-    README.md       # optional
-</code></pre>
-<ul>
-<li>Use one directory per independently testable construct and a stable lowercase kebab-case directory name.</li>
-<li><code>manifest.yaml</code> is YAML. It records construct identity, classification, source evidence, applicable exact interpreter versions, per-version expectations, and probe paths. The schema and required fields are tracked by <a href="https://github.com/vsimko/gfabasic-rust/issues/570">#570</a>.</li>
-<li>Keep documentary evidence, expected behavior, observed run results, and Rust implementation/conformance status separate.</li>
-<li>A construct can declare different applicability or probe variants by version. Reuse one probe only when its syntax and intent are equivalent.</li>
-<li>CI selects only changed construct directories and their declared versions. Each construct/version pair runs as an independent parallel job; unrelated constructs are not run. Selection tooling is tracked by <a href="https://github.com/vsimko/gfabasic-rust/issues/571">#571</a>, and native matrix integration by <a href="https://github.com/vsimko/gfabasic-rust/issues/572">#572</a>.</li>
-<li>Keep native output and screenshots in workflow artifacts. Do not commit generated run output as canonical evidence.</li>
-<li>Existing <code>tests/interpreter-probes/</code> suites remain supported as baseline/diagnostic paths during migration. This catalogue does not replace <code>tests/corpus/</code>, its YAML sidecars, or <code>tests/corpus/manifest.yaml</code>; the broader corpus-format migration is tracked separately in <a href="https://github.com/vsimko/gfabasic-rust/issues/574">#574</a>.</li>
-</ul>
 <h2 id="verify-native-editor-merge">Verify native editor Merge</h2>
 <p>For a probe that depends on editor shortcut expansion (for example <code>M O identity()</code>), distinguish editor behavior from an explicitly typed runtime command such as <code>MAT ONE identity()</code>.</p>
 <ol>
