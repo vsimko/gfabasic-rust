@@ -8,6 +8,7 @@ title: "Multi-version Amiga GFA-BASIC conformance baseline"
 - **Status:** Accepted
 - **Date:** 2026-11-16
 - **Tracking:** [Issue #557](https://github.com/vsimko/gfabasic-rust/issues/557)
+- **Construct-scoped execution:** [ADR 0018](0018-construct-scoped-amiga-gfa-basic-probes.md)
 
 ## Context
 
@@ -54,6 +55,7 @@ Keep manual-documented behavior, directly observed behavior, and assumptions dis
 - Reports and fixtures must retain exact version identity and per-version outcomes.
 - A missing interpreter asset or unavailable workflow is an explicit coverage gap.
 - The unified matrix entry point is `.github/workflows/amiga-reference-matrix.yml`. It invokes the 3.52 and 3.041U native workflows and captures the 3.5 editor's held-right-button version menu as identity evidence. The initial 3.5 native smoke suite is wired into the matrix; the three configured cases passed in run 44094135503 and the raw artifact was inspected. This is limited smoke coverage, not complete language conformance. The individual workflows remain available for focused manual runs. A successful matrix run validates only the configured probes and result-collection protocol, not complete language conformance.
+- New construct-scoped probes and change-triggered version jobs follow [ADR 0018](0018-construct-scoped-amiga-gfa-basic-probes.md). The existing whole-suite workflows remain available during migration.
 - The status of private assets and runnable workflows must be checked from the current workflow configuration and latest issue/CI evidence, not inferred from the media inventory alone.
 
 ## Evidence and limitations

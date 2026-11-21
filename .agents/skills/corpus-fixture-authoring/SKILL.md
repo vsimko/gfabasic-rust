@@ -68,6 +68,14 @@ Then run relevant Rust formatter/parser or targeted tests if the fixture is wire
 
 The corpus validator checks metadata and paths; it does not compile or execute fixtures. A formatter acceptance check is not interpreter conformance. Report the exact validation performed and do not overstate it.
 
+## Boundary with construct-scoped native probes
+
+The native interpreter catalogue is separate from the general corpus:
+- native probes live under `tests/language-constructs/<construct-id>/` and use YAML `manifest.yaml` files;
+- the existing conformance corpus remains under `tests/corpus/` with YAML sidecars and `tests/corpus/manifest.yaml`;
+- do not migrate corpus files or metadata as part of the construct-catalogue work; broader format migration is tracked separately in [#574](https://github.com/vsimko/gfabasic-rust/issues/574);
+- use [ADR 0018](../../../docs/architecture/adr/0018-construct-scoped-amiga-gfa-basic-probes.md) for the native probe architecture.
+
 ## Review checklist
 
 - [ ] Fixture is original, minimal, deterministic, and self-contained.
