@@ -37,7 +37,7 @@
 <li>one or more independently authored <code>.LST</code> probe files;</li>
 <li>an optional <code>README.md</code> for rationale or unresolved details that do not fit the manifest.</li>
 </ul>
-<p>Use YAML for this new construct catalogue. Do not introduce TOML for construct manifests. This decision does not migrate or replace the existing TOML API registry, corpus manifest, or corpus sidecars.</p>
+<p>Use YAML for this new construct catalogue. Do not introduce TOML for construct manifests. This decision does not replace the existing TOML API registry. The corpus manifest and sidecars follow the separate migration tracked in <a href="https://github.com/vsimko/gfabasic-rust/issues/574">#574</a>; construct manifests remain a distinct contract.</p>
 <p>The manifest contract must keep these dimensions distinct:</p>
 <ul>
 <li>construct identity and classification;</li>
@@ -54,7 +54,7 @@
 <ol>
 <li><strong>Keep only version-wide suites.</strong> Rejected as the primary change-triggered workflow because a focused construct change needlessly executes unrelated tests.</li>
 <li><strong>One manifest for all constructs.</strong> Rejected because per-construct directories make probes, evidence, and ownership boundaries easier to inspect and change independently.</li>
-<li><strong>TOML for new manifests.</strong> Rejected for this catalogue; YAML is the selected authoring format. Existing TOML contracts remain unchanged.</li>
+<li><strong>TOML for new manifests.</strong> Rejected for this catalogue; YAML is the selected authoring format. The existing API registry TOML contract remains unchanged; corpus-format migration is governed separately by #574.</li>
 <li><strong>Run every construct on every version for every change.</strong> Rejected because it defeats change-scoped execution and increases cost without adding relevant coverage.</li>
 </ol>
 <h2 id="consequences">Consequences</h2>
