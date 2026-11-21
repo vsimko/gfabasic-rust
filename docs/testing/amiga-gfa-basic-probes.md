@@ -7,11 +7,11 @@ title: "Writing Amiga GFA BASIC reference-interpreter probes"
 
 ## Purpose
 
-Use this guide when writing or changing .LST regression programs for the original Amiga GFA BASIC interpreter. A probe must distinguish a language/runtime failure from a test-harness or program-setup failure.
+Use this guide when writing or changing .LST regression programs for the original Amiga GFA BASIC interpreter. A probe must distinguish a language/runtime failure from a test-harness or program-setup failure. New construct-scoped probes follow [ADR 0018](../architecture/adr/0018-construct-scoped-amiga-gfa-basic-probes.md).
 
 ## Interpreter version strategy
 
-The project uses three reference versions. See [ADR 0017](../architecture/adr/0017-multi-version-amiga-gfa-basic-conformance.md) and [issue #557](https://github.com/vsimko/gfabasic-rust/issues/557).
+The project uses three reference versions. See [ADR 0017](../architecture/adr/0017-multi-version-amiga-gfa-basic-conformance.md) and [ADR 0018](../architecture/adr/0018-construct-scoped-amiga-gfa-basic-probes.md).
 
 | Version | Role |
 |---|---|
@@ -31,6 +31,26 @@ Use these outcomes per probe/version:
 - `UNTESTED`: no adequate run/evidence is available. Missing assets are not failures or passes.
 
 A maintainer-reported example motivating this policy is `M O a()`: reported as `MAT SET a()` in 3.5 and `MAT ONE a()` in 3.52. Treat it as reported evidence until exact-version screenshots/native runs are preserved.
+
+## Construct-scoped probe catalogue
+
+New native probes are organized by language construct:
+
+```text
+tests/language-constructs/
+  <construct-id>/
+    manifest.yaml
+    probe.LST
+    README.md       # optional
+```
+
+- Use one directory per independently testable construct and a stable lowercase kebab-case directory name.
+- `manifest.yaml` is YAML. It records construct identity, classification, source evidence, applicable exact interpreter versions, per-version expectations, and probe paths. The schema and required fields are tracked by [#570](https://github.com/vsimko/gfabasic-rust/issues/570).
+- Keep documentary evidence, expected behavior, observed run results, and Rust implementation/conformance status separate.
+- A construct can declare different applicability or probe variants by version. Reuse one probe only when its syntax and intent are equivalent.
+- CI selects only changed construct directories and their declared versions. Each construct/version pair runs as an independent parallel job; unrelated constructs are not run. Selection tooling is tracked by [#571](https://github.com/vsimko/gfabasic-rust/issues/571), and native matrix integration by [#572](https://github.com/vsimko/gfabasic-rust/issues/572).
+- Keep native output and screenshots in workflow artifacts. Do not commit generated run output as canonical evidence.
+- Existing `tests/interpreter-probes/` suites remain supported as baseline/diagnostic paths during migration. This catalogue does not replace `tests/corpus/`, its YAML sidecars, or `tests/corpus/manifest.yaml`; the broader corpus-format migration is tracked separately in [#574](https://github.com/vsimko/gfabasic-rust/issues/574).
 
 ## Verify native editor Merge
 
