@@ -118,10 +118,11 @@ jobs:
           GFA_ASSETS_TOKEN: ${{ secrets.GFA_ASSETS_TOKEN }}
         run: |
           set -euo pipefail
-          mkdir -p artifacts/amiga-3.5-discovery/boot-volume/S
-          cp "$RUNNER_TEMP/gfabasic-3.5" artifacts/amiga-3.5-discovery/boot-volume/gfabasic
-          printf 'gfabasic\n' > artifacts/amiga-3.5-discovery/boot-volume/S/Startup-Sequence
-          xdftool "$RUNNER_TEMP/gfa-basic-3.5-boot.adf" create + format GFA35 ofs + write artifacts/amiga-3.5-discovery/boot-volume/gfabasic + write artifacts/amiga-3.5-discovery/boot-volume/S
+          # Keep the licensed interpreter and boot disk exclusively in runner-temp storage.
+          mkdir -p "$RUNNER_TEMP/boot-volume/S"
+          cp "$RUNNER_TEMP/gfabasic-3.5" "$RUNNER_TEMP/boot-volume/gfabasic"
+          printf 'gfabasic\n' > "$RUNNER_TEMP/boot-volume/S/Startup-Sequence"
+          xdftool "$RUNNER_TEMP/gfa-basic-3.5-boot.adf" create + format GFA35 ofs + write "$RUNNER_TEMP/boot-volume/gfabasic" + write "$RUNNER_TEMP/boot-volume/S"
           xdftool "$RUNNER_TEMP/gfa-basic-3.5-boot.adf" boot install boot1x
           xdftool "$RUNNER_TEMP/gfa-basic-3.5-boot.adf" info > artifacts/amiga-3.5-discovery/boot-adf-info.txt
 
@@ -227,8 +228,57 @@ jobs:
       - name: Merge and run the 3.5 BASIC probe
         run: bash scripts/amiga-cli-probe-35.sh
 
-      - name: Upload non-binary discovery evidence
+      - name: Assert discovery artifact contains evidence only
+        id: evidence-boundary
         if: always()
+        run: |
+          python3 - <<'PY'
+          import pathlib
+          import stat
+
+          root = pathlib.Path("artifacts/amiga-3.5-discovery")
+          if not root.is_dir():
+              raise SystemExit(f"Missing artifact staging directory: {root}")
+
+          forbidden_suffixes = {".adf", ".dms", ".hdf", ".img", ".rom", ".lha", ".exe", ".hunk"}
+          png_signature = b"\\x89PNG\\r\\n\\x1a\\n"
+          violations = []
+          for path in sorted(root.rglob("*")):
+              if path.is_symlink():
+                  violations.append(f"symlink: {path.relative_to(root)}")
+                  continue
+              if not path.is_file():
+                  continue
+              relative = path.relative_to(root)
+              data = path.read_bytes()
+              if path.suffix.lower() in forbidden_suffixes or path.name.lower() == "gfabasic":
+                  violations.append(f"forbidden asset name: {relative}")
+                  continue
+              if path.stat().st_mode & (stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH):
+                  violations.append(f"executable file: {relative}")
+                  continue
+              if path.suffix.lower() == ".png":
+                  if not data.startswith(png_signature):
+                      violations.append(f"invalid PNG evidence: {relative}")
+                  continue
+              if b"\\x00" in data:
+                  violations.append(f"binary content: {relative}")
+                  continue
+              try:
+                  data.decode("utf-8")
+              except UnicodeDecodeError:
+                  violations.append(f"non-UTF-8/binary content: {relative}")
+
+          if violations:
+              print("Artifact boundary violations:")
+              for violation in violations:
+                  print(f" - {violation}")
+              raise SystemExit(1)
+          print("Artifact staging contains only UTF-8 diagnostics/metadata and valid PNG evidence.")
+          PY
+
+      - name: Upload non-binary discovery evidence
+        if: always() && steps.evidence-boundary.outcome == 'success'
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         with:
           name: amiga-gfa-basic-3.5-asset-discovery
