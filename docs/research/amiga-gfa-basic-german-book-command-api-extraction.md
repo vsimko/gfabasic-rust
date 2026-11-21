@@ -200,11 +200,24 @@ RETURN
 - Procedure names may contain letters, digits, underscore and period; unlike variable names, the first character may be a digit.
 - A procedure may declare a list of local receiving variables. The book says these receive values passed through GOSUB; parameter types must match the corresponding argument types.
 - Procedures may call other procedures and may recursively call themselves.
-- ENDPROC and ENDSUB are documented as alternatives to RETURN; the interpreter normalizes them to RETURN.
+- The book presents separate procedure forms on printed pp. 183–184: `PROCEDURE Name […] … RETURN`, alternatively `SUB Name […] … ENDSUB`, and `PROCEDURE Name […] … ENDPROC`. Preserve these as the forms and terminators shown by the source; do not summarize `SUB` as an alias for `PROCEDURE`.
 - The book documents a VAR marker in PROCEDURE/FUNCTION parameter lists for direct variable passing, as an alternative to indirect pointer variables. The OCR examples show the shape PROCEDURE Name([ordinary parameters] VAR variable[, ...]) and similarly for FUNCTION; exact punctuation and mixed-parameter grammar need page-image verification.
 - The chapter cross-references LOCAL, VAR, GOSUB and FUNCTION. Do not infer their complete grammar from the cross-reference alone.
 
-### 7.4 Computed procedure dispatch and Break handling
+### 7.4 Multi-line functions
+
+The book documents the multi-line user-defined function form on printed p. 176:
+
+```basic
+FUNCTION Name [(Var1, Var2%, ...)]
+  ... statements ...
+  RETURN Back
+ENDFUNC
+```
+
+`FUNCTION` begins a multi-line function definition; its optional local parameter list is distinct from the one-line `DEFFN`/`FN` form. `RETURN Back` supplies the function result and returns to the caller. `ENDFUNC` closes the function structure; it is not the function-result return operation. This is V3.03-era documentary evidence from the book, not a 3.5-specific witness or a runtime test.
+
+### 7.5 Computed procedure dispatch and Break handling
 
 The book also describes computed procedure dispatch:
 
@@ -222,7 +235,7 @@ Break handling is documented with these forms:
 
 The exact semantics and state transitions should be checked against the interpreter manual before implementation.
 
-### 7.5 Evidence boundary
+### 7.6 Evidence boundary
 
 This chapter provides strong evidence for the existence and broad syntax of the constructs above in the book's Amiga interpreter reference. It does not establish every whitespace, abbreviation, nesting, error-recovery or expression-precedence rule. Those details should be taken from the primary 3.5 interpreter manual or verified with the interpreter, not guessed from OCR.
 
