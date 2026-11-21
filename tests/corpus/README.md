@@ -7,7 +7,7 @@ This directory contains small, independently authored GFA BASIC programs and met
 All fixtures must be independently authored. Do not copy historical program listings or require historical manuals, ROMs, disk images, or other third-party artifacts to be present in the repository or a release. Cite external evidence by bibliographic source and page/section; do not embed the source material itself.
 
 <!-- fixture-summary:start -->
-Manifest summary: 3 GFA BASIC Amiga 3.0 fixtures candidate; 13 GFA BASIC Amiga 3.5 fixtures verified; 16 total.
+Manifest summary: 3 GFA BASIC Amiga 3.0 fixtures candidate; 14 GFA BASIC Amiga 3.5 fixtures verified; 17 total.
 <!-- fixture-summary:end -->
 
 The repository contains an experimental, evidence-gated Amiga GFA BASIC 3.5 parser/formatter for the documented `FACT`, `VARIAT`, `COMBIN`, and `PRINT` subset plus selected matrix statements, including verified `MAT ADD`, `MAT SUB`, and scalar-result `MAT MUL` forms. The executable compiler remains limited to the combinatorics subset and uses a temporary C/`cc` native bootstrap; there is no general compiler or corpus test runner. Independently authored Amiga 3.5 fixtures marked `verified` on page-image evidence cover: `MAT ONE`, `MAT CLR`, `MAT SET`, `MAT BASE`/`MAT TRANS`, `MAT NORM`, `MAT ADD`, `MAT SUB`, two scalar-result `MAT MUL` forms, `MAT READ`, `MAT CPY`, and two combinatorics fixtures (`FACT(0)` and `FACT`/`VARIAT`/`COMBIN`). The `MAT CPY` fixture covers copying a bounded submatrix between explicit row/column offsets on printed pp. 13-5–13-6. The `MAT ADD` and `MAT SUB` fixtures cover destination-expression forms documented on printed pp. 13-16–13-19; the two `MAT MUL` fixtures cover the equal-length vector scalar product (p. 13-22) and vector-matrix-vector product (p. 13-23); the `MAT READ` fixture covers reading a previously dimensioned matrix from `DATA` rows on printed p. 13-4. This verifies documented syntax and expected behavior against cited page images; it is not original-interpreter execution or proof of full dialect conformance. The Amiga 3.0 fixtures remain `candidate` and must not be promoted without applicable evidence. The metadata validator does not compile or execute fixtures.
@@ -38,6 +38,7 @@ The verified fixture IDs below are source-evidence links, not executable conform
 | `amiga-3.5-mat-sub` | `gfa.language.matrix.mat-sub` | Destination-expression form; `MAT SET` initializes operands. |
 | `amiga-3.5-mat-mul-dot` | `gfa.language.matrix.mat-mul` | Vector scalar/dot product form. |
 | `amiga-3.5-mat-read-data` | `gfa.language.matrix.mat-read` | Reads DATA rows into a previously dimensioned matrix. |
+| `amiga-3.5-data-pointer-save-restore` | `gfa.language.data.data-pointer`, `gfa.language.data.set-data-pointer` | Saves the current DATA pointer, consumes values, restores the pointer, and reads the same value again. |
 | `amiga-3.5-fact-zero` | `gfa.language.math.fact` | FACT(0), FACT(1), and FACT(2). |
 | `amiga-3.5-combinatorics-intrinsics` | `gfa.language.math.fact`, `gfa.language.math.variat`, `gfa.language.math.combin` | One fixture covers all three Chapter 14 intrinsics. |
 | `amiga-3.5-mat-mul-triple` | `gfa.language.matrix.mat-mul` | Vector–matrix–vector scalar-result form; not currently formatter-gated. |
