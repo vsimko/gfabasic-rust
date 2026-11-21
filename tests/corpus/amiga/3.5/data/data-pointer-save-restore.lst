@@ -1,0 +1,9 @@
+DATA 10,20,30
+saved%=_DATA
+READ first
+READ second
+_DATA=saved%
+READ restored
+PRINT first
+PRINT second
+PRINT restored
