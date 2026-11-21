@@ -109,6 +109,10 @@ jobs:
             --header "Accept: application/vnd.github.raw" \
             "https://api.github.com/repos/vsimko/gfabasic-private-assets/contents/$ARCHIVE_PATH_ENCODED?ref=main" \
             --output "$RUNNER_TEMP/gfa-basic-3.5.zip"
+
+      - name: Inspect candidate 3.5 editor disk archive
+        run: |
+          set -euo pipefail
           printf 'archive_size=%s\\n' "$(wc -c < "$RUNNER_TEMP/gfa-basic-3.5.zip")" > artifacts/amiga-3.5-discovery/archive-info.txt
           unzip -Z1 "$RUNNER_TEMP/gfa-basic-3.5.zip" | tee artifacts/amiga-3.5-discovery/archive-members.txt
           mapfile -t ADF_MEMBERS < <(unzip -Z1 "$RUNNER_TEMP/gfa-basic-3.5.zip" | grep -i '\.adf$' || true)
@@ -132,7 +136,8 @@ jobs:
           printf '%s\\n' "${ADF_MEMBERS[0]}" > artifacts/amiga-3.5-discovery/adf-member.txt
           echo "Candidate disk discovered; running editor identity will be verified from the held-right-button menu screenshot. Native language conformance remains UNTESTED." >> "$GITHUB_STEP_SUMMARY"
 
-      - name: Download original Amiga Kickstart ROM
+
+      - name: Download private asset index
         env:
           GFA_ASSETS_TOKEN: ${{ secrets.GFA_ASSETS_TOKEN }}
         run: |
@@ -144,8 +149,21 @@ jobs:
             --header "Accept: application/vnd.github+json" \
             "https://api.github.com/repos/vsimko/gfabasic-private-assets/contents?ref=main" \
             --output "$RUNNER_TEMP/private-assets-index.json"
+      - name: Select Kickstart ROM asset
+        id: select-rom
+        run: |
+          set -euo pipefail
           ROM_NAME="$(jq -r '[.[] | select(.type == "file" and .size == 524288 and (.name|test("(?i)kickstart.*v?1[.]3.*34[.]5"))) ] | .[0].name // empty' "$RUNNER_TEMP/private-assets-index.json")"
           test -n "$ROM_NAME" || { echo "No 512 KiB Kickstart 1.3 rev 34.5 ROM found"; exit 1; }
+          echo "name=$ROM_NAME" >> "$GITHUB_OUTPUT"
+
+      - name: Download original Amiga Kickstart ROM
+        env:
+          GFA_ASSETS_TOKEN: ${{ secrets.GFA_ASSETS_TOKEN }}
+          ROM_NAME: ${{ steps.select-rom.outputs.name }}
+        run: |
+          set -euo pipefail
+          test -n "$GFA_ASSETS_TOKEN"
           ROM_PATH_ENCODED="$(jq -rn --arg path "$ROM_NAME" '$path | @uri')"
           curl --fail --silent --show-error --location \
             --header "Authorization: Bearer $GFA_ASSETS_TOKEN" \
@@ -154,6 +172,12 @@ jobs:
             --output "$RUNNER_TEMP/kick.rom"
           test "$(wc -c < "$RUNNER_TEMP/kick.rom")" -eq 524288
           sha256sum "$RUNNER_TEMP/kick.rom" > artifacts/amiga-3.5-discovery/kickstart-sha256.txt
+      - name: Verify downloaded Kickstart ROM
+        run: |
+          set -euo pipefail
+          test "$(wc -c < "$RUNNER_TEMP/kick.rom")" -eq 524288
+          sha256sum "$RUNNER_TEMP/kick.rom" > artifacts/amiga-3.5-discovery/kickstart-sha256.txt
+
       - name: Capture the running editor version from its right-button menu
         run: |
           set -euo pipefail
