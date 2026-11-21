@@ -1445,7 +1445,7 @@ RETURN
 <li>Parameter count, type and order at the call site must match the receiving-variable list.</li>
 <li>Receiving variables may be of mixed types. The book describes the parameter list as limited by the maximum BASIC line length (256 characters).</li>
 <li>Procedures may call other procedures and may call themselves recursively.</li>
-<li><code>SUB</code> is an alternative spelling for <code>PROCEDURE</code>; <code>ENDPROC</code> and <code>ENDSUB</code> are alternative terminators that the interpreter converts to <code>RETURN</code>.</li>
+<li>The book presents three procedure forms on printed pp. 183–184: <code>PROCEDURE Name […] … RETURN</code>, alternatively <code>SUB Name […] … ENDSUB</code>, and separately <code>PROCEDURE Name […] … ENDPROC</code>. Keep each keyword form paired with its source-presented terminator; do not describe these forms as interchangeable aliases.</li>
 <li>Procedure names may contain letters, digits, underscore and period; the first character may be a digit.</li>
 <li>The computed form <code>ON Wert GOSUB Proc1[,Proc2,...]</code> selects a procedure by one-based index. A value of zero or a value greater than the number of targets continues with the next statement. The book says targets in ON…GOSUB forms must not expect parameter lists.</li>
 </ul>
