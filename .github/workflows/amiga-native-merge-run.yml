@@ -169,6 +169,15 @@ jobs:
             done
             test -n "$ipc_socket_path" || { cat "$AMIBERRY_LOG"; exit 1; }
             sleep 35
+            # Identify the running editor from its own held-right-button menu.
+            # Amiberry IPC button bits: bit0=left, bit1=right, bit2=middle.
+            printf "SEND_MOUSE\\t0\\t0\\t2\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+            sleep 0.5
+            printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/running-editor-version-menu.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+            printf "SEND_MOUSE\\t0\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+            sleep 0.2
+            tesseract "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/running-editor-version-menu.png" stdout 2>/dev/null > "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/running-editor-version-menu-ocr.txt"
+
             # Insert and verify the test ADF through Amiberry IPC.
             printf "INSERTFLOPPY\\t%s\\t0\\n" "$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/factzero.adf" | timeout 5s nc -U -N "${ipc_socket_path:-}" >"$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/insert-floppy-ipc.txt"
             printf "LIST_FLOPPIES\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}" >"$GITHUB_WORKSPACE/artifacts/amiga-cli-probe/list-floppies-ipc.txt"
