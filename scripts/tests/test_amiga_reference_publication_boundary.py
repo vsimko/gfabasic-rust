@@ -31,6 +31,19 @@ class AmigaReferencePublicationBoundaryTests(unittest.TestCase):
         self.assertEqual("inputs.publish_private_analysis", private_publish["if"])
         self.assertTrue(any(step.get("name") == "Upload reviewed public analysis files only" for step in steps))
 
+    def test_public_analysis_artifact_requires_public_opt_in(self):
+        job = self.workflow["jobs"]["prepare-and-analyze"]
+        steps = job["steps"]
+        stage = next(step for step in steps if step.get("name") == "Stage explicitly approved public analysis files")
+        upload = next(step for step in steps if step.get("name") == "Upload reviewed public analysis files only")
+        self.assertEqual("inputs.publish_public_analysis", stage["if"])
+        self.assertEqual("inputs.publish_public_analysis", upload["if"])
+
+    def test_analysis_checkout_does_not_persist_repository_credentials(self):
+        job = self.workflow["jobs"]["prepare-and-analyze"]
+        checkout = next(step for step in job["steps"] if step.get("name") == "Check out analysis scripts")
+        self.assertEqual("false", checkout["with"]["persist-credentials"])
+
     def test_public_write_permissions_are_confined_to_opt_in_job(self):
         job = self.workflow["jobs"]["publish-public-analysis"]
         self.assertEqual("github.ref == 'refs/heads/main' && inputs.publish_public_analysis", job["if"])
