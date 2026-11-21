@@ -241,7 +241,7 @@ jobs:
               raise SystemExit(f"Missing artifact staging directory: {root}")
 
           forbidden_suffixes = {".adf", ".dms", ".hdf", ".img", ".rom", ".lha", ".exe", ".hunk"}
-          png_signature = b"\\x89PNG\\r\\n\\x1a\\n"
+          png_signature = bytes.fromhex("89504e470d0a1a0a")
           violations = []
           for path in sorted(root.rglob("*")):
               if path.is_symlink():
@@ -261,7 +261,7 @@ jobs:
                   if not data.startswith(png_signature):
                       violations.append(f"invalid PNG evidence: {relative}")
                   continue
-              if b"\\x00" in data:
+              if bytes([0]) in data:
                   violations.append(f"binary content: {relative}")
                   continue
               try:
