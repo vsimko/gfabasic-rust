@@ -22,7 +22,7 @@
   "reason": "GFATEST result file is missing; running-editor version-menu OCR did not identify the requested version; native harness step concluded failure",
   "result_schema_version": 1,
   "run_attempt": "1",
-  "run_url": "https://github.com/vsimko/gfabasic-rust/actions/runs/44956249303",
+  "run_url": "https://github.com/vsimko/gfabasic-rust/actions/runs/44958242034",
   "selection": "targeted",
   "version": "3.041U"
 }
