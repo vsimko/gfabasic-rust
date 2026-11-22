@@ -70,7 +70,7 @@ MAX_TOTAL_BYTES = 40 * 1024 * 1024
 
 def valid_png(data: bytes) -> bool:
     """Check PNG framing, chunk CRCs, required chunks, and IDAT zlib stream."""
-    signature = b"\\x89PNG\\r\\n\\x1a\\n"
+    signature = b"\x89PNG\r\n\x1a\n"
     if not data.startswith(signature):
         return False
     offset = len(signature)
