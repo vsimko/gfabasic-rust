@@ -603,6 +603,7 @@ struct Parser {
     diagnostics: Vec<Diagnostic>,
     source_id: SourceId,
     source_len: usize,
+    extended_depth: usize,
 }
 
 impl Parser {
@@ -796,6 +797,17 @@ impl Parser {
         self.expect(TokenKind::Equals, "'='")?;
         let value = self.parse_expression()?;
         let span = SourceSpan::new(self.source_id, start.start, value.span().end);
+        if let Expression::Call { name: function, arguments, span: call_span } = &value {
+            let expected = match function.as_str() { "FACT" => Some(1), "VARIAT" | "COMBIN" => Some(2), _ => None };
+            if let Some(expected) = expected {
+                if arguments.len() != expected {
+                    return Err(self.syntax_error(format!("{function} expects {expected} argument(s)"), *call_span));
+                }
+                if !arguments.iter().all(|argument| matches!(argument, Expression::Integer(_, _) | Expression::Negate(_, _))) {
+                    return Err(self.syntax_error(format!("{function} arguments must be integer literals in this compiler subset"), *call_span));
+                }
+            }
+        }
         match &value {
             Expression::Integer(number, _) => Ok(Statement::AssignInteger { name, value: *number, span }),
             Expression::Negate(inner, _) if matches!(inner.as_ref(), Expression::Integer(_, _)) => {
@@ -839,6 +851,13 @@ impl Parser {
         else { Err(self.syntax_error("expected end of line", self.current().span)) }
     }
 
+    fn parse_extended_block_until(&mut self, terminators: &[&str]) -> Result<Vec<Statement>, Box<Diagnostic>> {
+        self.extended_depth += 1;
+        let result = self.parse_block_until(terminators);
+        self.extended_depth -= 1;
+        result
+    }
+
     fn parse_block_until(&mut self, terminators: &[&str]) -> Result<Vec<Statement>, Box<Diagnostic>> {
         let mut body = Vec::new();
         self.skip_newlines();
@@ -877,7 +896,7 @@ impl Parser {
             return Err(self.syntax_error("DOWNTO cannot be combined with STEP", direction_token.span));
         }
         self.finish_line()?;
-        let body = self.parse_block_until(&["NEXT", "ENDFOR"])?;
+        let body = self.parse_extended_block_until(&["NEXT", "ENDFOR"])?;
         let terminator = self.advance();
         let end_span = if matches!(&terminator.kind, TokenKind::Identifier(word) if word.eq_ignore_ascii_case("NEXT")) {
             if let TokenKind::Identifier(next_name) = &self.current().kind {
@@ -894,7 +913,7 @@ impl Parser {
         let (name, _) = self.parse_identifier_name("procedure name")?;
         let parameters = self.parse_parameters()?;
         self.finish_line()?;
-        let body = self.parse_block_until(&["RETURN", "ENDPROC", "ENDSUB"])?;
+        let body = self.parse_extended_block_until(&["RETURN", "ENDPROC", "ENDSUB"])?;
         let terminator = self.advance();
         if matches!(&terminator.kind, TokenKind::Identifier(word) if word.eq_ignore_ascii_case("RETURN")) {
             self.finish_line()?;
@@ -909,7 +928,7 @@ impl Parser {
         let (name, _) = self.parse_identifier_name("function name")?;
         let parameters = self.parse_parameters()?;
         self.finish_line()?;
-        let body = self.parse_block_until(&["RETURN"])?;
+        let body = self.parse_extended_block_until(&["RETURN"])?;
         let return_token = self.advance();
         let result = self.parse_expression()?;
         self.finish_line()?;
@@ -942,12 +961,16 @@ impl Parser {
             values.push(self.parse_expression()?);
         }
         let end = values.last().expect("at least one print expression").span().end;
-        if values.iter().all(|value| matches!(value, Expression::Variable(name, _) if matches!(name.as_str(), "x" | "y" | "z"))) {
-            let names = values.into_iter().map(|value| match value { Expression::Variable(name, _) => name, _ => unreachable!() }).collect();
-            Ok(Statement::PrintVariables { names, span: SourceSpan::new(self.source_id, start.start, end) })
-        } else {
-            Ok(Statement::PrintExpressions { values, span: SourceSpan::new(self.source_id, start.start, end) })
+        if values.iter().all(|value| matches!(value, Expression::Variable(_, _))) {
+            let names: Vec<String> = values.iter().map(|value| match value { Expression::Variable(name, _) => name.clone(), _ => unreachable!() }).collect();
+            if names.iter().all(|name| matches!(name.as_str(), "x" | "y" | "z")) {
+                return Ok(Statement::PrintVariables { names, span: SourceSpan::new(self.source_id, start.start, end) });
+            }
+            if self.extended_depth == 0 {
+                return Err(self.unsupported_error("variables outside x, y, and z are not supported by the top-level MVP subset", values[0].span()));
+            }
         }
+        Ok(Statement::PrintExpressions { values, span: SourceSpan::new(self.source_id, start.start, end) })
     }
 
     fn parse_matrix_name(&mut self) -> Result<(String, SourceSpan), Box<Diagnostic>> {
@@ -1400,7 +1423,7 @@ impl Parser {
         match first.kind {
             TokenKind::Identifier(name) if name.eq_ignore_ascii_case("PRINT") => self.parse_print(first.span),
             TokenKind::Identifier(name) if name.eq_ignore_ascii_case("LET") => {
-                let (variable, _) = self.parse_identifier_name("assignment variable")?;
+                let (variable, _) = if self.extended_depth == 0 { self.parse_variable()? } else { self.parse_identifier_name("assignment variable")? };
                 self.parse_assignment(variable, first.span)
             }
             TokenKind::Identifier(name) if name.eq_ignore_ascii_case("FOR") => self.parse_for(first.span),
@@ -1411,7 +1434,7 @@ impl Parser {
             TokenKind::Identifier(name) if name.eq_ignore_ascii_case("MAT") => self.parse_mat_statement(first.span),
             TokenKind::Identifier(name) if name.eq_ignore_ascii_case("RETURN") => Err(self.unsupported_error("RETURN is only valid as a PROCEDURE or FUNCTION terminator", first.span)),
             TokenKind::Identifier(name) => {
-                if matches!(self.current().kind, TokenKind::Equals) {
+                if matches!(self.current().kind, TokenKind::Equals) && (self.extended_depth > 0 || matches!(name.as_str(), "x" | "y" | "z")) {
                     self.parse_assignment(name, first.span)
                 } else {
                     Err(self.unsupported_error(format!("statement {name:?} is not supported by the current frontend"), first.span))
@@ -1486,6 +1509,7 @@ pub fn parse_document(
         diagnostics: Vec::new(),
         source_id,
         source_len: source.len(),
+        extended_depth: 0,
     }
     .parse_program()?;
 
