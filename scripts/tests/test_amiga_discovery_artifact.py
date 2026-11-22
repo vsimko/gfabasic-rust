@@ -124,7 +124,7 @@ class ArtifactBoundaryTests(unittest.TestCase):
         native_run = self.root / "native-run"
         native_run.mkdir()
         payload = base64.urlsafe_b64encode(b"\\xff" * 513).decode("ascii").rstrip("=")
-        tabbed = "\\t".join(payload[index:index + 64] for index in range(0, len(payload), 64))
+        tabbed = "\t".join(payload[index:index + 64] for index in range(0, len(payload), 64))
         (native_run / "result.txt").write_text(tabbed, encoding="utf-8")
         self.assertTrue(any("encoded payload in text evidence: native-run/result.txt" in item
                             for item in validate_artifact(self.root)))
