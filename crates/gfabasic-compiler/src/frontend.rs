@@ -955,7 +955,10 @@ impl Parser {
                 name: function,
                 arguments,
                 ..
-            } if (function.eq_ignore_ascii_case("VARIAT") || function.eq_ignore_ascii_case("COMBIN")) && arguments.len() == 2 => {
+            } if (function.eq_ignore_ascii_case("VARIAT")
+                || function.eq_ignore_ascii_case("COMBIN"))
+                && arguments.len() == 2 =>
+            {
                 if let (Expression::Integer(n, _), Expression::Integer(k, _)) =
                     (&arguments[0], &arguments[1])
                 {
