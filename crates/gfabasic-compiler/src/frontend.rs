@@ -1256,7 +1256,7 @@ impl Parser {
                     span: SourceSpan::new(self.source_id, start.start, end),
                 });
             }
-            if self.extended_depth == 0 {
+            if self.extended_depth == 0 && !self.extended_program {
                 return Err(self.unsupported_error("variables outside the top-level MVP subset (supported: x, y, z) are not supported", values[0].span()));
             }
         }
