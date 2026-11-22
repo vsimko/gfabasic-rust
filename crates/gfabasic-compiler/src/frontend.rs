@@ -1355,7 +1355,9 @@ impl Parser {
             }
             TokenKind::Identifier(name) if name.eq_ignore_ascii_case("DIM") => self.parse_dim_matrix(first.span),
             TokenKind::Identifier(name) if name.eq_ignore_ascii_case("MAT") => self.parse_mat_statement(first.span),
-            TokenKind::Identifier(name) if matches!(name.as_str(), "x" | "y" | "z") => {
+            TokenKind::Identifier(name)
+                if matches!(self.current().kind, TokenKind::Equals) =>
+            {
                 self.parse_assignment(name, first.span)
             }
             TokenKind::Identifier(name) => Err(self.unsupported_error(
