@@ -138,6 +138,24 @@ class ArtifactBoundaryTests(unittest.TestCase):
         self.assertTrue(any("encoded payload in text evidence: native-run/result.txt" in item
                             for item in validate_artifact(self.root)))
 
+    def test_rejects_base64url_payload_split_into_77_character_groups(self) -> None:
+        native_run = self.root / "native-run"
+        native_run.mkdir()
+        payload = base64.urlsafe_b64encode(b"\\xff" * 513).decode("ascii").rstrip("=")
+        spaced = " ".join(payload[index:index + 77] for index in range(0, len(payload), 77))
+        (native_run / "result.txt").write_text(spaced, encoding="utf-8")
+        self.assertTrue(any("encoded payload in text evidence: native-run/result.txt" in item
+                            for item in validate_artifact(self.root)))
+
+    def test_rejects_hex_payload_split_into_65_character_groups(self) -> None:
+        native_run = self.root / "native-run"
+        native_run.mkdir()
+        payload = bytes(range(256)).hex()
+        spaced = " ".join(payload[index:index + 65] for index in range(0, len(payload), 65))
+        (native_run / "result.txt").write_text(spaced, encoding="utf-8")
+        self.assertTrue(any("encoded payload in text evidence: native-run/result.txt" in item
+                            for item in validate_artifact(self.root)))
+
     def test_rejects_truncated_png_raster(self) -> None:
         header = struct.pack(">IIBBBBB", 2, 2, 8, 2, 0, 0, 0)
         truncated = (b"\x89PNG\r\n\x1a\n" + png_chunk(b"IHDR", header)
