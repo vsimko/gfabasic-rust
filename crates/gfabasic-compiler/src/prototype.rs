@@ -139,14 +139,16 @@ fn lower_program(
 }
 
 fn contains_structured(statements: &[Statement]) -> bool {
-    statements.iter().any(|statement| match statement {
-        Statement::AssignExpression { .. }
-        | Statement::PrintExpressions { .. }
-        | Statement::For { .. }
-        | Statement::Procedure { .. }
-        | Statement::Function { .. }
-        | Statement::Gosub { .. } => true,
-        _ => false,
+    statements.iter().any(|statement| {
+        matches!(
+            statement,
+            Statement::AssignExpression { .. }
+                | Statement::PrintExpressions { .. }
+                | Statement::For { .. }
+                | Statement::Procedure { .. }
+                | Statement::Function { .. }
+                | Statement::Gosub { .. }
+        )
     })
 }
 

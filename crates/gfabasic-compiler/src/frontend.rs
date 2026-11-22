@@ -1035,26 +1035,24 @@ impl Parser {
                     self.current().span,
                 ));
             }
-            if let TokenKind::Identifier(name) = &self.current().kind {
-                if terminators
+            if let TokenKind::Identifier(name) = &self.current().kind
+                && terminators
                     .iter()
                     .any(|word| name.eq_ignore_ascii_case(word))
-                {
-                    return Ok(body);
-                }
+            {
+                return Ok(body);
             }
             let statement = self.parse_statement()?;
             body.push(statement);
             if matches!(self.current().kind, TokenKind::Newline) {
                 self.skip_newlines();
             } else if !self.at_end() {
-                if let TokenKind::Identifier(name) = &self.current().kind {
-                    if terminators
+                if let TokenKind::Identifier(name) = &self.current().kind
+                    && terminators
                         .iter()
                         .any(|word| name.eq_ignore_ascii_case(word))
-                    {
-                        continue;
-                    }
+                {
+                    continue;
                 }
                 return Err(
                     self.syntax_error("expected end of line inside block", self.current().span)

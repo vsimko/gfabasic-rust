@@ -259,21 +259,19 @@ pub fn validate_structured_program(program: &Program) -> Result<(), Vec<Semantic
                 span,
             );
         }
-        if declarations.contains_key(&key) {
-            error(
+        match declarations.entry(key) {
+            std::collections::btree_map::Entry::Vacant(entry) => {
+                entry.insert(Callable {
+                    function,
+                    arity: parameters.len(),
+                });
+            }
+            std::collections::btree_map::Entry::Occupied(_) => error(
                 errors,
                 "GFA-SEM-0013",
                 format!("duplicate procedure/function declaration '{name}'"),
                 span,
-            );
-        } else {
-            declarations.insert(
-                key,
-                Callable {
-                    function,
-                    arity: parameters.len(),
-                },
-            );
+            ),
         }
         let mut seen = std::collections::BTreeSet::new();
         for parameter in parameters {
@@ -315,15 +313,16 @@ pub fn validate_structured_program(program: &Program) -> Result<(), Vec<Semantic
                     scan_expr(argument, declarations, errors, current_function);
                 }
                 let key = name.to_ascii_uppercase();
-                if let Some((current, single_line)) = current_function {
-                    if single_line && current.eq_ignore_ascii_case(name) {
-                        error(
-                            errors,
-                            "GFA-SEM-0018",
-                            format!("DEFFN function '{name}' cannot call itself recursively"),
-                            *span,
-                        );
-                    }
+                if let Some((current, single_line)) = current_function
+                    && single_line
+                    && current.eq_ignore_ascii_case(name)
+                {
+                    error(
+                        errors,
+                        "GFA-SEM-0018",
+                        format!("DEFFN function '{name}' cannot call itself recursively"),
+                        *span,
+                    );
                 }
                 let builtin_arity = match key.as_str() {
                     "FACT" => Some(1),
