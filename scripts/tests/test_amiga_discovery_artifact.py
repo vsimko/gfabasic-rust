@@ -114,7 +114,7 @@ class ArtifactBoundaryTests(unittest.TestCase):
     def test_rejects_base64url_payload_split_by_spaces_in_approved_text_path(self) -> None:
         native_run = self.root / "native-run"
         native_run.mkdir()
-        payload = base64.urlsafe_b64encode(b"\\xff" * 513).decode("ascii").rstrip("=")
+        payload = base64.urlsafe_b64encode(b"\xff" * 513).decode("ascii").rstrip("=")
         spaced = " ".join(payload[index:index + 64] for index in range(0, len(payload), 64))
         (native_run / "result.txt").write_text(spaced, encoding="utf-8")
         self.assertTrue(any("encoded payload in text evidence: native-run/result.txt" in item
@@ -123,7 +123,7 @@ class ArtifactBoundaryTests(unittest.TestCase):
     def test_rejects_base64url_payload_split_by_tabs_in_approved_text_path(self) -> None:
         native_run = self.root / "native-run"
         native_run.mkdir()
-        payload = base64.urlsafe_b64encode(b"\\xff" * 513).decode("ascii").rstrip("=")
+        payload = base64.urlsafe_b64encode(b"\xff" * 513).decode("ascii").rstrip("=")
         tabbed = "\t".join(payload[index:index + 64] for index in range(0, len(payload), 64))
         (native_run / "result.txt").write_text(tabbed, encoding="utf-8")
         self.assertTrue(any("encoded payload in text evidence: native-run/result.txt" in item
@@ -141,7 +141,7 @@ class ArtifactBoundaryTests(unittest.TestCase):
     def test_rejects_base64url_payload_split_into_77_character_groups(self) -> None:
         native_run = self.root / "native-run"
         native_run.mkdir()
-        payload = base64.urlsafe_b64encode(b"\\xff" * 513).decode("ascii").rstrip("=")
+        payload = base64.urlsafe_b64encode(b"\xff" * 513).decode("ascii").rstrip("=")
         spaced = " ".join(payload[index:index + 77] for index in range(0, len(payload), 77))
         (native_run / "result.txt").write_text(spaced, encoding="utf-8")
         self.assertTrue(any("encoded payload in text evidence: native-run/result.txt" in item
