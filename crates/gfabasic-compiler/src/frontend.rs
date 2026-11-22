@@ -166,6 +166,7 @@ pub enum Statement {
         parameters: Vec<String>,
         body: Vec<Statement>,
         result: Expression,
+        single_line: bool,
         span: SourceSpan,
     },
     Gosub { name: String, arguments: Vec<Expression>, span: SourceSpan },
@@ -966,7 +967,16 @@ impl Parser {
         if !matches!(self.current().kind, TokenKind::Newline | TokenKind::End) {
             return Err(self.syntax_error("expected end of line after ENDFUNC", self.current().span));
         }
-        Ok(Statement::Function { name, parameters, body, result, span })
+        Ok(Statement::Function { name, parameters, body, result, single_line: false, span })
+    }
+
+    fn parse_deffn(&mut self, start: SourceSpan) -> Result<Statement, Box<Diagnostic>> {
+        let (name, _) = self.parse_identifier_name("DEFFN function name")?;
+        let parameters = self.parse_parameters()?;
+        self.expect(TokenKind::Equals, "'=' after DEFFN name and parameter list")?;
+        let result = self.parse_expression()?;
+        let span = SourceSpan::new(self.source_id, start.start, result.span().end);
+        Ok(Statement::Function { name, parameters, body: Vec::new(), result, single_line: true, span })
     }
 
     fn parse_gosub(&mut self, start: SourceSpan) -> Result<Statement, Box<Diagnostic>> {
@@ -1459,6 +1469,7 @@ impl Parser {
             TokenKind::Identifier(name) if name.eq_ignore_ascii_case("FOR") => self.parse_for(first.span),
             TokenKind::Identifier(name) if name.eq_ignore_ascii_case("PROCEDURE") || name.eq_ignore_ascii_case("SUB") => self.parse_procedure(first.span),
             TokenKind::Identifier(name) if name.eq_ignore_ascii_case("FUNCTION") => self.parse_function(first.span),
+            TokenKind::Identifier(name) if name.eq_ignore_ascii_case("DEFFN") => self.parse_deffn(first.span),
             TokenKind::Identifier(name) if name.eq_ignore_ascii_case("GOSUB") => self.parse_gosub(first.span),
             TokenKind::Identifier(name) if name.eq_ignore_ascii_case("DIM") => self.parse_dim_matrix(first.span),
             TokenKind::Identifier(name) if name.eq_ignore_ascii_case("MAT") => self.parse_mat_statement(first.span),
@@ -1534,7 +1545,7 @@ pub fn parse_document(
 ) -> Result<ParsedDocument, Vec<Diagnostic>> {
     let syntax = lex_lossless(source_id, source)?;
     let extended_program = syntax.tokens.iter().any(|token| matches!(&token.kind,
-        TokenKind::Identifier(name) if matches!(name.to_ascii_uppercase().as_str(), "FOR" | "PROCEDURE" | "FUNCTION" | "GOSUB" | "SUB")
+        TokenKind::Identifier(name) if matches!(name.to_ascii_uppercase().as_str(), "FOR" | "PROCEDURE" | "FUNCTION" | "DEFFN" | "GOSUB" | "SUB")
     ));
     let program = Parser {
         tokens: syntax.tokens.clone(),
