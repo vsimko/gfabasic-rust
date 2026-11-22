@@ -182,8 +182,8 @@ def contains_encoded_payload(text: str) -> bool:
     candidates.extend(
         match.group(0)
         for match in re.finditer(
-            rf"(?<![{base64_alphabet}])[{base64_alphabet}]{+}"
-            rf"(?:[ \t\r\n]+[{base64_alphabet}]{+})+={{0,2}}"
+            rf"(?<![{base64_alphabet}])[{base64_alphabet}]+"
+            rf"(?:[ \t\r\n]+[{base64_alphabet}]+)+={{0,2}}"
             rf"(?![A-Za-z0-9+/_=-])",
             text,
         )
