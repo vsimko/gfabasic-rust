@@ -108,6 +108,15 @@ class ArtifactBoundaryTests(unittest.TestCase):
         self.assertTrue(any("invalid PNG evidence" in item
                             for item in validate_artifact(self.root)))
 
+    def test_rejects_control_characters_in_approved_text_path(self) -> None:
+        native_run = self.root / "native-run"
+        native_run.mkdir()
+        (native_run / "result.txt").write_text(
+            "diagnostic\x01payload", encoding="utf-8"
+        )
+        self.assertTrue(any("control character in text evidence: native-run/result.txt" in item
+                            for item in validate_artifact(self.root)))
+
 
 if __name__ == "__main__":
     unittest.main()

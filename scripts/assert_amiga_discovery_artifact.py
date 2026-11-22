@@ -11,6 +11,7 @@ import re
 import stat
 import struct
 import sys
+import unicodedata
 import zlib
 
 
@@ -249,6 +250,9 @@ def validate_artifact(root: pathlib.Path) -> list[str]:
             violations.append(f"non-UTF-8 text evidence: {relative}")
             continue
 
+        if any(unicodedata.category(char) == "Cc" and char not in "\t\n\r" for char in text):
+            violations.append(f"control character in text evidence: {relative}")
+            continue
         if relative == "archive-info.txt" and not re.fullmatch(r"archive_size=[0-9]+(?:\\n|\r?\n)?", text):
             violations.append("invalid text format: archive-info.txt")
             continue
