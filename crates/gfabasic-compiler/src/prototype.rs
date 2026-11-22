@@ -765,18 +765,28 @@ mod tests {
     #[test]
     fn for_step_and_non_rejecting_initial_iteration_preserve_counter_values() {
         for (source, expected) in [
-            ("x=0\nFOR i=1 TO 5 STEP 2\nx=x+i\nNEXT i\nPRINT x,i\n", "9 7"),
+            (
+                "x=0\nFOR i=1 TO 5 STEP 2\nx=x+i\nNEXT i\nPRINT x,i\n",
+                "9 7",
+            ),
             ("x=0\nFOR i=3 TO 1\nx=x+1\nNEXT i\nPRINT x,i\n", "1 4"),
         ] {
             let sequence = NEXT_TEST.fetch_add(1, Ordering::Relaxed);
-            let directory = std::env::temp_dir().join(format!("gfabasic-for-step-test-{}-{sequence}", std::process::id()));
+            let directory = std::env::temp_dir().join(format!(
+                "gfabasic-for-step-test-{}-{sequence}",
+                std::process::id()
+            ));
             fs::create_dir_all(&directory).unwrap();
             let input = directory.join("for-step.LST");
             let output = directory.join("for-step");
             fs::write(&input, source).unwrap();
             compile_file(&input, &output).unwrap();
             let run = Command::new(&output).output().unwrap();
-            assert!(run.status.success(), "{}", String::from_utf8_lossy(&run.stderr));
+            assert!(
+                run.status.success(),
+                "{}",
+                String::from_utf8_lossy(&run.stderr)
+            );
             assert_eq!(String::from_utf8(run.stdout).unwrap().trim(), expected);
             fs::remove_dir_all(directory).unwrap();
         }
@@ -786,14 +796,21 @@ mod tests {
     fn procedure_value_parameters_do_not_mutate_shadowed_globals() {
         let source = "x=10\nPROCEDURE Inc(x)\nx=x+1\nRETURN\nGOSUB Inc(5)\nPRINT x\n";
         let sequence = NEXT_TEST.fetch_add(1, Ordering::Relaxed);
-        let directory = std::env::temp_dir().join(format!("gfabasic-procedure-scope-test-{}-{sequence}", std::process::id()));
+        let directory = std::env::temp_dir().join(format!(
+            "gfabasic-procedure-scope-test-{}-{sequence}",
+            std::process::id()
+        ));
         fs::create_dir_all(&directory).unwrap();
         let input = directory.join("scope.LST");
         let output = directory.join("scope");
         fs::write(&input, source).unwrap();
         compile_file(&input, &output).unwrap();
         let run = Command::new(&output).output().unwrap();
-        assert!(run.status.success(), "{}", String::from_utf8_lossy(&run.stderr));
+        assert!(
+            run.status.success(),
+            "{}",
+            String::from_utf8_lossy(&run.stderr)
+        );
         assert_eq!(String::from_utf8(run.stdout).unwrap().trim(), "10");
         fs::remove_dir_all(directory).unwrap();
     }
@@ -801,17 +818,30 @@ mod tests {
     #[test]
     fn rejects_deffn_recursion_and_wrong_function_arity() {
         for (source, expected) in [
-            ("DEFFN Loop(n)=@Loop(n-1)\nx=@Loop(3)\nPRINT x\n", "cannot call itself recursively"),
-            ("FUNCTION Square(n)\nRETURN n*n\nENDFUNC\nx=@Square()\nPRINT x\n", "expects 1 argument(s), got 0"),
+            (
+                "DEFFN Loop(n)=@Loop(n-1)\nx=@Loop(3)\nPRINT x\n",
+                "cannot call itself recursively",
+            ),
+            (
+                "FUNCTION Square(n)\nRETURN n*n\nENDFUNC\nx=@Square()\nPRINT x\n",
+                "expects 1 argument(s), got 0",
+            ),
         ] {
             let sequence = NEXT_TEST.fetch_add(1, Ordering::Relaxed);
-            let directory = std::env::temp_dir().join(format!("gfabasic-invalid-function-test-{}-{sequence}", std::process::id()));
+            let directory = std::env::temp_dir().join(format!(
+                "gfabasic-invalid-function-test-{}-{sequence}",
+                std::process::id()
+            ));
             fs::create_dir_all(&directory).unwrap();
             let input = directory.join("invalid-function.LST");
             let output = directory.join("invalid-function");
             fs::write(&input, source).unwrap();
-            let error = compile_file(&input, &output).expect_err("invalid function must be rejected");
-            assert!(error.contains(expected), "expected {expected:?}, got {error:?}");
+            let error =
+                compile_file(&input, &output).expect_err("invalid function must be rejected");
+            assert!(
+                error.contains(expected),
+                "expected {expected:?}, got {error:?}"
+            );
             fs::remove_dir_all(directory).unwrap();
         }
     }
