@@ -25,6 +25,8 @@ WORKFLOWS = {
         "scripts/amiga-cli-probe-35.sh",
         "scripts/amiga-cli-probe-3041u.sh",
         "scripts/validate_gfatest_results.py",
+        "scripts/assert_amiga_discovery_artifact.py",
+        "scripts/tests/test_amiga_discovery_artifact.py",
     ),
     ".github/workflows/docs.yml": (
         "**/*.md", ".markdownlint-cli2.jsonc", ".lychee.toml",
