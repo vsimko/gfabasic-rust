@@ -88,7 +88,9 @@ fn needs_space(previous: &TokenKind, current: &TokenKind) -> bool {
         | (_, TokenKind::Minus)
         | (TokenKind::Minus, _)
         | (_, TokenKind::Star)
-        | (TokenKind::Star, _) => true,
+        | (TokenKind::Star, _)
+        | (_, TokenKind::Slash)
+        | (TokenKind::Slash, _) => true,
         (_, TokenKind::Hash) => true,
         (TokenKind::Comma, _) => true,
         (_, TokenKind::Comma)
@@ -96,7 +98,9 @@ fn needs_space(previous: &TokenKind, current: &TokenKind) -> bool {
         | (TokenKind::LeftParen, _)
         | (_, TokenKind::RightParen) => false,
         (TokenKind::Identifier(_), TokenKind::Identifier(_))
-        | (TokenKind::Identifier(_), TokenKind::Integer(_)) => true,
+        | (TokenKind::Identifier(_), TokenKind::Integer(_))
+        | (TokenKind::Integer(_), TokenKind::Identifier(_))
+        | (TokenKind::RightParen, TokenKind::Identifier(_)) => true,
         _ => false,
     }
 }
@@ -280,6 +284,17 @@ mod tests {
         let mut sources = SourceMap::new();
         let source_id = sources.add_source("format.bas", source);
         format_source(source_id, source).expect("supported source should format")
+    }
+
+    #[test]
+    fn formats_structured_keywords_expressions_and_loop_bounds_without_merging_tokens() {
+        let source = "FOR i=1 TO 3 STEP 2\nx=x+i/2\nNEXT i\nDEFFN Double(n)=n*2\n";
+        let formatted = format(source);
+        assert_eq!(
+            formatted,
+            "FOR i = 1 TO 3 STEP 2\nx = x + i / 2\nNEXT i\nDEFFN Double(n) = n * 2\n"
+        );
+        assert_eq!(format(&formatted), formatted);
     }
 
     #[test]
