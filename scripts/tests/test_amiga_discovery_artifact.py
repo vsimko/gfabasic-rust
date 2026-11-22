@@ -90,6 +90,27 @@ class ArtifactBoundaryTests(unittest.TestCase):
         self.assertTrue(any("encoded payload in text evidence: native-run/result.txt" in item
                             for item in validate_artifact(self.root)))
 
+    def test_rejects_png_with_ancillary_payload_chunk(self) -> None:
+        header = struct.pack(">IIBBBBB", 2, 2, 8, 2, 0, 0, 0)
+        payload = base64.b64encode(bytes(range(256)) * 2)
+        raster = b"\x00" + b"\xff\x00\x00" * 2 + b"\x00" + b"\x00\xff\x00" * 2
+        image = (b"\x89PNG\r\n\x1a\n" + png_chunk(b"IHDR", header)
+                 + png_chunk(b"tEXt", b"Comment\x00" + payload)
+                 + png_chunk(b"IDAT", zlib.compress(raster))
+                 + png_chunk(b"IEND", b""))
+        (self.root / "editor-version-menu.png").write_bytes(image)
+        self.assertTrue(any("invalid PNG evidence" in item
+                            for item in validate_artifact(self.root)))
+
+    def test_rejects_base64url_payload_in_approved_text_path(self) -> None:
+        native_run = self.root / "native-run"
+        native_run.mkdir()
+        payload = base64.urlsafe_b64encode(b"\xff" * 512).decode("ascii").rstrip("=")
+        self.assertEqual(set(payload), {"_"})
+        (native_run / "result.txt").write_text(payload, encoding="utf-8")
+        self.assertTrue(any("encoded payload in text evidence: native-run/result.txt" in item
+                            for item in validate_artifact(self.root)))
+
     def test_rejects_truncated_png_raster(self) -> None:
         header = struct.pack(">IIBBBBB", 2, 2, 8, 2, 0, 0, 0)
         truncated = (b"\x89PNG\r\n\x1a\n" + png_chunk(b"IHDR", header)

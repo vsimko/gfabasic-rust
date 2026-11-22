@@ -94,6 +94,9 @@ def valid_png(data: bytes) -> bool:
         expected_crc = struct.unpack(">I", data[offset + 8 + length:end])[0]
         if (binascii.crc32(chunk_type + chunk_data) & 0xFFFFFFFF) != expected_crc:
             return False
+        # Only core raster chunks are needed; ancillary chunks can hide payloads.
+        if chunk_type not in {b"IHDR", b"IDAT", b"IEND"}:
+            return False
         if not seen_ihdr:
             if chunk_type != b"IHDR" or length != 13:
                 return False
@@ -168,14 +171,14 @@ def contains_encoded_payload(text: str) -> bool:
     candidates = [
         match.group(0)
         for match in re.finditer(
-            r"(?<![A-Za-z0-9+/])[A-Za-z0-9+/]{128,}={0,2}(?![A-Za-z0-9+/=])",
+            r"(?<![A-Za-z0-9+/_-])[A-Za-z0-9+/_-]{128,}={0,2}(?![A-Za-z0-9+/_=-])",
             text,
         )
     ]
     wrapped_lines: list[str] = []
     for line in text.splitlines():
         candidate = line.strip()
-        if candidate and re.fullmatch(r"[A-Za-z0-9+/]+={0,2}", candidate):
+        if candidate and re.fullmatch(r"[A-Za-z0-9+/_-]+={0,2}", candidate):
             wrapped_lines.append(candidate)
         elif wrapped_lines:
             candidates.append("".join(wrapped_lines))
@@ -188,7 +191,7 @@ def contains_encoded_payload(text: str) -> bool:
         if len(compact) < 128:
             continue
         try:
-            decoded = base64.b64decode(compact + "=" * (-len(compact) % 4), validate=True)
+            decoded = base64.b64decode(compact + "=" * (-len(compact) % 4), altchars=b"-_", validate=True)
         except (ValueError, binascii.Error):
             continue
         if len(decoded) >= 96:
