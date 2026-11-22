@@ -1,9 +1,10 @@
 //! Compiler implementation boundaries.
 //!
 //! The compiler contains source-map/loading primitives, structured
-//! diagnostics, an evidence-gated Amiga GFA BASIC 3.5 combinatorics frontend,
-//! an initial narrow typed IR, and a temporary native-code bootstrap bridge.
-//! General language semantics and the planned LLVM backend remain unimplemented.
+//! diagnostics, an evidence-gated Amiga GFA BASIC 3.5 intrinsic/MAT frontend,
+//! an experimental numeric FOR/NEXT and procedure/function subset, a narrow
+//! IR, and a temporary native-code bootstrap bridge. General language
+//! semantics and the planned LLVM backend remain unimplemented.
 
 pub mod backend;
 pub mod cli;

@@ -35,7 +35,11 @@ The formatter library is independent of CLI file I/O, LLVM, runtime, and platfor
 
 ## Bootstrap prototype exception
 
-The experimental combinatorics vertical slice under [issue #113](https://github.com/vsimko/gfabasic-rust/issues/113) parses the evidence-backed `FACT`, `VARIAT`, `COMBIN`, and `PRINT` subset, lowers the AST to the project-owned typed IR, verifies the IR, and only then emits temporary C for the host `cc` command. This is a bootstrap bridge, not the production LLVM backend. Its output spacing and UTF-8 transport are prototype choices, not verified historical interpreter behavior. CR, CRLF, and LF line separators in the experimental frontend are transport-level handling only until the original interpreter behavior is observed under #66. Do not generalize this bridge or infer support for other syntax.
+The experimental intrinsic vertical slice under [issue #113](https://github.com/vsimko/gfabasic-rust/issues/113) parses the evidence-backed `FACT`, `VARIAT`, `COMBIN`, and `PRINT` subset, lowers the AST to the project-owned typed IR, verifies the IR, and emits temporary C for the host `cc` command.
+
+A second, deliberately bounded structured subset under [issue #617](https://github.com/vsimko/gfabasic-rust/issues/617) parses numeric expressions, `FOR/NEXT`, `PROCEDURE/GOSUB`, multi-line `FUNCTION`, and `DEFFN`. Semantic validation checks callable declarations, arity, DEFFN recursion, and loop-step invariants. The current IR module retains these validated structured blocks as a source-level payload for the C bootstrap; it is **not yet a fully lowered typed control-flow graph** and does not replace the planned general IR/LLVM backend. Both paths are bootstrap prototypes, not the production LLVM backend. Output spacing and UTF-8 transport are prototype choices, not verified historical interpreter behavior. CR, CRLF, and LF line separators in the experimental frontend are transport-level handling only until the original interpreter behavior is observed under #66.
+
+Do not generalize either bridge or infer support for other syntax. In particular, Chapter 7's procedure/function forms are documented in the 3.0 base manual and have not yet been observed on the exact 3.5 interpreter.
 
 ## Stage and error rules
 

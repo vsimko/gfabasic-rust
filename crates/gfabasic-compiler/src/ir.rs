@@ -1,8 +1,10 @@
-//! Project-owned typed IR for the evidence-backed combinatorics prototype.
+//! Project-owned IR for the narrow compiler prototype.
 //!
-//! This is intentionally smaller than the planned general-purpose IR. It
-//! models only i64 constants and ordered PRINT operations; it does not imply
-//! that GFA BASIC variables are universally i64.
+//! The original intrinsic slice uses typed i64 constants and PRINT operations.
+//! Structured numeric programs are retained as validated source-level blocks
+//! for the temporary C bootstrap; they are not yet a general typed CFG. The
+//! i64 expression subset is an implementation boundary, not a claim that all
+//! GFA BASIC variables are i64.
 
 use std::collections::{BTreeMap, BTreeSet};
 
@@ -39,7 +41,7 @@ pub enum Instruction {
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct Module {
     pub instructions: Vec<Instruction>,
-    /// Structured source lowered as a verified control-flow module.
+    /// Validated structured source retained for the experimental C bootstrap.
     pub structured_program: Option<crate::frontend::Program>,
 }
 
@@ -168,7 +170,7 @@ impl<'a> LoweringState<'a> {
     }
 }
 
-/// Lower structured statements and user callables after semantic validation.
+/// Validate structured statements and retain their blocks for the prototype backend.
 pub fn lower_structured(program: &crate::frontend::Program) -> Result<Module, Vec<IrError>> {
     crate::semantic::validate_structured_program(program).map_err(|errors| {
         errors
@@ -315,8 +317,13 @@ pub fn lower(model: &SemanticModel) -> Result<Module, Vec<IrError>> {
 
 /// Verify unique definitions and reject uses that precede their definitions.
 pub fn verify(module: &Module) -> Result<(), Vec<IrError>> {
-    if module.structured_program.is_some() {
-        return Ok(());
+    if let Some(program) = &module.structured_program {
+        return crate::semantic::validate_structured_program(program).map_err(|errors| {
+            errors
+                .into_iter()
+                .map(|error| IrError::at(error.message, error.span))
+                .collect()
+        });
     }
     let mut definitions = BTreeSet::new();
     let mut errors = Vec::new();

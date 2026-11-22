@@ -1,9 +1,10 @@
-//! Evidence-gated frontend for the first Amiga GFA BASIC 3.5 vertical slice.
+//! Evidence-gated frontend for the narrow Amiga GFA BASIC compiler prototype.
 //!
-//! This is deliberately not a general GFA BASIC lexer/parser. It recognizes
-//! only the source forms demonstrated by the 3.5 addendum: FACT/VARIAT/COMBIN
-//! assignments and PRINT, plus selected verified MAT matrix commands. Other
-//! syntax is rejected rather than guessed.
+//! The 3.5 addendum-backed slice includes FACT/VARIAT/COMBIN assignments,
+//! PRINT, and selected MAT commands. A separate numeric structured subset adds
+//! FOR/NEXT, PROCEDURE/GOSUB, FUNCTION, and DEFFN using Chapter 7 base-manual
+//! syntax. Chapter 7 is 3.0 evidence, not proof that procedures/functions are
+//! available in exact 3.5. Unsupported forms remain diagnostics.
 
 use crate::diagnostics::{Diagnostic, DiagnosticCategory, DiagnosticSeverity};
 use crate::source::{SourceId, SourceSpan};

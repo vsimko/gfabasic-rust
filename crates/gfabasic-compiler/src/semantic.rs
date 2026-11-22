@@ -1,8 +1,9 @@
 //! Symbol resolution and semantic analysis boundary.
 //!
-//! This module currently provides a deliberately narrow symbol index for the
-//! evidence-backed FACT/VARIAT/COMBIN/PRINT prototype. It does not define
-//! general Amiga GFA BASIC declaration, scope, or type rules.
+//! The initial symbol index remains narrow (FACT/VARIAT/COMBIN/PRINT). A
+//! separate validator checks numeric structured blocks, callable declarations,
+//! parameter arity, and the explicitly supported recursion rules. It does not
+//! define the full Amiga GFA BASIC declaration, VAR, LOCAL, or type system.
 
 use std::collections::BTreeMap;
 

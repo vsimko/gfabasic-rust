@@ -1,9 +1,9 @@
 //! Experimental, deliberately narrow native-code prototype.
 //!
-//! This module consumes verified project IR and emits temporary C for the
-//! host `cc` bootstrap. It is not the production LLVM backend. Output spacing
-//! and UTF-8 transport are prototype choices, not verified historical
-//! interpreter behavior.
+//! This module consumes verified intrinsic IR or validated structured numeric
+//! blocks and emits temporary C for the host `cc` bootstrap. It is not the
+//! production LLVM backend. Output spacing and UTF-8 transport are prototype
+//! choices, not verified historical interpreter behavior.
 
 use std::collections::{BTreeMap, BTreeSet};
 use std::fs;
@@ -19,8 +19,9 @@ use crate::source::{SourceMap, SourceSpan};
 
 static NEXT_TEMP: AtomicUsize = AtomicUsize::new(0);
 
-/// Compile the current evidence-backed Amiga GFA BASIC 3.5 subset to a native
-/// host executable using the temporary C/`cc` bootstrap bridge.
+/// Compile the current numeric compiler subset to a native host executable.
+/// The structured procedure/function syntax is not yet natively confirmed for
+/// exact Amiga GFA BASIC 3.5; see the structured compiler subset documentation.
 pub fn compile_file(input: &Path, output: &Path) -> Result<(), String> {
     if !crate::source::is_text_listing_path(input) {
         return Err(format!(
