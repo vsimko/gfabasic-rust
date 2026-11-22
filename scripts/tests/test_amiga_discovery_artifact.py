@@ -156,6 +156,33 @@ class ArtifactBoundaryTests(unittest.TestCase):
         self.assertTrue(any("encoded payload in text evidence: native-run/result.txt" in item
                             for item in validate_artifact(self.root)))
 
+    def test_rejects_base64url_payload_split_by_no_break_spaces(self) -> None:
+        native_run = self.root / "native-run"
+        native_run.mkdir()
+        payload = base64.urlsafe_b64encode(b"\\xff" * 513).decode("ascii").rstrip("=")
+        separated = "\\u00a0".join(payload[index:index + 64] for index in range(0, len(payload), 64))
+        (native_run / "result.txt").write_text(separated, encoding="utf-8")
+        self.assertTrue(any("encoded payload in text evidence: native-run/result.txt" in item
+                            for item in validate_artifact(self.root)))
+
+    def test_rejects_base64url_payload_split_by_em_spaces(self) -> None:
+        native_run = self.root / "native-run"
+        native_run.mkdir()
+        payload = base64.urlsafe_b64encode(b"\\xff" * 513).decode("ascii").rstrip("=")
+        separated = "\\u2003".join(payload[index:index + 64] for index in range(0, len(payload), 64))
+        (native_run / "result.txt").write_text(separated, encoding="utf-8")
+        self.assertTrue(any("encoded payload in text evidence: native-run/result.txt" in item
+                            for item in validate_artifact(self.root)))
+
+    def test_rejects_hex_payload_split_by_no_break_spaces(self) -> None:
+        native_run = self.root / "native-run"
+        native_run.mkdir()
+        payload = bytes(range(256)).hex()
+        separated = "\\u00a0".join(payload[index:index + 64] for index in range(0, len(payload), 64))
+        (native_run / "result.txt").write_text(separated, encoding="utf-8")
+        self.assertTrue(any("encoded payload in text evidence: native-run/result.txt" in item
+                            for item in validate_artifact(self.root)))
+
     def test_rejects_truncated_png_raster(self) -> None:
         header = struct.pack(">IIBBBBB", 2, 2, 8, 2, 0, 0, 0)
         truncated = (b"\x89PNG\r\n\x1a\n" + png_chunk(b"IHDR", header)
