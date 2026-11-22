@@ -33,7 +33,7 @@ class ArtifactBoundaryTests(unittest.TestCase):
         self.temp = tempfile.TemporaryDirectory()
         self.root = pathlib.Path(self.temp.name) / "artifact"
         self.root.mkdir()
-        (self.root / "archive-info.txt").write_text("archive_size=123\\\\n", encoding="utf-8")
+        (self.root / "archive-info.txt").write_text("archive_size=123\\n", encoding="utf-8")
 
     def tearDown(self) -> None:
         self.temp.cleanup()

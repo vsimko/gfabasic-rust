@@ -249,7 +249,7 @@ def validate_artifact(root: pathlib.Path) -> list[str]:
             violations.append(f"non-UTF-8 text evidence: {relative}")
             continue
 
-        if relative == "archive-info.txt" and not re.fullmatch(r"archive_size=[0-9]+(?:\\\\n|\\r?\\n)?", text):
+        if relative == "archive-info.txt" and not re.fullmatch(r"archive_size=[0-9]+(?:\\n|\r?\n)?", text):
             violations.append("invalid text format: archive-info.txt")
             continue
         if contains_encoded_payload(text):
