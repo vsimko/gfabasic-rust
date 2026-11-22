@@ -426,6 +426,40 @@ mod tests {
         include_str!("../../../tests/corpus/amiga/3.5/combinatorics/fact-zero.lst");
 
     #[test]
+    fn compiles_and_runs_for_next_procedures_and_functions() {
+        let cc_version = Command::new("cc").arg("--version").output().unwrap();
+        assert!(cc_version.status.success());
+        let source = "x=0\nFOR i=1 TO 5\nx=x+i\nNEXT i\nPROCEDURE Add(a,b)\nx=x+a+b\nRETURN\nFUNCTION Square(n)\nRETURN n*n\nENDFUNC\nGOSUB Add(2,3)\nx=x+@Square(4)\nPRINT x\n";
+        let sequence = NEXT_TEST.fetch_add(1, Ordering::Relaxed);
+        let directory = std::env::temp_dir().join(format!("gfabasic-structured-test-{}-{sequence}", std::process::id()));
+        fs::create_dir_all(&directory).unwrap();
+        let input = directory.join("structured.LST");
+        let output = directory.join("structured");
+        fs::write(&input, source).unwrap();
+        compile_file(&input, &output).unwrap();
+        let run = Command::new(&output).output().unwrap();
+        assert!(run.status.success(), "{}", String::from_utf8_lossy(&run.stderr));
+        assert_eq!(String::from_utf8(run.stdout).unwrap().trim(), "36");
+        fs::remove_dir_all(directory).unwrap();
+    }
+
+    #[test]
+    fn compiles_nested_for_next_and_downto_loops() {
+        let source = "x=0\nFOR i=1 TO 3\nFOR j=2 DOWNTO 1\nx=x+1\nNEXT j\nNEXT i\nPRINT x\n";
+        let sequence = NEXT_TEST.fetch_add(1, Ordering::Relaxed);
+        let directory = std::env::temp_dir().join(format!("gfabasic-nested-for-test-{}-{sequence}", std::process::id()));
+        fs::create_dir_all(&directory).unwrap();
+        let input = directory.join("nested.LST");
+        let output = directory.join("nested");
+        fs::write(&input, source).unwrap();
+        compile_file(&input, &output).unwrap();
+        let run = Command::new(&output).output().unwrap();
+        assert!(run.status.success(), "{}", String::from_utf8_lossy(&run.stderr));
+        assert_eq!(String::from_utf8(run.stdout).unwrap().trim(), "6");
+        fs::remove_dir_all(directory).unwrap();
+    }
+
+    #[test]
     fn lowers_the_resolved_semantic_model_for_the_verified_fact_fixture() {
         let mut sources = SourceMap::new();
         let source_id = sources.add_source("fact-zero.bas", FACT_FIXTURE);

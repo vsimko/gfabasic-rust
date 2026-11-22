@@ -797,6 +797,17 @@ impl Parser {
         self.expect(TokenKind::Equals, "'='")?;
         let value = self.parse_expression()?;
         let span = SourceSpan::new(self.source_id, start.start, value.span().end);
+        if self.extended_depth == 0 {
+            let supported_literal = matches!(value, Expression::Integer(_, _) | Expression::Negate(_, _));
+            let supported_intrinsic = matches!(&value,
+                Expression::Call { name, arguments, .. }
+                if matches!(name.as_str(), "FACT" | "VARIAT" | "COMBIN")
+                    && arguments.iter().all(|argument| matches!(argument, Expression::Integer(_, _) | Expression::Negate(_, _)))
+            );
+            if !supported_literal && !supported_intrinsic {
+                return Err(self.unsupported_error("assignment expressions are only supported inside FOR/PROCEDURE/FUNCTION blocks in this compiler subset", value.span()));
+            }
+        }
         if let Expression::Call { name: function, arguments, span: call_span } = &value {
             let expected = match function.as_str() { "FACT" => Some(1), "VARIAT" | "COMBIN" => Some(2), _ => None };
             if let Some(expected) = expected {
