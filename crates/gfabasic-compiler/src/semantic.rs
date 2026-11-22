@@ -224,67 +224,158 @@ pub fn validate_structured_program(program: &Program) -> Result<(), Vec<Semantic
     use std::collections::BTreeMap;
 
     #[derive(Clone)]
-    struct Callable { function: bool, arity: usize }
+    struct Callable {
+        function: bool,
+        arity: usize,
+    }
 
-    fn error(errors: &mut Vec<SemanticError>, code: &str, message: impl Into<String>, span: crate::source::SourceSpan) {
-        errors.push(SemanticError { code: code.to_owned(), message: message.into(), span });
+    fn error(
+        errors: &mut Vec<SemanticError>,
+        code: &str,
+        message: impl Into<String>,
+        span: crate::source::SourceSpan,
+    ) {
+        errors.push(SemanticError {
+            code: code.to_owned(),
+            message: message.into(),
+            span,
+        });
     }
 
     fn register(
-        name: &str, parameters: &[String], function: bool, span: crate::source::SourceSpan,
-        declarations: &mut BTreeMap<String, Callable>, errors: &mut Vec<SemanticError>,
+        name: &str,
+        parameters: &[String],
+        function: bool,
+        span: crate::source::SourceSpan,
+        declarations: &mut BTreeMap<String, Callable>,
+        errors: &mut Vec<SemanticError>,
     ) {
         let key = name.to_ascii_uppercase();
         if matches!(key.as_str(), "FACT" | "VARIAT" | "COMBIN") {
-            error(errors, "GFA-SEM-0013", format!("'{name}' conflicts with a built-in function"), span);
+            error(
+                errors,
+                "GFA-SEM-0013",
+                format!("'{name}' conflicts with a built-in function"),
+                span,
+            );
         }
         if declarations.contains_key(&key) {
-            error(errors, "GFA-SEM-0013", format!("duplicate procedure/function declaration '{name}'"), span);
+            error(
+                errors,
+                "GFA-SEM-0013",
+                format!("duplicate procedure/function declaration '{name}'"),
+                span,
+            );
         } else {
-            declarations.insert(key, Callable { function, arity: parameters.len() });
+            declarations.insert(
+                key,
+                Callable {
+                    function,
+                    arity: parameters.len(),
+                },
+            );
         }
         let mut seen = std::collections::BTreeSet::new();
         for parameter in parameters {
             if !seen.insert(parameter.to_ascii_uppercase()) {
-                error(errors, "GFA-SEM-0014", format!("duplicate parameter '{parameter}' in '{name}'"), span);
+                error(
+                    errors,
+                    "GFA-SEM-0014",
+                    format!("duplicate parameter '{parameter}' in '{name}'"),
+                    span,
+                );
             }
         }
     }
 
     fn scan_expr(
-        expr: &Expression, declarations: &BTreeMap<String, Callable>,
-        errors: &mut Vec<SemanticError>, current_function: Option<(&str, bool)>,
+        expr: &Expression,
+        declarations: &BTreeMap<String, Callable>,
+        errors: &mut Vec<SemanticError>,
+        current_function: Option<(&str, bool)>,
     ) {
         match expr {
             Expression::Integer(_, _) | Expression::Variable(_, _) => {}
-            Expression::Negate(value, _) => scan_expr(value, declarations, errors, current_function),
-            Expression::Add(left, right, _) | Expression::Subtract(left, right, _)
-            | Expression::Multiply(left, right, _) | Expression::Divide(left, right, _) => {
+            Expression::Negate(value, _) => {
+                scan_expr(value, declarations, errors, current_function)
+            }
+            Expression::Add(left, right, _)
+            | Expression::Subtract(left, right, _)
+            | Expression::Multiply(left, right, _)
+            | Expression::Divide(left, right, _) => {
                 scan_expr(left, declarations, errors, current_function);
                 scan_expr(right, declarations, errors, current_function);
             }
-            Expression::Call { name, arguments, span } => {
-                for argument in arguments { scan_expr(argument, declarations, errors, current_function); }
+            Expression::Call {
+                name,
+                arguments,
+                span,
+            } => {
+                for argument in arguments {
+                    scan_expr(argument, declarations, errors, current_function);
+                }
                 let key = name.to_ascii_uppercase();
                 if let Some((current, single_line)) = current_function {
                     if single_line && current.eq_ignore_ascii_case(name) {
-                        error(errors, "GFA-SEM-0018", format!("DEFFN function '{name}' cannot call itself recursively"), *span);
+                        error(
+                            errors,
+                            "GFA-SEM-0018",
+                            format!("DEFFN function '{name}' cannot call itself recursively"),
+                            *span,
+                        );
                     }
                 }
-                let builtin_arity = match key.as_str() { "FACT" => Some(1), "VARIAT" | "COMBIN" => Some(2), _ => None };
+                let builtin_arity = match key.as_str() {
+                    "FACT" => Some(1),
+                    "VARIAT" | "COMBIN" => Some(2),
+                    _ => None,
+                };
                 if let Some(arity) = builtin_arity {
                     if arguments.len() != arity {
-                        error(errors, "GFA-SEM-0012", format!("{name} expects {arity} argument(s)"), *span);
+                        error(
+                            errors,
+                            "GFA-SEM-0012",
+                            format!("{name} expects {arity} argument(s)"),
+                            *span,
+                        );
                     }
-                    if !arguments.iter().all(|arg| matches!(arg, Expression::Integer(_, _) | Expression::Negate(_, _))) {
-                        error(errors, "GFA-SEM-0016", format!("{name} arguments must be integer literals in this compiler subset"), *span);
+                    if !arguments.iter().all(|arg| {
+                        matches!(arg, Expression::Integer(_, _) | Expression::Negate(_, _))
+                    }) {
+                        error(
+                            errors,
+                            "GFA-SEM-0016",
+                            format!(
+                                "{name} arguments must be integer literals in this compiler subset"
+                            ),
+                            *span,
+                        );
                     }
                 } else {
                     match declarations.get(&key) {
-                        Some(callable) if !callable.function => error(errors, "GFA-SEM-0011", format!("'{name}' is a procedure, not a function"), *span),
-                        Some(callable) if callable.arity != arguments.len() => error(errors, "GFA-SEM-0012", format!("function '{name}' expects {} argument(s), got {}", callable.arity, arguments.len()), *span),
+                        Some(callable) if !callable.function => error(
+                            errors,
+                            "GFA-SEM-0011",
+                            format!("'{name}' is a procedure, not a function"),
+                            *span,
+                        ),
+                        Some(callable) if callable.arity != arguments.len() => error(
+                            errors,
+                            "GFA-SEM-0012",
+                            format!(
+                                "function '{name}' expects {} argument(s), got {}",
+                                callable.arity,
+                                arguments.len()
+                            ),
+                            *span,
+                        ),
                         Some(_) => {}
-                        None => error(errors, "GFA-SEM-0010", format!("unknown function '{name}'"), *span),
+                        None => error(
+                            errors,
+                            "GFA-SEM-0010",
+                            format!("unknown function '{name}'"),
+                            *span,
+                        ),
                     }
                 }
             }
@@ -292,44 +383,103 @@ pub fn validate_structured_program(program: &Program) -> Result<(), Vec<Semantic
     }
 
     fn scan_statements(
-        statements: &[Statement], declarations: &BTreeMap<String, Callable>,
-        errors: &mut Vec<SemanticError>, current_function: Option<(&str, bool)>,
+        statements: &[Statement],
+        declarations: &BTreeMap<String, Callable>,
+        errors: &mut Vec<SemanticError>,
+        current_function: Option<(&str, bool)>,
     ) {
         for statement in statements {
             match statement {
-                Statement::AssignExpression { value, .. } => scan_expr(value, declarations, errors, current_function),
-                Statement::PrintExpressions { values, .. } => for value in values { scan_expr(value, declarations, errors, current_function); },
-                Statement::For { start, end, step, body, direction, span, .. } => {
+                Statement::AssignExpression { value, .. } => {
+                    scan_expr(value, declarations, errors, current_function)
+                }
+                Statement::PrintExpressions { values, .. } => {
+                    for value in values {
+                        scan_expr(value, declarations, errors, current_function);
+                    }
+                }
+                Statement::For {
+                    start,
+                    end,
+                    step,
+                    body,
+                    direction,
+                    span,
+                    ..
+                } => {
                     scan_expr(start, declarations, errors, current_function);
                     scan_expr(end, declarations, errors, current_function);
                     if let Some(step) = step {
                         scan_expr(step, declarations, errors, current_function);
-                        if matches!(step, Expression::Integer(0, _)) || matches!(step, Expression::Negate(inner, _) if matches!(inner.as_ref(), Expression::Integer(0, _))) {
+                        if matches!(step, Expression::Integer(0, _))
+                            || matches!(step, Expression::Negate(inner, _) if matches!(inner.as_ref(), Expression::Integer(0, _)))
+                        {
                             error(errors, "GFA-SEM-0015", "FOR STEP must not be zero", *span);
                         }
                     }
                     if *direction == ForDirection::DownTo && step.is_some() {
-                        error(errors, "GFA-SEM-0015", "DOWNTO cannot be combined with STEP", *span);
+                        error(
+                            errors,
+                            "GFA-SEM-0015",
+                            "DOWNTO cannot be combined with STEP",
+                            *span,
+                        );
                     }
                     scan_statements(body, declarations, errors, current_function);
                 }
-                Statement::Gosub { name, arguments, span } => {
-                    for argument in arguments { scan_expr(argument, declarations, errors, current_function); }
+                Statement::Gosub {
+                    name,
+                    arguments,
+                    span,
+                } => {
+                    for argument in arguments {
+                        scan_expr(argument, declarations, errors, current_function);
+                    }
                     match declarations.get(&name.to_ascii_uppercase()) {
-                        Some(callable) if callable.function => error(errors, "GFA-SEM-0011", format!("'{name}' is a function, not a procedure"), *span),
-                        Some(callable) if callable.arity != arguments.len() => error(errors, "GFA-SEM-0012", format!("procedure '{name}' expects {} argument(s), got {}", callable.arity, arguments.len()), *span),
+                        Some(callable) if callable.function => error(
+                            errors,
+                            "GFA-SEM-0011",
+                            format!("'{name}' is a function, not a procedure"),
+                            *span,
+                        ),
+                        Some(callable) if callable.arity != arguments.len() => error(
+                            errors,
+                            "GFA-SEM-0012",
+                            format!(
+                                "procedure '{name}' expects {} argument(s), got {}",
+                                callable.arity,
+                                arguments.len()
+                            ),
+                            *span,
+                        ),
                         Some(_) => {}
-                        None => error(errors, "GFA-SEM-0010", format!("unknown procedure '{name}'"), *span),
+                        None => error(
+                            errors,
+                            "GFA-SEM-0010",
+                            format!("unknown procedure '{name}'"),
+                            *span,
+                        ),
                     }
                 }
-                Statement::Procedure { body, .. } => scan_statements(body, declarations, errors, None),
-                Statement::Function { name, body, result, single_line, .. } => {
+                Statement::Procedure { body, .. } => {
+                    scan_statements(body, declarations, errors, None)
+                }
+                Statement::Function {
+                    name,
+                    body,
+                    result,
+                    single_line,
+                    ..
+                } => {
                     let scope = Some((name.as_str(), *single_line));
                     scan_statements(body, declarations, errors, scope);
                     scan_expr(result, declarations, errors, scope);
                 }
-                Statement::AssignFact { .. } | Statement::AssignVariat { .. } | Statement::AssignCombin { .. }
-                | Statement::AssignInteger { .. } | Statement::PrintVariables { .. } => {}
+                Statement::AssignFact { .. }
+                | Statement::AssignVariat { .. }
+                | Statement::AssignCombin { .. }
+                | Statement::AssignInteger { .. }
+                | Statement::PrintVariables { .. } => {}
                 _ => {}
             }
         }
@@ -339,27 +489,67 @@ pub fn validate_structured_program(program: &Program) -> Result<(), Vec<Semantic
     let mut errors = Vec::new();
     for statement in &program.statements {
         match statement {
-            Statement::Procedure { name, parameters, span, .. } => register(name, parameters, false, *span, &mut declarations, &mut errors),
-            Statement::Function { name, parameters, span, .. } => register(name, parameters, true, *span, &mut declarations, &mut errors),
+            Statement::Procedure {
+                name,
+                parameters,
+                span,
+                ..
+            } => register(
+                name,
+                parameters,
+                false,
+                *span,
+                &mut declarations,
+                &mut errors,
+            ),
+            Statement::Function {
+                name,
+                parameters,
+                span,
+                ..
+            } => register(
+                name,
+                parameters,
+                true,
+                *span,
+                &mut declarations,
+                &mut errors,
+            ),
             _ => {}
         }
     }
     for statement in &program.statements {
         match statement {
             Statement::Procedure { body, .. } | Statement::Function { body, .. } => {
-                if let Some(nested) = body.iter().find(|statement| matches!(statement, Statement::Procedure { .. } | Statement::Function { .. })) {
+                if let Some(nested) = body.iter().find(|statement| {
+                    matches!(
+                        statement,
+                        Statement::Procedure { .. } | Statement::Function { .. }
+                    )
+                }) {
                     let span = match nested {
-                        Statement::Procedure { span, .. } | Statement::Function { span, .. } => *span,
+                        Statement::Procedure { span, .. } | Statement::Function { span, .. } => {
+                            *span
+                        }
                         _ => unreachable!(),
                     };
-                    error(&mut errors, "GFA-SEM-0017", "nested procedure/function declarations are not supported", span);
+                    error(
+                        &mut errors,
+                        "GFA-SEM-0017",
+                        "nested procedure/function declarations are not supported",
+                        span,
+                    );
                 }
             }
             _ => {}
         }
     }
     scan_statements(&program.statements, &declarations, &mut errors, None);
-    if errors.is_empty() { Ok(()) } else { Err(errors) }
+    if errors.is_empty() {
+        Ok(())
+    } else {
+        Err(errors)
+    }
 }
 
 /// Resolve a built-in API call through the canonical registry and runtime table.

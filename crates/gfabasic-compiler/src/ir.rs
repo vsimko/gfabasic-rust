@@ -171,15 +171,24 @@ impl<'a> LoweringState<'a> {
 /// Lower structured statements and user callables after semantic validation.
 pub fn lower_structured(program: &crate::frontend::Program) -> Result<Module, Vec<IrError>> {
     crate::semantic::validate_structured_program(program).map_err(|errors| {
-        errors.into_iter().map(|error| IrError::at(error.message, error.span)).collect::<Vec<_>>()
+        errors
+            .into_iter()
+            .map(|error| IrError::at(error.message, error.span))
+            .collect::<Vec<_>>()
     })?;
-    Ok(Module { instructions: Vec::new(), structured_program: Some(program.clone()) })
+    Ok(Module {
+        instructions: Vec::new(),
+        structured_program: Some(program.clone()),
+    })
 }
 
 fn contains_structured(statements: &[Statement]) -> bool {
     statements.iter().any(|statement| match statement {
-        Statement::AssignExpression { .. } | Statement::PrintExpressions { .. }
-        | Statement::For { .. } | Statement::Procedure { .. } | Statement::Function { .. }
+        Statement::AssignExpression { .. }
+        | Statement::PrintExpressions { .. }
+        | Statement::For { .. }
+        | Statement::Procedure { .. }
+        | Statement::Function { .. }
         | Statement::Gosub { .. } => true,
         _ => false,
     })
@@ -282,7 +291,9 @@ pub fn lower(model: &SemanticModel) -> Result<Module, Vec<IrError>> {
                 }
             }
             _ => {
-                state.errors.push(IrError::global("structured statements require structured IR lowering"));
+                state.errors.push(IrError::global(
+                    "structured statements require structured IR lowering",
+                ));
             }
         }
     }
@@ -302,7 +313,9 @@ pub fn lower(model: &SemanticModel) -> Result<Module, Vec<IrError>> {
 
 /// Verify unique definitions and reject uses that precede their definitions.
 pub fn verify(module: &Module) -> Result<(), Vec<IrError>> {
-    if module.structured_program.is_some() { return Ok(()); }
+    if module.structured_program.is_some() {
+        return Ok(());
+    }
     let mut definitions = BTreeSet::new();
     let mut errors = Vec::new();
     for instruction in &module.instructions {

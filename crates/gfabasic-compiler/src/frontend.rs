@@ -149,8 +149,15 @@ pub enum Statement {
         matrix: String,
         span: SourceSpan,
     },
-    AssignExpression { name: String, value: Expression, span: SourceSpan },
-    PrintExpressions { values: Vec<Expression>, span: SourceSpan },
+    AssignExpression {
+        name: String,
+        value: Expression,
+        span: SourceSpan,
+    },
+    PrintExpressions {
+        values: Vec<Expression>,
+        span: SourceSpan,
+    },
     For {
         variable: String,
         start: Expression,
@@ -160,7 +167,12 @@ pub enum Statement {
         body: Vec<Statement>,
         span: SourceSpan,
     },
-    Procedure { name: String, parameters: Vec<String>, body: Vec<Statement>, span: SourceSpan },
+    Procedure {
+        name: String,
+        parameters: Vec<String>,
+        body: Vec<Statement>,
+        span: SourceSpan,
+    },
     Function {
         name: String,
         parameters: Vec<String>,
@@ -169,11 +181,18 @@ pub enum Statement {
         single_line: bool,
         span: SourceSpan,
     },
-    Gosub { name: String, arguments: Vec<Expression>, span: SourceSpan },
+    Gosub {
+        name: String,
+        arguments: Vec<Expression>,
+        span: SourceSpan,
+    },
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
-pub enum ForDirection { To, DownTo }
+pub enum ForDirection {
+    To,
+    DownTo,
+}
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum Expression {
@@ -184,15 +203,23 @@ pub enum Expression {
     Subtract(Box<Expression>, Box<Expression>, SourceSpan),
     Multiply(Box<Expression>, Box<Expression>, SourceSpan),
     Divide(Box<Expression>, Box<Expression>, SourceSpan),
-    Call { name: String, arguments: Vec<Expression>, span: SourceSpan },
+    Call {
+        name: String,
+        arguments: Vec<Expression>,
+        span: SourceSpan,
+    },
 }
 
 impl Expression {
     pub fn span(&self) -> SourceSpan {
         match self {
-            Self::Integer(_, span) | Self::Variable(_, span) | Self::Negate(_, span)
-            | Self::Add(_, _, span) | Self::Subtract(_, _, span)
-            | Self::Multiply(_, _, span) | Self::Divide(_, _, span) => *span,
+            Self::Integer(_, span)
+            | Self::Variable(_, span)
+            | Self::Negate(_, span)
+            | Self::Add(_, _, span)
+            | Self::Subtract(_, _, span)
+            | Self::Multiply(_, _, span)
+            | Self::Divide(_, _, span) => *span,
             Self::Call { span, .. } => *span,
         }
     }
@@ -472,12 +499,18 @@ pub fn lex_lossless(source_id: SourceId, source: &str) -> Result<LexedSource, Ve
             b'/' => {
                 let start = offset;
                 offset += 1;
-                tokens.push(Token { kind: TokenKind::Slash, span: SourceSpan::new(source_id, start, offset) });
+                tokens.push(Token {
+                    kind: TokenKind::Slash,
+                    span: SourceSpan::new(source_id, start, offset),
+                });
             }
             b'@' => {
                 let start = offset;
                 offset += 1;
-                tokens.push(Token { kind: TokenKind::At, span: SourceSpan::new(source_id, start, offset) });
+                tokens.push(Token {
+                    kind: TokenKind::At,
+                    span: SourceSpan::new(source_id, start, offset),
+                });
             }
             b'=' => {
                 let start = offset;
@@ -691,7 +724,10 @@ impl Parser {
         }
     }
 
-    fn parse_identifier_name(&mut self, description: &str) -> Result<(String, SourceSpan), Box<Diagnostic>> {
+    fn parse_identifier_name(
+        &mut self,
+        description: &str,
+    ) -> Result<(String, SourceSpan), Box<Diagnostic>> {
         let token = self.advance_required(description)?;
         match token.kind {
             TokenKind::Identifier(name) => Ok((name, token.span)),
@@ -703,18 +739,30 @@ impl Parser {
         self.syntax_error(description, span)
     }
 
-    fn parse_call_arguments(&mut self, name: String, start: SourceSpan) -> Result<Expression, Box<Diagnostic>> {
+    fn parse_call_arguments(
+        &mut self,
+        name: String,
+        start: SourceSpan,
+    ) -> Result<Expression, Box<Diagnostic>> {
         self.expect(TokenKind::LeftParen, "'(' before function arguments")?;
         let mut arguments = Vec::new();
         if !matches!(self.current().kind, TokenKind::RightParen) {
             loop {
                 arguments.push(self.parse_expression()?);
-                if !matches!(self.current().kind, TokenKind::Comma) { break; }
+                if !matches!(self.current().kind, TokenKind::Comma) {
+                    break;
+                }
                 self.advance();
             }
         }
-        let end = self.expect(TokenKind::RightParen, "')' after function arguments")?.span;
-        Ok(Expression::Call { name, arguments, span: SourceSpan::new(self.source_id, start.start, end.end) })
+        let end = self
+            .expect(TokenKind::RightParen, "')' after function arguments")?
+            .span;
+        Ok(Expression::Call {
+            name,
+            arguments,
+            span: SourceSpan::new(self.source_id, start.start, end.end),
+        })
     }
 
     fn parse_primary(&mut self) -> Result<Expression, Box<Diagnostic>> {
@@ -728,7 +776,9 @@ impl Parser {
             }
             TokenKind::LeftParen => {
                 let value = self.parse_expression()?;
-                let end = self.expect(TokenKind::RightParen, "')' after expression")?.span;
+                let end = self
+                    .expect(TokenKind::RightParen, "')' after expression")?
+                    .span;
                 let span = SourceSpan::new(self.source_id, token.span.start, end.end);
                 match value {
                     Expression::Integer(v, _) => Ok(Expression::Integer(v, span)),
@@ -737,11 +787,18 @@ impl Parser {
             }
             TokenKind::At => {
                 let (name, name_span) = self.parse_identifier_name("function name after '@'")?;
-                self.parse_call_arguments(name, SourceSpan::new(self.source_id, token.span.start, name_span.end))
+                self.parse_call_arguments(
+                    name,
+                    SourceSpan::new(self.source_id, token.span.start, name_span.end),
+                )
             }
             TokenKind::Identifier(name) if name == "FN" => {
-                let (function, function_span) = self.parse_identifier_name("function name after FN")?;
-                self.parse_call_arguments(function, SourceSpan::new(self.source_id, token.span.start, function_span.end))
+                let (function, function_span) =
+                    self.parse_identifier_name("function name after FN")?;
+                self.parse_call_arguments(
+                    function,
+                    SourceSpan::new(self.source_id, token.span.start, function_span.end),
+                )
             }
             TokenKind::Identifier(name) => {
                 if matches!(self.current().kind, TokenKind::LeftParen) {
@@ -750,7 +807,10 @@ impl Parser {
                     Ok(Expression::Variable(name, token.span))
                 }
             }
-            _ => Err(self.expression_error("expected an integer, variable, function call, or parenthesized expression", token.span)),
+            _ => Err(self.expression_error(
+                "expected an integer, variable, function call, or parenthesized expression",
+                token.span,
+            )),
         }
     }
 
@@ -795,12 +855,17 @@ impl Parser {
         Ok(expression)
     }
 
-    fn parse_assignment(&mut self, name: String, start: SourceSpan) -> Result<Statement, Box<Diagnostic>> {
+    fn parse_assignment(
+        &mut self,
+        name: String,
+        start: SourceSpan,
+    ) -> Result<Statement, Box<Diagnostic>> {
         self.expect(TokenKind::Equals, "'='")?;
         let value = self.parse_expression()?;
         let span = SourceSpan::new(self.source_id, start.start, value.span().end);
         if self.extended_depth == 0 && !self.extended_program {
-            let supported_literal = matches!(value, Expression::Integer(_, _) | Expression::Negate(_, _));
+            let supported_literal =
+                matches!(value, Expression::Integer(_, _) | Expression::Negate(_, _));
             let supported_intrinsic = matches!(&value,
                 Expression::Call { name, arguments, .. }
                 if matches!(name.as_str(), "FACT" | "VARIAT" | "COMBIN")
@@ -821,33 +886,96 @@ impl Parser {
                 }
             }
         }
-        if let Expression::Call { name: function, arguments, span: call_span } = &value {
-            let expected = match function.as_str() { "FACT" => Some(1), "VARIAT" | "COMBIN" => Some(2), _ => None };
+        if let Expression::Call {
+            name: function,
+            arguments,
+            span: call_span,
+        } = &value
+        {
+            let expected = match function.as_str() {
+                "FACT" => Some(1),
+                "VARIAT" | "COMBIN" => Some(2),
+                _ => None,
+            };
             if let Some(expected) = expected {
                 if arguments.len() != expected {
-                    return Err(self.syntax_error(format!("{function} expects {expected} argument(s)"), *call_span));
+                    return Err(self.syntax_error(
+                        format!("{function} expects {expected} argument(s)"),
+                        *call_span,
+                    ));
                 }
-                if !arguments.iter().all(|argument| matches!(argument, Expression::Integer(_, _) | Expression::Negate(_, _))) {
-                    return Err(self.syntax_error(format!("{function} arguments must be integer literals in this compiler subset"), *call_span));
+                if !arguments.iter().all(|argument| {
+                    matches!(
+                        argument,
+                        Expression::Integer(_, _) | Expression::Negate(_, _)
+                    )
+                }) {
+                    return Err(self.syntax_error(
+                        format!(
+                            "{function} arguments must be integer literals in this compiler subset"
+                        ),
+                        *call_span,
+                    ));
                 }
             }
         }
         match &value {
-            Expression::Integer(number, _) => Ok(Statement::AssignInteger { name, value: *number, span }),
+            Expression::Integer(number, _) => Ok(Statement::AssignInteger {
+                name,
+                value: *number,
+                span,
+            }),
             Expression::Negate(inner, _) if matches!(inner.as_ref(), Expression::Integer(_, _)) => {
-                let Expression::Integer(number, _) = inner.as_ref() else { unreachable!() };
-                Ok(Statement::AssignInteger { name, value: -*number, span })
+                let Expression::Integer(number, _) = inner.as_ref() else {
+                    unreachable!()
+                };
+                Ok(Statement::AssignInteger {
+                    name,
+                    value: -*number,
+                    span,
+                })
             }
-            Expression::Call { name: function, arguments, .. } if function == "FACT" && arguments.len() == 1 => {
+            Expression::Call {
+                name: function,
+                arguments,
+                ..
+            } if function == "FACT" && arguments.len() == 1 => {
                 if let Expression::Integer(argument, _) = arguments[0] {
-                    Ok(Statement::AssignFact { name, argument, span })
-                } else { Ok(Statement::AssignExpression { name, value, span }) }
+                    Ok(Statement::AssignFact {
+                        name,
+                        argument,
+                        span,
+                    })
+                } else {
+                    Ok(Statement::AssignExpression { name, value, span })
+                }
             }
-            Expression::Call { name: function, arguments, .. } if (function == "VARIAT" || function == "COMBIN") && arguments.len() == 2 => {
-                if let (Expression::Integer(n, _), Expression::Integer(k, _)) = (&arguments[0], &arguments[1]) {
-                    if function == "VARIAT" { Ok(Statement::AssignVariat { name, n: *n, k: *k, span }) }
-                    else { Ok(Statement::AssignCombin { name, n: *n, k: *k, span }) }
-                } else { Ok(Statement::AssignExpression { name, value, span }) }
+            Expression::Call {
+                name: function,
+                arguments,
+                ..
+            } if (function == "VARIAT" || function == "COMBIN") && arguments.len() == 2 => {
+                if let (Expression::Integer(n, _), Expression::Integer(k, _)) =
+                    (&arguments[0], &arguments[1])
+                {
+                    if function == "VARIAT" {
+                        Ok(Statement::AssignVariat {
+                            name,
+                            n: *n,
+                            k: *k,
+                            span,
+                        })
+                    } else {
+                        Ok(Statement::AssignCombin {
+                            name,
+                            n: *n,
+                            k: *k,
+                            span,
+                        })
+                    }
+                } else {
+                    Ok(Statement::AssignExpression { name, value, span })
+                }
             }
             _ => Ok(Statement::AssignExpression { name, value, span }),
         }
@@ -855,13 +983,17 @@ impl Parser {
 
     fn parse_parameters(&mut self) -> Result<Vec<String>, Box<Diagnostic>> {
         let mut parameters = Vec::new();
-        if !matches!(self.current().kind, TokenKind::LeftParen) { return Ok(parameters); }
+        if !matches!(self.current().kind, TokenKind::LeftParen) {
+            return Ok(parameters);
+        }
         self.advance();
         if !matches!(self.current().kind, TokenKind::RightParen) {
             loop {
                 let (name, _) = self.parse_identifier_name("parameter name")?;
                 parameters.push(name);
-                if !matches!(self.current().kind, TokenKind::Comma) { break; }
+                if !matches!(self.current().kind, TokenKind::Comma) {
+                    break;
+                }
                 self.advance();
             }
         }
@@ -870,36 +1002,63 @@ impl Parser {
     }
 
     fn finish_line(&mut self) -> Result<(), Box<Diagnostic>> {
-        if matches!(self.current().kind, TokenKind::Newline) { self.skip_newlines(); Ok(()) }
-        else if self.at_end() { Ok(()) }
-        else { Err(self.syntax_error("expected end of line", self.current().span)) }
+        if matches!(self.current().kind, TokenKind::Newline) {
+            self.skip_newlines();
+            Ok(())
+        } else if self.at_end() {
+            Ok(())
+        } else {
+            Err(self.syntax_error("expected end of line", self.current().span))
+        }
     }
 
-    fn parse_extended_block_until(&mut self, terminators: &[&str]) -> Result<Vec<Statement>, Box<Diagnostic>> {
+    fn parse_extended_block_until(
+        &mut self,
+        terminators: &[&str],
+    ) -> Result<Vec<Statement>, Box<Diagnostic>> {
         self.extended_depth += 1;
         let result = self.parse_block_until(terminators);
         self.extended_depth -= 1;
         result
     }
 
-    fn parse_block_until(&mut self, terminators: &[&str]) -> Result<Vec<Statement>, Box<Diagnostic>> {
+    fn parse_block_until(
+        &mut self,
+        terminators: &[&str],
+    ) -> Result<Vec<Statement>, Box<Diagnostic>> {
         let mut body = Vec::new();
         self.skip_newlines();
         loop {
             if self.at_end() {
-                return Err(self.syntax_error(format!("expected block terminator {}", terminators.join(" or ")), self.current().span));
+                return Err(self.syntax_error(
+                    format!("expected block terminator {}", terminators.join(" or ")),
+                    self.current().span,
+                ));
             }
             if let TokenKind::Identifier(name) = &self.current().kind {
-                if terminators.iter().any(|word| name.eq_ignore_ascii_case(word)) { return Ok(body); }
+                if terminators
+                    .iter()
+                    .any(|word| name.eq_ignore_ascii_case(word))
+                {
+                    return Ok(body);
+                }
             }
             let statement = self.parse_statement()?;
             body.push(statement);
-            if matches!(self.current().kind, TokenKind::Newline) { self.skip_newlines(); }
-            else if !self.at_end() {
+            if matches!(self.current().kind, TokenKind::Newline) {
+                self.skip_newlines();
+            } else if !self.at_end() {
                 if let TokenKind::Identifier(name) = &self.current().kind {
-                    if terminators.iter().any(|word| name.eq_ignore_ascii_case(word)) { continue; }
+                    if terminators
+                        .iter()
+                        .any(|word| name.eq_ignore_ascii_case(word))
+                    {
+                        continue;
+                    }
                 }
-                return Err(self.syntax_error("expected end of line inside block", self.current().span));
+                return Err(
+                    self.syntax_error("expected end of line inside block", self.current().span)
+                );
             }
         }
     }
@@ -911,31 +1070,64 @@ impl Parser {
         let direction_token = self.advance_required("TO or DOWNTO")?;
         let direction = match direction_token.kind {
             TokenKind::Identifier(ref word) if word.eq_ignore_ascii_case("TO") => ForDirection::To,
-            TokenKind::Identifier(ref word) if word.eq_ignore_ascii_case("DOWNTO") => ForDirection::DownTo,
-            _ => return Err(self.syntax_error("expected TO or DOWNTO in FOR header", direction_token.span)),
+            TokenKind::Identifier(ref word) if word.eq_ignore_ascii_case("DOWNTO") => {
+                ForDirection::DownTo
+            }
+            _ => {
+                return Err(
+                    self.syntax_error("expected TO or DOWNTO in FOR header", direction_token.span)
+                );
+            }
         };
         let end = self.parse_expression()?;
-        let step = if matches!(&self.current().kind, TokenKind::Identifier(word) if word.eq_ignore_ascii_case("STEP")) {
+        let step = if matches!(&self.current().kind, TokenKind::Identifier(word) if word.eq_ignore_ascii_case("STEP"))
+        {
             self.advance();
             Some(self.parse_expression()?)
-        } else { None };
+        } else {
+            None
+        };
         if direction == ForDirection::DownTo && step.is_some() {
-            return Err(self.syntax_error("DOWNTO cannot be combined with STEP", direction_token.span));
+            return Err(
+                self.syntax_error("DOWNTO cannot be combined with STEP", direction_token.span)
+            );
         }
         self.finish_line()?;
         let body = self.parse_extended_block_until(&["NEXT", "ENDFOR"])?;
         let terminator = self.advance();
-        let end_span = if matches!(&terminator.kind, TokenKind::Identifier(word) if word.eq_ignore_ascii_case("NEXT")) {
+        let end_span = if matches!(&terminator.kind, TokenKind::Identifier(word) if word.eq_ignore_ascii_case("NEXT"))
+        {
             if let TokenKind::Identifier(next_name) = &self.current().kind {
-                if next_name.eq_ignore_ascii_case(&variable) { self.advance().span } else {
-                    return Err(self.syntax_error(format!("NEXT variable does not match FOR variable '{variable}'"), self.current().span));
+                if next_name.eq_ignore_ascii_case(&variable) {
+                    self.advance().span
+                } else {
+                    return Err(self.syntax_error(
+                        format!("NEXT variable does not match FOR variable '{variable}'"),
+                        self.current().span,
+                    ));
                 }
-            } else { terminator.span }
-        } else { terminator.span };
+            } else {
+                terminator.span
+            }
+        } else {
+            terminator.span
+        };
         if !matches!(self.current().kind, TokenKind::Newline | TokenKind::End) {
             return Err(self.syntax_error("expected end of line after NEXT", self.current().span));
         }
-        Ok(Statement::For { variable, start: initial, end, step, direction, body, span: SourceSpan::new(self.source_id, start.start, end_span.end.max(terminator.span.end)) })
+        Ok(Statement::For {
+            variable,
+            start: initial,
+            end,
+            step,
+            direction,
+            body,
+            span: SourceSpan::new(
+                self.source_id,
+                start.start,
+                end_span.end.max(terminator.span.end),
+            ),
+        })
     }
 
     fn parse_procedure(&mut self, start: SourceSpan) -> Result<Statement, Box<Diagnostic>> {
@@ -945,10 +1137,18 @@ impl Parser {
         let body = self.parse_extended_block_until(&["RETURN", "ENDPROC", "ENDSUB"])?;
         let terminator = self.advance();
         if !matches!(self.current().kind, TokenKind::Newline | TokenKind::End) {
-            return Err(self.syntax_error("expected end of line after procedure terminator", self.current().span));
+            return Err(self.syntax_error(
+                "expected end of line after procedure terminator",
+                self.current().span,
+            ));
         }
         let end = terminator.span.end;
-        Ok(Statement::Procedure { name, parameters, body, span: SourceSpan::new(self.source_id, start.start, end) })
+        Ok(Statement::Procedure {
+            name,
+            parameters,
+            body,
+            span: SourceSpan::new(self.source_id, start.start, end),
+        })
     }
 
     fn parse_function(&mut self, start: SourceSpan) -> Result<Statement, Box<Diagnostic>> {
@@ -960,14 +1160,31 @@ impl Parser {
         let result = self.parse_expression()?;
         self.finish_line()?;
         let end_token = self.advance_required("ENDFUNC")?;
-        if !matches!(end_token.kind, TokenKind::Identifier(ref word) if word.eq_ignore_ascii_case("ENDFUNC")) {
-            return Err(self.syntax_error("expected ENDFUNC after FUNCTION return expression", end_token.span));
+        if !matches!(end_token.kind, TokenKind::Identifier(ref word) if word.eq_ignore_ascii_case("ENDFUNC"))
+        {
+            return Err(self.syntax_error(
+                "expected ENDFUNC after FUNCTION return expression",
+                end_token.span,
+            ));
         }
-        let span = SourceSpan::new(self.source_id, start.start, end_token.span.end.max(return_token.span.end));
+        let span = SourceSpan::new(
+            self.source_id,
+            start.start,
+            end_token.span.end.max(return_token.span.end),
+        );
         if !matches!(self.current().kind, TokenKind::Newline | TokenKind::End) {
-            return Err(self.syntax_error("expected end of line after ENDFUNC", self.current().span));
+            return Err(
+                self.syntax_error("expected end of line after ENDFUNC", self.current().span)
+            );
         }
-        Ok(Statement::Function { name, parameters, body, result, single_line: false, span })
+        Ok(Statement::Function {
+            name,
+            parameters,
+            body,
+            result,
+            single_line: false,
+            span,
+        })
     }
 
     fn parse_deffn(&mut self, start: SourceSpan) -> Result<Statement, Box<Diagnostic>> {
@@ -976,7 +1193,14 @@ impl Parser {
         self.expect(TokenKind::Equals, "'=' after DEFFN name and parameter list")?;
         let result = self.parse_expression()?;
         let span = SourceSpan::new(self.source_id, start.start, result.span().end);
-        Ok(Statement::Function { name, parameters, body: Vec::new(), result, single_line: true, span })
+        Ok(Statement::Function {
+            name,
+            parameters,
+            body: Vec::new(),
+            result,
+            single_line: true,
+            span,
+        })
     }
 
     fn parse_gosub(&mut self, start: SourceSpan) -> Result<Statement, Box<Diagnostic>> {
@@ -986,12 +1210,21 @@ impl Parser {
                 Expression::Call { arguments, .. } => arguments,
                 _ => unreachable!(),
             }
-        } else { Vec::new() };
+        } else {
+            Vec::new()
+        };
         if !matches!(self.current().kind, TokenKind::Newline | TokenKind::End) {
             return Err(self.syntax_error("expected end of line after GOSUB", self.current().span));
         }
-        let end = self.tokens[self.cursor.saturating_sub(1)].span.end.max(name_span.end);
-        Ok(Statement::Gosub { name, arguments, span: SourceSpan::new(self.source_id, start.start, end) })
+        let end = self.tokens[self.cursor.saturating_sub(1)]
+            .span
+            .end
+            .max(name_span.end);
+        Ok(Statement::Gosub {
+            name,
+            arguments,
+            span: SourceSpan::new(self.source_id, start.start, end),
+        })
     }
 
     fn parse_print(&mut self, start: SourceSpan) -> Result<Statement, Box<Diagnostic>> {
@@ -1000,17 +1233,39 @@ impl Parser {
             self.advance();
             values.push(self.parse_expression()?);
         }
-        let end = values.last().expect("at least one print expression").span().end;
-        if values.iter().all(|value| matches!(value, Expression::Variable(_, _))) {
-            let names: Vec<String> = values.iter().map(|value| match value { Expression::Variable(name, _) => name.clone(), _ => unreachable!() }).collect();
-            if names.iter().all(|name| matches!(name.as_str(), "x" | "y" | "z")) {
-                return Ok(Statement::PrintVariables { names, span: SourceSpan::new(self.source_id, start.start, end) });
+        let end = values
+            .last()
+            .expect("at least one print expression")
+            .span()
+            .end;
+        if values
+            .iter()
+            .all(|value| matches!(value, Expression::Variable(_, _)))
+        {
+            let names: Vec<String> = values
+                .iter()
+                .map(|value| match value {
+                    Expression::Variable(name, _) => name.clone(),
+                    _ => unreachable!(),
+                })
+                .collect();
+            if names
+                .iter()
+                .all(|name| matches!(name.as_str(), "x" | "y" | "z"))
+            {
+                return Ok(Statement::PrintVariables {
+                    names,
+                    span: SourceSpan::new(self.source_id, start.start, end),
+                });
             }
             if self.extended_depth == 0 {
                 return Err(self.unsupported_error("variables outside the top-level MVP subset (supported: x, y, z) are not supported", values[0].span()));
             }
         }
-        Ok(Statement::PrintExpressions { values, span: SourceSpan::new(self.source_id, start.start, end) })
+        Ok(Statement::PrintExpressions {
+            values,
+            span: SourceSpan::new(self.source_id, start.start, end),
+        })
     }
 
     fn parse_matrix_name(&mut self) -> Result<(String, SourceSpan), Box<Diagnostic>> {
