@@ -14,3 +14,4 @@ pub mod ir;
 pub mod prototype;
 pub mod semantic;
 pub mod source;
+pub mod structured_ir;
