@@ -224,11 +224,12 @@ pub fn validate_structured_program(program: &Program) -> Result<(), Vec<Semantic
     use std::collections::BTreeMap;
 
     #[derive(Clone)]
-    struct Callable { function: bool, arity: usize, span: crate::source::SourceSpan }
+    struct Callable { function: bool, arity: usize }
 
     fn error(errors: &mut Vec<SemanticError>, code: &str, message: impl Into<String>, span: crate::source::SourceSpan) {
         errors.push(SemanticError { code: code.to_owned(), message: message.into(), span });
     }
+
     fn register(
         name: &str, parameters: &[String], function: bool, span: crate::source::SourceSpan,
         declarations: &mut BTreeMap<String, Callable>, errors: &mut Vec<SemanticError>,
@@ -237,11 +238,10 @@ pub fn validate_structured_program(program: &Program) -> Result<(), Vec<Semantic
         if matches!(key.as_str(), "FACT" | "VARIAT" | "COMBIN") {
             error(errors, "GFA-SEM-0013", format!("'{name}' conflicts with a built-in function"), span);
         }
-        if let Some(previous) = declarations.get(&key) {
+        if declarations.contains_key(&key) {
             error(errors, "GFA-SEM-0013", format!("duplicate procedure/function declaration '{name}'"), span);
-            let _ = previous.span;
         } else {
-            declarations.insert(key, Callable { function, arity: parameters.len(), span });
+            declarations.insert(key, Callable { function, arity: parameters.len() });
         }
         let mut seen = std::collections::BTreeSet::new();
         for parameter in parameters {
@@ -250,21 +250,27 @@ pub fn validate_structured_program(program: &Program) -> Result<(), Vec<Semantic
             }
         }
     }
+
     fn scan_expr(
         expr: &Expression, declarations: &BTreeMap<String, Callable>,
-        errors: &mut Vec<SemanticError>,
+        errors: &mut Vec<SemanticError>, current_function: Option<(&str, bool)>,
     ) {
         match expr {
             Expression::Integer(_, _) | Expression::Variable(_, _) => {}
-            Expression::Negate(value, _) => scan_expr(value, declarations, errors),
+            Expression::Negate(value, _) => scan_expr(value, declarations, errors, current_function),
             Expression::Add(left, right, _) | Expression::Subtract(left, right, _)
             | Expression::Multiply(left, right, _) | Expression::Divide(left, right, _) => {
-                scan_expr(left, declarations, errors);
-                scan_expr(right, declarations, errors);
+                scan_expr(left, declarations, errors, current_function);
+                scan_expr(right, declarations, errors, current_function);
             }
             Expression::Call { name, arguments, span } => {
-                for argument in arguments { scan_expr(argument, declarations, errors); }
+                for argument in arguments { scan_expr(argument, declarations, errors, current_function); }
                 let key = name.to_ascii_uppercase();
+                if let Some((current, single_line)) = current_function {
+                    if single_line && current.eq_ignore_ascii_case(name) {
+                        error(errors, "GFA-SEM-0018", format!("DEFFN function '{name}' cannot call itself recursively"), *span);
+                    }
+                }
                 let builtin_arity = match key.as_str() { "FACT" => Some(1), "VARIAT" | "COMBIN" => Some(2), _ => None };
                 if let Some(arity) = builtin_arity {
                     if arguments.len() != arity {
@@ -284,19 +290,20 @@ pub fn validate_structured_program(program: &Program) -> Result<(), Vec<Semantic
             }
         }
     }
+
     fn scan_statements(
         statements: &[Statement], declarations: &BTreeMap<String, Callable>,
-        errors: &mut Vec<SemanticError>,
+        errors: &mut Vec<SemanticError>, current_function: Option<(&str, bool)>,
     ) {
         for statement in statements {
             match statement {
-                Statement::AssignExpression { value, .. } => scan_expr(value, declarations, errors),
-                Statement::PrintExpressions { values, .. } => for value in values { scan_expr(value, declarations, errors); },
+                Statement::AssignExpression { value, .. } => scan_expr(value, declarations, errors, current_function),
+                Statement::PrintExpressions { values, .. } => for value in values { scan_expr(value, declarations, errors, current_function); },
                 Statement::For { start, end, step, body, direction, span, .. } => {
-                    scan_expr(start, declarations, errors);
-                    scan_expr(end, declarations, errors);
+                    scan_expr(start, declarations, errors, current_function);
+                    scan_expr(end, declarations, errors, current_function);
                     if let Some(step) = step {
-                        scan_expr(step, declarations, errors);
+                        scan_expr(step, declarations, errors, current_function);
                         if matches!(step, Expression::Integer(0, _)) || matches!(step, Expression::Negate(inner, _) if matches!(inner.as_ref(), Expression::Integer(0, _))) {
                             error(errors, "GFA-SEM-0015", "FOR STEP must not be zero", *span);
                         }
@@ -304,10 +311,10 @@ pub fn validate_structured_program(program: &Program) -> Result<(), Vec<Semantic
                     if *direction == ForDirection::DownTo && step.is_some() {
                         error(errors, "GFA-SEM-0015", "DOWNTO cannot be combined with STEP", *span);
                     }
-                    scan_statements(body, declarations, errors);
+                    scan_statements(body, declarations, errors, current_function);
                 }
                 Statement::Gosub { name, arguments, span } => {
-                    for argument in arguments { scan_expr(argument, declarations, errors); }
+                    for argument in arguments { scan_expr(argument, declarations, errors, current_function); }
                     match declarations.get(&name.to_ascii_uppercase()) {
                         Some(callable) if callable.function => error(errors, "GFA-SEM-0011", format!("'{name}' is a function, not a procedure"), *span),
                         Some(callable) if callable.arity != arguments.len() => error(errors, "GFA-SEM-0012", format!("procedure '{name}' expects {} argument(s), got {}", callable.arity, arguments.len()), *span),
@@ -315,11 +322,12 @@ pub fn validate_structured_program(program: &Program) -> Result<(), Vec<Semantic
                         None => error(errors, "GFA-SEM-0010", format!("unknown procedure '{name}'"), *span),
                     }
                 }
-                Statement::Procedure { body, .. } => scan_statements(body, declarations, errors),
-                Statement::Function { body, result, .. } => {
-                    scan_statements(body, declarations, errors);
-                    scan_expr(result, declarations, errors);
-                },
+                Statement::Procedure { body, .. } => scan_statements(body, declarations, errors, None),
+                Statement::Function { name, body, result, single_line, .. } => {
+                    let scope = Some((name.as_str(), *single_line));
+                    scan_statements(body, declarations, errors, scope);
+                    scan_expr(result, declarations, errors, scope);
+                }
                 Statement::AssignFact { .. } | Statement::AssignVariat { .. } | Statement::AssignCombin { .. }
                 | Statement::AssignInteger { .. } | Statement::PrintVariables { .. } => {}
                 _ => {}
@@ -339,14 +347,18 @@ pub fn validate_structured_program(program: &Program) -> Result<(), Vec<Semantic
     for statement in &program.statements {
         match statement {
             Statement::Procedure { body, .. } | Statement::Function { body, .. } => {
-                if body.iter().any(|statement| matches!(statement, Statement::Procedure { .. } | Statement::Function { .. })) {
-                    error(&mut errors, "GFA-SEM-0017", "nested procedure/function declarations are not supported", body.iter().find(|statement| matches!(statement, Statement::Procedure { .. } | Statement::Function { .. })).map(|s| match s { Statement::Procedure { span, .. } | Statement::Function { span, .. } => *span, _ => unreachable!() }).unwrap());
+                if let Some(nested) = body.iter().find(|statement| matches!(statement, Statement::Procedure { .. } | Statement::Function { .. })) {
+                    let span = match nested {
+                        Statement::Procedure { span, .. } | Statement::Function { span, .. } => *span,
+                        _ => unreachable!(),
+                    };
+                    error(&mut errors, "GFA-SEM-0017", "nested procedure/function declarations are not supported", span);
                 }
             }
             _ => {}
         }
     }
-    scan_statements(&program.statements, &declarations, &mut errors);
+    scan_statements(&program.statements, &declarations, &mut errors, None);
     if errors.is_empty() { Ok(()) } else { Err(errors) }
 }
 
