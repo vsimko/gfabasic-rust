@@ -69,12 +69,12 @@ env -u SHELLOPTS xvfb-run -a -s "-screen 0 1024x768x24 +extension GLX" bash -c '
 from PIL import Image, ImageEnhance, ImageOps
 image = Image.open("artifacts/amiga-3.5-discovery/native-run/merge-file-selected.png").convert("L")
 image = ImageOps.invert(image).resize((image.width * 3, image.height * 3))
-ImageEnhance.Contrast(image).enhance(3).save("artifacts/amiga-3.5-discovery/native-run/merge-file-selected-ocr-input.png")
+ImageEnhance.Contrast(image).enhance(3).save("$RUNNER_TEMP/merge-file-selected-ocr-input.png")
 PY
-  tesseract artifacts/amiga-3.5-discovery/native-run/merge-file-selected-ocr-input.png stdout --psm 6 2>/dev/null > artifacts/amiga-3.5-discovery/native-run/merge-file-selected-ocr.txt
-  if ! grep -Eiq "gfatest[ ._-]*lst" artifacts/amiga-3.5-discovery/native-run/merge-file-selected-ocr.txt; then
+  tesseract $RUNNER_TEMP/merge-file-selected-ocr-input.png stdout --psm 6 2>/dev/null > $RUNNER_TEMP/merge-file-selected-ocr.txt
+  if ! grep -Eiq "gfatest[ ._-]*lst" $RUNNER_TEMP/merge-file-selected-ocr.txt; then
     echo "::error::Merge requester did not select gfatest.LST; refusing to continue."
-    cat artifacts/amiga-3.5-discovery/native-run/merge-file-selected-ocr.txt
+    cat $RUNNER_TEMP/merge-file-selected-ocr.txt
     exit 1
   fi
 
