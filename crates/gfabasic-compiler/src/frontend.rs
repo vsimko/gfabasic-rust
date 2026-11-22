@@ -1468,7 +1468,7 @@ mod tests {
         assert_eq!(variable, "i");
         assert!(!down_to);
         assert!(matches!(step, Some(super::Expression::Integer(1))));
-        assert!(matches!(body[0], Statement::ForLoop { down_to: true, .. }));
+        assert!(matches!(&body[0], Statement::ForLoop { down_to: true, .. }));
     }
 
     #[test]
@@ -1501,9 +1501,6 @@ mod tests {
         assert!(matches!(program.statements[0], Statement::AssignExpression { .. }));
         assert!(matches!(program.statements[1], Statement::ProcedureCall { .. }));
     }
-    use super::{Statement, parse, parse_document};
-    use crate::diagnostics::DiagnosticCategory;
-    use crate::source::SourceMap;
 
     #[test]
     fn parses_the_fact_zero_vertical_slice_fixture() {

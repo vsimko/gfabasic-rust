@@ -134,14 +134,14 @@ fn lower_statements(statements: &[Statement], errors: &mut Vec<LoweringError>) -
             }
             Statement::PrintVariables { names, span } => result.push(Instruction::Print { variables: names.clone(), span: *span }),
             Statement::ForLoop { variable, start, end, step, down_to, body, span } => {
+                if matches!(step, Some(Expression::Integer(0))) {
+                    errors.push(LoweringError { message: "FOR STEP must not be zero".into(), span: *span });
+                }
                 let step = if *down_to {
                     ValueExpr::I64(-1)
                 } else {
                     step.as_ref().map(convert_expression).unwrap_or(ValueExpr::I64(1))
                 };
-                if let Some(Expression::Integer(0)) = step.as_ref().and_then(|_| step_literal(step.clone())) {
-                    errors.push(LoweringError { message: "FOR STEP must not be zero".into(), span: *span });
-                }
                 result.push(Instruction::For {
                     variable: variable.clone(),
                     start: convert_expression(start),
@@ -163,10 +163,6 @@ fn lower_statements(statements: &[Statement], errors: &mut Vec<LoweringError>) -
         }
     }
     result
-}
-
-fn step_literal(step: ValueExpr) -> Option<Expression> {
-    match step { ValueExpr::I64(value) => Some(Expression::Integer(value)), _ => None }
 }
 
 fn statement_span(statement: &Statement) -> SourceSpan {
