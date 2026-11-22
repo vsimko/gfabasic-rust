@@ -803,7 +803,17 @@ impl Parser {
             }
             TokenKind::Identifier(name) => {
                 if matches!(self.current().kind, TokenKind::LeftParen) {
-                    self.parse_call_arguments(name, token.span)
+                    if ["FACT", "VARIAT", "COMBIN"]
+                        .iter()
+                        .any(|builtin| name.eq_ignore_ascii_case(builtin))
+                    {
+                        self.parse_call_arguments(name, token.span)
+                    } else {
+                        Err(self.unsupported_error(
+                            "user-defined function calls require an FN or '@' prefix",
+                            token.span,
+                        ))
+                    }
                 } else {
                     Ok(Expression::Variable(name, token.span))
                 }
@@ -2847,6 +2857,36 @@ mod tests {
             };
             assert_eq!(&source_text[span.start..span.end], expected_text);
         }
+    }
+
+    #[test]
+    fn user_defined_function_calls_require_documented_prefixes() {
+        let source = "DEFFN Double(n)=n*2\nx=FN Double(4)\ny=@Double(5)\nPRINT x,y\n";
+        let mut sources = SourceMap::new();
+        let source_id = sources.add_source("function-call-prefixes.bas", source);
+        let program = parse(source_id, source).expect("FN and @ calls are documented forms");
+        assert!(matches!(
+            &program.statements[1],
+            Statement::AssignExpression {
+                value: super::Expression::Call { name, .. },
+                ..
+            } if name == "Double"
+        ));
+        assert!(matches!(
+            &program.statements[2],
+            Statement::AssignExpression {
+                value: super::Expression::Call { name, .. },
+                ..
+            } if name == "Double"
+        ));
+
+        let bare_source = "DEFFN Double(n)=n*2\nx=Double(4)\n";
+        let mut bare_sources = SourceMap::new();
+        let bare_source_id = bare_sources.add_source("bare-function-call.bas", bare_source);
+        let errors = parse(bare_source_id, bare_source)
+            .expect_err("bare user-defined function calls are not documented syntax");
+        assert_eq!(errors[0].category, DiagnosticCategory::Unsupported);
+        assert!(errors[0].message.contains("require an FN or '@' prefix"));
     }
 
     #[test]
