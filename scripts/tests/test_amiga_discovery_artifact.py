@@ -2,15 +2,29 @@
 
 from __future__ import annotations
 
+import binascii
 import pathlib
+import struct
 import sys
 import tempfile
 import unittest
-
-from PIL import Image
+import zlib
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
 from assert_amiga_discovery_artifact import validate_artifact
+
+
+def png_chunk(kind: bytes, data: bytes) -> bytes:
+    return (struct.pack(">I", len(data)) + kind + data
+            + struct.pack(">I", binascii.crc32(kind + data) & 0xFFFFFFFF))
+
+
+def valid_test_png() -> bytes:
+    header = struct.pack(">IIBBBBB", 2, 2, 8, 2, 0, 0, 0)
+    pixels = zlib.compress(b"\x00" + b"\xff\x00\x00" * 2
+                           + b"\x00" + b"\x00\xff\x00" * 2)
+    return (b"\x89PNG\r\n\x1a\n" + png_chunk(b"IHDR", header)
+            + png_chunk(b"IDAT", pixels) + png_chunk(b"IEND", b""))
 
 
 class ArtifactBoundaryTests(unittest.TestCase):
@@ -25,7 +39,7 @@ class ArtifactBoundaryTests(unittest.TestCase):
 
     def test_accepts_approved_utf8_evidence_and_valid_png(self) -> None:
         image_path = self.root / "editor-version-menu.png"
-        Image.new("RGB", (2, 2)).save(image_path, format="PNG")
+        image_path.write_bytes(valid_test_png())
         self.assertEqual(validate_artifact(self.root), [])
 
     def test_rejects_unapproved_file_path(self) -> None:
