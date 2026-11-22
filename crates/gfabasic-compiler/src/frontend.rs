@@ -806,7 +806,18 @@ impl Parser {
                     && arguments.iter().all(|argument| matches!(argument, Expression::Integer(_, _) | Expression::Negate(_, _)))
             );
             if !supported_literal && !supported_intrinsic {
-                return Err(self.unsupported_error("assignment expressions are only supported inside FOR/PROCEDURE/FUNCTION blocks in this compiler subset", value.span()));
+                match &value {
+                    Expression::Add(left, right, _) | Expression::Subtract(left, right, _)
+                    | Expression::Multiply(left, right, _) | Expression::Divide(left, right, _) => {
+                        let operator = SourceSpan::new(self.source_id, left.span().end, right.span().start);
+                        return Err(self.syntax_error("arithmetic expressions are only supported inside structured blocks", operator));
+                    }
+                    Expression::Call { span: call_span, .. } => {
+                        let name_span = self.tokens.iter().find(|token| token.span.start == call_span.start).map_or(*call_span, |token| token.span);
+                        return Err(self.unsupported_error("function call is outside the top-level MVP intrinsic subset", name_span));
+                    }
+                    _ => return Err(self.unsupported_error("assignment expressions are only supported inside FOR/PROCEDURE/FUNCTION blocks in this compiler subset", value.span())),
+                }
             }
         }
         if let Expression::Call { name: function, arguments, span: call_span } = &value {
