@@ -5,14 +5,14 @@
 //! and UTF-8 transport are prototype choices, not verified historical
 //! interpreter behavior.
 
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, BTreeSet};
 use std::fs;
 use std::path::Path;
 use std::process::Command;
 use std::sync::atomic::{AtomicUsize, Ordering};
 
 use crate::diagnostics::{Diagnostic, DiagnosticCategory, DiagnosticSeverity};
-use crate::frontend::parse_document;
+use crate::frontend::{Expression, ForDirection, Statement, parse_document};
 use crate::ir::{Instruction, Module, ValueId};
 use crate::semantic::analyze_prototype;
 use crate::source::{SourceMap, SourceSpan};
@@ -96,6 +96,15 @@ fn lower_program(
     document: crate::frontend::ParsedDocument,
     sources: &SourceMap,
 ) -> Result<String, String> {
+    if contains_structured(&document.program.statements) {
+        let module = crate::ir::lower_structured(&document.program).map_err(|errors| {
+            errors.iter().map(|error| match error.span {
+                Some(span) => semantic_error(sources, span, error.message.clone()),
+                None => error.message.clone(),
+            }).collect::<Vec<_>>().join("\\n")
+        })?;
+        return emit_c(&module);
+    }
     let model = analyze_prototype(document).map_err(|errors| {
         errors
             .iter()
@@ -125,7 +134,240 @@ fn lower_program(
     emit_c(&module)
 }
 
+fn contains_structured(statements: &[Statement]) -> bool {
+    statements.iter().any(|statement| match statement {
+        Statement::AssignExpression { .. } | Statement::PrintExpressions { .. }
+        | Statement::For { .. } | Statement::Procedure { .. } | Statement::Function { .. }
+        | Statement::Gosub { .. } => true,
+        _ => false,
+    })
+}
+
+fn canonical(name: &str) -> String { name.to_ascii_uppercase() }
+
+fn collect_expression_variables(expression: &Expression, variables: &mut BTreeSet<String>) {
+    match expression {
+        Expression::Integer(_, _) => {}
+        Expression::Variable(name, _) => { variables.insert(canonical(name)); }
+        Expression::Negate(value, _) => collect_expression_variables(value, variables),
+        Expression::Add(left, right, _) | Expression::Subtract(left, right, _)
+        | Expression::Multiply(left, right, _) | Expression::Divide(left, right, _) => {
+            collect_expression_variables(left, variables);
+            collect_expression_variables(right, variables);
+        }
+        Expression::Call { arguments, .. } => for argument in arguments { collect_expression_variables(argument, variables); },
+    }
+}
+
+fn collect_statement_variables(statements: &[Statement], variables: &mut BTreeSet<String>) {
+    for statement in statements {
+        match statement {
+            Statement::AssignInteger { name, .. } | Statement::AssignFact { name, .. }
+            | Statement::AssignVariat { name, .. } | Statement::AssignCombin { name, .. } => { variables.insert(canonical(name)); }
+            Statement::AssignExpression { name, value, .. } => {
+                variables.insert(canonical(name));
+                collect_expression_variables(value, variables);
+            }
+            Statement::PrintVariables { names, .. } => for name in names { variables.insert(canonical(name)); },
+            Statement::PrintExpressions { values, .. } => for value in values { collect_expression_variables(value, variables); },
+            Statement::For { variable, start, end, step, body, .. } => {
+                variables.insert(canonical(variable));
+                collect_expression_variables(start, variables);
+                collect_expression_variables(end, variables);
+                if let Some(step) = step { collect_expression_variables(step, variables); }
+                collect_statement_variables(body, variables);
+            }
+            Statement::Procedure { parameters, body, .. } | Statement::Function { parameters, body, .. } => {
+                for parameter in parameters { variables.insert(canonical(parameter)); }
+                collect_statement_variables(body, variables);
+                if let Statement::Function { result, .. } = statement { collect_expression_variables(result, variables); }
+            }
+            Statement::Gosub { arguments, .. } => for argument in arguments { collect_expression_variables(argument, variables); },
+            _ => {}
+        }
+    }
+}
+
+fn variable_reference(name: &str, parameters: &BTreeMap<String, String>, globals: &BTreeMap<String, String>) -> Result<String, String> {
+    let key = canonical(name);
+    parameters.get(&key).or_else(|| globals.get(&key)).cloned()
+        .ok_or_else(|| format!("variable '{name}' has no allocated storage"))
+}
+
+fn emit_expression(
+    expression: &Expression,
+    parameters: &BTreeMap<String, String>,
+    globals: &BTreeMap<String, String>,
+    functions: &BTreeMap<String, String>,
+) -> Result<String, String> {
+    Ok(match expression {
+        Expression::Integer(value, _) => value.to_string(),
+        Expression::Variable(name, _) => variable_reference(name, parameters, globals)?,
+        Expression::Negate(value, _) => format!("(-{})", emit_expression(value, parameters, globals, functions)?),
+        Expression::Add(left, right, _) => format!("({} + {})", emit_expression(left, parameters, globals, functions)?, emit_expression(right, parameters, globals, functions)?),
+        Expression::Subtract(left, right, _) => format!("({} - {})", emit_expression(left, parameters, globals, functions)?, emit_expression(right, parameters, globals, functions)?),
+        Expression::Multiply(left, right, _) => format!("({} * {})", emit_expression(left, parameters, globals, functions)?, emit_expression(right, parameters, globals, functions)?),
+        Expression::Divide(left, right, _) => format!("({} / {})", emit_expression(left, parameters, globals, functions)?, emit_expression(right, parameters, globals, functions)?),
+        Expression::Call { name, arguments, .. } => {
+            let key = canonical(name);
+            let target = match key.as_str() {
+                "FACT" => "gfa_builtin_fact".to_owned(),
+                "VARIAT" => "gfa_builtin_variat".to_owned(),
+                "COMBIN" => "gfa_builtin_combin".to_owned(),
+                _ => functions.get(&key).cloned().ok_or_else(|| format!("function '{name}' has no generated symbol"))?,
+            };
+            let args = arguments.iter().map(|arg| emit_expression(arg, parameters, globals, functions)).collect::<Result<Vec<_>,_>>()?;
+            format!("{target}({})", args.join(", "))
+        }
+    })
+}
+
+fn emit_statement(
+    statement: &Statement,
+    indent: usize,
+    parameters: &BTreeMap<String, String>,
+    globals: &BTreeMap<String, String>,
+    functions: &BTreeMap<String, String>,
+    procedures: &BTreeMap<String, String>,
+    loop_id: &mut usize,
+) -> Result<String, String> {
+    let pad = "    ".repeat(indent);
+    let mut output = String::new();
+    match statement {
+        Statement::AssignInteger { name, value, .. } => {
+            output.push_str(&format!("{pad}{} = {value};\n", variable_reference(name, parameters, globals)?));
+        }
+        Statement::AssignFact { name, argument, .. } => {
+            output.push_str(&format!("{pad}{} = gfa_builtin_fact({argument});\n", variable_reference(name, parameters, globals)?));
+        }
+        Statement::AssignVariat { name, n, k, .. } => {
+            output.push_str(&format!("{pad}{} = gfa_builtin_variat({n}, {k});\n", variable_reference(name, parameters, globals)?));
+        }
+        Statement::AssignCombin { name, n, k, .. } => {
+            output.push_str(&format!("{pad}{} = gfa_builtin_combin({n}, {k});\n", variable_reference(name, parameters, globals)?));
+        }
+        Statement::AssignExpression { name, value, .. } => {
+            let value = emit_expression(value, parameters, globals, functions)?;
+            output.push_str(&format!("{pad}{} = {value};\n", variable_reference(name, parameters, globals)?));
+        }
+        Statement::PrintVariables { names, .. } => {
+            let args = names.iter().map(|name| variable_reference(name, parameters, globals)).collect::<Result<Vec<_>,_>>()?;
+            output.push_str(&format!("{pad}(void)printf(\"{}\\n\", {});\n", vec!["%lld"; args.len()].join(" "), args.join(", ")));
+        }
+        Statement::PrintExpressions { values, .. } => {
+            let args = values.iter().map(|value| emit_expression(value, parameters, globals, functions)).collect::<Result<Vec<_>,_>>()?;
+            output.push_str(&format!("{pad}(void)printf(\"{}\\n\", {});\n", vec!["%lld"; args.len()].join(" "), args.join(", ")));
+        }
+        Statement::For { variable, start, end, step, direction, body, .. } => {
+            let id = *loop_id;
+            *loop_id += 1;
+            let start_name = format!("gfa_for_start_{id}");
+            let end_name = format!("gfa_for_end_{id}");
+            let step_name = format!("gfa_for_step_{id}");
+            let start_expr = emit_expression(start, parameters, globals, functions)?;
+            let end_expr = emit_expression(end, parameters, globals, functions)?;
+            let step_expr = if let Some(step) = step {
+                emit_expression(step, parameters, globals, functions)?
+            } else if *direction == ForDirection::DownTo { "-1".to_owned() } else { "1".to_owned() };
+            let counter = variable_reference(variable, parameters, globals)?;
+            output.push_str(&format!("{pad}{{\n{pad}    long long {start_name} = {start_expr};\n{pad}    long long {end_name} = {end_expr};\n{pad}    long long {step_name} = {step_expr};\n{pad}    if ({step_name} == 0) {{ (void)fputs(\"GFA BASIC FOR STEP cannot be zero\\n\", stderr); abort(); }}\n{pad}    {counter} = {start_name};\n{pad}    do {{\n"));
+            for child in body {
+                output.push_str(&emit_statement(child, indent + 2, parameters, globals, functions, procedures, loop_id)?);
+            }
+            output.push_str(&format!("{pad}        {counter} += {step_name};\n{pad}    }} while (({step_name} > 0 && {counter} <= {end_name}) || ({step_name} < 0 && {counter} >= {end_name}));\n{pad}}}\n"));
+        }
+        Statement::Gosub { name, arguments, .. } => {
+            let target = procedures.get(&canonical(name)).ok_or_else(|| format!("procedure '{name}' has no generated symbol"))?;
+            let args = arguments.iter().map(|arg| emit_expression(arg, parameters, globals, functions)).collect::<Result<Vec<_>,_>>()?;
+            output.push_str(&format!("{pad}{target}({});\n", args.join(", ")));
+        }
+        Statement::Procedure { .. } | Statement::Function { .. } => {}
+        _ => return Err("matrix statements are not supported in structured executable code".to_owned()),
+    }
+    Ok(output)
+}
+
+fn emit_structured_c(program: &crate::frontend::Program) -> Result<String, String> {
+    let mut variables = BTreeSet::new();
+    collect_statement_variables(&program.statements, &mut variables);
+    let globals: BTreeMap<String, String> = variables.iter().enumerate().map(|(i, name)| (name.clone(), format!("gfa_var_{i}"))).collect();
+
+    let mut functions = BTreeMap::new();
+    let mut procedures = BTreeMap::new();
+    let mut function_declarations = Vec::new();
+    let mut procedure_declarations = Vec::new();
+    for statement in &program.statements {
+        match statement {
+            Statement::Function { name, parameters, .. } => {
+                let symbol = format!("gfa_function_{}", functions.len());
+                functions.insert(canonical(name), symbol.clone());
+                function_declarations.push((symbol, parameters.clone()));
+            }
+            Statement::Procedure { name, parameters, .. } => {
+                let symbol = format!("gfa_procedure_{}", procedures.len());
+                procedures.insert(canonical(name), symbol.clone());
+                procedure_declarations.push((symbol, parameters.clone()));
+            }
+            _ => {}
+        }
+    }
+
+    let mut c = String::from("#include <stdio.h>\n#include <stdlib.h>\n\n");
+    c.push_str("static long long gfa_builtin_fact(long long n) { if (n < 0 || n > 20) abort(); long long r = 1; for (long long i = 2; i <= n; ++i) r *= i; return r; }\n");
+    c.push_str("static long long gfa_builtin_variat(long long n, long long k) { if (n < 0 || n > 20 || k < 0 || k > n) abort(); long long r = 1; for (long long i = 0; i < k; ++i) r *= n - i; return r; }\n");
+    c.push_str("static long long gfa_builtin_combin(long long n, long long k) { if (n < 0 || n > 20 || k < 0 || k > n) abort(); if (k > n-k) k = n-k; long long r = 1; for (long long i = 1; i <= k; ++i) r = r * (n-k+i) / i; return r; }\n\n");
+    for name in globals.values() { c.push_str(&format!("long long {name};\n")); }
+    c.push('\n');
+
+    for (symbol, parameters) in &function_declarations {
+        let args = (0..parameters.len()).map(|i| format!("long long p{i}")).collect::<Vec<_>>().join(", ");
+        c.push_str(&format!("long long {symbol}({});\n", if args.is_empty() { "void" } else { &args }));
+    }
+    for (symbol, parameters) in &procedure_declarations {
+        let args = (0..parameters.len()).map(|i| format!("long long p{i}")).collect::<Vec<_>>().join(", ");
+        c.push_str(&format!("void {symbol}({});\n", if args.is_empty() { "void" } else { &args }));
+    }
+    c.push('\n');
+
+    let mut loop_id = 0;
+    for (index, statement) in program.statements.iter().enumerate() {
+        match statement {
+            Statement::Function { name, parameters, body, result, .. } => {
+                let symbol = functions.get(&canonical(name)).unwrap();
+                let params: BTreeMap<String, String> = parameters.iter().enumerate().map(|(i,p)| (canonical(p), format!("p{i}"))).collect();
+                let args = (0..parameters.len()).map(|i| format!("long long p{i}")).collect::<Vec<_>>().join(", ");
+                c.push_str(&format!("long long {symbol}({}) {{\n", if args.is_empty() { "void" } else { &args }));
+                for i in 0..parameters.len() { c.push_str(&format!("    (void)p{i};\n")); }
+                for child in body { c.push_str(&emit_statement(child, 1, &params, &globals, &functions, &procedures, &mut loop_id)?); }
+                c.push_str(&format!("    return {};\n}}\n\n", emit_expression(result, &params, &globals, &functions)?));
+            }
+            Statement::Procedure { name, parameters, body, .. } => {
+                let symbol = procedures.get(&canonical(name)).unwrap();
+                let params: BTreeMap<String, String> = parameters.iter().enumerate().map(|(i,p)| (canonical(p), format!("p{i}"))).collect();
+                let args = (0..parameters.len()).map(|i| format!("long long p{i}")).collect::<Vec<_>>().join(", ");
+                c.push_str(&format!("void {symbol}({}) {{\n", if args.is_empty() { "void" } else { &args }));
+                for i in 0..parameters.len() { c.push_str(&format!("    (void)p{i};\n")); }
+                for child in body { c.push_str(&emit_statement(child, 1, &params, &globals, &functions, &procedures, &mut loop_id)?); }
+                c.push_str("}\n\n");
+            }
+            _ => { let _ = index; }
+        }
+    }
+
+    c.push_str("int main(void) {\n");
+    for statement in &program.statements {
+        if !matches!(statement, Statement::Procedure { .. } | Statement::Function { .. }) {
+            c.push_str(&emit_statement(statement, 1, &BTreeMap::new(), &globals, &functions, &procedures, &mut loop_id)?);
+        }
+    }
+    c.push_str("    return 0;\n}\n");
+    Ok(c)
+}
+
 fn emit_c(module: &Module) -> Result<String, String> {
+    if let Some(program) = &module.structured_program {
+        return emit_structured_c(program);
+    }
     let mut names = BTreeMap::<ValueId, String>::new();
     let mut statements = Vec::new();
 
