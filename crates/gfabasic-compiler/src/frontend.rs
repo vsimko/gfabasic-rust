@@ -157,7 +157,6 @@ pub enum Statement {
     },
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum Expression {
     Integer(i64),
@@ -169,6 +168,7 @@ pub enum Expression {
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum BinaryOperator { Add, Subtract, Multiply }
 
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum MatCopyOperation {
     Copy,
     TransposedCopy,
