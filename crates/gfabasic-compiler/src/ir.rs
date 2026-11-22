@@ -478,6 +478,7 @@ mod tests {
         let id = sources.add_source("ir-invalid.bas", source);
         let span = crate::source::SourceSpan::new(id, 0, source.len());
         let undefined = super::Module {
+            structured_program: None,
             instructions: vec![Instruction::Print {
                 values: vec![ValueId(9)],
                 span,
@@ -486,6 +487,7 @@ mod tests {
         assert!(verify(&undefined).is_err());
 
         let duplicate = super::Module {
+            structured_program: None,
             instructions: vec![
                 Instruction::ConstI64 {
                     result: ValueId(1),
