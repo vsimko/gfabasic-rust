@@ -1457,6 +1457,55 @@ mod tests {
     use crate::source::SourceMap;
 
     #[test]
+    fn parses_nested_for_loops_with_named_next_and_step_directions() {
+        let source = "FOR i=1 TO 3 STEP 1\n FOR j=3 DOWNTO 1\n  x=x+i*j\n NEXT j\nNEXT i\nPRINT x\n";
+        let mut sources = SourceMap::new();
+        let id = sources.add_source("for-loops.bas", source);
+        let program = parse(id, source).expect("nested counted loops parse");
+        let Statement::ForLoop { variable, step, body, down_to, .. } = &program.statements[0] else {
+            panic!("expected outer FOR");
+        };
+        assert_eq!(variable, "i");
+        assert!(!down_to);
+        assert!(matches!(step, Some(super::Expression::Integer(1))));
+        assert!(matches!(body[0], Statement::ForLoop { down_to: true, .. }));
+    }
+
+    #[test]
+    fn rejects_crossed_or_mismatched_next_variable() {
+        let source = "FOR i=1 TO 3\n x=x+1\nNEXT j\n";
+        let mut sources = SourceMap::new();
+        let id = sources.add_source("mismatched-next.bas", source);
+        let errors = parse(id, source).expect_err("mismatched NEXT must fail");
+        assert!(errors.iter().any(|error| error.message.contains("does not match FOR variable")));
+    }
+
+    #[test]
+    fn parses_procedures_multiline_functions_and_deffn() {
+        let source = "GOSUB bump(2)\nx=FN twice(x)\nPROCEDURE bump(n)\n x=x+n\nRETURN\nFUNCTION twice(n)\n x=x+1\n RETURN n*2\nENDFUNC\nDEFFN square(n)=n*n\nPRINT x\n";
+        let mut sources = SourceMap::new();
+        let id = sources.add_source("subprograms.bas", source);
+        let program = parse(id, source).expect("subprogram declarations parse");
+        assert!(matches!(program.statements[0], Statement::ProcedureCall { ref name, .. } if name == "bump"));
+        assert!(program.statements.iter().any(|statement| matches!(statement, Statement::ProcedureDefinition { name, parameters, .. } if name == "bump" && parameters == &["n"])));
+        assert!(program.statements.iter().any(|statement| matches!(statement, Statement::FunctionDefinition { name, .. } if name == "twice")));
+        assert!(program.statements.iter().any(|statement| matches!(statement, Statement::DefFnDefinition { name, .. } if name == "square")));
+    }
+
+    #[test]
+    fn parses_at_prefixed_function_and_procedure_calls() {
+        let source = "x=@double(4)\n@touch(x)\nPROCEDURE touch(n)\n x=n\nRETURN\nDEFFN double(n)=n*2\nPRINT x\n";
+        let mut sources = SourceMap::new();
+        let id = sources.add_source("at-calls.bas", source);
+        let program = parse(id, source).expect("@-prefixed calls parse");
+        assert!(matches!(program.statements[0], Statement::AssignExpression { .. }));
+        assert!(matches!(program.statements[1], Statement::ProcedureCall { .. }));
+    }
+    use super::{Statement, parse, parse_document};
+    use crate::diagnostics::DiagnosticCategory;
+    use crate::source::SourceMap;
+
+    #[test]
     fn parses_the_fact_zero_vertical_slice_fixture() {
         let source_text = "x=FACT(0)\ny=FACT(1)\nz=FACT(2)\nPRINT x,y,z\n";
         let mut sources = SourceMap::new();

@@ -259,6 +259,17 @@ pub fn lower(model: &SemanticModel) -> Result<Module, Vec<IrError>> {
                     saw_print = true;
                 }
             }
+            Statement::AssignExpression { span, .. }
+            | Statement::ForLoop { span, .. }
+            | Statement::ProcedureDefinition { span, .. }
+            | Statement::ProcedureCall { span, .. }
+            | Statement::FunctionDefinition { span, .. }
+            | Statement::DefFnDefinition { span, .. } => {
+                state.errors.push(IrError::at(
+                    "structured statement must be lowered through the structured numeric IR",
+                    *span,
+                ));
+            }
         }
     }
 

@@ -206,6 +206,16 @@ pub fn resolve_prototype_symbols(
                     }
                 }
             }
+            Statement::AssignExpression { span, .. }
+            | Statement::ForLoop { span, .. }
+            | Statement::ProcedureDefinition { span, .. }
+            | Statement::ProcedureCall { span, .. }
+            | Statement::FunctionDefinition { span, .. }
+            | Statement::DefFnDefinition { span, .. } => errors.push(SemanticError {
+                code: "GFA-SEM-0004".to_owned(),
+                message: "structured control-flow syntax must use the structured numeric analysis path".to_owned(),
+                span: *span,
+            }),
         }
     }
 

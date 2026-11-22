@@ -96,6 +96,31 @@ fn lower_program(
     document: crate::frontend::ParsedDocument,
     sources: &SourceMap,
 ) -> Result<String, String> {
+    let uses_structured_ir = document.program.statements.iter().any(|statement| matches!(
+        statement,
+        crate::frontend::Statement::AssignExpression { .. }
+            | crate::frontend::Statement::ForLoop { .. }
+            | crate::frontend::Statement::ProcedureDefinition { .. }
+            | crate::frontend::Statement::ProcedureCall { .. }
+            | crate::frontend::Statement::FunctionDefinition { .. }
+            | crate::frontend::Statement::DefFnDefinition { .. }
+    ));
+    if uses_structured_ir {
+        let module = crate::structured_ir::lower(&document.program).map_err(|errors| {
+            errors.iter().map(|error| {
+                Diagnostic::new(
+                    "GFA-IR-0001",
+                    DiagnosticSeverity::Error,
+                    DiagnosticCategory::Semantic,
+                    error.message.clone(),
+                )
+                .with_primary_span(error.span)
+                .render(sources)
+            }).collect::<Vec<_>>().join("\n")
+        })?;
+        return Ok(crate::structured_ir::emit_c(&module));
+    }
+
     let model = analyze_prototype(document).map_err(|errors| {
         errors
             .iter()
