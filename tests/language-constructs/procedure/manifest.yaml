@@ -1,0 +1,80 @@
+manifest_schema_version: 1
+construct:
+  id: "procedure"
+  kind: "declaration"
+  name: "PROCEDURE/GOSUB"
+  summary: "Named subroutines with positional value parameters and RETURN control transfer."
+  syntax_forms:
+    - text: "PROCEDURE name[(parameters)] ... RETURN"
+      versions: ["3.5"]
+    - text: "GOSUB name[(arguments)]"
+      versions: ["3.5"]
+    - text: "SUB name[(parameters)] ... ENDPROC|ENDSUB"
+      versions: ["3.5"]
+evidence:
+  - id: "procedure-manual-base-30"
+    source_id: "AM-INTERPRETER-35"
+    location: "Chapter 7 base manual, printed pp. 7-21–7-23"
+    kind: "primary-manual"
+    status: "text-verified"
+    claim: "The base Chapter 7 text documents PROCEDURE/GOSUB/RETURN, positional value parameters, VAR parameters, and LOCAL. These are GFA-BASIC 3.0 base-manual descriptions, not proof of exact 3.5 availability."
+  - id: "procedure-rust-prototype"
+    source_id: "ISSUE-617"
+    location: "crates/gfabasic-compiler/src/frontend.rs, semantic.rs, ir.rs, prototype.rs and compiler end-to-end tests"
+    kind: "repository-code"
+    status: "repository-record"
+    claim: "The Rust compiler prototype supports numeric PROCEDURE declarations, GOSUB calls, positional value arguments, parameter shadowing, RETURN terminators, and SUB/ENDPROC/ENDSUB aliases."
+    url: "https://github.com/vsimko/gfabasic-rust/issues/617"
+versions:
+  "3.041U":
+    applicability: "unknown"
+    expectation:
+      status: "unknown"
+      summary: "No version-scoped procedure/GOSUB expectation has been established for 3.041U."
+      evidence_refs: []
+    probe: null
+    execution:
+      status: "UNTESTED"
+      observed: null
+      run_url: null
+      probe_source: null
+      evidence_refs: []
+    implementation:
+      status: "not-targeted"
+      refs: []
+  "3.5":
+    applicability: "unknown"
+    expectation:
+      status: "unknown"
+      summary: "The source form is documented in the 3.0 base chapter, but its retention and detailed semantics in exact 3.5 have not been independently verified."
+      evidence_refs: []
+    probe: null
+    execution:
+      status: "UNTESTED"
+      observed: null
+      run_url: null
+      probe_source: null
+      evidence_refs: []
+    implementation:
+      status: "prototype"
+      refs:
+        - "crates/gfabasic-compiler/src/frontend.rs"
+        - "crates/gfabasic-compiler/src/semantic.rs"
+        - "crates/gfabasic-compiler/src/ir.rs"
+        - "crates/gfabasic-compiler/src/prototype.rs"
+  "3.52":
+    applicability: "unknown"
+    expectation:
+      status: "unknown"
+      summary: "No accepted 3.52 procedure/GOSUB expectation or native execution result is linked."
+      evidence_refs: []
+    probe: null
+    execution:
+      status: "UNTESTED"
+      observed: null
+      run_url: null
+      probe_source: null
+      evidence_refs: []
+    implementation:
+      status: "not-targeted"
+      refs: []

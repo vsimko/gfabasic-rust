@@ -1,0 +1,85 @@
+manifest_schema_version: 1
+construct:
+  id: "for-next"
+  kind: "statement"
+  name: "FOR/NEXT"
+  summary: "Numeric counted loops with TO, DOWNTO, STEP, and an optional matching NEXT counter."
+  syntax_forms:
+    - text: "FOR variable=start TO end [STEP step] ... NEXT [variable]"
+      versions: ["3.5"]
+    - text: "FOR variable=start DOWNTO end ... NEXT [variable]"
+      versions: ["3.5"]
+evidence:
+  - id: "for-next-manual-base-30"
+    source_id: "AM-INTERPRETER-35"
+    location: "Chapter 7 base manual, printed pp. 7-2 and 7-13–7-14"
+    kind: "primary-manual"
+    status: "text-verified"
+    claim: "The base Chapter 7 text identifies FOR/NEXT as a non-rejecting loop and documents TO, STEP, and NEXT. The base chapters describe GFA-BASIC 3.0, not exact 3.5."
+  - id: "for-next-native-35"
+    source_id: "ACTIONS-44094135503"
+    location: "GFA-BASIC 3.5 native smoke run; regression-suite.LST; GFATEST:for-next:PASS"
+    kind: "native-observation"
+    status: "direct-observation"
+    claim: "On the exact 3.5 candidate, FOR i=1 TO 4 with a sum accumulator produced 10. This is a simple FOR/NEXT smoke observation only."
+    url: "https://github.com/vsimko/gfabasic-rust/actions/runs/44094135503"
+  - id: "for-next-rust-prototype"
+    source_id: "ISSUE-617"
+    location: "crates/gfabasic-compiler/src/frontend.rs, semantic.rs, ir.rs, prototype.rs and compiler end-to-end tests"
+    kind: "repository-code"
+    status: "repository-record"
+    claim: "The Rust compiler prototype parses and emits numeric FOR/NEXT loops, including nested loops, DOWNTO, STEP, counter matching, zero-step diagnostics, and executable-output tests."
+    url: "https://github.com/vsimko/gfabasic-rust/issues/617"
+versions:
+  "3.041U":
+    applicability: "unknown"
+    expectation:
+      status: "unknown"
+      summary: "No version-scoped FOR/NEXT observation has been established for 3.041U."
+      evidence_refs: []
+    probe: null
+    execution:
+      status: "UNTESTED"
+      observed: null
+      run_url: null
+      probe_source: null
+      evidence_refs: []
+    implementation:
+      status: "not-targeted"
+      refs: []
+  "3.5":
+    applicability: "applicable"
+    expectation:
+      status: "observed"
+      summary: "The exact 3.5 native smoke suite observed a FOR/NEXT sum from 1 through 4 equal to 10; extended loop edge cases remain unverified natively."
+      evidence_refs: ["for-next-native-35"]
+    probe: "probe-3.5.LST"
+    execution:
+      status: "PASS"
+      observed: "FOR i=1 TO 4; sum=sum+i; resulting sum=10; GFATEST:for-next:PASS."
+      run_url: "https://github.com/vsimko/gfabasic-rust/actions/runs/44094135503"
+      probe_source: "tests/interpreter-probes/amiga-3.5/regression-suite.LST"
+      evidence_refs: ["for-next-native-35"]
+    implementation:
+      status: "prototype"
+      refs:
+        - "crates/gfabasic-compiler/src/frontend.rs"
+        - "crates/gfabasic-compiler/src/semantic.rs"
+        - "crates/gfabasic-compiler/src/ir.rs"
+        - "crates/gfabasic-compiler/src/prototype.rs"
+  "3.52":
+    applicability: "unknown"
+    expectation:
+      status: "unknown"
+      summary: "The available Chapter 7 base-manual description is 3.0 material; no accepted 3.52 FOR/NEXT result is linked here."
+      evidence_refs: []
+    probe: null
+    execution:
+      status: "UNTESTED"
+      observed: null
+      run_url: null
+      probe_source: null
+      evidence_refs: []
+    implementation:
+      status: "not-targeted"
+      refs: []

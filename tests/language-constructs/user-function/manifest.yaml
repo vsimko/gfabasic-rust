@@ -1,0 +1,80 @@
+manifest_schema_version: 1
+construct:
+  id: "user-function"
+  kind: "function"
+  name: "FUNCTION/DEFFN"
+  summary: "Numeric multi-line FUNCTION and single-line DEFFN definitions with FN/@ calls."
+  syntax_forms:
+    - text: "FUNCTION name[(parameters)] ... RETURN expression ... ENDFUNC"
+      versions: ["3.5"]
+    - text: "DEFFN name[(parameters)]=expression"
+      versions: ["3.5"]
+    - text: "FN name(arguments) or @name(arguments)"
+      versions: ["3.5"]
+evidence:
+  - id: "function-manual-base-30"
+    source_id: "AM-INTERPRETER-35"
+    location: "Chapter 7 base manual, printed pp. 7-24–7-27"
+    kind: "primary-manual"
+    status: "text-verified"
+    claim: "The base Chapter 7 text documents multi-line FUNCTION/RETURN/ENDFUNC and single-line DEFFN with FN/@ calls; it states DEFFN functions cannot be recursive. These are GFA-BASIC 3.0 base-manual descriptions, not proof of exact 3.5 availability."
+  - id: "function-rust-prototype"
+    source_id: "ISSUE-617"
+    location: "crates/gfabasic-compiler/src/frontend.rs, semantic.rs, ir.rs, prototype.rs and compiler end-to-end tests"
+    kind: "repository-code"
+    status: "repository-record"
+    claim: "The Rust compiler prototype supports numeric multi-line FUNCTION and DEFFN declarations, FN/@ calls, value parameters, numeric return expressions, arity validation, and DEFFN self-recursion rejection."
+    url: "https://github.com/vsimko/gfabasic-rust/issues/617"
+versions:
+  "3.041U":
+    applicability: "unknown"
+    expectation:
+      status: "unknown"
+      summary: "No version-scoped user-function expectation has been established for 3.041U."
+      evidence_refs: []
+    probe: null
+    execution:
+      status: "UNTESTED"
+      observed: null
+      run_url: null
+      probe_source: null
+      evidence_refs: []
+    implementation:
+      status: "not-targeted"
+      refs: []
+  "3.5":
+    applicability: "unknown"
+    expectation:
+      status: "unknown"
+      summary: "FUNCTION and DEFFN are documented in the 3.0 base chapter, but their retention and detailed semantics in exact 3.5 have not been independently verified."
+      evidence_refs: []
+    probe: null
+    execution:
+      status: "UNTESTED"
+      observed: null
+      run_url: null
+      probe_source: null
+      evidence_refs: []
+    implementation:
+      status: "prototype"
+      refs:
+        - "crates/gfabasic-compiler/src/frontend.rs"
+        - "crates/gfabasic-compiler/src/semantic.rs"
+        - "crates/gfabasic-compiler/src/ir.rs"
+        - "crates/gfabasic-compiler/src/prototype.rs"
+  "3.52":
+    applicability: "unknown"
+    expectation:
+      status: "unknown"
+      summary: "No accepted 3.52 user-function expectation or native execution result is linked."
+      evidence_refs: []
+    probe: null
+    execution:
+      status: "UNTESTED"
+      observed: null
+      run_url: null
+      probe_source: null
+      evidence_refs: []
+    implementation:
+      status: "not-targeted"
+      refs: []
