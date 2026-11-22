@@ -323,6 +323,7 @@ class LanguageConstructSelectionTests(unittest.TestCase):
             [
                 ("fact-function", "3.5"),
                 ("fact-function", "3.52"),
+                ("for-next", "3.5"),
                 ("mat-one-statement", "3.5"),
                 ("mat-one-statement", "3.52"),
             ],

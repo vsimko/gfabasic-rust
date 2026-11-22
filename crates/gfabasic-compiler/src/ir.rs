@@ -1,8 +1,10 @@
-//! Project-owned typed IR for the evidence-backed combinatorics prototype.
+//! Project-owned IR for the narrow compiler prototype.
 //!
-//! This is intentionally smaller than the planned general-purpose IR. It
-//! models only i64 constants and ordered PRINT operations; it does not imply
-//! that GFA BASIC variables are universally i64.
+//! The original intrinsic slice uses typed i64 constants and PRINT operations.
+//! Structured numeric programs are retained as validated source-level blocks
+//! for the temporary C bootstrap; they are not yet a general typed CFG. The
+//! i64 expression subset is an implementation boundary, not a claim that all
+//! GFA BASIC variables are i64.
 
 use std::collections::{BTreeMap, BTreeSet};
 
@@ -39,6 +41,8 @@ pub enum Instruction {
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct Module {
     pub instructions: Vec<Instruction>,
+    /// Validated structured source retained for the experimental C bootstrap.
+    pub structured_program: Option<crate::frontend::Program>,
 }
 
 /// Lowering or verification failure with source provenance where available.
@@ -166,11 +170,42 @@ impl<'a> LoweringState<'a> {
     }
 }
 
+/// Validate structured statements and retain their blocks for the prototype backend.
+pub fn lower_structured(program: &crate::frontend::Program) -> Result<Module, Vec<IrError>> {
+    crate::semantic::validate_structured_program(program).map_err(|errors| {
+        errors
+            .into_iter()
+            .map(|error| IrError::at(error.message, error.span))
+            .collect::<Vec<_>>()
+    })?;
+    Ok(Module {
+        instructions: Vec::new(),
+        structured_program: Some(program.clone()),
+    })
+}
+
+fn contains_structured(statements: &[Statement]) -> bool {
+    statements.iter().any(|statement| {
+        matches!(
+            statement,
+            Statement::AssignExpression { .. }
+                | Statement::PrintExpressions { .. }
+                | Statement::For { .. }
+                | Statement::Procedure { .. }
+                | Statement::Function { .. }
+                | Statement::Gosub { .. }
+        )
+    })
+}
+
 /// Lower a resolved semantic model to typed, constant-valued IR.
 ///
 /// Intrinsics are evaluated here only for the prototype's documented literal
 /// subset. Their bounds are implementation limits, not dialect limits.
 pub fn lower(model: &SemanticModel) -> Result<Module, Vec<IrError>> {
+    if contains_structured(&model.document.program.statements) {
+        return lower_structured(&model.document.program);
+    }
     let mut state = LoweringState::new(&model.symbols);
     let mut saw_print = false;
 
@@ -259,6 +294,11 @@ pub fn lower(model: &SemanticModel) -> Result<Module, Vec<IrError>> {
                     saw_print = true;
                 }
             }
+            _ => {
+                state.errors.push(IrError::global(
+                    "structured statements require structured IR lowering",
+                ));
+            }
         }
     }
 
@@ -277,6 +317,14 @@ pub fn lower(model: &SemanticModel) -> Result<Module, Vec<IrError>> {
 
 /// Verify unique definitions and reject uses that precede their definitions.
 pub fn verify(module: &Module) -> Result<(), Vec<IrError>> {
+    if let Some(program) = &module.structured_program {
+        return crate::semantic::validate_structured_program(program).map_err(|errors| {
+            errors
+                .into_iter()
+                .map(|error| IrError::at(error.message, error.span))
+                .collect()
+        });
+    }
     let mut definitions = BTreeSet::new();
     let mut errors = Vec::new();
     for instruction in &module.instructions {
@@ -452,6 +500,7 @@ mod tests {
         let id = sources.add_source("ir-invalid.bas", source);
         let span = crate::source::SourceSpan::new(id, 0, source.len());
         let undefined = super::Module {
+            structured_program: None,
             instructions: vec![Instruction::Print {
                 values: vec![ValueId(9)],
                 span,
@@ -460,6 +509,7 @@ mod tests {
         assert!(verify(&undefined).is_err());
 
         let duplicate = super::Module {
+            structured_program: None,
             instructions: vec![
                 Instruction::ConstI64 {
                     result: ValueId(1),

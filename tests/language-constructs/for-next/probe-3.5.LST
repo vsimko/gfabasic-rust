@@ -1,0 +1,13 @@
+REM Candidate isolated Amiga GFA-BASIC 3.5 FOR/NEXT probe.
+REM The linked PASS observation comes from the shared 3.5 regression suite.
+OPEN "O",#1,"DF0:GFATEST.OUT"
+sum = 0
+FOR i = 1 TO 4
+  sum = sum + i
+NEXT i
+IF sum=10
+  PRINT #1,"GFATEST:for-next:PASS"
+ELSE
+  PRINT #1,"GFATEST:for-next:FAIL"
+ENDIF
+CLOSE #1

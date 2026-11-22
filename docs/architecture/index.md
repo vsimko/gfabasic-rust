@@ -20,6 +20,7 @@
 - [MEMORY](MEMORY.md) - Documentation concepts in architecture.
 - [MVP Vertical Slice](MVP-vertical-slice.md) - Documentation concepts in architecture.
 - [PIPELINE AND IR](PIPELINE-AND-IR.md) - Documentation concepts in architecture.
+- [STRUCTURED NUMERIC COMPILER SUBSET](structured-compiler-subset.md) - Supported numeric FOR/NEXT, PROCEDURE/GOSUB, FUNCTION, and DEFFN prototype syntax and evidence limits.
 - [Overview](README.md) - Documentation concepts in architecture.
 - [RELEASES](RELEASES.md) - Documentation concepts in architecture.
 - [RUNTIME](RUNTIME.md) - Documentation concepts in architecture.
