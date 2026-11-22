@@ -105,7 +105,7 @@ class ArtifactBoundaryTests(unittest.TestCase):
     def test_rejects_base64url_payload_in_approved_text_path(self) -> None:
         native_run = self.root / "native-run"
         native_run.mkdir()
-        payload = base64.urlsafe_b64encode(b"\xff" * 512).decode("ascii").rstrip("=")
+        payload = base64.urlsafe_b64encode(b"\xff" * 513).decode("ascii").rstrip("=")
         self.assertEqual(set(payload), {"_"})
         (native_run / "result.txt").write_text(payload, encoding="utf-8")
         self.assertTrue(any("encoded payload in text evidence: native-run/result.txt" in item
