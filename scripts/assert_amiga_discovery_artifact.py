@@ -167,7 +167,7 @@ def contains_encoded_payload(text: str) -> bool:
     candidates = [
         match.group(0)
         for match in re.finditer(
-            r"(?<![A-Za-z0-9+/])[A-Za-z0-9+/]{128,}={0,2}(?![A-Za-z0-9+/=)",
+            r"(?<![A-Za-z0-9+/])[A-Za-z0-9+/]{128,}={0,2}(?![A-Za-z0-9+/=])",
             text,
         )
     ]
