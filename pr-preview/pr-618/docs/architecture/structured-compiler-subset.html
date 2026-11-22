@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Status: experimental compiler prototype, tracked by issue #617.">
+  <title>Structured numeric compiler subset · GFA BASIC Rust documentation</title>
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body class="docs-site">
+  <header class="docs-header">
+    <a href="../../index.html">GFA BASIC Rust</a>
+    <span aria-hidden="true">/</span>
+    <a href="../index.html">Documentation</a>
+  </header>
+  <div class="docs-layout">
+    <nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home" href="index.html">Section index</a><ul><li><a href="AI-VERIFICATION.html">AI-assisted API verification</a></li><li><a href="AI-AGENT-SECURITY.html">AI agent security and trust boundaries</a></li><li><a href="AI-AGENT-EVALUATION.html">AI agent contribution evaluation pilot</a></li><li><a href="https://github.com/vsimko/gfabasic-rust/blob/main/.agents/skills/api-evidence-verification/SKILL.md">`api-evidence-verification` agent skill</a></li><li><a href="API-PROFILES.html">API profiles</a></li><li><a href="API-REGISTRY.html">API registry and declaration source of truth</a></li><li><a href="BENCHMARKING.html">Performance benchmarks and profiling strategy</a></li><li><a href="CI.html">GitHub Actions workflow architecture</a></li><li><a href="CLI-AND-CONFIG.html">CLI, configuration, and build artifacts</a></li><li><a href="COMPATIBILITY-MATRIX.html">Current compatibility matrix</a></li><li><a href="DIAGNOSTICS.html">Diagnostics and compatibility reporting</a></li><li><a href="DIALECTS.html">Dialects, versions, and compatibility policy</a></li><li><a href="FORMATTER.html">Formatter style and current support</a></li><li><a href="FUZZING.html">Frontend fuzzing and robustness strategy</a></li><li><a href="GOALS.html">Project goals and compatibility objectives</a></li><li><a href="IMPLEMENTATION-DASHBOARD.html">Implementation dashboard</a></li><li><a href="LANGUAGE-TOOLING.html">Language tooling and editor integration</a></li><li><a href="MEMORY.html">Memory model and hardware access</a></li><li><a href="MVP-vertical-slice.html">First compiler vertical slice — proposed boundary</a></li><li><a href="PIPELINE-AND-IR.html">Compiler pipeline and intermediate representation</a></li><li><a href="structured-compiler-subset.html">Structured numeric compiler subset</a></li><li><a href="README.html">README</a></li><li><a href="RELEASES.html">Release, artifact, and reproducible-build policy</a></li><li><a href="RUNTIME.html">Runtime architecture</a></li><li><a href="SECURITY.html">Dependency and supply-chain security</a></li><li><a href="TARGETS.html">Host and target model</a></li><li><a href="TESTING.html">Compatibility testing and release criteria</a></li><li><a href="https://github.com/vsimko/gfabasic-rust/blob/main/tests/language-constructs/README.md">VERSION-SCOPED LANGUAGE CONSTRUCT CATALOGUE</a></li><li><a href="VALIDATION.html">Repository consistency validation</a></li><li><a href="VERSIONING.html">Versioning and compatibility lifecycle</a></li><li><a href="WEBSITE_PREVIEWS.html">Website previews for pull requests</a></li><li><a href="WORKSPACE.html">Rust workspace and dependency policy</a></li><li><a href="TOML-YAML-MIGRATION.html">TOML inventory and YAML migration policy</a></li><li><a href="adr/index.html">Architecture decisions</a></li></ul></nav>
+    <main class="docs-content">
+      <article>
+        <h1>Structured numeric compiler subset</h1>
+        <p class="docs-meta"><span>Architecture Note</span></p>
+        <h1 id="structured-numeric-compiler-subset">Structured numeric compiler subset</h1>
+<p>Status: experimental compiler prototype, tracked by <a href="https://github.com/vsimko/gfabasic-rust/issues/617">issue #617</a>.</p>
+<h2 id="supported-syntax">Supported syntax</h2>
+<p>The current compiler accepts these numeric forms when a structured construct is present in the source:</p>
+<pre><code class="language-basic">FOR i = 1 TO 10
+  total = total + i
+NEXT i
+
+FOR j = 10 DOWNTO 1
+  total = total + j
+NEXT j
+
+FOR k = 1 TO 9 STEP 2
+  total = total + k
+NEXT k
+
+PROCEDURE Add(a,b)
+  total = total + a + b
+RETURN
+
+FUNCTION Square(n)
+  RETURN n * n
+ENDFUNC
+
+DEFFN Double(n) = n * 2
+
+GOSUB Add(3,4)
+total = total + @Square(5) + FN Double(6)
+PRINT total
+</code></pre>
+<ul>
+<li>Expressions: integer literals, variables, unary minus, parentheses, <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, and user-function calls.</li>
+<li><code>FOR</code> counters may be named variables. <code>NEXT</code> may omit the counter name; if supplied, it must match the opening <code>FOR</code>.</li>
+<li><code>TO</code> defaults to step +1. <code>DOWNTO</code> defaults to step -1 and cannot be combined with <code>STEP</code>. Explicit <code>STEP</code> may be positive or negative; a statically known zero step is diagnosed and a dynamic zero step aborts at runtime.</li>
+<li>The loop is emitted as a post-test loop, matching the base-manual description that <code>FOR/NEXT</code> is non-rejecting and executes at least once. The counter is advanced after each body execution.</li>
+<li>Procedures accept positional value parameters and are called through <code>GOSUB</code>. <code>SUB</code>, <code>ENDPROC</code>, and <code>ENDSUB</code> are accepted aliases. Parameters shadow global variables; reference parameters are not supported.</li>
+<li>Multi-line <code>FUNCTION</code> returns a numeric expression through <code>RETURN expression</code> and ends with <code>ENDFUNC</code>. Single-line <code>DEFFN</code> definitions are supported and can be called using <code>FN name(...)</code> or <code>@name(...)</code>. DEFFN self-recursion is rejected; multi-line functions may recurse.</li>
+<li>The numeric bootstrap currently uses signed 64-bit C <code>long long</code> values and integer division. This is an implementation subset, not a claim about the full GFA BASIC numeric model.</li>
+</ul>
+<h2 id="explicitly-unsupported">Explicitly unsupported</h2>
+<p>This milestone does not implement <code>VAR</code> reference parameters, <code>LOCAL</code>, string parameters or string-returning functions, type suffixes, array parameters, nested declarations, <code>IF/ELSE</code>, <code>EXIT IF</code>, <code>GOTO</code>, or the other loop families. Unsupported statements are diagnosed rather than ignored. Function/procedure semantics such as dynamic-local rules, all return paths, and complete recursion behavior are not claimed beyond the tested subset.</p>
+<h2 id="evidence-boundary">Evidence boundary</h2>
+<p>The supplied <em>GFA-BASIC 3.5 Interpreter</em> manual's Chapter 7 base material explicitly identifies itself as GFA-BASIC 3.0. It documents:</p>
+<ul>
+<li>non-rejecting <code>FOR/NEXT</code> loops and their at-least-once behavior (printed p. 7-2);</li>
+<li><code>FOR variable=start TO end [STEP step]</code> and <code>NEXT</code> (printed pp. 7-13–7-14);</li>
+<li><code>PROCEDURE</code>, <code>GOSUB</code>, value/VAR parameters, and <code>RETURN</code> (printed pp. 7-21–7-22);</li>
+<li>multi-line <code>FUNCTION</code> and <code>DEFFN</code> syntax and calls (printed pp. 7-24–7-27).</li>
+</ul>
+<p>These Chapter 7 descriptions are 3.0 base-manual evidence, not proof of exact 3.5 compatibility. The exact 3.5 native smoke run <a href="https://github.com/vsimko/gfabasic-rust/actions/runs/44094135503">44094135503</a> includes only a simple <code>FOR/NEXT</code> sum probe (1 through 4 equals 10). Procedures and functions have not been run against the exact 3.5 interpreter and remain UNTESTED there. Compiler end-to-end tests prove only the behavior of this Rust/C bootstrap implementation.</p>
+<p>The structured path retains validated source-level blocks in the prototype IR and emits temporary C. It is not yet a fully lowered typed control-flow graph or the production LLVM backend. See <a href="PIPELINE-AND-IR.html">pipeline and IR architecture</a>.</p>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>

@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Use this guide when writing or changing .LST regression programs for the original Amiga GFA BASIC interpreter. A probe must distinguish a language/runtime failure from a test-harness or program-setup failure.">
+  <title>Writing Amiga GFA BASIC reference-interpreter probes · GFA BASIC Rust documentation</title>
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body class="docs-site">
+  <header class="docs-header">
+    <a href="../../index.html">GFA BASIC Rust</a>
+    <span aria-hidden="true">/</span>
+    <a href="../index.html">Documentation</a>
+  </header>
+  <div class="docs-layout">
+    <nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home" href="index.html">Section index</a><ul><li><a href="amiga-reference-interpreter.html">Original Amiga interpreter reference asset</a></li><li><a href="amiga-gfa-basic-probes.html">Writing Amiga GFA BASIC reference-interpreter probes</a></li><li><a href="property-mutation-pilot.html">Generated property and mutation-testing pilot</a></li><li><a href="https://github.com/vsimko/gfabasic-rust/blob/main/.agents/skills/amiga-gfa-basic-regression-testing/SKILL.md">`amiga-gfa-basic-regression-testing`</a></li><li><a href="https://github.com/vsimko/gfabasic-rust/blob/main/.agents/skills/corpus-fixture-authoring/SKILL.md">`corpus-fixture-authoring`</a></li></ul></nav>
+    <main class="docs-content">
+      <article>
+        <h1>Writing Amiga GFA BASIC reference-interpreter probes</h1>
+        <p class="docs-meta"><span>Testing Guide</span></p>
+        <h1 id="writing-amiga-gfa-basic-reference-interpreter-probes">Writing Amiga GFA BASIC reference-interpreter probes</h1>
+<h2 id="purpose">Purpose</h2>
+<p>Use this guide when writing or changing .LST regression programs for the original Amiga GFA BASIC interpreter. A probe must distinguish a language/runtime failure from a test-harness or program-setup failure.</p>
+<h2 id="interpreter-version-strategy">Interpreter version strategy</h2>
+<p>The project uses three reference versions. See <a href="../architecture/adr/0017-multi-version-amiga-gfa-basic-conformance.html">ADR 0017</a> and <a href="https://github.com/vsimko/gfabasic-rust/issues/557">issue #557</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Version</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GFA-BASIC 3.52</td>
+<td>Active native runtime baseline and default expected behavior for current development</td>
+</tr>
+<tr>
+<td>GFA-BASIC 3.041U</td>
+<td>Available native comparison profile for the 3.0-era dialect; always report the exact <code>3.041U</code> version</td>
+</tr>
+<tr>
+<td>Amiga GFA-BASIC 3.5</td>
+<td>Normative source-language target (ADR 0009); initial native smoke probes (arithmetic, FOR/NEXT, strings) passed; broader conformance remains incomplete</td>
+</tr>
+</tbody>
+</table>
+<p>The unified entry point is <code>.github/workflows/amiga-reference-matrix.yml</code>. It calls the two active native workflows as reusable workflows and captures the running 3.5 editor's version menu for identity evidence. An initial 3.5 native smoke suite (arithmetic, FOR/NEXT, strings) ran using a separate writable test disk in <a href="https://github.com/vsimko/gfabasic-rust/actions/runs/44094135503">workflow run 44094135503</a>. The inspected artifact <code>amiga-gfa-basic-3.5-asset-discovery</code> contains the held-right-button menu screenshot visibly identifying <code>GFA-BASIC 3.5 Block</code>, Merge/Run screenshots, and three raw <code>GFATEST:*:PASS</code> records. These three cases are PASS for that exact candidate and run; this limited smoke set is not complete language conformance. Run this matrix for a combined view. The individual native workflows remain manually dispatchable for focused diagnosis. A green matrix means the configured native jobs and GFATEST collection protocol completed; it is not a claim of complete language conformance.</p>
+<h2 id="compiler-structured-subset-status">Compiler structured-subset status</h2>
+<p>The compiler prototype now accepts a numeric structured subset: <code>FOR/NEXT</code> (including <code>TO</code>, <code>DOWNTO</code>, and <code>STEP</code>), <code>PROCEDURE</code> with <code>GOSUB</code>, multi-line <code>FUNCTION</code>, and single-line <code>DEFFN</code>. Compiler tests exercise executable output, nested loops, value parameters, function calls, zero-step diagnostics, arity checks, and DEFFN recursion rejection. This is compiler implementation evidence only.</p>
+<p>The exact 3.5 native smoke run 44094135503 includes a simple <code>FOR/NEXT</code> case (sum 1 through 4 equals 10). It does <strong>not</strong> exercise <code>DOWNTO</code>, <code>STEP</code>, procedures, or functions. The Chapter 7 entries for procedures and functions in the supplied interpreter manual are base GFA-BASIC 3.0 documentation (printed pp. 7-21–7-27); their availability and detailed behavior in exact 3.5 remain <strong>UNTESTED</strong>. Do not promote the compiler tests or 3.0 manual evidence into a 3.5 native conformance claim. See <a href="../architecture/structured-compiler-subset.html">structured compiler subset</a>.</p>
+<p>Run each applicable probe against active native profiles for which the licensed asset and workflow are available. The current native profiles are 3.52 and 3.041U. Keep results separate; never relabel 3.041U as exactly 3.0 or transfer its results to 3.5. Amiga GFA-BASIC 3.5 remains the normative documented target; its identity and the three initial native smoke results have been verified from the retained screenshot and raw result artifact. Broader native conformance remains incomplete.</p>
+<p>Use these outcomes per probe/version:</p>
+<ul>
+<li><code>PASS</code>: observed behavior matches the version-specific expectation.</li>
+<li><code>FAIL</code>: observed behavior contradicts the version-specific expectation.</li>
+<li><code>DIFFERENT</code>: a verified cross-version difference is recorded; this is not automatically a defect.</li>
+<li><code>UNTESTED</code>: no adequate run/evidence is available. Missing assets are not failures or passes.</li>
+</ul>
+<p>A maintainer-reported example motivating this policy is <code>M O a()</code>: reported as <code>MAT SET a()</code> in 3.5 and <code>MAT ONE a()</code> in 3.52. Treat it as reported evidence until exact-version screenshots/native runs are preserved.</p>
+<h2 id="verify-native-editor-merge">Verify native editor Merge</h2>
+<p>For a probe that depends on editor shortcut expansion (for example <code>M O identity()</code>), distinguish editor behavior from an explicitly typed runtime command such as <code>MAT ONE identity()</code>.</p>
+<ol>
+<li>Capture the Merge requester and confirm the exact <code>.LST</code> filename selected.</li>
+<li>After Merge, capture the editor and inspect the source statement itself before running.</li>
+<li>Compare the displayed statement with the staged fixture byte-for-byte where possible; OCR is supporting evidence only.</li>
+<li>If the editor shows a changed or unrecognized token, stop before Run and preserve the screenshot and source fixture. Do not attribute a later runtime error to the interpreter until the Merge discrepancy is understood.</li>
+<li>Run with the workflow's verified key sequence only after the source is confirmed. Do not reuse mouse coordinates from a different emulator layout.</li>
+</ol>
+<p>A successful Merge operation does not establish that a statement was expanded or accepted correctly.</p>
+<h2 id="probe-metadata">Probe metadata</h2>
+<p>The standalone metadata for the Amiga 3.5 FACT smoke probe is stored in
+<code>tests/interpreter-probes/amiga-3.5/fact-zero.yaml</code>. It is deliberately
+separate from the conformance-corpus manifest: it records the target component,
+input format, documentary expectation, and observed editor/runtime results.
+Keep expected output separate from observed output, and do not mark a probe as
+loaded or executed unless the corresponding native run produced that evidence.
+The corpus validator does not validate this probe-specific metadata file.</p>
+<h2 id="before-writing-a-probe">Before writing a probe</h2>
+<ol>
+<li>Identify the exact interpreter version and platform under test. Do not transfer observations between 3.041U, 3.5, and 3.52 without evidence.</li>
+<li>Find the relevant primary-manual example and record its edition and printed page numbers.</li>
+<li>Preserve the documented statement order and control-flow structure unless the test explicitly targets a variation.</li>
+<li>Check how the native harness starts the program, assigns drives, captures output, and detects completion. Read the matching workflow and existing passing .LST probes.</li>
+<li>Keep the fixture minimal. Add one behavior at a time and write diagnostic values before asserting them.</li>
+<li>Where possible, use the same source probe and harness procedure across versions. If syntax or setup must differ, document the reason and keep the test intent equivalent.</li>
+</ol>
+<h2 id="identify-the-running-interpreter-version">Identify the running interpreter version</h2>
+<p>Use the version shown by the running editor, not the disk or archive filename.</p>
+<ol>
+<li>Open the GFA-BASIC editor in Amiberry.</li>
+<li>Press and keep holding the right mouse button to open the editor menu.</li>
+<li>While the right mouse button is still held down, capture the screenshot. Do not release it before or during capture: releasing the button closes the menu, so the screenshot would no longer show the version.</li>
+<li>OCR the screenshot and read the first menu item in the upper-left corner; it displays the running GFA-BASIC interpreter version.</li>
+<li>Record the exact text and preserve the screenshot as evidence. If OCR is uncertain, inspect or crop the upper-left menu area and transcribe it manually.</li>
+</ol>
+<p>Use this procedure whenever the executable version is uncertain or a test result must be tied to an exact interpreter version. Disk labels and archive names are not substitutes for inspecting the running editor.</p>
+<p><strong>Interpretation of the <code>==&gt;</code> editor prefix:</strong> In the manually observed reference editor, an imported <code>.LST</code> statement prefixed with <code>==&gt;</code> is an unsupported or unrecognized command. The editor can retain and display the statement after MERGE, while attempting to execute it can fail later with a runtime <code>syntax error ==&gt; program aborted</code>. Therefore, successful MERGE or a visible source line does not establish that the command is supported. Inspect the prefix before Run and record both the editor screenshot and any runtime error. Treat this as observed behavior for the tested interpreter, not a universal rule for every GFA-BASIC release.</p>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>
