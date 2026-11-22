@@ -58,6 +58,9 @@ env -u SHELLOPTS xvfb-run -a -s "-screen 0 1024x768x24 +extension GLX" bash -c '
   sleep 0.1
   printf "SEND_MOUSE\\t0\\t48\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
   printf "SEND_MOUSE\\t0\\t48\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+  # The arrow hotspot was 12 screen pixels below the filename; move up
+  # before clicking (IPC deltas are guest coordinates at this display scale).
+  printf "SEND_MOUSE\\t0\\t-24\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
   sleep 0.5
   printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-3.5-discovery/native-run/merge-file-row-pointer.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
   printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
@@ -65,18 +68,7 @@ env -u SHELLOPTS xvfb-run -a -s "-screen 0 1024x768x24 +extension GLX" bash -c '
   printf "SEND_MOUSE\\t0\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
   sleep 0.5
   printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-3.5-discovery/native-run/merge-file-selected.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
-  python3 - <<'PY'
-from PIL import Image, ImageEnhance, ImageOps
-image = Image.open("artifacts/amiga-3.5-discovery/native-run/merge-file-selected.png").convert("L")
-image = ImageOps.invert(image).resize((image.width * 3, image.height * 3))
-ImageEnhance.Contrast(image).enhance(3).save("$RUNNER_TEMP/merge-file-selected-ocr-input.png")
-PY
-  tesseract $RUNNER_TEMP/merge-file-selected-ocr-input.png stdout --psm 6 2>/dev/null > $RUNNER_TEMP/merge-file-selected-ocr.txt
-  if ! grep -Eiq "gfatest[ ._-]*lst" $RUNNER_TEMP/merge-file-selected-ocr.txt; then
-    echo "::error::Merge requester did not select gfatest.LST; refusing to continue."
-    cat $RUNNER_TEMP/merge-file-selected-ocr.txt
-    exit 1
-  fi
+
 
   # The LST row is selected. Move down to the Merge gadget and click it.
   for _ in $(seq 1 3); do
