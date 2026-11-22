@@ -18,10 +18,6 @@ tests/language-constructs/
   for-next/
     manifest.yaml
     probe-3.5.LST
-  procedure/
-    manifest.yaml
-  user-function/
-    manifest.yaml
 ```
 
 A directory name is the stable construct ID. It must match `construct.id` and use lowercase kebab-case. A directory may contain only one semantic construct; use multiple `syntax_forms` only when the forms exercise the same construct. Split constructs with different semantics into separate directories.
@@ -121,4 +117,4 @@ A changed manifest selects only that construct's applicable versions; a changed 
 
 Issue [#571](https://github.com/vsimko/gfabasic-rust/issues/571) implements validation and selection. The validator rejects duplicate IDs, unsupported schema versions, missing/extra version keys, invalid enums, dangling evidence references, path traversal, missing/non-`.LST` probes, and inconsistent expectation/execution states. It does not modify or migrate the existing corpus YAML or API registry TOML.
 
-The new construct catalogue is metadata for selecting and interpreting tests; it does not add parser, IR, runtime, or API-registry behavior.
+The new construct catalogue is metadata for selecting and interpreting tests; it does not add parser, IR, runtime, or API-registry behavior. Constructs whose applicability is unknown for all three tracked versions remain documented in research notes rather than receiving a guessed version mapping.
