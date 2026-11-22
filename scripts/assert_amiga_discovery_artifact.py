@@ -167,18 +167,31 @@ def valid_png(data: bytes) -> bool:
 
 
 def contains_encoded_payload(text: str) -> bool:
-    """Reject long Base64/hex blobs in text evidence, including wrapped Base64."""
+    """Reject long Base64/hex blobs, including whitespace-obfuscated encodings."""
+    base64_alphabet = r"A-Za-z0-9+/_-"
     candidates = [
         match.group(0)
         for match in re.finditer(
-            r"(?<![A-Za-z0-9+/_-])[A-Za-z0-9+/_-]{128,}={0,2}(?![A-Za-z0-9+/_=-])",
+            rf"(?<![{base64_alphabet}])[{base64_alphabet}]{{128,}}={{0,2}}(?![{base64_alphabet}=])",
             text,
         )
     ]
+    # Attackers can split a single encoded value with spaces, tabs, or newlines.
+    # Keep separators limited to whitespace and encoded-character groups so prose
+    # punctuation cannot be silently discarded while reconstructing a candidate.
+    candidates.extend(
+        match.group(0)
+        for match in re.finditer(
+            rf"(?<![{base64_alphabet}])[{base64_alphabet}]{{1,76}}"
+            rf"(?:[ \\t\\r\\n]+[{base64_alphabet}]{{1,76}})+={{0,2}}"
+            rf"(?![{base64_alphabet}=])",
+            text,
+        )
+    )
     wrapped_lines: list[str] = []
     for line in text.splitlines():
         candidate = line.strip()
-        if candidate and re.fullmatch(r"[A-Za-z0-9+/_-]+={0,2}", candidate):
+        if candidate and re.fullmatch(rf"[{base64_alphabet}]+={{0,2}}", candidate):
             wrapped_lines.append(candidate)
         elif wrapped_lines:
             candidates.append("".join(wrapped_lines))
@@ -191,16 +204,27 @@ def contains_encoded_payload(text: str) -> bool:
         if len(compact) < 128:
             continue
         try:
-            decoded = base64.b64decode(compact + "=" * (-len(compact) % 4), altchars=b"-_", validate=True)
+            decoded = base64.b64decode(
+                compact + "=" * (-len(compact) % 4), altchars=b"-_", validate=True
+            )
         except (ValueError, binascii.Error):
             continue
         if len(decoded) >= 96:
             return True
 
-    return any(
+    hex_candidates = [
+        match.group(0)
+        for match in re.finditer(
+            r"(?<![0-9A-Fa-f])[0-9A-Fa-f]{1,64}(?:[ \\t\\r\\n]+[0-9A-Fa-f]{1,64}){2,}(?![0-9A-Fa-f])",
+            text,
+        )
+    ]
+    if any(
         len(match.group(0)) >= 192
         for match in re.finditer(r"(?<![0-9A-Fa-f])[0-9A-Fa-f]{192,}(?![0-9A-Fa-f])", text)
-    )
+    ):
+        return True
+    return any(len("".join(candidate.split())) >= 192 for candidate in hex_candidates)
 
 def validate_artifact(root: pathlib.Path) -> list[str]:
     """Return violations; an unknown path or unrecognized file always fails."""
