@@ -460,6 +460,40 @@ mod tests {
     }
 
     #[test]
+    fn compiles_and_runs_single_line_deffn_functions() {
+        let source = "DEFFN Double(n)=n*2\nx=@Double(4)\nPRINT x\n";
+        let sequence = NEXT_TEST.fetch_add(1, Ordering::Relaxed);
+        let directory = std::env::temp_dir().join(format!("gfabasic-deffn-test-{}-{sequence}", std::process::id()));
+        fs::create_dir_all(&directory).unwrap();
+        let input = directory.join("deffn.LST");
+        let output = directory.join("deffn");
+        fs::write(&input, source).unwrap();
+        compile_file(&input, &output).unwrap();
+        let run = Command::new(&output).output().unwrap();
+        assert!(run.status.success(), "{}", String::from_utf8_lossy(&run.stderr));
+        assert_eq!(String::from_utf8(run.stdout).unwrap().trim(), "8");
+        fs::remove_dir_all(directory).unwrap();
+    }
+
+    #[test]
+    fn rejects_zero_step_and_unknown_procedure_calls() {
+        for (source, expected) in [
+            ("FOR i=1 TO 2 STEP 0\nPRINT i\nNEXT i\n", "FOR STEP must not be zero"),
+            ("GOSUB Missing\n", "unknown procedure 'Missing'"),
+        ] {
+            let sequence = NEXT_TEST.fetch_add(1, Ordering::Relaxed);
+            let directory = std::env::temp_dir().join(format!("gfabasic-invalid-structured-{}-{sequence}", std::process::id()));
+            fs::create_dir_all(&directory).unwrap();
+            let input = directory.join("invalid.LST");
+            let output = directory.join("invalid");
+            fs::write(&input, source).unwrap();
+            let error = compile_file(&input, &output).expect_err("invalid structured source must be rejected");
+            assert!(error.contains(expected), "expected {expected:?}, got {error:?}");
+            fs::remove_dir_all(directory).unwrap();
+        }
+    }
+
+    #[test]
     fn lowers_the_resolved_semantic_model_for_the_verified_fact_fixture() {
         let mut sources = SourceMap::new();
         let source_id = sources.add_source("fact-zero.bas", FACT_FIXTURE);
