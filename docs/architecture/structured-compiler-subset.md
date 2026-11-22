@@ -1,3 +1,8 @@
+---
+type: "Architecture Note"
+title: "Structured numeric compiler subset"
+---
+
 # Structured numeric compiler subset
 
 Status: experimental compiler prototype, tracked by [issue #617](https://github.com/vsimko/gfabasic-rust/issues/617).
