@@ -180,6 +180,18 @@
 <td>No focused fixture identified; keep separate from <code>PRINT #</code>.</td>
 </tr>
 <tr>
+<td><code>OPEN</code></td>
+<td>File-channel open statement; <code>amiga-gfa-basic-3.0-statements.toml</code> and candidate <code>amiga.base6.open</code>.</td>
+<td>The 3.0 base manual lists <code>OPEN</code> (printed p. 6-7). The separate 3.5 companion-book Chapter 18 example uses <code>OPEN &quot;O&quot;</code> and <code>OPEN &quot;I&quot;</code> (printed p. 458), giving narrow 3.5 documentary evidence for output and input modes only. Append, update, and random-access modes are not demonstrated.</td>
+<td>No focused fixture identified; preserve the two evidenced modes and do not infer other modes.</td>
+</tr>
+<tr>
+<td><code>CLOSE</code></td>
+<td>File-channel close statement; <code>amiga-gfa-basic-3.0-statements.toml</code> and candidate <code>amiga.base6.close</code>.</td>
+<td>The 3.0 base manual lists <code>CLOSE</code> (printed p. 6-8). The separate 3.5 companion-book Chapter 18 example uses <code>CLOSE #1</code> (printed p. 458), a narrow 3.5 witness for closing that channel. The no-argument close-all form is not demonstrated.</td>
+<td>No focused fixture identified; do not infer the no-argument form.</td>
+</tr>
+<tr>
 <td><code>LOF</code></td>
 <td>Built-in function; function inventory, not a statement.</td>
 <td>3.0 base-manual function evidence.</td>
