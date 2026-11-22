@@ -883,6 +883,9 @@ impl Parser {
             body.push(statement);
             if matches!(self.current().kind, TokenKind::Newline) { self.skip_newlines(); }
             else if !self.at_end() {
+                if let TokenKind::Identifier(name) = &self.current().kind {
+                    if terminators.iter().any(|word| name.eq_ignore_ascii_case(word)) { continue; }
+                }
                 return Err(self.syntax_error("expected end of line inside block", self.current().span));
             }
         }
@@ -916,7 +919,9 @@ impl Parser {
                 }
             } else { terminator.span }
         } else { terminator.span };
-        self.finish_line()?;
+        if !matches!(self.current().kind, TokenKind::Newline | TokenKind::End) {
+            return Err(self.syntax_error("expected end of line after NEXT", self.current().span));
+        }
         Ok(Statement::For { variable, start: initial, end, step, direction, body, span: SourceSpan::new(self.source_id, start.start, end_span.end.max(terminator.span.end)) })
     }
 
@@ -926,10 +931,8 @@ impl Parser {
         self.finish_line()?;
         let body = self.parse_extended_block_until(&["RETURN", "ENDPROC", "ENDSUB"])?;
         let terminator = self.advance();
-        if matches!(&terminator.kind, TokenKind::Identifier(word) if word.eq_ignore_ascii_case("RETURN")) {
-            self.finish_line()?;
-        } else {
-            self.finish_line()?;
+        if !matches!(self.current().kind, TokenKind::Newline | TokenKind::End) {
+            return Err(self.syntax_error("expected end of line after procedure terminator", self.current().span));
         }
         let end = terminator.span.end;
         Ok(Statement::Procedure { name, parameters, body, span: SourceSpan::new(self.source_id, start.start, end) })
@@ -948,7 +951,9 @@ impl Parser {
             return Err(self.syntax_error("expected ENDFUNC after FUNCTION return expression", end_token.span));
         }
         let span = SourceSpan::new(self.source_id, start.start, end_token.span.end.max(return_token.span.end));
-        self.finish_line()?;
+        if !matches!(self.current().kind, TokenKind::Newline | TokenKind::End) {
+            return Err(self.syntax_error("expected end of line after ENDFUNC", self.current().span));
+        }
         Ok(Statement::Function { name, parameters, body, result, span })
     }
 
@@ -960,7 +965,9 @@ impl Parser {
                 _ => unreachable!(),
             }
         } else { Vec::new() };
-        self.finish_line()?;
+        if !matches!(self.current().kind, TokenKind::Newline | TokenKind::End) {
+            return Err(self.syntax_error("expected end of line after GOSUB", self.current().span));
+        }
         let end = self.tokens[self.cursor.saturating_sub(1)].span.end.max(name_span.end);
         Ok(Statement::Gosub { name, arguments, span: SourceSpan::new(self.source_id, start.start, end) })
     }
