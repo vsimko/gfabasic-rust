@@ -793,7 +793,7 @@ impl Parser {
                     SourceSpan::new(self.source_id, token.span.start, name_span.end),
                 )
             }
-            TokenKind::Identifier(name) if name == "FN" => {
+            TokenKind::Identifier(name) if name.eq_ignore_ascii_case("FN") => {
                 let (function, function_span) =
                     self.parse_identifier_name("function name after FN")?;
                 self.parse_call_arguments(
@@ -869,7 +869,7 @@ impl Parser {
                 matches!(value, Expression::Integer(_, _) | Expression::Negate(_, _));
             let supported_intrinsic = matches!(&value,
                 Expression::Call { name, arguments, .. }
-                if matches!(name.as_str(), "FACT" | "VARIAT" | "COMBIN")
+                if ["FACT", "VARIAT", "COMBIN"].iter().any(|builtin| name.eq_ignore_ascii_case(builtin))
                     && arguments.iter().all(|argument| matches!(argument, Expression::Integer(_, _) | Expression::Negate(_, _)))
             );
             if !supported_literal && !supported_intrinsic {
@@ -940,7 +940,7 @@ impl Parser {
                 name: function,
                 arguments,
                 ..
-            } if function == "FACT" && arguments.len() == 1 => {
+            } if function.eq_ignore_ascii_case("FACT") && arguments.len() == 1 => {
                 if let Expression::Integer(argument, _) = arguments[0] {
                     Ok(Statement::AssignFact {
                         name,
@@ -955,11 +955,11 @@ impl Parser {
                 name: function,
                 arguments,
                 ..
-            } if (function == "VARIAT" || function == "COMBIN") && arguments.len() == 2 => {
+            } if (function.eq_ignore_ascii_case("VARIAT") || function.eq_ignore_ascii_case("COMBIN")) && arguments.len() == 2 => {
                 if let (Expression::Integer(n, _), Expression::Integer(k, _)) =
                     (&arguments[0], &arguments[1])
                 {
-                    if function == "VARIAT" {
+                    if function.eq_ignore_ascii_case("VARIAT") {
                         Ok(Statement::AssignVariat {
                             name,
                             n: *n,
