@@ -297,7 +297,7 @@ pub fn validate_structured_program(program: &Program) -> Result<(), Vec<Semantic
                     scan_expr(end, declarations, errors);
                     if let Some(step) = step {
                         scan_expr(step, declarations, errors);
-                        if matches!(step, Expression::Integer(0, _) | Expression::Negate(box Expression::Integer(0, _), _)) {
+                        if matches!(step, Expression::Integer(0, _)) || matches!(step, Expression::Negate(inner, _) if matches!(inner.as_ref(), Expression::Integer(0, _))) {
                             error(errors, "GFA-SEM-0015", "FOR STEP must not be zero", *span);
                         }
                     }
@@ -315,10 +315,11 @@ pub fn validate_structured_program(program: &Program) -> Result<(), Vec<Semantic
                         None => error(errors, "GFA-SEM-0010", format!("unknown procedure '{name}'"), *span),
                     }
                 }
-                Statement::Procedure { body, .. } | Statement::Function { body, .. } => {
+                Statement::Procedure { body, .. } => scan_statements(body, declarations, errors),
+                Statement::Function { body, result, .. } => {
                     scan_statements(body, declarations, errors);
-                }
-                Statement::Function { result, .. } => scan_expr(result, declarations, errors),
+                    scan_expr(result, declarations, errors);
+                },
                 Statement::AssignFact { .. } | Statement::AssignVariat { .. } | Statement::AssignCombin { .. }
                 | Statement::AssignInteger { .. } | Statement::PrintVariables { .. } => {}
                 _ => {}

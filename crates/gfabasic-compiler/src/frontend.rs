@@ -967,7 +967,7 @@ impl Parser {
                 return Ok(Statement::PrintVariables { names, span: SourceSpan::new(self.source_id, start.start, end) });
             }
             if self.extended_depth == 0 {
-                return Err(self.unsupported_error("variables outside x, y, and z are not supported by the top-level MVP subset", values[0].span()));
+                return Err(self.unsupported_error("variables outside the top-level MVP subset (supported: x, y, z) are not supported", values[0].span()));
             }
         }
         Ok(Statement::PrintExpressions { values, span: SourceSpan::new(self.source_id, start.start, end) })
