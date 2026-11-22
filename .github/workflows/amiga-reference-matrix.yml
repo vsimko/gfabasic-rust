@@ -15,6 +15,8 @@ on:
       - "scripts/amiga-cli-probe-35.sh"
       - "scripts/amiga-cli-probe-3041u.sh"
       - "scripts/validate_gfatest_results.py"
+      - "scripts/assert_amiga_discovery_artifact.py"
+      - "scripts/tests/test_amiga_discovery_artifact.py"
   pull_request:
     paths:
       - ".github/workflows/amiga-reference-matrix.yml"
@@ -232,57 +234,8 @@ jobs:
         id: evidence-boundary
         if: always()
         run: |
-          python3 - <<'PY'
-          import io
-          import pathlib
-          import stat
-          from PIL import Image
-
-          root = pathlib.Path("artifacts/amiga-3.5-discovery")
-          if not root.is_dir():
-              raise SystemExit(f"Missing artifact staging directory: {root}")
-
-          forbidden_suffixes = {".adf", ".dms", ".hdf", ".img", ".rom", ".lha", ".exe", ".hunk"}
-          png_signature = bytes.fromhex("89504e470d0a1a0a")
-          violations = []
-          for path in sorted(root.rglob("*")):
-              if path.is_symlink():
-                  violations.append(f"symlink: {path.relative_to(root)}")
-                  continue
-              if not path.is_file():
-                  continue
-              relative = path.relative_to(root)
-              data = path.read_bytes()
-              if path.suffix.lower() in forbidden_suffixes or path.name.lower() == "gfabasic":
-                  violations.append(f"forbidden asset name: {relative}")
-                  continue
-              if path.stat().st_mode & (stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH):
-                  violations.append(f"executable file: {relative}")
-                  continue
-              if path.suffix.lower() == ".png":
-                  try:
-                      if not data.startswith(png_signature):
-                          raise ValueError("missing PNG signature")
-                      with Image.open(io.BytesIO(data)) as image:
-                          image.verify()
-                  except Exception as error:
-                      violations.append(f"invalid PNG evidence: {relative} ({error})")
-                  continue
-              if bytes([0]) in data:
-                  violations.append(f"binary content: {relative}")
-                  continue
-              try:
-                  data.decode("utf-8")
-              except UnicodeDecodeError:
-                  violations.append(f"non-UTF-8/binary content: {relative}")
-
-          if violations:
-              print("Artifact boundary violations:")
-              for violation in violations:
-                  print(f" - {violation}")
-              raise SystemExit(1)
-          print("Artifact staging contains only UTF-8 diagnostics/metadata and valid PNG evidence.")
-          PY
+          python3 scripts/tests/test_amiga_discovery_artifact.py
+          python3 scripts/assert_amiga_discovery_artifact.py artifacts/amiga-3.5-discovery
 
       - name: Upload non-binary discovery evidence
         if: always() && steps.evidence-boundary.outcome == 'success'
