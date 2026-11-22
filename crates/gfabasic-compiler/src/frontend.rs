@@ -950,22 +950,6 @@ impl Parser {
         }
     }
 
-    fn parse_print(&mut self, start: SourceSpan) -> Result<Statement, Box<Diagnostic>> {
-        let mut names = Vec::new();
-        let (first, _) = self.parse_variable()?;
-        names.push(first);
-        while matches!(self.current().kind, TokenKind::Comma) {
-            self.advance();
-            let (name, _) = self.parse_variable()?;
-            names.push(name);
-        }
-        let end = self.tokens[self.cursor - 1].span;
-        Ok(Statement::PrintVariables {
-            names,
-            span: SourceSpan::new(self.source_id, start.start, end.end),
-        })
-    }
-
     fn parse_matrix_name(&mut self) -> Result<(String, SourceSpan), Box<Diagnostic>> {
         let token = self.advance_required("matrix name 'a' or 'b'")?;
         match token.kind {

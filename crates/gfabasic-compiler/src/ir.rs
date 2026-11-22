@@ -259,6 +259,9 @@ pub fn lower(model: &SemanticModel) -> Result<Module, Vec<IrError>> {
                     saw_print = true;
                 }
             }
+            _ => {
+                state.errors.push(IrError::global("structured statements require structured IR lowering"));
+            }
         }
     }
 

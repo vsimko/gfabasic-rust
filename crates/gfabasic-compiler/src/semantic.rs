@@ -206,6 +206,7 @@ pub fn resolve_prototype_symbols(
                     }
                 }
             }
+            _ => {}
         }
     }
 

@@ -138,6 +138,7 @@ mod tests {
         MatRead(String),
         MatInput(i64, String),
         MatPrint(String, Option<i64>, Option<(i64, i64)>),
+        Other(String),
     }
 
     fn meanings(program: &Program) -> Vec<Meaning> {
@@ -270,6 +271,7 @@ mod tests {
                         format!("{operation}:{operand_kind}"),
                     )
                 }
+                _ => Meaning::Other(format!("{statement:?}")),
             })
             .collect()
     }
