@@ -313,9 +313,9 @@ fn emit_structured_c(program: &crate::frontend::Program) -> Result<String, Strin
     }
 
     let mut c = String::from("#include <stdio.h>\n#include <stdlib.h>\n\n");
-    c.push_str("static long long gfa_builtin_fact(long long n) { if (n < 0 || n > 20) abort(); long long r = 1; for (long long i = 2; i <= n; ++i) r *= i; return r; }\n");
-    c.push_str("static long long gfa_builtin_variat(long long n, long long k) { if (n < 0 || n > 20 || k < 0 || k > n) abort(); long long r = 1; for (long long i = 0; i < k; ++i) r *= n - i; return r; }\n");
-    c.push_str("static long long gfa_builtin_combin(long long n, long long k) { if (n < 0 || n > 20 || k < 0 || k > n) abort(); if (k > n-k) k = n-k; long long r = 1; for (long long i = 1; i <= k; ++i) r = r * (n-k+i) / i; return r; }\n\n");
+    c.push_str("long long gfa_builtin_fact(long long n) { if (n < 0 || n > 20) abort(); long long r = 1; for (long long i = 2; i <= n; ++i) r *= i; return r; }\n");
+    c.push_str("long long gfa_builtin_variat(long long n, long long k) { if (n < 0 || n > 20 || k < 0 || k > n) abort(); long long r = 1; for (long long i = 0; i < k; ++i) r *= n - i; return r; }\n");
+    c.push_str("long long gfa_builtin_combin(long long n, long long k) { if (n < 0 || n > 20 || k < 0 || k > n) abort(); if (k > n-k) k = n-k; long long r = 1; for (long long i = 1; i <= k; ++i) r = r * (n-k+i) / i; return r; }\n\n");
     for name in globals.values() { c.push_str(&format!("long long {name};\n")); }
     c.push('\n');
 

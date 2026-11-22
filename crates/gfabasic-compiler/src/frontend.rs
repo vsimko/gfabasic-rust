@@ -604,6 +604,7 @@ struct Parser {
     source_id: SourceId,
     source_len: usize,
     extended_depth: usize,
+    extended_program: bool,
 }
 
 impl Parser {
@@ -797,7 +798,7 @@ impl Parser {
         self.expect(TokenKind::Equals, "'='")?;
         let value = self.parse_expression()?;
         let span = SourceSpan::new(self.source_id, start.start, value.span().end);
-        if self.extended_depth == 0 {
+        if self.extended_depth == 0 && !self.extended_program {
             let supported_literal = matches!(value, Expression::Integer(_, _) | Expression::Negate(_, _));
             let supported_intrinsic = matches!(&value,
                 Expression::Call { name, arguments, .. }
@@ -1441,7 +1442,7 @@ impl Parser {
         match first.kind {
             TokenKind::Identifier(name) if name.eq_ignore_ascii_case("PRINT") => self.parse_print(first.span),
             TokenKind::Identifier(name) if name.eq_ignore_ascii_case("LET") => {
-                let (variable, _) = if self.extended_depth == 0 { self.parse_variable()? } else { self.parse_identifier_name("assignment variable")? };
+                let (variable, _) = if self.extended_depth == 0 && !self.extended_program { self.parse_variable()? } else { self.parse_identifier_name("assignment variable")? };
                 self.parse_assignment(variable, first.span)
             }
             TokenKind::Identifier(name) if name.eq_ignore_ascii_case("FOR") => self.parse_for(first.span),
@@ -1452,7 +1453,7 @@ impl Parser {
             TokenKind::Identifier(name) if name.eq_ignore_ascii_case("MAT") => self.parse_mat_statement(first.span),
             TokenKind::Identifier(name) if name.eq_ignore_ascii_case("RETURN") => Err(self.unsupported_error("RETURN is only valid as a PROCEDURE or FUNCTION terminator", first.span)),
             TokenKind::Identifier(name) => {
-                if matches!(self.current().kind, TokenKind::Equals) && (self.extended_depth > 0 || matches!(name.as_str(), "x" | "y" | "z")) {
+                if matches!(self.current().kind, TokenKind::Equals) && (self.extended_depth > 0 || self.extended_program || matches!(name.as_str(), "x" | "y" | "z")) {
                     self.parse_assignment(name, first.span)
                 } else {
                     Err(self.unsupported_error(format!("statement {name:?} is not supported by the current frontend"), first.span))
@@ -1521,6 +1522,9 @@ pub fn parse_document(
     source: &str,
 ) -> Result<ParsedDocument, Vec<Diagnostic>> {
     let syntax = lex_lossless(source_id, source)?;
+    let extended_program = syntax.tokens.iter().any(|token| matches!(&token.kind,
+        TokenKind::Identifier(name) if matches!(name.to_ascii_uppercase().as_str(), "FOR" | "PROCEDURE" | "FUNCTION" | "GOSUB" | "SUB")
+    ));
     let program = Parser {
         tokens: syntax.tokens.clone(),
         cursor: 0,
@@ -1528,6 +1532,7 @@ pub fn parse_document(
         source_id,
         source_len: source.len(),
         extended_depth: 0,
+        extended_program,
     }
     .parse_program()?;
 
