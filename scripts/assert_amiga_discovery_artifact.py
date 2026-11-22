@@ -4,12 +4,12 @@
 from __future__ import annotations
 
 import argparse
-import io
+import binascii
 import pathlib
 import stat
+import struct
 import sys
-
-from PIL import Image
+import zlib
 
 
 # These are the only paths produced by the 3.5 discovery workflow and probe.
@@ -68,6 +68,60 @@ MAX_FILE_BYTES = 10 * 1024 * 1024
 MAX_TOTAL_BYTES = 40 * 1024 * 1024
 
 
+def valid_png(data: bytes) -> bool:
+    """Check PNG framing, chunk CRCs, required chunks, and IDAT zlib stream."""
+    signature = b"\\x89PNG\\r\\n\\x1a\\n"
+    if not data.startswith(signature):
+        return False
+    offset = len(signature)
+    seen_ihdr = False
+    seen_idat = False
+    seen_iend = False
+    compressed = bytearray()
+    while offset + 12 <= len(data):
+        length = struct.unpack(">I", data[offset:offset + 4])[0]
+        chunk_type = data[offset + 4:offset + 8]
+        end = offset + 12 + length
+        if end > len(data):
+            return False
+        chunk_data = data[offset + 8:offset + 8 + length]
+        expected_crc = struct.unpack(">I", data[offset + 8 + length:end])[0]
+        if (binascii.crc32(chunk_type + chunk_data) & 0xFFFFFFFF) != expected_crc:
+            return False
+        if not seen_ihdr:
+            if chunk_type != b"IHDR" or length != 13:
+                return False
+            width, height, depth, color, compression, filtering, interlace = struct.unpack(">IIBBBBB", chunk_data)
+            depths = {0: {1, 2, 4, 8, 16}, 2: {8, 16}, 3: {1, 2, 4, 8}, 4: {8, 16}, 6: {8, 16}}
+            if (width == 0 or height == 0 or depth not in depths.get(color, set())
+                    or compression != 0 or filtering != 0 or interlace not in {0, 1}):
+                return False
+            seen_ihdr = True
+        elif chunk_type == b"IHDR":
+            return False
+        if chunk_type == b"IDAT":
+            if seen_iend:
+                return False
+            seen_idat = True
+            compressed.extend(chunk_data)
+        elif chunk_type == b"IEND":
+            if length != 0 or not seen_idat:
+                return False
+            seen_iend = True
+            offset = end
+            break
+        offset = end
+    if not seen_ihdr or not seen_idat or not seen_iend or offset != len(data):
+        return False
+    try:
+        decoder = zlib.decompressobj()
+        decoder.decompress(bytes(compressed))
+        decoder.flush()
+        return decoder.eof and not decoder.unused_data
+    except zlib.error:
+        return False
+
+
 def validate_artifact(root: pathlib.Path) -> list[str]:
     """Return violations; an unknown path or unrecognized file always fails."""
     violations: list[str] = []
@@ -106,13 +160,8 @@ def validate_artifact(root: pathlib.Path) -> list[str]:
 
         data = path.read_bytes()
         if relative in ALLOWED_PNG:
-            try:
-                with Image.open(io.BytesIO(data)) as image:
-                    if image.format != "PNG":
-                        raise ValueError("content is not PNG")
-                    image.verify()
-            except Exception as error:
-                violations.append(f"invalid PNG evidence: {relative} ({error})")
+            if not valid_png(data):
+                violations.append(f"invalid PNG evidence: {relative}")
             continue
 
         if b"\x00" in data:
