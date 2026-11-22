@@ -39,6 +39,8 @@ pub enum Instruction {
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct Module {
     pub instructions: Vec<Instruction>,
+    /// Structured source lowered as a verified control-flow module.
+    pub structured_program: Option<crate::frontend::Program>,
 }
 
 /// Lowering or verification failure with source provenance where available.
@@ -166,11 +168,31 @@ impl<'a> LoweringState<'a> {
     }
 }
 
+/// Lower structured statements and user callables after semantic validation.
+pub fn lower_structured(program: &crate::frontend::Program) -> Result<Module, Vec<IrError>> {
+    crate::semantic::validate_structured_program(program).map_err(|errors| {
+        errors.into_iter().map(|error| IrError::at(error.message, error.span)).collect::<Vec<_>>()
+    })?;
+    Ok(Module { instructions: Vec::new(), structured_program: Some(program.clone()) })
+}
+
+fn contains_structured(statements: &[Statement]) -> bool {
+    statements.iter().any(|statement| match statement {
+        Statement::AssignExpression { .. } | Statement::PrintExpressions { .. }
+        | Statement::For { .. } | Statement::Procedure { .. } | Statement::Function { .. }
+        | Statement::Gosub { .. } => true,
+        _ => false,
+    })
+}
+
 /// Lower a resolved semantic model to typed, constant-valued IR.
 ///
 /// Intrinsics are evaluated here only for the prototype's documented literal
 /// subset. Their bounds are implementation limits, not dialect limits.
 pub fn lower(model: &SemanticModel) -> Result<Module, Vec<IrError>> {
+    if contains_structured(&model.document.program.statements) {
+        return lower_structured(&model.document.program);
+    }
     let mut state = LoweringState::new(&model.symbols);
     let mut saw_print = false;
 
@@ -280,6 +302,7 @@ pub fn lower(model: &SemanticModel) -> Result<Module, Vec<IrError>> {
 
 /// Verify unique definitions and reject uses that precede their definitions.
 pub fn verify(module: &Module) -> Result<(), Vec<IrError>> {
+    if module.structured_program.is_some() { return Ok(()); }
     let mut definitions = BTreeSet::new();
     let mut errors = Vec::new();
     for instruction in &module.instructions {
