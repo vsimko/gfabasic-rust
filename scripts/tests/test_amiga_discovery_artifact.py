@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import base64
 import binascii
 import pathlib
 import struct
@@ -69,6 +70,42 @@ class ArtifactBoundaryTests(unittest.TestCase):
     def test_rejects_binary_bytes_in_approved_text_path(self) -> None:
         (self.root / "archive-info.txt").write_bytes(b"metadata\x00payload")
         self.assertTrue(any("NUL byte in text evidence" in item
+                            for item in validate_artifact(self.root)))
+
+    def test_rejects_base64_binary_payload_in_approved_text_path(self) -> None:
+        payload = base64.b64encode(bytes(range(256)) * 2).decode("ascii")
+        (self.root / "archive-info.txt").write_text(
+            "archive_size=123\n" + payload + "\n", encoding="utf-8"
+        )
+        self.assertTrue(any("invalid text format: archive-info.txt" in item
+                            for item in validate_artifact(self.root)))
+
+    def test_rejects_base64_payload_in_other_approved_text_path(self) -> None:
+        native_run = self.root / "native-run"
+        native_run.mkdir()
+        payload = base64.b64encode(bytes(range(256)) * 2).decode("ascii")
+        (native_run / "result.txt").write_text(
+            "probe diagnostic:\n" + payload + "\n", encoding="utf-8"
+        )
+        self.assertTrue(any("encoded payload in text evidence: native-run/result.txt" in item
+                            for item in validate_artifact(self.root)))
+
+    def test_rejects_truncated_png_raster(self) -> None:
+        header = struct.pack(">IIBBBBB", 2, 2, 8, 2, 0, 0, 0)
+        truncated = (b"\x89PNG\r\n\x1a\n" + png_chunk(b"IHDR", header)
+                     + png_chunk(b"IDAT", zlib.compress(b""))
+                     + png_chunk(b"IEND", b""))
+        (self.root / "editor-version-menu.png").write_bytes(truncated)
+        self.assertTrue(any("invalid PNG evidence" in item
+                            for item in validate_artifact(self.root)))
+
+    def test_rejects_png_with_excessive_raster_expansion(self) -> None:
+        header = struct.pack(">IIBBBBB", 1, 1, 8, 2, 0, 0, 0)
+        oversized = zlib.compress(b"\x00" * 1_000_000)
+        image = (b"\x89PNG\r\n\x1a\n" + png_chunk(b"IHDR", header)
+                 + png_chunk(b"IDAT", oversized) + png_chunk(b"IEND", b""))
+        (self.root / "editor-version-menu.png").write_bytes(image)
+        self.assertTrue(any("invalid PNG evidence" in item
                             for item in validate_artifact(self.root)))
 
 

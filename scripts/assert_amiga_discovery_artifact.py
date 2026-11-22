@@ -4,8 +4,10 @@
 from __future__ import annotations
 
 import argparse
+import base64
 import binascii
 import pathlib
+import re
 import stat
 import struct
 import sys
@@ -66,10 +68,12 @@ ALLOWED_PNG = {
 ALLOWED_PATHS = ALLOWED_TEXT | ALLOWED_PNG
 MAX_FILE_BYTES = 10 * 1024 * 1024
 MAX_TOTAL_BYTES = 40 * 1024 * 1024
+MAX_PNG_PIXELS = 16_000_000
+MAX_PNG_RASTER_BYTES = 64 * 1024 * 1024
 
 
 def valid_png(data: bytes) -> bool:
-    """Check PNG framing, chunk CRCs, required chunks, and IDAT zlib stream."""
+    """Validate PNG framing, CRCs, complete raster data, and bounded decoding."""
     signature = b"\x89PNG\r\n\x1a\n"
     if not data.startswith(signature):
         return False
@@ -78,6 +82,7 @@ def valid_png(data: bytes) -> bool:
     seen_idat = False
     seen_iend = False
     compressed = bytearray()
+    width = height = depth = color = interlace = 0
     while offset + 12 <= len(data):
         length = struct.unpack(">I", data[offset:offset + 4])[0]
         chunk_type = data[offset + 4:offset + 8]
@@ -94,7 +99,8 @@ def valid_png(data: bytes) -> bool:
             width, height, depth, color, compression, filtering, interlace = struct.unpack(">IIBBBBB", chunk_data)
             depths = {0: {1, 2, 4, 8, 16}, 2: {8, 16}, 3: {1, 2, 4, 8}, 4: {8, 16}, 6: {8, 16}}
             if (width == 0 or height == 0 or depth not in depths.get(color, set())
-                    or compression != 0 or filtering != 0 or interlace not in {0, 1}):
+                    or compression != 0 or filtering != 0 or interlace not in {0, 1}
+                    or width * height > MAX_PNG_PIXELS):
                 return False
             seen_ihdr = True
         elif chunk_type == b"IHDR":
@@ -113,14 +119,84 @@ def valid_png(data: bytes) -> bool:
         offset = end
     if not seen_ihdr or not seen_idat or not seen_iend or offset != len(data):
         return False
+
+    channels = {0: 1, 2: 3, 3: 1, 4: 2, 6: 4}[color]
+    bits_per_pixel = channels * depth
+    passes = (
+        ((0, 0, 1, 1),) if interlace == 0 else
+        ((0, 0, 8, 8), (4, 0, 8, 8), (0, 4, 4, 8),
+         (2, 0, 4, 4), (0, 2, 2, 4), (1, 0, 2, 2), (0, 1, 1, 2))
+    )
+    pass_layout: list[tuple[int, int]] = []
+    expected_raster_bytes = 0
+    for x_start, y_start, x_step, y_step in passes:
+        pass_width = (width - x_start + x_step - 1) // x_step if width > x_start else 0
+        pass_height = (height - y_start + y_step - 1) // y_step if height > y_start else 0
+        if not pass_width or not pass_height:
+            continue
+        row_bytes = (pass_width * bits_per_pixel + 7) // 8
+        pass_layout.append((row_bytes, pass_height))
+        expected_raster_bytes += (row_bytes + 1) * pass_height
+        if expected_raster_bytes > MAX_PNG_RASTER_BYTES:
+            return False
+
+    if expected_raster_bytes == 0:
+        return False
     try:
         decoder = zlib.decompressobj()
-        decoder.decompress(bytes(compressed))
-        decoder.flush()
-        return decoder.eof and not decoder.unused_data
-    except zlib.error:
+        raster = decoder.decompress(bytes(compressed), expected_raster_bytes + 1)
+        # The extra byte detects expansion beyond the IHDR-derived bound.
+        if (len(raster) != expected_raster_bytes or not decoder.eof
+                or decoder.unused_data or decoder.unconsumed_tail):
+            return False
+    except (zlib.error, struct.error, OverflowError):
         return False
 
+    cursor = 0
+    for row_bytes, pass_height in pass_layout:
+        scanline_size = row_bytes + 1
+        for _ in range(pass_height):
+            if raster[cursor] > 4:
+                return False
+            cursor += scanline_size
+    return cursor == len(raster)
+
+
+def contains_encoded_payload(text: str) -> bool:
+    """Reject long Base64/hex blobs in text evidence, including wrapped Base64."""
+    candidates = [
+        match.group(0)
+        for match in re.finditer(
+            r"(?<![A-Za-z0-9+/])[A-Za-z0-9+/]{128,}={0,2}(?![A-Za-z0-9+/=)",
+            text,
+        )
+    ]
+    wrapped_lines: list[str] = []
+    for line in text.splitlines():
+        candidate = line.strip()
+        if candidate and re.fullmatch(r"[A-Za-z0-9+/]+={0,2}", candidate):
+            wrapped_lines.append(candidate)
+        elif wrapped_lines:
+            candidates.append("".join(wrapped_lines))
+            wrapped_lines = []
+    if wrapped_lines:
+        candidates.append("".join(wrapped_lines))
+
+    for candidate in candidates:
+        compact = "".join(candidate.split())
+        if len(compact) < 128:
+            continue
+        try:
+            decoded = base64.b64decode(compact + "=" * (-len(compact) % 4), validate=True)
+        except (ValueError, binascii.Error):
+            continue
+        if len(decoded) >= 96:
+            return True
+
+    return any(
+        len(match.group(0)) >= 192
+        for match in re.finditer(r"(?<![0-9A-Fa-f])[0-9A-Fa-f]{192,}(?![0-9A-Fa-f])", text)
+    )
 
 def validate_artifact(root: pathlib.Path) -> list[str]:
     """Return violations; an unknown path or unrecognized file always fails."""
@@ -168,9 +244,16 @@ def validate_artifact(root: pathlib.Path) -> list[str]:
             violations.append(f"NUL byte in text evidence: {relative}")
             continue
         try:
-            data.decode("utf-8")
+            text = data.decode("utf-8")
         except UnicodeDecodeError:
             violations.append(f"non-UTF-8 text evidence: {relative}")
+            continue
+
+        if relative == "archive-info.txt" and not re.fullmatch(r"archive_size=[0-9]+\r?\n?", text):
+            violations.append("invalid text format: archive-info.txt")
+            continue
+        if contains_encoded_payload(text):
+            violations.append(f"encoded payload in text evidence: {relative}")
 
     if total_bytes > MAX_TOTAL_BYTES:
         violations.append(f"artifact exceeds {MAX_TOTAL_BYTES} total bytes")
