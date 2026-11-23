@@ -550,7 +550,8 @@ mod tests {
         let mut sources = SourceMap::new();
         let id = sources.add_source("intrinsic-overflow.bas", source);
         let model = semantic_model(id, source);
-        let errors = lower(&model).expect_err("successor overflow is outside the implemented subset");
+        let errors =
+            lower(&model).expect_err("successor overflow is outside the implemented subset");
 
         assert_eq!(errors.len(), 1);
         assert_eq!(
@@ -558,5 +559,4 @@ mod tests {
             Some(SourceSpan::new(id, 0, source.trim_end().len()))
         );
     }
-
 }
