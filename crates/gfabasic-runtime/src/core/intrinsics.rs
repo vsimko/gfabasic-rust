@@ -11,8 +11,17 @@ fn next_random_u64() -> u64 {
     let mut current = RANDOM_STATE.load(Ordering::Relaxed);
     loop {
         if current == 0 {
-            let seed = (SystemTime::now().duration_since(UNIX_EPOCH).unwrap_or_default().as_nanos() as u64) | 1;
-            current = match RANDOM_STATE.compare_exchange(0, seed, Ordering::Relaxed, Ordering::Relaxed) {
+            let seed = (SystemTime::now()
+                .duration_since(UNIX_EPOCH)
+                .unwrap_or_default()
+                .as_nanos() as u64)
+                | 1;
+            current = match RANDOM_STATE.compare_exchange(
+                0,
+                seed,
+                Ordering::Relaxed,
+                Ordering::Relaxed,
+            ) {
                 Ok(_) => seed,
                 Err(actual) => actual,
             };
@@ -21,8 +30,15 @@ fn next_random_u64() -> u64 {
         next ^= next >> 12;
         next ^= next << 25;
         next ^= next >> 27;
-        if next == 0 { next = 0x9e37_79b9_7f4a_7c15; }
-        match RANDOM_STATE.compare_exchange_weak(current, next, Ordering::Relaxed, Ordering::Relaxed) {
+        if next == 0 {
+            next = 0x9e37_79b9_7f4a_7c15;
+        }
+        match RANDOM_STATE.compare_exchange_weak(
+            current,
+            next,
+            Ordering::Relaxed,
+            Ordering::Relaxed,
+        ) {
             Ok(_) => return next.wrapping_mul(0x2545_f491_4f6c_dd1d),
             Err(actual) => current = actual,
         }
@@ -40,12 +56,16 @@ pub fn rand_integer(bound: i64) -> Option<i64> {
     let accepted_below = u64::MAX - (u64::MAX % bound);
     loop {
         let sample = next_random_u64();
-        if sample < accepted_below { return i64::try_from(sample % bound).ok(); }
+        if sample < accepted_below {
+            return i64::try_from(sample % bound).ok();
+        }
     }
 }
 
 /// Numeric successor for the evidenced integer-expression form.
-pub fn succ_integer(value: i64) -> Option<i64> { value.checked_add(1) }
+pub fn succ_integer(value: i64) -> Option<i64> {
+    value.checked_add(1)
+}
 
 /// Repeat the supplied byte string; no historical count ceiling is asserted.
 pub fn repeat_string(count: i64, value: &[u8]) -> Option<Vec<u8>> {
@@ -53,29 +73,39 @@ pub fn repeat_string(count: i64, value: &[u8]) -> Option<Vec<u8>> {
     let length = value.len().checked_mul(count)?;
     let mut output = Vec::new();
     output.try_reserve_exact(length).ok()?;
-    for _ in 0..count { output.extend_from_slice(value); }
+    for _ in 0..count {
+        output.extend_from_slice(value);
+    }
     Some(output)
 }
 
 /// Positive one-argument HEX$ subset; negative/width behavior remains unverified.
 pub fn hex_string(value: i64) -> Option<String> {
     let value = i32::try_from(value).ok()?;
-    if value < 0 { return None; }
+    if value < 0 {
+        return None;
+    }
     Some(crate::core::numeric::hex(value, None))
 }
 
 /// RND(1) candidate; [0,1) and ignored argument follow only 3.0 base semantics.
-pub fn rnd(argument: f64) -> Option<f64> { argument.is_finite().then(random_unit) }
+pub fn rnd(argument: f64) -> Option<f64> {
+    argument.is_finite().then(random_unit)
+}
 
 /// INT subset for finite non-negative values; negative rounding is unverified.
 pub fn int(value: f64) -> Option<i64> {
-    if !value.is_finite() || value < 0.0 || value >= i64::MAX as f64 { return None; }
+    if !value.is_finite() || value < 0.0 || value >= i64::MAX as f64 {
+        return None;
+    }
     Some(value.trunc() as i64)
 }
 
 /// SQR subset for finite non-negative inputs; negative-input behavior is unverified.
 pub fn sqr(value: f64) -> Option<f64> {
-    if !value.is_finite() || value < 0.0 { return None; }
+    if !value.is_finite() || value < 0.0 {
+        return None;
+    }
     let result = value.sqrt();
     result.is_finite().then_some(result)
 }

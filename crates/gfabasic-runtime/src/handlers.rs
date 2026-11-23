@@ -35,8 +35,14 @@ impl ImplementationStatus {
 /// The exact ABI shape of a runtime handler.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum HandlerSignature {
-    IntegerToUnsigned, TwoIntegersToUnsigned, IntegerToInteger, IntegerToString,
-    IntegerAndStringToString, RealToReal, RealToInteger, Unsupported,
+    IntegerToUnsigned,
+    TwoIntegersToUnsigned,
+    IntegerToInteger,
+    IntegerToString,
+    IntegerAndStringToString,
+    RealToReal,
+    RealToInteger,
+    Unsupported,
 }
 
 /// Typed handler target. No dynamically typed argument list or fallback exists.
@@ -150,7 +156,9 @@ impl HandlerRegistry {
     /// Construct the explicit built-in handler table.
     pub fn builtins() -> Self {
         use crate::core::combinatorics::{combin, factorial, variat};
-        use crate::core::intrinsics::{hex_string, int, rand_integer, repeat_string, rnd, sqr, succ_integer};
+        use crate::core::intrinsics::{
+            hex_string, int, rand_integer, repeat_string, rnd, sqr, succ_integer,
+        };
 
         let mut registry = Self::new();
         registry.register(HandlerRegistration {
@@ -168,13 +176,41 @@ impl HandlerRegistry {
             profile: ApiProfile::LanguageCore,
             handler: RuntimeHandler::TwoIntegersToUnsigned(combin),
         });
-        registry.register(HandlerRegistration { id: "gfa.language.numeric.rand", profile: ApiProfile::LanguageCore, handler: RuntimeHandler::IntegerToInteger(rand_integer) });
-        registry.register(HandlerRegistration { id: "gfa.language.numeric.succ", profile: ApiProfile::LanguageCore, handler: RuntimeHandler::IntegerToInteger(succ_integer) });
-        registry.register(HandlerRegistration { id: "gfa.language.string.string", profile: ApiProfile::LanguageCore, handler: RuntimeHandler::IntegerAndStringToString(repeat_string) });
-        registry.register(HandlerRegistration { id: "gfa.language.string.hex", profile: ApiProfile::LanguageCore, handler: RuntimeHandler::IntegerToString(hex_string) });
-        registry.register(HandlerRegistration { id: "gfa.language.numeric.rnd", profile: ApiProfile::LanguageCore, handler: RuntimeHandler::RealToReal(rnd) });
-        registry.register(HandlerRegistration { id: "gfa.language.numeric.int", profile: ApiProfile::LanguageCore, handler: RuntimeHandler::RealToInteger(int) });
-        registry.register(HandlerRegistration { id: "gfa.language.numeric.sqr", profile: ApiProfile::LanguageCore, handler: RuntimeHandler::RealToReal(sqr) });
+        registry.register(HandlerRegistration {
+            id: "gfa.language.numeric.rand",
+            profile: ApiProfile::LanguageCore,
+            handler: RuntimeHandler::IntegerToInteger(rand_integer),
+        });
+        registry.register(HandlerRegistration {
+            id: "gfa.language.numeric.succ",
+            profile: ApiProfile::LanguageCore,
+            handler: RuntimeHandler::IntegerToInteger(succ_integer),
+        });
+        registry.register(HandlerRegistration {
+            id: "gfa.language.string.string",
+            profile: ApiProfile::LanguageCore,
+            handler: RuntimeHandler::IntegerAndStringToString(repeat_string),
+        });
+        registry.register(HandlerRegistration {
+            id: "gfa.language.string.hex",
+            profile: ApiProfile::LanguageCore,
+            handler: RuntimeHandler::IntegerToString(hex_string),
+        });
+        registry.register(HandlerRegistration {
+            id: "gfa.language.numeric.rnd",
+            profile: ApiProfile::LanguageCore,
+            handler: RuntimeHandler::RealToReal(rnd),
+        });
+        registry.register(HandlerRegistration {
+            id: "gfa.language.numeric.int",
+            profile: ApiProfile::LanguageCore,
+            handler: RuntimeHandler::RealToInteger(int),
+        });
+        registry.register(HandlerRegistration {
+            id: "gfa.language.numeric.sqr",
+            profile: ApiProfile::LanguageCore,
+            handler: RuntimeHandler::RealToReal(sqr),
+        });
         registry
     }
 
@@ -225,10 +261,16 @@ impl HandlerRegistry {
             RuntimeHandler::IntegerToUnsigned(function) => {
                 ResolvedHandler::IntegerToUnsigned(function)
             }
-            RuntimeHandler::TwoIntegersToUnsigned(function) => ResolvedHandler::TwoIntegersToUnsigned(function),
-            RuntimeHandler::IntegerToInteger(function) => ResolvedHandler::IntegerToInteger(function),
+            RuntimeHandler::TwoIntegersToUnsigned(function) => {
+                ResolvedHandler::TwoIntegersToUnsigned(function)
+            }
+            RuntimeHandler::IntegerToInteger(function) => {
+                ResolvedHandler::IntegerToInteger(function)
+            }
             RuntimeHandler::IntegerToString(function) => ResolvedHandler::IntegerToString(function),
-            RuntimeHandler::IntegerAndStringToString(function) => ResolvedHandler::IntegerAndStringToString(function),
+            RuntimeHandler::IntegerAndStringToString(function) => {
+                ResolvedHandler::IntegerAndStringToString(function)
+            }
             RuntimeHandler::RealToReal(function) => ResolvedHandler::RealToReal(function),
             RuntimeHandler::RealToInteger(function) => ResolvedHandler::RealToInteger(function),
         })
@@ -462,15 +504,21 @@ mod tests {
             _ => panic!("SUCC handler signature"),
         }
         match resolve_builtin_handler("gfa.language.string.string").unwrap() {
-            ResolvedHandler::IntegerAndStringToString(handler) => assert_eq!(handler(3, b"-"), Some(b"---".to_vec())),
+            ResolvedHandler::IntegerAndStringToString(handler) => {
+                assert_eq!(handler(3, b"-"), Some(b"---".to_vec()))
+            }
             _ => panic!("STRING$ handler signature"),
         }
         match resolve_builtin_handler("gfa.language.string.hex").unwrap() {
-            ResolvedHandler::IntegerToString(handler) => assert_eq!(handler(47).as_deref(), Some("2F")),
+            ResolvedHandler::IntegerToString(handler) => {
+                assert_eq!(handler(47).as_deref(), Some("2F"))
+            }
             _ => panic!("HEX$ handler signature"),
         }
         match resolve_builtin_handler("gfa.language.numeric.rnd").unwrap() {
-            ResolvedHandler::RealToReal(handler) => assert!(handler(1.0).is_some_and(|v| (0.0..1.0).contains(&v))),
+            ResolvedHandler::RealToReal(handler) => {
+                assert!(handler(1.0).is_some_and(|v| (0.0..1.0).contains(&v)))
+            }
             _ => panic!("RND handler signature"),
         }
         match resolve_builtin_handler("gfa.language.numeric.int").unwrap() {
@@ -482,5 +530,4 @@ mod tests {
             _ => panic!("SQR handler signature"),
         }
     }
-
 }

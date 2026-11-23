@@ -76,14 +76,20 @@ fn unary_intrinsic(declaration_id: &str, argument: i64) -> Result<Option<i64>, S
         gfabasic_runtime::handlers::ResolvedHandler::IntegerToUnsigned(handler) => {
             Ok(handler(argument).and_then(|value| i64::try_from(value).ok()))
         }
-        _ => Err(format!("runtime handler signature mismatch for {declaration_id}")),
+        _ => Err(format!(
+            "runtime handler signature mismatch for {declaration_id}"
+        )),
     }
 }
 
 fn integer_intrinsic(declaration_id: &str, argument: i64) -> Result<Option<i64>, String> {
     match crate::semantic::resolve_api_handler(declaration_id).map_err(|error| error.to_string())? {
-        gfabasic_runtime::handlers::ResolvedHandler::IntegerToInteger(handler) => Ok(handler(argument)),
-        _ => Err(format!("runtime handler signature mismatch for {declaration_id}")),
+        gfabasic_runtime::handlers::ResolvedHandler::IntegerToInteger(handler) => {
+            Ok(handler(argument))
+        }
+        _ => Err(format!(
+            "runtime handler signature mismatch for {declaration_id}"
+        )),
     }
 }
 
@@ -92,7 +98,9 @@ fn real_to_integer_intrinsic(declaration_id: &str, argument: i64) -> Result<Opti
         gfabasic_runtime::handlers::ResolvedHandler::RealToInteger(handler) => {
             Ok(handler(argument as f64))
         }
-        _ => Err(format!("runtime handler signature mismatch for {declaration_id}")),
+        _ => Err(format!(
+            "runtime handler signature mismatch for {declaration_id}"
+        )),
     }
 }
 
@@ -110,7 +118,9 @@ fn binary_intrinsic(declaration_id: &str, left: i64, right: i64) -> Result<Optio
         gfabasic_runtime::handlers::ResolvedHandler::TwoIntegersToUnsigned(handler) => {
             Ok(handler(left, right).and_then(|value| i64::try_from(value).ok()))
         }
-        _ => Err(format!("runtime handler signature mismatch for {declaration_id}")),
+        _ => Err(format!(
+            "runtime handler signature mismatch for {declaration_id}"
+        )),
     }
 }
 
@@ -518,13 +528,20 @@ mod tests {
         assert_eq!(ir.instructions.len(), 3);
         assert!(matches!(
             ir.instructions[0],
-            Instruction::ConstI64 { result: ValueId(0), value: 3, .. }
+            Instruction::ConstI64 {
+                result: ValueId(0),
+                value: 3,
+                ..
+            }
         ));
         assert!(matches!(
             ir.instructions[1],
-            Instruction::ConstI64 { result: ValueId(1), value: 5, .. }
+            Instruction::ConstI64 {
+                result: ValueId(1),
+                value: 5,
+                ..
+            }
         ));
         verify(&ir).expect("literal intrinsic IR is valid");
     }
-
 }

@@ -681,7 +681,10 @@ impl Parser {
             }
         };
 
-        if !matches!(function_name.as_str(), "FACT" | "VARIAT" | "COMBIN" | "SUCC" | "INT") {
+        if !matches!(
+            function_name.as_str(),
+            "FACT" | "VARIAT" | "COMBIN" | "SUCC" | "INT"
+        ) {
             return Err(self.unsupported_error(
                 format!("intrinsic {function_name:?} is outside the current MVP subset"),
                 function.span,
@@ -701,13 +704,28 @@ impl Parser {
         };
 
         if matches!(function_name.as_str(), "FACT" | "SUCC" | "INT") {
-            self.expect(TokenKind::RightParen, &format!("')' after {function_name} argument"))?;
+            self.expect(
+                TokenKind::RightParen,
+                &format!("')' after {function_name} argument"),
+            )?;
             let end = self.tokens[self.cursor - 1].span;
             let span = SourceSpan::new(self.source_id, start.start, end.end);
             return match function_name.as_str() {
-                "FACT" => Ok(Statement::AssignFact { name, argument: first_value, span }),
-                "SUCC" => Ok(Statement::AssignSucc { name, argument: first_value, span }),
-                "INT" => Ok(Statement::AssignInt { name, argument: first_value, span }),
+                "FACT" => Ok(Statement::AssignFact {
+                    name,
+                    argument: first_value,
+                    span,
+                }),
+                "SUCC" => Ok(Statement::AssignSucc {
+                    name,
+                    argument: first_value,
+                    span,
+                }),
+                "INT" => Ok(Statement::AssignInt {
+                    name,
+                    argument: first_value,
+                    span,
+                }),
                 _ => unreachable!("unary intrinsic set is exhaustive"),
             };
         }
@@ -2386,5 +2404,4 @@ mod tests {
             Statement::AssignInt { name, argument: 5, .. } if name == "y"
         ));
     }
-
 }
