@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "status": "permission-denied",
-  "generated_at": "2026-11-23T05:59:03.668259+00:00",
+  "generated_at": "2026-11-23T06:00:03.300130+00:00",
   "last_successful_at": null,
   "items": [],
   "error": "GitHub API returned HTTP 403"
