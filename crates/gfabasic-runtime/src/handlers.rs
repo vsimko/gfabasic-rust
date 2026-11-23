@@ -357,7 +357,7 @@ mod tests {
             .unwrap();
         match resolved {
             ResolvedHandler::IntegerToUnsigned(handler) => assert_eq!(handler(4), Some(5)),
-            ResolvedHandler::TwoIntegersToUnsigned(_) => panic!("wrong handler type"),
+            _ => panic!("wrong handler type"),
         }
     }
 

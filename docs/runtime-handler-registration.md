@@ -44,6 +44,7 @@ the limited call forms, but detailed RAND/RND range and seeding, negative INT
 rounding, negative SQR inputs, HEX$ negative formatting, STRING$ count limits,
 and numeric overflow edges are not all independently established for 3.5.
 The runtime helpers expose bounded candidate behavior and return `None` for
-inputs outside that subset. Linux target behavior is partial; exact 3.5
-interpreter conformance remains `not-tested`. A Rust registration does not
+inputs outside that subset. The Linux implementation is partial, but target support remains `unknown`
+until conformance is established; exact 3.5 interpreter conformance remains
+`not-tested`. A Rust registration does not
 promote evidence or historical conformance.

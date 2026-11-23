@@ -129,7 +129,7 @@ handler = "gfa.language.numeric.succ"
 
 [[declarations.support]]
 target = "x86_64-unknown-linux-gnu"
-classification = "partial"
+classification = "unknown"
 conformance = "not-tested"
 tests = []
 pending-reason = "A partial Rust runtime handler is registered; exact 3.5 reference-interpreter conformance and unverified edge cases remain open."
@@ -176,7 +176,7 @@ handler = "gfa.language.string.string"
 
 [[declarations.support]]
 target = "x86_64-unknown-linux-gnu"
-classification = "partial"
+classification = "unknown"
 conformance = "not-tested"
 tests = []
 pending-reason = "A partial Rust runtime handler is registered; exact 3.5 reference-interpreter conformance and unverified edge cases remain open."
@@ -220,7 +220,7 @@ handler = "gfa.language.string.hex"
 
 [[declarations.support]]
 target = "x86_64-unknown-linux-gnu"
-classification = "partial"
+classification = "unknown"
 conformance = "not-tested"
 tests = []
 pending-reason = "A partial Rust runtime handler is registered; exact 3.5 reference-interpreter conformance and unverified edge cases remain open."
@@ -264,7 +264,7 @@ handler = "gfa.language.numeric.rnd"
 
 [[declarations.support]]
 target = "x86_64-unknown-linux-gnu"
-classification = "partial"
+classification = "unknown"
 conformance = "not-tested"
 tests = []
 pending-reason = "A partial Rust runtime handler is registered; exact 3.5 reference-interpreter conformance and unverified edge cases remain open."
@@ -308,7 +308,7 @@ handler = "gfa.language.numeric.int"
 
 [[declarations.support]]
 target = "x86_64-unknown-linux-gnu"
-classification = "partial"
+classification = "unknown"
 conformance = "not-tested"
 tests = []
 pending-reason = "A partial Rust runtime handler is registered; exact 3.5 reference-interpreter conformance and unverified edge cases remain open."
@@ -352,7 +352,7 @@ handler = "gfa.language.numeric.sqr"
 
 [[declarations.support]]
 target = "x86_64-unknown-linux-gnu"
-classification = "partial"
+classification = "unknown"
 conformance = "not-tested"
 tests = []
 pending-reason = "A partial Rust runtime handler is registered; exact 3.5 reference-interpreter conformance and unverified edge cases remain open."

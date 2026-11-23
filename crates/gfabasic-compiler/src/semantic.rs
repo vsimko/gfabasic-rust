@@ -380,18 +380,14 @@ mod tests {
             gfabasic_runtime::handlers::ResolvedHandler::IntegerToUnsigned(handler) => {
                 assert_eq!(handler(5), Some(120));
             }
-            gfabasic_runtime::handlers::ResolvedHandler::TwoIntegersToUnsigned(_) => {
-                panic!("FACT must resolve to its unary signature");
-            }
+            _ => panic!("FACT must resolve to its unary signature"),
         }
 
         match super::resolve_api_handler("gfa.language.math.variat").unwrap() {
             gfabasic_runtime::handlers::ResolvedHandler::TwoIntegersToUnsigned(handler) => {
                 assert_eq!(handler(5, 2), Some(20));
             }
-            gfabasic_runtime::handlers::ResolvedHandler::IntegerToUnsigned(_) => {
-                panic!("VARIAT must resolve to its binary signature");
-            }
+            _ => panic!("VARIAT must resolve to its binary signature"),
         }
     }
 
