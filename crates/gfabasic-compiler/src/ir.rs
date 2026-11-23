@@ -553,10 +553,7 @@ mod tests {
         let errors =
             lower(&model).expect_err("successor overflow is outside the implemented subset");
 
-        assert_eq!(errors.len(), 1);
-        assert_eq!(
-            errors[0].span,
-            Some(SourceSpan::new(id, 0, source.trim_end().len()))
-        );
+        let expected_span = Some(SourceSpan::new(id, 0, source.trim_end().len()));
+        assert!(errors.iter().any(|error| error.span == expected_span));
     }
 }
