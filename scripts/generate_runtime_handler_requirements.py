@@ -68,7 +68,7 @@ def signature_for(declaration: dict, status: str, path: Path) -> str:
             return "IntegerAndStringToString"
 
     raise GenerationError(
-        f"{path}: unsupported argument/return signature for {declaration['id']}: "
+        f"{path}: unsupported argument signature/return type for {declaration['id']}: "
         f"{argument_types!r} -> {returns!r}"
     )
 
