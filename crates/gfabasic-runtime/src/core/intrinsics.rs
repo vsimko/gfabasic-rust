@@ -70,6 +70,9 @@ pub fn succ_integer(value: i64) -> Option<i64> {
 /// Repeat the supplied byte string; no historical count ceiling is asserted.
 pub fn repeat_string(count: i64, value: &[u8]) -> Option<Vec<u8>> {
     let count = usize::try_from(count).ok()?;
+    if value.is_empty() || count == 0 {
+        return Some(Vec::new());
+    }
     let length = value.len().checked_mul(count)?;
     let mut output = Vec::new();
     output.try_reserve_exact(length).ok()?;
@@ -125,6 +128,11 @@ mod tests {
         assert_eq!(repeat_string(3, b"-"), Some(b"---".to_vec()));
         assert_eq!(repeat_string(0, b"x"), Some(Vec::new()));
         assert_eq!(repeat_string(-1, b"x"), None);
+    }
+
+    #[test]
+    fn empty_string_repetition_is_constant_time_for_large_counts() {
+        assert_eq!(repeat_string(i64::MAX, b""), Some(Vec::new()));
     }
 
     #[test]
