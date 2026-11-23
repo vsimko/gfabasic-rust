@@ -22,8 +22,8 @@ A page-image-checked example establishes that the shown form is used in that 3.5
 | Counted loop | `FOR i=1 TO 15 ... NEXT i` | Ascending `TO` form with an explicit named `NEXT`. | `AM-BOOK-DE-1990`, printed p. 471 |
 | Counted loop, negative step | `FOR j=i TO 1 STEP -1 ... NEXT j` | The example uses a negative step in a descending loop. | `AM-BOOK-DE-1990`, printed p. 480 |
 | Counted loop, DOWNTO | `FOR j%=i% DOWNTO 0 ... NEXT j%` | The 3.5 addendum's DATA-pointer example uses the `DOWNTO` spelling. | `AM-INTERPRETER-35`, printed p. 13-35 |
-| Pre-test loop | `WHILE _DATA ... WEND` | The companion-book example loops while the DATA pointer is nonzero. | `AM-BOOK-DE-1990`, printed p. 480 |
-| Conditional DO loop | `DO WHILE DATA ... LOOP` | The 3.5 addendum uses the DATA-availability predicate at the DO boundary. | `AM-INTERPRETER-35`, printed pp. 13-34–13-35 |
+| WHILE loop | `WHILE _DATA ... WEND` | The companion-book example loops while the DATA pointer is nonzero. | `AM-BOOK-DE-1990`, printed p. 480 |
+| Conditional DO loop | `DO WHILE _DATA ... LOOP` | The 3.5 addendum uses the DATA-pointer availability predicate at the DO boundary. | `AM-INTERPRETER-35`, printed pp. 13-34–13-35 |
 | Procedure | `PROCEDURE drawp ... RETURN` | A parameterless procedure is defined and terminated with `RETURN`. | `AM-BOOK-DE-1990`, printed p. 471 |
 | Procedure call | `@drawp` | The example invokes the procedure with the `@` prefix. | `AM-BOOK-DE-1990`, printed p. 471 |
 | Program termination | `END` | The vector example terminates with `END`. | `AM-BOOK-DE-1990`, printed p. 471 |
@@ -34,7 +34,7 @@ The procedure example does not establish parameter passing, recursion, nested pr
 
 | Construct | Form directly witnessed | What the source establishes | Source |
 |---|---|---|---|
-| DATA-pointer query | `_DATA` | Returns the current DATA-pointer position; the addendum states that `DATA` is zero when the next `READ` would run out of data. | `AM-INTERPRETER-35`, printed p. 13-34; `AM-BOOK-DE-1990`, printed p. 480 |
+| DATA-pointer query | `_DATA` | Returns the current DATA-pointer position; the addendum states that `_DATA` is zero when the next `READ` would run out of data. | `AM-INTERPRETER-35`, printed p. 13-34; `AM-BOOK-DE-1990`, printed p. 480 |
 | DATA-pointer restore | `_DATA=dp%(j%)` | Restores a previously saved DATA-pointer value. The companion-book text warns to use a previously read position. | `AM-INTERPRETER-35`, printed p. 13-34; `AM-BOOK-DE-1990`, printed p. 480 |
 | DATA read | `READ a` | Reads one value into the shown scalar variable in the DATA-pointer example. | `AM-INTERPRETER-35`, printed p. 13-35; `AM-BOOK-DE-1990`, printed p. 480 |
 | DATA reset | `RESTORE` | The companion-book example resets the DATA pointer to the beginning before reading. | `AM-BOOK-DE-1990`, printed p. 480 |
