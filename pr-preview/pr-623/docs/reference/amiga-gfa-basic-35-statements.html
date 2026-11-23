@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="This page records a limited set of statement forms directly witnessed in Amiga GFA BASIC 3.5 material. It is a partial contribution to issue #21, not a complete grammar or a claim of full 3.5 compatibility.">
-  <title>Amiga GFA BASIC 3.5 statements — verified forms · GFA BASIC Rust documentation</title>
+  <title>Amiga GFA BASIC 3.5 statements — evidenced forms · GFA BASIC Rust documentation</title>
   <link rel="stylesheet" href="../../styles.css">
 </head>
 <body class="docs-site">
@@ -14,16 +14,16 @@
     <a href="../index.html">Documentation</a>
   </header>
   <div class="docs-layout">
-    <nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home" href="index.html">Section index</a><ul><li><a href="README.html">GFA BASIC language reference notes</a></li><li><a href="amiga-gfa-api.html">Amiga GFA BASIC API reference — initial research inventory</a></li><li><a href="amiga-gfa-basic-3.0-feature-inventory.html">Amiga GFA BASIC interpreter 3.0 — feature inventory (working draft)</a></li><li><a href="amiga-gfa-basic-3.0.html">Amiga GFA BASIC 3.0 reference research notes</a></li><li><a href="amiga-gfa-basic-35-formatter.html">Amiga GFA BASIC 3.5 formatter</a></li><li><a href="amiga-gfa-basic-35-statements.html">Amiga GFA BASIC 3.5 statements — verified forms</a></li><li><a href="../research/amiga-gfa-basic-35-primary-reference.html">Amiga GFA BASIC 3.5 primary reference</a></li><li><a href="../research/amiga-gfa-basic-35-addendum-inventory.html">Amiga GFA BASIC 3.5 addendum inventory</a></li><li><a href="../research/amiga-gfa-basic-documentation-audit.html">Documentation coverage audit</a></li><li><a href="atari-gfa-api.html">Atari ST GFA BASIC API reference — research draft</a></li><li><a href="atari-gfa-basic-3.0.html">Atari ST GFA BASIC V2.xx / V3.0 — preliminary language specification</a></li></ul></nav>
+    <nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home" href="index.html">Section index</a><ul><li><a href="README.html">GFA BASIC language reference notes</a></li><li><a href="amiga-gfa-api.html">Amiga GFA BASIC API reference — initial research inventory</a></li><li><a href="amiga-gfa-basic-3.0-feature-inventory.html">Amiga GFA BASIC interpreter 3.0 — feature inventory (working draft)</a></li><li><a href="amiga-gfa-basic-3.0.html">Amiga GFA BASIC 3.0 reference research notes</a></li><li><a href="amiga-gfa-basic-35-formatter.html">Amiga GFA BASIC 3.5 formatter</a></li><li><a href="amiga-gfa-basic-35-statements.html">Amiga GFA BASIC 3.5 statements — evidenced forms</a></li><li><a href="../research/amiga-gfa-basic-35-primary-reference.html">Amiga GFA BASIC 3.5 primary reference</a></li><li><a href="../research/amiga-gfa-basic-35-addendum-inventory.html">Amiga GFA BASIC 3.5 addendum inventory</a></li><li><a href="../research/amiga-gfa-basic-documentation-audit.html">Documentation coverage audit</a></li><li><a href="atari-gfa-api.html">Atari ST GFA BASIC API reference — research draft</a></li><li><a href="atari-gfa-basic-3.0.html">Atari ST GFA BASIC V2.xx / V3.0 — preliminary language specification</a></li></ul></nav>
     <main class="docs-content">
       <article>
-        <h1>Amiga GFA BASIC 3.5 statements — verified forms</h1>
+        <h1>Amiga GFA BASIC 3.5 statements — evidenced forms</h1>
         <p class="docs-meta"><span>Reference</span></p>
-        <h1 id="amiga-gfa-basic-35-statements-verified-forms">Amiga GFA BASIC 3.5 statements — verified forms</h1>
+        <h1 id="amiga-gfa-basic-35-statements-evidenced-forms">Amiga GFA BASIC 3.5 statements — evidenced forms</h1>
 <h2 id="scope-and-evidence-boundary">Scope and evidence boundary</h2>
 <p>This page records a <strong>limited set of statement forms directly witnessed in Amiga GFA BASIC 3.5 material</strong>. It is a partial contribution to <a href="https://github.com/vsimko/gfabasic-rust/issues/21">issue #21</a>, not a complete grammar or a claim of full 3.5 compatibility.</p>
 <p>Primary source: <code>AM-INTERPRETER-35</code>, <em>GFA-BASIC 3.5 Interpreter</em>. The manual states that its base chapters describe version 3.0 and that the 3.5 addendum describes additional 3.5 features. The forms below are taken from the addendum at printed pp. 13-34–13-36.</p>
-<p>Secondary source: <code>AM-BOOK-DE-1990</code>, <em>Das große GFA-BASIC-Buch zum Amiga</em> (DATA BECKER, 1990). Its main language chapters describe earlier interpreter versions. Chapters 18–19 are explicitly labelled as new Version 3.5 material; the examples below establish only the exact forms shown there. They do not promote all Chapter 7 rules from the base manual to 3.5.</p>
+<p>Secondary source: <code>AM-BOOK-DE-1990</code>, <em>Das große GFA-BASIC-Buch zum Amiga</em> (DATA BECKER, 1990). Its main language chapters describe earlier interpreter versions. Chapter 18 states on printed p. 451 that it describes commands newly added in Version 3.5. The DATA-pointer example on printed p. 480 identifies itself as a demonstration of new GFA-BASIC V3.5 commands. The examples below establish only the exact forms shown in those contexts. They do not promote all Chapter 7 rules from the base manual to 3.5.</p>
 <p>A page-image-checked example establishes that the shown form is used in that 3.5 context. It does not establish every overload, edge case, error condition, or interpreter/compiler mode. The entries below are documentary evidence, not native-interpreter conformance results or Rust implementation claims.</p>
 <h2 id="control-flow-and-procedures">Control flow and procedures</h2>
 <table>
