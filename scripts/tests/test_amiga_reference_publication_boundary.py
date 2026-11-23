@@ -39,6 +39,28 @@ class AmigaReferencePublicationBoundaryTests(unittest.TestCase):
         self.assertEqual("inputs.publish_public_analysis", stage["if"])
         self.assertEqual("inputs.publish_public_analysis", upload["if"])
 
+    def test_public_analysis_allowlist_excludes_decompiler_source(self):
+        job = self.workflow["jobs"]["prepare-and-analyze"]
+        stage = next(
+            step
+            for step in job["steps"]
+            if step.get("name") == "Stage explicitly approved public analysis files"
+        )
+        for forbidden in ("decompiled.c", "decompiled.h"):
+            self.assertNotIn(forbidden, stage["run"])
+        for approved in (
+            "REPORT.md",
+            "strings.json",
+            "functions.json",
+            "memory_blocks.json",
+            "analysis_stats.json",
+            "instructions.jsonl",
+            "references.jsonl",
+            "string_xrefs.jsonl",
+            "unclaimed_instructions.jsonl",
+        ):
+            self.assertIn(approved, stage["run"])
+
     def test_analysis_checkout_does_not_persist_repository_credentials(self):
         job = self.workflow["jobs"]["prepare-and-analyze"]
         checkout = next(step for step in job["steps"] if step.get("name") == "Check out analysis scripts")
