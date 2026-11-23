@@ -1,4 +1,4 @@
-//! Project-owned typed IR for the evidence-backed combinatorics prototype.
+//! Project-owned typed IR for the evidence-backed literal-intrinsic prototype.
 //!
 //! This is intentionally smaller than the planned general-purpose IR. It
 //! models only i64 constants and ordered PRINT operations; it does not imply
@@ -76,9 +76,23 @@ fn unary_intrinsic(declaration_id: &str, argument: i64) -> Result<Option<i64>, S
         gfabasic_runtime::handlers::ResolvedHandler::IntegerToUnsigned(handler) => {
             Ok(handler(argument).and_then(|value| i64::try_from(value).ok()))
         }
-        gfabasic_runtime::handlers::ResolvedHandler::TwoIntegersToUnsigned(_) => Err(format!(
-            "runtime handler signature mismatch for {declaration_id}"
-        )),
+        _ => Err(format!("runtime handler signature mismatch for {declaration_id}")),
+    }
+}
+
+fn integer_intrinsic(declaration_id: &str, argument: i64) -> Result<Option<i64>, String> {
+    match crate::semantic::resolve_api_handler(declaration_id).map_err(|error| error.to_string())? {
+        gfabasic_runtime::handlers::ResolvedHandler::IntegerToInteger(handler) => Ok(handler(argument)),
+        _ => Err(format!("runtime handler signature mismatch for {declaration_id}")),
+    }
+}
+
+fn real_to_integer_intrinsic(declaration_id: &str, argument: i64) -> Result<Option<i64>, String> {
+    match crate::semantic::resolve_api_handler(declaration_id).map_err(|error| error.to_string())? {
+        gfabasic_runtime::handlers::ResolvedHandler::RealToInteger(handler) => {
+            Ok(handler(argument as f64))
+        }
+        _ => Err(format!("runtime handler signature mismatch for {declaration_id}")),
     }
 }
 
@@ -96,9 +110,7 @@ fn binary_intrinsic(declaration_id: &str, left: i64, right: i64) -> Result<Optio
         gfabasic_runtime::handlers::ResolvedHandler::TwoIntegersToUnsigned(handler) => {
             Ok(handler(left, right).and_then(|value| i64::try_from(value).ok()))
         }
-        gfabasic_runtime::handlers::ResolvedHandler::IntegerToUnsigned(_) => Err(format!(
-            "runtime handler signature mismatch for {declaration_id}"
-        )),
+        _ => Err(format!("runtime handler signature mismatch for {declaration_id}")),
     }
 }
 
@@ -150,7 +162,7 @@ impl<'a> LoweringState<'a> {
         }
         let Some(value) = value else {
             self.errors.push(IrError::at(
-                "intrinsic arguments are outside the supported prototype range (0 <= k <= n <= 20)",
+                "intrinsic argument is outside the supported literal subset or the runtime result is unavailable",
                 span,
             ));
             return;
@@ -181,6 +193,26 @@ pub fn lower(model: &SemanticModel) -> Result<Module, Vec<IrError>> {
             }
             Statement::AssignFact { argument, span, .. } => {
                 let value = match unary_intrinsic("gfa.language.math.fact", *argument) {
+                    Ok(value) => value,
+                    Err(message) => {
+                        state.errors.push(IrError::at(message, *span));
+                        continue;
+                    }
+                };
+                state.lower_assignment(*span, value, *span);
+            }
+            Statement::AssignSucc { argument, span, .. } => {
+                let value = match integer_intrinsic("gfa.language.numeric.succ", *argument) {
+                    Ok(value) => value,
+                    Err(message) => {
+                        state.errors.push(IrError::at(message, *span));
+                        continue;
+                    }
+                };
+                state.lower_assignment(*span, value, *span);
+            }
+            Statement::AssignInt { argument, span, .. } => {
+                let value = match real_to_integer_intrinsic("gfa.language.numeric.int", *argument) {
                     Ok(value) => value,
                     Err(message) => {
                         state.errors.push(IrError::at(message, *span));
@@ -475,4 +507,24 @@ mod tests {
         };
         assert!(verify(&duplicate).is_err());
     }
+
+    #[test]
+    fn lowers_succ_and_integer_literal_int_through_typed_registry() {
+        let source = "x=SUCC(2)\ny=INT(5)\nPRINT x,y\n";
+        let mut sources = SourceMap::new();
+        let id = sources.add_source("inherited-intrinsics.bas", source);
+        let model = semantic_model(id, source);
+        let ir = lower(&model).expect("supported integer intrinsic forms lower");
+        assert_eq!(ir.instructions.len(), 3);
+        assert!(matches!(
+            ir.instructions[0],
+            Instruction::ConstI64 { result: ValueId(0), value: 3, .. }
+        ));
+        assert!(matches!(
+            ir.instructions[1],
+            Instruction::ConstI64 { result: ValueId(1), value: 5, .. }
+        ));
+        verify(&ir).expect("literal intrinsic IR is valid");
+    }
+
 }

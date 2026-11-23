@@ -105,7 +105,9 @@ pub fn resolve_prototype_symbols(
             Statement::AssignInteger { name, span, .. }
             | Statement::AssignFact { name, span, .. }
             | Statement::AssignVariat { name, span, .. }
-            | Statement::AssignCombin { name, span, .. } => {
+            | Statement::AssignCombin { name, span, .. }
+            | Statement::AssignSucc { name, span, .. }
+            | Statement::AssignInt { name, span, .. } => {
                 let declaration = document.syntax.tokens.iter().find_map(|token| {
                     if token.span.start < span.start || token.span.end > span.end {
                         return None;
