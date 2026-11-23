@@ -34,7 +34,7 @@ The GitHub integration used during this audit can read and modify repository con
 
 ### Private assets and credentials
 
-Several Amiga workflows use the repository secret named GFA_ASSETS_TOKEN to read files from vsimko/gfabasic-private-assets. In addition, amiga-reference.yml passes the same secret to scripts/publish_private_amiga_analysis.sh, which pushes generated analysis to the private repository and creates or uploads a GitHub Release there. The current workflow therefore requires write capability for that publishing path; this is not a read-only credential use. The token value, token type, exact repository scope, fine-grained permissions, expiry, secret access policy, and private-repository collaborator settings are not visible from repository contents.
+Several Amiga workflows use the repository secret named GFA_ASSETS_TOKEN to read files from vsimko/gfabasic-private-assets. In amiga-reference.yml, the prepare-and-analyze job uses the secret for private-asset preflight and download. The private publisher receives it only when the independent publish_private_analysis input is enabled (default false) and then writes generated analysis metadata to the private repository and creates or updates a private release. The secret is therefore potentially write-capable for the private repository; this is not a read-only credential use. The token value, token type, exact repository scope, fine-grained permissions, expiry, secret access policy, and private-repository collaborator settings are not visible from repository contents.
 
 Do not infer the token's exact scope or permissions from its name. A maintainer should consider splitting the current mixed-purpose credential into a read-only asset-download secret and a separate write-capable analysis-publishing secret, both scoped only to the private-assets repository. Until that migration is approved and completed, treat GFA_ASSETS_TOKEN as write-capable. The workflows must not print it, persist it in generated files, include it in artifacts, or pass it to code that does not need its specific read or publish capability.
 
@@ -47,7 +47,10 @@ The workflow files explicitly declare permissions. The main write-capable surfac
 | pr-preview.yml | contents, issues, pull requests; actions read | Publish/remove a same-repository PR preview and comment on the PR. Fork PRs and Dependabot are excluded. The build step receives no explicit write token and checkout does not persist credentials; the pinned preview action performs the publishing operation. |
 | pages.yml | contents write; actions read | Publish the production site from main; the job is restricted to the main ref. |
 | propose-public-pdf-index.yml | contents and pull requests write | Update a generated source-index branch and open/update its PR. Push trigger is main; manual dispatch is restricted to main. |
-| amiga-reference.yml | contents and pull requests write | Publish generated 3.52 analysis to the private-assets repository and propose reviewed metadata through a PR. Manual dispatch on main only; no automatic push trigger, so publishing requires an explicit maintainer action. |
+| amiga-reference.yml — prepare-and-analyze | public repository: contents read | Downloads the private 3.52 interpreter, runs Ghidra analysis and validation. Private-repository publication is gated by `publish_private_analysis` (default `false`); public metadata artifact staging/upload is gated by `publish_public_analysis` (default `false`). |
+| amiga-reference.yml — publish-public-analysis | contents and pull requests write | Separate job, only on `main` when `publish_public_analysis=true`; it receives no `GFA_ASSETS_TOKEN`. |
+
+The two publication inputs are independent and both default to `false`. The analysis job has no public repository write permission. Only the opt-in public publisher job can create/update the public branch and PR; private publication uses the separate private-assets credential path. No live private-media dispatch was performed for this change.
 | release-sbom.yml | contents write on the release job | Attach the generated SBOM to a published GitHub Release. Its PR validation job is read-only. |
 | cleanup-private-adf-artifacts.yml | actions write | Delete a fixed list of legacy artifacts; push trigger is main, and manual dispatch is restricted to main. |
 | amiga-media-inventory.yml cleanup job | actions write | Delete one known legacy artifact after a successful inventory run. The workflow is manual-dispatch only on main; it is not triggered by PRs or pushes. |
@@ -168,7 +171,7 @@ These checks cannot verify repository settings, actual secret scopes, collaborat
 
 The following platform/account settings are outside the repository files and were not verifiable through the available integration:
 
-- Confirm that GFA_ASSETS_TOKEN is a fine-grained, read-only credential scoped only to vsimko/gfabasic-private-assets, with an owner, expiry, and rotation procedure.
+- Confirm that GFA_ASSETS_TOKEN is a fine-grained credential scoped only to vsimko/gfabasic-private-assets, with the minimum read/write permissions required by the publication paths that the maintainer explicitly enables, an owner, expiry, and rotation procedure. If read-only download and write-capable private publication should be isolated, split the secrets before enabling private publication.
 - Confirm the repository's Actions policy, default GITHUB_TOKEN permissions, fork-PR approval settings, and who can approve workflows from outside collaborators.
 - Review repository and organization write access; same-repository PR workflows are treated as trusted.
 - Review the GitHub App installation's repository selection and permissions for any agent connector.

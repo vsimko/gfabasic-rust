@@ -23,7 +23,7 @@ class AmigaReferencePublicationBoundaryTests(unittest.TestCase):
 
     def test_analysis_job_has_no_public_write_permissions_or_publication_steps(self):
         job = self.workflow["jobs"]["prepare-and-analyze"]
-        self.assertEqual("read", job["permissions"]["contents"])
+        self.assertEqual({"contents": "read"}, job["permissions"])
         self.assertNotIn("pull-requests", job["permissions"])
         steps = job["steps"]
         self.assertFalse(any("Publish reviewed analysis data through a pull request" == step.get("name") for step in steps))
@@ -48,12 +48,15 @@ class AmigaReferencePublicationBoundaryTests(unittest.TestCase):
         job = self.workflow["jobs"]["publish-public-analysis"]
         self.assertEqual("github.ref == 'refs/heads/main' && inputs.publish_public_analysis", job["if"])
         self.assertEqual("prepare-and-analyze", job["needs"])
-        self.assertEqual("write", job["permissions"]["contents"])
-        self.assertEqual("write", job["permissions"]["pull-requests"])
+        self.assertEqual(
+            {"contents": "write", "pull-requests": "write"},
+            job["permissions"],
+        )
         self.assertNotIn("GFA_ASSETS_TOKEN", str(job))
         self.assertTrue(any(step.get("name") == "Publish reviewed analysis data through a pull request" for step in job["steps"]))
 
     def test_only_public_publication_job_has_repository_write_permissions(self):
+        self.assertEqual({"contents": "read"}, self.workflow["permissions"])
         for job_id, job in self.workflow["jobs"].items():
             permissions = job.get("permissions", {})
             if any(value == "write" for value in permissions.values()):
