@@ -366,7 +366,7 @@ mod tests {
     use super::{Instruction, ValueId, ValueType, lower, value_type, verify};
     use crate::frontend::parse_document;
     use crate::semantic::analyze_prototype;
-    use crate::source::SourceMap;
+    use crate::source::{SourceMap, SourceSpan};
 
     fn semantic_model(
         source_id: crate::source::SourceId,
