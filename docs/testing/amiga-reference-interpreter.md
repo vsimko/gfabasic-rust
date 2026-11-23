@@ -1,3 +1,8 @@
+---
+type: "Testing Guide"
+title: "Original Amiga interpreter reference asset"
+---
+
 # Original Amiga interpreter reference asset
 
 The selected implementation dialect is Amiga GFA-BASIC 3.5. The separately
