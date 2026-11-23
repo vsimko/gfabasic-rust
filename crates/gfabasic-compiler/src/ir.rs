@@ -544,4 +544,19 @@ mod tests {
         ));
         verify(&ir).expect("literal intrinsic IR is valid");
     }
+    #[test]
+    fn keeps_the_original_source_span_on_intrinsic_lowering_errors() {
+        let source = "x=SUCC(9223372036854775807)\n";
+        let mut sources = SourceMap::new();
+        let id = sources.add_source("intrinsic-overflow.bas", source);
+        let model = semantic_model(id, source);
+        let errors = lower(&model).expect_err("successor overflow is outside the implemented subset");
+
+        assert_eq!(errors.len(), 1);
+        assert_eq!(
+            errors[0].span,
+            Some(SourceSpan::new(id, 0, source.trim_end().len()))
+        );
+    }
+
 }
