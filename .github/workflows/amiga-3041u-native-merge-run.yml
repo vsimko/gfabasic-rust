@@ -174,7 +174,7 @@ jobs:
           else
             cp "tests/interpreter-probes/amiga-3.041u/regression-suite.LST" artifacts/amiga-cli-probe/gfatest.LST
           fi
-          printf '%s\\n' "DF1:gfabasic" > artifacts/amiga-cli-probe/interpreter-installed-path.txt
+          printf '%s\n' "DF1:gfabasic" > artifacts/amiga-cli-probe/interpreter-installed-path.txt
           cp "$RUNNER_TEMP/Startup-Sequence" artifacts/amiga-cli-probe/Startup-Sequence.txt
           grep -F "gfatest.LST" artifacts/amiga-cli-probe/prepared-adf-layout.txt
           grep -F "Startup-Sequence" artifacts/amiga-cli-probe/prepared-adf-layout.txt
