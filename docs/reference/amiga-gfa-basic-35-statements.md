@@ -1,9 +1,9 @@
 ---
 type: "Reference"
-title: "Amiga GFA BASIC 3.5 statements — verified forms"
+title: "Amiga GFA BASIC 3.5 statements — evidenced forms"
 ---
 
-# Amiga GFA BASIC 3.5 statements — verified forms
+# Amiga GFA BASIC 3.5 statements — evidenced forms
 
 ## Scope and evidence boundary
 
@@ -11,7 +11,7 @@ This page records a **limited set of statement forms directly witnessed in Amiga
 
 Primary source: `AM-INTERPRETER-35`, *GFA-BASIC 3.5 Interpreter*. The manual states that its base chapters describe version 3.0 and that the 3.5 addendum describes additional 3.5 features. The forms below are taken from the addendum at printed pp. 13-34–13-36.
 
-Secondary source: `AM-BOOK-DE-1990`, *Das große GFA-BASIC-Buch zum Amiga* (DATA BECKER, 1990). Its main language chapters describe earlier interpreter versions. Chapters 18–19 are explicitly labelled as new Version 3.5 material; the examples below establish only the exact forms shown there. They do not promote all Chapter 7 rules from the base manual to 3.5.
+Secondary source: `AM-BOOK-DE-1990`, *Das große GFA-BASIC-Buch zum Amiga* (DATA BECKER, 1990). Its main language chapters describe earlier interpreter versions. Chapter 18 states on printed p. 451 that it describes commands newly added in Version 3.5. The DATA-pointer example on printed p. 480 identifies itself as a demonstration of new GFA-BASIC V3.5 commands. The examples below establish only the exact forms shown in those contexts. They do not promote all Chapter 7 rules from the base manual to 3.5.
 
 A page-image-checked example establishes that the shown form is used in that 3.5 context. It does not establish every overload, edge case, error condition, or interpreter/compiler mode. The entries below are documentary evidence, not native-interpreter conformance results or Rust implementation claims.
 
