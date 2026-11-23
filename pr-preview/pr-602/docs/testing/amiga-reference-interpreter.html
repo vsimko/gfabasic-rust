@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="The project targets Amiga GFA BASIC interpreter 3.5. A separately supplied GFA BASIC 3.52 (1990) interpreter is retained in the private repository vsimko/gfabasic-private-assets for version-specific research only. Do …">
+  <meta name="description" content="The selected implementation dialect is Amiga GFA-BASIC 3.5. The separately retained 3.52 executable is research material only; observations must remain version-scoped and must not be promoted to 3.5 conformance.">
   <title>Original Amiga interpreter reference asset · GFA BASIC Rust documentation</title>
   <link rel="stylesheet" href="../../styles.css">
 </head>
@@ -20,48 +20,67 @@
         <h1>Original Amiga interpreter reference asset</h1>
         <p class="docs-meta"><span>Testing Guide</span></p>
         <h1 id="original-amiga-interpreter-reference-asset">Original Amiga interpreter reference asset</h1>
-<p>The project targets <strong>Amiga GFA BASIC interpreter 3.5</strong>. A separately supplied
-GFA BASIC 3.52 (1990) interpreter is retained in the private repository
-<code>vsimko/gfabasic-private-assets</code> for version-specific research only. Do not
-treat 3.52 observations as evidence for 3.5.</p>
-<h2 id="prepare-the-private-352-executable">Prepare the private 3.52 executable</h2>
-<p>The manual GitHub Actions workflow
-<a href="https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/amiga-reference.yml"><code>Prepare Amiga reference interpreter</code></a>
-downloads the <code>GFABasic</code> executable from the private assets repository and
-checks its exact size, SHA-256, and Amiga HUNK_HEADER magic before packaging it
-as a short-lived workflow artifact.</p>
-<p>Required repository secret in <code>vsimko/gfabasic-rust</code>:</p>
+<p>The selected implementation dialect is Amiga GFA-BASIC 3.5. The separately
+retained 3.52 executable is research material only; observations must remain
+version-scoped and must not be promoted to 3.5 conformance.</p>
+<h2 id="reference-analysis-workflow">Reference-analysis workflow</h2>
+<p>The manual
+<a href="https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/amiga-reference.yml">Prepare and analyze Amiga GFA-BASIC reference interpreter</a>
+workflow downloads the approved private 3.52 executable, verifies its recorded
+identity, runs the configured Ghidra analysis, and validates the generated
+analysis metadata. It does not execute the BASIC interpreter.</p>
+<p>The workflow can read the private asset only through the repository secret
+<code>GFA_ASSETS_TOKEN</code>. Its exact token scope and expiry are maintainer-managed
+security facts; do not infer them from the workflow file. The same token is
+used for private publication only when the private publication input is
+explicitly enabled.</p>
+<h3 id="independent-publication-gates">Independent publication gates</h3>
+<p>Both workflow-dispatch inputs default to <code>false</code> and control different
+destinations:</p>
 <ul>
-<li><code>GFA_ASSETS_TOKEN</code>: fine-grained PAT limited to
-<code>vsimko/gfabasic-private-assets</code>, with <strong>Contents: read-only</strong> permission.</li>
+<li><code>publish_private_analysis</code> gates the private-assets publisher. When enabled,
+it pushes generated metadata to <code>vsimko/gfabasic-private-assets</code> and creates
+or updates the private release. This path requires the separate human
+authorization tracked by <a href="https://github.com/vsimko/gfabasic-rust/issues/598">#598</a>.</li>
+<li><code>publish_public_analysis</code> gates public analysis-artifact staging/upload and
+the separate <code>publish-public-analysis</code> job that creates or updates the
+public branch/PR. This job alone receives public-repository
+<code>contents: write</code> and <code>pull-requests: write</code>; it does not receive
+<code>GFA_ASSETS_TOKEN</code>. Public publication remains subject to the maintainer
+decision tracked by <a href="https://github.com/vsimko/gfabasic-rust/issues/585">#585</a>
+and the workflow-hardening work in <a href="https://github.com/vsimko/gfabasic-rust/issues/599">#599</a>.</li>
 </ul>
-<p>The workflow is deliberately <code>workflow_dispatch</code> only. It does not run for
-pull requests or ordinary pushes, and it never copies the binary into this
-public repository.</p>
-<h2 id="prepare-and-run-it">Prepare and run it</h2>
-<p>The <strong>Prepare Amiga reference interpreter</strong> workflow only fetches, verifies,
-and packages the executable. It does not execute it.</p>
-<p>The separate <strong>Amiga GFA BASIC 3.52 native Merge and Run</strong> workflow boots
-Amiberry with the private interpreter and licensed Kickstart ROM, merges an
-ASCII listing through the native editor, and runs it. Its current regression
-batch writes diagnostic output to <code>FACT.OUT</code> and terminal fixture records to
-<code>GFATEST.OUT</code>. The host validates the exact requested fixture IDs with
-<code>scripts/validate_gfatest_results.py</code>; it does not manufacture PASS records.</p>
-<p>The native workflow can be run from <strong>Actions</strong> with <strong>Run workflow</strong>. Pull
-requests that change the workflow also exercise it. It requires the
-<code>GFA_ASSETS_TOKEN</code> secret and the licensed private assets described above.
-Download the <code>amiga-gfa-basic-3.52-native-merge-run</code> artifact to inspect the
-raw result file, emulator diagnostics, and screenshots.</p>
-<h2 id="emulator-prerequisites-and-limits">Emulator prerequisites and limits</h2>
-<p>The artifact contains only the <code>GFABasic</code> executable. It does not contain an
-Amiga Kickstart ROM, Workbench disk, or full disk image. A separately licensed
-and configured Amiga environment is required before the interpreter can be
-executed in FS-UAE or another Amiga emulator. This workflow only fetches,
-validates, and packages the executable; it does not claim that the interpreter
-has been run.</p>
-<p>Do not commit commercial interpreter binaries, ROMs, or disk images to this
-public repository. Keep any version-specific observations clearly labelled
-with the exact interpreter version and media provenance.</p>
+<p>The two inputs are independent: enabling one does not enable the other. With
+both inputs false, the analysis/download/validation path can still run, but
+the private publisher step, public artifact upload, and public branch/PR job
+are skipped by their respective conditions. This behavior is covered by
+static workflow tests; no private-media workflow was dispatched for this
+change.</p>
+<p>The analysis job has only public-repository <code>contents: read</code> permission and
+does not persist checkout credentials. The public publication job has the
+minimum repository write permissions required for its branch/PR operation.
+The public artifact is an allowlisted metadata package; it must not contain
+the commercial executable, ROM/disk images, or Ghidra decompiler output such
+as reconstructed C source.</p>
+<p>Do not enable either publication input until its corresponding maintainer
+authorization is recorded in the linked human-blocker issue. A successful
+static validation does not itself grant publication permission.</p>
+<h2 id="native-interpreter-merge-run-workflow">Native interpreter Merge + Run workflow</h2>
+<p>The separate
+<a href="https://github.com/vsimko/gfabasic-rust/blob/main/.github/workflows/amiga-native-merge-run.yml">Amiga native Merge + Run workflow</a>
+boots the selected interpreter build in Amiberry, merges an ASCII listing
+through the native editor, and runs the resulting program. It is distinct
+from the Ghidra reference-analysis workflow above.</p>
+<p>Native observations must identify the exact executable build, emulator
+configuration, and individual probe outcomes. A successful 3.52 or 3.5U run
+does not establish behavior for the selected non-U 3.5 interpreter. Physical
+Amiga hardware is not required for the documented emulator test path.</p>
+<p>The native workflow uses private interpreter media and a licensed Kickstart
+image. Keep those assets private; retained diagnostics and screenshots must
+not include the original commercial binaries or ROM images. The outstanding
+rights/ROM authorization and private asset questions remain tracked in
+<a href="https://github.com/vsimko/gfabasic-rust/issues/42">#42</a> and
+<a href="https://github.com/vsimko/gfabasic-rust/issues/585">#585</a>.</p>
 
       </article>
     </main>

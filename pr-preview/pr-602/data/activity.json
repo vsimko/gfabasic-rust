@@ -1,9 +1,25 @@
 {
   "schema_version": 1,
   "status": "fresh",
-  "generated_at": "2026-11-21T22:27:35.268414+00:00",
-  "last_successful_at": "2026-11-21T22:27:35.268414+00:00",
+  "generated_at": "2026-11-23T06:15:27.438889+00:00",
+  "last_successful_at": "2026-11-23T06:15:27.438889+00:00",
   "items": [
+    {
+      "type": "merged_pull_request",
+      "title": "[CI] Keep commercial Amiga assets out of discovery artifacts",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/615",
+      "number": 615,
+      "timestamp": "2026-11-22T16:31:46Z",
+      "summary": "PR #615 merged"
+    },
+    {
+      "type": "commit",
+      "title": "[CI] Keep commercial Amiga assets out of discovery artifacts (#615)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/8f7cf4366fcde585e0e17b6c31f602085819e719",
+      "number": null,
+      "timestamp": "2026-11-22T16:31:46Z",
+      "summary": "Commit 8f7cf43"
+    },
     {
       "type": "merged_pull_request",
       "title": "[API Registry] Reconcile Amiga GFA BASIC 3.5 platform profile",
@@ -83,22 +99,6 @@
       "number": null,
       "timestamp": "2026-11-19T07:05:56Z",
       "summary": "Commit e591114"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "[Testing] Validate and select versioned construct manifests (#571)",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/593",
-      "number": 593,
-      "timestamp": "2026-11-17T22:59:16Z",
-      "summary": "PR #593 merged"
-    },
-    {
-      "type": "commit",
-      "title": "[Testing] Validate and select versioned construct manifests (#571) (#593)",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/7eb80cac97ac9f7d16f85c1fb0d69a23bc74bb52",
-      "number": null,
-      "timestamp": "2026-11-17T22:59:16Z",
-      "summary": "Commit 7eb80ca"
     }
   ]
 }
