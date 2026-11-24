@@ -86,9 +86,10 @@ impl Module {
     }
 
     fn entry_block_mut(&mut self) -> &mut BasicBlock {
+        let entry = self.entry;
         self.blocks
             .iter_mut()
-            .find(|block| block.id == self.entry)
+            .find(|block| block.id == entry)
             .expect("single-block lowering initializes its entry")
     }
 }
