@@ -278,6 +278,38 @@ mod tests {
     }
 
     #[test]
+    fn compiles_and_runs_succ_and_int_literal_intrinsics() {
+        let cc_version = Command::new("cc")
+            .arg("--version")
+            .output()
+            .expect("native bootstrap end-to-end test requires a host C compiler (`cc`)");
+        assert!(cc_version.status.success());
+
+        let sequence = NEXT_TEST.fetch_add(1, Ordering::Relaxed);
+        let directory = std::env::temp_dir().join(format!(
+            "gfabasic-inherited-intrinsics-test-{}-{sequence}",
+            std::process::id()
+        ));
+        fs::create_dir_all(&directory).unwrap();
+        let input = directory.join("inherited-intrinsics.LST");
+        let output = directory.join("inherited-intrinsics");
+        fs::write(&input, "x=SUCC(4)\ny=INT(5)\nPRINT x,y\n").unwrap();
+
+        compile_file(&input, &output).unwrap();
+        let run = Command::new(&output).output().unwrap();
+        assert!(run.status.success());
+        assert_eq!(
+            String::from_utf8(run.stdout)
+                .unwrap()
+                .split_whitespace()
+                .collect::<Vec<_>>(),
+            ["5", "5"]
+        );
+
+        fs::remove_dir_all(directory).unwrap();
+    }
+
+    #[test]
     fn compiles_and_runs_a_native_executable() {
         let cc_version = Command::new("cc")
             .arg("--version")
