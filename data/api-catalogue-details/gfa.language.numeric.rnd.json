@@ -31,7 +31,7 @@
     "returns": "real number"
   },
   "semantics": {
-    "summary": "Returns a random real number; the 3.5 Chapter 18 example uses RND(1) inside INT(RND(1)*5).",
+    "summary": "Returns a random real number; the 3.5 Chapter 18 example uses RND(1) inside INT(RND(1)*5). The result interval, argument treatment, distribution, and seeding remain unverified for 3.5.",
     "side-effects": [],
     "errors": []
   },
@@ -50,7 +50,8 @@
     ]
   },
   "implementation": {
-    "status": "not-implemented"
+    "status": "partial",
+    "handler": "gfa.language.numeric.rnd"
   },
   "support": [
     {
@@ -58,7 +59,7 @@
       "classification": "unknown",
       "conformance": "not-tested",
       "tests": [],
-      "pending-reason": "No registered runtime implementation or executable 3.5 reference-interpreter conformance test."
+      "pending-reason": "A partial Rust runtime handler is registered; exact 3.5 reference-interpreter conformance and unverified edge cases remain open."
     }
   ],
   "docs": {

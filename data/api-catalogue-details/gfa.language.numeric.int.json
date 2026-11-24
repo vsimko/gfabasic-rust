@@ -31,7 +31,7 @@
     "returns": "integer"
   },
   "semantics": {
-    "summary": "Converts a numeric expression to an integer; the 3.5 Chapter 18 example uses INT(RND(1)*5).",
+    "summary": "Converts an arithmetic expression to an integer; the 3.5 Chapter 18 example uses INT(RND(1)*5). Rounding of negative fractional inputs remains unverified for 3.5.",
     "side-effects": [],
     "errors": []
   },
@@ -50,7 +50,8 @@
     ]
   },
   "implementation": {
-    "status": "not-implemented"
+    "status": "partial",
+    "handler": "gfa.language.numeric.int"
   },
   "support": [
     {
@@ -58,7 +59,7 @@
       "classification": "unknown",
       "conformance": "not-tested",
       "tests": [],
-      "pending-reason": "No registered runtime implementation or executable 3.5 reference-interpreter conformance test."
+      "pending-reason": "A partial Rust runtime handler is registered; exact 3.5 reference-interpreter conformance and unverified edge cases remain open."
     }
   ],
   "docs": {

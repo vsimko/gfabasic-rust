@@ -31,7 +31,7 @@
     "returns": "string"
   },
   "semantics": {
-    "summary": "Converts an integer value to its hexadecimal string representation; the 3.5 GURU example calls HEX$(GURU).",
+    "summary": "Converts an integer value to a hexadecimal string; the 3.5 GURU example calls HEX$(GURU). Negative-value formatting and optional-width forms remain unverified.",
     "side-effects": [],
     "errors": []
   },
@@ -50,7 +50,8 @@
     ]
   },
   "implementation": {
-    "status": "not-implemented"
+    "status": "partial",
+    "handler": "gfa.language.string.hex"
   },
   "support": [
     {
@@ -58,7 +59,7 @@
       "classification": "unknown",
       "conformance": "not-tested",
       "tests": [],
-      "pending-reason": "No registered runtime implementation or executable 3.5 reference-interpreter conformance test."
+      "pending-reason": "A partial Rust runtime handler is registered; exact 3.5 reference-interpreter conformance and unverified edge cases remain open."
     }
   ],
   "docs": {

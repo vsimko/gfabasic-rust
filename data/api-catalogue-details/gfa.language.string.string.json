@@ -36,7 +36,7 @@
     "returns": "string"
   },
   "semantics": {
-    "summary": "Creates a string by repeating the supplied string value count times; the 3.5 matrix example uses STRING$(n, \"-\") for separator lines.",
+    "summary": "Repeats the supplied string value count times; the 3.5 matrix example uses STRING$(n, \"-\"). Negative counts and the exact maximum length remain unverified.",
     "side-effects": [],
     "errors": []
   },
@@ -55,7 +55,8 @@
     ]
   },
   "implementation": {
-    "status": "not-implemented"
+    "status": "partial",
+    "handler": "gfa.language.string.string"
   },
   "support": [
     {
@@ -63,7 +64,7 @@
       "classification": "unknown",
       "conformance": "not-tested",
       "tests": [],
-      "pending-reason": "No registered runtime implementation or executable 3.5 reference-interpreter conformance test."
+      "pending-reason": "A partial Rust runtime handler is registered; exact 3.5 reference-interpreter conformance and unverified edge cases remain open."
     }
   ],
   "docs": {

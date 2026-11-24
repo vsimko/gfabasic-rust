@@ -31,7 +31,7 @@
     "returns": "integer"
   },
   "semantics": {
-    "summary": "Returns a random 16-bit integer in the range from 0 to y-1; the 3.5 addendum example uses RAND(10) as a matrix element value.",
+    "summary": "Returns a random integer for the supplied bound; the 3.5 addendum example uses RAND(10) as a matrix element. Exact result range, width, distribution, and seeding are not established by the 3.5 occurrence.",
     "side-effects": [],
     "errors": []
   },
@@ -50,7 +50,8 @@
     ]
   },
   "implementation": {
-    "status": "not-implemented"
+    "status": "partial",
+    "handler": "gfa.language.numeric.rand"
   },
   "support": [
     {
@@ -58,7 +59,7 @@
       "classification": "unknown",
       "conformance": "not-tested",
       "tests": [],
-      "pending-reason": "No registered runtime implementation or executable 3.5 reference-interpreter conformance test."
+      "pending-reason": "A partial Rust runtime handler is registered; exact 3.5 reference-interpreter conformance and unverified edge cases remain open."
     }
   ],
   "docs": {

@@ -1,9 +1,25 @@
 {
   "schema_version": 1,
   "status": "fresh",
-  "generated_at": "2026-11-22T16:32:03.153155+00:00",
-  "last_successful_at": "2026-11-22T16:32:03.153155+00:00",
+  "generated_at": "2026-11-24T14:53:51.307033+00:00",
+  "last_successful_at": "2026-11-24T14:53:51.307033+00:00",
   "items": [
+    {
+      "type": "merged_pull_request",
+      "title": "[Runtime] Add typed handlers for inherited GFA BASIC 3.5 intrinsics",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/622",
+      "number": 622,
+      "timestamp": "2026-11-24T14:53:22Z",
+      "summary": "PR #622 merged"
+    },
+    {
+      "type": "commit",
+      "title": "[Runtime] Add typed handlers for inherited GFA BASIC 3.5 intrinsics (#622)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/e158dc77ae6c5baaff59869617bfe01a33fb10c5",
+      "number": null,
+      "timestamp": "2026-11-24T14:53:21Z",
+      "summary": "Commit e158dc7"
+    },
     {
       "type": "merged_pull_request",
       "title": "[CI] Keep commercial Amiga assets out of discovery artifacts",
@@ -83,22 +99,6 @@
       "number": null,
       "timestamp": "2026-11-19T07:10:00Z",
       "summary": "Commit f020422"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "[CI] Suppress ShellCheck false positive for Pages cleanup trap",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/606",
-      "number": 606,
-      "timestamp": "2026-11-19T07:05:57Z",
-      "summary": "PR #606 merged"
-    },
-    {
-      "type": "commit",
-      "title": "ci: suppress ShellCheck false positive for EXIT cleanup trap (#606)",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/e59111416cbfb220a7d6fec578919cb6c4cbafc6",
-      "number": null,
-      "timestamp": "2026-11-19T07:05:56Z",
-      "summary": "Commit e591114"
     }
   ]
 }
