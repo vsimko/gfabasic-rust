@@ -27,7 +27,7 @@
 </ul>
 <h2 id="scope">Scope</h2>
 <p>The formatter is a library feature in <code>gfabasic-compiler::formatter</code>. It consumes source text and a source ID, validates the whole document through the lossless parser, and returns formatted text or the parser's diagnostics. It does not depend on the CLI, LLVM, generated-program runtime, or SDL3.</p>
-<p>The parser accepts the evidence-backed <code>FACT</code>, <code>VARIAT</code>, <code>COMBIN</code>, and <code>PRINT</code> forms with the current prototype variable subset, plus selected 3.5 matrix syntax (<code>DIM</code> and the documented <code>MAT</code> forms listed in the <a href="../reference/amiga-gfa-basic-35-formatter.html">formatter reference</a>). The formatter rejects every construct the parser cannot validate. Matrix syntax is parsed/formatted only; the executable IR does not evaluate it. Comments, string and DATA payloads, broader identifier forms, and nested blocks remain unsupported until their Amiga GFA BASIC 3.5 lexical/grammar rules are verified and represented losslessly.</p>
+<p>The parser accepts the evidence-backed <code>FACT</code>, <code>VARIAT</code>, <code>COMBIN</code>, <code>SUCC(integer-literal)</code>, integer-literal <code>INT</code>, and <code>PRINT</code> forms with the current prototype variable subset, plus selected 3.5 matrix syntax (<code>DIM</code> and the documented <code>MAT</code> forms listed in the <a href="../reference/amiga-gfa-basic-35-formatter.html">formatter reference</a>). The formatter rejects every construct the parser cannot validate. Matrix syntax is parsed/formatted only; the executable IR does not evaluate it. The whitespace-separated inline <code>!</code> comment form is recognized and preserved verbatim; this narrow prototype behavior does not establish historical Amiga GFA BASIC 3.5 comment compatibility. <code>REM</code> and apostrophe remarks, string and DATA payloads, broader identifier forms, and nested blocks remain unsupported.</p>
 <h2 id="canonical-prototype-layout">Canonical prototype layout</h2>
 <p>For the supported subset only:</p>
 <ul>
@@ -55,10 +55,10 @@ let formatted = format_source(source_id, source)?;
 <h2 id="cli">CLI</h2>
 <p>The <code>gfabasic fmt</code> command uses this library directly. It writes formatted text to stdout by default; <code>--check</code> returns 1 when formatting would change the file and never writes; <code>-o &lt;path&gt;</code> writes to a separate destination; and <code>--in-place</code> explicitly replaces the source. The two write modes create a sibling temporary file, flush it, and rename it over the destination. Formatting diagnostics and read failures return before any write. <code>--check</code> cannot be combined with either write option, and <code>-o</code> cannot be combined with <code>--in-place</code>.</p>
 <h2 id="ci-fixture-gate">CI fixture gate</h2>
-<p>Rust CI runs <code>gfabasic fmt --check</code> over the verified Amiga 3.5 combinatorics fixtures under <code>tests/corpus/amiga/3.5/combinatorics/</code>. Those files are kept in canonical prototype style. This gate covers only the currently accepted FACT/VARIAT/COMBIN/PRINT subset; it is not a corpus-wide conformance runner and does not imply support for other verified corpus constructs such as matrix statements.</p>
+<p>Rust CI runs <code>gfabasic fmt --check</code> over the verified Amiga 3.5 combinatorics fixtures under <code>tests/corpus/amiga/3.5/combinatorics/</code>. Those files are kept in canonical prototype style. This gate covers only those combinatorics fixture inputs; it is not a corpus-wide conformance runner and does not imply support for other verified corpus constructs such as matrix statements.</p>
 <h2 id="next-increments">Next increments</h2>
 <ol>
-<li>Extend lossless lexing and formatting only alongside verified comment, string/DATA, identifier, and grammar support.</li>
+<li>Extend lossless lexing and formatting only alongside verified remaining comment forms, string/DATA, identifier, and grammar support.</li>
 <li>Add further fixture paths to the formatter check only when the parser can validate them without dropping source content.</li>
 <li>Share the same formatter implementation with LSP document/range formatting; editor edits must be version-bound as specified by issue #208 and ADR 0012.</li>
 </ol>
