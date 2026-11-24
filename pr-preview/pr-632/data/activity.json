@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "status": "fresh",
+  "generated_at": "2026-11-24T17:00:09.289777+00:00",
+  "last_successful_at": "2026-11-24T17:00:09.289777+00:00",
+  "items": [
+    {
+      "type": "merged_pull_request",
+      "title": "[Compiler/Runtime] Close intrinsic test and documentation gaps",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/629",
+      "number": 629,
+      "timestamp": "2026-11-24T16:39:36Z",
+      "summary": "PR #629 merged"
+    },
+    {
+      "type": "commit",
+      "title": "[Compiler/Runtime] Close intrinsic test and documentation gaps (#629)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/153f7ead5b1d362204db90ee79963b07995abe2f",
+      "number": null,
+      "timestamp": "2026-11-24T16:39:35Z",
+      "summary": "Commit 153f7ea"
+    },
+    {
+      "type": "merged_pull_request",
+      "title": "[Docs] Reconcile issue #616 intrinsic support boundaries",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/626",
+      "number": 626,
+      "timestamp": "2026-11-24T16:20:42Z",
+      "summary": "PR #626 merged"
+    },
+    {
+      "type": "commit",
+      "title": "[Docs] Reconcile issue #616 intrinsic support boundaries (#626)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/28311b4d66eab3361747f1c0e3b6adc274b044f4",
+      "number": null,
+      "timestamp": "2026-11-24T16:20:41Z",
+      "summary": "Commit 28311b4"
+    },
+    {
+      "type": "merged_pull_request",
+      "title": "[Research] Reconcile application-used BASIC constructs (#562)",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/608",
+      "number": 608,
+      "timestamp": "2026-11-24T15:50:23Z",
+      "summary": "PR #608 merged"
+    },
+    {
+      "type": "commit",
+      "title": "[Research] Reconcile application-used BASIC constructs (#562) (#608)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/7bee3e7ddf82644f4cf2814c315f222b3a7c33dd",
+      "number": null,
+      "timestamp": "2026-11-24T15:50:23Z",
+      "summary": "Commit 7bee3e7"
+    },
+    {
+      "type": "merged_pull_request",
+      "title": "[Testing] Add Amiga 3.5 DATA pointer save/restore fixture",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/613",
+      "number": 613,
+      "timestamp": "2026-11-24T15:34:39Z",
+      "summary": "PR #613 merged"
+    },
+    {
+      "type": "commit",
+      "title": "[Testing] Add Amiga 3.5 DATA pointer save/restore fixture (#613)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/ae9c46182eeb77c0897d42804a28d77b296df745",
+      "number": null,
+      "timestamp": "2026-11-24T15:34:38Z",
+      "summary": "Commit ae9c461"
+    },
+    {
+      "type": "merged_pull_request",
+      "title": "docs: add evidence-scoped Amiga GFA BASIC 3.5 statement reference",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/623",
+      "number": 623,
+      "timestamp": "2026-11-24T15:23:26Z",
+      "summary": "PR #623 merged"
+    },
+    {
+      "type": "commit",
+      "title": "docs: add evidence-scoped Amiga GFA BASIC 3.5 statement reference (#623)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/aede6966afd09a410d11528386455f6dcfbc3852",
+      "number": null,
+      "timestamp": "2026-11-24T15:23:25Z",
+      "summary": "Commit aede696"
+    },
+    {
+      "type": "merged_pull_request",
+      "title": "[Runtime] Add typed handlers for inherited GFA BASIC 3.5 intrinsics",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/622",
+      "number": 622,
+      "timestamp": "2026-11-24T14:53:22Z",
+      "summary": "PR #622 merged"
+    },
+    {
+      "type": "commit",
+      "title": "[Runtime] Add typed handlers for inherited GFA BASIC 3.5 intrinsics (#622)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/e158dc77ae6c5baaff59869617bfe01a33fb10c5",
+      "number": null,
+      "timestamp": "2026-11-24T14:53:21Z",
+      "summary": "Commit e158dc7"
+    }
+  ]
+}
