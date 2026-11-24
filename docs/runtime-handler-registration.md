@@ -30,13 +30,21 @@ referenced by the canonical registry. The runtime crate tests the complete
 generated declaration set, including unsupported declarations, without SDL3.
 
 The compiler's semantic API resolver uses the same runtime lookup by stable
-declaration ID. The narrow combinatorics IR lowering now dispatches FACT,
-VARIAT, and COMBIN through those typed registrations rather than maintaining
-duplicate arithmetic implementations.
+declaration ID. Its literal-only IR lowering dispatches FACT, VARIAT, COMBIN,
+SUCC, and integer-literal INT through those typed registrations.
 
-The three combinatorics declarations are marked `partial`, not complete:
-the helpers use u32 inputs and u128 results, while the original interpreter's
-overflow/error behavior remains unverified and the compiler frontend remains
-restricted to its documented literal subset. Their Linux support remains
-`unknown` and conformance remains `not-tested`. A Rust registration does not
-promote evidence, target support, or historical conformance.
+The runtime also registers RAND, STRING$, HEX$, RND, and SQR with their exact
+argument/result shapes. They are runtime-callable but not compiler-executable
+yet: the current IR has no general runtime-call instruction and does not
+represent strings or real values. This is a concrete compiler/IR dependency,
+not end-to-end compiler support.
+
+All ten registrations remain `partial`. The 3.5 sources directly establish
+the limited call forms, but detailed RAND/RND range and seeding, negative INT
+rounding, negative SQR inputs, HEX$ negative formatting, STRING$ count limits,
+and numeric overflow edges are not all independently established for 3.5.
+The runtime helpers expose bounded candidate behavior and return `None` for
+inputs outside that subset. The Linux implementation is partial, but target support remains `unknown`
+until conformance is established; exact 3.5 interpreter conformance remains
+`not-tested`. A Rust registration does not
+promote evidence or historical conformance.

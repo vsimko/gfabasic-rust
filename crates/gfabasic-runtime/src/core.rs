@@ -4,6 +4,7 @@
 //! is supported by primary-source evidence.
 
 pub mod combinatorics;
+pub mod intrinsics;
 pub mod matrix;
 pub mod numeric;
 pub mod strings;

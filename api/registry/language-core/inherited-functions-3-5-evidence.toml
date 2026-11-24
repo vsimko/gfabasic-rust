@@ -21,7 +21,7 @@ arguments = [{ name = "y", type = "integer expression", required = true }]
 returns = "integer"
 
 [declarations.semantics]
-summary = "Returns a random 16-bit integer in the range from 0 to y-1; the 3.5 addendum example uses RAND(10) as a matrix element value."
+summary = "Returns a random integer for the supplied bound; the 3.5 addendum example uses RAND(10) as a matrix element. Exact result range, width, distribution, and seeding are not established by the 3.5 occurrence."
 side-effects = []
 errors = []
 
@@ -33,14 +33,15 @@ printed-pages = ["Chapter 13, printed p. 13-3", "Base-manual function definition
 notes = ["The 3.5 example directly demonstrates the one-argument RAND(10) form. The result range and 16-bit description come from the 3.0 base-manual definition; distribution, seed behavior, and other random functions are not reconfirmed by this occurrence."]
 
 [declarations.implementation]
-status = "not-implemented"
+status = "partial"
+handler = "gfa.language.numeric.rand"
 
 [[declarations.support]]
 target = "x86_64-unknown-linux-gnu"
 classification = "unknown"
 conformance = "not-tested"
 tests = []
-pending-reason = "No registered runtime implementation or executable 3.5 reference-interpreter conformance test."
+pending-reason = "A partial Rust runtime handler is registered; exact 3.5 reference-interpreter conformance and unverified edge cases remain open."
 
 [declarations.docs]
 path = "docs/research/amiga-gfa-basic-35-base-function-use-audit.md"
@@ -111,7 +112,7 @@ arguments = [{ name = "i", type = "integer expression", required = true }]
 returns = "integer"
 
 [declarations.semantics]
-summary = "Returns the successor of the supplied integer value; the 3.5 matrix-copy example uses SUCC(i%)."
+summary = "Returns the successor of the supplied integer value; the 3.5 matrix-copy example uses SUCC(i%). Numeric overflow behavior remains unverified."
 side-effects = []
 errors = []
 
@@ -123,14 +124,15 @@ printed-pages = ["Chapter 13, printed p. 13-6", "Base-manual function definition
 notes = ["Only the integer-expression form SUCC(i%) is directly demonstrated in 3.5 material. The string overload described in the 3.0 base text is not independently confirmed for 3.5."]
 
 [declarations.implementation]
-status = "not-implemented"
+status = "partial"
+handler = "gfa.language.numeric.succ"
 
 [[declarations.support]]
 target = "x86_64-unknown-linux-gnu"
 classification = "unknown"
 conformance = "not-tested"
 tests = []
-pending-reason = "No registered runtime implementation or executable 3.5 reference-interpreter conformance test."
+pending-reason = "A partial Rust runtime handler is registered; exact 3.5 reference-interpreter conformance and unverified edge cases remain open."
 
 [declarations.docs]
 path = "docs/research/amiga-gfa-basic-35-base-function-use-audit.md"
@@ -157,7 +159,7 @@ arguments = [
 returns = "string"
 
 [declarations.semantics]
-summary = "Creates a string by repeating the supplied string value count times; the 3.5 matrix example uses STRING$(n, \"-\") for separator lines."
+summary = "Repeats the supplied string value count times; the 3.5 matrix example uses STRING$(n, \"-\"). Negative counts and the exact maximum length remain unverified."
 side-effects = []
 errors = []
 
@@ -169,14 +171,15 @@ printed-pages = ["Chapter 13, printed p. 13-21", "Base-manual function definitio
 notes = ["The 3.5 example directly demonstrates the string-expression second argument. The numeric character-code overload and the documented count boundary are not independently demonstrated in 3.5 material."]
 
 [declarations.implementation]
-status = "not-implemented"
+status = "partial"
+handler = "gfa.language.string.string"
 
 [[declarations.support]]
 target = "x86_64-unknown-linux-gnu"
 classification = "unknown"
 conformance = "not-tested"
 tests = []
-pending-reason = "No registered runtime implementation or executable 3.5 reference-interpreter conformance test."
+pending-reason = "A partial Rust runtime handler is registered; exact 3.5 reference-interpreter conformance and unverified edge cases remain open."
 
 [declarations.docs]
 path = "docs/research/amiga-gfa-basic-35-base-function-use-audit.md"
@@ -200,7 +203,7 @@ arguments = [{ name = "x", type = "integer expression", required = true }]
 returns = "string"
 
 [declarations.semantics]
-summary = "Converts an integer value to its hexadecimal string representation; the 3.5 GURU example calls HEX$(GURU)."
+summary = "Converts an integer value to a hexadecimal string; the 3.5 GURU example calls HEX$(GURU). Negative-value formatting and optional-width forms remain unverified."
 side-effects = []
 errors = []
 
@@ -212,14 +215,15 @@ printed-pages = ["Chapter 13, printed p. 13-36", "Base-manual function definitio
 notes = ["Only the one-argument form is demonstrated in 3.5 material. The optional width argument and exact formatting edge cases remain unconfirmed for 3.5."]
 
 [declarations.implementation]
-status = "not-implemented"
+status = "partial"
+handler = "gfa.language.string.hex"
 
 [[declarations.support]]
 target = "x86_64-unknown-linux-gnu"
 classification = "unknown"
 conformance = "not-tested"
 tests = []
-pending-reason = "No registered runtime implementation or executable 3.5 reference-interpreter conformance test."
+pending-reason = "A partial Rust runtime handler is registered; exact 3.5 reference-interpreter conformance and unverified edge cases remain open."
 
 [declarations.docs]
 path = "docs/research/amiga-gfa-basic-35-base-function-use-audit.md"
@@ -243,7 +247,7 @@ arguments = [{ name = "x", type = "arithmetic expression", required = true }]
 returns = "real number"
 
 [declarations.semantics]
-summary = "Returns a random real number; the 3.5 Chapter 18 example uses RND(1) inside INT(RND(1)*5)."
+summary = "Returns a random real number; the 3.5 Chapter 18 example uses RND(1) inside INT(RND(1)*5). The result interval, argument treatment, distribution, and seeding remain unverified for 3.5."
 side-effects = []
 errors = []
 
@@ -255,14 +259,15 @@ printed-pages = ["Chapter 18, printed p. 458", "Base-manual function definition,
 notes = ["The 3.5-labelled example directly demonstrates the one-argument form. The 3.0 base text says the optional parameter has no meaning and describes a [0,1) result; this detailed range/parameter behavior is not independently restated in Chapter 18. RANDOM and RANDOMIZE are not confirmed by this occurrence."]
 
 [declarations.implementation]
-status = "not-implemented"
+status = "partial"
+handler = "gfa.language.numeric.rnd"
 
 [[declarations.support]]
 target = "x86_64-unknown-linux-gnu"
 classification = "unknown"
 conformance = "not-tested"
 tests = []
-pending-reason = "No registered runtime implementation or executable 3.5 reference-interpreter conformance test."
+pending-reason = "A partial Rust runtime handler is registered; exact 3.5 reference-interpreter conformance and unverified edge cases remain open."
 
 [declarations.docs]
 path = "docs/research/amiga-gfa-basic-35-base-function-use-audit.md"
@@ -286,7 +291,7 @@ arguments = [{ name = "x", type = "arithmetic expression", required = true }]
 returns = "integer"
 
 [declarations.semantics]
-summary = "Converts a numeric expression to an integer; the 3.5 Chapter 18 example uses INT(RND(1)*5)."
+summary = "Converts an arithmetic expression to an integer; the 3.5 Chapter 18 example uses INT(RND(1)*5). Rounding of negative fractional inputs remains unverified for 3.5."
 side-effects = []
 errors = []
 
@@ -298,14 +303,15 @@ printed-pages = ["Chapter 18, printed p. 458", "Base-manual function definition,
 notes = ["Only the one-argument form is demonstrated in 3.5 material. The floor behavior for negative fractional values is documented in the 3.0 base text but is not independently restated in Chapter 18."]
 
 [declarations.implementation]
-status = "not-implemented"
+status = "partial"
+handler = "gfa.language.numeric.int"
 
 [[declarations.support]]
 target = "x86_64-unknown-linux-gnu"
 classification = "unknown"
 conformance = "not-tested"
 tests = []
-pending-reason = "No registered runtime implementation or executable 3.5 reference-interpreter conformance test."
+pending-reason = "A partial Rust runtime handler is registered; exact 3.5 reference-interpreter conformance and unverified edge cases remain open."
 
 [declarations.docs]
 path = "docs/research/amiga-gfa-basic-35-base-function-use-audit.md"
@@ -329,7 +335,7 @@ arguments = [{ name = "x", type = "arithmetic expression", required = true }]
 returns = "real number"
 
 [declarations.semantics]
-summary = "Returns the square root of a numeric expression; the 3.5 Chapter 18 vector-normalization example uses SQR(l)."
+summary = "Returns a square root; the 3.5 vector-normalization example uses SQR(l). Negative-input behavior remains unverified for 3.5."
 side-effects = []
 errors = []
 
@@ -341,14 +347,15 @@ printed-pages = ["Chapter 18, printed p. 473", "Base-manual function definition,
 notes = ["Only the one-argument form is demonstrated in 3.5 material. The negative-input error behavior is documented in the 3.0 base text but is not independently restated in Chapter 18."]
 
 [declarations.implementation]
-status = "not-implemented"
+status = "partial"
+handler = "gfa.language.numeric.sqr"
 
 [[declarations.support]]
 target = "x86_64-unknown-linux-gnu"
 classification = "unknown"
 conformance = "not-tested"
 tests = []
-pending-reason = "No registered runtime implementation or executable 3.5 reference-interpreter conformance test."
+pending-reason = "A partial Rust runtime handler is registered; exact 3.5 reference-interpreter conformance and unverified edge cases remain open."
 
 [declarations.docs]
 path = "docs/research/amiga-gfa-basic-35-base-function-use-audit.md"

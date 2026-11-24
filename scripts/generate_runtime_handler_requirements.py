@@ -39,20 +39,38 @@ def signature_for(declaration: dict, status: str, path: Path) -> str:
 
     if declaration.get("kind") != "function":
         raise GenerationError(f"{path}: callable handler {declaration['id']} must be a function")
-    signature = declaration.get("signature", {})
-    if signature.get("returns") != "arithmetic expression":
-        raise GenerationError(f"{path}: unsupported return type for {declaration['id']}")
-
+    returns = declaration.get("signature", {}).get("returns")
     syntax = declaration.get("syntax", [])
     if len(syntax) != 1 or syntax[0].get("contexts") != ["expression"]:
         raise GenerationError(f"{path}: handler {declaration['id']} needs one expression syntax")
     arguments = syntax[0].get("arguments", [])
-    if len(arguments) not in {1, 2} or any(
-        argument.get("type") != "integer expression" or argument.get("required") is not True
-        for argument in arguments
-    ):
-        raise GenerationError(f"{path}: unsupported argument signature for {declaration['id']}")
-    return "IntegerToUnsigned" if len(arguments) == 1 else "TwoIntegersToUnsigned"
+    if any(argument.get("required") is not True for argument in arguments):
+        raise GenerationError(f"{path}: optional arguments are not supported by the runtime ABI")
+
+    argument_types = [argument.get("type") for argument in arguments]
+    if argument_types == ["integer expression"]:
+        signatures = {
+            "arithmetic expression": "IntegerToUnsigned",
+            "integer": "IntegerToInteger",
+            "string": "IntegerToString",
+        }
+        if returns in signatures:
+            return signatures[returns]
+    elif argument_types == ["arithmetic expression"]:
+        signatures = {"real number": "RealToReal", "integer": "RealToInteger"}
+        if returns in signatures:
+            return signatures[returns]
+    elif argument_types == ["integer expression", "integer expression"]:
+        if returns == "arithmetic expression":
+            return "TwoIntegersToUnsigned"
+    elif argument_types == ["integer expression", "string expression"]:
+        if returns == "string":
+            return "IntegerAndStringToString"
+
+    raise GenerationError(
+        f"{path}: unsupported argument signature/return type for {declaration['id']}: "
+        f"{argument_types!r} -> {returns!r}"
+    )
 
 
 def generate_source(root: Path = ROOT) -> str:

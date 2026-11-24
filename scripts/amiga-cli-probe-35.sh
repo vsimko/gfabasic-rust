@@ -45,8 +45,7 @@ env -u SHELLOPTS xvfb-run -a -s "-screen 0 1024x768x24 +extension GLX" bash -c '
   printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-3.5-discovery/native-run/merge-dialog.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
 
   # DF0 is already selected. Move the pointer from the top-left corner
-  # to the visible gfatest.LST row (about x=340,y=211 in the screenshot).
-  # Amiberry applies a bounded relative delta per IPC event, so split motion.
+  # onto the visible gfatest.LST row; the extra two 48-unit steps target its center.
   for _ in $(seq 1 4); do
     printf "SEND_MOUSE\\t240\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
     sleep 0.1
@@ -55,7 +54,13 @@ env -u SHELLOPTS xvfb-run -a -s "-screen 0 1024x768x24 +extension GLX" bash -c '
   sleep 0.1
   printf "SEND_MOUSE\\t0\\t112\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
   sleep 0.1
-  printf "SEND_MOUSE\\t0\\t112\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+  printf "SEND_MOUSE\\t0\\t48\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+  sleep 0.1
+  printf "SEND_MOUSE\\t0\\t48\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+  printf "SEND_MOUSE\\t0\\t48\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+  # The arrow hotspot was 12 screen pixels below the filename; move up
+  # before clicking (IPC deltas are guest coordinates at this display scale).
+  printf "SEND_MOUSE\\t0\\t-24\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
   sleep 0.5
   printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-3.5-discovery/native-run/merge-file-row-pointer.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
   printf "SEND_MOUSE\\t0\\t0\\t1\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
@@ -63,6 +68,7 @@ env -u SHELLOPTS xvfb-run -a -s "-screen 0 1024x768x24 +extension GLX" bash -c '
   printf "SEND_MOUSE\\t0\\t0\\t0\\n" | timeout 5s nc -U -N "${ipc_socket_path:-}"
   sleep 0.5
   printf "SCREENSHOT\\t%s\\n" "$GITHUB_WORKSPACE/artifacts/amiga-3.5-discovery/native-run/merge-file-selected.png" | timeout 5s nc -U -N "${ipc_socket_path:-}"
+
 
   # The LST row is selected. Move down to the Merge gadget and click it.
   for _ in $(seq 1 3); do
