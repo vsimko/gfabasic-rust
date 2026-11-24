@@ -13,7 +13,7 @@ use std::sync::atomic::{AtomicUsize, Ordering};
 
 use crate::diagnostics::{Diagnostic, DiagnosticCategory, DiagnosticSeverity};
 use crate::frontend::parse_document;
-use crate::ir::{Instruction, Module, ValueId};
+use crate::ir::{Instruction, Module, Terminator, ValueId};
 use crate::semantic::analyze_prototype;
 use crate::source::{SourceMap, SourceSpan};
 
@@ -129,7 +129,15 @@ fn emit_c(module: &Module) -> Result<String, String> {
     let mut names = BTreeMap::<ValueId, String>::new();
     let mut statements = Vec::new();
 
-    for instruction in &module.instructions {
+    if module.blocks.len() != 1 || module.blocks[0].id != module.entry {
+        return Err("C bootstrap currently supports exactly one verified entry block".to_owned());
+    }
+    let block = &module.blocks[0];
+    if !matches!(block.terminator, Some(Terminator::Return { .. })) {
+        return Err("C bootstrap requires an explicit return terminator".to_owned());
+    }
+
+    for instruction in &block.instructions {
         match instruction {
             Instruction::ConstI64 { result, value, .. } => {
                 let name = format!("v{}", result.0);
