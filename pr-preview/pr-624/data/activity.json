@@ -1,9 +1,41 @@
 {
   "schema_version": 1,
   "status": "fresh",
-  "generated_at": "2026-11-24T14:54:02.448898+00:00",
-  "last_successful_at": "2026-11-24T14:54:02.448898+00:00",
+  "generated_at": "2026-11-24T15:35:33.045754+00:00",
+  "last_successful_at": "2026-11-24T15:35:33.045754+00:00",
   "items": [
+    {
+      "type": "merged_pull_request",
+      "title": "[Testing] Add Amiga 3.5 DATA pointer save/restore fixture",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/613",
+      "number": 613,
+      "timestamp": "2026-11-24T15:34:39Z",
+      "summary": "PR #613 merged"
+    },
+    {
+      "type": "commit",
+      "title": "[Testing] Add Amiga 3.5 DATA pointer save/restore fixture (#613)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/ae9c46182eeb77c0897d42804a28d77b296df745",
+      "number": null,
+      "timestamp": "2026-11-24T15:34:38Z",
+      "summary": "Commit ae9c461"
+    },
+    {
+      "type": "merged_pull_request",
+      "title": "docs: add evidence-scoped Amiga GFA BASIC 3.5 statement reference",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/623",
+      "number": 623,
+      "timestamp": "2026-11-24T15:23:26Z",
+      "summary": "PR #623 merged"
+    },
+    {
+      "type": "commit",
+      "title": "docs: add evidence-scoped Amiga GFA BASIC 3.5 statement reference (#623)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/aede6966afd09a410d11528386455f6dcfbc3852",
+      "number": null,
+      "timestamp": "2026-11-24T15:23:25Z",
+      "summary": "Commit aede696"
+    },
     {
       "type": "merged_pull_request",
       "title": "[Runtime] Add typed handlers for inherited GFA BASIC 3.5 intrinsics",
@@ -67,38 +99,6 @@
       "number": null,
       "timestamp": "2026-11-19T08:13:57Z",
       "summary": "Commit e5813bf"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "[Compiler] Lower typed IR from resolved semantic model",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/601",
-      "number": 601,
-      "timestamp": "2026-11-19T07:15:49Z",
-      "summary": "PR #601 merged"
-    },
-    {
-      "type": "commit",
-      "title": "[Compiler] Lower typed IR from resolved semantic model (#601)",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/ced5ad437b24f2007ee39f4b09d52aef0bad6503",
-      "number": null,
-      "timestamp": "2026-11-19T07:15:49Z",
-      "summary": "Commit ced5ad4"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "[CI] Make mutation schedule guard resilient to delayed runners",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/609",
-      "number": 609,
-      "timestamp": "2026-11-19T07:10:00Z",
-      "summary": "PR #609 merged"
-    },
-    {
-      "type": "commit",
-      "title": "[CI] Make mutation schedule guard resilient to delayed runners (#609)",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/f020422dcd59c55880496d8c887203d9036c88ae",
-      "number": null,
-      "timestamp": "2026-11-19T07:10:00Z",
-      "summary": "Commit f020422"
     }
   ]
 }

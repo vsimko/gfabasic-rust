@@ -31,7 +31,7 @@
     "returns": "integer"
   },
   "semantics": {
-    "summary": "Returns the successor of the supplied integer value; the 3.5 matrix-copy example uses SUCC(i%).",
+    "summary": "Returns the successor of the supplied integer value; the 3.5 matrix-copy example uses SUCC(i%). Numeric overflow behavior remains unverified.",
     "side-effects": [],
     "errors": []
   },
@@ -50,7 +50,8 @@
     ]
   },
   "implementation": {
-    "status": "not-implemented"
+    "status": "partial",
+    "handler": "gfa.language.numeric.succ"
   },
   "support": [
     {
@@ -58,7 +59,7 @@
       "classification": "unknown",
       "conformance": "not-tested",
       "tests": [],
-      "pending-reason": "No registered runtime implementation or executable 3.5 reference-interpreter conformance test."
+      "pending-reason": "A partial Rust runtime handler is registered; exact 3.5 reference-interpreter conformance and unverified edge cases remain open."
     }
   ],
   "docs": {
