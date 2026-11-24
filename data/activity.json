@@ -1,9 +1,25 @@
 {
   "schema_version": 1,
   "status": "fresh",
-  "generated_at": "2026-11-24T15:51:00.591844+00:00",
-  "last_successful_at": "2026-11-24T15:51:00.591844+00:00",
+  "generated_at": "2026-11-24T16:21:11.594696+00:00",
+  "last_successful_at": "2026-11-24T16:21:11.594696+00:00",
   "items": [
+    {
+      "type": "merged_pull_request",
+      "title": "[Docs] Reconcile issue #616 intrinsic support boundaries",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/626",
+      "number": 626,
+      "timestamp": "2026-11-24T16:20:42Z",
+      "summary": "PR #626 merged"
+    },
+    {
+      "type": "commit",
+      "title": "[Docs] Reconcile issue #616 intrinsic support boundaries (#626)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/28311b4d66eab3361747f1c0e3b6adc274b044f4",
+      "number": null,
+      "timestamp": "2026-11-24T16:20:41Z",
+      "summary": "Commit 28311b4"
+    },
     {
       "type": "merged_pull_request",
       "title": "[Research] Reconcile application-used BASIC constructs (#562)",
@@ -83,22 +99,6 @@
       "number": null,
       "timestamp": "2026-11-22T16:31:46Z",
       "summary": "Commit 8f7cf43"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "[API Registry] Reconcile Amiga GFA BASIC 3.5 platform profile",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/607",
-      "number": 607,
-      "timestamp": "2026-11-21T22:22:53Z",
-      "summary": "PR #607 merged"
-    },
-    {
-      "type": "commit",
-      "title": "[API Registry] Reconcile Amiga GFA BASIC 3.5 platform profile (#607)",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/55e536a12b787e0a56c8b1f9f3b3dd2f845b423f",
-      "number": null,
-      "timestamp": "2026-11-21T22:22:53Z",
-      "summary": "Commit 55e536a"
     }
   ]
 }

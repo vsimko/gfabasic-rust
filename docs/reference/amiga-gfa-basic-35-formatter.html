@@ -25,8 +25,8 @@
 <code>formatter::format_source</code>. The CLI delegates to the same implementation.
 It currently formats only the evidence-gated prototype grammar:</p>
 <ul>
-<li>assignments of <code>FACT(n)</code>, <code>VARIAT(n,k)</code>, and <code>COMBIN(n,k)</code> to <code>x</code>, <code>y</code>,
-or <code>z</code>;</li>
+<li>assignments of <code>FACT(n)</code>, <code>VARIAT(n,k)</code>, <code>COMBIN(n,k)</code>, <code>SUCC(integer-literal)</code>,
+and integer-literal <code>INT</code> to <code>x</code>, <code>y</code>, or <code>z</code>;</li>
 <li><code>PRINT</code> statements containing the supported variables;</li>
 <li>the independently verified matrix fixture forms: <code>DIM a(rows,columns)</code>,
 <code>MAT ONE a()</code>, <code>MAT SET a()=value</code>, <code>MAT CLR a()</code>, <code>MAT PRINT a()</code>,
@@ -142,26 +142,31 @@ so invalid or unsupported input is not overwritten.</p>
 transport and formatting policy for the prototype, not a statement about the
 historical Amiga source encoding or line-ending convention.</p>
 <h2 id="deliberately-unsupported-syntax">Deliberately unsupported syntax</h2>
-<p>The formatter currently rejects comments, string literals, <code>DATA</code> statements,
-and all other syntax outside the prototype grammar. It must not discard or
-guess at these constructs.</p>
-<p>The supplied Amiga interpreter manual's base chapters describe <code>REM</code>,
-apostrophe remarks, and inline <code>!</code> comments on pages labelled GFA-BASIC 3.0.
-The German 1990 book provides supplementary Amiga V3.03 descriptions. Those
-are inherited candidates, not proof of Amiga GFA BASIC interpreter 3.5
-behavior. The current 3.5 lexer evidence inventory explicitly leaves comment
-rules unresolved, including comment context around strings and <code>DATA</code>.
-Therefore these forms must remain unsupported until a 3.5-specific source or a
-reproducible observation confirms their lexical behavior.</p>
+<p>The formatter recognizes a narrow inline-comment form: a whitespace-separated
+<code>!</code> after a non-empty command line, outside a <code>DATA</code> instruction line. The
+lexer stores this text as comment trivia and the formatter preserves it
+verbatim. This is an implemented prototype lexical rule, not evidence that the
+original Amiga GFA BASIC 3.5 interpreter accepts the same form.</p>
+<p>The formatter still rejects <code>REM</code> comments, apostrophe remarks, string
+literals, <code>DATA</code> statements, and all other syntax outside the prototype
+grammar. It must not discard or guess at these constructs. The supplied Amiga
+interpreter manual's base chapters describe <code>REM</code>, apostrophe remarks, and
+inline <code>!</code> comments on pages labelled GFA-BASIC 3.0. The German 1990 book
+provides supplementary Amiga V3.03 descriptions. Those are inherited
+candidates, not proof of Amiga GFA BASIC interpreter 3.5 behavior. The current
+3.5 lexer evidence inventory leaves the historical comment rules unresolved,
+including comment context around strings and <code>DATA</code>. Therefore no broader
+comment compatibility is claimed without a 3.5-specific source or a
+reproducible observation.</p>
 <p>The same evidence gate applies to string escaping, DATA payload boundaries,
 general identifier syntax, and operators. Do not broaden the formatter by
 importing Atari ST rules or by treating the base 3.0 text as automatically
 normative for 3.5.</p>
 <h2 id="tests-and-ci">Tests and CI</h2>
 <p>Formatter unit tests cover canonical whitespace, all currently supported
-statement forms, identifier/intrinsic/literal spelling preservation,
-idempotence, semantic preservation, unsupported syntax rejection, and blank
-line policy. The verified Amiga 3.5 combinatorics and matrix fixtures are checked by CI
+statement forms, inline-comment preservation, identifier/intrinsic/literal
+spelling preservation, idempotence, semantic preservation, unsupported syntax
+rejection, and blank line policy. The verified Amiga 3.5 combinatorics and matrix fixtures are checked by CI
 with <code>gfabasic fmt --check</code>.</p>
 <p>As the parser gains verified grammar constructs, add independently authored
 golden fixtures and semantic/idempotence tests before enabling formatting for
