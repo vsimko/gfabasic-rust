@@ -53,7 +53,7 @@ The `gfabasic fmt` command uses this library directly. It writes formatted text 
 
 ## CI fixture gate
 
-Rust CI runs `gfabasic fmt --check` over the verified Amiga 3.5 combinatorics fixtures under `tests/corpus/amiga/3.5/combinatorics/`. Those files are kept in canonical prototype style. This gate covers only those combinatorics fixture inputs; it is not a corpus-wide conformance runner and does not imply support for other verified corpus constructs such as matrix statements.
+Rust CI runs `gfabasic fmt --check` over the verified Amiga 3.5 combinatorics fixtures under `tests/corpus/amiga/3.5/combinatorics/` and matrix fixtures under `tests/corpus/amiga/3.5/matrix/`. Those files are kept in canonical prototype style. This gate covers only those fixture inputs; it is not a corpus-wide conformance runner and does not imply support for other verified corpus constructs beyond the documented parser subset. Matrix syntax is parsed and formatted only; the executable IR does not evaluate it.
 
 ## Next increments
 
