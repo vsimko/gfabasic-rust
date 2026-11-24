@@ -1,7 +1,7 @@
 //! Symbol resolution and semantic analysis boundary.
 //!
 //! This module currently provides a deliberately narrow symbol index for the
-//! evidence-backed FACT/VARIAT/COMBIN/PRINT prototype. It does not define
+//! evidence-backed FACT/VARIAT/COMBIN/SUCC/integer-literal-INT/PRINT prototype. It does not define
 //! general Amiga GFA BASIC declaration, scope, or type rules.
 
 use std::collections::BTreeMap;

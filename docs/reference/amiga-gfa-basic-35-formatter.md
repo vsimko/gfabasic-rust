@@ -11,8 +11,8 @@ The formatter is a first-class library API in `gfabasic-compiler`, exposed as
 `formatter::format_source`. The CLI delegates to the same implementation.
 It currently formats only the evidence-gated prototype grammar:
 
-- assignments of `FACT(n)`, `VARIAT(n,k)`, and `COMBIN(n,k)` to `x`, `y`,
-  or `z`;
+- assignments of `FACT(n)`, `VARIAT(n,k)`, `COMBIN(n,k)`, `SUCC(integer-literal)`,
+  and integer-literal `INT` to `x`, `y`, or `z`;
 - `PRINT` statements containing the supported variables;
 - the independently verified matrix fixture forms: `DIM a(rows,columns)`,
   `MAT ONE a()`, `MAT SET a()=value`, `MAT CLR a()`, `MAT PRINT a()`,
@@ -112,18 +112,23 @@ historical Amiga source encoding or line-ending convention.
 
 ## Deliberately unsupported syntax
 
-The formatter currently rejects comments, string literals, `DATA` statements,
-and all other syntax outside the prototype grammar. It must not discard or
-guess at these constructs.
+The formatter recognizes a narrow inline-comment form: a whitespace-separated
+`!` after a non-empty command line, outside a `DATA` instruction line. The
+lexer stores this text as comment trivia and the formatter preserves it
+verbatim. This is an implemented prototype lexical rule, not evidence that the
+original Amiga GFA BASIC 3.5 interpreter accepts the same form.
 
-The supplied Amiga interpreter manual's base chapters describe `REM`,
-apostrophe remarks, and inline `!` comments on pages labelled GFA-BASIC 3.0.
-The German 1990 book provides supplementary Amiga V3.03 descriptions. Those
-are inherited candidates, not proof of Amiga GFA BASIC interpreter 3.5
-behavior. The current 3.5 lexer evidence inventory explicitly leaves comment
-rules unresolved, including comment context around strings and `DATA`.
-Therefore these forms must remain unsupported until a 3.5-specific source or a
-reproducible observation confirms their lexical behavior.
+The formatter still rejects `REM` comments, apostrophe remarks, string
+literals, `DATA` statements, and all other syntax outside the prototype
+grammar. It must not discard or guess at these constructs. The supplied Amiga
+interpreter manual's base chapters describe `REM`, apostrophe remarks, and
+inline `!` comments on pages labelled GFA-BASIC 3.0. The German 1990 book
+provides supplementary Amiga V3.03 descriptions. Those are inherited
+candidates, not proof of Amiga GFA BASIC interpreter 3.5 behavior. The current
+3.5 lexer evidence inventory leaves the historical comment rules unresolved,
+including comment context around strings and `DATA`. Therefore no broader
+comment compatibility is claimed without a 3.5-specific source or a
+reproducible observation.
 
 The same evidence gate applies to string escaping, DATA payload boundaries,
 general identifier syntax, and operators. Do not broaden the formatter by
@@ -133,9 +138,9 @@ normative for 3.5.
 ## Tests and CI
 
 Formatter unit tests cover canonical whitespace, all currently supported
-statement forms, identifier/intrinsic/literal spelling preservation,
-idempotence, semantic preservation, unsupported syntax rejection, and blank
-line policy. The verified Amiga 3.5 combinatorics and matrix fixtures are checked by CI
+statement forms, inline-comment preservation, identifier/intrinsic/literal
+spelling preservation, idempotence, semantic preservation, unsupported syntax
+rejection, and blank line policy. The verified Amiga 3.5 combinatorics and matrix fixtures are checked by CI
 with `gfabasic fmt --check`.
 
 As the parser gains verified grammar constructs, add independently authored
