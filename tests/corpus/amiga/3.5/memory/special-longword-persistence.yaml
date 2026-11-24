@@ -1,0 +1,17 @@
+id: "amiga-3.5-special-longword-persistence"
+dialect: "GFA BASIC Amiga"
+version: "3.5"
+api_profiles: []
+kind: "semantic"
+status: "verified"
+source_key: "AM-INTERPRETER-35"
+source_pages: "printed p. 13-35"
+evidence_status: "page-image-verified"
+expectation: "The assignment stores 123456 in special longword variable _0. CLEAR does not erase _0, so PRINT _0 outputs 123456."
+expected_stdout: "123456\\n"
+expected_exit: "0"
+notes:
+  - "Independently authored minimal fixture; no historical program listing is copied."
+  - "Printed p. 13-35 defines _0 through _9 as ten special longword variables, not floating-point variables, and explicitly states that CLEAR does not erase them."
+  - "This fixture covers only persistence across CLEAR; it makes no claim about LOAD, CHAIN, RUN, NEW, numeric limits, or address semantics."
+  - "Verified against the supplied GFA BASIC 3.5 Interpreter page image; no original interpreter execution has been performed."
