@@ -296,7 +296,7 @@ mod tests {
         fs::create_dir_all(&directory).unwrap();
         let input = directory.join("intrinsics.LST");
         let output = directory.join("intrinsics");
-        fs::write(&input, "x=SUCC(2)\\ny=INT(5)\\nPRINT x,y\\n").unwrap();
+        fs::write(&input, "x=SUCC(2)\ny=INT(5)\nPRINT x,y\n").unwrap();
 
         compile_file(&input, &output).unwrap();
         let run = Command::new(&output).output().unwrap();
