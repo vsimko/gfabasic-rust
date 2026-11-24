@@ -18,3 +18,4 @@ fixtures:
   - "amiga/3.5/combinatorics/fact-zero"
   - "amiga/3.5/combinatorics/three-intrinsics"
   - "amiga/3.5/data/mat-mul-triple"
+  - "amiga/3.5/data/data-pointer-save-restore"
