@@ -233,11 +233,14 @@ impl<'a> LoweringState<'a> {
         let id = ValueId(self.next_value);
         self.next_value += 1;
         self.variables.insert(symbol_id, id);
-        self.module.entry_block_mut().instructions.push(Instruction::ConstI64 {
-            result: id,
-            value,
-            span,
-        });
+        self.module
+            .entry_block_mut()
+            .instructions
+            .push(Instruction::ConstI64 {
+                result: id,
+                value,
+                span,
+            });
     }
 }
 
@@ -347,10 +350,14 @@ pub fn lower(model: &SemanticModel) -> Result<Module, Vec<IrError>> {
                     }
                 }
                 if values.len() == names.len() {
-                    state.module.entry_block_mut().instructions.push(Instruction::Print {
-                        values,
-                        span: *span,
-                    });
+                    state
+                        .module
+                        .entry_block_mut()
+                        .instructions
+                        .push(Instruction::Print {
+                            values,
+                            span: *span,
+                        });
                     saw_print = true;
                 }
             }
@@ -432,7 +439,10 @@ pub fn value_type(module: &Module, id: ValueId) -> Option<ValueType> {
 
 #[cfg(test)]
 mod tests {
-    use super::{BasicBlock, BlockId, Instruction, Module, SourceOrigin, Terminator, ValueId, ValueType, lower, value_type, verify};
+    use super::{
+        BasicBlock, BlockId, Instruction, Module, SourceOrigin, Terminator, ValueId, ValueType,
+        lower, value_type, verify,
+    };
     use crate::frontend::parse_document;
     use crate::semantic::analyze_prototype;
     use crate::source::{SourceMap, SourceSpan};
@@ -579,7 +589,9 @@ mod tests {
                     values: vec![ValueId(9)],
                     span,
                 }],
-                terminator: Some(Terminator::Return { origin: SourceOrigin::Synthetic }),
+                terminator: Some(Terminator::Return {
+                    origin: SourceOrigin::Synthetic,
+                }),
             }],
         };
         assert!(verify(&undefined).is_err());
