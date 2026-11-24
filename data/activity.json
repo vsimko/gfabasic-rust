@@ -1,9 +1,25 @@
 {
   "schema_version": 1,
   "status": "fresh",
-  "generated_at": "2026-11-24T16:21:11.594696+00:00",
-  "last_successful_at": "2026-11-24T16:21:11.594696+00:00",
+  "generated_at": "2026-11-24T16:40:02.125526+00:00",
+  "last_successful_at": "2026-11-24T16:40:02.125526+00:00",
   "items": [
+    {
+      "type": "merged_pull_request",
+      "title": "[Compiler/Runtime] Close intrinsic test and documentation gaps",
+      "url": "https://github.com/vsimko/gfabasic-rust/pull/629",
+      "number": 629,
+      "timestamp": "2026-11-24T16:39:36Z",
+      "summary": "PR #629 merged"
+    },
+    {
+      "type": "commit",
+      "title": "[Compiler/Runtime] Close intrinsic test and documentation gaps (#629)",
+      "url": "https://github.com/vsimko/gfabasic-rust/commit/153f7ead5b1d362204db90ee79963b07995abe2f",
+      "number": null,
+      "timestamp": "2026-11-24T16:39:35Z",
+      "summary": "Commit 153f7ea"
+    },
     {
       "type": "merged_pull_request",
       "title": "[Docs] Reconcile issue #616 intrinsic support boundaries",
@@ -83,22 +99,6 @@
       "number": null,
       "timestamp": "2026-11-24T14:53:21Z",
       "summary": "Commit e158dc7"
-    },
-    {
-      "type": "merged_pull_request",
-      "title": "[CI] Keep commercial Amiga assets out of discovery artifacts",
-      "url": "https://github.com/vsimko/gfabasic-rust/pull/615",
-      "number": 615,
-      "timestamp": "2026-11-22T16:31:46Z",
-      "summary": "PR #615 merged"
-    },
-    {
-      "type": "commit",
-      "title": "[CI] Keep commercial Amiga assets out of discovery artifacts (#615)",
-      "url": "https://github.com/vsimko/gfabasic-rust/commit/8f7cf4366fcde585e0e17b6c31f602085819e719",
-      "number": null,
-      "timestamp": "2026-11-22T16:31:46Z",
-      "summary": "Commit 8f7cf43"
     }
   ]
 }
