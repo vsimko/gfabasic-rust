@@ -613,7 +613,9 @@ mod tests {
                         span,
                     },
                 ],
-                terminator: Some(Terminator::Return { origin: SourceOrigin::Synthetic }),
+                terminator: Some(Terminator::Return {
+                    origin: SourceOrigin::Synthetic,
+                }),
             }],
         };
         assert!(verify(&duplicate).is_err());
