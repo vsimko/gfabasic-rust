@@ -483,6 +483,14 @@ mod tests {
                 if values == &[ValueId(2), ValueId(0), ValueId(1)]
         ));
         assert_eq!(value_type(&ir, ValueId(0)), Some(ValueType::I64));
+        assert_eq!(ir.entry, BlockId(0));
+        assert_eq!(ir.blocks[0].origin, SourceOrigin::Synthetic);
+        assert_eq!(
+            ir.blocks[0].terminator,
+            Some(Terminator::Return {
+                origin: SourceOrigin::Synthetic,
+            })
+        );
         verify(&ir).unwrap();
     }
 
@@ -540,7 +548,7 @@ mod tests {
             Instruction::ConstI64 { value: 1, .. }
         ));
         assert!(matches!(
-            ir.instructions[2],
+            ir.blocks[0].instructions[2],
             Instruction::ConstI64 { value: 184756, .. }
         ));
     }
@@ -596,6 +604,44 @@ mod tests {
             }],
         };
         assert!(verify(&duplicate).is_err());
+
+        let missing_terminator = Module {
+            entry: BlockId(0),
+            blocks: vec![BasicBlock {
+                id: BlockId(0),
+                origin: SourceOrigin::Synthetic,
+                instructions: vec![Instruction::ConstI64 {
+                    result: ValueId(0),
+                    value: 1,
+                    span,
+                }],
+                terminator: None,
+            }],
+        };
+        assert!(
+            verify(&missing_terminator)
+                .unwrap_err()
+                .iter()
+                .any(|error| error.message.contains("missing a terminator"))
+        );
+
+        let missing_entry = Module {
+            entry: BlockId(1),
+            blocks: vec![BasicBlock {
+                id: BlockId(0),
+                origin: SourceOrigin::Synthetic,
+                instructions: Vec::new(),
+                terminator: Some(Terminator::Return {
+                    origin: SourceOrigin::Synthetic,
+                }),
+            }],
+        };
+        assert!(
+            verify(&missing_entry)
+                .unwrap_err()
+                .iter()
+                .any(|error| error.message.contains("entry block does not exist"))
+        );
     }
 
     #[test]
@@ -607,7 +653,7 @@ mod tests {
         let ir = lower(&model).expect("supported integer intrinsic forms lower");
         assert_eq!(ir.blocks[0].instructions.len(), 3);
         assert!(matches!(
-            ir.instructions[0],
+            ir.blocks[0].instructions[0],
             Instruction::ConstI64 {
                 result: ValueId(0),
                 value: 3,
@@ -615,7 +661,7 @@ mod tests {
             }
         ));
         assert!(matches!(
-            ir.instructions[1],
+            ir.blocks[0].instructions[1],
             Instruction::ConstI64 {
                 result: ValueId(1),
                 value: 5,
