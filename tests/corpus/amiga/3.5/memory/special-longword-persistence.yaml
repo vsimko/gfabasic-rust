@@ -8,7 +8,7 @@ source_key: "AM-INTERPRETER-35"
 source_pages: "printed p. 13-35"
 evidence_status: "page-image-verified"
 expectation: "The assignment stores 123456 in special longword variable _0. CLEAR does not erase _0, so PRINT _0 outputs 123456."
-expected_stdout: "123456\\n"
+expected_stdout: "123456\n"
 expected_exit: "0"
 notes:
   - "Independently authored minimal fixture; no historical program listing is copied."
