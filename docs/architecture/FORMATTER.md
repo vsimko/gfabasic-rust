@@ -13,7 +13,7 @@ title: "Formatter style and current support"
 
 The formatter is a library feature in `gfabasic-compiler::formatter`. It consumes source text and a source ID, validates the whole document through the lossless parser, and returns formatted text or the parser's diagnostics. It does not depend on the CLI, LLVM, generated-program runtime, or SDL3.
 
-The parser accepts the evidence-backed `FACT`, `VARIAT`, `COMBIN`, and `PRINT` forms with the current prototype variable subset, plus selected 3.5 matrix syntax (`DIM` and the documented `MAT` forms listed in the [formatter reference](../reference/amiga-gfa-basic-35-formatter.md)). The formatter rejects every construct the parser cannot validate. Matrix syntax is parsed/formatted only; the executable IR does not evaluate it. Comments, string and DATA payloads, broader identifier forms, and nested blocks remain unsupported until their Amiga GFA BASIC 3.5 lexical/grammar rules are verified and represented losslessly.
+The parser accepts the evidence-backed `FACT`, `VARIAT`, `COMBIN`, `SUCC(integer-literal)`, integer-literal `INT`, and `PRINT` forms with the current prototype variable subset, plus selected 3.5 matrix syntax (`DIM` and the documented `MAT` forms listed in the [formatter reference](../reference/amiga-gfa-basic-35-formatter.md)). The formatter rejects every construct the parser cannot validate. Matrix syntax is parsed/formatted only; the executable IR does not evaluate it. The whitespace-separated inline `!` comment form is recognized and preserved verbatim; this narrow prototype behavior does not establish historical Amiga GFA BASIC 3.5 comment compatibility. `REM` and apostrophe remarks, string and DATA payloads, broader identifier forms, and nested blocks remain unsupported.
 
 ## Canonical prototype layout
 
@@ -53,10 +53,10 @@ The `gfabasic fmt` command uses this library directly. It writes formatted text 
 
 ## CI fixture gate
 
-Rust CI runs `gfabasic fmt --check` over the verified Amiga 3.5 combinatorics fixtures under `tests/corpus/amiga/3.5/combinatorics/`. Those files are kept in canonical prototype style. This gate covers only the currently accepted FACT/VARIAT/COMBIN/PRINT subset; it is not a corpus-wide conformance runner and does not imply support for other verified corpus constructs such as matrix statements.
+Rust CI runs `gfabasic fmt --check` over the verified Amiga 3.5 combinatorics fixtures under `tests/corpus/amiga/3.5/combinatorics/`. Those files are kept in canonical prototype style. This gate covers only those combinatorics fixture inputs; it is not a corpus-wide conformance runner and does not imply support for other verified corpus constructs such as matrix statements.
 
 ## Next increments
 
-1. Extend lossless lexing and formatting only alongside verified comment, string/DATA, identifier, and grammar support.
+1. Extend lossless lexing and formatting only alongside verified remaining comment forms, string/DATA, identifier, and grammar support.
 2. Add further fixture paths to the formatter check only when the parser can validate them without dropping source content.
 3. Share the same formatter implementation with LSP document/range formatting; editor edits must be version-bound as specified by issue #208 and ADR 0012.
