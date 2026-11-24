@@ -484,6 +484,18 @@ mod tests {
             ResolvedHandler::IntegerToUnsigned(handler) => assert_eq!(handler(5), Some(120)),
             _ => panic!("wrong handler type"),
         }
+        match resolve_builtin_handler("gfa.language.math.variat").unwrap() {
+            ResolvedHandler::TwoIntegersToUnsigned(handler) => {
+                assert_eq!(handler(5, 2), Some(20))
+            }
+            _ => panic!("VARIAT handler signature"),
+        }
+        match resolve_builtin_handler("gfa.language.math.combin").unwrap() {
+            ResolvedHandler::TwoIntegersToUnsigned(handler) => {
+                assert_eq!(handler(5, 2), Some(10))
+            }
+            _ => panic!("COMBIN handler signature"),
+        }
         assert_eq!(
             resolve_builtin_handler("gfa.language.matrix.mat-one").unwrap_err(),
             RegistryError::UnsupportedDeclaration("gfa.language.matrix.mat-one".into())

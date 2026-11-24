@@ -6,9 +6,9 @@ title: "Runtime architecture"
 # Runtime architecture
 
 - Status: Approved architectural baseline (2026-11-04); language-specific contracts and implementation details remain deferred to their respective issues.
-- Implementation status: no stable generated-program runtime ABI, general core runtime, or Amiga/Linux platform runtime is implemented. The runtime crate does contain partial typed handlers for FACT, VARIAT, and COMBIN, used by the compiler's literal combinatorics prototype; these are not a complete generated-program runtime.
+- Implementation status: no stable generated-program runtime ABI, general core runtime, or Amiga/Linux platform runtime is implemented. The runtime crate contains partial typed handlers for ten language-core intrinsics: FACT, VARIAT, COMBIN, RAND, SUCC, STRING$, HEX$, RND, INT, and SQR. The compiler's literal-only subset lowers FACT, VARIAT, COMBIN, SUCC, and integer-literal INT; RAND, STRING$, HEX$, RND, and SQR are runtime-registered but not compiler-executable because the current IR lacks general runtime calls, strings, and real values. These handlers do not constitute a complete generated-program runtime.
 
-This document defines the approved boundaries and minimum interface properties. It does not define GFA BASIC semantics, source data layouts, or a stable ABI. Partial combinatorics handler functions and their registry dispatch do not constitute the generated-program ABI described here. The project maintainer approved the layering, project-owned generated-code/runtime boundary, opaque-handle/resource lifecycle principles, and SDL3-as-Linux-adapter boundary on 2026-11-04.
+This document defines the approved boundaries and minimum interface properties. It does not define GFA BASIC semantics, source data layouts, or a stable ABI. The ten partial intrinsic handlers and their typed registry dispatch do not constitute the generated-program ABI described here. The project maintainer approved the layering, project-owned generated-code/runtime boundary, opaque-handle/resource lifecycle principles, and SDL3-as-Linux-adapter boundary on 2026-11-04.
 
 ## Layers and dependency direction
 
