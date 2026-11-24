@@ -1,8 +1,9 @@
 //! Project-owned typed IR for the evidence-backed literal-intrinsic prototype.
 //!
-//! This is intentionally smaller than the planned general-purpose IR. It
-//! models only i64 constants and ordered PRINT operations; it does not imply
-//! that GFA BASIC variables are universally i64.
+//! This first CFG slice models one straight-line entry block, i64 constants,
+//! ordered PRINT operations, and an explicit synthetic return terminator. It
+//! does not imply that GFA BASIC variables are universally i64 or that general
+//! branching, loops, calls, and runtime operations are implemented.
 
 use std::collections::{BTreeMap, BTreeSet};
 
@@ -13,6 +14,32 @@ use crate::source::SourceSpan;
 /// Stable identity of a value within one IR module.
 #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
 pub struct ValueId(pub u32);
+
+/// Stable identity of a basic block within one IR module.
+#[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
+pub struct BlockId(pub u32);
+
+/// Origin of an IR structure, distinguishing source-backed and generated nodes.
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum SourceOrigin {
+    Source(SourceSpan),
+    Synthetic,
+}
+
+/// Explicit control-flow exit for the current straight-line IR subset.
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum Terminator {
+    Return { origin: SourceOrigin },
+}
+
+/// One explicitly identified basic block.
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct BasicBlock {
+    pub id: BlockId,
+    pub origin: SourceOrigin,
+    pub instructions: Vec<Instruction>,
+    pub terminator: Option<Terminator>,
+}
 
 /// Types currently representable by this deliberately narrow IR.
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -34,11 +61,37 @@ pub enum Instruction {
     },
 }
 
-/// One straight-line function body. Control flow and general calls are not
-/// represented by this prototype IR.
-#[derive(Clone, Debug, Default, Eq, PartialEq)]
+/// One function body with an explicit entry block.
+///
+/// This increment deliberately supports a single straight-line block only;
+/// branch terminators and multi-block CFG verification are future work.
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Module {
-    pub instructions: Vec<Instruction>,
+    pub entry: BlockId,
+    pub blocks: Vec<BasicBlock>,
+}
+
+impl Module {
+    fn single_block() -> Self {
+        let entry = BlockId(0);
+        Self {
+            entry,
+            blocks: vec![BasicBlock {
+                id: entry,
+                origin: SourceOrigin::Synthetic,
+                instructions: Vec::new(),
+                terminator: None,
+            }],
+        }
+    }
+
+    fn entry_block_mut(&mut self) -> &mut BasicBlock {
+        let entry = self.entry;
+        self.blocks
+            .iter_mut()
+            .find(|block| block.id == entry)
+            .expect("single-block lowering initializes its entry")
+    }
 }
 
 /// Lowering or verification failure with source provenance where available.
@@ -138,7 +191,7 @@ impl<'a> LoweringState<'a> {
         Self {
             symbols,
             variables: BTreeMap::new(),
-            module: Module::default(),
+            module: Module::single_block(),
             next_value: 0,
             errors: Vec::new(),
         }
@@ -180,11 +233,14 @@ impl<'a> LoweringState<'a> {
         let id = ValueId(self.next_value);
         self.next_value += 1;
         self.variables.insert(symbol_id, id);
-        self.module.instructions.push(Instruction::ConstI64 {
-            result: id,
-            value,
-            span,
-        });
+        self.module
+            .entry_block_mut()
+            .instructions
+            .push(Instruction::ConstI64 {
+                result: id,
+                value,
+                span,
+            });
     }
 }
 
@@ -294,10 +350,14 @@ pub fn lower(model: &SemanticModel) -> Result<Module, Vec<IrError>> {
                     }
                 }
                 if values.len() == names.len() {
-                    state.module.instructions.push(Instruction::Print {
-                        values,
-                        span: *span,
-                    });
+                    state
+                        .module
+                        .entry_block_mut()
+                        .instructions
+                        .push(Instruction::Print {
+                            values,
+                            span: *span,
+                        });
                     saw_print = true;
                 }
             }
@@ -310,6 +370,9 @@ pub fn lower(model: &SemanticModel) -> Result<Module, Vec<IrError>> {
         ));
     }
     if state.errors.is_empty() {
+        state.module.entry_block_mut().terminator = Some(Terminator::Return {
+            origin: SourceOrigin::Synthetic,
+        });
         verify(&state.module)?;
         Ok(state.module)
     } else {
@@ -317,11 +380,23 @@ pub fn lower(model: &SemanticModel) -> Result<Module, Vec<IrError>> {
     }
 }
 
-/// Verify unique definitions and reject uses that precede their definitions.
+/// Verify the current single-block CFG, its explicit exit, definitions, and uses.
 pub fn verify(module: &Module) -> Result<(), Vec<IrError>> {
-    let mut definitions = BTreeSet::new();
     let mut errors = Vec::new();
-    for instruction in &module.instructions {
+    if module.blocks.len() != 1 {
+        errors.push(IrError::global(
+            "prototype IR currently requires exactly one straight-line basic block",
+        ));
+    }
+    let Some(block) = module.blocks.iter().find(|block| block.id == module.entry) else {
+        errors.push(IrError::global("IR entry block does not exist"));
+        return Err(errors);
+    };
+    if block.terminator.is_none() {
+        errors.push(IrError::global("IR basic block is missing a terminator"));
+    }
+    let mut definitions = BTreeSet::new();
+    for instruction in &block.instructions {
         match instruction {
             Instruction::ConstI64 { result, span, .. } => {
                 if !definitions.insert(*result) {
@@ -353,8 +428,9 @@ pub fn verify(module: &Module) -> Result<(), Vec<IrError>> {
 /// Return the explicit type of a value defined in this module.
 pub fn value_type(module: &Module, id: ValueId) -> Option<ValueType> {
     module
-        .instructions
+        .blocks
         .iter()
+        .flat_map(|block| block.instructions.iter())
         .find_map(|instruction| match instruction {
             Instruction::ConstI64 { result, .. } if *result == id => Some(ValueType::I64),
             _ => None,
@@ -363,7 +439,10 @@ pub fn value_type(module: &Module, id: ValueId) -> Option<ValueType> {
 
 #[cfg(test)]
 mod tests {
-    use super::{Instruction, ValueId, ValueType, lower, value_type, verify};
+    use super::{
+        BasicBlock, BlockId, Instruction, Module, SourceOrigin, Terminator, ValueId, ValueType,
+        lower, value_type, verify,
+    };
     use crate::frontend::parse_document;
     use crate::semantic::analyze_prototype;
     use crate::source::{SourceMap, SourceSpan};
@@ -384,9 +463,9 @@ mod tests {
         let model = semantic_model(id, source);
         let ir = lower(&model).unwrap();
 
-        assert_eq!(ir.instructions.len(), 4);
+        assert_eq!(ir.blocks[0].instructions.len(), 4);
         assert!(matches!(
-            ir.instructions[0],
+            ir.blocks[0].instructions[0],
             Instruction::ConstI64 {
                 result: ValueId(0),
                 value: 120,
@@ -394,7 +473,7 @@ mod tests {
             }
         ));
         assert!(matches!(
-            ir.instructions[1],
+            ir.blocks[0].instructions[1],
             Instruction::ConstI64 {
                 result: ValueId(1),
                 value: 20,
@@ -402,7 +481,7 @@ mod tests {
             }
         ));
         assert!(matches!(
-            ir.instructions[2],
+            ir.blocks[0].instructions[2],
             Instruction::ConstI64 {
                 result: ValueId(2),
                 value: 10,
@@ -410,11 +489,19 @@ mod tests {
             }
         ));
         assert!(matches!(
-            &ir.instructions[3],
+            &ir.blocks[0].instructions[3],
             Instruction::Print { values, .. }
                 if values == &[ValueId(2), ValueId(0), ValueId(1)]
         ));
         assert_eq!(value_type(&ir, ValueId(0)), Some(ValueType::I64));
+        assert_eq!(ir.entry, BlockId(0));
+        assert_eq!(ir.blocks[0].origin, SourceOrigin::Synthetic);
+        assert_eq!(
+            ir.blocks[0].terminator,
+            Some(Terminator::Return {
+                origin: SourceOrigin::Synthetic,
+            })
+        );
         verify(&ir).unwrap();
     }
 
@@ -427,15 +514,15 @@ mod tests {
         let module = lower(&model).expect("integer assignments lower to constants");
 
         assert!(matches!(
-            module.instructions[0],
+            module.blocks[0].instructions[0],
             Instruction::ConstI64 { value: 42, .. }
         ));
         assert!(matches!(
-            module.instructions[1],
+            module.blocks[0].instructions[1],
             Instruction::ConstI64 { value: 7, .. }
         ));
         assert!(matches!(
-            &module.instructions[2],
+            &module.blocks[0].instructions[2],
             Instruction::Print { values, .. } if values.len() == 2
         ));
     }
@@ -464,15 +551,15 @@ mod tests {
         let ir = lower(&model).unwrap();
 
         assert!(matches!(
-            ir.instructions[0],
+            ir.blocks[0].instructions[0],
             Instruction::ConstI64 { value: 1, .. }
         ));
         assert!(matches!(
-            ir.instructions[1],
+            ir.blocks[0].instructions[1],
             Instruction::ConstI64 { value: 1, .. }
         ));
         assert!(matches!(
-            ir.instructions[2],
+            ir.blocks[0].instructions[2],
             Instruction::ConstI64 { value: 184756, .. }
         ));
     }
@@ -493,29 +580,83 @@ mod tests {
         let mut sources = SourceMap::new();
         let id = sources.add_source("ir-invalid.bas", source);
         let span = crate::source::SourceSpan::new(id, 0, source.len());
-        let undefined = super::Module {
-            instructions: vec![Instruction::Print {
-                values: vec![ValueId(9)],
-                span,
+        let undefined = Module {
+            entry: BlockId(0),
+            blocks: vec![BasicBlock {
+                id: BlockId(0),
+                origin: SourceOrigin::Synthetic,
+                instructions: vec![Instruction::Print {
+                    values: vec![ValueId(9)],
+                    span,
+                }],
+                terminator: Some(Terminator::Return {
+                    origin: SourceOrigin::Synthetic,
+                }),
             }],
         };
         assert!(verify(&undefined).is_err());
 
-        let duplicate = super::Module {
-            instructions: vec![
-                Instruction::ConstI64 {
-                    result: ValueId(1),
-                    value: 1,
-                    span,
-                },
-                Instruction::ConstI64 {
-                    result: ValueId(1),
-                    value: 2,
-                    span,
-                },
-            ],
+        let duplicate = Module {
+            entry: BlockId(0),
+            blocks: vec![BasicBlock {
+                id: BlockId(0),
+                origin: SourceOrigin::Synthetic,
+                instructions: vec![
+                    Instruction::ConstI64 {
+                        result: ValueId(1),
+                        value: 1,
+                        span,
+                    },
+                    Instruction::ConstI64 {
+                        result: ValueId(1),
+                        value: 2,
+                        span,
+                    },
+                ],
+                terminator: Some(Terminator::Return {
+                    origin: SourceOrigin::Synthetic,
+                }),
+            }],
         };
         assert!(verify(&duplicate).is_err());
+
+        let missing_terminator = Module {
+            entry: BlockId(0),
+            blocks: vec![BasicBlock {
+                id: BlockId(0),
+                origin: SourceOrigin::Synthetic,
+                instructions: vec![Instruction::ConstI64 {
+                    result: ValueId(0),
+                    value: 1,
+                    span,
+                }],
+                terminator: None,
+            }],
+        };
+        assert!(
+            verify(&missing_terminator)
+                .unwrap_err()
+                .iter()
+                .any(|error| error.message.contains("missing a terminator"))
+        );
+
+        let missing_entry = Module {
+            entry: BlockId(1),
+            blocks: vec![BasicBlock {
+                id: BlockId(0),
+                origin: SourceOrigin::Synthetic,
+                instructions: Vec::new(),
+                terminator: Some(Terminator::Return {
+                    origin: SourceOrigin::Synthetic,
+                }),
+            }],
+        };
+        assert!(
+            verify(&missing_entry)
+                .unwrap_err()
+                .iter()
+                .any(|error| error.message.contains("entry block does not exist"))
+        );
     }
 
     #[test]
@@ -525,9 +666,9 @@ mod tests {
         let id = sources.add_source("inherited-intrinsics.bas", source);
         let model = semantic_model(id, source);
         let ir = lower(&model).expect("supported integer intrinsic forms lower");
-        assert_eq!(ir.instructions.len(), 3);
+        assert_eq!(ir.blocks[0].instructions.len(), 3);
         assert!(matches!(
-            ir.instructions[0],
+            ir.blocks[0].instructions[0],
             Instruction::ConstI64 {
                 result: ValueId(0),
                 value: 3,
@@ -535,7 +676,7 @@ mod tests {
             }
         ));
         assert!(matches!(
-            ir.instructions[1],
+            ir.blocks[0].instructions[1],
             Instruction::ConstI64 {
                 result: ValueId(1),
                 value: 5,
