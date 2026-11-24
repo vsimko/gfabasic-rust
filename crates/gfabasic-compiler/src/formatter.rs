@@ -111,6 +111,8 @@ mod tests {
     enum Meaning {
         Integer(String, i64),
         Fact(String, i64),
+        Succ(String, i64),
+        Int(String, i64),
         Variat(String, i64, i64),
         Combin(String, i64, i64),
         Print(Vec<String>),
@@ -150,6 +152,12 @@ mod tests {
                 }
                 Statement::AssignFact { name, argument, .. } => {
                     Meaning::Fact(name.clone(), *argument)
+                }
+                Statement::AssignSucc { name, argument, .. } => {
+                    Meaning::Succ(name.clone(), *argument)
+                }
+                Statement::AssignInt { name, argument, .. } => {
+                    Meaning::Int(name.clone(), *argument)
                 }
                 Statement::AssignVariat { name, n, k, .. } => Meaning::Variat(name.clone(), *n, *k),
                 Statement::AssignCombin { name, n, k, .. } => Meaning::Combin(name.clone(), *n, *k),
@@ -316,6 +324,8 @@ mod tests {
             ("x=FACT(0001)", "x = FACT(0001)\n"),
             ("y=VARIAT(5,2)", "y = VARIAT(5, 2)\n"),
             ("z=COMBIN(5,2)", "z = COMBIN(5, 2)\n"),
+            ("x=SUCC(2)", "x = SUCC(2)\n"),
+            ("y=INT(5)", "y = INT(5)\n"),
             ("PRINT   x,y,z", "PRINT x, y, z\n"),
         ];
 
@@ -376,6 +386,8 @@ mod tests {
             "x=FACT(2)\n",
             "y=VARIAT(5,2)\n",
             "z=COMBIN(5,2)\n",
+            "x=SUCC(2)\n",
+            "y=INT(5)\n",
             "PRINT x,y,z\n",
             "x=FACT(2)\ny=VARIAT(5,2)\nz=COMBIN(5,2)\nPRINT x,y,z\n",
         ];

@@ -1,8 +1,9 @@
 //! Evidence-gated frontend for the first Amiga GFA BASIC 3.5 vertical slice.
 //!
 //! This is deliberately not a general GFA BASIC lexer/parser. It recognizes
-//! only the source forms demonstrated by the 3.5 addendum: FACT/VARIAT/COMBIN
-//! assignments and PRINT, plus selected verified MAT matrix commands. Other
+//! only the source forms demonstrated by the 3.5 material: FACT/VARIAT/COMBIN,
+//! SUCC, the integer-literal INT subset, and PRINT, plus selected verified MAT
+//! matrix commands. Other
 //! syntax is rejected rather than guessed.
 
 use crate::diagnostics::{Diagnostic, DiagnosticCategory, DiagnosticSeverity};
@@ -47,6 +48,16 @@ pub enum Statement {
         name: String,
         n: i64,
         k: i64,
+        span: SourceSpan,
+    },
+    AssignSucc {
+        name: String,
+        argument: i64,
+        span: SourceSpan,
+    },
+    AssignInt {
+        name: String,
+        argument: i64,
         span: SourceSpan,
     },
     PrintVariables {
@@ -670,7 +681,10 @@ impl Parser {
             }
         };
 
-        if !matches!(function_name.as_str(), "FACT" | "VARIAT" | "COMBIN") {
+        if !matches!(
+            function_name.as_str(),
+            "FACT" | "VARIAT" | "COMBIN" | "SUCC" | "INT"
+        ) {
             return Err(self.unsupported_error(
                 format!("intrinsic {function_name:?} is outside the current MVP subset"),
                 function.span,
@@ -689,14 +703,31 @@ impl Parser {
             }
         };
 
-        if function_name == "FACT" {
-            self.expect(TokenKind::RightParen, "')' after FACT argument")?;
+        if matches!(function_name.as_str(), "FACT" | "SUCC" | "INT") {
+            self.expect(
+                TokenKind::RightParen,
+                &format!("')' after {function_name} argument"),
+            )?;
             let end = self.tokens[self.cursor - 1].span;
-            return Ok(Statement::AssignFact {
-                name,
-                argument: first_value,
-                span: SourceSpan::new(self.source_id, start.start, end.end),
-            });
+            let span = SourceSpan::new(self.source_id, start.start, end.end);
+            return match function_name.as_str() {
+                "FACT" => Ok(Statement::AssignFact {
+                    name,
+                    argument: first_value,
+                    span,
+                }),
+                "SUCC" => Ok(Statement::AssignSucc {
+                    name,
+                    argument: first_value,
+                    span,
+                }),
+                "INT" => Ok(Statement::AssignInt {
+                    name,
+                    argument: first_value,
+                    span,
+                }),
+                _ => unreachable!("unary intrinsic set is exhaustive"),
+            };
         }
 
         self.expect(TokenKind::Comma, "',' between intrinsic arguments")?;
@@ -2356,5 +2387,21 @@ mod tests {
             matches!(token.kind, super::TokenKind::Newline)
                 && &source_text[token.span.start..token.span.end] == "\r"
         }));
+    }
+
+    #[test]
+    fn parses_the_directly_evidenced_succ_and_integer_literal_int_forms() {
+        let source_text = "x=SUCC(2)\ny=INT(5)\n";
+        let mut sources = SourceMap::new();
+        let source_id = sources.add_source("inherited-intrinsics.bas", source_text);
+        let program = parse(source_id, source_text).expect("limited integer call forms parse");
+        assert!(matches!(
+            &program.statements[0],
+            Statement::AssignSucc { name, argument: 2, .. } if name == "x"
+        ));
+        assert!(matches!(
+            &program.statements[1],
+            Statement::AssignInt { name, argument: 5, .. } if name == "y"
+        ));
     }
 }

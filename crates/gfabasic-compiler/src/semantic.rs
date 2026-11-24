@@ -105,7 +105,9 @@ pub fn resolve_prototype_symbols(
             Statement::AssignInteger { name, span, .. }
             | Statement::AssignFact { name, span, .. }
             | Statement::AssignVariat { name, span, .. }
-            | Statement::AssignCombin { name, span, .. } => {
+            | Statement::AssignCombin { name, span, .. }
+            | Statement::AssignSucc { name, span, .. }
+            | Statement::AssignInt { name, span, .. } => {
                 let declaration = document.syntax.tokens.iter().find_map(|token| {
                     if token.span.start < span.start || token.span.end > span.end {
                         return None;
@@ -378,18 +380,14 @@ mod tests {
             gfabasic_runtime::handlers::ResolvedHandler::IntegerToUnsigned(handler) => {
                 assert_eq!(handler(5), Some(120));
             }
-            gfabasic_runtime::handlers::ResolvedHandler::TwoIntegersToUnsigned(_) => {
-                panic!("FACT must resolve to its unary signature");
-            }
+            _ => panic!("FACT must resolve to its unary signature"),
         }
 
         match super::resolve_api_handler("gfa.language.math.variat").unwrap() {
             gfabasic_runtime::handlers::ResolvedHandler::TwoIntegersToUnsigned(handler) => {
                 assert_eq!(handler(5, 2), Some(20));
             }
-            gfabasic_runtime::handlers::ResolvedHandler::IntegerToUnsigned(_) => {
-                panic!("VARIAT must resolve to its binary signature");
-            }
+            _ => panic!("VARIAT must resolve to its binary signature"),
         }
     }
 
