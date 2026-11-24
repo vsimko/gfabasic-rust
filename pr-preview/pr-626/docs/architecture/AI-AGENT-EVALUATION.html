@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="This document records a small retrospective baseline for agent-assisted contributions in this repository. It is intended to improve the contribution process, not to rank agents or people.">
+  <title>AI agent contribution evaluation pilot · GFA BASIC Rust documentation</title>
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body class="docs-site">
+  <header class="docs-header">
+    <a href="../../index.html">GFA BASIC Rust</a>
+    <span aria-hidden="true">/</span>
+    <a href="../index.html">Documentation</a>
+  </header>
+  <div class="docs-layout">
+    <nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home" href="index.html">Section index</a><ul><li><a href="AI-VERIFICATION.html">AI-assisted API verification</a></li><li><a href="AI-AGENT-SECURITY.html">AI agent security and trust boundaries</a></li><li><a href="AI-AGENT-EVALUATION.html">AI agent contribution evaluation pilot</a></li><li><a href="https://github.com/vsimko/gfabasic-rust/blob/main/.agents/skills/api-evidence-verification/SKILL.md">`api-evidence-verification` agent skill</a></li><li><a href="API-PROFILES.html">API profiles</a></li><li><a href="API-REGISTRY.html">API registry and declaration source of truth</a></li><li><a href="BENCHMARKING.html">Performance benchmarks and profiling strategy</a></li><li><a href="CI.html">GitHub Actions workflow architecture</a></li><li><a href="CLI-AND-CONFIG.html">CLI, configuration, and build artifacts</a></li><li><a href="COMPATIBILITY-MATRIX.html">Current compatibility matrix</a></li><li><a href="DIAGNOSTICS.html">Diagnostics and compatibility reporting</a></li><li><a href="DIALECTS.html">Dialects, versions, and compatibility policy</a></li><li><a href="FORMATTER.html">Formatter style and current support</a></li><li><a href="FUZZING.html">Frontend fuzzing and robustness strategy</a></li><li><a href="GOALS.html">Project goals and compatibility objectives</a></li><li><a href="IMPLEMENTATION-DASHBOARD.html">Implementation dashboard</a></li><li><a href="LANGUAGE-TOOLING.html">Language tooling and editor integration</a></li><li><a href="MEMORY.html">Memory model and hardware access</a></li><li><a href="MVP-vertical-slice.html">First compiler vertical slice — proposed boundary</a></li><li><a href="PIPELINE-AND-IR.html">Compiler pipeline and intermediate representation</a></li><li><a href="README.html">README</a></li><li><a href="RELEASES.html">Release, artifact, and reproducible-build policy</a></li><li><a href="RUNTIME.html">Runtime architecture</a></li><li><a href="SECURITY.html">Dependency and supply-chain security</a></li><li><a href="TARGETS.html">Host and target model</a></li><li><a href="TESTING.html">Compatibility testing and release criteria</a></li><li><a href="https://github.com/vsimko/gfabasic-rust/blob/main/tests/language-constructs/README.md">VERSION-SCOPED LANGUAGE CONSTRUCT CATALOGUE</a></li><li><a href="VALIDATION.html">Repository consistency validation</a></li><li><a href="VERSIONING.html">Versioning and compatibility lifecycle</a></li><li><a href="WEBSITE_PREVIEWS.html">Website previews for pull requests</a></li><li><a href="WORKSPACE.html">Rust workspace and dependency policy</a></li><li><a href="TOML-YAML-MIGRATION.html">TOML inventory and YAML migration policy</a></li><li><a href="adr/index.html">Architecture decisions</a></li></ul></nav>
+    <main class="docs-content">
+      <article>
+        <h1>AI agent contribution evaluation pilot</h1>
+        <p class="docs-meta"><span>Architecture</span></p>
+        <h1 id="ai-agent-contribution-evaluation-pilot">AI agent contribution evaluation pilot</h1>
+<h2 id="purpose-and-guardrails">Purpose and guardrails</h2>
+<p>This document records a small retrospective baseline for agent-assisted contributions in this repository. It is intended to improve the contribution process, not to rank agents or people.</p>
+<p>The pilot follows issue <a href="https://github.com/vsimko/gfabasic-rust/issues/578">#578</a>:</p>
+<ul>
+<li>No leaderboard, person/agent ranking, or productivity score.</li>
+<li>Raw PR count, lines changed, and elapsed time are not success measures.</li>
+<li>No numeric targets are set from this sample.</li>
+<li>No dashboard, scheduled workflow, telemetry service, or new dependency is introduced.</li>
+<li>Facts from GitHub/CI are separated from interpretation and from information known only through this project conversation.</li>
+</ul>
+<h2 id="compact-rubric">Compact rubric</h2>
+<table>
+<thead>
+<tr>
+<th>Dimension</th>
+<th>Operational definition</th>
+<th>Evidence source</th>
+<th>Interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>First-head CI reliability</td>
+<td>Result of the required PR gate and relevant required workflows for the first PR head submitted for review</td>
+<td>PR creation time, first head SHA, GitHub Actions runs</td>
+<td>Record the first result and final result separately. A later green run does not erase the initial failure.</td>
+</tr>
+<tr>
+<td>Rework before green</td>
+<td>Number of commits added after the PR was opened, plus the reason for each observed corrective change</td>
+<td>PR commit timestamps and CI failure logs</td>
+<td>This is only a rework proxy. GitHub data available to this pilot does not reliably expose push count; commits are not equivalent to pushes.</td>
+</tr>
+<tr>
+<td>Review findings</td>
+<td>Substantive human review comments that required code, test, or design changes</td>
+<td>PR reviews and review comments</td>
+<td>If no human review is recorded, mark this dimension not assessable; do not interpret silence as approval or quality.</td>
+</tr>
+<tr>
+<td>Escaped regressions and follow-ups</td>
+<td>Linked issue/PR or post-merge workflow failure attributable to the change</td>
+<td>Issue/PR cross-links and Actions runs on the merge commit</td>
+<td>Record the concrete failure and mitigation; do not assign a speculative severity score.</td>
+</tr>
+<tr>
+<td>Acceptance and evidence quality</td>
+<td>Whether issue criteria are complete, commands/results are recorded, and unresolved validation is explicit</td>
+<td>Issue body, PR body, workflow artifacts, test results</td>
+<td>An implementation PR can merge while the parent issue remains open if an acceptance item is still pending.</td>
+</tr>
+<tr>
+<td>Scope discipline and hand-off</td>
+<td>Unrequested changes, corrections after user clarification, duplicate effort, and human-only blockers</td>
+<td>Conversation/task provenance, changed files, needs-human issues</td>
+<td>Separate avoidable agent rework from settings or decisions that only a maintainer can make.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="sample-selection-and-provenance">Sample selection and provenance</h2>
+<p>The sample contains four consecutive PRs from the 2026-11-17 workstream:</p>
+<ul>
+<li><a href="https://github.com/vsimko/gfabasic-rust/pull/581">#581</a> — contributor process and PR template.</li>
+<li><a href="https://github.com/vsimko/gfabasic-rust/pull/582">#582</a> — Rust source-map properties and scheduled mutation workflow.</li>
+<li><a href="https://github.com/vsimko/gfabasic-rust/pull/584">#584</a> — AI-agent security policy and workflow hardening.</li>
+<li><a href="https://github.com/vsimko/gfabasic-rust/pull/586">#586</a> — follow-up restricting privileged private-asset workflows to manual dispatch.</li>
+</ul>
+<p>This is a purposive sample across process documentation, Rust testing, and workflow/security changes. It is not a random or statistically representative sample of all repository contributions.</p>
+<p>Agent involvement is known from the task provenance in this project conversation. GitHub identifies the repository owner as the PR author; that metadata alone does not establish agent authorship. No other PRs are included because their agent attribution cannot be established from the available evidence.</p>
+<p>For each PR, the first submitted head is the latest commit whose committer timestamp is at or before the PR creation time. The count of commits after PR creation is reported as a rework proxy, not as a push count. CI results refer to the first observed Actions runs for that head and the final required PR gate.</p>
+<h2 id="baseline-observations">Baseline observations</h2>
+<table>
+<thead>
+<tr>
+<th>PR</th>
+<th>First submitted head and first CI result</th>
+<th style="text-align:right">Commits after PR opened</th>
+<th>Human review evidence</th>
+<th>Follow-up / acceptance status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>#581</td>
+<td>Head 2252822. Stable PR gate passed. The first preview smoke test returned HTTP 404; a later preview run passed. <a href="https://github.com/vsimko/gfabasic-rust/actions/runs/44176081520">Gate</a>, <a href="https://github.com/vsimko/gfabasic-rust/actions/runs/44176081545">first preview</a>, <a href="https://github.com/vsimko/gfabasic-rust/actions/runs/44177849222">successful preview retry</a>.</td>
+<td style="text-align:right">0 (3 total)</td>
+<td>No human review records or substantive review comments.</td>
+<td>Issue #577 closed after merge. No follow-up defect was recorded in this sample.</td>
+</tr>
+<tr>
+<td>#582</td>
+<td>Head bdb4c7b. Documentation validation failed because the testing index lacked a direct entry for the new pilot document; the stable PR gate consequently failed. <a href="https://github.com/vsimko/gfabasic-rust/actions/runs/44178248935">Docs run</a>, <a href="https://github.com/vsimko/gfabasic-rust/actions/runs/44178268722">gate run</a>. Final gate passed after fixes. <a href="https://github.com/vsimko/gfabasic-rust/actions/runs/44182379156">Final gate</a>.</td>
+<td style="text-align:right">20 (23 total)</td>
+<td>No human review records or substantive review comments.</td>
+<td>The user corrected an out-of-scope mutation experiment that briefly targeted a Python validator; the final mutation target is Rust-only. The temporary Rust mutant's CI attempt stopped at rustfmt before tests executed. Issue #579 remains open until the first scheduled mutation report is reviewed.</td>
+</tr>
+<tr>
+<td>#584</td>
+<td>Head f7b1bbe. Documentation validation failed because the architecture index lacked a direct entry for the new policy. The first PR-gate attempt also hit a GitHub API HTTP 500. <a href="https://github.com/vsimko/gfabasic-rust/actions/runs/44187844410">Docs run</a>, <a href="https://github.com/vsimko/gfabasic-rust/actions/runs/44187846554">gate run</a>. Final gate passed. <a href="https://github.com/vsimko/gfabasic-rust/actions/runs/44188927691">Final gate</a>.</td>
+<td style="text-align:right">13 (34 total)</td>
+<td>No human review records or substantive review comments.</td>
+<td>After merge, the private-media inventory and reference-analysis push workflows failed with HTTP 404 because configured private-asset paths were stale. <a href="https://github.com/vsimko/gfabasic-rust/actions/runs/44189649278">Inventory run</a>, <a href="https://github.com/vsimko/gfabasic-rust/actions/runs/44189649086">analysis run</a>. Issue #585 records the repair; PR #586 makes both workflows manual-only until then. Issue #580 remains open for account-level verification in #583.</td>
+</tr>
+<tr>
+<td>#586</td>
+<td>Head b8db523. Documentation, Rust, workflow validation, security audit, SBOM, benchmark validation, preview, and stable PR gate all passed. <a href="https://github.com/vsimko/gfabasic-rust/actions/runs/44189963968">Stable gate</a>.</td>
+<td style="text-align:right">0 (3 total)</td>
+<td>No human review records or substantive review comments.</td>
+<td>Follow-up mitigation merged. The underlying private asset paths remain unresolved in #585; no claim is made that those workflows are operational.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="findings">Findings</h3>
+<p><strong>Positive signals</strong></p>
+<ul>
+<li>All four PRs were ultimately merged with a successful stable PR gate.</li>
+<li>The final PR #582 and #584 runs passed their relevant documentation, workflow, Rust, and integration checks.</li>
+<li>Human-only platform decisions were not silently guessed: #580 remains labelled needs-human and links to #583; branch protection remains separately tracked in #472.</li>
+<li>The post-merge private-asset failures were recorded in #585 and the risky automatic triggers were removed in #586 rather than repeatedly dispatching the broken workflows.</li>
+</ul>
+<p><strong>Quality gaps and rework</strong></p>
+<ul>
+<li>Two PRs (#582 and #584) failed their first documentation validation because a new architecture/testing document was not added to the required direct index. This is a repeatable pre-PR check that should be run before opening a PR.</li>
+<li>The #582 workstream used 20 commits after opening the PR; #584 used 13. These are commit counts, not push counts, and they include several one-file corrective commits. They indicate avoidable review churn, not a measured productivity score.</li>
+<li>The #582 mutation experiment briefly targeted a Python implementation despite the Rust-only intent, and the manual Rust mutant was not actually executed by the test step. The scheduled workflow is in place, but issue #579 correctly remains open pending its first completed report.</li>
+<li>The #584 workflow review did not fully account for automatic push-triggered side effects. Two privileged workflows ran after merge and failed against stale private asset paths. This is an escaped workflow-configuration problem, mitigated by #586 and tracked in #585.</li>
+<li>None of the four PRs has a recorded human review. Therefore this sample cannot measure the quality of independent review findings or establish that the merged work received substantive peer review.</li>
+</ul>
+<p><strong>Human blockers versus avoidable rework</strong></p>
+<ul>
+<li>Secret scope, GitHub App installation permissions, collaborator access, Actions account settings, and external agent runtime details are not exposed by the repository integration. These are correctly tracked as human actions in #583.</li>
+<li>Requiring the exact PR gate in branch protection is tracked separately in #472.</li>
+<li>Missing documentation index entries, excessive one-file commits, and incomplete trigger/side-effect inspection are repository/agent-process improvements, not human-only blockers.</li>
+</ul>
+<h2 id="actionable-improvements">Actionable improvements</h2>
+<ol>
+<li><strong>Workflow-change checklist:</strong> the PR template now asks contributors changing workflows to review event triggers, effective permissions, secrets, fork/Dependabot behavior, checkout credentials, artifacts, and post-merge side effects. This is the follow-up change in <a href="https://github.com/vsimko/gfabasic-rust/pull/587">PR #589</a>.</li>
+<li><strong>Batch related edits:</strong> prepare related file changes together and commit one coherent logical unit (or a small number of reviewable units), rather than creating one commit per file or per small correction.</li>
+<li><strong>Run documentation preflight before opening a PR:</strong> validate OKF direct-index entries, links, and Markdown locally when adding a document. The repository already documents these commands in the contributor guide.</li>
+<li><strong>Audit event side effects before merge:</strong> for workflow changes, inspect not only PR execution but also push-to-main, manual dispatch, reusable workflow calls, release, artifact deletion, and publication behavior.</li>
+<li><strong>Do not close an issue merely because its implementation PR merged:</strong> leave it open when a scheduled test, mutation report, external verification, or human decision remains outstanding. Issue #579 is the current example.</li>
+</ol>
+<h2 id="recommendation">Recommendation</h2>
+<p>This pilot does not justify recurring measurement, a dashboard, scheduled reporting, or numeric targets. The sample is small, same-day, one-workstream, and has no recorded independent reviews. Keep this as a one-off baseline. Revisit only after a broader set of agent-assisted tasks across different task types has reliable attribution and independent review evidence.</p>
+<p>No recurring automation or new dependency is recommended.</p>
+
+      </article>
+    </main>
+  </div>
+</body>
+</html>
