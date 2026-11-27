@@ -8,6 +8,7 @@ on:
       - "AGENTS.md"
       - "scripts/**/*.sh"
       - "scripts/validate_agent_skills.py"
+      - "scripts/tests/test_rust_mutation_workflow.py"
       - ".github/workflows/workflow-lint.yml"
   push:
     branches: [main]
@@ -17,6 +18,7 @@ on:
       - "AGENTS.md"
       - "scripts/**/*.sh"
       - "scripts/validate_agent_skills.py"
+      - "scripts/tests/test_rust_mutation_workflow.py"
       - ".github/workflows/workflow-lint.yml"
   workflow_dispatch:
 
@@ -54,6 +56,9 @@ jobs:
           if [ "${#shell_files[@]}" -gt 0 ]; then
             bash -n "${shell_files[@]}"
           fi
+
+      - name: Test Rust mutation workflow schedule contract
+        run: python -m unittest scripts.tests.test_rust_mutation_workflow -v
 
       - name: Validate Agent Skills and discovery links
         run: python scripts/validate_agent_skills.py
