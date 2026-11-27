@@ -104,5 +104,14 @@ ELSE
   PRINT #2,"GFATEST:deffn-fn:FAIL"
 ENDIF
 
+REM UPPER$ converts lowercase letters to uppercase.
+s$ = UPPER$("Gfa-Basic 3.52")
+PRINT #1,"UPPER$:";s$
+IF s$="GFA-BASIC 3.52"
+  PRINT #2,"GFATEST:upper-dollar:PASS"
+ELSE
+  PRINT #2,"GFATEST:upper-dollar:FAIL"
+ENDIF
+
 CLOSE #2
 CLOSE #1
