@@ -18,3 +18,4 @@
 - [ADR template](TEMPLATE.md) - Documentation concepts in architecture / adr.
 - [OKF v0.2 Documentation Bundle](0016-okf-v02-documentation-bundle.md) - Adopt the canonical documentation format, validation, website generation, and deployment rules.
 - [0017 Multi-version Amiga GFA-BASIC conformance baseline](0017-multi-version-amiga-gfa-basic-conformance.md) - Active 3.52 runtime baseline, 3.041U comparison profile, and explicit UNTESTED status for native 3.5; 3.5U is retired.
+- [0018 Construct-scoped Amiga GFA-BASIC probes](0018-construct-scoped-amiga-gfa-basic-probes.md) - YAML manifest per construct and change-scoped parallel execution for each applicable interpreter version.
